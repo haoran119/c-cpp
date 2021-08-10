@@ -146,6 +146,6 @@
 * [你们要的C++面试题答案来了--基础篇](https://mp.weixin.qq.com/s/-Yo1m5bwe1bHkXuAjV17gQ)
   * https://www.nowcoder.com/tutorial/93/a34ed23d58b84da3a707c70371f59c21
 
-## PROGRAMMING
+## CODE
 
-* https://github.com/haoran119/c-cpp/tree/main/src/interview-summary-of-C-and-CPP
+* [c-cpp/src/面试总结之C-C++ at main · haoran119/c-cpp](https://github.com/haoran119/c-cpp/tree/main/src/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93%E4%B9%8BC-C%2B%2B)
