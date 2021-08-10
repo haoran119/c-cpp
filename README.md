@@ -1,6 +1,6 @@
 # 学习笔记之C / C++
 
-* [面试总结之C/C++ - 浩然119 - 博客园 (cnblogs.com)](https://www.cnblogs.com/pegasus923/p/5558919.html)
+* [c-cpp/面试总结之C-C++.md at main · haoran119/c-cpp](https://github.com/haoran119/c-cpp/blob/main/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93%E4%B9%8BC-C%2B%2B.md)
 
 * [学习笔记之C++ How to Program(part) - 浩然119 - 博客园 (cnblogs.com)](https://www.cnblogs.com/pegasus923/archive/2010/10/26/1860906.html)
 
