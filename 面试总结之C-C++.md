@@ -1,6 +1,6 @@
 # 面试总结之C/C++
 
-* [interview/interview summary of C and CPP at master · haoran119/interview (github.com)](https://github.com/haoran119/interview/tree/master/interview%20summary%20of%20C%20and%20CPP)
+* https://github.com/haoran119/c-cpp/tree/main/src/interview-summary-of-C-and-CPP
 
 * [学习笔记之IKM C++ 11 - 浩然119 - 博客园 (cnblogs.com)](https://www.cnblogs.com/pegasus923/p/8465745.html)
 
