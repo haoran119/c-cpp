@@ -143,8 +143,7 @@
 * volatile
   * [volatile_百度百科](http://baike.baidu.com/link?url=gPm-SmXKapujjcPjO3COGYDPSvH4VPOMabuV61XG7kM1kMhwX1AnNxF5_VZDiq7fizEaEfpYKLRBVgRt99BxOK)
   * [volatile (C++)](https://msdn.microsoft.com/zh-cn/library/12a04hfd.aspx)
-* [你们要的C++面试题答案来了--基础篇](https://mp.weixin.qq.com/s/-Yo1m5bwe1bHkXuAjV17gQ)
-  * https://www.nowcoder.com/tutorial/93/a34ed23d58b84da3a707c70371f59c21
+* [C++面试题答案--基础篇](https://www.nowcoder.com/tutorial/93/a34ed23d58b84da3a707c70371f59c21)
 
 ## CODE
 
