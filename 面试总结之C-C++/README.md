@@ -11,6 +11,7 @@
 * [2021 年 C++ 岗就业如何？附学习路线图 (qq.com)](https://mp.weixin.qq.com/s/g6dHxYN7jhw_bLXqnFdEyA)
 
 ## RESOURCES
+* [C++ 面试突击 - LeetBook - 力扣（LeetCode）全球极客挚爱的技术成长平台](https://leetcode-cn.com/leetbook/detail/cpp-interview-highlights/)
 * [C 语言与 C++ 面试知识总结 (qq.com)](https://mp.weixin.qq.com/s/x6DMkh54NQBOlDMqNxvf7w)
 * [C++面试题答案--基础篇](https://www.nowcoder.com/tutorial/93/a34ed23d58b84da3a707c70371f59c21)
 
