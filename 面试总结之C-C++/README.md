@@ -15,7 +15,7 @@
 * [C 语言与 C++ 面试知识总结 (qq.com)](https://mp.weixin.qq.com/s/x6DMkh54NQBOlDMqNxvf7w)
 * [C++面试题答案--基础篇](https://www.nowcoder.com/tutorial/93/a34ed23d58b84da3a707c70371f59c21)
 
-## 编译内存
+## 编译内存相关
 
 * 变量的内存分区
   * [C/C++的四大内存分区 - CSDN博客](https://blog.csdn.net/K346K346/article/details/45592329)
@@ -48,6 +48,17 @@
 * 如何对消息实现同步响应
   * 使用CALLBACK，回调函数
   * [CALLBACK_百度百科](https://baike.baidu.com/item/CALLBACK/813549?fr=aladdin)
+
+## 语言对比
+
+## 关键字库函数
+
+## 面向对象
+
+## 类相关
+
+## 语言特性相关
+
 * struct和union的区别：
   * 在存储多个成员信息时，编译器会自动给struct第个成员分配存储空间，struct可以存储多个成员信息，而union每个成员会用同一个存储空间，只能存储最后一个成员的信息。
   * 都是由多个不同的数据类型成员组成，但在任何同一时刻，Union只存放了一个被先选中的成员，而结构体的所有成员都存在。
