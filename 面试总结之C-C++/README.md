@@ -10,15 +10,19 @@
 
 * [2021 年 C++ 岗就业如何？附学习路线图 (qq.com)](https://mp.weixin.qq.com/s/g6dHxYN7jhw_bLXqnFdEyA)
 
+## RESOURCES
+* [C 语言与 C++ 面试知识总结 (qq.com)](https://mp.weixin.qq.com/s/x6DMkh54NQBOlDMqNxvf7w)
+* [C++面试题答案--基础篇](https://www.nowcoder.com/tutorial/93/a34ed23d58b84da3a707c70371f59c21)
+
 ## 编译内存
 
+* 变量的内存分区
+  * [C/C++的四大内存分区 - CSDN博客](https://blog.csdn.net/K346K346/article/details/45592329)
 * C structure，数据结构里有inter,char,float时，数据的内存布局会是怎样
   * 数据会以4位或是8位，16位等等方式对齐
 * 为什么会有这种对齐
   * 这是因为机器寻址就是按照这种方式进行的，这样可以一次而不是多次读取一定数据
 * [面试常考，项目易错！C/C++中的字节对齐 (qq.com)](https://mp.weixin.qq.com/s/F0QIjH-fMe7KP-CtlQVbHA)
-* 变量的内存分区
-  * [C/C++的四大内存分区 - CSDN博客](https://blog.csdn.net/K346K346/article/details/45592329)
 * [size_t_百度百科](http://baike.baidu.com/link?url=sh8RRfasW1QG-PhcWPZhfcZ75Uw-KYLKh443jzpNg36hVk1Fu7WeTh4lEPLCuBx_iT0wglX5MRQUqXJMWV-oUK)
 * C pointer,指向数据结构与指向char的指针有区别吗
   * 它们正做+1运算时产生的位移不同
@@ -79,7 +83,6 @@
 
 ## C++
 
-* [C 语言与 C++ 面试知识总结 (qq.com)](https://mp.weixin.qq.com/s/x6DMkh54NQBOlDMqNxvf7w)
 * 什么是深浅拷贝?
   * 浅拷贝是创建了一个对象用一个现成的对象初始化它的时候只是复制了成员(简单赋值)而没有拷贝分配给成员的资源(如给其指针变量成员分配了动态内存); 深拷贝是当一个对象创建时，如果分配了资源，就需要定义自己的拷贝构造函数，使之不但拷贝成员也拷贝分配给它的资源
 * 短小而被频繁调用的程序如何处理？
@@ -142,7 +145,6 @@
 * volatile
   * [volatile_百度百科](http://baike.baidu.com/link?url=gPm-SmXKapujjcPjO3COGYDPSvH4VPOMabuV61XG7kM1kMhwX1AnNxF5_VZDiq7fizEaEfpYKLRBVgRt99BxOK)
   * [volatile (C++)](https://msdn.microsoft.com/zh-cn/library/12a04hfd.aspx)
-* [C++面试题答案--基础篇](https://www.nowcoder.com/tutorial/93/a34ed23d58b84da3a707c70371f59c21)
 
 ## CODE
 
