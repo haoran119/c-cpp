@@ -101,7 +101,16 @@
 
 ## 面向对象
 
+* C++虚拟机制
+  * 用来实现多态
+
 ## 类相关
+
+* Virtual：
+  * 虚函数：派生类可以覆盖掉的函数，
+  * 纯虚函数：只是个空函数，没有函数实现体。
+* 抽象类能被实例化吗
+  * 不能，只能继承抽象类，实现抽象类的函数
 
 ## 语言特性相关
 
@@ -124,13 +133,6 @@
     * 所以基本的一条是：无故的声明虚析构函数和永远不去声明一样是错误的。实际上，很多人这样总结：当且仅当类里包含至少一个虚函数的时候才去声明虚析构函数。抽象类是准备被用做基类的，基类必须要有一个虚析构函数，纯虚函数会产生抽象类，所以方法很简单：在想要成为抽象类的类里声明一个纯虚析构函数。
 * 函数对象功能
   * 可以用作类似C里的回调函数，也可以用作函数功能的组合
-* C++虚拟机制
-  * 用来实现多态
-* 抽象类能被实例化吗
-  * 不能，只能继承抽象类，实现抽象类的函数
-* Virtual：
-  * 虚函数：派生类可以覆盖掉的函数，
-  * 纯虚函数：只是个空函数，没有函数实现体。
 * Object Slicing
   * [Object slicing - Wikipedia](https://en.wikipedia.org/wiki/Object_slicing)
   * In C++ programming, object slicing occurs when an object of a subclass type is copied to an object of superclass type: the superclass copy will not have any of the member variables defined in the subclass. These variables have, in effect, been "sliced off".) More subtly, object slicing can also occur when an object of a subclass type is copied to an object of the same type by the superclass's assignment operator, in which case some of the target object's member variables will retain their original values instead of being copied from the source object.
