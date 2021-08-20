@@ -120,7 +120,9 @@
 * 什么是拷贝构造函数?
   * 它是单个参数的构造函数，其参数是与它同属一类的对象的(常)引用；类定义中，如果未提供自己的拷贝构造函数，C++提供一个默认拷贝构造函数，该默认拷贝构造函数完成一个成员到一个成员的拷贝
 * 要在C++防止对象被复制，有什么方法
-  * 定义一个基类，将其中的拷贝构造函数和赋值构造函数声明为私有private
+  * [Explicitly Defaulted and Deleted Functions | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/explicitly-defaulted-and-deleted-functions?view=msvc-160)
+  * Pre-C++11 定义一个基类，将其中的拷贝构造函数和赋值构造函数声明为私有private
+  * C++11则可以对拷贝构造函数和赋值构造函数声明为delete
   * 派生类以私有private的方式继承基类
 
 
