@@ -17,6 +17,9 @@
 
 ## 编译内存相关
 
+* #include “filename.h”和#include <filename.h>的区别
+  * #include “filename.h”是指编译器将从当前工作目录上开始查找此文件
+  * #include <filename.h>是指编译器将从标准库目录中开始查找此文件
 * 变量的内存分区
   * [C/C++的四大内存分区 - CSDN博客](https://blog.csdn.net/K346K346/article/details/45592329)
 * C structure，数据结构里有inter,char,float时，数据的内存布局会是怎样
@@ -24,7 +27,6 @@
 * 为什么会有这种对齐
   * 这是因为机器寻址就是按照这种方式进行的，这样可以一次而不是多次读取一定数据
 * [面试常考，项目易错！C/C++中的字节对齐 (qq.com)](https://mp.weixin.qq.com/s/F0QIjH-fMe7KP-CtlQVbHA)
-* [size_t_百度百科](http://baike.baidu.com/link?url=sh8RRfasW1QG-PhcWPZhfcZ75Uw-KYLKh443jzpNg36hVk1Fu7WeTh4lEPLCuBx_iT0wglX5MRQUqXJMWV-oUK)
 * C pointer,指向数据结构与指向char的指针有区别吗
   * 它们正做+1运算时产生的位移不同
 * 函数指针,什么是函数指针，有什么用处
@@ -51,14 +53,14 @@
 
 ## 语言对比
 
+* C++如何实现JAVA接口
+  * [java接口_百度百科](http://baike.baidu.com/link?url=hoPdmBnxPUNPpyCRPD80NQVbOPS0qT5IoI1jezWUDT4Dz0MdgaVrPEurjtacqy6rJRZxO0CrQCNqDn5czUriNK)
+  * [C++中的抽象类以及接口的区别联系_Linux编程_Linux公社-Linux系统门户网站](http://www.linuxidc.com/Linux/2012-10/73243.htm)
+* list v.s. vector
+
 ## 关键字库函数
 
-## 面向对象
-
-## 类相关
-
-## 语言特性相关
-
+* [size_t_百度百科](http://baike.baidu.com/link?url=sh8RRfasW1QG-PhcWPZhfcZ75Uw-KYLKh443jzpNg36hVk1Fu7WeTh4lEPLCuBx_iT0wglX5MRQUqXJMWV-oUK)
 * struct和union的区别：
   * 在存储多个成员信息时，编译器会自动给struct第个成员分配存储空间，struct可以存储多个成员信息，而union每个成员会用同一个存储空间，只能存储最后一个成员的信息。
   * 都是由多个不同的数据类型成员组成，但在任何同一时刻，Union只存放了一个被先选中的成员，而结构体的所有成员都存在。
@@ -87,9 +89,14 @@
   * 在一个函数声明中，const可以修饰形参，表明它是一个输入参数，在函数内部不能改变其值；
   * 对于类的成员函数，若指定其为const类型，则表明其是一个常函数，不能修改类的成员变量；
   * 对于类的成员函数，有时候必须指定其返回值为const类型，以使得其返回值不为“左值”。
-* #include “filename.h”和#include <filename.h>的区别
-  * #include “filename.h”是指编译器将从当前工作目录上开始查找此文件
-  * #include <filename.h>是指编译器将从标准库目录中开始查找此文件
+
+## 面向对象
+
+## 类相关
+
+## 语言特性相关
+
+
 * 用C语言，将一个数字乘以7倍的效率最快的方法是什么？ 
   * 先左移三位（*8）然后再减去原值：X << 3 – X
 
@@ -125,9 +132,6 @@
 * Virtual：
   * 虚函数：派生类可以覆盖掉的函数，
   * 纯虚函数：只是个空函数，没有函数实现体。
-* C++如何实现JAVA接口
-  * [java接口_百度百科](http://baike.baidu.com/link?url=hoPdmBnxPUNPpyCRPD80NQVbOPS0qT5IoI1jezWUDT4Dz0MdgaVrPEurjtacqy6rJRZxO0CrQCNqDn5czUriNK)
-  * [C++中的抽象类以及接口的区别联系_Linux编程_Linux公社-Linux系统门户网站](http://www.linuxidc.com/Linux/2012-10/73243.htm)
 * Object Slicing
   * [Object slicing - Wikipedia](https://en.wikipedia.org/wiki/Object_slicing)
   * In C++ programming, object slicing occurs when an object of a subclass type is copied to an object of superclass type: the superclass copy will not have any of the member variables defined in the subclass. These variables have, in effect, been "sliced off".) More subtly, object slicing can also occur when an object of a subclass type is copied to an object of the same type by the superclass's assignment operator, in which case some of the target object's member variables will retain their original values instead of being copied from the source object.
@@ -144,7 +148,6 @@
   * unordered_set / unordered_multiset / unordered_map / unordered_multimap ：Hash表
   * [Containers - C++ Reference](http://www.cplusplus.com/reference/stl/)
   * [STL实现的底层数据结构简介 - CSDN博客](http://blog.csdn.net/huangkq1989/article/details/7277282)
-* list v.s. vector
 * RAII
   * [RAII - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/RAII)
     * RAII全称为Resource Acquisition Is Initialization，它是在一些面向对象语言中的一种惯用法。RAII源于C++，在Java，C#，D，Ada，Vala和Rust中也有应用。1984-1989年期间，比雅尼·斯特劳斯特鲁普和安德鲁·柯尼希在设计C++异常时，为解决资源管理时的异常安全性而使用了该用法，后来比雅尼·斯特劳斯特鲁普将其称为RAII。
