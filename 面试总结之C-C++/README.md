@@ -73,6 +73,10 @@
   * 在一个函数声明中，const可以修饰形参，表明它是一个输入参数，在函数内部不能改变其值；
   * 对于类的成员函数，若指定其为const类型，则表明其是一个常函数，不能修改类的成员变量；
   * 对于类的成员函数，有时候必须指定其返回值为const类型，以使得其返回值不为“左值”。
+* 短小而被频繁调用的程序如何处理？
+  * C语言用宏代替。
+  * C++用inline，内联函数机制。
+  * 内联函数可以得到宏的替换功能，所有可预见的状态和常规函数的类型检查。
 * struct和union的区别：
   * 在存储多个成员信息时，编译器会自动给struct第个成员分配存储空间，struct可以存储多个成员信息，而union每个成员会用同一个存储空间，只能存储最后一个成员的信息。
   * 都是由多个不同的数据类型成员组成，但在任何同一时刻，Union只存放了一个被先选中的成员，而结构体的所有成员都存在。
@@ -89,10 +93,9 @@
 |Default inheritance is public	|Default inheritance is private	|-
 |Could not use Template	|Could use Template	|-
 
-* 短小而被频繁调用的程序如何处理？
-  * C语言用宏代替。
-  * C++用inline，内联函数机制。
-  * 内联函数可以得到宏的替换功能，所有可预见的状态和常规函数的类型检查。
+* volatile
+  * [volatile_百度百科](http://baike.baidu.com/link?url=gPm-SmXKapujjcPjO3COGYDPSvH4VPOMabuV61XG7kM1kMhwX1AnNxF5_VZDiq7fizEaEfpYKLRBVgRt99BxOK)
+  * [volatile (C++)](https://msdn.microsoft.com/zh-cn/library/12a04hfd.aspx)
 
 
 ## 面向对象
@@ -154,9 +157,6 @@
     * [对象所有资源 (RAII)](https://msdn.microsoft.com/zh-cn/library/hh438480.aspx)
 * RTTI
   * RTTI事指运行时类型识别（Run-time type identification）在只有一个指向基类的指针或引用时确定一个对象的准确类型。
-* volatile
-  * [volatile_百度百科](http://baike.baidu.com/link?url=gPm-SmXKapujjcPjO3COGYDPSvH4VPOMabuV61XG7kM1kMhwX1AnNxF5_VZDiq7fizEaEfpYKLRBVgRt99BxOK)
-  * [volatile (C++)](https://msdn.microsoft.com/zh-cn/library/12a04hfd.aspx)
 
 ## CODE
 
