@@ -17,8 +17,7 @@ public:
 int main(int argc, char* argv[])
 {
     B b;
-    return 0
-        ;
+    return 0;
 }
 
 /*
