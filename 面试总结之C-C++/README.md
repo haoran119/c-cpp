@@ -134,10 +134,11 @@
 * 如何对消息实现同步响应
   * 使用CALLBACK，回调函数
   * [CALLBACK_百度百科](https://baike.baidu.com/item/CALLBACK/813549?fr=aladdin)
-
-
 * 函数对象功能
   * 可以用作类似C里的回调函数，也可以用作函数功能的组合
+* C++模板
+  * 简化对类似函数的设计，比如要设计两个函数 abs(int a), abs(float a),就可以用模板去设计一个函数就可以了
+
 * Object Slicing
   * [Object slicing - Wikipedia](https://en.wikipedia.org/wiki/Object_slicing)
   * In C++ programming, object slicing occurs when an object of a subclass type is copied to an object of superclass type: the superclass copy will not have any of the member variables defined in the subclass. These variables have, in effect, been "sliced off".) More subtly, object slicing can also occur when an object of a subclass type is copied to an object of the same type by the superclass's assignment operator, in which case some of the target object's member variables will retain their original values instead of being copied from the source object.
@@ -145,8 +146,6 @@
   * [c++对象切割 - CSDN博客](https://blog.csdn.net/weiwangchao_/article/details/4702241)
 * 异常,异常的功能
   * 保证异常的健壮性，结构化处理出错信息
-* C++模板
-  * 简化对类似函数的设计，比如要设计两个函数 abs(int a), abs(float a),就可以用模板去设计一个函数就可以了
 * STL containers内部实现的数据结构
   * vector ：数组
   * list ：链表
