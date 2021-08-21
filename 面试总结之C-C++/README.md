@@ -138,6 +138,13 @@
   * 可以用作类似C里的回调函数，也可以用作函数功能的组合
 * C++模板
   * 简化对类似函数的设计，比如要设计两个函数 abs(int a), abs(float a),就可以用模板去设计一个函数就可以了
+* STL containers内部实现的数据结构
+  * vector ：数组
+  * list ：链表
+  * set / map / multimap / multiset ：红黑树
+  * unordered_set / unordered_multiset / unordered_map / unordered_multimap ：Hash表
+  * [Containers - C++ Reference](http://www.cplusplus.com/reference/stl/)
+  * [STL实现的底层数据结构简介 - CSDN博客](http://blog.csdn.net/huangkq1989/article/details/7277282)
 
 * Object Slicing
   * [Object slicing - Wikipedia](https://en.wikipedia.org/wiki/Object_slicing)
@@ -146,13 +153,6 @@
   * [c++对象切割 - CSDN博客](https://blog.csdn.net/weiwangchao_/article/details/4702241)
 * 异常,异常的功能
   * 保证异常的健壮性，结构化处理出错信息
-* STL containers内部实现的数据结构
-  * vector ：数组
-  * list ：链表
-  * set / map / multimap / multiset ：红黑树
-  * unordered_set / unordered_multiset / unordered_map / unordered_multimap ：Hash表
-  * [Containers - C++ Reference](http://www.cplusplus.com/reference/stl/)
-  * [STL实现的底层数据结构简介 - CSDN博客](http://blog.csdn.net/huangkq1989/article/details/7277282)
 * RAII
   * [RAII - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/RAII)
     * RAII全称为Resource Acquisition Is Initialization，它是在一些面向对象语言中的一种惯用法。RAII源于C++，在Java，C#，D，Ada，Vala和Rust中也有应用。1984-1989年期间，比雅尼·斯特劳斯特鲁普和安德鲁·柯尼希在设计C++异常时，为解决资源管理时的异常安全性而使用了该用法，后来比雅尼·斯特劳斯特鲁普将其称为RAII。
