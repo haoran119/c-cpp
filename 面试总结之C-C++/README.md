@@ -47,11 +47,6 @@
   * [智能指针（现代 C++）](https://msdn.microsoft.com/zh-cn/library/hh279674.aspx)
   * [Smart pointer - Wikipedia, the free encyclopedia](https://en.wikipedia.org/wiki/Smart_pointer)
   * [智能指针：从std::auto_ptr到std::unique_ptr - hanhuili的专栏 - 博客频道 - CSDN.NET](http://blog.csdn.net/hanhuili/article/details/8299912)
-* 设计一个函数，函数中有一段功能是对相关数据的结理，但具体的处理方式是不定的。
-  * 将不定的处理方式设定成一个外部传来函数指针。(可以设计成这样 func(int a,int b，某种函数指针) )
-* 如何对消息实现同步响应
-  * 使用CALLBACK，回调函数
-  * [CALLBACK_百度百科](https://baike.baidu.com/item/CALLBACK/813549?fr=aladdin)
 
 ## 语言对比
 
@@ -134,6 +129,12 @@
   * 引用被创建的同时必须被初始化（指针则可以在任何时候被初始化）。
   * 不能有NULL 引用，引用必须与合法的存储单元关联（指针则可以是NULL）。
   * 一旦引用被初始化，就不能改变引用的关系（指针则可以随时改变所指的对象）。
+* 设计一个函数，函数中有一段功能是对相关数据的结理，但具体的处理方式是不定的。
+  * 将不定的处理方式设定成一个外部传来函数指针。(可以设计成这样 func(int a,int b，某种函数指针) )
+* 如何对消息实现同步响应
+  * 使用CALLBACK，回调函数
+  * [CALLBACK_百度百科](https://baike.baidu.com/item/CALLBACK/813549?fr=aladdin)
+
 
 * 函数对象功能
   * 可以用作类似C里的回调函数，也可以用作函数功能的组合
