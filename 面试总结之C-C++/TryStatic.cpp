@@ -12,3 +12,6 @@ public:
 private:
     static int aa;
 };
+
+// int TryStatic::aa = 1;
+
