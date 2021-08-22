@@ -5,6 +5,13 @@
 //  Created by Hao on 2017/3/16.
 //  Copyright © 2017年 Hao. All rights reserved.
 //
+
+/*
+按照概率输出determined rate result 01，例如rate = 0.25，00010001。
+
+概率题。累加概率到1则输出。注意对double跟1的比较要用精度控制。
+*/
+
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -50,9 +57,3 @@ int main()
 
     return 0;
 }
-
-/*
-按照概率输出determined rate result 01，例如rate = 0.25，00010001。
-
-概率题。累加概率到1则输出。注意对double跟1的比较要用精度控制。
-*/
