@@ -1,11 +1,3 @@
-class TryConst
-{
-public:
-    TryConst () {}
-private:
-    const int aaa;
-};
-
 /*
 What's wrong, and how to fix?
 
@@ -15,3 +7,11 @@ To fix it, we could take any one action as below.
 2) Assign a value in this statement const int aaa;
 3) Remove keyword const
 */
+
+class TryConst
+{
+public:
+    TryConst () {}
+private:
+    const int aaa;
+};
