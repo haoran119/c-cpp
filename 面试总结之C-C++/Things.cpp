@@ -5,6 +5,14 @@
 //  Created by Hao on 2017/3/16.
 //  Copyright © 2017年 Hao. All rights reserved.
 //
+
+/*
+What's wrong, and how to fix?
+
+When multiple access, the Next function will make the current pointer behave unexpected. E.g. A is calling doSomething(), and B issues Next(). When A issues Next(), actually the current node is not current->next but current->next->next.
+To fix it, add a parameter for Next() => Next(Thing *currentNode) so that it could make sure that the next node would not be changed by others.
+*/
+
 #include <iostream>
 using namespace std;
 
@@ -53,10 +61,3 @@ int main()
 
     return 0;
 }
-
-/*
-What's wrong, and how to fix?
-
-When multiple access, the Next function will make the current pointer behave unexpected. E.g. A is calling doSomething(), and B issues Next(). When A issues Next(), actually the current node is not current->next but current->next->next.
-To fix it, add a parameter for Next() => Next(Thing *currentNode) so that it could make sure that the next node would not be changed by others.
-*/
