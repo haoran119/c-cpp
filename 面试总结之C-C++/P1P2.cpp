@@ -1,3 +1,10 @@
+/*
+What's wrong, and how to fix?
+
+~P2 would not be executed, which would cause memory leak.
+To fix it, define ~P1() as virtual ~P1().
+*/
+
 class P1
 {
 public:
@@ -22,10 +29,3 @@ int main(int argc, char* argv[])
     delete pp;
     return 0;
 }
-
-/*
-What's wrong, and how to fix?
-
-~P2 would not be executed, which would cause memory leak.
-To fix it, define ~P1() as virtual ~P1().
-*/
