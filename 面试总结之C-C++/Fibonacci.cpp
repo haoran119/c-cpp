@@ -6,6 +6,25 @@
 //  Copyright © 2017年 Hao. All rights reserved.
 //
 
+/*
+输出Fibonacci数列的第N项
+
+注意解法有递归，非递归和数学方法。
+输入N最好用unsigned int类型。
+
+0
+1
+1
+2
+3
+5
+8
+13
+21
+34
+Program ended with exit code: 0
+*/
+
 #include <iostream>
 using namespace std;
 
@@ -43,22 +62,3 @@ int main(int argc, char* argv[])
     
     return 0;
 }
-
-/*
-输出Fibonacci数列的第N项
-
-注意解法有递归，非递归和数学方法。
-输入N最好用unsigned int类型。
-
-0
-1
-1
-2
-3
-5
-8
-13
-21
-34
-Program ended with exit code: 0
-*/
