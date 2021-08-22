@@ -47,7 +47,6 @@
 * C++如何实现JAVA接口
   * [java接口_百度百科](http://baike.baidu.com/link?url=hoPdmBnxPUNPpyCRPD80NQVbOPS0qT5IoI1jezWUDT4Dz0MdgaVrPEurjtacqy6rJRZxO0CrQCNqDn5czUriNK)
   * [C++中的抽象类以及接口的区别联系_Linux编程_Linux公社-Linux系统门户网站](http://www.linuxidc.com/Linux/2012-10/73243.htm)
-* list v.s. vector
 
 ## 关键字库函数
 
@@ -87,7 +86,6 @@
   * [volatile_百度百科](http://baike.baidu.com/link?url=gPm-SmXKapujjcPjO3COGYDPSvH4VPOMabuV61XG7kM1kMhwX1AnNxF5_VZDiq7fizEaEfpYKLRBVgRt99BxOK)
   * [volatile (C++)](https://msdn.microsoft.com/zh-cn/library/12a04hfd.aspx)
 
-
 ## 面向对象
 
 * C++虚拟机制
@@ -116,7 +114,6 @@
 * 什么是深浅拷贝?
   * 浅拷贝是创建了一个对象用一个现成的对象初始化它的时候只是复制了成员(简单赋值)而没有拷贝分配给成员的资源(如给其指针变量成员分配了动态内存); 深拷贝是当一个对象创建时，如果分配了资源，就需要定义自己的拷贝构造函数，使之不但拷贝成员也拷贝分配给它的资源
 
-
 ## 语言特性相关
 
 * 指针和引用的初始化区别
@@ -141,6 +138,7 @@
   * unordered_set / unordered_multiset / unordered_map / unordered_multimap ：Hash表
   * [Containers - C++ Reference](http://www.cplusplus.com/reference/stl/)
   * [STL实现的底层数据结构简介 - CSDN博客](http://blog.csdn.net/huangkq1989/article/details/7277282)
+* list v.s. vector
 * Object Slicing
   * [Object slicing - Wikipedia](https://en.wikipedia.org/wiki/Object_slicing)
   * In C++ programming, object slicing occurs when an object of a subclass type is copied to an object of superclass type: the superclass copy will not have any of the member variables defined in the subclass. These variables have, in effect, been "sliced off".) More subtly, object slicing can also occur when an object of a subclass type is copied to an object of the same type by the superclass's assignment operator, in which case some of the target object's member variables will retain their original values instead of being copied from the source object.
