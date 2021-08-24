@@ -1,0 +1,47 @@
+//
+//  main.cpp
+//  LeetCode
+//
+//  Created by Hao on 2017/3/16.
+//  Copyright © 2017年 Hao. All rights reserved.
+//
+
+#include <iostream>
+using namespace std;
+
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+#define WRONGSQUARE(x) (x * x)
+#define SQUARE(x) ((x) * (x))
+
+inline int max(int a, int b)
+{
+    return a > b ? a : b;
+}
+
+int main()
+{
+    int a = 55, b = 4;
+    
+    int c = max(a ++, b);
+    
+    cout << "c = " << c << endl;
+    cout << "a = " << a << endl;
+
+    a = 55;
+    
+    int d = MAX(a ++, b); // a ++ > b ? a ++ : b;
+    
+    cout << "d = " << d << endl;
+    cout << "a = " << a << endl;
+
+    int e = SQUARE(2 + 3); // ((2 + 3) * (2 + 3))
+    
+    cout << "e = " << e << endl;
+    
+    int f = WRONGSQUARE(2 + 3); // (2 + 3 * 2 + 3)
+    
+    cout << "f = " << f << endl;
+    
+    return 0;
+}
