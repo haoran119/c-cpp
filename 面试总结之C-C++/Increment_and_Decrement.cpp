@@ -91,5 +91,25 @@ int main()
 
     cout << "(" << point.x() << ", " << point.y() << ")" << endl;   // (0, 0)
 
+    Point point2 = ++ point;
+
+    cout << "(" << point.x() << ", " << point.y() << ")" << endl;   // (1, 1)
+    cout << "(" << point2.x() << ", " << point2.y() << ")" << endl;   // (1, 1)
+
+    Point point3 = point ++;
+
+    cout << "(" << point.x() << ", " << point.y() << ")" << endl;   // (2, 2)
+    cout << "(" << point3.x() << ", " << point3.y() << ")" << endl;   // (1, 1)
+
+    Point point4 = -- point;
+
+    cout << "(" << point.x() << ", " << point.y() << ")" << endl;   // (1, 1)
+    cout << "(" << point4.x() << ", " << point4.y() << ")" << endl;   // (1, 1)
+
+    Point point5 = point --;
+
+    cout << "(" << point.x() << ", " << point.y() << ")" << endl;   // (0, 0)
+    cout << "(" << point5.x() << ", " << point5.y() << ")" << endl;   // (1, 1)
+
     return 0;
 }
