@@ -9,7 +9,7 @@
 
 //
 //  main.cpp
-//  LeetCode
+//  LEETCODE
 //
 //  Created by Hao on 2020/8/29.
 //  Copyright © 2020年 Hao. All rights reserved.
@@ -46,7 +46,7 @@ public:
             return m_data[pos];
     }
 
-    inline const char * data() const
+    const char * data() const
     {
         // cout << __func__ << endl;
 
