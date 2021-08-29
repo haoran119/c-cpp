@@ -7,26 +7,69 @@
 注意delete释放资源之前，最好先判断是否nullptf，否则释放为nullptr的指针会报错。此处拷贝构造与赋值函数中，因为m_data不会为nullptr，所以可以不判断。
 */
 
+//
+//  main.cpp
+//  LeetCode
+//
+//  Created by Hao on 2020/8/29.
+//  Copyright © 2020年 Hao. All rights reserved.
+//
+
 #include <iostream>
 #include <string>
 using namespace std;
 
 class String {
-public :
-    String (const char *str = NULL); // default initial value
-    String (const String &other);
-    ~ String (void);
-    String & operator=(const String &other);
-    friend ostream &operator<<(ostream &os, const String &str);
-    friend istream &operator>>(istream &is, String &str);
-private :
+public:
+    String ();                                                  // Default constructor
+    String (const char *str);                                   // Parameterized constructor
+    String (const String &other);                               // Copy constructor
+    ~ String ();                                                // Destructor
+    String& operator=(const String &other);                     // Overloaded assignment operator
+    String& operator=(const char *other);                       // Overloaded assignment operator
+    String& operator+=(const String &other);                    // Overloaded addition/assignment operator
+    String& operator+=(const char *other);                      // Overloaded addition/assignment operator
+    String operator+(const String &other) const;                // Overloaded addition operator
+    String operator+(const char *other) const;                  // Overloaded addition operator
+    friend ostream& operator<<(ostream &out, const String &s);  // Overloaded left shift operator
+    friend istream& operator>>(istream &in, String &s);         // Overloaded right shift operator
+    friend bool operator<(const String &s1, const String &s2);  // Overloaded less than operator
+
+    char& operator[](int pos)                                   // Overloaded index operator
+    {
+        cout << __func__ << endl;
+
+        int length = strlen(m_data);
+        if (pos >= length)
+            return m_data[length - 1];
+        else
+            return m_data[pos];
+    }
+
+    inline const char * data() const
+    {
+        // cout << __func__ << endl;
+
+        return m_data;
+    }
+
+private:
     char *m_data;
 };
 
-// 普通构造函数
+String::String()
+{
+    cout << "Entry of String()" << endl;
+
+    m_data = new char[1];
+    *m_data = '\0';
+}
+
 String::String(const char *str)
 {
-    if (str == NULL) { // empty string
+    cout << "Entry of String(const char *str)" << endl;
+
+    if (nullptr == str) {
         m_data = new char[1];
         *m_data = '\0';
     } else {
@@ -36,28 +79,31 @@ String::String(const char *str)
     }
 }
 
-// 析构函数
-String::~String(void)
-{
-    delete[] m_data;
-}
-
-// 拷贝构造函数
 String::String(const String &other)
 {
+    cout << "Entry of String(const String &other)" << endl;
+
     int length = strlen(other.m_data);
     m_data = new char[length + 1];
     strcpy(m_data, other.m_data);
 }
 
-// 赋值函数
-String & String::String::operator=(const String &other)
+String::~String()
 {
-    // 检查自赋值
+    cout << __func__ << endl;
+
+    delete[] m_data;
+}
+
+String& String::operator=(const String &other)
+{
+    cout << "Entry of operator=(const String &other)" << endl;
+
+    // check self-assignment
     if (this == &other)
         return *this;
 
-    // 释放原有的内存资源
+    // release original memory resources
     delete[] m_data;
 
     int length = strlen(other.m_data);
@@ -67,51 +113,182 @@ String & String::String::operator=(const String &other)
     return *this;
 }
 
-ostream &operator<<(ostream &os, const String &str)
+String& String::operator=(const char *other)
 {
-    os << str.m_data;
+    cout << "Entry of operator=(const char *other)" << endl;
 
-    return os;
+    delete[] m_data;
+
+    if (nullptr == other) {
+        m_data = new char[1];
+        *m_data = '\0';
+    } else {
+        int length = strlen(other);
+        m_data = new char[length + 1];
+        strcpy(m_data, other);
+    }
+
+    return *this;
 }
 
-istream &operator>>(istream &is, String &str)
+String& String::operator+=(const String &other)
 {
-    char *sTemp = new char[1000];
+    cout << "Entry of operator+=(const String &other)" << endl;
 
-    is >> sTemp;
+    char *sTemp = m_data;
+    int length = strlen(m_data) + strlen(other.m_data);
+
+    m_data = new char[length + 1];
+    strcpy(m_data, sTemp);
+    strcat(m_data, other.m_data);
+
+    delete[] sTemp;
+
+    return *this;
+}
+
+String& String::operator+=(const char *other)
+{
+    cout << "Entry of operator+=(const char *other)" << endl;
+
+    String sTemp(other);
+
+    *this += sTemp;
+
+    return *this;
+}
+
+String String::operator+(const String &other) const
+{
+    cout << "Entry of operator+(const String &other) const" << endl;
+
+    String result;
+
+    result += *this;
+    result += other;
+
+    return result;
+}
+
+String String::operator+(const char *other) const
+{
+    cout << "Entry of operator+(const char *other) const" << endl;
+
+    String result = *this;
+
+    result += other;
+
+    return result;
+}
+
+ostream& operator<<(ostream &out, const String &str)
+{
+    cout << "Entry of operator<<(ostream &out, const String &str)" << endl;
+
+    out << str.m_data << endl;
+
+    return out;
+}
+
+istream& operator>>(istream &in, String &str)
+{
+    cout << "Entry of operator>>(istream &in, String &str)" << endl;
+
+    char *sTemp = new char[1000];
+    in >> sTemp;
 
     // Must check if input succeeds
-    if (is) {
+    if (in) {
         delete[] str.m_data;
 
         int length = strlen(sTemp);
         str.m_data = new char[length + 1];
         strcpy(str.m_data, sTemp);
-    } else
-        str = String(); // if fail, set to the default value
+    } else {
+        // if fails, set to the default value
+        str = String();
+    }
 
     delete[] sTemp;
 
-    return is;
+    return in;
+}
+
+bool operator<(const String &s1, const String &s2)
+{
+    cout << "Entry of operator<(const String &s1, const String &s2)" << endl;
+
+    if (strcmp(s1.m_data, s2.m_data) < 0)
+        return true;
+
+    return false;
 }
 
 int main()
 {
-    String s1;
-    String s2("Test");
-    String s3 = s2;
+    String s1;                  // Default constructor : String()
+    String s2("Hello ");        // Parameterized constructor : String(const char *str)
+    String s3 = s2;             // Copy constructor : String(const String &other)
+    String s4 = "World ";       // Parameterized constructor : String(const char *str)
 
-    cout << s1 << endl;
+    cout << "s1 = \"" << s1.data() << "\"" << endl; // s1 = ""
+    cout << "s2 = \"" << s2.data() << "\"" << endl; // s2 = "Hello "
+    cout << "s3 = \"" << s3.data() << "\"" << endl; // s3 = "Hello "
+    cout << "s4 = \"" << s4.data() << "\"" << endl; // s4 = "World "
 
-    s1 = s2;
+    s1 = "hello world ";        // Overloaded assignment operator : operator=(const char *other)
+    cout << "s1 = \"" << s1.data() << "\"" << endl; // s1 = "hello world "
 
-    cout << s1 << endl;
+    s3 = s1;                    // Overloaded assignment operator : operator=(const String &other)
+    cout << "s3 = \"" << s3.data() << "\"" << endl; // s3 = "hello world "
 
-    cin >> s1;
+    s1 += s3;                   // Overloaded addition/assignment operator : operator+=(const String &other)
+    cout << "s1 = \"" << s1.data() << "\"" << endl; // s1 = "hello world hello world "
 
-    cout << s1 << endl;
-    cout << s2 << endl;
-    cout << s3 << endl;
+    // Entry of operator+=(const char *other)
+    // Entry of String(const char *str)
+    // Entry of operator+=(const String &other)
+    // ~String
+    s3 += "!";                  // Overloaded addition/assignment operator : operator+=(const char *other)
+    cout << "s3 = \"" << s3.data() << "\"" << endl; // s3 = "hello world !"
+
+    // Entry of operator+(const String &other) const
+    // Entry of String()
+    // Entry of operator+=(const String &other)
+    // Entry of operator+=(const String &other)
+    String s5 = s2 + s4;        // Overloaded addition operator : operator+(const String &other) const
+    cout << "s5 = \"" << s5.data() << "\"" << endl; // s5 = "Hello World "
+
+    // s5 = "Hello " + s3; // 没有与这些操作数匹配的 "+" 运算符 -- 操作数类型为:  const char [7] + StringC/C++
+
+    // Entry of operator+(const char *other) const
+    // Entry of String(const String &other)
+    // Entry of operator+=(const char *other)
+    // Entry of String(const char *str)
+    // Entry of operator+=(const String &other)
+    // ~String
+    // Entry of operator=(const String &other)
+    // ~String
+    s5 = s2 + "World !";        // Overloaded addition operator : operator+(const char *other) const
+    cout << "s5 = \"" << s5.data() << "\"" << endl; // s5 = "Hello World !"
+
+    cin >> s1;                  // Overloaded left shift operator : operator>>(istream &in, String &str)
+    // HelloWorld
+
+    cout << s1 << endl;         // Overloaded right shift operator : operator<<(ostream &out, const String &str)
+    // HelloWorld
+
+    cout << (s1 < s2) << endl;  // Overloaded less than operator : operator<(const String &s1, const String &s2)
+    // 0
+
+    cout << (s1[5]) << endl;    // Overloaded index operator : operator[]
+    // W
+
+    // ~String
+    // ~String
+    // ~String
+    // ~String
+    // ~String
 
     return 0;
 }
