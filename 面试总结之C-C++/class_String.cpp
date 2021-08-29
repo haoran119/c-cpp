@@ -35,7 +35,7 @@ public:
     friend istream& operator>>(istream &in, String &s);         // Overloaded right shift operator
     friend bool operator<(const String &s1, const String &s2);  // Overloaded less than operator
 
-    char& operator[](int pos)                                   // Overloaded index operator
+    char& operator[](int pos)                                   // Overloaded subscript operator
     {
         cout << __func__ << endl;
 
