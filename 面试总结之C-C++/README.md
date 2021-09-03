@@ -119,6 +119,44 @@
 
 * C++虚拟机制
   * 用来实现多态
+* 菱形继承
+···
+#include <iostream>
+using namespace std;
+
+class Base
+{
+public:
+	virtual void fun() { cout << "Base::fun()" << endl; }
+};
+
+// class Base1 : virtual public Base
+class Base1 : public Base
+{
+public:
+	virtual void fun() { cout << "Base1::fun()" << endl; }
+};
+
+// class Base2 : virtual public Base
+class Base2 : public Base
+{
+public:
+	virtual void fun() { cout << "Base2::fun()" << endl; }
+};
+
+class Derive : public Base1, public Base2
+{
+public:
+	void fun() { cout << "Derive::fun()" << endl; }
+};
+
+int main()
+{
+	Base *p = new Derive(); // Compile error : ambiguous conversion from derived class 'Derive' to base class 'Base'
+	p->fun(); // Derive::fun() 调用派生类中的虚函数
+	return 0;
+}
+···
 
 ## 类相关
 
