@@ -120,7 +120,7 @@
 * C++虚拟机制
   * 用来实现多态
 * 菱形继承
-···
+```
 #include <iostream>
 using namespace std;
 
@@ -156,7 +156,7 @@ int main()
 	p->fun(); // Derive::fun() 调用派生类中的虚函数
 	return 0;
 }
-···
+```
 
 ## 类相关
 
