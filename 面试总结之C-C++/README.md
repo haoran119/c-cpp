@@ -119,6 +119,11 @@
 
 * C++虚拟机制
   * 用来实现多态
+* 多重继承
+  * 可以为一个派生类指定多个基类，这样的继承结构称为多重继承或多继承
+  * Java/C#中没有多继承，C++中也应避免使用
+  * 当两个父类有同样的成员时会带来模糊性，这样导致了名称冲突(name collision)，在编译时将予以拒绝，也称之为菱形继承
+  * 可以在方法前说明基类，或者用虚继承来解决菱形继承问题
 * 菱形继承
 ```
 #include <iostream>
@@ -130,7 +135,8 @@ public:
 	virtual void fun() { cout << "Base::fun()" << endl; }
 };
 
-// class Base1 : virtual public Base
+// Use virtual inheritance to fix the diamond problem
+// class Base1 : virtual public Base 
 class Base1 : public Base
 {
 public:
