@@ -6,6 +6,9 @@
 * [[ZZ]软件工程师 C/C++笔试题 - 浩然119 - 博客园 (cnblogs.com)](https://www.cnblogs.com/pegasus923/archive/2010/10/05/1842918.html)
 
 ## RESOURCES
+* [STL Time Complexity (Detailed)](http://www.cplusplus.com/reference/stl/)
+* [STL Time Complexity (Summary)](http://john-ahlgren.blogspot.com/2013/10/stl-container-performance.html)
+* [Data Structure and Algorithms Cheat Sheet](https://github.com/gibsjose/cpp-cheat-sheet/blob/master/Data%20Structures%20and%20Algorithms.md)
 * [C++ 面试突击 - LeetBook - 力扣（LeetCode）全球极客挚爱的技术成长平台](https://leetcode-cn.com/leetbook/detail/cpp-interview-highlights/)
   * 面向对象的三大特性：
     * 封装(Encapsulation)：将具体的实现过程和数据封装成一个函数，只能通过接口进行访问，降低耦合性。
