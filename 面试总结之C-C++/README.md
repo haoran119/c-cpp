@@ -468,7 +468,7 @@ int main()
     * [array](https://github.com/huihut/interview/tree/master/STL#array) / [vector](https://github.com/huihut/interview/tree/master/STL#vector) ：数组
     * [deque](https://github.com/huihut/interview/tree/master/STL#deque) : 双端队列
     * [forward_list](https://github.com/huihut/interview/tree/master/STL#forward_list) : 单向链表
-    * [list](https://github.com/huihut/interview/tree/master/STL#list) ：链表
+    * [list](https://github.com/huihut/interview/tree/master/STL#list) ：双向链表
   * Container adaptors
     * [stack](https://github.com/huihut/interview/tree/master/STL#stack) / [queue](https://github.com/huihut/interview/tree/master/STL#queue) : deque / list
     * [priority_queue](https://github.com/huihut/interview/tree/master/STL#priority_queue) : vector + max-heap
