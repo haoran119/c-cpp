@@ -199,75 +199,78 @@
         e.test(); // hello from A: e_a
     }    
     ```
-  * 菱形继承
-    * The "diamond problem" (sometimes referred to as the "Deadly Diamond of Death") is an ambiguity that arises when two classes B and C inherit from A, and class D inherits from both B and C. If there is a method in A that B and C have overridden, and D does not override it, then which version of the method does D inherit: that of B, or that of C?
-  ```c++
-  #include <iostream>
-  using namespace std;
+  * 虚继承用于解决多继承条件下的菱形继承问题（浪费存储空间、存在二义性）。
+  * 底层实现原理与编译器相关，一般通过虚基类指针和虚基类表实现，每个虚继承的子类都有一个虚基类指针（占用一个指针的存储空间，4字节）和虚基类表（不占用类对象的存储空间）（需要强调的是，虚基类依旧会在子类里面存在拷贝，只是仅仅最多存在一份而已，并不是不在子类里面了）；当虚继承的子类被当做父类继承时，虚基类指针也会被继承。
+  * 实际上，vbptr 指的是虚基类表指针（virtual base table pointer），该指针指向了一个虚基类表（virtual table），虚表中记录了虚基类与本类的偏移地址；通过偏移地址，这样就找到了虚基类成员，而虚继承也不用像普通多继承那样维持着公共基类（虚基类）的两份同样的拷贝，节省了存储空间。
+* 菱形继承
+  * The "diamond problem" (sometimes referred to as the "Deadly Diamond of Death") is an ambiguity that arises when two classes B and C inherit from A, and class D inherits from both B and C. If there is a method in A that B and C have overridden, and D does not override it, then which version of the method does D inherit: that of B, or that of C?
+```c++
+#include <iostream>
+using namespace std;
 
-  class A
-  {
-  public:
-      virtual void fun() { cout << "A::fun()" << endl; }
-  };
+class A
+{
+public:
+    virtual void fun() { cout << "A::fun()" << endl; }
+};
 
-  class B : public A
-  {
-  public:
-      virtual void fun() { cout << "B::fun()" << endl; }
-  };
+class B : public A
+{
+public:
+    virtual void fun() { cout << "B::fun()" << endl; }
+};
 
-  class C : public A
-  {
-  public:
-      virtual void fun() { cout << "C::fun()" << endl; }
-  };
+class C : public A
+{
+public:
+    virtual void fun() { cout << "C::fun()" << endl; }
+};
 
-  // Two classes virtually inheriting A
-  class BB : virtual public A
-  {
-  public:
-      virtual void fun() { cout << "BB::fun()" << endl; }
-  };
+// Two classes virtually inheriting A
+class BB : virtual public A
+{
+public:
+    virtual void fun() { cout << "BB::fun()" << endl; }
+};
 
-  class CC : virtual public A
-  {
-  public:
-      virtual void fun() { cout << "CC::fun()" << endl; }
-  };
+class CC : virtual public A
+{
+public:
+    virtual void fun() { cout << "CC::fun()" << endl; }
+};
 
-  class D : public B, public C
-  {
-  public:
-      void fun() { cout << "D::fun()" << endl; }
-  };
+class D : public B, public C
+{
+public:
+    void fun() { cout << "D::fun()" << endl; }
+};
 
-  // class DD : public BB, public CC // Compile error : virtual function 'A::fun' has more than one final overrider in 'DD'
-  // {
-  // };
+// class DD : public BB, public CC // Compile error : virtual function 'A::fun' has more than one final overrider in 'DD'
+// {
+// };
 
-  class DDD : public BB, public CC
-  {
-  public:
-      void fun() { cout << "DDD::fun()" << endl; }
-  };
+class DDD : public BB, public CC
+{
+public:
+    void fun() { cout << "DDD::fun()" << endl; }
+};
 
-  int main()
-  {
-      // A *p1 = new D(); // Compile error : ambiguous conversion from derived class 'D' to base class 'A'
+int main()
+{
+    // A *p1 = new D(); // Compile error : ambiguous conversion from derived class 'D' to base class 'A'
 
-      // A *pDD = new DD(); // Compile error : cannot initialize a variable of type 'A *' with an rvalue of type 'DD *'
+    // A *pDD = new DD(); // Compile error : cannot initialize a variable of type 'A *' with an rvalue of type 'DD *'
 
-      A *pDDD = new DDD();
-      pDDD->fun();  // DDD::fun() 调用派生类中的虚函数
+    A *pDDD = new DDD();
+    pDDD->fun();  // DDD::fun() 调用派生类中的虚函数
 
-      DDD ddd;
-      A &a = ddd;
-      a.fun();    // DDD::fun() 调用派生类中的虚函数
+    DDD ddd;
+    A &a = ddd;
+    a.fun();    // DDD::fun() 调用派生类中的虚函数
 
-      return 0;
-  }
-  ```
+    return 0;
+}
+```
 * 多态
   * [多态 (计算机科学) - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E5%A4%9A%E6%80%81_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6))
   * [Polymorphism (computer science) - Wikipedia](https://en.wikipedia.org/wiki/Polymorphism_(computer_science))
