@@ -127,6 +127,13 @@
   * Java/C#中没有多继承，C++中也应避免使用
   * 当两个父类有同样的成员时会带来模糊性，这样导致了名称冲突(name collision)，在编译时将予以拒绝，也称之为菱形继承
   * 可以在方法前说明基类，或者用虚继承来解决菱形继承问题
+  * [多重继承 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E5%A4%9A%E9%87%8D%E7%BB%A7%E6%89%BF)
+    * 多重继承可以导致某些令人混淆的情况，所以关于它的好处与风险之间孰轻孰重常常受人争论。Java使用了一个折衷的办法：Java允许一个类别继承自多于一个父接口（可以指定某一个类别，它继承了所有父类的类型，并必须拥有所有父类接口的外部可见方法的具体实现，并允许编译器强制以上要求），但只可以从一个父类继承实现（方法与数据）。微软的.NET编程语言，例如C#和Visual Basic .NET也使用了这种接口的做法。
+  * [Multiple inheritance - Wikipedia](https://en.wikipedia.org/wiki/Multiple_inheritance)
+    * Multiple inheritance has been a controversial issue for many years, with opponents pointing to its increased complexity and ambiguity in situations such as the "diamond problem", where it may be ambiguous as to which parent class a particular feature is inherited from if more than one parent class implements same feature. This can be addressed in various ways, including using virtual inheritance. Alternate methods of object composition not based on inheritance such as mixins and traits have also been proposed to address the ambiguity.
+    * The "diamond problem" (sometimes referred to as the "Deadly Diamond of Death") is an ambiguity that arises when two classes B and C inherit from A, and class D inherits from both B and C. If there is a method in A that B and C have overridden, and D does not override it, then which version of the method does D inherit: that of B, or that of C?
+    * For example, in the context of GUI software development, a class Button may inherit from both classes Rectangle (for appearance) and Clickable (for functionality/input handling), and classes Rectangle and Clickable both inherit from the Object class. Now if the equals method is called for a Button object and there is no such method in the Button class but there is an overridden equals method in Rectangle or Clickable (or both), which method should be eventually called?
+    * It is called the "diamond problem" because of the shape of the class inheritance diagram in this situation. In this case, class A is at the top, both B and C separately beneath it, and D joins the two together at the bottom to form a diamond shape.
 * 菱形继承
 ```
 #include <iostream>
