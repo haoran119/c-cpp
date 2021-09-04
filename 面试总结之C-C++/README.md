@@ -403,6 +403,14 @@
                                 // is executed
     }   
    ```
+   * [Virtual function - Wikipedia](https://en.wikipedia.org/wiki/Virtual_function)
+     * Behavior during construction and destruction
+       * Languages differ in their behavior while the constructor or destructor of an object is running. For this reason, calling virtual functions in constructors is generally discouraged.
+       * In C++, the "base" function is called. Specifically, the most derived function that is not more derived than the current constructor's class is called. If that function is a pure virtual function, then undefined behavior occurs. This is true even if the class contains an implementation for that pure virtual function. A conforming C++ implementation is not required (and generally not able) to detect indirect calls to pure virtual functions at compile time or link time. Some runtime systems will issue a pure virtual function call error when encountering a call to a pure virtual function at run time.
+       * In Java and C#, the derived implementation is called, but some fields are not yet initialized by the derived constructor (although they are initialized to their default zero values). Some design patterns, such as the Abstract Factory Pattern, actively promote this usage in languages supporting this ability.
+     * Virtual destructors
+       * Object-oriented languages typically manage memory allocation and de-allocation automatically when objects are created and destroyed. However, some object-oriented languages allow a custom destructor method to be implemented, if desired. If the language in question uses automatic memory management, the custom destructor (generally called a finalizer in this context) that is called is certain to be the appropriate one for the object in question. For example, if an object of type Wolf that inherits Animal is created, and both have custom destructors, the one called will be the one declared in Wolf.
+       * In manual memory management contexts, the situation can be more complex, particularly in relation to static dispatch. If an object of type Wolf is created but pointed to by an Animal pointer, and it is this Animal pointer type that is deleted, the destructor called may actually be the one defined for Animal and not the one for Wolf, unless the destructor is virtual. This is particularly the case with C++, where the behavior is a common source of programming errors if destructors are not virtual.
 
 ## 类相关
 
