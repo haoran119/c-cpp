@@ -464,12 +464,18 @@ int main()
   * 简化对类似函数的设计，比如要设计两个函数 abs(int a), abs(float a),就可以用模板去设计一个函数就可以了
 * [STL](https://github.com/huihut/interview#-stl)
 * STL containers内部实现的数据结构
-  * [vector](https://github.com/huihut/interview/tree/master/STL#vector) ：数组
-  * [list](https://github.com/huihut/interview/tree/master/STL#list) ：链表
-  * [stack](https://github.com/huihut/interview/tree/master/STL#stack) / [queue](https://github.com/huihut/interview/tree/master/STL#queue) : [deque](https://github.com/huihut/interview/tree/master/STL#deque) / [list](https://github.com/huihut/interview/tree/master/STL#list)
-  * [priority_queue](https://github.com/huihut/interview/tree/master/STL#priority_queue) : vector + max-heap
-  * [set](https://github.com/huihut/interview/tree/master/STL#set) / [multiset](https://github.com/huihut/interview/tree/master/STL#multiset) / [map](https://github.com/huihut/interview/tree/master/STL#map)  / [multimap](https://github.com/huihut/interview/tree/master/STL#multimap) ：红黑树([Red–black tree - Wikipedia](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree)))
-  * [unordered_set](https://github.com/huihut/interview/tree/master/STL#unordered_set) / [unordered_multiset](https://github.com/huihut/interview/tree/master/STL#unordered_multiset) / [unordered_map](https://github.com/huihut/interview/tree/master/STL#unordered_map) / [unordered_multimap](https://github.com/huihut/interview/tree/master/STL#unordered_multimap) ：Hash表
+  * Sequence containers
+    * [array](https://github.com/huihut/interview/tree/master/STL#array) / [vector](https://github.com/huihut/interview/tree/master/STL#vector) ：数组
+    * [deque](https://github.com/huihut/interview/tree/master/STL#deque) : 双端队列
+    * [forward_list](https://github.com/huihut/interview/tree/master/STL#forward_list) : 单向链表
+    * [list](https://github.com/huihut/interview/tree/master/STL#list) ：链表
+  * Container adaptors
+    * [stack](https://github.com/huihut/interview/tree/master/STL#stack) / [queue](https://github.com/huihut/interview/tree/master/STL#queue) : deque / list
+    * [priority_queue](https://github.com/huihut/interview/tree/master/STL#priority_queue) : vector + max-heap
+  * Associative containers
+    * [set](https://github.com/huihut/interview/tree/master/STL#set) / [multiset](https://github.com/huihut/interview/tree/master/STL#multiset) / [map](https://github.com/huihut/interview/tree/master/STL#map)  / [multimap](https://github.com/huihut/interview/tree/master/STL#multimap) ：红黑树([Red–black tree - Wikipedia](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree)))
+  * Unordered associative containers
+    * [unordered_set](https://github.com/huihut/interview/tree/master/STL#unordered_set) / [unordered_multiset](https://github.com/huihut/interview/tree/master/STL#unordered_multiset) / [unordered_map](https://github.com/huihut/interview/tree/master/STL#unordered_map) / [unordered_multimap](https://github.com/huihut/interview/tree/master/STL#unordered_multimap) ：Hash表
   * [Containers - C++ Reference](http://www.cplusplus.com/reference/stl/)
   * [STL实现的底层数据结构简介 - CSDN博客](http://blog.csdn.net/huangkq1989/article/details/7277282)
 * list v.s. vector
