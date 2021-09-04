@@ -473,7 +473,7 @@ int main()
     * [stack](https://github.com/huihut/interview/tree/master/STL#stack) / [queue](https://github.com/huihut/interview/tree/master/STL#queue) : deque / list
     * [priority_queue](https://github.com/huihut/interview/tree/master/STL#priority_queue) : vector + max-heap
   * Associative containers
-    * [set](https://github.com/huihut/interview/tree/master/STL#set) / [multiset](https://github.com/huihut/interview/tree/master/STL#multiset) / [map](https://github.com/huihut/interview/tree/master/STL#map)  / [multimap](https://github.com/huihut/interview/tree/master/STL#multimap) ：红黑树([Red–black tree - Wikipedia](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree)))
+    * [set](https://github.com/huihut/interview/tree/master/STL#set) / [multiset](https://github.com/huihut/interview/tree/master/STL#multiset) / [map](https://github.com/huihut/interview/tree/master/STL#map)  / [multimap](https://github.com/huihut/interview/tree/master/STL#multimap) ：红黑树([Red–black tree - Wikipedia](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree))
   * Unordered associative containers
     * [unordered_set](https://github.com/huihut/interview/tree/master/STL#unordered_set) / [unordered_multiset](https://github.com/huihut/interview/tree/master/STL#unordered_multiset) / [unordered_map](https://github.com/huihut/interview/tree/master/STL#unordered_map) / [unordered_multimap](https://github.com/huihut/interview/tree/master/STL#unordered_multimap) ：Hash表
   * [Containers - C++ Reference](http://www.cplusplus.com/reference/stl/)
