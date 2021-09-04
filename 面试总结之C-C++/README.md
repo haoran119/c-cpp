@@ -462,6 +462,7 @@ int main()
   * 可以用作类似C里的回调函数，也可以用作函数功能的组合
 * C++模板
   * 简化对类似函数的设计，比如要设计两个函数 abs(int a), abs(float a),就可以用模板去设计一个函数就可以了
+* [STL](https://github.com/huihut/interview#-stl)
 * STL containers内部实现的数据结构
   * vector ：数组
   * list ：链表
