@@ -376,6 +376,33 @@
       return 0;
    }   
    ```
+   * 在Java语言中, 所有的方法默认都是"虚函数". 只有以关键字 final 标记的方法才是非虚函数.
+   * 在 C# 语言中, 对基类中的任何虚方法必须用 virtual 修饰, 而派生类中由基类继承而来的重载方法必须用 override 修饰.
+   * 抽象类和纯虚函数
+     * 纯虚函数或纯虚方法是一个需要被非抽象的派生类覆盖（override）的虚函数. 包含纯虚方法的类被称作抽象类; 抽象类不能被直接实例化。 一个抽象基类的一个子类只有在所有的纯虚函数在该类(或其父类)内给出实现时, 才能直接实例化. 纯虚方法通常只有声明(签名)而没有定义(实现)，但有特例情形要求纯虚函数必须给出函数体定义.
+     * 虽然纯虚方法通常在定义它的类中没有实现, 在 C++ 语言中, 允许纯虚函数在定义它的类中包含其实现, 这为派生类提供了备用或默认的行为. C++的虚基类的虚析构函数必须提供函数体定义，否则链接时（linking）在析构该抽象类的派生实例对象的语句处会报错。
+     * 在C++语言中, 纯虚函数用一种特别的语法[=0]定义（但 VS 也支持 abstract 关键字：virtual ReturnType Function()abstract;）
+     * 纯虚函数的定义仅提供方法的原型. 虽然在抽象类中通常不提供纯虚函数的实现, 但是抽象类中可以包含其实现, 而且可以不在声明的同时给出定义[2]. 每个非抽象子类仍然需要重载该方法, 抽象类中实现的调用可以采用以下这种形式:
+   ```c++
+   class Abstract {
+   public:
+      virtual void pure_virtual() = 0;
+   };
+
+   void Abstract::pure_virtual() {
+      // do something
+    }
+
+    class Child : public Abstract {
+      virtual void pure_virtual(); // no longer abstract, this class may be
+                                   // instantiated.
+    };
+
+    void Child::pure_virtual() {
+      Abstract::pure_virtual(); // the implementation in the abstract class
+                                // is executed
+    }   
+   ```
 
 ## 类相关
 
