@@ -149,7 +149,7 @@
       * 例如，常见的“菱形”虚继承例子中，两个派生类、一个最派生类的构造函数的初始化列表中都可以给出虚基类的初始化；但只由最派生类的构造函数实际执行虚基类的初始化。
     * 虚继承的应用：不可派生的finally类
       * 一个类如果不希望被继承，类似于Java中的具有finally性质的类，这在C++中可以用虚继承来实现：
-      ```sh
+      ```cpp
       template<typename T> class MakeFinally{
          private:
              MakeFinally(){};//只有MakeFinally的友类才可以构造MakeFinally
@@ -171,7 +171,7 @@
       }
       ```
   * 菱形继承
-  ```
+  ```c++
   #include <iostream>
   using namespace std;
 
