@@ -139,45 +139,70 @@
       * Java 8 introduces default methods on interfaces. If A,B,C are interfaces, B,C can each provide a different implementation to an abstract method of A, causing the diamond problem. Either class D must reimplement the method (the body of which can simply forward the call to one of the super implementations), or the ambiguity will be rejected as a compile error. Prior to Java 8, Java was not subject to the Diamond problem risk, because it did not support multiple inheritance and interface default methods were not available.
       * Python has the same structure as Perl, but, unlike Perl, includes it in the syntax of the language. The order of inheritance affects the class semantics. Python had to deal with this upon the introduction of new-style classes, all of which have a common ancestor, object. Python creates a list of classes using the C3 linearization (or Method Resolution Order (MRO)) algorithm. That algorithm enforces two constraints: children precede their parents and if a class inherits from multiple classes, they are kept in the order specified in the tuple of base classes (however in this case, some classes high in the inheritance graph may precede classes lower in the graph). Thus, the method resolution order is: D, B, C, A.
     * Nevertheless, even when several interfaces declare the same method signature, as soon as that method is implemented (defined) anywhere in the inheritance chain, it overrides any implementation of that method in the chain above it (in its superclasses). Hence, at any given level in the inheritance chain, there can be at most one implementation of any method. Thus, single-inheritance method implementation does not exhibit the Diamond Problem even with multiple-inheritance of interfaces. With the introduction of default implementation for interfaces in Java 8 and C# 8, it is still possible to generate a Diamond Problem, although this will only appear as a compile-time error.
-* 菱形继承
-```
-#include <iostream>
-using namespace std;
+  * 菱形继承
+  ```
+  #include <iostream>
+  using namespace std;
 
-class Base
-{
-public:
-    virtual void fun() { cout << "Base::fun()" << endl; }
-};
+  class A
+  {
+  public:
+      virtual void fun() { cout << "A::fun()" << endl; }
+  };
 
-// class Base1 : virtual public Base
-class Base1 : public Base
-{
-public:
-    virtual void fun() { cout << "Base1::fun()" << endl; }
-};
+  class B : public A
+  {
+  public:
+      virtual void fun() { cout << "B::fun()" << endl; }
+  };
 
-// class Base2 : virtual public Base
-class Base2 : public Base
-{
-public:
-    virtual void fun() { cout << "Base2::fun()" << endl; }
-};
+  class C : public A
+  {
+  public:
+      virtual void fun() { cout << "C::fun()" << endl; }
+  };
 
-class Derive : public Base1, public Base2
-{
-public:
-    void fun() { cout << "Derive::fun()" << endl; }
-};
+  class BB : virtual public A
+  {
+  public:
+      virtual void fun() { cout << "BB::fun()" << endl; }
+  };
 
-int main()
-{
-    Base *p = new Derive(); // Compile error : ambiguous conversion from derived class 'Derive' to base class 'Base'
-    p->fun(); // Derive::fun() 调用派生类中的虚函数
-    return 0;
-}
+  class CC : virtual public A
+  {
+  public:
+      virtual void fun() { cout << "CC::fun()" << endl; }
+  };
 
-```
+  class D : public B, public C
+  {
+  public:
+      void fun() { cout << "D::fun()" << endl; }
+  };
+
+  // class DD : public BB, public CC // Compile error : virtual function 'A::fun' has more than one final overrider in 'DD'
+  // {
+  // };
+
+  class DDD : public BB, public CC
+  {
+  public:
+      void fun() { cout << "DDD::fun()" << endl; }
+  };
+
+  int main()
+  {
+      // A *p1 = new D(); // Compile error : ambiguous conversion from derived class 'D' to base class 'A'
+
+      // A *pDD = new DD(); // Compile error : cannot initialize a variable of type 'A *' with an rvalue of type 'DD *'
+
+      A *pDDD = new DDD();
+
+      pDDD->fun();  // DDD::fun() 调用派生类中的虚函数
+
+      return 0;
+  }
+  ```
 * 多态
   * [多态 (计算机科学) - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E5%A4%9A%E6%80%81_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6))
   * [Polymorphism (computer science) - Wikipedia](https://en.wikipedia.org/wiki/Polymorphism_(computer_science))
