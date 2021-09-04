@@ -294,6 +294,88 @@
       * 动态多态（dynamic polymorphism）:生效于运行期。
       * 静态多态（static polymorphism）：将不同的特殊行为和单个泛化记号相关联，由于这种关联处理于编译期而非运行期，因此被称为“静态”。可以用来实现类型安全、运行高效的同质对象集合操作。C++ STL不采用动态多态来实现就是个例子。
     * 对于C++语言，带变量的宏和函数重载机制也允许将不同的特殊行为和单个泛化记号相关联。然而，习惯上并不将这种函数多态、宏多态展现出来的行为称为多态（或静态多态），否则就连C语言也具有宏多态了。谈及多态时，默认就是指动态多态，而静态多态则是指基于模板的多态。
+ * 虚函数
+   * [虚函数 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E8%99%9A%E5%87%BD%E6%95%B0)
+   * 在面向对象程序设计领域，C++、Object Pascal 等语言中有虚函数（英语：virtual function）或虚方法（英语：virtual method）的概念。这种函数或方法可以被子类继承和覆盖，通常使用动态分派实现。这一概念是面向对象程序设计中（运行时）多态的重要组成部分。简言之，虚函数可以给出目标函数的定义，但该目标的具体指向在编译期可能无法确定。
+   * 虚函数在设计模式方面扮演重要角色。例如，《设计模式》一书中提到的23种设计模式中，仅5个对象创建模式就有4个用到了虚函数（抽象工厂、工厂方法、生成器、原型），只有单例没有用到。
+   * 虚函数概念的引入可以解决这样的问题：
+     * 在面向对象程序设计中，派生类继承自基类。使用指针或引用访问派生类对象时，指针或引用本身所指向的类型是基类而不是派生类。如果派生类覆盖了基类中的方法，通过上述指针或引用调用该方法时，可以有两种结果：
+       * 调用到基类的方法：编译器根据指针或引用的类型决定，称作“早绑定”；
+       * 调用到派生类的方法：语言的运行时系统根据对象的实际类型决定，称作“迟绑定”。
+     * 虚函数的效果属于后者。如果问题中基类的函数是“虚”的，则调用到的都是最终派生类（英语：most-derived class）中的函数实现，与指针或引用的类型无关。反之，如果函数非“虚”，调用到的函数就在编译期根据指针或者引用所指向的类型决定。
+     * 有了虚函数，程序甚至能够调用编译期还不存在的函数。
+     * 在 C++ 中，在基类的成员函数声明前加上关键字 virtual 即可让该函数成为 虚函数，派生类中对此函数的不同实现都会继承这一修饰符，允许后续派生类覆盖，达到迟绑定的效果。即便是基类中的成员函数调用虚函数，也会调用到派生类中的版本。
+   ```c++
+   # include <iostream>
+   # include <vector>
+
+   using namespace std;
+   class Animal
+   {
+   public:
+       // void eat() const { cout << "I eat like a generic Animal." << endl; }
+       // ~Animal() {}
+       virtual void eat() const { cout << "I eat like a generic Animal." << endl; }
+       virtual ~Animal() {}
+   };
+
+   class Wolf : public Animal
+   {
+   public:
+       void eat() const { cout << "I eat like a wolf!" << endl; }
+   };
+
+   class Fish : public Animal
+   {
+   public:
+       void eat() const { cout << "I eat like a fish!" << endl; }
+   };
+
+   class GoldFish : public Fish
+   {
+   public:
+       void eat() const { cout << "I eat like a goldfish!" << endl; }
+   };
+
+
+   class OtherAnimal : public Animal
+   {
+   };
+
+   int main()
+   {
+       std::vector<Animal*> animals;
+       animals.push_back( new Animal() );
+       animals.push_back( new Wolf() );
+       animals.push_back( new Fish() );
+       animals.push_back( new GoldFish() );
+       animals.push_back( new OtherAnimal() );
+
+       /*
+       以下是虚函数 Animal::eat() 的输出：
+       I eat like a generic Animal.
+       I eat like a wolf!
+       I eat like a fish!
+       I eat like a goldfish!
+       I eat like a generic Animal.
+
+       当 Animal::eat() 不是被宣告为虚函数时，输出如下所示：
+       I eat like a generic Animal.
+       I eat like a generic Animal.
+       I eat like a generic Animal.
+       I eat like a generic Animal.
+       I eat like a generic Animal.
+       */
+       for( std::vector<Animal*>::const_iterator it = animals.begin();
+          it != animals.end(); ++it)
+       {
+           (*it)->eat();
+           delete *it;
+       }
+
+      return 0;
+   }   
+   ```
 
 ## 类相关
 
