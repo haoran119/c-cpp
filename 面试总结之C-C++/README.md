@@ -10,31 +10,6 @@
 * [STL Time Complexity (Summary)](http://john-ahlgren.blogspot.com/2013/10/stl-container-performance.html)
 * [Data Structure and Algorithms Cheat Sheet](https://github.com/gibsjose/cpp-cheat-sheet/blob/master/Data%20Structures%20and%20Algorithms.md)
 * [C++ 面试突击 - LeetBook - 力扣（LeetCode）全球极客挚爱的技术成长平台](https://leetcode-cn.com/leetbook/detail/cpp-interview-highlights/)
-  * 面向对象的三大特性：
-    * 封装(Encapsulation)：将具体的实现过程和数据封装成一个函数，只能通过接口进行访问，降低耦合性。
-    * 继承(Inheritance)：子类继承父类的特征和行为，子类有父类的非 private 方法或成员变量，子类可以对父类的方法进行重写，增强了类之间的耦合性，但是当父类中的成员变量、成员函数或者类本身被 final 关键字修饰时，修饰的类不能继承，修饰的成员不能重写或修改。
-    * 多态(Polymorphism)：多态就是不同继承类的对象，对同一消息做出不同的响应，基类的指针指向或绑定到派生类的对象，使得基类指针呈现不同的表现方式。
-  * 重载、重写、隐藏的区别
-    * 重载(Overload)：是指同一可访问区内被声明几个具有不同参数列（参数的类型、个数、顺序）的同名函数，根据参数列表确定调用哪个函数，重载不关心函数返回类型。
-    * 隐藏(Overwrite / Hide)：是指派生类的函数屏蔽了与其同名的基类函数，主要只要同名函数，不管参数列表是否相同，基类函数都会被隐藏。
-    * 重写(覆盖)(Override)：是指派生类中存在重新定义的函数。函数名、参数列表、返回值类型都必须同基类中被重写的函数一致，只有函数体不同。派生类调用时会调用派生类的重写函数，不会调用被重写函数。重写的基类中被重写的函数必须有 virtual 修饰。
-    * 重写和重载的区别：
-      * 范围区别：对于类中函数的重载或者重写而言，重载发生在同一个类的内部，重写发生在不同的类之间（子类和父类之间）。
-      * 参数区别：重载的函数需要与原函数有相同的函数名、不同的参数列表，不关注函数的返回值类型；重写的函数的函数名、参数列表和返回值类型都需要和原函数相同，父类中被重写的函数需要有 virtual 修饰。
-      * virtual 关键字：重写的函数基类中必须有 virtual关键字的修饰，重载的函数可以有 virtual 关键字的修饰也可以没有。
-    * 隐藏和重写，重载的区别：
-      * 范围区别：隐藏与重载范围不同，隐藏发生在不同类中。
-      * 参数区别：隐藏函数和被隐藏函数参数列表可以相同，也可以不同，但函数名一定相同；当参数不同时，无论基类中的函数是否被 virtual 修饰，基类函数都是被隐藏，而不是重写。
-  * 什么是多态？多态如何实现？
-    * 多态：多态就是不同继承类的对象，对同一消息做出不同的响应，基类的指针指向或绑定到派生类的对象，使得基类指针呈现不同的表现方式。在基类的函数前加上 virtual 关键字，在派生类中重写该函数，运行时将会根据对象的实际类型来调用相应的函数。如果对象类型是派生类，就调用派生类的函数；如果对象类型是基类，就调用基类的函数。
-    * 实现方法：多态是通过虚函数实现的，虚函数的地址保存在虚函数表中，虚函数表的地址保存在含有虚函数的类的实例对象的内存空间中。
-    * 实现过程：
-      * 在类中用 virtual 关键字声明的函数叫做虚函数；
-      * 存在虚函数的类都有一个虚函数表，当创建一个该类的对象时，该对象有一个指向虚函数表的虚表指针（虚函数表和类对应的，虚表指针是和对象对应）；
-      * 当基类指针指向派生类对象，基类指针调用虚函数时，基类指针指向派生类的虚表指针，由于该虚表指针指向派生类虚函数表，通过遍历虚表，寻找相应的虚函数。
-    * 如果使用虚函数，父类指针指向子类对象并调用对象方法时，使用的是子类的方法;
-    * 如果未使用虚函数，则是普通的重写，则父类指针指向子类对象时，使用的是父类的方法（与指针类型看齐）
-    * 父类指针能指向子类对象，但是子类指针不能指向父类对象
 * [C 语言与 C++ 面试知识总结 (qq.com)](https://mp.weixin.qq.com/s/x6DMkh54NQBOlDMqNxvf7w)
   * [huihut/interview: 📚 C/C++ 技术面试基础知识总结](https://github.com/huihut/interview#effective)
 * [这些C++工程师面试题你都会了吗？](https://mp.weixin.qq.com/s/JA3ZrRwS_KllNdJxVMQRdA)
@@ -120,6 +95,21 @@
 
 ## 面向对象
 
+* 面向对象的三大特性：
+  * 封装(Encapsulation)：将具体的实现过程和数据封装成一个函数，只能通过接口进行访问，降低耦合性。
+  * 继承(Inheritance)：子类继承父类的特征和行为，子类有父类的非 private 方法或成员变量，子类可以对父类的方法进行重写，增强了类之间的耦合性，但是当父类中的成员变量、成员函数或者类本身被 final 关键字修饰时，修饰的类不能继承，修饰的成员不能重写或修改。
+  * 多态(Polymorphism)：多态就是不同继承类的对象，对同一消息做出不同的响应，基类的指针指向或绑定到派生类的对象，使得基类指针呈现不同的表现方式。
+* 重载、重写、隐藏的区别
+  * 重载(Overload)：是指同一可访问区内被声明几个具有不同参数列（参数的类型、个数、顺序）的同名函数，根据参数列表确定调用哪个函数，重载不关心函数返回类型。
+  * 隐藏(Overwrite / Hide)：是指派生类的函数屏蔽了与其同名的基类函数，主要只要同名函数，不管参数列表是否相同，基类函数都会被隐藏。
+  * 重写(覆盖)(Override)：是指派生类中存在重新定义的函数。函数名、参数列表、返回值类型都必须同基类中被重写的函数一致，只有函数体不同。派生类调用时会调用派生类的重写函数，不会调用被重写函数。重写的基类中被重写的函数必须有 virtual 修饰。
+  * 重写和重载的区别：
+    * 范围区别：对于类中函数的重载或者重写而言，重载发生在同一个类的内部，重写发生在不同的类之间（子类和父类之间）。
+    * 参数区别：重载的函数需要与原函数有相同的函数名、不同的参数列表，不关注函数的返回值类型；重写的函数的函数名、参数列表和返回值类型都需要和原函数相同，父类中被重写的函数需要有 virtual 修饰。
+    * virtual 关键字：重写的函数基类中必须有 virtual关键字的修饰，重载的函数可以有 virtual 关键字的修饰也可以没有。
+  * 隐藏和重写，重载的区别：
+    * 范围区别：隐藏与重载范围不同，隐藏发生在不同类中。
+    * 参数区别：隐藏函数和被隐藏函数参数列表可以相同，也可以不同，但函数名一定相同；当参数不同时，无论基类中的函数是否被 virtual 修饰，基类函数都是被隐藏，而不是重写。
 * C++虚拟机制
   * 用来实现多态
 * 多重继承
@@ -295,123 +285,133 @@
       * 动态多态（dynamic polymorphism）:生效于运行期。
       * 静态多态（static polymorphism）：将不同的特殊行为和单个泛化记号相关联，由于这种关联处理于编译期而非运行期，因此被称为“静态”。可以用来实现类型安全、运行高效的同质对象集合操作。C++ STL不采用动态多态来实现就是个例子。
     * 对于C++语言，带变量的宏和函数重载机制也允许将不同的特殊行为和单个泛化记号相关联。然而，习惯上并不将这种函数多态、宏多态展现出来的行为称为多态（或静态多态），否则就连C语言也具有宏多态了。谈及多态时，默认就是指动态多态，而静态多态则是指基于模板的多态。
- * 虚函数
-   * [虚函数 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E8%99%9A%E5%87%BD%E6%95%B0)
-   * 在面向对象程序设计领域，C++、Object Pascal 等语言中有虚函数（英语：virtual function）或虚方法（英语：virtual method）的概念。这种函数或方法可以被子类继承和覆盖，通常使用动态分派实现。这一概念是面向对象程序设计中（运行时）多态的重要组成部分。简言之，虚函数可以给出目标函数的定义，但该目标的具体指向在编译期可能无法确定。
-   * 虚函数在设计模式方面扮演重要角色。例如，《设计模式》一书中提到的23种设计模式中，仅5个对象创建模式就有4个用到了虚函数（抽象工厂、工厂方法、生成器、原型），只有单例没有用到。
-   * 虚函数概念的引入可以解决这样的问题：
-     * 在面向对象程序设计中，派生类继承自基类。使用指针或引用访问派生类对象时，指针或引用本身所指向的类型是基类而不是派生类。如果派生类覆盖了基类中的方法，通过上述指针或引用调用该方法时，可以有两种结果：
-       * 调用到基类的方法：编译器根据指针或引用的类型决定，称作“早绑定”；
-       * 调用到派生类的方法：语言的运行时系统根据对象的实际类型决定，称作“迟绑定”。
-     * 虚函数的效果属于后者。如果问题中基类的函数是“虚”的，则调用到的都是最终派生类（英语：most-derived class）中的函数实现，与指针或引用的类型无关。反之，如果函数非“虚”，调用到的函数就在编译期根据指针或者引用所指向的类型决定。
-     * 有了虚函数，程序甚至能够调用编译期还不存在的函数。
-     * 在 C++ 中，在基类的成员函数声明前加上关键字 virtual 即可让该函数成为 虚函数，派生类中对此函数的不同实现都会继承这一修饰符，允许后续派生类覆盖，达到迟绑定的效果。即便是基类中的成员函数调用虚函数，也会调用到派生类中的版本。
-   ```c++
-   # include <iostream>
-   # include <vector>
+  * 什么是多态？多态如何实现？
+    * 多态：多态就是不同继承类的对象，对同一消息做出不同的响应，基类的指针指向或绑定到派生类的对象，使得基类指针呈现不同的表现方式。在基类的函数前加上 virtual 关键字，在派生类中重写该函数，运行时将会根据对象的实际类型来调用相应的函数。如果对象类型是派生类，就调用派生类的函数；如果对象类型是基类，就调用基类的函数。
+    * 实现方法：多态是通过虚函数实现的，虚函数的地址保存在虚函数表中，虚函数表的地址保存在含有虚函数的类的实例对象的内存空间中。
+    * 实现过程：
+      * 在类中用 virtual 关键字声明的函数叫做虚函数；
+      * 存在虚函数的类都有一个虚函数表，当创建一个该类的对象时，该对象有一个指向虚函数表的虚表指针（虚函数表和类对应的，虚表指针是和对象对应）；
+      * 当基类指针指向派生类对象，基类指针调用虚函数时，基类指针指向派生类的虚表指针，由于该虚表指针指向派生类虚函数表，通过遍历虚表，寻找相应的虚函数。
+    * 如果使用虚函数，父类指针指向子类对象并调用对象方法时，使用的是子类的方法;
+    * 如果未使用虚函数，则是普通的重写，则父类指针指向子类对象时，使用的是父类的方法（与指针类型看齐）
+    * 父类指针能指向子类对象，但是子类指针不能指向父类对象
+* 虚函数
+  * [虚函数 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E8%99%9A%E5%87%BD%E6%95%B0)
+  * 在面向对象程序设计领域，C++、Object Pascal 等语言中有虚函数（英语：virtual function）或虚方法（英语：virtual method）的概念。这种函数或方法可以被子类继承和覆盖，通常使用动态分派实现。这一概念是面向对象程序设计中（运行时）多态的重要组成部分。简言之，虚函数可以给出目标函数的定义，但该目标的具体指向在编译期可能无法确定。
+  * 虚函数在设计模式方面扮演重要角色。例如，《设计模式》一书中提到的23种设计模式中，仅5个对象创建模式就有4个用到了虚函数（抽象工厂、工厂方法、生成器、原型），只有单例没有用到。
+  * 虚函数概念的引入可以解决这样的问题：
+    * 在面向对象程序设计中，派生类继承自基类。使用指针或引用访问派生类对象时，指针或引用本身所指向的类型是基类而不是派生类。如果派生类覆盖了基类中的方法，通过上述指针或引用调用该方法时，可以有两种结果：
+      * 调用到基类的方法：编译器根据指针或引用的类型决定，称作“早绑定”；
+      * 调用到派生类的方法：语言的运行时系统根据对象的实际类型决定，称作“迟绑定”。
+    * 虚函数的效果属于后者。如果问题中基类的函数是“虚”的，则调用到的都是最终派生类（英语：most-derived class）中的函数实现，与指针或引用的类型无关。反之，如果函数非“虚”，调用到的函数就在编译期根据指针或者引用所指向的类型决定。
+    * 有了虚函数，程序甚至能够调用编译期还不存在的函数。
+    * 在 C++ 中，在基类的成员函数声明前加上关键字 virtual 即可让该函数成为 虚函数，派生类中对此函数的不同实现都会继承这一修饰符，允许后续派生类覆盖，达到迟绑定的效果。即便是基类中的成员函数调用虚函数，也会调用到派生类中的版本。
+  ```c++
+  # include <iostream>
+  # include <vector>
 
-   using namespace std;
-   class Animal
-   {
-   public:
-       // void eat() const { cout << "I eat like a generic Animal." << endl; }
-       // ~Animal() {}
-       virtual void eat() const { cout << "I eat like a generic Animal." << endl; }
-       virtual ~Animal() {}
+  using namespace std;
+  class Animal
+  {
+  public:
+      // void eat() const { cout << "I eat like a generic Animal." << endl; }
+      // ~Animal() {}
+      virtual void eat() const { cout << "I eat like a generic Animal." << endl; }
+      virtual ~Animal() {}
+  };
+
+  class Wolf : public Animal
+  {
+  public:
+      void eat() const { cout << "I eat like a wolf!" << endl; }
+  };
+
+  class Fish : public Animal
+  {
+  public:
+      void eat() const { cout << "I eat like a fish!" << endl; }
+  };
+
+  class GoldFish : public Fish
+  {
+  public:
+      void eat() const { cout << "I eat like a goldfish!" << endl; }
+  };
+
+
+  class OtherAnimal : public Animal
+  {
+  };
+
+  int main()
+  {
+      std::vector<Animal*> animals;
+      animals.push_back( new Animal() );
+      animals.push_back( new Wolf() );
+      animals.push_back( new Fish() );
+      animals.push_back( new GoldFish() );
+      animals.push_back( new OtherAnimal() );
+
+      /*
+      以下是虚函数 Animal::eat() 的输出：
+      I eat like a generic Animal.
+      I eat like a wolf!
+      I eat like a fish!
+      I eat like a goldfish!
+      I eat like a generic Animal.
+
+      当 Animal::eat() 不是被宣告为虚函数时，输出如下所示：
+      I eat like a generic Animal.
+      I eat like a generic Animal.
+      I eat like a generic Animal.
+      I eat like a generic Animal.
+      I eat like a generic Animal.
+      */
+      for( std::vector<Animal*>::const_iterator it = animals.begin();
+         it != animals.end(); ++it)
+      {
+          (*it)->eat();
+          delete *it;
+      }
+
+     return 0;
+  }   
+  ```
+  * 在Java语言中, 所有的方法默认都是"虚函数". 只有以关键字 final 标记的方法才是非虚函数.
+  * 在 C# 语言中, 对基类中的任何虚方法必须用 virtual 修饰, 而派生类中由基类继承而来的重载方法必须用 override 修饰.
+  * 抽象类和纯虚函数
+    * 纯虚函数或纯虚方法是一个需要被非抽象的派生类覆盖（override）的虚函数. 包含纯虚方法的类被称作抽象类; 抽象类不能被直接实例化。 一个抽象基类的一个子类只有在所有的纯虚函数在该类(或其父类)内给出实现时, 才能直接实例化. 纯虚方法通常只有声明(签名)而没有定义(实现)，但有特例情形要求纯虚函数必须给出函数体定义.
+    * 虽然纯虚方法通常在定义它的类中没有实现, 在 C++ 语言中, 允许纯虚函数在定义它的类中包含其实现, 这为派生类提供了备用或默认的行为. C++的虚基类的虚析构函数必须提供函数体定义，否则链接时（linking）在析构该抽象类的派生实例对象的语句处会报错。
+    * 在C++语言中, 纯虚函数用一种特别的语法[=0]定义（但 VS 也支持 abstract 关键字：virtual ReturnType Function()abstract;）
+    * 纯虚函数的定义仅提供方法的原型. 虽然在抽象类中通常不提供纯虚函数的实现, 但是抽象类中可以包含其实现, 而且可以不在声明的同时给出定义[2]. 每个非抽象子类仍然需要重载该方法, 抽象类中实现的调用可以采用以下这种形式:
+  ```c++
+  class Abstract {
+  public:
+     virtual void pure_virtual() = 0;
+  };
+
+  void Abstract::pure_virtual() {
+     // do something
+   }
+
+   class Child : public Abstract {
+     virtual void pure_virtual(); // no longer abstract, this class may be
+                                  // instantiated.
    };
 
-   class Wolf : public Animal
-   {
-   public:
-       void eat() const { cout << "I eat like a wolf!" << endl; }
-   };
-
-   class Fish : public Animal
-   {
-   public:
-       void eat() const { cout << "I eat like a fish!" << endl; }
-   };
-
-   class GoldFish : public Fish
-   {
-   public:
-       void eat() const { cout << "I eat like a goldfish!" << endl; }
-   };
-
-
-   class OtherAnimal : public Animal
-   {
-   };
-
-   int main()
-   {
-       std::vector<Animal*> animals;
-       animals.push_back( new Animal() );
-       animals.push_back( new Wolf() );
-       animals.push_back( new Fish() );
-       animals.push_back( new GoldFish() );
-       animals.push_back( new OtherAnimal() );
-
-       /*
-       以下是虚函数 Animal::eat() 的输出：
-       I eat like a generic Animal.
-       I eat like a wolf!
-       I eat like a fish!
-       I eat like a goldfish!
-       I eat like a generic Animal.
-
-       当 Animal::eat() 不是被宣告为虚函数时，输出如下所示：
-       I eat like a generic Animal.
-       I eat like a generic Animal.
-       I eat like a generic Animal.
-       I eat like a generic Animal.
-       I eat like a generic Animal.
-       */
-       for( std::vector<Animal*>::const_iterator it = animals.begin();
-          it != animals.end(); ++it)
-       {
-           (*it)->eat();
-           delete *it;
-       }
-
-      return 0;
+   void Child::pure_virtual() {
+     Abstract::pure_virtual(); // the implementation in the abstract class
+                               // is executed
    }   
-   ```
-   * 在Java语言中, 所有的方法默认都是"虚函数". 只有以关键字 final 标记的方法才是非虚函数.
-   * 在 C# 语言中, 对基类中的任何虚方法必须用 virtual 修饰, 而派生类中由基类继承而来的重载方法必须用 override 修饰.
-   * 抽象类和纯虚函数
-     * 纯虚函数或纯虚方法是一个需要被非抽象的派生类覆盖（override）的虚函数. 包含纯虚方法的类被称作抽象类; 抽象类不能被直接实例化。 一个抽象基类的一个子类只有在所有的纯虚函数在该类(或其父类)内给出实现时, 才能直接实例化. 纯虚方法通常只有声明(签名)而没有定义(实现)，但有特例情形要求纯虚函数必须给出函数体定义.
-     * 虽然纯虚方法通常在定义它的类中没有实现, 在 C++ 语言中, 允许纯虚函数在定义它的类中包含其实现, 这为派生类提供了备用或默认的行为. C++的虚基类的虚析构函数必须提供函数体定义，否则链接时（linking）在析构该抽象类的派生实例对象的语句处会报错。
-     * 在C++语言中, 纯虚函数用一种特别的语法[=0]定义（但 VS 也支持 abstract 关键字：virtual ReturnType Function()abstract;）
-     * 纯虚函数的定义仅提供方法的原型. 虽然在抽象类中通常不提供纯虚函数的实现, 但是抽象类中可以包含其实现, 而且可以不在声明的同时给出定义[2]. 每个非抽象子类仍然需要重载该方法, 抽象类中实现的调用可以采用以下这种形式:
-   ```c++
-   class Abstract {
-   public:
-      virtual void pure_virtual() = 0;
-   };
-
-   void Abstract::pure_virtual() {
-      // do something
-    }
-
-    class Child : public Abstract {
-      virtual void pure_virtual(); // no longer abstract, this class may be
-                                   // instantiated.
-    };
-
-    void Child::pure_virtual() {
-      Abstract::pure_virtual(); // the implementation in the abstract class
-                                // is executed
-    }   
-   ```
-   * [Virtual function - Wikipedia](https://en.wikipedia.org/wiki/Virtual_function)
-     * Behavior during construction and destruction
-       * Languages differ in their behavior while the constructor or destructor of an object is running. For this reason, calling virtual functions in constructors is generally discouraged.
-       * In C++, the "base" function is called. Specifically, the most derived function that is not more derived than the current constructor's class is called. If that function is a pure virtual function, then undefined behavior occurs. This is true even if the class contains an implementation for that pure virtual function. A conforming C++ implementation is not required (and generally not able) to detect indirect calls to pure virtual functions at compile time or link time. Some runtime systems will issue a pure virtual function call error when encountering a call to a pure virtual function at run time.
-       * In Java and C#, the derived implementation is called, but some fields are not yet initialized by the derived constructor (although they are initialized to their default zero values). Some design patterns, such as the Abstract Factory Pattern, actively promote this usage in languages supporting this ability.
-     * Virtual destructors
-       * Object-oriented languages typically manage memory allocation and de-allocation automatically when objects are created and destroyed. However, some object-oriented languages allow a custom destructor method to be implemented, if desired. If the language in question uses automatic memory management, the custom destructor (generally called a finalizer in this context) that is called is certain to be the appropriate one for the object in question. For example, if an object of type Wolf that inherits Animal is created, and both have custom destructors, the one called will be the one declared in Wolf.
-       * In manual memory management contexts, the situation can be more complex, particularly in relation to static dispatch. If an object of type Wolf is created but pointed to by an Animal pointer, and it is this Animal pointer type that is deleted, the destructor called may actually be the one defined for Animal and not the one for Wolf, unless the destructor is virtual. This is particularly the case with C++, where the behavior is a common source of programming errors if destructors are not virtual.
+  ```
+  * [Virtual function - Wikipedia](https://en.wikipedia.org/wiki/Virtual_function)
+    * Behavior during construction and destruction
+      * Languages differ in their behavior while the constructor or destructor of an object is running. For this reason, calling virtual functions in constructors is generally discouraged.
+      * In C++, the "base" function is called. Specifically, the most derived function that is not more derived than the current constructor's class is called. If that function is a pure virtual function, then undefined behavior occurs. This is true even if the class contains an implementation for that pure virtual function. A conforming C++ implementation is not required (and generally not able) to detect indirect calls to pure virtual functions at compile time or link time. Some runtime systems will issue a pure virtual function call error when encountering a call to a pure virtual function at run time.
+      * In Java and C#, the derived implementation is called, but some fields are not yet initialized by the derived constructor (although they are initialized to their default zero values). Some design patterns, such as the Abstract Factory Pattern, actively promote this usage in languages supporting this ability.
+    * Virtual destructors
+      * Object-oriented languages typically manage memory allocation and de-allocation automatically when objects are created and destroyed. However, some object-oriented languages allow a custom destructor method to be implemented, if desired. If the language in question uses automatic memory management, the custom destructor (generally called a finalizer in this context) that is called is certain to be the appropriate one for the object in question. For example, if an object of type Wolf that inherits Animal is created, and both have custom destructors, the one called will be the one declared in Wolf.
+      * In manual memory management contexts, the situation can be more complex, particularly in relation to static dispatch. If an object of type Wolf is created but pointed to by an Animal pointer, and it is this Animal pointer type that is deleted, the destructor called may actually be the one defined for Animal and not the one for Wolf, unless the destructor is virtual. This is particularly the case with C++, where the behavior is a common source of programming errors if destructors are not virtual.
 
 ## 类相关
 
