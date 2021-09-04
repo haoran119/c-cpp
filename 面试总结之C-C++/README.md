@@ -139,6 +139,7 @@
       * Java 8 introduces default methods on interfaces. If A,B,C are interfaces, B,C can each provide a different implementation to an abstract method of A, causing the diamond problem. Either class D must reimplement the method (the body of which can simply forward the call to one of the super implementations), or the ambiguity will be rejected as a compile error. Prior to Java 8, Java was not subject to the Diamond problem risk, because it did not support multiple inheritance and interface default methods were not available.
       * Python has the same structure as Perl, but, unlike Perl, includes it in the syntax of the language. The order of inheritance affects the class semantics. Python had to deal with this upon the introduction of new-style classes, all of which have a common ancestor, object. Python creates a list of classes using the C3 linearization (or Method Resolution Order (MRO)) algorithm. That algorithm enforces two constraints: children precede their parents and if a class inherits from multiple classes, they are kept in the order specified in the tuple of base classes (however in this case, some classes high in the inheritance graph may precede classes lower in the graph). Thus, the method resolution order is: D, B, C, A.
     * Nevertheless, even when several interfaces declare the same method signature, as soon as that method is implemented (defined) anywhere in the inheritance chain, it overrides any implementation of that method in the chain above it (in its superclasses). Hence, at any given level in the inheritance chain, there can be at most one implementation of any method. Thus, single-inheritance method implementation does not exhibit the Diamond Problem even with multiple-inheritance of interfaces. With the introduction of default implementation for interfaces in Java 8 and C# 8, it is still possible to generate a Diamond Problem, although this will only appear as a compile-time error.
+* 虚继承
   * [虚继承 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E8%99%9A%E7%BB%A7%E6%89%BF)
     * 虚继承 是面向对象编程中的一种技术，是指一个指定的基类，在继承体系结构中，将其成员数据实例共享给也从这个基类型直接或间接派生的其它类。
     * 举例来说：假如类A和类B各自从类X派生（非虚继承且假设类X包含一些数据成员），且类C同时多继承自类A和B，那么C的对象就会拥有两套X的实例数据（可分别独立访问，一般要用适当的消歧义限定符）。但是如果类A与B各自虚继承了类X，那么C的对象就只包含一套类X的实例数据。对于这一概念典型实现的编程语言是C++。
@@ -170,6 +171,44 @@
       // D var2;  //这一行编译将导致错误，因为D类的默认构造函数不合法
       }
       ```
+  * [Virtual inheritance - Wikipedia](https://en.wikipedia.org/wiki/Virtual_inheritance)
+    * This example to illustrates a case where base class A has a constructor variable msg and an additional ancestor E is derived from grandchild class D.
+    * Here, A must be constructed in both D and E. Further, inspection of the variable msg illustrates the how class A becomes a direct base class of its deriving class, as opposed to a base class of any intermediate deriving classed between A and the final deriving class.
+    ```c++
+    #include <string>
+    #include <iostream>
+
+    class A                     {
+        private:
+            std::string _msg;
+        public:
+            A(std::string x): _msg(x) {}
+            void test(){ std::cout<<"hello from A: "<<_msg <<"\n"; }
+    };
+
+    // B,C inherit A virtually
+    class B: virtual public A   { public: B(std::string x):A("b"){}  };
+    class C: virtual public A   { public: C(std::string x):A("c"){}  };
+
+    // since B,C inherit A virtually, A must be constructed in each child
+    class D: public         B,C { public: D(std::string x):A("d_a"),B("d_b"),C("d_c"){}  };
+    class E: public         D   { public: E(std::string x):A("e_a"),D("e_d"){}  };
+
+    // breaks without constructing A
+    // class D: public         B,C { public: D(std::string x):B(x),C(x){}  };
+
+    // breaks without constructing A
+    //class E: public         D   { public: E(std::string x):D(x){}  };
+
+
+    int main(int argc, char ** argv){
+        D d("d");
+        d.test(); // hello from A: d_a
+
+        E e("e");
+        e.test(); // hello from A: e_a
+    }    
+    ```
   * 菱形继承
   ```c++
   #include <iostream>
