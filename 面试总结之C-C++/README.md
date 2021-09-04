@@ -139,6 +139,37 @@
       * Java 8 introduces default methods on interfaces. If A,B,C are interfaces, B,C can each provide a different implementation to an abstract method of A, causing the diamond problem. Either class D must reimplement the method (the body of which can simply forward the call to one of the super implementations), or the ambiguity will be rejected as a compile error. Prior to Java 8, Java was not subject to the Diamond problem risk, because it did not support multiple inheritance and interface default methods were not available.
       * Python has the same structure as Perl, but, unlike Perl, includes it in the syntax of the language. The order of inheritance affects the class semantics. Python had to deal with this upon the introduction of new-style classes, all of which have a common ancestor, object. Python creates a list of classes using the C3 linearization (or Method Resolution Order (MRO)) algorithm. That algorithm enforces two constraints: children precede their parents and if a class inherits from multiple classes, they are kept in the order specified in the tuple of base classes (however in this case, some classes high in the inheritance graph may precede classes lower in the graph). Thus, the method resolution order is: D, B, C, A.
     * Nevertheless, even when several interfaces declare the same method signature, as soon as that method is implemented (defined) anywhere in the inheritance chain, it overrides any implementation of that method in the chain above it (in its superclasses). Hence, at any given level in the inheritance chain, there can be at most one implementation of any method. Thus, single-inheritance method implementation does not exhibit the Diamond Problem even with multiple-inheritance of interfaces. With the introduction of default implementation for interfaces in Java 8 and C# 8, it is still possible to generate a Diamond Problem, although this will only appear as a compile-time error.
+  * [虚继承 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E8%99%9A%E7%BB%A7%E6%89%BF)
+    * 虚继承 是面向对象编程中的一种技术，是指一个指定的基类，在继承体系结构中，将其成员数据实例共享给也从这个基类型直接或间接派生的其它类。
+    * 举例来说：假如类A和类B各自从类X派生（非虚继承且假设类X包含一些数据成员），且类C同时多继承自类A和B，那么C的对象就会拥有两套X的实例数据（可分别独立访问，一般要用适当的消歧义限定符）。但是如果类A与B各自虚继承了类X，那么C的对象就只包含一套类X的实例数据。对于这一概念典型实现的编程语言是C++。
+    * 这一特性在多重继承应用中非常有用，可以使得虚基类对于由它直接或间接派生的类来说，拥有一个共同的基类对象实例。避免由于带有歧义的组合而产生的问题（如“菱形继承问题”）。其原理是，间接派生类（C）穿透了其父类（上面例子中的A与B），实质上直接继承了虚基类X。
+    * 这一概念一般用于“继承”在表现为一个整体，而非几个部分的组合时。在C++中，基类可以通过使用关键字virtual来声明虚继承关系。
+    * 虚基类的初始化
+      * 由于虚基类是多个派生类共享的基类，因此由谁来初始化虚基类必须明确。C++标准规定，由最派生类直接初始化虚基类。因此，对间接继承了虚基类的类，也必须能直接访问其虚继承来的祖先类，也即应知道其虚继承来的祖先类的地址偏移值。
+      * 例如，常见的“菱形”虚继承例子中，两个派生类、一个最派生类的构造函数的初始化列表中都可以给出虚基类的初始化；但只由最派生类的构造函数实际执行虚基类的初始化。
+    * 虚继承的应用：不可派生的finally类
+      * 一个类如果不希望被继承，类似于Java中的具有finally性质的类，这在C++中可以用虚继承来实现：
+      ```
+      template<typename T> class MakeFinally{
+         private:
+             MakeFinally(){};//只有MakeFinally的友类才可以构造MakeFinally
+             ~MakeFinally(){};
+         friend T;
+      };
+
+      class MyClass:public virtual  MakeFinally<MyClass>{};//MyClass是不可派生类
+
+      //由于虚继承，所以D要直接负责构造MakeFinally类，从而导致编译报错，所以D作为派生类是不合法的。
+      class D: public MyClass{};
+      //另外，如果D类没有实例化对象，即没有被使用，实际上D类是被编译器忽略掉而不报错
+
+
+      int main()
+      {
+      MyClass var1;
+      // D var2;  //这一行编译将导致错误，因为D类的默认构造函数不合法
+      }
+      ```
   * 菱形继承
   ```
   #include <iostream>
