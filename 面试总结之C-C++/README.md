@@ -295,13 +295,9 @@ int main()
       * 在类中用 virtual 关键字声明的函数叫做虚函数；
       * 存在虚函数的类都有一个虚函数表，当创建一个该类的对象时，该对象有一个指向虚函数表的虚表指针（虚函数表和类对应的，虚表指针是和对象对应）；
       * 当基类指针指向派生类对象，基类指针调用虚函数时，基类指针指向派生类的虚表指针，由于该虚表指针指向派生类虚函数表，通过遍历虚表，寻找相应的虚函数。
-    * 如果使用虚函数，父类指针指向子类对象并调用对象方法时，使用的是子类的方法;
-    * 如果未使用虚函数，则是普通的重写，则父类指针指向子类对象时，使用的是父类的方法（与指针类型看齐）
-    * 可以将派生类的对象赋值给基类的指针或引用，反之不可
-    * 普通函数（非类成员函数）不能是虚函数
-    * 静态函数（static）不能是虚函数
-    * 构造函数不能是虚函数（因为在调用构造函数时，虚表指针并没有在对象的内存空间中，必须要构造函数调用完成后才会形成虚表指针）
-    * 内联函数不能是表现多态性时的虚函数，解释见：[虚函数（virtual）可以是内联函数（inline）吗？](https://github.com/huihut/interview#%E8%99%9A%E5%87%BD%E6%95%B0virtual%E5%8F%AF%E4%BB%A5%E6%98%AF%E5%86%85%E8%81%94%E5%87%BD%E6%95%B0inline%E5%90%97)
+
+## 类相关
+
 * 虚函数
   * [虚函数 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E8%99%9A%E5%87%BD%E6%95%B0)
   * 在面向对象程序设计领域，C++、Object Pascal 等语言中有虚函数（英语：virtual function）或虚方法（英语：virtual method）的概念。这种函数或方法可以被子类继承和覆盖，通常使用动态分派实现。这一概念是面向对象程序设计中（运行时）多态的重要组成部分。简言之，虚函数可以给出目标函数的定义，但该目标的具体指向在编译期可能无法确定。
@@ -419,9 +415,13 @@ int main()
     * Virtual destructors
       * Object-oriented languages typically manage memory allocation and de-allocation automatically when objects are created and destroyed. However, some object-oriented languages allow a custom destructor method to be implemented, if desired. If the language in question uses automatic memory management, the custom destructor (generally called a finalizer in this context) that is called is certain to be the appropriate one for the object in question. For example, if an object of type Wolf that inherits Animal is created, and both have custom destructors, the one called will be the one declared in Wolf.
       * In manual memory management contexts, the situation can be more complex, particularly in relation to static dispatch. If an object of type Wolf is created but pointed to by an Animal pointer, and it is this Animal pointer type that is deleted, the destructor called may actually be the one defined for Animal and not the one for Wolf, unless the destructor is virtual. This is particularly the case with C++, where the behavior is a common source of programming errors if destructors are not virtual.
-
-## 类相关
-
+  * 如果使用虚函数，父类指针指向子类对象并调用对象方法时，使用的是子类的方法;
+  * 如果未使用虚函数，则是普通的重写，则父类指针指向子类对象时，使用的是父类的方法（与指针类型看齐）
+  * 可以将派生类的对象赋值给基类的指针或引用，反之不可
+  * 普通函数（非类成员函数）不能是虚函数
+  * 静态函数（static）不能是虚函数
+  * 构造函数不能是虚函数（因为在调用构造函数时，虚表指针并没有在对象的内存空间中，必须要构造函数调用完成后才会形成虚表指针）
+  * 内联函数不能是表现多态性时的虚函数，解释见：[虚函数（virtual）可以是内联函数（inline）吗？](https://github.com/huihut/interview#%E8%99%9A%E5%87%BD%E6%95%B0virtual%E5%8F%AF%E4%BB%A5%E6%98%AF%E5%86%85%E8%81%94%E5%87%BD%E6%95%B0inline%E5%90%97)
 * Virtual：
   * 虚函数：派生类可以覆盖掉的函数，
   * 纯虚函数：只是个空函数，没有函数实现体。
