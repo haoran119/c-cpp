@@ -162,6 +162,7 @@
       virtual void fun() { cout << "C::fun()" << endl; }
   };
 
+  // Two classes virtually inheriting A
   class BB : virtual public A
   {
   public:
@@ -197,8 +198,11 @@
       // A *pDD = new DD(); // Compile error : cannot initialize a variable of type 'A *' with an rvalue of type 'DD *'
 
       A *pDDD = new DDD();
-
       pDDD->fun();  // DDD::fun() 调用派生类中的虚函数
+
+      DDD ddd;
+      A &a = ddd;
+      a.fun();    // DDD::fun() 调用派生类中的虚函数
 
       return 0;
   }
