@@ -446,7 +446,25 @@ int main()
   * 浅拷贝是创建了一个对象用一个现成的对象初始化它的时候只是复制了成员(简单赋值)而没有拷贝分配给成员的资源(如给其指针变量成员分配了动态内存); 深拷贝是当一个对象创建时，如果分配了资源，就需要定义自己的拷贝构造函数，使之不但拷贝成员也拷贝分配给它的资源
 
 ## 语言特性相关
-
+* 左值和右值的区别？左值引用和右值引用的区别，如何将左值转换成右值？
+  * 左值：指表达式结束后依然存在的持久对象。
+  * 右值：表达式结束就不再存在的临时对象。
+  * 左值和右值的区别：左值持久，右值短暂
+  * 右值引用和左值引用的区别：
+  * 左值引用不能绑定到要转换的表达式、字面常量或返回右值的表达式。右值引用恰好相反，可以绑定到这类表达式，但不能绑定到一个左值上。
+  * 右值引用必须绑定到右值的引用，通过 && 获得。右值引用只能绑定到一个将要销毁的对象上，因此可以自由地移动其资源。
+* std::move 可以将一个左值强制转化为右值，继而可以通过右值引用使用该值，以用于移动语义。
+* std::move()
+  * [move - C++ Reference](https://www.cplusplus.com/reference/algorithm/move/)
+  * [std::move - cppreference.com](https://en.cppreference.com/w/cpp/utility/move)
+    * std::move is used to indicate that an object t may be "moved from", i.e. allowing the efficient transfer of resources from t to another object.
+    * In particular, std::move produces an xvalue expression that identifies its argument t. It is exactly equivalent to a static_cast to an rvalue reference type.
+  * [c++ - What is std::move(), and when should it be used? - Stack Overflow](https://stackoverflow.com/questions/3413470/what-is-stdmove-and-when-should-it-be-used)
+  * [Rvalue Reference Quick Look](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2027.html#Move_Semantics)
+  * std::move() 实现原理：
+    * 利用引用折叠原理将右值经过 T&& 传递类型保持不变还是右值，而左值经过 T&& 变为普通的左值引用，以保证模板可以传递任意实参，且保持类型不变；
+    * 然后通过 remove_refrence 移除引用，得到具体的类型 T；
+    * 最后通过 static_cast<> 进行强制类型转换，返回 T&& 右值引用。
 * 指针和引用的初始化区别
   * 引用被创建的同时必须被初始化（指针则可以在任何时候被初始化）。
   * 不能有NULL 引用，引用必须与合法的存储单元关联（指针则可以是NULL）。
