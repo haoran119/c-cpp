@@ -453,14 +453,14 @@ int main()
   * 右值引用和左值引用的区别：
   * 左值引用不能绑定到要转换的表达式、字面常量或返回右值的表达式。右值引用恰好相反，可以绑定到这类表达式，但不能绑定到一个左值上。
   * 右值引用必须绑定到右值的引用，通过 && 获得。右值引用只能绑定到一个将要销毁的对象上，因此可以自由地移动其资源。
-* std::move 可以将一个左值强制转化为右值，继而可以通过右值引用使用该值，以用于移动语义。
+  * std::move 可以将一个左值强制转化为右值，继而可以通过右值引用使用该值，以用于移动语义。
 * std::move()
   * [move - C++ Reference](https://www.cplusplus.com/reference/algorithm/move/)
   * [std::move - cppreference.com](https://en.cppreference.com/w/cpp/utility/move)
     * std::move is used to indicate that an object t may be "moved from", i.e. allowing the efficient transfer of resources from t to another object.
     * In particular, std::move produces an xvalue expression that identifies its argument t. It is exactly equivalent to a static_cast to an rvalue reference type.
   * [c++ - What is std::move(), and when should it be used? - Stack Overflow](https://stackoverflow.com/questions/3413470/what-is-stdmove-and-when-should-it-be-used)
-  * [Rvalue Reference Quick Look](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2027.html#Move_Semantics)
+    * [Rvalue Reference Quick Look](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2027.html#Move_Semantics)
   * std::move() 实现原理：
     * 利用引用折叠原理将右值经过 T&& 传递类型保持不变还是右值，而左值经过 T&& 变为普通的左值引用，以保证模板可以传递任意实参，且保持类型不变；
     * 然后通过 remove_refrence 移除引用，得到具体的类型 T；
