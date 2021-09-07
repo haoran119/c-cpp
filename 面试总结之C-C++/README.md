@@ -21,6 +21,15 @@
 * #include “filename.h”和#include <filename.h>的区别
   * #include “filename.h”是指编译器将从当前工作目录上开始查找此文件
   * #include <filename.h>是指编译器将从标准库目录中开始查找此文件
+* C++ 内存管理
+  * C++ 内存分区：栈、堆、全局/静态存储区、常量存储区、代码区。
+  * 栈：存放函数的局部变量、函数参数、返回地址等，由编译器自动分配和释放。
+  * 堆：动态申请的内存空间，就是由 malloc 分配的内存块，由程序员控制它的分配和释放，如果程序执行结束还没有释放，操作系统会自动回收。
+  * 全局区/静态存储区（.bss 段和 .data 段）：存放全局变量和静态变量，程序运行结束操作系统自动释放，在 C 语言中，未初始化的放在 .bss 段中，初始化的放在 .data 段中，C++ 中不再区分了。
+  * 常量存储区（.rodata 段）：存放的是常量，不允许修改，程序运行结束自动释放。
+  * 代码区（.text 段）：存放代码，不允许修改，但可以执行。编译后的二进制文件存放在这里。
+  * 说明：
+    * 从操作系统的本身来讲，以上存储区在内存中的分布是如下形式(从低地址到高地址)：.text 段 --> .data 段 --> .bss 段 --> 堆 --> unused --> 栈 --> env
 * 变量的内存分区
   * [C/C++的四大内存分区 - CSDN博客](https://blog.csdn.net/K346K346/article/details/45592329)
 * C structure，数据结构里有inter,char,float时，数据的内存布局会是怎样
@@ -461,6 +470,7 @@ int main()
     * In particular, std::move produces an xvalue expression that identifies its argument t. It is exactly equivalent to a static_cast to an rvalue reference type.
   * [c++ - What is std::move(), and when should it be used? - Stack Overflow](https://stackoverflow.com/questions/3413470/what-is-stdmove-and-when-should-it-be-used)
     * [Rvalue Reference Quick Look](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2027.html#Move_Semantics)
+    * The move function really does very little work. All move does is accept either an lvalue or rvalue argument, and return it as an rvalue without triggering a copy construction:
   * std::move() 实现原理：
     * 利用引用折叠原理将右值经过 T&& 传递类型保持不变还是右值，而左值经过 T&& 变为普通的左值引用，以保证模板可以传递任意实参，且保持类型不变；
     * 然后通过 remove_refrence 移除引用，得到具体的类型 T；
