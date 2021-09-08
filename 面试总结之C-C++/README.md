@@ -478,8 +478,21 @@ int main()
     * std::move is used to indicate that an object t may be "moved from", i.e. allowing the efficient transfer of resources from t to another object.
     * In particular, std::move produces an xvalue expression that identifies its argument t. It is exactly equivalent to a static_cast to an rvalue reference type.
   * [c++ - What is std::move(), and when should it be used? - Stack Overflow](https://stackoverflow.com/questions/3413470/what-is-stdmove-and-when-should-it-be-used)
+    * In C++11, in addition to copy constructors, objects can have move constructors.(And in addition to copy assignment operators, they have move assignment operators.)
+    * The move constructor is used instead of the copy constructor, if the object has type "rvalue-reference" (Type &&).
+    * std::move() is a cast that produces an rvalue-reference to an object, to enable moving from it.
+    * It's a new C++ way to avoid copies. For example, using a move constructor, a std::vector could just copy its internal pointer to data to the new object, leaving the moved object in an moved from state, therefore not copying all the data.  
     * [Rvalue Reference Quick Look](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2027.html#Move_Semantics)
-    * The move function really does very little work. All move does is accept either an lvalue or rvalue argument, and return it as an rvalue without triggering a copy construction:
+      * Rvalue references is a small technical extension to the C++ language. Rvalue references allow programmers to avoid logically unnecessary copying and to provide perfect forwarding functions. They are primarily meant to aid in the design of higer performance and more robust libraries.
+      * The rvalue reference      
+        * An rvalue reference is a compound type very similar to C++'s traditional reference. To better distinguish these two types, we refer to a traditional C++ reference as an lvalue reference. When the term reference is used, it refers to both kinds of reference: lvalue reference and rvalue reference.
+        * It turns out that the combination of rvalue references and lvalue references is just what is needed to easily code move semantics. The rvalue reference can also be used to achieve perfect forwarding, a heretofore unsolved problem in C++. From a casual programmer's perspective, what we get from rvalue references is more general and better performing libraries.
+      * Move Semantics
+        * Eliminating spurious copies
+          * Copying can be expensive. 
+          * The first task of rvalue references is to allow us to implement move() without verbosity, or rutime overhead.
+          * move
+            * The move function really does very little work. All move does is accept either an lvalue or rvalue argument, and return it as an rvalue without triggering a copy construction:
   * std::move() 实现原理：
     * 利用引用折叠原理将右值经过 T&& 传递类型保持不变还是右值，而左值经过 T&& 变为普通的左值引用，以保证模板可以传递任意实参，且保持类型不变；
     * 然后通过 remove_refrence 移除引用，得到具体的类型 T；
