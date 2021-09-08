@@ -12,6 +12,7 @@
 * [C++ 面试突击 - LeetBook - 力扣（LeetCode）全球极客挚爱的技术成长平台](https://leetcode-cn.com/leetbook/detail/cpp-interview-highlights/)
 * [C 语言与 C++ 面试知识总结 (qq.com)](https://mp.weixin.qq.com/s/x6DMkh54NQBOlDMqNxvf7w)
   * [huihut/interview: 📚 C/C++ 技术面试基础知识总结](https://github.com/huihut/interview#effective)
+    * [STL](https://github.com/huihut/interview#-stl)
     * [Effective C++](https://github.com/huihut/interview#effective-c)
     * [More Effective c++](https://github.com/huihut/interview#more-effective-c)
 * [这些C++工程师面试题你都会了吗？](https://mp.weixin.qq.com/s/JA3ZrRwS_KllNdJxVMQRdA)
@@ -535,7 +536,6 @@ int main()
   * 可以用作类似C里的回调函数，也可以用作函数功能的组合
 * C++模板
   * 简化对类似函数的设计，比如要设计两个函数 abs(int a), abs(float a),就可以用模板去设计一个函数就可以了
-* [STL](https://github.com/huihut/interview#-stl)
 * STL containers内部实现的数据结构
   * Sequence containers
     * [array](https://github.com/huihut/interview/tree/master/STL#array) / [vector](https://github.com/huihut/interview/tree/master/STL#vector) ：数组
