@@ -118,11 +118,11 @@
 ## FAQ
 
 * How to set precision of float / double in output ?
-* [std::setprecision - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/setprecision)
-* /*unspecified*/ setprecision( int n );
-* When used in an expression out << setprecision(n) or in >> setprecision(n), sets the precision parameter of the stream out or in to exactly n.
-* [std::fixed, std::scientific, std::hexfloat, std::defaultfloat - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/fixed)
-* This is an I/O manipulator, it may be called with an expression such as out << std::fixed for any out of type std::basic_ostream or with an expression such as in >> std::scientific for any in of type std::basic_istream.
-```c++
-cout << fixed << setprecision(9) << e << endl; // 14049.304930000  
-```
+  * [std::setprecision - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/setprecision)
+    * /*unspecified*/ setprecision( int n );
+    * When used in an expression out << setprecision(n) or in >> setprecision(n), sets the precision parameter of the stream out or in to exactly n.
+  * [std::fixed, std::scientific, std::hexfloat, std::defaultfloat - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/fixed)
+    * This is an I/O manipulator, it may be called with an expression such as out << std::fixed for any out of type std::basic_ostream or with an expression such as in >> std::scientific for any in of type std::basic_istream.
+  ```c++
+  cout << fixed << setprecision(9) << e << endl; // 14049.304930000  
+  ```
