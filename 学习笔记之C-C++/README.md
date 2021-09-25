@@ -121,6 +121,12 @@
   * [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
   * [std::basic_stringstream - cppreference.com](https://en.cppreference.com/w/cpp/io/basic_stringstream)
   * [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
+    * A stringstream associates a string object with a stream allowing you to read from the string as if it were a stream (like cin).
+    * Basic methods are –
+      * clear() — to clear the stream
+      * str() — to get and set string object whose content is present in stream.
+      * operator << — add a string to the stringstream object.
+      * operator >> — read something from the stringstream object,
   * [StringStream | HackerRank](https://www.hackerrank.com/challenges/c-tutorial-stringstream/problem)
 
 ## FAQ
