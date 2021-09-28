@@ -115,13 +115,13 @@
     * C++在开发者中的稳定位置
   * 总而言之，我认为在未来的十年，我们可以以一种积极乐观的态度看待C++。虽然我们无法预知更远的将来会发生什么，但是至少在接下来的十年里，我相信C++应该是稳定的。有了所有这些工具的帮助，新的C++标准编写的C++代码会更加容易访问，并且更加不容易出错。在可预见的将来，C++仍然是追求性能的应用程序的无二选择，甚至它会取代C和Fortran。
 
-### BASICS
+### Basics
 
 * [<bits/stdc++.h> in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/bitsstdc-h-c/)
   * It is basically a header file that includes every standard library. In programming contests, using this file is a good idea, when you want to reduce the time wasted in doing chores; especially when your rank is time sensitive.
 In programming contests, people do focus more on finding the algorithm to solve a problem than on software engineering. From, software engineering perspective, it is a good idea to minimize the include. If you use it actually includes a lot of files, which your program may not need, thus increases both compile time and program size unnecessarily.
 
-### STRINGS
+### Strings
 
 * StringStream
   * [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
@@ -134,6 +134,29 @@ In programming contests, people do focus more on finding the algorithm to solve 
       * operator << — add a string to the stringstream object.
       * operator >> — read something from the stringstream object,
   * [StringStream | HackerRank](https://www.hackerrank.com/challenges/c-tutorial-stringstream/problem)
+
+### Exception Handling
+
+* [Inherited Code | HackerRank](https://www.hackerrank.com/challenges/inherited-code/problem)
+  * [exception - C++ Reference](http://www.cplusplus.com/reference/exception/exception/)
+  * [to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
+  * [string::c_str - C++ Reference](https://www.cplusplus.com/reference/string/string/c_str/)
+  ```c++
+  class BadLengthException : public exception
+  {
+      public:
+          BadLengthException(int n) : m_n(to_string(n)) {}
+
+          const char* what() const noexcept
+          {
+              return m_n.c_str();
+          }
+
+      private:
+          string m_n;
+
+  };
+  ```
 
 ### STL
 
