@@ -137,8 +137,9 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 ### Exception Handling
 
-* [Inherited Code | HackerRank](https://www.hackerrank.com/challenges/inherited-code/problem)
-  * [exception - C++ Reference](http://www.cplusplus.com/reference/exception/exception/)
+* [exception - C++ Reference](http://www.cplusplus.com/reference/exception/exception/)
+  * [Inherited Code | HackerRank](https://www.hackerrank.com/challenges/inherited-code/problem)
+  * [Exceptional Server | HackerRank](https://www.hackerrank.com/challenges/exceptional-server/problem)
   * [to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
   * [string::c_str - C++ Reference](https://www.cplusplus.com/reference/string/string/c_str/)
   ```c++
