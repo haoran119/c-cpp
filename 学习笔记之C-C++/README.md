@@ -178,7 +178,12 @@ In programming contests, people do focus more on finding the algorithm to solve 
   }
   ```
 
-### STL
+### Standard Template Library (STL)
+
+* [lower_bound - C++ Reference](http://www.cplusplus.com/reference/algorithm/lower_bound/)
+  * Returns an iterator pointing to the first element in the range \[first,last) which does not compare less than val.
+  * [upper_bound - C++ Reference](http://www.cplusplus.com/reference/algorithm/upper_bound/)
+  * [Lower Bound-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-lower-bound/problem)
 
 * swap
   * [std::swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/swap)
