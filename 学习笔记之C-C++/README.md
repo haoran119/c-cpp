@@ -184,7 +184,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * Returns an iterator pointing to the first element in the range \[first,last) which does not compare less than val.
   * [upper_bound - C++ Reference](http://www.cplusplus.com/reference/algorithm/upper_bound/)
   * [Lower Bound-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-lower-bound/problem)
-
 * swap
   * [std::swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/swap)
   * [swap() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/swap-in-cpp/)
