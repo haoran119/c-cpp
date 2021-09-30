@@ -184,6 +184,14 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * Returns an iterator pointing to the first element in the range \[first,last) which does not compare less than val.
   * [upper_bound - C++ Reference](http://www.cplusplus.com/reference/algorithm/upper_bound/)
   * [Lower Bound-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-lower-bound/problem)
+* [map - C++ Reference](http://www.cplusplus.com/reference/map/map/)
+  * [map::operator[] - C++ Reference](http://www.cplusplus.com/reference/map/map/operator[]/)
+    * If k matches the key of an element in the container, the function returns a reference to its mapped value.
+    * If k does not match the key of any element in the container, the function inserts a new element with that key and returns a reference to its mapped value. Notice that this always increases the container size by one, even if no mapped value is assigned to the element (the element is constructed using its default constructor).
+    * A similar member function, map::at, has the same behavior when an element with the key exists, but throws an exception when it does not.
+    * A call to this function is equivalent to:
+      * (*((this->insert(make_pair(k,mapped_type()))).first)).second
+  * [Maps-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-maps/problem)
 * [std::swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/swap)
   * [swap() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/swap-in-cpp/)
 
