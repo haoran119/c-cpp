@@ -135,6 +135,14 @@ In programming contests, people do focus more on finding the algorithm to solve 
       * operator >> — read something from the stringstream object,
   * [StringStream | HackerRank](https://www.hackerrank.com/challenges/c-tutorial-stringstream/problem)
 
+### Object Oriented Programming
+
+* [Abstract Classes - Polymorphism | HackerRank](https://www.hackerrank.com/challenges/abstract-classes-polymorphism/problem)
+  * [LRU Cache Implementation - GeeksforGeeks](https://www.geeksforgeeks.org/lru-cache-implementation/)
+  * [list - C++ Reference](http://www.cplusplus.com/reference/list/list/?kw=list)
+  * [pair - C++ Reference](http://www.cplusplus.com/reference/utility/pair/?kw=pair)
+  * [unordered_map - C++ Reference](http://www.cplusplus.com/reference/unordered_map/unordered_map/?kw=unordered_map)
+
 ### Exception Handling
 
 * [exception - C++ Reference](http://www.cplusplus.com/reference/exception/exception/)
