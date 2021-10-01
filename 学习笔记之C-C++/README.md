@@ -121,6 +121,34 @@
   * It is basically a header file that includes every standard library. In programming contests, using this file is a good idea, when you want to reduce the time wasted in doing chores; especially when your rank is time sensitive.
 In programming contests, people do focus more on finding the algorithm to solve a problem than on software engineering. From, software engineering perspective, it is a good idea to minimize the include. If you use it actually includes a lot of files, which your program may not need, thus increases both compile time and program size unnecessarily.
 
+### Basic Input/Output
+
+* [manipulators - C++ Reference](http://www.cplusplus.com/reference/library/manipulators/)
+  * Basic format flags
+    * These manipulators are usable on both input and output streams, although many only have an effect when applied to either output or input streams.
+    * Independent flags (switch on):
+      * [showbase - C++ Reference](http://www.cplusplus.com/reference/ios/showbase/)
+      * [showpos - C++ Reference](http://www.cplusplus.com/reference/ios/showpos/)
+      * [uppercase - C++ Reference](http://www.cplusplus.com/reference/ios/uppercase/)
+    * Independent flags (switch off):
+      * [noshowpos - C++ Reference](http://www.cplusplus.com/reference/ios/noshowpos/)
+      * [nouppercase - C++ Reference](http://www.cplusplus.com/reference/ios/nouppercase/)
+    * Numerical base format flags ("basefield" flags):
+      * [dec - C++ Reference](http://www.cplusplus.com/reference/ios/dec/)
+      * [hex - C++ Reference](http://www.cplusplus.com/reference/ios/hex/?kw=hex)
+    * Floating-point format flags ("floatfield" flags):
+      * [fixed - C++ Reference](http://www.cplusplus.com/reference/ios/fixed/)
+      * [scientific - C++ Reference](http://www.cplusplus.com/reference/ios/scientific/)
+    * Adustment format flags ("adjustfield" flags):
+      * [left - C++ Reference](http://www.cplusplus.com/reference/ios/left/)
+      * [right - C++ Reference](http://www.cplusplus.com/reference/ios/right/)
+  * Parameterized manipulators
+    * These functions take parameters when used as manipulators. They require the explicit inclusion of the header file \<iomanip\>.
+    * [setfill - C++ Reference](http://www.cplusplus.com/reference/iomanip/setfill/)
+    * [setprecision - C++ Reference](http://www.cplusplus.com/reference/iomanip/setprecision/)
+    * [setw - C++ Reference](http://www.cplusplus.com/reference/iomanip/setw/)
+  * [Print Pretty | HackerRank](https://www.hackerrank.com/challenges/prettyprint/problem)
+
 ### Strings
 
 * StringStream
