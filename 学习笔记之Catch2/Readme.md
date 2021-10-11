@@ -3,7 +3,7 @@
 * [catchorg/Catch2: A modern, C++-native, header-only, test framework for unit-tests, TDD and BDD - using C++11, C++14, C++17 and later (or C++03 on the Catch1.x branch)](https://github.com/catchorg/Catch2)
   * Catch2 is mainly a unit testing framework for C++, but it also provides basic micro-benchmarking features, and simple BDD macros.
   * Catch2's main advantage is that using it is both simple and natural. Tests autoregister themselves and do not have to be named with valid identifiers, assertions look like normal C++ code, and sections provide a nice way to share set-up and tear-down code in tests.
-  * [Catch2/why-catch.md at devel · catchorg/Catch2](https://github.com/catchorg/Catch2/blob/devel/docs/why-catch.md#top)
-  * [Catch2/tutorial.md at devel · catchorg/Catch2](https://github.com/catchorg/Catch2/blob/devel/docs/tutorial.md#top)
-  * [Catch2/Readme.md at devel · catchorg/Catch2](https://github.com/catchorg/Catch2/blob/devel/docs/Readme.md#top)
+  * [Why do we need yet another C++ Test Framework?](https://github.com/catchorg/Catch2/blob/devel/docs/why-catch.md#top)
+  * [Tutorial - getting started](https://github.com/catchorg/Catch2/blob/devel/docs/tutorial.md#top)
+  * [Reference section - all the details](https://github.com/catchorg/Catch2/blob/devel/docs/Readme.md#top)
 * [A guide to using Catch2 for Unit Testing in C++ | by Junaid Rahim | DSC KIIT | Medium](https://medium.com/dsckiit/a-guide-to-using-catch2-for-unit-testing-in-c-f0f5450d05fb)
