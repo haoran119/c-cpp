@@ -178,6 +178,21 @@
   * It is basically a header file that includes every standard library. In programming contests, using this file is a good idea, when you want to reduce the time wasted in doing chores; especially when your rank is time sensitive.
 In programming contests, people do focus more on finding the algorithm to solve a problem than on software engineering. From, software engineering perspective, it is a good idea to minimize the include. If you use it actually includes a lot of files, which your program may not need, thus increases both compile time and program size unnecessarily.
 
+#### Preprocessor
+
+* [inject_statement import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/inject-statement?view=msvc-160)
+  * Inserts its argument as source text into the type-library header.
+  * #import type-library inject_statement( "source-text" )
+* [named_guids import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/named-guids?view=msvc-160)
+  * Tells the compiler to define and initialize GUID variables in the old style, of the form LIBID_MyLib, CLSID_MyCoClass, IID_MyInterface, and DIID_MyDispInterface.
+  * #import type-library named_guids
+* [rename_namespace import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/rename-namespace?view=msvc-160)
+  * Renames the namespace that contains the contents of the type library.
+  * #import type-library rename_namespace( "NewName" )
+* [#undef directive (C/C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/hash-undef-directive-c-cpp?view=msvc-160)
+  * Removes (undefines) a name previously created with #define.
+  * #undef identifier
+
 ### Basic Input/Output
 
 * [manipulators - C++ Reference](http://www.cplusplus.com/reference/library/manipulators/)
