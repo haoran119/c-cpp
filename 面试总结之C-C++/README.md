@@ -682,6 +682,17 @@ int main()
 * RTTI
   * RTTI事指运行时类型识别（Run-time type identification）在只有一个指向基类的指针或引用时确定一个对象的准确类型。
 
+## Design
+
+* [SOLID - Wikipedia](https://en.wikipedia.org/wiki/SOLID)
+  * In software engineering, SOLID is a mnemonic acronym for five design principles intended to make software designs more understandable, flexible, and maintainable. The principles are a subset of many principles promoted by American software engineer and instructor Robert C. Martin,[1][2][3] first introduced in his 2000 paper Design Principles and Design Patterns.[2][4]
+  * The SOLID concepts are
+    * The Single-responsibility principle: "There should never be more than one reason for a class to change."[5] In other words, every class should have only one responsibility.[6]
+    * The Open–closed principle: "Software entities ... should be open for extension, but closed for modification."[7]
+    * The Liskov substitution principle: "Functions that use pointers or references to base classes must be able to use objects of derived classes without knowing it."[8] See also design by contract.[8]
+    * The Interface segregation principle: "Many client-specific interfaces are better than one general-purpose interface."[9][4]
+    * The Dependency inversion principle: "Depend upon abstractions, [not] concretions."[10][4]
+
 ## CODE
 
 * [c-cpp/面试总结之C-C++ at main · haoran119/c-cpp](https://github.com/haoran119/c-cpp/tree/main/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93%E4%B9%8BC-C%2B%2B)
