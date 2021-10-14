@@ -351,6 +351,17 @@ In programming contests, people do focus more on finding the algorithm to solve 
 * [std::swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/swap)
   * [swap() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/swap-in-cpp/)
 
+### C++ Library
+
+* Chrono
+  * [\<chrono> - C++ Reference](https://www.cplusplus.com/reference/chrono/)
+  * [Date and time utilities - cppreference.com](https://en.cppreference.com/w/cpp/chrono)
+    * C++ includes support for two types of time manipulation:
+      * The chrono library, a flexible collection of types that track time with varying degrees of precision (e.g. std::chrono::time_point).
+      * C-style date and time library (e.g. std::time)
+  * [\<chrono> | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/chrono?view=msvc-160)
+  * [Chrono in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/chrono-in-c/)
+
 ## FAQ
 
 * How to set precision of float / double in output ?
