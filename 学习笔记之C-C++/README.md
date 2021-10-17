@@ -1,6 +1,7 @@
 # 学习笔记之C / C++
 
 * [C++ Language Reference | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/cpp-language-reference?view=msvc-160)
+  * [Welcome back to C++ - Modern C++ | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/welcome-back-to-cpp-modern-cpp?view=msvc-160)
 * [cppreference.com](https://en.cppreference.com/w/)
 * [cplusplus.com - The C++ Resources Network](http://www.cplusplus.com/)
 * [Learn C++ – Skill up with our free tutorials](https://www.learncpp.com/)
