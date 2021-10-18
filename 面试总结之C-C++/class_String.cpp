@@ -5,6 +5,7 @@
 * 输入输出运算符必须是普通非成员函数，而不能是类的成员函数。否则，它们的左侧运算对象将是我们的类的一个对象。假设输入输出运算符是某个类的成员，则它们也必须是istream或ostream的成员。然而，
 这两个类属于标准库，并且我们无法给标准库中的类添加任何成员。当然，IO运算符通常需要读写类的非公有数据成员，所以IO运算符一般被声明为友元。
 * 注意delete释放资源之前，最好先判断是否nullptf，否则释放为nullptr的指针会报错。此处拷贝构造与赋值函数中，因为m_data不会为nullptr，所以可以不判断。
+* Overloading the << Operator for Your Own Classes | Microsoft Docs (https://docs.microsoft.com/en-us/cpp/standard-library/overloading-the-output-operator-for-your-own-classes?view=msvc-160)
 */
 
 //
