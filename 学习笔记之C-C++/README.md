@@ -200,6 +200,32 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * _NATIVE_WCHAR_T_DEFINED Defined as 1 when the /Zc:wchar_t compiler option is set. Otherwise, undefined.
     * [/Zc:wchar_t (wchar_t Is Native Type) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/build/reference/zc-wchar-t-wchar-t-is-native-type?view=msvc-160)
       * Parse wchar_t as a built-in type according to the C++ standard.
+* [Type conversions](https://www.cplusplus.com/doc/tutorial/typecasting/)
+  * [const_cast Operator | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/const-cast-operator?view=msvc-160)
+    * Removes the const, volatile, and __unaligned attribute(s) from a class.
+    * Syntax
+      * const_cast \<type-id> (expression)
+  * [const_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/const_cast)
+    * Converts between types with different cv-qualification.
+    * Syntax
+      * const_cast < new_type > ( expression )		
+    * Returns a value of type new_type.
+    * Explanation
+      * Only the following conversions can be done with const_cast. In particular, only const_cast may be used to cast away (remove) constness or volatility.
+        * 1) Two possibly multilevel pointers to the same type may be converted between each other, regardless of cv-qualifiers at each level.
+        * 2) lvalue of any type T may be converted to a lvalue or rvalue reference to the same type T, more or less cv-qualified. Likewise, a prvalue of class type or an xvalue of any type may be converted to a more or less cv-qualified rvalue reference. The result of a reference const_cast refers to the original object if expression is a glvalue and to the materialized temporary otherwise (since C++17).
+        * 3) Same rules apply to possibly multilevel pointers to data members and possibly multilevel pointers to arrays of known and unknown bound (arrays to cv-qualified elements are considered to be cv-qualified themselves) (since C++17)
+        * 4) null pointer value may be converted to the null pointer value of new_type
+      * As with all cast expressions, the result is:
+        * an lvalue if new_type is an lvalue reference type or an rvalue reference to function type;
+        * an xvalue if new_type is an rvalue reference to object type;
+        * a prvalue otherwise.
+  * [const_cast examples](https://www.geeksforgeeks.org/const_cast-in-c-type-casting-operators/)
+    * C++ supports following 4 types of casting operators:
+      * 1. const_cast
+      * 2. static_cast
+      * 3. dynamic_cast
+      * 4. reinterpret_cast
 * [constexpr (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/constexpr-cpp?view=msvc-160)
   * The keyword constexpr was introduced in C++11 and improved in C++14. It means constant expression. Like const, it can be applied to variables: A compiler error is raised when any code attempts to modify the value. Unlike const, constexpr can also be applied to functions and class constructors. constexpr indicates that the value, or return value, is constant and, where possible, is computed at compile time.
   * A constexpr integral value can be used wherever a const integer is required, such as in template arguments and array declarations. And when a value is computed at compile time instead of run time, it helps your program run faster and use less memory.
