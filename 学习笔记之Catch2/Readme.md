@@ -5,5 +5,7 @@
   * Catch2's main advantage is that using it is both simple and natural. Tests autoregister themselves and do not have to be named with valid identifiers, assertions look like normal C++ code, and sections provide a nice way to share set-up and tear-down code in tests.
   * [Why do we need yet another C++ Test Framework?](https://github.com/catchorg/Catch2/blob/devel/docs/why-catch.md#top)
   * [Tutorial - getting started](https://github.com/catchorg/Catch2/blob/devel/docs/tutorial.md#top)
+    * [BDD-Style](https://github.com/catchorg/Catch2/blob/devel/docs/tutorial.md#bdd-style)
   * [Reference section - all the details](https://github.com/catchorg/Catch2/blob/devel/docs/Readme.md#top)
+    * [BDD-style test cases](https://github.com/catchorg/Catch2/blob/devel/docs/test-cases-and-sections.md#bdd-style-test-cases)
 * [A guide to using Catch2 for Unit Testing in C++ | by Junaid Rahim | DSC KIIT | Medium](https://medium.com/dsckiit/a-guide-to-using-catch2-for-unit-testing-in-c-f0f5450d05fb)
