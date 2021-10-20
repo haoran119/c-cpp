@@ -327,8 +327,12 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 ### Strings
 
-* StringStream
-  * [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
+* [string::compare - C++ Reference](https://www.cplusplus.com/reference/string/string/compare/)
+  * Compare strings
+  * Compares the value of the string object (or a substring) to the sequence of characters specified by its arguments.
+  * The compared string is the value of the string object or -if the signature used has a pos and a len parameters- the substring that begins at its character in position pos and spans len characters.
+  * This string is compared to a comparing string, which is determined by the other arguments passed to the function.
+* [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
   * [std::basic_stringstream - cppreference.com](https://en.cppreference.com/w/cpp/io/basic_stringstream)
   * [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
     * A stringstream associates a string object with a stream allowing you to read from the string as if it were a stream (like cin).
@@ -338,6 +342,17 @@ In programming contests, people do focus more on finding the algorithm to solve 
       * operator << — add a string to the stringstream object.
       * operator >> — read something from the stringstream object,
   * [StringStream | HackerRank](https://www.hackerrank.com/challenges/c-tutorial-stringstream/problem)
+* [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
+  * Output stream class to operate on strings.
+  * Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
+  * Characters can be inserted into the stream with any operation allowed on output streams.
+  * [ostringstream::str - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/str/)
+    * string str() const;
+    * void str (const string& s);
+    * Get/set content
+      * The first form (1) returns a string object with a copy of the current contents of the stream.
+      * The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
+      * Internally, the function calls the str member of its internal string buffer object.
 
 ### Object Oriented Programming
 
