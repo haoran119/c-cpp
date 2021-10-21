@@ -435,6 +435,40 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [Lambda expressions (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/lambda)
   * [Lambda expression in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/lambda-expression-in-c/)
 
+### Multiple Threading
+
+* [lock_guard - C++ Reference](https://www.cplusplus.com/reference/mutex/lock_guard/)
+  * template \<class Mutex> class lock_guard;
+  * Lock guard
+    * A lock guard is an object that manages a mutex object by keeping it always locked.
+    * On construction, the mutex object is locked by the calling thread, and on destruction, the mutex is unlocked. It is the simplest lock, and is specially useful as an object with automatic duration that lasts until the end of its context. In this way, it guarantees the mutex object is properly unlocked in case an exception is thrown.
+    * Note though that the lock_guard object does not manage the lifetime of the mutex object in any way: the duration of the mutex object shall extend at least until the destruction of the lock_guard that locks it.
+  * [mutex - C++ Reference](https://www.cplusplus.com/reference/mutex/mutex/)
+    * class mutex;
+    * Mutex class
+    * A mutex is a lockable object that is designed to signal when critical sections of code need exclusive access, preventing other threads with the same protection from executing concurrently and access the same memory locations.
+    * mutex objects provide exclusive ownership and do not support recursivity (i.e., a thread shall not lock a mutex it already owns) -- see recursive_mutex for an alternative class that does.
+    * It is guaranteed to be a standard-layout class.
+  * [std::lock_guard - cppreference.com](https://en.cppreference.com/w/cpp/thread/lock_guard)
+    * Defined in header \<mutex>
+    * template\< class Mutex >
+    * class lock_guard; (since C++11)
+    * The class lock_guard is a mutex wrapper that provides a convenient RAII-style mechanism for owning a mutex for the duration of a scoped block.
+    * When a lock_guard object is created, it attempts to take ownership of the mutex it is given. When control leaves the scope in which the lock_guard object was created, the lock_guard is destructed and the mutex is released.
+    * The lock_guard class is non-copyable.
+    * [std::lock_guard\<Mutex>::lock_guard - cppreference.com](https://en.cppreference.com/w/cpp/thread/lock_guard/lock_guard)
+  * [RAII - cppreference.com](https://en.cppreference.com/w/cpp/language/raii)
+    * Resource Acquisition Is Initialization or RAII, is a C++ programming technique[1][2] which binds the life cycle of a resource that must be acquired before use (allocated heap memory, thread of execution, open socket, open file, locked mutex, disk space, database connection—anything that exists in limited supply) to the lifetime of an object.
+    * RAII can be summarized as follows:
+      * encapsulate each resource into a class, where
+        * the constructor acquires the resource and establishes all class invariants or throws an exception if that cannot be done,
+        * the destructor releases the resource and never throws exceptions;
+      * always use the resource via an instance of a RAII-class that either
+        * has automatic storage duration or temporary lifetime itself, or
+        * has lifetime that is bounded by the lifetime of an automatic or temporary object
+    * Move semantics make it possible to safely transfer resource ownership between objects, across scopes, and in and out of threads, while maintaining resource safety.
+    * Classes with open()/close(), lock()/unlock(), or init()/copyFrom()/destroy() member functions are typical examples of non-RAII classes
+
 ## FAQ
 
 * How to set precision of float / double in output ?
