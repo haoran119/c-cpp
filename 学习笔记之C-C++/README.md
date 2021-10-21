@@ -451,8 +451,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * It is guaranteed to be a standard-layout class.
   * [std::lock_guard - cppreference.com](https://en.cppreference.com/w/cpp/thread/lock_guard)
     * Defined in header \<mutex>
-    * template\< class Mutex >
-    * class lock_guard; (since C++11)
+    * template\< class Mutex > class lock_guard; (since C++11)
     * The class lock_guard is a mutex wrapper that provides a convenient RAII-style mechanism for owning a mutex for the duration of a scoped block.
     * When a lock_guard object is created, it attempts to take ownership of the mutex it is given. When control leaves the scope in which the lock_guard object was created, the lock_guard is destructed and the mutex is released.
     * The lock_guard class is non-copyable.
