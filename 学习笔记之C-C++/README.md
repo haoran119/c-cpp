@@ -446,9 +446,9 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [mutex - C++ Reference](https://www.cplusplus.com/reference/mutex/mutex/)
     * class mutex;
     * Mutex class
-    * A mutex is a lockable object that is designed to signal when critical sections of code need exclusive access, preventing other threads with the same protection from executing concurrently and access the same memory locations.
-    * mutex objects provide exclusive ownership and do not support recursivity (i.e., a thread shall not lock a mutex it already owns) -- see recursive_mutex for an alternative class that does.
-    * It is guaranteed to be a standard-layout class.
+      * A mutex is a lockable object that is designed to signal when critical sections of code need exclusive access, preventing other threads with the same protection from executing concurrently and access the same memory locations.
+      * mutex objects provide exclusive ownership and do not support recursivity (i.e., a thread shall not lock a mutex it already owns) -- see recursive_mutex for an alternative class that does.
+      * It is guaranteed to be a standard-layout class.
   * [std::lock_guard - cppreference.com](https://en.cppreference.com/w/cpp/thread/lock_guard)
     * Defined in header \<mutex>
     * template\< class Mutex > class lock_guard; (since C++11)
