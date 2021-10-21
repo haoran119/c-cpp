@@ -9,6 +9,7 @@
   * [MFC Desktop Applications | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/mfc/mfc-desktop-applications?view=msvc-160)
     * The Microsoft Foundation Class (MFC) Library provides an object-oriented wrapper over much of the Win32 and COM APIs. Although it can be used to create very simple desktop applications, it is most useful when you need to develop more complex user interfaces with multiple controls. You can use MFC to create applications with Office-style user interfaces. For documentation on the Windows platform itself, see Windows documentation. For information on building Windows applications in C++ without MFC, see Build desktop Windows apps using the Win32 API.
   * [ATL-MFC Shared Classes | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/atl-mfc-shared-classes?view=msvc-160)
+    * These utility classes can be used in any native C++ project without requiring any MFC DLL.
     * [Classes Shared by MFC and ATL | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/reference/classes-shared-by-mfc-and-atl?view=msvc-160)
       * [CTime Class | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/reference/ctime-class?view=msvc-160)
         * Represents an absolute time and date.
