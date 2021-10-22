@@ -1,0 +1,33 @@
+# 学习笔记之Component Object Model (COM)
+
+* [Component Object Model (COM) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal)
+  * Purpose
+    * COM is a platform-independent, distributed, object-oriented system for creating binary software components that can interact. COM is the foundation technology for Microsoft's OLE (compound documents) and ActiveX (Internet-enabled components) technologies.
+  * Where applicable
+    * COM objects can be created with a variety of programming languages. Object-oriented languages, such as C++, provide programming mechanisms that simplify the implementation of COM objects. These objects can be within a single process, in other processes, even on remote computers.
+* [Component Object Model - Wikipedia](https://en.wikipedia.org/wiki/Component_Object_Model)
+  * Component Object Model (COM) is a binary-interface standard for software components introduced by Microsoft in 1993. It is used to enable inter-process communication object creation in a large range of programming languages. COM is the basis for several other Microsoft technologies and frameworks, including OLE, OLE Automation, Browser Helper Object, ActiveX, COM+, DCOM, the Windows shell, DirectX, UMDF and Windows Runtime. The essence of COM is a language-neutral way of implementing objects that can be used in environments different from the one in which they were created, even across machine boundaries. For well-authored components, COM allows reuse of objects with no knowledge of their internal implementation, as it forces component implementers to provide well-defined interfaces that are separated from the implementation. The different allocation semantics of languages are accommodated by making objects responsible for their own creation and destruction through reference-counting. Type conversion casting between different interfaces of an object is achieved through the QueryInterface method. The preferred method of "inheritance" within COM is the creation of sub-objects to which method "calls" are delegated.
+  * COM is an interface technology defined and implemented as standard only on Microsoft Windows and Apple's Core Foundation 1.3 and later plug-in application programming interface (API).[1] The latter only implements a subset of the whole COM interface.[2] For some applications, COM has been replaced at least to some extent by the Microsoft .NET framework, and support for Web Services through the Windows Communication Foundation (WCF). However, COM objects can be used with all .NET languages through .NET COM Interop. Networked DCOM uses binary proprietary formats, while WCF encourages the use of XML-based SOAP messaging. COM is very similar to other component software interface technologies, such as CORBA and Enterprise JavaBeans, although each has its own strengths and weaknesses. Unlike C++, COM provides a stable application binary interface (ABI) that does not change between compiler releases.[3] This makes COM interfaces attractive for object-oriented C++ libraries that are to be used by clients compiled using different compiler versions.
+* [Is component object model still used?](https://livebook.manning.com/book/powershell-in-depth-second-edition/chapter-34/)
+  * .NET Framework, folks relied on an earlier technology called the Component Object Model (COM). COM is basically a set of rules that enable developers to write software components that can easily interoperate. COM is still in wide use today, although it's considered an older cousin to the . NET Framework.
+* [c++ - What is COM (Component Object Model) in a nutshell? - Stack Overflow](https://stackoverflow.com/questions/455687/what-is-com-component-object-model-in-a-nutshell)
+* [Essential COM - Don Box - Google Books](https://books.google.co.uk/books?id=kfRWvKSePmAC&dq=essential+com&printsec=frontcover&source=bn&hl=en&sa=X&oi=book_result&ct=result#v=onepage&q=essential%20com&f=false)
+* [Migrating COM/DCOM Applications in Microsoft .NET Framework](https://www.c-sharpcorner.com/article/migrating-comdcom-applications-in-microsoft-net-framework/)
+* [Managed and Unmanaged Code - Key Differences - ParTech](https://www.partech.nl/en/publications/2021/03/managed-and-unmanaged-code---key-differences#)
+  * DIFFERENCE BETWEEN MANAGED AND UNMANAGED CODE?
+    * Managed code is the one that is executed by the CLR of the .NET framework while unmanaged or unsafe code is executed by the operating system.
+    * The managed code provides security to the code while undamaged code creates security threats.
+    * In unsafe or unmanaged code the unsafe modifier is used to write the block of code while any other code written outside the unsafe code block is managed code.
+    * Memory buffer overflow problems do not occur in managed code as it is taken care of by the runtime environment but these problems occur in unmanaged code.
+    * Runtime services are provided in managed code while they are not provided in unmanaged code.
+    * Source code is first converted to intermediate language and then to native language in managed code while it is directly converted into the native language in unmanaged code.
+    * Unmanaged code provides low-level access while managed code does not provide that.
+    * In unsafe or unmanaged code the unsafe modifier is used to write the block of code while any other code written outside the unsafe code block is managed code.
+* [HRESULT - Wikipedia](https://en.wikipedia.org/wiki/HRESULT)
+  * In the field of computer programming, the HRESULT is a data type used in Windows operating systems, and the earlier IBM/Microsoft OS/2 operating system, to represent error conditions, and warning conditions.
+  * The original purpose of HRESULTs was to formally lay out ranges of error codes for both public and Microsoft internal use in order to prevent collisions between error codes in different subsystems of the OS/2 operating system.
+  * HRESULTs are numerical error codes. Various bits within an HRESULT encode information about the nature of the error code, and where it came from.
+  * HRESULT error codes are most commonly encountered in COM programming, where they form the basis for a standardized COM error handling convention.
+  * [HRESULT | Microsoft Docs](https://docs.microsoft.com/en-us/office/client-developer/outlook/mapi/hresult)
+  * [Common HRESULT Values - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-1)
+  * [COM Error Codes (Generic) (Winerror.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-1)
