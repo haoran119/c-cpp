@@ -429,18 +429,25 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 ### C++ Library
 
-* Chrono
-  * [\<chrono> - C++ Reference](https://www.cplusplus.com/reference/chrono/)
+* [\<chrono> - C++ Reference](https://www.cplusplus.com/reference/chrono/)
   * [Date and time utilities - cppreference.com](https://en.cppreference.com/w/cpp/chrono)
     * C++ includes support for two types of time manipulation:
       * The chrono library, a flexible collection of types that track time with varying degrees of precision (e.g. std::chrono::time_point).
       * C-style date and time library (e.g. std::time)
   * [\<chrono> | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/chrono?view=msvc-160)
   * [Chrono in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/chrono-in-c/)
+* [is_same - C++ Reference](https://www.cplusplus.com/reference/type_traits/is_same/)
+  * template <class T, class U> struct is_same;
+  * Trait class that identifies whether T is the same type as U, including having the same const and/or volatile qualification, if any.
+  * Two different type names are considered to represent the same type if -and only if- one is a typedef of the other: Two names representing types with the exact same characteristics but which none is a typedef of the other are not considered the same type.
+  * is_same inherits from integral_constant as being either true_type or false_type, depending on whether T and U are the same type.
+  * [std::is_same - cppreference.com](https://en.cppreference.com/w/cpp/types/is_same)
+    * If T and U name the same type (taking into account const/volatile qualifications), provides the member constant value equal to true. Otherwise value is false.
+    * Commutativity is satisfied, i.e. for any two types T and U, is_same<T, U>::value == true if and only if is_same<U, T>::value == true.
+    * The behavior of a program that adds specializations for is_same or is_same_v (since C++17) is undefined.
 
 ### C++ Advanced
-* Lambda expression
-  * [Lambda expressions in C++ | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/lambda-expressions-in-cpp?view=msvc-160)
+* [Lambda expressions in C++ | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/lambda-expressions-in-cpp?view=msvc-160)
   * [Lambda expressions (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/lambda)
   * [Lambda expression in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/lambda-expression-in-c/)
 
