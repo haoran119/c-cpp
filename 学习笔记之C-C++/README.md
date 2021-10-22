@@ -327,6 +327,26 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 ### Strings
 
+* [basic_string - C++ Reference](https://www.cplusplus.com/reference/string/basic_string/)
+  * Generic string class
+  * The basic_string is the generalization of class string for any character type (see string for a description).
+  * [std::basic_string - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string)
+    * The class template basic_string stores and manipulates sequences of char-like objects, which are non-array objects of trivial standard-layout type. The class is dependent neither on the character type nor on the nature of operations on that type. The definitions of the operations are supplied via the Traits template parameter - a specialization of std::char_traits or a compatible traits class. Traits::char_type and CharT must name the same type; otherwise the program is ill-formed.
+    * The elements of a basic_string are stored contiguously, that is, for a basic_string s, &*(s.begin() + n) == &*s.begin() + n for any n in [0, s.size()), or, equivalently, a pointer to s[0] can be passed to functions that expect a pointer to the first element of a null-terminated (since C++11)CharT[] array.
+    * std::basic_string satisfies the requirements of AllocatorAwareContainer, SequenceContainer and ContiguousContainer (since C++17)
+  * [std::basic_string_view - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string_view)
+    * The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
+* [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
+  * Output stream class to operate on strings.
+  * Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
+  * Characters can be inserted into the stream with any operation allowed on output streams.
+  * [ostringstream::str - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/str/)
+    * string str() const;
+    * void str (const string& s);
+    * Get/set content
+      * The first form (1) returns a string object with a copy of the current contents of the stream.
+      * The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
+      * Internally, the function calls the str member of its internal string buffer object.
 * [string::compare - C++ Reference](https://www.cplusplus.com/reference/string/string/compare/)
   * Compare strings
   * Compares the value of the string object (or a substring) to the sequence of characters specified by its arguments.
@@ -342,17 +362,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
       * operator << — add a string to the stringstream object.
       * operator >> — read something from the stringstream object,
   * [StringStream | HackerRank](https://www.hackerrank.com/challenges/c-tutorial-stringstream/problem)
-* [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
-  * Output stream class to operate on strings.
-  * Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
-  * Characters can be inserted into the stream with any operation allowed on output streams.
-  * [ostringstream::str - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/str/)
-    * string str() const;
-    * void str (const string& s);
-    * Get/set content
-      * The first form (1) returns a string object with a copy of the current contents of the stream.
-      * The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
-      * Internally, the function calls the str member of its internal string buffer object.
 
 ### Object Oriented Programming
 
