@@ -447,10 +447,17 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * The behavior of a program that adds specializations for is_same or is_same_v (since C++17) is undefined.
 
 ### C++ Advanced
+
 * [Lambda expressions in C++ | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/lambda-expressions-in-cpp?view=msvc-160)
   * In C++11 and later, a lambda expression—often called a lambda—is a convenient way of defining an anonymous function object (a closure) right at the location where it's invoked or passed as an argument to a function. Typically lambdas are used to encapsulate a few lines of code that are passed to algorithms or asynchronous functions. This article defines what lambdas are, and compares them to other programming techniques. It describes their advantages, and provides some basic examples.
   * [Lambda expressions (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/lambda)
   * [Lambda expression in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/lambda-expression-in-c/)
+* [C++ keywords: mutable - cppreference.com](https://en.cppreference.com/w/cpp/keyword/mutable)
+  * [mutable type specifier](https://en.cppreference.com/w/cpp/language/cv)
+    * mutable - permits modification of the class member declared mutable even if the containing object is declared const.
+  * [lambda-declarator](https://en.cppreference.com/w/cpp/language/lambda) that removes const qualification from parameters captured by copy (since C++11)
+    * mutable: allows body to modify the objects captured by copy, and to call their non-const member functions
+  * [C++ mutable keyword - GeeksforGeeks](https://www.geeksforgeeks.org/c-mutable-keyword/)
 
 ### Multiple Threading
 
