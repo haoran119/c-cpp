@@ -405,6 +405,10 @@ In programming contests, people do focus more on finding the algorithm to solve 
       cout << "Other Exception" << endl;
   }
   ```
+* [noexcept specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/noexcept_spec)
+  * Specifies whether a function could throw exceptions.
+  * [noexcept (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/noexcept-cpp?view=msvc-160)
+  * [Modern C++ best practices for exceptions and error handling | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/errors-and-exception-handling-modern-cpp?view=msvc-160)
 
 ### Standard Template Library (STL)
 
