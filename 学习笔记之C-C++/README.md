@@ -269,6 +269,21 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 ### Basic Input/Output
 
+* [Fast I/O for Competitive Programming - GeeksforGeeks](https://www.geeksforgeeks.org/fast-io-for-competitive-programming/)
+  ```c++
+  #include <bits/stdc++.h>
+  using namespace std;
+
+  int main()
+  {
+      ios_base::sync_with_stdio(false);
+      cin.tie(NULL);
+      return 0;
+  }
+  ```
+  * [c++ - Significance of ios_base::sync_with_stdio(false); cin.tie(NULL); - Stack Overflow](https://stackoverflow.com/questions/31162367/significance-of-ios-basesync-with-stdiofalse-cin-tienull/31165481#31165481)
+  * [std::ios_base::sync_with_stdio - cppreference.com](https://en.cppreference.com/w/cpp/io/ios_base/sync_with_stdio)
+  * [ios::tie - C++ Reference](https://www.cplusplus.com/reference/ios/ios/tie/)
 * [manipulators - C++ Reference](http://www.cplusplus.com/reference/library/manipulators/)
   * Basic format flags
     * These manipulators are usable on both input and output streams, although many only have an effect when applied to either output or input streams.
