@@ -25,3 +25,14 @@
   * The following set of string classes can be used without linking an MFC library, with or without CRT support: CAtlString, CAtlStringA, and CAtlStringW.
   * CString is used in native projects. For managed-code (C++/CLI) projects, use System::String.
   * To add more capabilities than CString, CStringA, or CStringW currently offer, you should create a subclass of CStringT that contains the additional features.
+  * [CString Operations Relating to C-Style Strings | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/cstring-operations-relating-to-c-style-strings?view=msvc-160)
+  * [CString::operator LPCTSTR | Microsoft Docs](https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-6.0/aa300569(v=vs.60)?redirectedfrom=MSDN)
+  * [c++ - What is LPCTSTR? - Software Engineering Stack Exchange](https://softwareengineering.stackexchange.com/questions/194764/what-is-lpctstr)
+    * LPCTSTR = L‌ong P‌ointer to a C‌onst T‌CHAR STR‌ing (Don't worry, a long pointer is the same as a pointer. There were two flavors of pointers under 16-bit windows.)
+    * Here's the table:
+      * LPSTR = char*
+      * LPCSTR = const char*
+      * LPWSTR = wchar_t*
+      * LPCWSTR = const wchar_t*
+      * LPTSTR = char* or wchar_t* depending on _UNICODE
+      * LPCTSTR = const char* or const wchar_t* depending on _UNICODE
