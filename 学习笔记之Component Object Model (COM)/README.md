@@ -23,6 +23,18 @@
     * Source code is first converted to intermediate language and then to native language in managed code while it is directly converted into the native language in unmanaged code.
     * Unmanaged code provides low-level access while managed code does not provide that.
     * In unsafe or unmanaged code the unsafe modifier is used to write the block of code while any other code written outside the unsafe code block is managed code.
+* [Compiler COM Support | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/compiler-com-support?view=msvc-160)
+  * The Microsoft C++ compiler can directly read component object model (COM) type libraries and translate the contents into C++ source code that can be included in the compilation. Language extensions are available to facilitate COM programming on the client side for desktop apps.
+  * By using the #import preprocessor directive, the compiler can read a type library and convert it into a C++ header file that describes the COM interfaces as classes. A set of #import attributes is available for user control of the content for the resulting type library header files.
+  * You can use the __declspec extended attribute uuid to assign a globally unique identifier (GUID) to a COM object. The keyword __uuidof can be used to extract the GUID associated with a COM object. Another __declspec attribute, property, can be used to specify the get and set methods for a data member of a COM object.
+  * A set of COM support global functions and classes is provided to support the VARIANT and BSTR types, implement smart pointers, and encapsulate the error object thrown by _com_raise_error:
+    * Compiler COM Global Functions
+    * _bstr_t
+    * _com_error
+    * _com_ptr_t
+    * _variant_t
+  * [_bstr_t class | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/bstr-t-class?view=msvc-160)
+    * A _bstr_t object encapsulates the BSTR data type. The class manages resource allocation and deallocation through function calls to SysAllocString and SysFreeString and other BSTR APIs when appropriate. The _bstr_t class uses reference counting to avoid excessive overhead.
 * [HRESULT - Wikipedia](https://en.wikipedia.org/wiki/HRESULT)
   * In the field of computer programming, the HRESULT is a data type used in Windows operating systems, and the earlier IBM/Microsoft OS/2 operating system, to represent error conditions, and warning conditions.
   * The original purpose of HRESULTs was to formally lay out ranges of error codes for both public and Microsoft internal use in order to prevent collisions between error codes in different subsystems of the OS/2 operating system.
