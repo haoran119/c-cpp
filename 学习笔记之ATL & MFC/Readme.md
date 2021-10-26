@@ -36,5 +36,5 @@
       * LPCWSTR = const wchar_t*
       * LPTSTR = char* or wchar_t* depending on _UNICODE
       * LPCTSTR = const char* or const wchar_t* depending on _UNICODE
-* [[MS-DTYP]: LPCSTR | Microsoft Docs](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/f8d4fe46-6be8-44c9-8823-615a21d17a61)
-* [[MS-DTYP]: LPCWSTR | Microsoft Docs](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/76f10dd8-699d-45e6-a53c-5aefc586da20)
+  * [[MS-DTYP]: LPCSTR | Microsoft Docs](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/f8d4fe46-6be8-44c9-8823-615a21d17a61)
+  * [[MS-DTYP]: LPCWSTR | Microsoft Docs](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/76f10dd8-699d-45e6-a53c-5aefc586da20)
