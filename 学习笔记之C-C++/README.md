@@ -239,6 +239,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
 #### Preprocessor
 
 * [Preprocessor directives - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/preprocessor/)
+* [Predefined macros | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160)
 * [once pragma | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/once?view=msvc-160)
   * Specifies that the compiler includes the header file only once, when compiling a source code file.
   * Syntax
