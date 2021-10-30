@@ -531,6 +531,24 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * 互斥量与临界区
   * 期物
   * 条件变量
+* [C++并发编程（C++11到C++17）](https://mp.weixin.qq.com/s/sLaJQl4cj_c-M2qy7iX__A)
+  * 为什么要并发编程
+  * 并发与并行
+    * 并发（Concurrent）与并行（Parallel）都是很常见的术语。
+  * 进程与线程
+  * 并发系统的性能
+  * C++与并发编程
+  * 编译器与C++标准
+  * 测试环境
+  * 线程
+  * 管理当前线程
+  * 一次调用
+  * 并发任务
+  * 竞争条件与临界区
+  * 互斥体与锁
+  * 通用锁定算法
+  * 通用互斥管理
+  * 并行算法
 
 ## Best Practice
 
