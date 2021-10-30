@@ -525,6 +525,13 @@ In programming contests, people do focus more on finding the algorithm to solve 
         * has lifetime that is bounded by the lifetime of an automatic or temporary object
     * Move semantics make it possible to safely transfer resource ownership between objects, across scopes, and in and out of threads, while maintaining resource safety.
     * Classes with open()/close(), lock()/unlock(), or init()/copyFrom()/destroy() member functions are typical examples of non-RAII classes
+* [现代 C++ 并发编程基础](https://mp.weixin.qq.com/s/GGIczr97q-RxAfAnQKeDRg)
+  * https://changkun.de/modern-cpp/zh-cn/07-thread/index.html
+  * 并行基础
+  * 互斥量与临界区
+  * 期物
+  * 条件变量
+
 
 ## FAQ
 
