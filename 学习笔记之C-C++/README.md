@@ -552,6 +552,21 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 ## Best Practice
 
+* [C++ 实用指南](https://mp.weixin.qq.com/s/PZ27a-Epy_WUITk7SWOHCQ)
+  * 介   绍
+  * 一些问题
+  * 其他问题？
+  * 如何保持理智
+  * 保持乐观，语言在不断发展
+  * 使用指南
+  * 还有工具！
+  * 努力跟上最新进展
+  * 细节太多了？
+  * 使用你需要的东西
+  * 增量变更
+  * 最后的底线：你的旧代码仍然可以编译
+  * 总   结
+
 ### Memory leak
 
 
