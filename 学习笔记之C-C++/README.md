@@ -532,9 +532,9 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * 期物
   * 条件变量
 
-### Best Practice
+## Best Practice
 
-#### Memory leak
+### Memory leak
 
 
 ## FAQ
