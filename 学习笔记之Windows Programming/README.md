@@ -19,3 +19,4 @@
     * The exit value specified in the ExitThread or TerminateThread function.
     * The return value from the thread function.
     * The exit value of the thread's process.
+  * [c++ - How can you get the return value of a Windows thread? - Stack Overflow](https://stackoverflow.com/questions/7100441/how-can-you-get-the-return-value-of-a-windows-thread)
