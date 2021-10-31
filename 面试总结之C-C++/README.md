@@ -127,6 +127,7 @@
   * [你们要的C++面试题答案来了--基础篇](https://mp.weixin.qq.com/s/YRo5Lm9pbbZnjY1DQfW6yw)
 * [2021 年 C++ 岗就业如何？附学习路线图 (qq.com)](https://mp.weixin.qq.com/s/g6dHxYN7jhw_bLXqnFdEyA)
 * [C++ 八股文（一）](https://mp.weixin.qq.com/s/qVSdP0hXbC7le5DC3vJHKw)
+* [C++来了，详细知识点思维导图！](https://mp.weixin.qq.com/s/0x_mWC7M0WhqJ03y1w6w2Q)
 
 ## 编译内存相关
 
