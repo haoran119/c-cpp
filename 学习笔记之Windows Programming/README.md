@@ -9,3 +9,13 @@
   * The Windows API (Win32) is focused mainly on the programming language C[2] in that its exposed functions and data structures are described in that language in recent versions of its documentation. However, the API may be used by any programming language compiler or assembler able to handle the (well-defined) low-level data structures along with the prescribed calling conventions for calls and callbacks. Similarly, the internal implementation of the API's function has been developed in several languages, historically.[3] Despite the fact that C is not an object-oriented programming language, the Windows API and Windows have both historically been described as object-oriented. There have also been many wrapper classes and extensions (from Microsoft and others) for object-oriented languages that make this object-oriented structure more explicit (Microsoft Foundation Class Library (MFC), Visual Component Library (VCL), GDI+, etc.). For instance, Windows 8 provides the Windows API and the WinRT API, which is implemented in C++[4] and is object-oriented by design.[4]
 * [c-cpp/学习笔记之ATL & MFC at main · haoran119/c-cpp](https://github.com/haoran119/c-cpp/tree/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BATL%20%26%20MFC)
 * [c-cpp/学习笔记之Component Object Model (COM) at main · haoran119/c-cpp](https://github.com/haoran119/c-cpp/tree/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BComponent%20Object%20Model%20(COM))
+* [GetExitCodeThread function (processthreadsapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getexitcodethread?redirectedfrom=MSDN)
+  * Retrieves the termination status of the specified thread.
+  * Return value
+    * If the function succeeds, the return value is nonzero.
+    * If the function fails, the return value is zero. To get extended error information, call GetLastError.
+  * Remarks
+    * This function returns immediately. If the specified thread has not terminated and the function succeeds, the status returned is STILL_ACTIVE. If the thread has terminated and the function succeeds, the status returned is one of the following values:
+    * The exit value specified in the ExitThread or TerminateThread function.
+    * The return value from the thread function.
+    * The exit value of the thread's process.
