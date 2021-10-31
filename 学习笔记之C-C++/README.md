@@ -174,6 +174,7 @@
     * 开发工具 – 让编写C++代码更加容易！
     * C++在开发者中的稳定位置
   * 总而言之，我认为在未来的十年，我们可以以一种积极乐观的态度看待C++。虽然我们无法预知更远的将来会发生什么，但是至少在接下来的十年里，我相信C++应该是稳定的。有了所有这些工具的帮助，新的C++标准编写的C++代码会更加容易访问，并且更加不容易出错。在可预见的将来，C++仍然是追求性能的应用程序的无二选择，甚至它会取代C和Fortran。
+  * [C/C++ PK 各大编程语言](https://mp.weixin.qq.com/s/zTuPyQRkjkVWp_KIjMh_Kw)
 
 ### Basics
 
@@ -580,7 +581,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * 最后的底线：你的旧代码仍然可以编译
   * 总   结
 
-### Memory leak
+### Memory Leak
 
 * [C++ 如何避免内存泄露](https://mp.weixin.qq.com/s/oBTNXxUiU3StexuyCKPI6w)
   * 内存是如何泄露的
@@ -610,6 +611,19 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * 但有时候为了让不同进程之间进行通信，需要让不同进程共享相同的物理内存，Linux通过 共享内存 来实现这个功能。下面先来介绍一下Linux系统的共享内存的使用。
   * 共享内存使用
   * 共享内存实现原理
+* [C/C++ 动态检测内存错误利器 - ASan](https://mp.weixin.qq.com/s/u6UtoXQkdcomtGZxX9vsvw)
+  * ASan，即Address Sanitizer，是一个适用于c/c++程序的动态内存错误检测器，它由一个编译器检测模块（LLVM pass）和一个替换malloc函数的运行时库组成，在性能及检测内存错误方面都优于Valgrind，你值得拥有。
+
+### Unit Testing
+
+* [C++ 单元测试与代码覆盖率](https://mp.weixin.qq.com/s/QV62sN4ILPGk4Ko-a0ZsfA)
+  * 本文以C++语言为基础，讲解如何进行单元测试并生成测试报告。
+  * 在工具上，我们会使用下面这些：
+    * GCC
+    * CMake
+    * Google Test
+    * gcov
+    * lcov
 
 ## FAQ
 
