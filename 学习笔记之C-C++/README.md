@@ -525,6 +525,19 @@ In programming contests, people do focus more on finding the algorithm to solve 
         * has lifetime that is bounded by the lifetime of an automatic or temporary object
     * Move semantics make it possible to safely transfer resource ownership between objects, across scopes, and in and out of threads, while maintaining resource safety.
     * Classes with open()/close(), lock()/unlock(), or init()/copyFrom()/destroy() member functions are typical examples of non-RAII classes
+* [C++ 线程的使用](https://mp.weixin.qq.com/s/tMWxvw4Kmga5ayUfXHaaIw)
+  * C++11 之前，C++ 语言没有对并发编程提供语言级别的支持，这使得我们在编写可移植的并发程序时，存在诸多的不便。现在 C++11 中增加了线程以及线程相关的类，很方便地支持了并发编程，使得编写的多线程程序的可移植性得到了很大的提高。
+  * C++11 中提供的线程类叫做 std::thread，基于这个类创建一个新的线程非常的简单，只需要提供线程函数或者函数对象即可，并且可以同时指定线程函数的参数。我们首先来了解一下这个类提供的一些常用 API：
+  * 1. 构造函数
+  * 2. 公共成员函数
+    * 2.1 get_id()
+    * 2.2 join()
+    * 2.3 detach()
+    * 2.5 joinable()
+    * 2.6 operator=
+  * 3. 静态函数
+  * 4. C 线程库
+    * [C语言线程库的使用](https://mp.weixin.qq.com/s?__biz=MzI3ODQ3OTczMw==&mid=2247491745&idx=1&sn=d995e1617ed6ad3d56de28b5be127e73&scene=21#wechat_redirect)
 * [现代 C++ 并发编程基础](https://mp.weixin.qq.com/s/GGIczr97q-RxAfAnQKeDRg)
   * https://changkun.de/modern-cpp/zh-cn/07-thread/index.html
   * 并行基础
@@ -569,6 +582,34 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 ### Memory leak
 
+* [C++ 如何避免内存泄露](https://mp.weixin.qq.com/s/oBTNXxUiU3StexuyCKPI6w)
+  * 内存是如何泄露的
+  * 经验 #1：尽量避免在堆上分配内存
+  * 经验 #2：使用 Arena
+  * 经验 #3：使用 Coroutine
+  * 经验 #4：善用 RAII
+  * 经验 #5：便于 Debug
+* [你踩过几种C++内存泄露的坑？](https://mp.weixin.qq.com/s/8h_ek1NLE9mOKdA2WiOoQw)
+  * 1. 函数内或者类成员内存未释放
+  * 2. delete []
+  * 3. delete (void*)
+  * 4. Virtual destructor
+  * 5. 对象循环引用
+  * 6. 资源泄露
+* [C++常见的三种内存破坏的场景和分析](https://mp.weixin.qq.com/s/uG4R-oSjf2AO-OVm2A1rPw)
+  * 有一定C++开发经验的同学大多数踩过内存破坏的坑,有这么几种现象:
+    * 比如某个变量整形，在程序中只可能初始化或者赋值为1或者2, 但是在使用的时候却发现其为0或者其他的情况。对于其他类型，比如字符串等，可能出现了一种出乎意料的值！
+    * 程序在堆上申请内存或者释放内存的时候，在内存充足的情况下，居然出现了堆错误。
+  * 当出现以上场景的时候，你该思考一下，是不是出现了内存破坏的情况了。而本文主要通过展示和分析常见的三种内存破坏导致覆盖相邻变量的场景，让读者在碰到类似的场景，不至于束手无策。而对于堆上的内存破坏，很常见并且棘手的场景，本人将在后续的文章和大家分享。
+  * 1. 内存破坏之强制类型转换
+  * 2. 字符串拷贝溢出
+  * 3. 随机性的内存被修改
+* [一文搞定 | Linux共享内存原理](https://mp.weixin.qq.com/s/RB6KRXF_uJF7wXjRvDyhmQ)
+  * https://cloud.tencent.com/developer/article/1396351
+  * 在Linux系统中，每个进程都有独立的虚拟内存空间，也就是说不同的进程访问同一段虚拟内存地址所得到的数据是不一样的，这是因为不同进程相同的虚拟内存地址会映射到不同的物理内存地址上。
+  * 但有时候为了让不同进程之间进行通信，需要让不同进程共享相同的物理内存，Linux通过 共享内存 来实现这个功能。下面先来介绍一下Linux系统的共享内存的使用。
+  * 共享内存使用
+  * 共享内存实现原理
 
 ## FAQ
 
