@@ -636,3 +636,5 @@ In programming contests, people do focus more on finding the algorithm to solve 
   ```c++
   cout << fixed << setprecision(9) << e << endl; // 14049.304930000  
   ```
+* How to fix "LNK1104: cannot open file 'libboost_log-vc142-mt-x32-1_72.lib'" when building project in MSVS ?
+  *  check the path, e.g. "BOOST_ROOT", in system enviroment variable to see if "\" is appended at the end, e.g. C:\Program Files\boost\boost_1_72_0\
