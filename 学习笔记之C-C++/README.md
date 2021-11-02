@@ -370,9 +370,15 @@ In programming contests, people do focus more on finding the algorithm to solve 
       * Internally, the function calls the str member of its internal string buffer object.
 * [string::compare - C++ Reference](https://www.cplusplus.com/reference/string/string/compare/)
   * Compare strings
-  * Compares the value of the string object (or a substring) to the sequence of characters specified by its arguments.
-  * The compared string is the value of the string object or -if the signature used has a pos and a len parameters- the substring that begins at its character in position pos and spans len characters.
-  * This string is compared to a comparing string, which is determined by the other arguments passed to the function.
+    * Compares the value of the string object (or a substring) to the sequence of characters specified by its arguments.
+    * The compared string is the value of the string object or -if the signature used has a pos and a len parameters- the substring that begins at its character in position pos and spans len characters.
+    * This string is compared to a comparing string, which is determined by the other arguments passed to the function.
+* [string::find - C++ Reference](https://www.cplusplus.com/reference/string/string/find/)
+  * Find content in string
+    * Searches the string for the first occurrence of the sequence specified by its arguments.
+    * When pos is specified, the search only includes characters at or after position pos, ignoring any possible occurrences that include characters before pos.
+    * Notice that unlike member find_first_of, whenever more than one character is being searched for, it is not enough that just one of these characters match, but the entire sequence must match.
+  * [std::basic_string<CharT,Traits,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find)
 * [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
   * [std::basic_stringstream - cppreference.com](https://en.cppreference.com/w/cpp/io/basic_stringstream)
   * [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
