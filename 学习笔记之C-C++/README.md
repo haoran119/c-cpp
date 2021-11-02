@@ -437,7 +437,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
 * [c++ - How to copy a file from a folder to another folder - Stack Overflow](https://stackoverflow.com/questions/9125122/how-to-copy-a-file-from-a-folder-to-another-folder)
   * [std::filesystem::copy - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy)
     * Defined in header \<filesystem> since C++ 17
-  * [std::filesystem::copy_options - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy)
+  * [std::filesystem::copy_options - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy_options)
   * [\<filesystem> | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/filesystem?view=msvc-160)
     * Include the header <filesystem> for access to classes and functions that manipulate and retrieve information about paths, files, and directories.
   * [c++ - How to use copy_file in boost::filesystem? - Stack Overflow](https://stackoverflow.com/questions/4785491/how-to-use-copy-file-in-boostfilesystem)
