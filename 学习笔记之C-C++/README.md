@@ -432,6 +432,17 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [Exception specifications (throw, noexcept) (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/exception-specifications-throw-cpp?view=msvc-160)
   * [Modern C++ best practices for exceptions and error handling | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/errors-and-exception-handling-modern-cpp?view=msvc-160)
 
+### File Handling
+
+* [c++ - How to copy a file from a folder to another folder - Stack Overflow](https://stackoverflow.com/questions/9125122/how-to-copy-a-file-from-a-folder-to-another-folder)
+  * [std::filesystem::copy - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy)
+    * Defined in header \<filesystem> since C++ 17
+  * [std::filesystem::copy_options - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy)
+  * [\<filesystem> | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/filesystem?view=msvc-160)
+    * Include the header <filesystem> for access to classes and functions that manipulate and retrieve information about paths, files, and directories.
+  * [c++ - How to use copy_file in boost::filesystem? - Stack Overflow](https://stackoverflow.com/questions/4785491/how-to-use-copy-file-in-boostfilesystem)
+    * [boost Filesystem Reference](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#copy_file)
+
 ### Standard Template Library (STL)
 
 * [deque - C++ Reference](http://www.cplusplus.com/reference/deque/deque/)
