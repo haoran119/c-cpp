@@ -232,11 +232,18 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * The keyword constexpr was introduced in C++11 and improved in C++14. It means constant expression. Like const, it can be applied to variables: A compiler error is raised when any code attempts to modify the value. Unlike const, constexpr can also be applied to functions and class constructors. constexpr indicates that the value, or return value, is constant and, where possible, is computed at compile time.
   * A constexpr integral value can be used wherever a const integer is required, such as in template arguments and array declarations. And when a value is computed at compile time instead of run time, it helps your program run faster and use less memory.
   * To limit the complexity of compile-time constant computations, and their potential impacts on compilation time, the C++14 standard requires the types in constant expressions to be literal types.
+  * [constexpr specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/constexpr)
+    * constexpr - specifies that the value of a variable or function can appear in constant expressions
+  * [Constant expressions - cppreference.com](https://en.cppreference.com/w/cpp/language/constant_expression)
+    * Defines an expression that can be evaluated at compile time.
+    * Such expressions can be used as non-type template arguments, array sizes, and in other contexts that require constant expressions
   * [Understanding constexpr specifier in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/understanding-constexper-specifier-in-c/)
     * constexpr is a feature added in C++ 11. The main idea is performance improvement of programs by doing computations at compile time rather than run time. Note that once a program is compiled and finalized by developer, it is run multiple times by users. The idea is to spend time in compilation and save time at run time (similar to template metaprogramming)
     * constexpr vs inline functions
     * constexpr with constructors
     * constexpr vs const
+  * [c++ - Difference between `constexpr` and `const` - Stack Overflow](https://stackoverflow.com/questions/14116003/difference-between-constexpr-and-const?rq=1)
+  * [c++ - constexpr const vs constexpr variables? - Stack Overflow](https://stackoverflow.com/questions/28845058/constexpr-const-vs-constexpr-variables)
 
 #### Preprocessor
 
