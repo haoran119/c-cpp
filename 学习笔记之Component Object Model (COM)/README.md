@@ -33,6 +33,8 @@
     * _com_error
     * _com_ptr_t
     * _variant_t
+  * [BSTR | Microsoft Docs](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/automat/bstr)
+    * A BSTR (Basic string or binary string) is a string data type that is used by COM, Automation, and Interop functions. Use the BSTR data type in all interfaces that will be accessed from script.
   * [_bstr_t class | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/bstr-t-class?view=msvc-160)
     * A _bstr_t object encapsulates the BSTR data type. The class manages resource allocation and deallocation through function calls to SysAllocString and SysFreeString and other BSTR APIs when appropriate. The _bstr_t class uses reference counting to avoid excessive overhead.
 * [HRESULT - Wikipedia](https://en.wikipedia.org/wiki/HRESULT)
