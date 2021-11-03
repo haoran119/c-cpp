@@ -37,6 +37,8 @@
     * A BSTR (Basic string or binary string) is a string data type that is used by COM, Automation, and Interop functions. Use the BSTR data type in all interfaces that will be accessed from script.
   * [_bstr_t class | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/bstr-t-class?view=msvc-160)
     * A _bstr_t object encapsulates the BSTR data type. The class manages resource allocation and deallocation through function calls to SysAllocString and SysFreeString and other BSTR APIs when appropriate. The _bstr_t class uses reference counting to avoid excessive overhead.
+  * [_bstr_t::operator +=, _bstr_t::operator + | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/bstr-t-operator-add-equal-plus?view=msvc-160)
+    * Appends characters to the end of the _bstr_t object, or concatenates two strings.
 * [HRESULT - Wikipedia](https://en.wikipedia.org/wiki/HRESULT)
   * In the field of computer programming, the HRESULT is a data type used in Windows operating systems, and the earlier IBM/Microsoft OS/2 operating system, to represent error conditions, and warning conditions.
   * The original purpose of HRESULTs was to formally lay out ranges of error codes for both public and Microsoft internal use in order to prevent collisions between error codes in different subsystems of the OS/2 operating system.
