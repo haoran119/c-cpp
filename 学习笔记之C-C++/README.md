@@ -375,55 +375,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [pair - C++ Reference](http://www.cplusplus.com/reference/utility/pair/?kw=pair)
   * [unordered_map - C++ Reference](http://www.cplusplus.com/reference/unordered_map/unordered_map/?kw=unordered_map)
 
-### Standard Template Library (STL)
-
-* [deque - C++ Reference](http://www.cplusplus.com/reference/deque/deque/)
-  * deque (usually pronounced like "deck") is an irregular acronym of double-ended queue. Double-ended queues are sequence containers with dynamic sizes that can be expanded or contracted on both ends (either its front or its back).
-  * [Deque-STL | HackerRank](https://www.hackerrank.com/challenges/deque-stl/problem)
-  * [Sliding Window Maximum (Maximum of all subarrays of size k) - GeeksforGeeks](https://www.geeksforgeeks.org/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/#disqus_thread)
-* [lower_bound - C++ Reference](http://www.cplusplus.com/reference/algorithm/lower_bound/)
-  * Returns an iterator pointing to the first element in the range \[first,last) which does not compare less than val.
-  * [upper_bound - C++ Reference](http://www.cplusplus.com/reference/algorithm/upper_bound/)
-  * [Lower Bound-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-lower-bound/problem)
-* [map - C++ Reference](http://www.cplusplus.com/reference/map/map/)
-  * [map::operator[] - C++ Reference](http://www.cplusplus.com/reference/map/map/operator[]/)
-    * If k matches the key of an element in the container, the function returns a reference to its mapped value.
-    * If k does not match the key of any element in the container, the function inserts a new element with that key and returns a reference to its mapped value. Notice that this always increases the container size by one, even if no mapped value is assigned to the element (the element is constructed using its default constructor).
-    * A similar member function, map::at, has the same behavior when an element with the key exists, but throws an exception when it does not.
-    * A call to this function is equivalent to:
-      * (*((this->insert(make_pair(k,mapped_type()))).first)).second
-  * [Maps-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-maps/problem)
-* [std::swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/swap)
-  * [swap() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/swap-in-cpp/)
-* [unordered_map - C++ Reference](https://www.cplusplus.com/reference/unordered_map/unordered_map/)
-  * Unordered Map
-  * Unordered maps are associative containers that store elements formed by the combination of a key value and a mapped value, and which allows for fast retrieval of individual elements based on their keys.
-  * In an unordered_map, the key value is generally used to uniquely identify the element, while the mapped value is an object with the content associated to this key. Types of key and mapped value may differ.
-  * Internally, the elements in the unordered_map are not sorted in any particular order with respect to either their key or mapped values, but organized into buckets depending on their hash values to allow for fast access to individual elements directly by their key values (with a constant average time complexity on average).
-  * unordered_map containers are faster than map containers to access individual elements by their key, although they are generally less efficient for range iteration through a subset of their elements.
-  * Unordered maps implement the direct access operator (operator[]) which allows for direct access of the mapped value using its key value as argument.
-  * Iterators in the container are at least forward iterators.
-  * [Static const map inside class/struct - C++ Forum](http://www.cplusplus.com/forum/general/266519/)
-
-### C++ Library
-
-* [\<chrono> - C++ Reference](https://www.cplusplus.com/reference/chrono/)
-  * [Date and time utilities - cppreference.com](https://en.cppreference.com/w/cpp/chrono)
-    * C++ includes support for two types of time manipulation:
-      * The chrono library, a flexible collection of types that track time with varying degrees of precision (e.g. std::chrono::time_point).
-      * C-style date and time library (e.g. std::time)
-  * [\<chrono> | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/chrono?view=msvc-160)
-  * [Chrono in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/chrono-in-c/)
-* [is_same - C++ Reference](https://www.cplusplus.com/reference/type_traits/is_same/)
-  * template <class T, class U> struct is_same;
-  * Trait class that identifies whether T is the same type as U, including having the same const and/or volatile qualification, if any.
-  * Two different type names are considered to represent the same type if -and only if- one is a typedef of the other: Two names representing types with the exact same characteristics but which none is a typedef of the other are not considered the same type.
-  * is_same inherits from integral_constant as being either true_type or false_type, depending on whether T and U are the same type.
-  * [std::is_same - cppreference.com](https://en.cppreference.com/w/cpp/types/is_same)
-    * If T and U name the same type (taking into account const/volatile qualifications), provides the member constant value equal to true. Otherwise value is false.
-    * Commutativity is satisfied, i.e. for any two types T and U, is_same<T, U>::value == true if and only if is_same<U, T>::value == true.
-    * The behavior of a program that adds specializations for is_same or is_same_v (since C++17) is undefined.
-
 ### C++ Advanced
 
 #### Files and Streams
@@ -603,6 +554,55 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * 通用互斥管理
   * 并行算法
 
+### Standard Template Library (STL)
+
+* [deque - C++ Reference](http://www.cplusplus.com/reference/deque/deque/)
+  * deque (usually pronounced like "deck") is an irregular acronym of double-ended queue. Double-ended queues are sequence containers with dynamic sizes that can be expanded or contracted on both ends (either its front or its back).
+  * [Deque-STL | HackerRank](https://www.hackerrank.com/challenges/deque-stl/problem)
+  * [Sliding Window Maximum (Maximum of all subarrays of size k) - GeeksforGeeks](https://www.geeksforgeeks.org/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/#disqus_thread)
+* [lower_bound - C++ Reference](http://www.cplusplus.com/reference/algorithm/lower_bound/)
+  * Returns an iterator pointing to the first element in the range \[first,last) which does not compare less than val.
+  * [upper_bound - C++ Reference](http://www.cplusplus.com/reference/algorithm/upper_bound/)
+  * [Lower Bound-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-lower-bound/problem)
+* [map - C++ Reference](http://www.cplusplus.com/reference/map/map/)
+  * [map::operator[] - C++ Reference](http://www.cplusplus.com/reference/map/map/operator[]/)
+    * If k matches the key of an element in the container, the function returns a reference to its mapped value.
+    * If k does not match the key of any element in the container, the function inserts a new element with that key and returns a reference to its mapped value. Notice that this always increases the container size by one, even if no mapped value is assigned to the element (the element is constructed using its default constructor).
+    * A similar member function, map::at, has the same behavior when an element with the key exists, but throws an exception when it does not.
+    * A call to this function is equivalent to:
+      * (*((this->insert(make_pair(k,mapped_type()))).first)).second
+  * [Maps-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-maps/problem)
+* [std::swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/swap)
+  * [swap() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/swap-in-cpp/)
+* [unordered_map - C++ Reference](https://www.cplusplus.com/reference/unordered_map/unordered_map/)
+  * Unordered Map
+  * Unordered maps are associative containers that store elements formed by the combination of a key value and a mapped value, and which allows for fast retrieval of individual elements based on their keys.
+  * In an unordered_map, the key value is generally used to uniquely identify the element, while the mapped value is an object with the content associated to this key. Types of key and mapped value may differ.
+  * Internally, the elements in the unordered_map are not sorted in any particular order with respect to either their key or mapped values, but organized into buckets depending on their hash values to allow for fast access to individual elements directly by their key values (with a constant average time complexity on average).
+  * unordered_map containers are faster than map containers to access individual elements by their key, although they are generally less efficient for range iteration through a subset of their elements.
+  * Unordered maps implement the direct access operator (operator[]) which allows for direct access of the mapped value using its key value as argument.
+  * Iterators in the container are at least forward iterators.
+  * [Static const map inside class/struct - C++ Forum](http://www.cplusplus.com/forum/general/266519/)
+
+### C++ Standard Library
+
+* [\<chrono> - C++ Reference](https://www.cplusplus.com/reference/chrono/)
+  * [Date and time utilities - cppreference.com](https://en.cppreference.com/w/cpp/chrono)
+    * C++ includes support for two types of time manipulation:
+      * The chrono library, a flexible collection of types that track time with varying degrees of precision (e.g. std::chrono::time_point).
+      * C-style date and time library (e.g. std::time)
+  * [\<chrono> | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/chrono?view=msvc-160)
+  * [Chrono in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/chrono-in-c/)
+* [is_same - C++ Reference](https://www.cplusplus.com/reference/type_traits/is_same/)
+  * template <class T, class U> struct is_same;
+  * Trait class that identifies whether T is the same type as U, including having the same const and/or volatile qualification, if any.
+  * Two different type names are considered to represent the same type if -and only if- one is a typedef of the other: Two names representing types with the exact same characteristics but which none is a typedef of the other are not considered the same type.
+  * is_same inherits from integral_constant as being either true_type or false_type, depending on whether T and U are the same type.
+  * [std::is_same - cppreference.com](https://en.cppreference.com/w/cpp/types/is_same)
+    * If T and U name the same type (taking into account const/volatile qualifications), provides the member constant value equal to true. Otherwise value is false.
+    * Commutativity is satisfied, i.e. for any two types T and U, is_same<T, U>::value == true if and only if is_same<U, T>::value == true.
+    * The behavior of a program that adds specializations for is_same or is_same_v (since C++17) is undefined.
+ 
 ## Best Practice
 
 * [C++ 实用指南](https://mp.weixin.qq.com/s/PZ27a-Epy_WUITk7SWOHCQ)
