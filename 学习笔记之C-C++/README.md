@@ -626,7 +626,20 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * 增量变更
   * 最后的底线：你的旧代码仍然可以编译
   * 总   结
-* []()
+* [编写可移植 C/C++ 程序的一些要点](https://mp.weixin.qq.com/s/Q_vCEHmJuF6WB5NsfyHkpw)
+  * https://blog.csdn.net/absurd
+  * 1、分层设计，隔离平台相关的代码。
+  * 2、事先熟悉各目标平台，合理抽象底层功能。
+  * 3、尽量使用标准 C/C++ 函数。
+  * 4、尽量不要使用 C/C++ 新标准里出现的特性。
+  * 5、尽量不要使用 C/C++ 标准里没有明确规定的特性。
+  * 6、尽量不要使用准标准函数。
+  * 7、注意标准函数的细节。
+  * 8、小心数据标准数据类型。
+  * 9、最好不要使用平台独有的特性。
+  * 10、最好不要使用编译器特有的特性。
+  * 11、注意平台的特性。
+  * 12、最好清楚不同平台的资源限制。
 
 ### Memory Leak
 
