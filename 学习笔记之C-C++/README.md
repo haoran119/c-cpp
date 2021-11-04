@@ -181,6 +181,9 @@
 * [<bits/stdc++.h> in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/bitsstdc-h-c/)
   * It is basically a header file that includes every standard library. In programming contests, using this file is a good idea, when you want to reduce the time wasted in doing chores; especially when your rank is time sensitive.
 In programming contests, people do focus more on finding the algorithm to solve a problem than on software engineering. From, software engineering perspective, it is a good idea to minimize the include. If you use it actually includes a lot of files, which your program may not need, thus increases both compile time and program size unnecessarily.
+
+#### Data Types
+
 * [Wide character - Wikipedia](https://en.wikipedia.org/wiki/Wide_character)
   * A wide character is a computer character datatype that generally has a size greater than the traditional 8-bit character. The increased datatype size allows for the use of larger coded character sets.
   * Programming specifics
@@ -245,9 +248,51 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [c++ - Difference between `constexpr` and `const` - Stack Overflow](https://stackoverflow.com/questions/14116003/difference-between-constexpr-and-const?rq=1)
   * [c++ - constexpr const vs constexpr variables? - Stack Overflow](https://stackoverflow.com/questions/28845058/constexpr-const-vs-constexpr-variables)
 
+#### Strings
 
+* [basic_string - C++ Reference](https://www.cplusplus.com/reference/string/basic_string/)
+  * Generic string class
+  * The basic_string is the generalization of class string for any character type (see string for a description).
+  * [std::basic_string - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string)
+    * The class template basic_string stores and manipulates sequences of char-like objects, which are non-array objects of trivial standard-layout type. The class is dependent neither on the character type nor on the nature of operations on that type. The definitions of the operations are supplied via the Traits template parameter - a specialization of std::char_traits or a compatible traits class. Traits::char_type and CharT must name the same type; otherwise the program is ill-formed.
+    * The elements of a basic_string are stored contiguously, that is, for a basic_string s, &*(s.begin() + n) == &*s.begin() + n for any n in [0, s.size()), or, equivalently, a pointer to s[0] can be passed to functions that expect a pointer to the first element of a null-terminated (since C++11)CharT[] array.
+    * std::basic_string satisfies the requirements of AllocatorAwareContainer, SequenceContainer and ContiguousContainer (since C++17)
+  * [std::basic_string_view - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string_view)
+    * The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
+* [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
+  * Output stream class to operate on strings.
+  * Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
+  * Characters can be inserted into the stream with any operation allowed on output streams.
+  * [ostringstream::str - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/str/)
+    * string str() const;
+    * void str (const string& s);
+    * Get/set content
+      * The first form (1) returns a string object with a copy of the current contents of the stream.
+      * The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
+      * Internally, the function calls the str member of its internal string buffer object.
+* [string::compare - C++ Reference](https://www.cplusplus.com/reference/string/string/compare/)
+  * Compare strings
+    * Compares the value of the string object (or a substring) to the sequence of characters specified by its arguments.
+    * The compared string is the value of the string object or -if the signature used has a pos and a len parameters- the substring that begins at its character in position pos and spans len characters.
+    * This string is compared to a comparing string, which is determined by the other arguments passed to the function.
+* [string::find - C++ Reference](https://www.cplusplus.com/reference/string/string/find/)
+  * Find content in string
+    * Searches the string for the first occurrence of the sequence specified by its arguments.
+    * When pos is specified, the search only includes characters at or after position pos, ignoring any possible occurrences that include characters before pos.
+    * Notice that unlike member find_first_of, whenever more than one character is being searched for, it is not enough that just one of these characters match, but the entire sequence must match.
+  * [std::basic_string<CharT,Traits,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find)
+* [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
+  * [std::basic_stringstream - cppreference.com](https://en.cppreference.com/w/cpp/io/basic_stringstream)
+  * [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
+    * A stringstream associates a string object with a stream allowing you to read from the string as if it were a stream (like cin).
+    * Basic methods are –
+      * clear() — to clear the stream
+      * str() — to get and set string object whose content is present in stream.
+      * operator << — add a string to the stringstream object.
+      * operator >> — read something from the stringstream object,
+  * [StringStream | HackerRank](https://www.hackerrank.com/challenges/c-tutorial-stringstream/problem)
 
-### Basic Input/Output
+#### Basic Input/Output
 
 * [Fast I/O for Competitive Programming - GeeksforGeeks](https://www.geeksforgeeks.org/fast-io-for-competitive-programming/)
   ```c++
@@ -322,50 +367,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
   }
   ```
 
-### Strings
-
-* [basic_string - C++ Reference](https://www.cplusplus.com/reference/string/basic_string/)
-  * Generic string class
-  * The basic_string is the generalization of class string for any character type (see string for a description).
-  * [std::basic_string - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string)
-    * The class template basic_string stores and manipulates sequences of char-like objects, which are non-array objects of trivial standard-layout type. The class is dependent neither on the character type nor on the nature of operations on that type. The definitions of the operations are supplied via the Traits template parameter - a specialization of std::char_traits or a compatible traits class. Traits::char_type and CharT must name the same type; otherwise the program is ill-formed.
-    * The elements of a basic_string are stored contiguously, that is, for a basic_string s, &*(s.begin() + n) == &*s.begin() + n for any n in [0, s.size()), or, equivalently, a pointer to s[0] can be passed to functions that expect a pointer to the first element of a null-terminated (since C++11)CharT[] array.
-    * std::basic_string satisfies the requirements of AllocatorAwareContainer, SequenceContainer and ContiguousContainer (since C++17)
-  * [std::basic_string_view - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string_view)
-    * The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
-* [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
-  * Output stream class to operate on strings.
-  * Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
-  * Characters can be inserted into the stream with any operation allowed on output streams.
-  * [ostringstream::str - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/str/)
-    * string str() const;
-    * void str (const string& s);
-    * Get/set content
-      * The first form (1) returns a string object with a copy of the current contents of the stream.
-      * The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
-      * Internally, the function calls the str member of its internal string buffer object.
-* [string::compare - C++ Reference](https://www.cplusplus.com/reference/string/string/compare/)
-  * Compare strings
-    * Compares the value of the string object (or a substring) to the sequence of characters specified by its arguments.
-    * The compared string is the value of the string object or -if the signature used has a pos and a len parameters- the substring that begins at its character in position pos and spans len characters.
-    * This string is compared to a comparing string, which is determined by the other arguments passed to the function.
-* [string::find - C++ Reference](https://www.cplusplus.com/reference/string/string/find/)
-  * Find content in string
-    * Searches the string for the first occurrence of the sequence specified by its arguments.
-    * When pos is specified, the search only includes characters at or after position pos, ignoring any possible occurrences that include characters before pos.
-    * Notice that unlike member find_first_of, whenever more than one character is being searched for, it is not enough that just one of these characters match, but the entire sequence must match.
-  * [std::basic_string<CharT,Traits,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find)
-* [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
-  * [std::basic_stringstream - cppreference.com](https://en.cppreference.com/w/cpp/io/basic_stringstream)
-  * [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
-    * A stringstream associates a string object with a stream allowing you to read from the string as if it were a stream (like cin).
-    * Basic methods are –
-      * clear() — to clear the stream
-      * str() — to get and set string object whose content is present in stream.
-      * operator << — add a string to the stringstream object.
-      * operator >> — read something from the stringstream object,
-  * [StringStream | HackerRank](https://www.hackerrank.com/challenges/c-tutorial-stringstream/problem)
-
 ### Object Oriented Programming
 
 * [Abstract Classes - Polymorphism | HackerRank](https://www.hackerrank.com/challenges/abstract-classes-polymorphism/problem)
@@ -373,65 +374,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [list - C++ Reference](http://www.cplusplus.com/reference/list/list/?kw=list)
   * [pair - C++ Reference](http://www.cplusplus.com/reference/utility/pair/?kw=pair)
   * [unordered_map - C++ Reference](http://www.cplusplus.com/reference/unordered_map/unordered_map/?kw=unordered_map)
-
-### Exception Handling
-
-* [exception - C++ Reference](http://www.cplusplus.com/reference/exception/exception/)
-  * [Inherited Code | HackerRank](https://www.hackerrank.com/challenges/inherited-code/problem)
-  * [Exceptional Server | HackerRank](https://www.hackerrank.com/challenges/exceptional-server/problem)
-  * [to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
-  * [string::c_str - C++ Reference](https://www.cplusplus.com/reference/string/string/c_str/)
-  ```c++
-  class BadLengthException : public exception
-  {
-      public:
-          BadLengthException(int n) : m_n(to_string(n)) {}
-
-          const char* what() const noexcept
-          {
-              return m_n.c_str();
-          }
-
-      private:
-          string m_n;
-
-  };
-  ```
-  ```c++
-  try {
-      cout << Server::compute(A, B) << endl;        
-  } catch (bad_alloc& ex) {
-      cout << "Not enough memory" << endl;
-  } catch (exception& ex) {
-      cout << "Exception: " << ex.what() << endl;
-  } catch (...) {
-      cout << "Other Exception" << endl;
-  }
-  ```
-* [std::runtime_error - cppreference.com](https://en.cppreference.com/w/cpp/error/runtime_error)
-  * Defines a type of object to be thrown as exception. It reports errors that are due to events beyond the scope of the program and can not be easily predicted.
-  * [exception - c++: Catch runtime_error - Stack Overflow](https://stackoverflow.com/questions/7491877/c-catch-runtime-error)
-* [noexcept specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/noexcept_spec)
-  * Specifies whether a function could throw exceptions.
-  * [noexcept (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/noexcept-cpp?view=msvc-160)
-  * [Exception specifications (throw, noexcept) (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/exception-specifications-throw-cpp?view=msvc-160)
-  * [Modern C++ best practices for exceptions and error handling | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/errors-and-exception-handling-modern-cpp?view=msvc-160)
-
-### File Handling
-
-* [c++ - How to copy a file from a folder to another folder - Stack Overflow](https://stackoverflow.com/questions/9125122/how-to-copy-a-file-from-a-folder-to-another-folder)
-  * [std::filesystem::copy - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy)
-    * Defined in header \<filesystem> since C++ 17
-  * [std::filesystem::copy_options - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy_options)
-  * [\<filesystem> | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/filesystem?view=msvc-160)
-    * Include the header \<filesystem> for access to classes and functions that manipulate and retrieve information about paths, files, and directories.
-  * [c++ - How to use copy_file in boost::filesystem? - Stack Overflow](https://stackoverflow.com/questions/4785491/how-to-use-copy-file-in-boostfilesystem)
-    * [Filesystem Reference - copy_file()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#copy_file)
-  * [string - How can I extract the file name and extension from a path in C++ - Stack Overflow](https://stackoverflow.com/questions/4430780/how-can-i-extract-the-file-name-and-extension-from-a-path-in-c)
-    * [Filesystem Reference - Class path](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#class-path)
-    * [Filesystem Reference - path extension()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#path-extension)
-    * [Filesystem Reference - string()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#string)
-  * [Filesystem Reference - remove()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#remove)
 
 ### Standard Template Library (STL)
 
@@ -484,6 +426,65 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 ### C++ Advanced
 
+#### Files and Streams
+
+* [c++ - How to copy a file from a folder to another folder - Stack Overflow](https://stackoverflow.com/questions/9125122/how-to-copy-a-file-from-a-folder-to-another-folder)
+  * [std::filesystem::copy - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy)
+    * Defined in header \<filesystem> since C++ 17
+  * [std::filesystem::copy_options - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy_options)
+  * [\<filesystem> | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/filesystem?view=msvc-160)
+    * Include the header \<filesystem> for access to classes and functions that manipulate and retrieve information about paths, files, and directories.
+  * [c++ - How to use copy_file in boost::filesystem? - Stack Overflow](https://stackoverflow.com/questions/4785491/how-to-use-copy-file-in-boostfilesystem)
+    * [Filesystem Reference - copy_file()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#copy_file)
+  * [string - How can I extract the file name and extension from a path in C++ - Stack Overflow](https://stackoverflow.com/questions/4430780/how-can-i-extract-the-file-name-and-extension-from-a-path-in-c)
+    * [Filesystem Reference - Class path](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#class-path)
+    * [Filesystem Reference - path extension()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#path-extension)
+    * [Filesystem Reference - string()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#string)
+  * [Filesystem Reference - remove()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#remove)
+
+#### Exception Handling
+
+* [exception - C++ Reference](http://www.cplusplus.com/reference/exception/exception/)
+  * [Inherited Code | HackerRank](https://www.hackerrank.com/challenges/inherited-code/problem)
+  * [Exceptional Server | HackerRank](https://www.hackerrank.com/challenges/exceptional-server/problem)
+  * [to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
+  * [string::c_str - C++ Reference](https://www.cplusplus.com/reference/string/string/c_str/)
+  ```c++
+  class BadLengthException : public exception
+  {
+      public:
+          BadLengthException(int n) : m_n(to_string(n)) {}
+
+          const char* what() const noexcept
+          {
+              return m_n.c_str();
+          }
+
+      private:
+          string m_n;
+
+  };
+  ```
+  ```c++
+  try {
+      cout << Server::compute(A, B) << endl;        
+  } catch (bad_alloc& ex) {
+      cout << "Not enough memory" << endl;
+  } catch (exception& ex) {
+      cout << "Exception: " << ex.what() << endl;
+  } catch (...) {
+      cout << "Other Exception" << endl;
+  }
+  ```
+* [std::runtime_error - cppreference.com](https://en.cppreference.com/w/cpp/error/runtime_error)
+  * Defines a type of object to be thrown as exception. It reports errors that are due to events beyond the scope of the program and can not be easily predicted.
+  * [exception - c++: Catch runtime_error - Stack Overflow](https://stackoverflow.com/questions/7491877/c-catch-runtime-error)
+* [noexcept specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/noexcept_spec)
+  * Specifies whether a function could throw exceptions.
+  * [noexcept (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/noexcept-cpp?view=msvc-160)
+  * [Exception specifications (throw, noexcept) (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/exception-specifications-throw-cpp?view=msvc-160)
+  * [Modern C++ best practices for exceptions and error handling | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/errors-and-exception-handling-modern-cpp?view=msvc-160)
+
 #### Preprocessor
 
 * [Preprocessor directives - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/preprocessor/)
@@ -532,7 +533,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * [default_value() - Class template typed_value - 1.72.0](https://www.boost.org/doc/libs/1_72_0/doc/html/boost/program_options/typed_value.html#id-1_3_32_9_10_1_1_1_5_1-bb)
     * [c++ - Boost.Program_Options: When <bool> is specified as a command-line option, what are valid command-line parameters? - Stack Overflow](https://stackoverflow.com/questions/15629771/boost-program-options-when-bool-is-specified-as-a-command-line-option-what-a)
 
-### Multiple Threading
+#### Multithreading
 
 * [lock_guard - C++ Reference](https://www.cplusplus.com/reference/mutex/lock_guard/)
   * template \<class Mutex> class lock_guard;
