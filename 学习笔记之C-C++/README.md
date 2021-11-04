@@ -439,6 +439,9 @@ In programming contests, people do focus more on finding the algorithm to solve 
       cout << "Other Exception" << endl;
   }
   ```
+* [std::runtime_error - cppreference.com](https://en.cppreference.com/w/cpp/error/runtime_error)
+  * Defines a type of object to be thrown as exception. It reports errors that are due to events beyond the scope of the program and can not be easily predicted.
+  * [exception - c++: Catch runtime_error - Stack Overflow](https://stackoverflow.com/questions/7491877/c-catch-runtime-error)
 * [noexcept specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/noexcept_spec)
   * Specifies whether a function could throw exceptions.
   * [noexcept (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/noexcept-cpp?view=msvc-160)
