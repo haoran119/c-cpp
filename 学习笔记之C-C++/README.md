@@ -601,13 +601,13 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [\<chrono> | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/chrono?view=msvc-160)
   * [Chrono in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/chrono-in-c/)
 * [is_same - C++ Reference](https://www.cplusplus.com/reference/type_traits/is_same/)
-  * template <class T, class U> struct is_same;
+  * template \<class T, class U> struct is_same;
   * Trait class that identifies whether T is the same type as U, including having the same const and/or volatile qualification, if any.
   * Two different type names are considered to represent the same type if -and only if- one is a typedef of the other: Two names representing types with the exact same characteristics but which none is a typedef of the other are not considered the same type.
   * is_same inherits from integral_constant as being either true_type or false_type, depending on whether T and U are the same type.
   * [std::is_same - cppreference.com](https://en.cppreference.com/w/cpp/types/is_same)
     * If T and U name the same type (taking into account const/volatile qualifications), provides the member constant value equal to true. Otherwise value is false.
-    * Commutativity is satisfied, i.e. for any two types T and U, is_same<T, U>::value == true if and only if is_same<U, T>::value == true.
+    * Commutativity is satisfied, i.e. for any two types T and U, is_same\<T, U>::value == true if and only if is_same\<U, T>::value == true.
     * The behavior of a program that adds specializations for is_same or is_same_v (since C++17) is undefined.
  
 ## Best Practice
@@ -626,6 +626,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * 增量变更
   * 最后的底线：你的旧代码仍然可以编译
   * 总   结
+* []()
 
 ### Memory Leak
 
