@@ -490,6 +490,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * #undef identifier
 * [SUCCEEDED macro (winerror.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/winerror/nf-winerror-succeeded)
   * Provides a generic test for success on any status value.
+  * void SUCCEEDED(hr);
   * #define SUCCEEDED(hr) (((HRESULT)(hr)) &gt;= 0)
 
 #### Multithreading
