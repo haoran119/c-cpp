@@ -251,6 +251,8 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [c++ - Difference between `constexpr` and `const` - Stack Overflow](https://stackoverflow.com/questions/14116003/difference-between-constexpr-and-const?rq=1)
   * [c++ - constexpr const vs constexpr variables? - Stack Overflow](https://stackoverflow.com/questions/28845058/constexpr-const-vs-constexpr-variables)
 
+#### Decision Making
+
 #### Strings
 
 * [basic_string - C++ Reference](https://www.cplusplus.com/reference/string/basic_string/)
@@ -294,6 +296,8 @@ In programming contests, people do focus more on finding the algorithm to solve 
       * operator << — add a string to the stringstream object.
       * operator >> — read something from the stringstream object,
   * [StringStream | HackerRank](https://www.hackerrank.com/challenges/c-tutorial-stringstream/problem)
+
+#### Pointers
 
 #### Basic Input/Output
 
