@@ -250,6 +250,12 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * constexpr vs const
   * [c++ - Difference between `constexpr` and `const` - Stack Overflow](https://stackoverflow.com/questions/14116003/difference-between-constexpr-and-const?rq=1)
   * [c++ - constexpr const vs constexpr variables? - Stack Overflow](https://stackoverflow.com/questions/28845058/constexpr-const-vs-constexpr-variables)
+* [C++ keywords: mutable - cppreference.com](https://en.cppreference.com/w/cpp/keyword/mutable)
+  * [mutable type specifier](https://en.cppreference.com/w/cpp/language/cv)
+    * mutable - permits modification of the class member declared mutable even if the containing object is declared const.
+  * [lambda-declarator](https://en.cppreference.com/w/cpp/language/lambda) that removes const qualification from parameters captured by copy (since C++11)
+    * mutable: allows body to modify the objects captured by copy, and to call their non-const member functions
+  * [C++ mutable keyword - GeeksforGeeks](https://www.geeksforgeeks.org/c-mutable-keyword/)
 
 #### Decision Making
 
@@ -479,12 +485,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * In C++11 and later, a lambda expression—often called a lambda—is a convenient way of defining an anonymous function object (a closure) right at the location where it's invoked or passed as an argument to a function. Typically lambdas are used to encapsulate a few lines of code that are passed to algorithms or asynchronous functions. This article defines what lambdas are, and compares them to other programming techniques. It describes their advantages, and provides some basic examples.
   * [Lambda expressions (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/lambda)
   * [Lambda expression in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/lambda-expression-in-c/)
-* [C++ keywords: mutable - cppreference.com](https://en.cppreference.com/w/cpp/keyword/mutable)
-  * [mutable type specifier](https://en.cppreference.com/w/cpp/language/cv)
-    * mutable - permits modification of the class member declared mutable even if the containing object is declared const.
-  * [lambda-declarator](https://en.cppreference.com/w/cpp/language/lambda) that removes const qualification from parameters captured by copy (since C++11)
-    * mutable: allows body to modify the objects captured by copy, and to call their non-const member functions
-  * [C++ mutable keyword - GeeksforGeeks](https://www.geeksforgeeks.org/c-mutable-keyword/)
 * Parse command line
   * [Chapter 31. Boost.Program_options - 1.72.0](https://www.boost.org/doc/libs/1_72_0/doc/html/program_options.html)
     * The program_options library allows program developers to obtain program options, that is (name, value) pairs from the user, via conventional methods such as command line and config file.
