@@ -459,7 +459,23 @@ In programming contests, people do focus more on finding the algorithm to solve 
 #### Preprocessor
 
 * [Preprocessor directives - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/preprocessor/)
-* [Predefined macros | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160)
+
+##### macro definitions (#define, #undef)
+
+* [#undef directive (C/C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/hash-undef-directive-c-cpp?view=msvc-160)
+  * Removes (undefines) a name previously created with #define.
+  * #undef identifier
+
+##### Conditional inclusions (#ifdef, #ifndef, #if, #endif, #else and #elif)
+
+##### Line control (#line)
+
+##### Error directive (#error)
+
+##### Source file inclusion (#include)
+
+##### Pragma directive (#pragma)
+
 * [once pragma | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/once?view=msvc-160)
   * Specifies that the compiler includes the header file only once, when compiling a source code file.
   * Syntax
@@ -476,6 +492,14 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * The C preprocessor processes directives of the form #include \<file> in a source file by locating the associated file on disk and transcluding ("including") its contents into a copy of the source file known as the translation unit, replacing the include directive in the process. The files included in this regard are generally header files, which typically contain declarations of functions and classes or structs. If certain C or C++ language constructs are defined twice, the resulting translation unit is invalid. #include guards prevent this erroneous construct from arising by the double inclusion mechanism.
     * The addition of #include guards to a header file is one way to make that file idempotent. Another construct to combat double inclusion is #pragma once, which is non-standard but nearly universally supported among C and C++ compilers.
   * [c++ - Is #pragma once a safe include guard? - Stack Overflow](https://stackoverflow.com/questions/787533/is-pragma-once-a-safe-include-guard)
+
+##### Predefined macro names
+
+* [Predefined macros | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160)
+* [SUCCEEDED macro (winerror.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/winerror/nf-winerror-succeeded)
+  * Provides a generic test for success on any status value.
+  * void SUCCEEDED(hr);
+  * #define SUCCEEDED(hr) (((HRESULT)(hr)) &gt;= 0)
 * [inject_statement import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/inject-statement?view=msvc-160)
   * Inserts its argument as source text into the type-library header.
   * #import type-library inject_statement( "source-text" )
@@ -485,13 +509,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
 * [rename_namespace import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/rename-namespace?view=msvc-160)
   * Renames the namespace that contains the contents of the type library.
   * #import type-library rename_namespace( "NewName" )
-* [#undef directive (C/C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/hash-undef-directive-c-cpp?view=msvc-160)
-  * Removes (undefines) a name previously created with #define.
-  * #undef identifier
-* [SUCCEEDED macro (winerror.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/winerror/nf-winerror-succeeded)
-  * Provides a generic test for success on any status value.
-  * void SUCCEEDED(hr);
-  * #define SUCCEEDED(hr) (((HRESULT)(hr)) &gt;= 0)
 
 #### Multithreading
 
