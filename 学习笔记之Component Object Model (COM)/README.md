@@ -50,13 +50,13 @@
   * [Common HRESULT Values - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-1)
   * [COM Error Codes (Generic) (Winerror.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-1)
 
-Return value|	Meaning
--|-
-S_OK	| The service was successfully created or retrieved.
-E_INVALIDARG	| One or more of the arguments is invalid.
-E_OUTOFMEMORY	| Memory is insufficient to create the service.
-E_UNEXPECTED	| An unknown error occurred.
-E_NOINTERFACE	| The requested interface is not part of this service, or the service is unknown.
+  Return value|	Meaning
+  -|-
+  S_OK	| The service was successfully created or retrieved.
+  E_INVALIDARG	| One or more of the arguments is invalid.
+  E_OUTOFMEMORY	| Memory is insufficient to create the service.
+  E_UNEXPECTED	| An unknown error occurred.
+  E_NOINTERFACE	| The requested interface is not part of this service, or the service is unknown.
 
 * [Universally unique identifier - Wikipedia](https://en.wikipedia.org/wiki/Universally_unique_identifier)
   * A universally unique identifier (UUID) is a 128-bit label used for information in computer systems. The term globally unique identifier (GUID) is also used, often in software created by Microsoft.[1]
