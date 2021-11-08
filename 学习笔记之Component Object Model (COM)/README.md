@@ -47,6 +47,7 @@
   * HRESULTs are numerical error codes. Various bits within an HRESULT encode information about the nature of the error code, and where it came from.
   * HRESULT error codes are most commonly encountered in COM programming, where they form the basis for a standardized COM error handling convention.
   * [HRESULT | Microsoft Docs](https://docs.microsoft.com/en-us/office/client-developer/outlook/mapi/hresult)
+    * The following HRESULT values are the most common. More values are contained in the header file Winerror.h.
   * [Common HRESULT Values - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/seccrypto/common-hresult-values)
   * [COM Error Codes (Generic) (Winerror.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-1)
 
