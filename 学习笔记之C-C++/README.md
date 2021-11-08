@@ -723,4 +723,10 @@ In programming contests, people do focus more on finding the algorithm to solve 
   cout << fixed << setprecision(9) << e << endl; // 14049.304930000  
   ```
 * How to fix "LNK1104: cannot open file 'libboost_log-vc142-mt-x32-1_72.lib'" when building project in MSVS ?
-  *  check the path, e.g. "BOOST_ROOT", in system enviroment variable to see if "\\" is appended at the end, e.g. C:\Program Files\boost\boost_1_72_0\
+  * check the path, e.g. "BOOST_ROOT", in system enviroment variable to see if "\\" is appended at the end, e.g. C:\Program Files\boost\boost_1_72_0\
+* How to fix "warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification" ?
+  * Change default to below values in MSVS > Your project property > Linker > Optimization :
+    * References = Keep Unreferenced Data (/OPT:NOREF)
+    * Enable COMDAT Folding = Do Not Remove Redundant COMDATs (/OPT:NOICF)
+  * [c++ - LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:ICF' specification - Stack Overflow](https://stackoverflow.com/questions/1574367/lnk4075-ignoring-editandcontinue-due-to-opticf-specification)
+  * [Linker Tools Warning LNK4075 | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/error-messages/tool-errors/linker-tools-warning-lnk4075?view=msvc-160)
