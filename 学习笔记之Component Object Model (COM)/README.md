@@ -49,8 +49,9 @@
   * [HRESULT | Microsoft Docs](https://docs.microsoft.com/en-us/office/client-developer/outlook/mapi/hresult)
   * [Common HRESULT Values - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-1)
   * [COM Error Codes (Generic) (Winerror.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-1)
--|-
+
 Return value|	Meaning
+-|-
 S_OK	| The service was successfully created or retrieved.
 E_INVALIDARG	| One or more of the arguments is invalid.
 E_OUTOFMEMORY	| Memory is insufficient to create the service.
