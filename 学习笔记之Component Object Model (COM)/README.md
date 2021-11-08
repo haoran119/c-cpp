@@ -49,6 +49,14 @@
   * [HRESULT | Microsoft Docs](https://docs.microsoft.com/en-us/office/client-developer/outlook/mapi/hresult)
   * [Common HRESULT Values - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-1)
   * [COM Error Codes (Generic) (Winerror.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-1)
+-|-
+Return value|	Meaning
+S_OK	| The service was successfully created or retrieved.
+E_INVALIDARG	| One or more of the arguments is invalid.
+E_OUTOFMEMORY	| Memory is insufficient to create the service.
+E_UNEXPECTED	| An unknown error occurred.
+E_NOINTERFACE	| The requested interface is not part of this service, or the service is unknown.
+
 * [Universally unique identifier - Wikipedia](https://en.wikipedia.org/wiki/Universally_unique_identifier)
   * A universally unique identifier (UUID) is a 128-bit label used for information in computer systems. The term globally unique identifier (GUID) is also used, often in software created by Microsoft.[1]
   * When generated according to the standard methods, UUIDs are, for practical purposes, unique. Their uniqueness does not depend on a central registration authority or coordination between the parties generating them, unlike most other numbering schemes. While the probability that a UUID will be duplicated is not zero, it is close enough to zero to be negligible.[2][3]
