@@ -50,19 +50,19 @@
   * [Common HRESULT Values - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/seccrypto/common-hresult-values)
   * [COM Error Codes (Generic) (Winerror.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-1)
 
-Name	| Description	| Value
-- | - | -
-S_OK	| Operation successful	| 0x00000000
-E_ABORT	| Operation aborted	| 0x80004004
-E_ACCESSDENIED	| General access denied error	| 0x80070005
-E_FAIL	| Unspecified failure	| 0x80004005
-E_HANDLE	| Handle that is not valid	| 0x80070006
-E_INVALIDARG	| One or more arguments are not valid	| 0x80070057
-E_NOINTERFACE	| No such interface supported	| 0x80004002
-E_NOTIMPL	| Not implemented	| 0x80004001
-E_OUTOFMEMORY	| Failed to allocate necessary memory	| 0x8007000E
-E_POINTER	| Pointer that is not valid	| 0x80004003
-E_UNEXPECTED	| Unexpected failure	| 0x8000FFFF
+  Name	| Description	| Value
+  -|-|-
+  S_OK	| Operation successful	| 0x00000000
+  E_ABORT	| Operation aborted	| 0x80004004
+  E_ACCESSDENIED	| General access denied error	| 0x80070005
+  E_FAIL	| Unspecified failure	| 0x80004005
+  E_HANDLE	| Handle that is not valid	| 0x80070006
+  E_INVALIDARG	| One or more arguments are not valid	| 0x80070057
+  E_NOINTERFACE	| No such interface supported	| 0x80004002
+  E_NOTIMPL	| Not implemented	| 0x80004001
+  E_OUTOFMEMORY	| Failed to allocate necessary memory	| 0x8007000E
+  E_POINTER	| Pointer that is not valid	| 0x80004003
+  E_UNEXPECTED	| Unexpected failure	| 0x8000FFFF
 
 * [Universally unique identifier - Wikipedia](https://en.wikipedia.org/wiki/Universally_unique_identifier)
   * A universally unique identifier (UUID) is a 128-bit label used for information in computer systems. The term globally unique identifier (GUID) is also used, often in software created by Microsoft.[1]
