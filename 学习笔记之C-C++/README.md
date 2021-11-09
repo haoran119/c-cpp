@@ -291,6 +291,8 @@ In programming contests, people do focus more on finding the algorithm to solve 
 * [string::append - C++ Reference](https://www.cplusplus.com/reference/string/string/append/)
   * Append to string
     * Extends the string by appending additional characters at the end of its current value:
+  * Complexity
+    * Unspecified, but generally up to linear in the new string length.
 * [string::c_str - C++ Reference](https://www.cplusplus.com/reference/string/string/c_str/)
 * [string::compare - C++ Reference](https://www.cplusplus.com/reference/string/string/compare/)
   * Compare strings
@@ -306,8 +308,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
 * [std::to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
   * Convert numerical value to string
     * Returns a string with the representation of val.
-  * Complexity
-    * Unspecified, but generally up to linear in the new string length.
 * [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
   * [std::basic_stringstream - cppreference.com](https://en.cppreference.com/w/cpp/io/basic_stringstream)
   * [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
