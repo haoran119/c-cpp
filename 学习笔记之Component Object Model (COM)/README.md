@@ -83,3 +83,35 @@
   * [StringFromCLSID function (combaseapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/combaseapi/nf-combaseapi-stringfromclsid?redirectedfrom=MSDN)
     * Converts a CLSID into a string of printable characters. Different CLSIDs always convert to different strings.
     * [c++ - Print a GUID variable - Stack Overflow](https://stackoverflow.com/questions/1672677/print-a-guid-variable)
+  ```c++
+  #include <iostream>
+  #include <string>
+  #include <stdexcept>
+  #include <comutil.h>
+
+  int main()
+  {
+   GUID guid{};
+   HRESULT hr = CoCreateGuid(&guid);
+      std::string toFilename{};
+
+   if (S_OK == hr) {
+    OLECHAR buffer[64];
+
+    auto size = StringFromGUID2(guid, buffer, 64);
+    if (size > 0) {
+     _bstr_t tempFilename = _bstr_t(buffer);
+
+     // remove enclosing braces
+     toFilename += std::string(tempFilename).substr(1, tempFilename.length() - 2);
+    }
+   }
+   else {
+    throw std::runtime_error("Error creating a GUID!");
+   }
+
+      std::cout << toFilename << std::endl;
+
+      return 0;
+  }
+  ```
