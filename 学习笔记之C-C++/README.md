@@ -288,6 +288,10 @@ In programming contests, people do focus more on finding the algorithm to solve 
       * The first form (1) returns a string object with a copy of the current contents of the stream.
       * The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
       * Internally, the function calls the str member of its internal string buffer object.
+* [string::append - C++ Reference](https://www.cplusplus.com/reference/string/string/append/)
+  * Append to string
+    * Extends the string by appending additional characters at the end of its current value:
+* [string::c_str - C++ Reference](https://www.cplusplus.com/reference/string/string/c_str/)
 * [string::compare - C++ Reference](https://www.cplusplus.com/reference/string/string/compare/)
   * Compare strings
     * Compares the value of the string object (or a substring) to the sequence of characters specified by its arguments.
@@ -299,6 +303,11 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * When pos is specified, the search only includes characters at or after position pos, ignoring any possible occurrences that include characters before pos.
     * Notice that unlike member find_first_of, whenever more than one character is being searched for, it is not enough that just one of these characters match, but the entire sequence must match.
   * [std::basic_string<CharT,Traits,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find)
+* [std::to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
+  * Convert numerical value to string
+    * Returns a string with the representation of val.
+  * Complexity
+    * Unspecified, but generally up to linear in the new string length.
 * [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
   * [std::basic_stringstream - cppreference.com](https://en.cppreference.com/w/cpp/io/basic_stringstream)
   * [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
@@ -418,8 +427,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
 * [exception - C++ Reference](http://www.cplusplus.com/reference/exception/exception/)
   * [Inherited Code | HackerRank](https://www.hackerrank.com/challenges/inherited-code/problem)
   * [Exceptional Server | HackerRank](https://www.hackerrank.com/challenges/exceptional-server/problem)
-  * [to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
-  * [string::c_str - C++ Reference](https://www.cplusplus.com/reference/string/string/c_str/)
   ```c++
   class BadLengthException : public exception
   {
