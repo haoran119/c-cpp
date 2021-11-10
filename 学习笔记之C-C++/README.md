@@ -144,7 +144,6 @@
   * 本文结合作者的工作经验和学习心得，对C++语言的一些高级特性，做了简单介绍；对一些常见的误解，做了解释澄清；对比较容易犯错的地方，做了归纳总结；希望借此能增进大家对C++语言了解，减少编程出错，提升工作效率。
 * [每个开发者都应该了解的一些C++特性](https://mp.weixin.qq.com/s/Hpn7KqYlBKz0JdryiozqyQ)
 * [C ++ 中不容忽视的 25 个 API 错误设计！](https://mp.weixin.qq.com/s/Yyno5VNHr88BaQvMoZafVA)
-* [C++虚函数表原理浅析 (qq.com)](https://mp.weixin.qq.com/s/lKfOZUM1txbUncD6ZBSO4w)
 * [为什么说 C++ 太复杂？有必要这么复杂吗？| 原力计划 (qq.com)](https://mp.weixin.qq.com/s/qYbKq-krR_GkBNbHsvbl5Q)
   * [为什么说C++太复杂？复杂的必要性是为什么？_韩江雪de 小屋-CSDN博客](https://blog.csdn.net/qq_33375598/article/details/105927654)
 * [C++控制台打飞机小游戏 | CSDN 博文精选](https://mp.weixin.qq.com/s/ML7bm89cBwkLVpyPt1dmkg)
@@ -212,7 +211,8 @@ In programming contests, people do focus more on finding the algorithm to solve 
         * 4) null pointer value may be converted to the null pointer value of new_type
       * As with all cast expressions, the result is:
         * an lvalue if new_type is an lvalue reference type or an rvalue reference to function type;
-        * an xvalue if new_type is an rvalue reference to object type;
+        * an xvalue if new_type is an rvalue reference to 
+        type;
         * a prvalue otherwise.
   * [const_cast examples](https://www.geeksforgeeks.org/const_cast-in-c-type-casting-operators/)
     * C++ supports following 4 types of casting operators:
@@ -406,6 +406,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [list - C++ Reference](http://www.cplusplus.com/reference/list/list/?kw=list)
   * [pair - C++ Reference](http://www.cplusplus.com/reference/utility/pair/?kw=pair)
   * [unordered_map - C++ Reference](http://www.cplusplus.com/reference/unordered_map/unordered_map/?kw=unordered_map)
+* [C++虚函数表原理浅析 (qq.com)](https://mp.weixin.qq.com/s/lKfOZUM1txbUncD6ZBSO4w)
 
 ### C++ Advanced
 
