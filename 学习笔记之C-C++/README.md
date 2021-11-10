@@ -143,7 +143,6 @@
   * C++是一门被广泛使用的系统级编程语言，更是高性能后端标准开发语言；C++虽功能强大，灵活巧妙，但却属于易学难精的专家型语言，不仅新手难以驾驭，就是老司机也容易掉进各种陷阱。
   * 本文结合作者的工作经验和学习心得，对C++语言的一些高级特性，做了简单介绍；对一些常见的误解，做了解释澄清；对比较容易犯错的地方，做了归纳总结；希望借此能增进大家对C++语言了解，减少编程出错，提升工作效率。
 * [每个开发者都应该了解的一些C++特性](https://mp.weixin.qq.com/s/Hpn7KqYlBKz0JdryiozqyQ)
-* [C ++ 中不容忽视的 25 个 API 错误设计！](https://mp.weixin.qq.com/s/Yyno5VNHr88BaQvMoZafVA)
 * [为什么说 C++ 太复杂？有必要这么复杂吗？| 原力计划 (qq.com)](https://mp.weixin.qq.com/s/qYbKq-krR_GkBNbHsvbl5Q)
   * [为什么说C++太复杂？复杂的必要性是为什么？_韩江雪de 小屋-CSDN博客](https://blog.csdn.net/qq_33375598/article/details/105927654)
 * [解读C++即将迎来的重大更新（一）：C++20的四大新特性](https://mp.weixin.qq.com/s/QpqvZ3a7nFdHGjIBiKX67g)
@@ -677,6 +676,33 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * 10、最好不要使用编译器特有的特性。
   * 11、注意平台的特性。
   * 12、最好清楚不同平台的资源限制。
+* [C ++ 中不容忽视的 25 个 API 错误设计！](https://mp.weixin.qq.com/s/Yyno5VNHr88BaQvMoZafVA)
+  * https://www.acodersjourney.com/top-25-cplusplus-api-design-mistakes-and-how-to-avoid-them/
+  * 错误＃1：不将你的API放在命名空间中
+  * 错误＃2：在你的公共API头的全局范围中包含“using namespace”
+  * 错误＃3：无视“三法则”
+  * 错误＃4：不将API中的移动构造函数和移动赋值运算符标记为noexcept
+  * 错误＃5：不将不可抛出的API标记为noexcept
+  * 错误＃6：不将单个参数构造函数标记为显式
+  * 错误＃7：不将只读数据/方法标记为const
+  * 错误＃8：通过const引用返回API的内部
+  * 错误＃9：使用隐式模板实例化时，使用模板实现细节来混淆公共头文件
+  * 错误＃10：当用例已知时，不使用显式模板实例化
+  * 错误＃11：在默认函数参数中公开内部值
+  * 错误＃12：将#Defines用于C ++ API
+  * 错误＃13：使用友元类
+  * 错误＃14：不避免不必要的include头文件
+  * 错误＃15：对外来（不是你自己的）对象类型使用前向声明
+  * 错误＃16：不让头文件必须自行编译
+  * 错误＃17：没有为你的API提供版本控制信息
+  * 错误＃18：从一开始就没有决定静态或动态库的实现
+  * 错误＃19：没有认识到ABI的兼容性
+  * 错误＃20：向已发布的类API添加纯虚方法
+  * 错误＃21：不记录API是同步还是异步
+  * 错误＃22：没有使用平台/编译器支持的最低公共特性
+  * 错误＃23：不考虑开源项目的头文件实现
+  * 错误＃24：参数类型不一致
+  * 错误＃25：没有API审核流程！
 
 ### Memory Leak
 
