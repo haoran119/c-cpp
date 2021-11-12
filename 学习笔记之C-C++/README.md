@@ -724,6 +724,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * 类模版参数推断
   * 智能指针
 * [C++ 11 新特性梳理](https://mp.weixin.qq.com/s/c6BCvqbmwU6jCOhjL7qQPQ)
+  * https://www.jianshu.com/p/78c700c8d72d
   * 在面试中，经常被问的一个问题就是：你了解C++11哪些新特性？一般而言，回答以下四个方面就够了：
     * “语法糖”：nullptr, auto自动类型推导，范围for循环，初始化列表, lambda表达式等
     * 右值引用和移动语义
