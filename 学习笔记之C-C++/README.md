@@ -305,6 +305,12 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 #### Pointers
 
+* [一文掌握 C++ 智能指针的使用](https://mp.weixin.qq.com/s/bn7BAzBSxgbrkgRMnuy8-A)
+  * RAII 与引用计数
+  * std::shared_ptr
+  * std::unique_ptr
+  * std::weak_ptr
+
 #### Basic Input/Output
 
 * [Fast I/O for Competitive Programming - GeeksforGeeks](https://www.geeksforgeeks.org/fast-io-for-competitive-programming/)
@@ -584,6 +590,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * 3. 静态函数
   * 4. C 线程库
     * [C语言线程库的使用](https://mp.weixin.qq.com/s?__biz=MzI3ODQ3OTczMw==&mid=2247491745&idx=1&sn=d995e1617ed6ad3d56de28b5be127e73&scene=21#wechat_redirect)
+* [C/C++ 线程库的详细使用](https://mp.weixin.qq.com/s/2PCUSTXrTGuOVgpNmWdA_Q)
 * [现代 C++ 并发编程基础](https://mp.weixin.qq.com/s/GGIczr97q-RxAfAnQKeDRg)
   * https://changkun.de/modern-cpp/zh-cn/07-thread/index.html
   * 并行基础
@@ -615,6 +622,10 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * The program_options library allows program developers to obtain program options, that is (name, value) pairs from the user, via conventional methods such as command line and config file.
   * [default_value() - Class template typed_value - 1.72.0](https://www.boost.org/doc/libs/1_72_0/doc/html/boost/program_options/typed_value.html#id-1_3_32_9_10_1_1_1_5_1-bb)
   * [c++ - Boost.Program_Options: When \<bool> is specified as a command-line option, what are valid command-line parameters? - Stack Overflow](https://stackoverflow.com/questions/15629771/boost-program-options-when-bool-is-specified-as-a-command-line-option-what-a)
+
+#### Logging
+
+* [一文详解 C++ 日志框架](https://mp.weixin.qq.com/s/0heKciXbMl95WMTXLfr8UA)
 
 ### Standard Template Library (STL)
 
