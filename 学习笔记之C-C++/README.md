@@ -399,7 +399,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * Defined in header \<filesystem> since C++ 17
 * [std::filesystem::copy_options - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy_options)
   * [c++ - How to copy a file from a folder to another folder - Stack Overflow](https://stackoverflow.com/questions/9125122/how-to-copy-a-file-from-a-folder-to-another-folder)
-and-extension-from-a-path-in-c)
 * [std::filesystem::path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path)
   * [std::filesystem::path::concat, std::filesystem::path::operator+= - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/concat)
     * Concatenates the current path and the argument
