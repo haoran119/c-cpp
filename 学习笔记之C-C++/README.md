@@ -395,15 +395,24 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 * [\<filesystem> | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/filesystem?view=msvc-160)
   * Include the header \<filesystem> for access to classes and functions that manipulate and retrieve information about paths, files, and directories.
-* [std::filesystem::path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path)
-  * [std::filesystem::path::concat, std::filesystem::path::operator+= - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/concat)
-    * Concatenates the current path and the argument
 * [std::filesystem::copy - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy)
     * Defined in header \<filesystem> since C++ 17
 * [std::filesystem::copy_options - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy_options)
   * [c++ - How to copy a file from a folder to another folder - Stack Overflow](https://stackoverflow.com/questions/9125122/how-to-copy-a-file-from-a-folder-to-another-folder)
 and-extension-from-a-path-in-c)
-* [Filesystem Reference - Class path](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#class-path)
+* [std::filesystem::path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path)
+  * [std::filesystem::path::concat, std::filesystem::path::operator+= - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/concat)
+    * Concatenates the current path and the argument
+  * [std::filesystem::path::filename - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/filename)
+  * [std::filesystem::path::parent_path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/parent_path)
+  * [std::filesystem::path::replace_filename - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/replace_filename)
+  * [std::filesystem::path::stem - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/stem)
+    * Returns the filename identified by the generic-format path stripped of its extension.
+    * Returns the substring from the beginning of filename() up to and not including the last period (.) character, with the following exceptions:
+      * If the first character in the filename is a period, that period is ignored (a filename like ".profile" is not treated as an extension)
+      * If the filename is one of the special filesystem components dot or dot-dot, or if it has no periods, the function returns the entire filename().
+  * [std::filesystem::operator/(std::filesystem::path) - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/operator_slash)
+* [boost Filesystem Reference - Class path](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#class-path)
   * [Chapter 35. Boost.Filesystem - Files and Directories](https://theboostcpplibraries.com/boost.filesystem-files-and-directories)
   * [Filesystem Reference - copy_file()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#copy_file)
   * [Filesystem Reference - create_directories()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#create_directories)
