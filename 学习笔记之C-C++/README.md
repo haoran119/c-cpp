@@ -411,6 +411,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
       * If the first character in the filename is a period, that period is ignored (a filename like ".profile" is not treated as an extension)
       * If the filename is one of the special filesystem components dot or dot-dot, or if it has no periods, the function returns the entire filename().
   * [std::filesystem::operator/(std::filesystem::path) - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/operator_slash)
+* [std::filesystem::remove, std::filesystem::remove_all - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/remove)
 * [boost Filesystem Reference - Class path](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#class-path)
   * [Chapter 35. Boost.Filesystem - Files and Directories](https://theboostcpplibraries.com/boost.filesystem-files-and-directories)
   * [Filesystem Reference - copy_file()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#copy_file)
