@@ -762,6 +762,12 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * 错误＃23：不考虑开源项目的头文件实现
   * 错误＃24：参数类型不一致
   * 错误＃25：没有API审核流程！
+* [这 5 个 C/C++ Bug](https://mp.weixin.qq.com/s/w6YRs_3MkJTRz4Yo8aFOAw)
+  * 1. 变量未初始化
+  * 2. 数组越界
+  * 3. 字符串溢出
+  * 4. 内存重复释放
+  * 5. 使用无效的文件指针
 
 ### Memory Leak
 
