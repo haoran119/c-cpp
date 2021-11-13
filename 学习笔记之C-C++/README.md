@@ -90,6 +90,9 @@
 * [C 语言发展史的点点滴滴 (qq.com)](https://mp.weixin.qq.com/s/NInTU_CagWlCEfhWhgYeOA)
 * [这几道 C/C++ 题涉及你的知识盲区？](https://mp.weixin.qq.com/s/0lWx9M8J5Xa2Mo9jLRdG-g)
   * 8个C语言面试题，涉及指针、运算、函数、内存，看看你能做出几个
+* [C语言中的“三字母词”坑了工程师](https://mp.weixin.qq.com/s/dsV2rYG6cEJI7IlLNSwwcg)
+  * https://blog.csdn.net/daheiantian/article/details/6095507
+  * "??/"会被编译器当作 /，变成C语言的换行符（多行代码连接符）。于是这段代码等同于// 注释语句 a = b+c ;就会被注释掉。
 
 ## C++
 
@@ -777,7 +780,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
 * [解读C++即将迎来的重大更新（一）：C++20的四大新特性](https://mp.weixin.qq.com/s/QpqvZ3a7nFdHGjIBiKX67g)
   * https://www.modernescpp.com/index.php/thebigfour
 
-### 坑
+### Bug
 
 * [C ++ 中不容忽视的 25 个 API 错误设计！](https://mp.weixin.qq.com/s/Yyno5VNHr88BaQvMoZafVA)
   * https://www.acodersjourney.com/top-25-cplusplus-api-design-mistakes-and-how-to-avoid-them/
@@ -812,6 +815,11 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * 3. 字符串溢出
   * 4. 内存重复释放
   * 5. 使用无效的文件指针
+* [代码优化导致的奇葩问题](https://mp.weixin.qq.com/s/p2GRR3n0s338K1qAmZOhMA)
+  * 总结、什么情况会导致这样的问题？
+  1、堆栈溢出应该是一个原因，之前我有遇到的情况是栈空间设置太小，然后溢出到堆空间导致问题。
+  2、使用某个函数导致溢出，我们使用的函数，比如，内存拷贝函数，如果长度设置不对，也会导致影响到其他的代码。
+  3、还有就是上面说的编译器优化导致的问题。
 
 ### Memory Leak
 
