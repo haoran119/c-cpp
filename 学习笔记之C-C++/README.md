@@ -545,6 +545,27 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * （2）大量模板的使用，编译时容易导致代码膨胀，提高了编译时间；
     * （3）对于C++来说，由于各编译器的差异，大量依赖模板元编程（特别是最新形式的）的代码可能会有移植性的问题。
     * 所以，对于模板元编程，我们需要扬其长避其短，合理使用模板元编程。
+* [std::optional - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional)
+  * Defined in header \<optional>
+  * template\< class T > class optional; (since C++17)
+  * The class template std::optional manages an optional contained value, i.e. a value that may or may not be present.
+  * A common use case for optional is the return value of a function that may fail. As opposed to other approaches, such as std::pair\<T,bool\>, optional handles expensive-to-construct objects well and is more readable, as the intent is expressed explicitly.
+  * Any instance of optional\<T> at any given point in time either contains a value or does not contain a value.
+  * If an optional\<T> contains a value, the value is guaranteed to be allocated as part of the optional object footprint, i.e. no dynamic memory allocation ever takes place. Thus, an optional object models an object, not a pointer, even though operator*() and operator->() are defined.
+  * When an object of type optional\<T> is contextually converted to bool, the conversion returns true if the object contains a value and false if it does not contain a value.
+  * The optional object contains a value in the following conditions:
+    * The object is initialized with/assigned from a value of type T or another optional that contains a value.
+    * The object does not contain a value in the following conditions:
+    * The object is default-initialized.
+    * The object is initialized with/assigned from a value of type std::nullopt_t or an optional object that does not contain a value.
+    * The member function reset() is called.
+  * There are no optional references; a program is ill-formed if it instantiates an optional with a reference type. Alternatively, an optional of a std::reference_wrapper of type T may be used to hold a reference. In addition, a program is ill-formed if it instantiates an optional with the (possibly cv-qualified) tag types std::nullopt_t or std::in_place_t.
+  * [optional Class | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/optional-class?view=msvc-170)
+  * [std::optional: How, when, and why - C++ Team Blog](https://devblogs.microsoft.com/cppblog/stdoptional-how-when-and-why/)
+    * optional is mandatory
+      * optional is particularly well-suited to the delayed initialization problem because it is itself an instance of delayed initialization. The contained T may be initialized at construction, or sometime later, or never. Any contained T must be destroyed when the optional is destroyed. The designers of optional have already answered most of the questions that arise in this context.
+    * Conclusions
+      * Any time you need a tool to express “value-or-not-value”, or “possibly an answer”, or “object with delayed initialization”, you should reach into your toolbox for std::optional. Using a vocabulary type for these cases raises the level of abstraction, making it easier for others to understand what your code is doing. The declarations optional/<T/> f(); and void g(optional/<T/>); express intent more clearly and concisely than do pair/<T, bool> f(); or void g(T t, bool is_valid);. Just as is the case with words, adding to our vocabulary of types increases our capacity to describe complex problems simply – it makes us more efficient.
 
 #### Preprocessor
 
