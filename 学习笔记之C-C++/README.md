@@ -545,6 +545,11 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * （2）大量模板的使用，编译时容易导致代码膨胀，提高了编译时间；
     * （3）对于C++来说，由于各编译器的差异，大量依赖模板元编程（特别是最新形式的）的代码可能会有移植性的问题。
     * 所以，对于模板元编程，我们需要扬其长避其短，合理使用模板元编程。
+
+##### Function Template
+
+##### Class Template
+
 * [std::optional - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional)
   * Defined in header \<optional>
   * template\< class T > class optional; (since C++17)
