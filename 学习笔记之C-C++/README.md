@@ -176,6 +176,36 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * _NATIVE_WCHAR_T_DEFINED Defined as 1 when the /Zc:wchar_t compiler option is set. Otherwise, undefined.
     * [/Zc:wchar_t (wchar_t Is Native Type) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/build/reference/zc-wchar-t-wchar-t-is-native-type?view=msvc-160)
       * Parse wchar_t as a built-in type according to the C++ standard.
+* [C/C++ 结构体就这样被攻克了！](https://mp.weixin.qq.com/s/-RoBZ9Gge-6HtYH8tUS8xw)
+  * 结构体的声明与定义
+    * 声明
+    * 定义
+    * 访问结构体成员
+    * 初始化结构体
+    * 对齐
+  * 结构体嵌套
+  * 结构体数组
+  * 结构体指针
+  * 传递结构体信息
+    * 传递结构体变量
+    * 传递指向结构体变量的指针
+  * 动态申请结构体
+  * 实战：建立一个图书馆数据库
+  * 单链表
+    * 在单链表中插入元素
+    * 搜索单链表
+    * 插入结点到指定位置
+    * 删除结点
+  * 内存池
+  * typedef
+    * 给数据类型起别名
+    * 结构体的搭档
+    * 进阶
+  * 共用体
+    * 声明
+    * 初始化
+  * 枚举
+  * 位域
 * [谈一谈 C++ 中的值的类型 (qq.com)](https://mp.weixin.qq.com/s/MQNIkeS3eMUmaezyUL8ZkQ)
 * [Type conversions](https://www.cplusplus.com/doc/tutorial/typecasting/)
   * [const_cast Operator | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/const-cast-operator?view=msvc-160)
@@ -247,6 +277,9 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * 只有在case中的条件是连续数字或相隔不大时，编译器会使用表结构做优化，性能优于if-else。
   * 其他情况下，switch-case其实就是逐个分支判断，性能与if-else无异。
   * switch-case中的case只能是常量，而if-else用途更广一些，本文仅讨论分支是常量的情况。
+* [while(1) 和 for(;;)有什么区别？](https://mp.weixin.qq.com/s/a9g9PAwgc3oXoQXBvT49bA)
+* 你会发现，除了文件名不同，其余都相同。
+* 当然，这里额外说一下，不同代码、不同编译器，以及不同优化等级，可能最终结果有所差异。
 
 #### Functions
 
@@ -499,6 +532,19 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [noexcept (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/noexcept-cpp?view=msvc-160)
   * [Exception specifications (throw, noexcept) (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/exception-specifications-throw-cpp?view=msvc-160)
   * [Modern C++ best practices for exceptions and error handling | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/errors-and-exception-handling-modern-cpp?view=msvc-160)
+
+#### C++ Templates
+
+* [C++ 高阶操作：模板元编程](https://mp.weixin.qq.com/s/Ypit8BrJSvpx6B3Yf5GRuA)
+  * 泛型编程大家应该都很熟悉了，主要就是利用模板实现“安全的宏”，而模板元编程区别于我们所知道的泛型编程，它是一种较为复杂的模板，属于C++的高阶操作了，它最主要的优点就在于把计算过程提前到编译期，能带来可观的性能提升。
+  * 1.概述
+    * 模板元编程（Template Meta programming，TMP）是编写生成或操纵程序的程序，也是一种复杂且功能强大的编程范式（Programming Paradigm）。
+  * 6.小结
+    * C++模板元编程是图灵完备的且是函数式编程，主要特点是代码在编译期执行，可用于编译期数值计算，能够获得更有效率的运行码。模板的使用，也提高了代码泛化。与此同时，模板元编程也存一定缺点，主要有
+    * （1）模板元编程产生的代码较为复杂，难易阅读，可读性较差；
+    * （2）大量模板的使用，编译时容易导致代码膨胀，提高了编译时间；
+    * （3）对于C++来说，由于各编译器的差异，大量依赖模板元编程（特别是最新形式的）的代码可能会有移植性的问题。
+    * 所以，对于模板元编程，我们需要扬其长避其短，合理使用模板元编程。
 
 #### Preprocessor
 
