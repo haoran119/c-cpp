@@ -774,6 +774,15 @@ In programming contests, people do focus more on finding the algorithm to solve 
       * C-style date and time library (e.g. std::time)
   * [\<chrono> | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/chrono?view=msvc-160)
   * [Chrono in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/chrono-in-c/)
+* [std::function - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/function)
+  * [function - C++ Reference](https://www.cplusplus.com/reference/functional/function/)
+    * Function wrapper
+      * Class that can wrap any kind of callable element (such as functions and function objects) into a copyable object, and whose type depends solely on its call signature (and not on the callable element type itself).
+      * An object of a function class instantiation can wrap any of the following kinds of callable objects: a function, a function pointer, a pointer to member, or any kind of function object (i.e., an object whose class defines operator(), including closures).
+      * A decay copy of the wrapped callable object is stored internally by the object, which becomes the function's target. The specific type of this target callable object is not needed in order to instantiate the function wrapper class; only its call signature.
+      * The function object can be copied and moved around, and can be used to directly invoke the callable object with the specified call signature (see member operator()).
+      * function objects can also be in a state with no target callable object. In this case they are known as empty functions, and calling them throws a bad_function_call exception.
+  * [C++ Library - \<functional>](https://www.tutorialspoint.com/cpp_standard_library/functional.htm)
 * [is_same - C++ Reference](https://www.cplusplus.com/reference/type_traits/is_same/)
   * template \<class T, class U> struct is_same;
   * Trait class that identifies whether T is the same type as U, including having the same const and/or volatile qualification, if any.
