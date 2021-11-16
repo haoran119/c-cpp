@@ -752,6 +752,21 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 ### C++ Standard Library
 
+#### Algorithm library
+
+* [std::find, std::find_if, std::find_if_not - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/find)
+  * [find_if - C++ Reference](https://www.cplusplus.com/reference/algorithm/find_if/)
+    * Find element in range
+      * Returns an iterator to the first element in the range \[first,last) for which pred returns true. If no such element is found, the function returns last.
+  * [std::find_if , std::find_if_not in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdfind_if-stdfind_if_not-in-c/)
+
+#### Ranges library
+
+* [起底 C++ Range 令人惊讶的局限性！](https://mp.weixin.qq.com/s/iB70FXO-D7C-72N4l9KnzA)
+  * https://www.fluentcpp.com/2019/09/13/the-surprising-limitations-of-c-ranges-beyond-trivial-use-cases/
+ 
+#### Utility library
+
 * [\<chrono> - C++ Reference](https://www.cplusplus.com/reference/chrono/)
   * [Date and time utilities - cppreference.com](https://en.cppreference.com/w/cpp/chrono)
     * C++ includes support for two types of time manipulation:
@@ -768,9 +783,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * If T and U name the same type (taking into account const/volatile qualifications), provides the member constant value equal to true. Otherwise value is false.
     * Commutativity is satisfied, i.e. for any two types T and U, is_same\<T, U>::value == true if and only if is_same\<U, T>::value == true.
     * The behavior of a program that adds specializations for is_same or is_same_v (since C++17) is undefined.
-* [起底 C++ Range 令人惊讶的局限性！](https://mp.weixin.qq.com/s/iB70FXO-D7C-72N4l9KnzA)
-  * https://www.fluentcpp.com/2019/09/13/the-surprising-limitations-of-c-ranges-beyond-trivial-use-cases/
- 
+
 ## Best Practice
 
 * [C++ 实用指南](https://mp.weixin.qq.com/s/PZ27a-Epy_WUITk7SWOHCQ)
