@@ -442,6 +442,8 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 #### Files and Streams
 
+##### \<filesystem>
+ 
 * [\<filesystem> | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/filesystem?view=msvc-160)
   * Include the header \<filesystem> for access to classes and functions that manipulate and retrieve information about paths, files, and directories.
 * [std::filesystem::path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path)
@@ -479,6 +481,9 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [Filesystem Reference - string()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#string)
   * [c++ - How to use copy_file in boost::filesystem? - Stack Overflow](https://stackoverflow.com/questions/4785491/how-to-use-copy-file-in-boostfilesystem)
   * [string - How can I extract the file name and extension from a path in C++ - Stack Overflow](https://stackoverflow.com/questions/4430780/how-can-i-extract-the-file-name-and-extension-from-a-path-in-c)
+
+##### \<fstream>
+
 * [ifstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/)
   * Input file stream class
     * Input stream class to operate on files.
