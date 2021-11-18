@@ -1024,6 +1024,13 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [Locking files using C++ on Windows - Stack Overflow](https://stackoverflow.com/questions/853805/locking-files-using-c-on-windows)
   * [CreateFileA function (fileapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea?redirectedfrom=MSDN)
   * [c++ - Using std:fstream how to deny access (read and write) to the file - Stack Overflow](https://stackoverflow.com/questions/839856/using-stdfstream-how-to-deny-access-read-and-write-to-the-file)
+* How to execute command and get output ?
+  * [process - How do I execute a command and get the output of the command within C++ using POSIX? - Stack Overflow](https://stackoverflow.com/questions/478898/how-do-i-execute-a-command-and-get-the-output-of-the-command-within-c-using-po)
+  * [system - C++ Reference](https://www.cplusplus.com/reference/cstdlib/system/)
+    * Execute system command
+      * Invokes the command processor to execute a command.
+      * If command is a null pointer, the function only checks whether a command processor is available through this function, without invoking any command.
+      * The effects of invoking a command depend on the system and library implementation, and may cause a program to behave in a non-standard manner or to terminate.
 
 ### ERROR FIX
 
