@@ -479,6 +479,16 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [Filesystem Reference - string()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#string)
   * [c++ - How to use copy_file in boost::filesystem? - Stack Overflow](https://stackoverflow.com/questions/4785491/how-to-use-copy-file-in-boostfilesystem)
   * [string - How can I extract the file name and extension from a path in C++ - Stack Overflow](https://stackoverflow.com/questions/4430780/how-can-i-extract-the-file-name-and-extension-from-a-path-in-c)
+* [ifstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/)
+  * Input file stream class
+    * Input stream class to operate on files.
+    * Objects of this class maintain a filebuf object as their internal stream buffer, which performs input/output operations on the file they are associated with (if any).
+    * File streams are associated with files either on construction, or by calling member open.
+    * Apart from the internal file stream buffer, objects of this class keep a set of internal fields inherited from ios_base, ios and istream
+  * [ifstream::is_open - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/is_open/)
+  * [ifstream::close - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/close/)
+  * [Read file line by line using C++](https://www.tutorialspoint.com/read-file-line-by-line-using-cplusplus)
+  * [getline (string) - C++ Reference](https://www.cplusplus.com/reference/string/string/getline/)
 * [ofstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/)
   * Output file stream
     * Output stream class to operate on files.
