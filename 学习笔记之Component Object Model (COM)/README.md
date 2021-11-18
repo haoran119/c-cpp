@@ -41,6 +41,12 @@
     * Appends characters to the end of the _bstr_t object, or concatenates two strings.
   * [_bstr_t::wchar_t*, _bstr_t::char* | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/bstr-t-wchar-t-star-bstr-t-char-star?view=msvc-160)
     * Returns the BSTR characters as a narrow or wide character array.
+* [CoInitialize function (objbase.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/objbase/nf-objbase-coinitialize)
+  * Initializes the COM library on the current thread and identifies the concurrency model as single-thread apartment (STA).
+  * New applications should call CoInitializeEx instead of CoInitialize.
+  * If you want to use the Windows Runtime, you must call Windows::Foundation::Initialize instead.
+* [CoUninitialize function (combaseapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/combaseapi/nf-combaseapi-couninitialize)
+  * Closes the COM library on the current thread, unloads all DLLs loaded by the thread, frees any other resources that the thread maintains, and forces all RPC connections on the thread to close.
 * [HRESULT - Wikipedia](https://en.wikipedia.org/wiki/HRESULT)
   * In the field of computer programming, the HRESULT is a data type used in Windows operating systems, and the earlier IBM/Microsoft OS/2 operating system, to represent error conditions, and warning conditions.
   * The original purpose of HRESULTs was to formally lay out ranges of error codes for both public and Microsoft internal use in order to prevent collisions between error codes in different subsystems of the OS/2 operating system.
