@@ -1024,6 +1024,14 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [Locking files using C++ on Windows - Stack Overflow](https://stackoverflow.com/questions/853805/locking-files-using-c-on-windows)
   * [CreateFileA function (fileapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea?redirectedfrom=MSDN)
   * [c++ - Using std:fstream how to deny access (read and write) to the file - Stack Overflow](https://stackoverflow.com/questions/839856/using-stdfstream-how-to-deny-access-read-and-write-to-the-file)
+* How to get UNC path of local folder ?
+  * [windows - UNC path to a folder on my local computer - Stack Overflow](https://stackoverflow.com/questions/2787203/unc-path-to-a-folder-on-my-local-computer)
+    * If you're going to access your local computer (or any computer) using UNC, you'll need to setup a share. If you haven't already setup a share, you could use the default administrative shares. Example: 
+    * \\localhost\c$\my_dir
+  * [What is Universal Naming Convention (UNC)? - Definition from WhatIs.com](https://whatis.techtarget.com/definition/Universal-Naming-Convention-UNC)
+    * In a network, the Universal Naming Convention (UNC) is a way to identify a shared file in a computer without having to specify (or know) the storage device it is on. 
+    * In Windows operating systems, the UNC name format is:
+    * \\servername\sharename\path\filename
 * How to execute command and get output ?
   * [process - How do I execute a command and get the output of the command within C++ using POSIX? - Stack Overflow](https://stackoverflow.com/questions/478898/how-do-i-execute-a-command-and-get-the-output-of-the-command-within-c-using-po)
   * [system - C++ Reference](https://www.cplusplus.com/reference/cstdlib/system/)
