@@ -777,6 +777,19 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 ### C++ Standard Library
 
+* [什么是 C 和 C++ 标准库？](https://mp.weixin.qq.com/s/wErRQ3AzgJ9lzQKsNG9SzA)
+  * https://www.oschina.net/translate/c-c-standard-library
+  * C 和 C++ 是如何制订的
+  * C 标准库
+  * C++ 标准库
+  * 实现 C/C++ 标准库
+  * GNU/Linux 版实现
+  * Mac 和 iOS 版实现
+  * Windows 版实现
+  * Android 版实现
+  * 我能使用不同版本的实现代码来替代默认实现吗？
+  * 如果我们脱离了标准库怎么办？
+
 #### Algorithm library
 
 * [std::find, std::find_if, std::find_if_not - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/find)
