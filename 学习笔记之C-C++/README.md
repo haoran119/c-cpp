@@ -459,8 +459,12 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [std::filesystem::path::concat, std::filesystem::path::operator+= - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/concat)
     * Concatenates the current path and the argument
   * [std::filesystem::path::filename - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/filename)
+  * [std::filesystem::operator/(std::filesystem::path) - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/operator_slash)
+    * Concatenates two path components using the preferred directory separator if appropriate (see operator/= for details).
+    * Effectively returns path(lhs) /= rhs.
   * [std::filesystem::path::parent_path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/parent_path)
   * [std::filesystem::path::replace_filename - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/replace_filename)
+  * [std::filesystem::path::replace_extension - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/replace_extension)
   * [std::filesystem::path::stem - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/stem)
     * Returns the filename identified by the generic-format path stripped of its extension.
     * Returns the substring from the beginning of filename() up to and not including the last period (.) character, with the following exceptions:
