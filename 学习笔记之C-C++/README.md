@@ -785,15 +785,22 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [Maps-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-maps/problem)
 * [std::swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/swap)
   * [swap() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/swap-in-cpp/)
-* [unordered_map - C++ Reference](https://www.cplusplus.com/reference/unordered_map/unordered_map/)
-  * Unordered Map
-  * Unordered maps are associative containers that store elements formed by the combination of a key value and a mapped value, and which allows for fast retrieval of individual elements based on their keys.
-  * In an unordered_map, the key value is generally used to uniquely identify the element, while the mapped value is an object with the content associated to this key. Types of key and mapped value may differ.
-  * Internally, the elements in the unordered_map are not sorted in any particular order with respect to either their key or mapped values, but organized into buckets depending on their hash values to allow for fast access to individual elements directly by their key values (with a constant average time complexity on average).
-  * unordered_map containers are faster than map containers to access individual elements by their key, although they are generally less efficient for range iteration through a subset of their elements.
-  * Unordered maps implement the direct access operator (operator[]) which allows for direct access of the mapped value using its key value as argument.
-  * Iterators in the container are at least forward iterators.
-  * [Static const map inside class/struct - C++ Forum](http://www.cplusplus.com/forum/general/266519/)
+* [std::unordered_map - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map)
+  * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::at - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/at)
+    * Returns a reference to the mapped value of the element with key equivalent to key. If no such element exists, an exception of type std::out_of_range is thrown.
+  * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::operator[] - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/operator_at)
+    * Returns a reference to the value that is mapped to a key equivalent to key, performing an insertion if such key does not already exist.
+  * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::count - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/count)
+    * 
+  * [unordered_map - C++ Reference](https://www.cplusplus.com/reference/unordered_map/unordered_map/)
+    * Unordered Map
+    * Unordered maps are associative containers that store elements formed by the combination of a key value and a mapped value, and which allows for fast retrieval of individual elements based on their keys.
+    * In an unordered_map, the key value is generally used to uniquely identify the element, while the mapped value is an object with the content associated to this key. Types of key and mapped value may differ.
+    * Internally, the elements in the unordered_map are not sorted in any particular order with respect to either their key or mapped values, but organized into buckets depending on their hash values to allow for fast access to individual elements directly by their key values (with a constant average time complexity on average).
+    * unordered_map containers are faster than map containers to access individual elements by their key, although they are generally less efficient for range iteration through a subset of their elements.
+    * Unordered maps implement the direct access operator (operator[]) which allows for direct access of the mapped value using its key value as argument.
+    * Iterators in the container are at least forward iterators.
+    * [Static const map inside class/struct - C++ Forum](http://www.cplusplus.com/forum/general/266519/)
 
 ### C++ Standard Library
 
