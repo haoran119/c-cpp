@@ -529,6 +529,12 @@ In programming contests, people do focus more on finding the algorithm to solve 
       * The file association of a stream is kept by its internal stream buffer:
       * Internally, the function calls rdbuf()->close(), and sets failbit in case of failure.
       * Note that any open file is automatically closed when the ofstream object is destroyed.
+  * [ofstream::is_open - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/is_open/)
+    * Check if file is open
+      * Returns whether the stream is currently associated to a file.
+      * Streams can be associated to files by a successful call to member open or directly on construction, and disassociated by calling close or on destruction.
+      * The file association of a stream is kept by its internal stream buffer:
+        * Internally, the function calls rdbuf()->is_open()
   * [ofstream::ofstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/ofstream/)
     * Construct object
       * Constructs an ofstream object
