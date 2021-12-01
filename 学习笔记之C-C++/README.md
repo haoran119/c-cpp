@@ -458,6 +458,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
 * [std::filesystem::path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path)
   * [std::filesystem::path::concat, std::filesystem::path::operator+= - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/concat)
     * Concatenates the current path and the argument
+  * [std::filesystem::path::extension - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/extension)
   * [std::filesystem::path::filename - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/filename)
   * [std::filesystem::operator/(std::filesystem::path) - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/operator_slash)
     * Concatenates two path components using the preferred directory separator if appropriate (see operator/= for details).
@@ -472,6 +473,12 @@ In programming contests, people do focus more on finding the algorithm to solve 
       * If the filename is one of the special filesystem components dot or dot-dot, or if it has no periods, the function returns the entire filename().
   * [std::filesystem::operator/(std::filesystem::path) - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/operator_slash)
 * [std::filesystem::filesystem_error - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/filesystem_error)
+* [std::filesystem::directory_entry - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/directory_entry)
+  * Represents a directory entry. The object stores a path as a member and may also store additional file attributes (hard link count, status, symlink status file size, and last write time) during directory iteration.
+* [std::filesystem::directory_iterator - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/directory_iterator)
+  * directory_iterator is a LegacyInputIterator that iterates over the directory_entry elements of a directory (but does not visit the subdirectories). The iteration order is unspecified, except that each directory entry is visited only once. The special pathnames dot and dot-dot are skipped.
+  * If the directory_iterator reports an error or is advanced past the last directory entry, it becomes equal to the default-constructed iterator, also known as the end iterator. Two end iterators are always equal, dereferencing or incrementing the end iterator is undefined behavior.
+  * If a file or a directory is deleted or added to the directory tree after the directory iterator has been created, it is unspecified whether the change would be observed through the iterator.
 * [std::filesystem::copy_options - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy_options)
   * [c++ - How to copy a file from a folder to another folder - Stack Overflow](https://stackoverflow.com/questions/9125122/how-to-copy-a-file-from-a-folder-to-another-folder)
 * [std::filesystem::copy - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy)
