@@ -767,14 +767,29 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 ### Standard Template Library (STL)
 
-* [deque - C++ Reference](http://www.cplusplus.com/reference/deque/deque/)
-  * deque (usually pronounced like "deck") is an irregular acronym of double-ended queue. Double-ended queues are sequence containers with dynamic sizes that can be expanded or contracted on both ends (either its front or its back).
-  * [Deque-STL | HackerRank](https://www.hackerrank.com/challenges/deque-stl/problem)
-  * [Sliding Window Maximum (Maximum of all subarrays of size k) - GeeksforGeeks](https://www.geeksforgeeks.org/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/#disqus_thread)
 * [lower_bound - C++ Reference](http://www.cplusplus.com/reference/algorithm/lower_bound/)
   * Returns an iterator pointing to the first element in the range \[first,last) which does not compare less than val.
   * [upper_bound - C++ Reference](http://www.cplusplus.com/reference/algorithm/upper_bound/)
   * [Lower Bound-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-lower-bound/problem)
+* [std::swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/swap)
+  * [swap() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/swap-in-cpp/)
+
+#### Sequence
+
+* [std::array - cppreference.com](https://en.cppreference.com/w/cpp/container/array)
+  * std::array is a container that encapsulates fixed size arrays.
+  * This container is an aggregate type with the same semantics as a struct holding a C-style array T[N] as its only non-static data member. Unlike a C-style array, it doesn't decay to T* automatically. As an aggregate type, it can be initialized with aggregate-initialization given at most N initializers that are convertible to T: std::array<int, 3> a = {1,2,3};.
+  * The struct combines the performance and accessibility of a C-style array with the benefits of a standard container, such as knowing its own size, supporting assignment, random access iterators, etc.
+  * std::array satisfies the requirements of Container and ReversibleContainer except that default-constructed array is not empty and that the complexity of swapping is linear, satisfies the requirements of ContiguousContainer, (since C++17) and partially satisfies the requirements of SequenceContainer.
+  * There is a special case for a zero-length array (N == 0). In that case, array.begin() == array.end(), which is some unique value. The effect of calling front() or back() on a zero-sized array is undefined.
+  * An array can also be used as a tuple of N elements of the same type.
+* [deque - C++ Reference](http://www.cplusplus.com/reference/deque/deque/)
+  * deque (usually pronounced like "deck") is an irregular acronym of double-ended queue. Double-ended queues are sequence containers with dynamic sizes that can be expanded or contracted on both ends (either its front or its back).
+  * [Deque-STL | HackerRank](https://www.hackerrank.com/challenges/deque-stl/problem)
+  * [Sliding Window Maximum (Maximum of all subarrays of size k) - GeeksforGeeks](https://www.geeksforgeeks.org/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/#disqus_thread)
+
+#### Associative
+
 * [map - C++ Reference](http://www.cplusplus.com/reference/map/map/)
   * [map::operator[] - C++ Reference](http://www.cplusplus.com/reference/map/map/operator[]/)
     * If k matches the key of an element in the container, the function returns a reference to its mapped value.
@@ -783,8 +798,9 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * A call to this function is equivalent to:
       * (*((this->insert(make_pair(k,mapped_type()))).first)).second
   * [Maps-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-maps/problem)
-* [std::swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/swap)
-  * [swap() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/swap-in-cpp/)
+
+#### Unordered associative
+
 * [std::unordered_map - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map)
   * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::at - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/at)
     * Returns a reference to the mapped value of the element with key equivalent to key. If no such element exists, an exception of type std::out_of_range is thrown.
@@ -800,6 +816,10 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * Unordered maps implement the direct access operator (operator[]) which allows for direct access of the mapped value using its key value as argument.
     * Iterators in the container are at least forward iterators.
     * [Static const map inside class/struct - C++ Forum](http://www.cplusplus.com/forum/general/266519/)
+
+#### Adaptors
+
+#### Views
 
 ### C++ Standard Library
 
