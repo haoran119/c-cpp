@@ -791,7 +791,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::operator[] - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/operator_at)
     * Returns a reference to the value that is mapped to a key equivalent to key, performing an insertion if such key does not already exist.
   * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::count - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/count)
-    * 
   * [unordered_map - C++ Reference](https://www.cplusplus.com/reference/unordered_map/unordered_map/)
     * Unordered Map
     * Unordered maps are associative containers that store elements formed by the combination of a key value and a mapped value, and which allows for fast retrieval of individual elements based on their keys.
