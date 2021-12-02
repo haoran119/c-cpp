@@ -762,6 +762,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * https://github.com/boostorg/program_options/blob/develop/example/first.cpp
   * [default_value() - Class template typed_value - 1.72.0](https://www.boost.org/doc/libs/1_72_0/doc/html/boost/program_options/typed_value.html#id-1_3_32_9_10_1_1_1_5_1-bb)
   * [c++ - Boost.Program_Options: When \<bool> is specified as a command-line option, what are valid command-line parameters? - Stack Overflow](https://stackoverflow.com/questions/15629771/boost-program-options-when-bool-is-specified-as-a-command-line-option-what-a)
+  * [Chapter 63. Boost.ProgramOptions](https://theboostcpplibraries.com/boost.program_options)
 
 #### Logging
 
