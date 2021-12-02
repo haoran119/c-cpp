@@ -540,6 +540,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [ofstream::ofstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/ofstream/)
     * Construct object
       * Constructs an ofstream object
+  * [replace line in a file C++](https://www.py4u.net/discuss/81342)
 
 #### Exception Handling
 
