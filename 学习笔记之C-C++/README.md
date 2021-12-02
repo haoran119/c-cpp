@@ -515,6 +515,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [ifstream::is_open - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/is_open/)
   * [ifstream::close - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/close/)
   * [Read file line by line using C++](https://www.tutorialspoint.com/read-file-line-by-line-using-cplusplus)
+  * [reading and using data in a .csv file - C++ Forum](http://www.cplusplus.com/forum/beginner/157129/)
   * [getline (string) - C++ Reference](https://www.cplusplus.com/reference/string/string/getline/)
 * [ofstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/)
   * Output file stream
