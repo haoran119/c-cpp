@@ -910,6 +910,42 @@ int main(){
   * Returns an iterator pointing to the first element in the range \[first,last) which does not compare less than val.
   * [upper_bound - C++ Reference](http://www.cplusplus.com/reference/algorithm/upper_bound/)
   * [Lower Bound-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-lower-bound/problem)
+```c++
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    int n, temp, q, y;
+    vector<int> vec;
+    vector<int>::iterator   low;
+    
+    cin >> n;
+    for (int i = 0; i < n; i ++) {
+        cin >> temp;
+        vec.push_back(temp);
+    }
+    
+    sort(vec.begin(), vec.end());
+    
+    cin >> q;
+    for (int i = 0; i < q; i ++) {
+        cin >> y;
+        low = lower_bound(vec.begin(), vec.end(), y);
+        if (*low == y) 
+            cout << "Yes " << low - vec.begin() + 1 << endl;
+        else
+            cout << "No " << low - vec.begin() + 1 << endl;         
+    }
+    
+    return 0;
+}
+```
 * [std::swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/swap)
   * [swap() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/swap-in-cpp/)
 
