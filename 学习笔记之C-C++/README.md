@@ -496,7 +496,6 @@ int main() {
   * [LRU Cache Implementation - GeeksforGeeks](https://www.geeksforgeeks.org/lru-cache-implementation/)
   * [list - C++ Reference](http://www.cplusplus.com/reference/list/list/?kw=list)
   * [pair - C++ Reference](http://www.cplusplus.com/reference/utility/pair/?kw=pair)
-  * [unordered_map - C++ Reference](http://www.cplusplus.com/reference/unordered_map/unordered_map/?kw=unordered_map)
 ```c++
 #include <bits/stdc++.h>
 using namespace std;
@@ -1081,13 +1080,20 @@ int main(){
 
 #### Associative
 
-* [map - C++ Reference](http://www.cplusplus.com/reference/map/map/)
+* [std::map - cppreference.com](https://en.cppreference.com/w/cpp/container/map)
+	* [map - C++ Reference](http://www.cplusplus.com/reference/map/map/)
+	* [map::cbegin - C++ Reference](http://www.cplusplus.com/reference/map/map/cbegin/)
+		* Return const_iterator to beginning
+			* Returns a const_iterator pointing to the first element in the container.
+			* A const_iterator is an iterator that points to const content. This iterator can be increased and decreased (unless it is itself also const), just like the iterator returned by map::begin, but it cannot be used to modify the contents it points to, even if the map object is not itself const.
+			* If the container is empty, the returned iterator value shall not be dereferenced.
   * [map::operator[] - C++ Reference](http://www.cplusplus.com/reference/map/map/operator[]/)
     * If k matches the key of an element in the container, the function returns a reference to its mapped value.
     * If k does not match the key of any element in the container, the function inserts a new element with that key and returns a reference to its mapped value. Notice that this always increases the container size by one, even if no mapped value is assigned to the element (the element is constructed using its default constructor).
     * A similar member function, map::at, has the same behavior when an element with the key exists, but throws an exception when it does not.
     * A call to this function is equivalent to:
       * (*((this->insert(make_pair(k,mapped_type()))).first)).second
+	* [map::begin() and end() in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/mapbegin-end-c-stl/)
   * [Maps-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-maps/problem)
 ```c++
 #include <cmath>
@@ -1133,6 +1139,8 @@ int main() {
 #### Unordered associative
 
 * [std::unordered_map - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map)
+	* [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::begin(size_type), std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::cbegin(size_type) - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/begin2)
+	* [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::size - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/size)
   * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::at - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/at)
     * Returns a reference to the mapped value of the element with key equivalent to key. If no such element exists, an exception of type std::out_of_range is thrown.
   * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::operator[] - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/operator_at)
