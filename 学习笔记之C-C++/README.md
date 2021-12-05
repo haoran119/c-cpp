@@ -345,6 +345,47 @@ In programming contests, people do focus more on finding the algorithm to solve 
       * operator << — add a string to the stringstream object.
       * operator >> — read something from the stringstream object,
   * [StringStream | HackerRank](https://www.hackerrank.com/challenges/c-tutorial-stringstream/problem)
+```c++
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <sstream>  // std::stringstream
+using namespace std;
+
+
+vector<int> parseInts(const string &str)
+{
+    stringstream ss(str);
+    char ch;
+    int temp;
+    vector<int> result;
+    
+    while (ss) {
+        ss >> temp >> ch;
+        result.push_back(temp);
+    }
+    
+    return result;    
+}
+
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    string s;
+    cin >> s;
+    
+    vector<int> vResult;
+    vResult = parseInts(s);
+    
+    for (const int &i : vResult)
+        cout << i << endl;
+    
+    return 0;
+}
+```
+
 * [使用 C++ 的 StringBuilder 提升 4350% 的性能](https://mp.weixin.qq.com/s/YfY_c4D_kWSth5tETqnhkg)
   * 经常出现客户端打电话抱怨说：你们的程序慢如蜗牛。你开始检查可能的疑点：文件IO，数据库访问速度，甚至查看web服务。但是这些可能的疑点都很正常，一点问题都没有。
   * 你使用最顺手的性能分析工具分析，发现瓶颈在于一个小函数，这个函数的作用是将一个长的字符串链表写到一文件中。
@@ -960,8 +1001,64 @@ int main() {
   * An array can also be used as a tuple of N elements of the same type.
 * [deque - C++ Reference](http://www.cplusplus.com/reference/deque/deque/)
   * deque (usually pronounced like "deck") is an irregular acronym of double-ended queue. Double-ended queues are sequence containers with dynamic sizes that can be expanded or contracted on both ends (either its front or its back).
-  * [Deque-STL | HackerRank](https://www.hackerrank.com/challenges/deque-stl/problem)
   * [Sliding Window Maximum (Maximum of all subarrays of size k) - GeeksforGeeks](https://www.geeksforgeeks.org/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/#disqus_thread)
+  * [Deque-STL | HackerRank](https://www.hackerrank.com/challenges/deque-stl/problem)
+```c++
+#include <iostream>
+#include <deque> 
+using namespace std;
+
+void printKMax(int arr[], int n, int k){
+	//Write your code here.
+    deque<int>  queue(k);
+    
+    int i;
+    // the first window with k elements
+    for (i = 0; i < k; ++ i) {
+        // remove smaller elements in queue
+        while (!queue.empty() and arr[i] >= arr[queue.back()])
+            queue.pop_back();
+        // add new element            
+        queue.push_back(i);
+    }
+    
+    // the remaining elements
+    for (; i < n; ++ i) {
+        cout << arr[queue.front()] << " ";
+        
+        // remove elements out of window
+        while (!queue.empty() and queue.front() <= i - k)
+            queue.pop_front();
+        
+        // remove smaller elements in queue
+        while (!queue.empty() and arr[i] >= arr[queue.back()])
+            queue.pop_back();
+        
+        // add new element
+        queue.push_back(i);                
+    }
+    
+    // print the maximum element of the last window
+    cout << arr[queue.front()] << endl;    
+}
+
+int main(){
+  
+	int t;
+	cin >> t;
+	while(t>0) {
+		int n,k;
+    	cin >> n >> k;
+    	int i;
+    	int arr[n];
+    	for(i=0;i<n;i++)
+      		cin >> arr[i];
+    	printKMax(arr, n, k);
+    	t--;
+  	}
+  	return 0;
+}
+```
 
 #### Associative
 
@@ -973,6 +1070,46 @@ int main() {
     * A call to this function is equivalent to:
       * (*((this->insert(make_pair(k,mapped_type()))).first)).second
   * [Maps-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-maps/problem)
+```c++
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <map>
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */  
+    map<string, int>    m;
+    map<string, int>::iterator  it;
+    int q, type, y;
+    string  x;
+    
+    cin >> q;
+    
+    for (int i = 0; i < q; ++ i) {
+        cin >> type >> x;
+        switch (type) {
+            case 1:
+                cin >> y;
+                // insert m[x] with default value 0 first if m[x] doesn't exist
+                // then add y to m[x]
+                m[x] += y;
+                break;
+            case 2:
+                m.erase(x);
+                break;
+            case 3:
+                // insert m[x] with default value 0 if m[x] doesn't exist
+                cout << m[x] << endl;
+        }
+    }
+    
+    return 0;
+}
+```
 
 #### Unordered associative
 
