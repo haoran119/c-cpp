@@ -445,6 +445,104 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [list - C++ Reference](http://www.cplusplus.com/reference/list/list/?kw=list)
   * [pair - C++ Reference](http://www.cplusplus.com/reference/utility/pair/?kw=pair)
   * [unordered_map - C++ Reference](http://www.cplusplus.com/reference/unordered_map/unordered_map/?kw=unordered_map)
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node{
+   Node* next;
+   Node* prev;
+   int value;
+   int key;
+   Node(Node* p, Node* n, int k, int val):prev(p),next(n),key(k),value(val){};
+   Node(int k, int val):prev(NULL),next(NULL),key(k),value(val){};
+};
+
+class Cache{
+   
+   protected: 
+   map<int,Node*> mp; //map the key to the node in the linked list
+   int cp;  //capacity
+   Node* tail; // double linked list tail pointer
+   Node* head; // double linked list head pointer
+   virtual void set(int, int) = 0; //set function
+   virtual int get(int) = 0; //get function
+
+};
+
+// Sometimes timeout
+class LRUCache : public Cache {
+    private:
+        list< pair<int, int> >   lru;   
+        unordered_map<int, list< pair<int, int> >::iterator> mp;
+        
+    public:
+        LRUCache(int);
+        ~LRUCache(){};
+        void set(int, int);
+        int get(int);
+};
+
+LRUCache::LRUCache(int capacity)
+{
+    // note that member initializer does not name a non-static data member or base class
+    cp = capacity;    
+}
+
+void LRUCache::set(int key, int value)
+{
+    // not present in cache
+    if (mp.find(key) == mp.end()) {
+        // cache is full
+        if (lru.size() == cp) {
+            // delete least recently used item
+            mp.erase(lru.back().first);
+            lru.pop_back();
+        }
+    } else {
+        lru.erase(mp[key]);
+    }
+    
+    // update reference
+    lru.push_front({key, value});
+    mp[key] = lru.begin();       
+}
+
+int LRUCache::get(int key)
+{
+    if (mp.find(key) == mp.end()) {
+        return -1;
+    } else {
+        lru.push_front(*mp[key]);
+        lru.erase(mp[key]);
+        mp[key] = lru.begin();
+        return mp[key]->second;
+    }
+}
+
+
+int main() {
+   int n, capacity,i;
+   cin >> n >> capacity;
+   LRUCache l(capacity);
+   for(i=0;i<n;i++) {
+      string command;
+      cin >> command;
+      if(command == "get") {
+         int key;
+         cin >> key;
+         cout << l.get(key) << endl;
+      } 
+      else if(command == "set") {
+         int key, value;
+         cin >> key >> value;
+         l.set(key,value);
+      }
+   }
+   
+   return 0;
+}
+```
 * [C++虚函数表原理浅析 (qq.com)](https://mp.weixin.qq.com/s/lKfOZUM1txbUncD6ZBSO4w)
 
 ### C++ Advanced
