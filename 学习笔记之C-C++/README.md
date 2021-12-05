@@ -872,6 +872,11 @@ int main(){
 
 #### Multithreading
 
+* [std::thread - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread)
+	* The class thread represents a single thread of execution. Threads allow multiple functions to execute concurrently.
+	* Threads begin execution immediately upon construction of the associated thread object (pending any OS scheduling delays), starting at the top-level function provided as a constructor argument. The return value of the top-level function is ignored and if it terminates by throwing an exception, std::terminate is called. The top-level function may communicate its return value or an exception to the caller via std::promise or by modifying shared variables (which may require synchronization, see std::mutex and std::atomic)
+	* std::thread objects may also be in the state that does not represent any thread (after default construction, move from, detach, or join), and a thread of execution may not be associated with any thread objects (after detach).
+	* No two std::thread objects may represent the same thread of execution; std::thread is not CopyConstructible or CopyAssignable, although it is MoveConstructible and MoveAssignable.
 * [lock_guard - C++ Reference](https://www.cplusplus.com/reference/mutex/lock_guard/)
   * template \<class Mutex> class lock_guard;
   * Lock guard
@@ -1182,6 +1187,17 @@ int main() {
     * Find element in range
       * Returns an iterator to the first element in the range \[first,last) for which pred returns true. If no such element is found, the function returns last.
   * [std::find_if , std::find_if_not in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdfind_if-stdfind_if_not-in-c/)
+
+#### Iterator library
+
+* [std::advance - cppreference.com](https://en.cppreference.com/w/cpp/iterator/advance)
+	* Increments given iterator it by n elements.
+	* If n is negative, the iterator is decremented. In this case, InputIt must meet the requirements of LegacyBidirectionalIterator, otherwise the behavior is undefined.
+	* [advance - C++ Reference](https://www.cplusplus.com/reference/iterator/advance/)
+		* Advance iterator
+			* Advances the iterator it by n element positions.
+			* If it is a random-access iterator, the function uses just once operator+ or operator-. Otherwise, the function uses repeatedly the increase or decrease operator (operator++ or operator--) until n elements have been advanced.
+	* [std::advance in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdadvance-in-cpp/)
 
 #### Ranges library
 
