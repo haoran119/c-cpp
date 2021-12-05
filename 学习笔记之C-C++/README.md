@@ -633,6 +633,43 @@ In programming contests, people do focus more on finding the algorithm to solve 
 #### Preprocessor
 
 * [Preprocessor directives - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/preprocessor/)
+* [Preprocessor Solution | HackerRank](https://www.hackerrank.com/challenges/preprocessor-solution/problem)
+```c++
+#define toStr(args) #args
+#define foreach(v, i) for (auto i = 0; i < v.size(); ++ i)
+#define io(v) cin >> v
+#define FUNCTION(func, op) inline void func(int& left, int right) { left = (left op right) ? left : right; }
+#define INF (int)((1 << 31) - 1)
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+#if !defined toStr || !defined io || !defined FUNCTION || !defined INF
+#error Missing preprocessor definitions
+#endif 
+
+FUNCTION(minimum, <)
+FUNCTION(maximum, >)
+
+int main(){
+	int n; cin >> n;
+	vector<int> v(n);
+	foreach(v, i) {
+		io(v)[i];
+	}
+	int mn = INF;
+	int mx = -INF;
+	foreach(v, i) {
+		minimum(mn, v[i]);
+		maximum(mx, v[i]);
+	}
+	int ans = mx - mn;
+	cout << toStr(Result =) << ' '<< ans;
+
+ return 0;
+}
+```
 
 ##### macro definitions (#define, #undef)
 
