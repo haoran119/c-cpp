@@ -1427,6 +1427,7 @@ int main() {
 
 ## Application
 
+* [简单的生成Email的C++程序 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2010/10/26/1860900.html)
 * [C++控制台打飞机小游戏 | CSDN 博文精选](https://mp.weixin.qq.com/s/ML7bm89cBwkLVpyPt1dmkg)
   * https://blog.csdn.net/C20190102/article/details/102727963
 
