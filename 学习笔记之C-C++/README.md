@@ -418,6 +418,7 @@ int main() {
 
 #### Basic Input/Output
 
+* [【ZZ】cin、cin.get()、cin.getline()、getline()、gets()等函数的用法 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2011/04/21/2024345.html)
 * [Fast I/O for Competitive Programming - GeeksforGeeks](https://www.geeksforgeeks.org/fast-io-for-competitive-programming/)
   ```c++
   #include <bits/stdc++.h>
