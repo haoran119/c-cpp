@@ -155,6 +155,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 #### Data Types
 
+* [【ZZ】C++11之统一初始化语法 | 桃子的博客志 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/8674208.html)
 * [为什么将 0.1f 改为 0 会使性能降低 10 倍？](https://mp.weixin.qq.com/s/bMacxnC_JBuqFDz8k2fp3w)
   * http://cenalulu.github.io/linux/about-denormalized-float-number/
 * [Wide character - Wikipedia](https://en.wikipedia.org/wiki/Wide_character)
