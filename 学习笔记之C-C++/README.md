@@ -179,6 +179,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * _NATIVE_WCHAR_T_DEFINED Defined as 1 when the /Zc:wchar_t compiler option is set. Otherwise, undefined.
     * [/Zc:wchar_t (wchar_t Is Native Type) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/build/reference/zc-wchar-t-wchar-t-is-native-type?view=msvc-160)
       * Parse wchar_t as a built-in type according to the C++ standard.
+* [Enumeration declaration - cppreference.com](https://en.cppreference.com/w/cpp/language/enum)
 * [C/C++ 结构体就这样被攻克了！](https://mp.weixin.qq.com/s/-RoBZ9Gge-6HtYH8tUS8xw)
   * 结构体的声明与定义
     * 声明
