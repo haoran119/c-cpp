@@ -320,6 +320,28 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * std::basic_string satisfies the requirements of AllocatorAwareContainer, SequenceContainer and ContiguousContainer (since C++17)
   * [std::basic_string_view - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string_view)
     * The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
+	* [string::append - C++ Reference](https://www.cplusplus.com/reference/string/string/append/)
+		* Append to string
+			* Extends the string by appending additional characters at the end of its current value:
+		* Complexity
+			* Unspecified, but generally up to linear in the new string length.
+	* [string::c_str - C++ Reference](https://www.cplusplus.com/reference/string/string/c_str/)
+	* [string::compare - C++ Reference](https://www.cplusplus.com/reference/string/string/compare/)
+		* Compare strings
+			* Compares the value of the string object (or a substring) to the sequence of characters specified by its arguments.
+			* The compared string is the value of the string object or -if the signature used has a pos and a len parameters- the substring that begins at its character in position pos and spans len characters.
+			* This string is compared to a comparing string, which is determined by the other arguments passed to the function.
+	* [string::find - C++ Reference](https://www.cplusplus.com/reference/string/string/find/)
+		* Find content in string
+			* Searches the string for the first occurrence of the sequence specified by its arguments.
+			* When pos is specified, the search only includes characters at or after position pos, ignoring any possible occurrences that include characters before pos.
+			* Notice that unlike member find_first_of, whenever more than one character is being searched for, it is not enough that just one of these characters match, but the entire sequence must match.
+		* [std::basic_string<CharT,Traits,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find)
+	* [std::basic_string<CharT,Traits,Allocator>::substr - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/substr)
+		* Returns a substring [pos, pos+count). If the requested substring extends past the end of the string, i.e. the count is greater than size() - pos (e.g. if count == npos), the returned substring is [pos, size()).
+	* [std::to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
+		* Convert numerical value to string
+			* Returns a string with the representation of val.
 * [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
   * Output stream class to operate on strings.
   * Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
@@ -331,26 +353,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
       * The first form (1) returns a string object with a copy of the current contents of the stream.
       * The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
       * Internally, the function calls the str member of its internal string buffer object.
-* [string::append - C++ Reference](https://www.cplusplus.com/reference/string/string/append/)
-  * Append to string
-    * Extends the string by appending additional characters at the end of its current value:
-  * Complexity
-    * Unspecified, but generally up to linear in the new string length.
-* [string::c_str - C++ Reference](https://www.cplusplus.com/reference/string/string/c_str/)
-* [string::compare - C++ Reference](https://www.cplusplus.com/reference/string/string/compare/)
-  * Compare strings
-    * Compares the value of the string object (or a substring) to the sequence of characters specified by its arguments.
-    * The compared string is the value of the string object or -if the signature used has a pos and a len parameters- the substring that begins at its character in position pos and spans len characters.
-    * This string is compared to a comparing string, which is determined by the other arguments passed to the function.
-* [string::find - C++ Reference](https://www.cplusplus.com/reference/string/string/find/)
-  * Find content in string
-    * Searches the string for the first occurrence of the sequence specified by its arguments.
-    * When pos is specified, the search only includes characters at or after position pos, ignoring any possible occurrences that include characters before pos.
-    * Notice that unlike member find_first_of, whenever more than one character is being searched for, it is not enough that just one of these characters match, but the entire sequence must match.
-  * [std::basic_string<CharT,Traits,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find)
-* [std::to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
-  * Convert numerical value to string
-    * Returns a string with the representation of val.
 * [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
   * [std::basic_stringstream - cppreference.com](https://en.cppreference.com/w/cpp/io/basic_stringstream)
   * [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
