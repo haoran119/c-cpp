@@ -318,9 +318,8 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * The class template basic_string stores and manipulates sequences of char-like objects, which are non-array objects of trivial standard-layout type. The class is dependent neither on the character type nor on the nature of operations on that type. The definitions of the operations are supplied via the Traits template parameter - a specialization of std::char_traits or a compatible traits class. Traits::char_type and CharT must name the same type; otherwise the program is ill-formed.
     * The elements of a basic_string are stored contiguously, that is, for a basic_string s, &*(s.begin() + n) == &*s.begin() + n for any n in [0, s.size()), or, equivalently, a pointer to s[0] can be passed to functions that expect a pointer to the first element of a null-terminated (since C++11)CharT[] array.
     * std::basic_string satisfies the requirements of AllocatorAwareContainer, SequenceContainer and ContiguousContainer (since C++17)
-  * [std::basic_string_view - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string_view)
-    * The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
-    * 
+	* [std::basic_string_view - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string_view)
+		* The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
 	* [string::append - C++ Reference](https://www.cplusplus.com/reference/string/string/append/)
 		* Append to string
 			* Extends the string by appending additional characters at the end of its current value:
