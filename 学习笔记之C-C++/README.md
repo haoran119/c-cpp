@@ -320,6 +320,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * std::basic_string satisfies the requirements of AllocatorAwareContainer, SequenceContainer and ContiguousContainer (since C++17)
   * [std::basic_string_view - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string_view)
     * The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
+    * 
 	* [string::append - C++ Reference](https://www.cplusplus.com/reference/string/string/append/)
 		* Append to string
 			* Extends the string by appending additional characters at the end of its current value:
