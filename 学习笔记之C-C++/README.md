@@ -1550,6 +1550,8 @@ int main() {
       * If command is a null pointer, the function only checks whether a command processor is available through this function, without invoking any command.
       * The effects of invoking a command depend on the system and library implementation, and may cause a program to behave in a non-standard manner or to terminate.
   * [std::unique_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr)
+* How to check if process is in deadlock ?
+	* Task Manager > Performance > Open Resource Monitor > Select process > Analyze Wait Chain...
 
 ### ERROR FIX
 
