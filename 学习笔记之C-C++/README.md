@@ -230,6 +230,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
 	* but each one with its own special characteristics
 	* [dynamic_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/dynamic_cast)
 		* Safely converts pointers and references to classes up, down, and sideways along the inheritance hierarchy.
+		* If the cast is successful, dynamic_cast returns a value of type new-type. If the cast fails and new-type is a pointer type, it returns a null pointer of that type. If the cast fails and new-type is a reference type, it throws an exception that matches a handler of type std::bad_cast.
   * [const_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/const_cast)
     * Converts between types with different cv-qualification.
     * Syntax
