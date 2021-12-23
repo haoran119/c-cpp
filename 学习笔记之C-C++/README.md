@@ -215,8 +215,9 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * 位域
 * [谈一谈 C++ 中的值的类型 (qq.com)](https://mp.weixin.qq.com/s/MQNIkeS3eMUmaezyUL8ZkQ)
 
-##### [Type conversions](https://www.cplusplus.com/doc/tutorial/typecasting/)
+##### Type conversions
 
+* [Type conversions](https://www.cplusplus.com/doc/tutorial/typecasting/)
 	* Unrestricted explicit type-casting allows to convert any pointer into any other pointer type, independently of the types they point to. The subsequent call to member result will produce either a run-time error or some other unexpected results.
 	* In order to control these types of conversions between classes, we have four specific casting operators: dynamic_cast, reinterpret_cast, static_cast and const_cast. Their format is to follow the new type enclosed between angle-brackets (<>) and immediately after, the expression to be converted between parentheses.
 		* dynamic_cast <new_type> (expression)
