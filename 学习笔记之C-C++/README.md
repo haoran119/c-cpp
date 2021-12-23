@@ -228,6 +228,8 @@ In programming contests, people do focus more on finding the algorithm to solve 
 		* (new_type) expression
 		* new_type (expression)
 	* but each one with its own special characteristics
+	* [dynamic_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/dynamic_cast)
+		* Safely converts pointers and references to classes up, down, and sideways along the inheritance hierarchy.
   * [const_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/const_cast)
     * Converts between types with different cv-qualification.
     * Syntax
