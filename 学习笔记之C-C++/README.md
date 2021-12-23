@@ -215,10 +215,16 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * 位域
 * [谈一谈 C++ 中的值的类型 (qq.com)](https://mp.weixin.qq.com/s/MQNIkeS3eMUmaezyUL8ZkQ)
 * [Type conversions](https://www.cplusplus.com/doc/tutorial/typecasting/)
-  * [const_cast Operator | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/const-cast-operator?view=msvc-160)
-    * Removes the const, volatile, and __unaligned attribute(s) from a class.
-    * Syntax
-      * const_cast \<type-id> (expression)
+	* Unrestricted explicit type-casting allows to convert any pointer into any other pointer type, independently of the types they point to. The subsequent call to member result will produce either a run-time error or some other unexpected results.
+	* In order to control these types of conversions between classes, we have four specific casting operators: dynamic_cast, reinterpret_cast, static_cast and const_cast. Their format is to follow the new type enclosed between angle-brackets (<>) and immediately after, the expression to be converted between parentheses.
+		* dynamic_cast <new_type> (expression)
+		* reinterpret_cast <new_type> (expression)
+		* static_cast <new_type> (expression)
+		* const_cast <new_type> (expression)
+	* The traditional type-casting equivalents to these expressions would be:
+		* (new_type) expression
+		* new_type (expression)
+	* but each one with its own special characteristics
   * [const_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/const_cast)
     * Converts between types with different cv-qualification.
     * Syntax
@@ -235,6 +241,10 @@ In programming contests, people do focus more on finding the algorithm to solve 
         * an xvalue if new_type is an rvalue reference to 
         type;
         * a prvalue otherwise.
+  * [const_cast Operator | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/const-cast-operator?view=msvc-160)
+    * Removes the const, volatile, and __unaligned attribute(s) from a class.
+    * Syntax
+      * const_cast \<type-id> (expression)
   * [const_cast examples](https://www.geeksforgeeks.org/const_cast-in-c-type-casting-operators/)
     * C++ supports following 4 types of casting operators:
       * 1. const_cast
