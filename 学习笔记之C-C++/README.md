@@ -271,8 +271,9 @@ In programming contests, people do focus more on finding the algorithm to solve 
 				3. dynamic_cast
 				4. reinterpret_cast
   * [typeid operator - cppreference.com](https://en.cppreference.com/w/cpp/language/typeid)
-	* Queries information of a type.
-	* Used where the dynamic type of a polymorphic object must be known and for static type identification.
+  	* Queries information of a type.
+  	* Used where the dynamic type of a polymorphic object must be known and for static type identification.
+  	* There is no guarantee that the same std::type_info instance will be referred to by all evaluations of the typeid expression on the same type, although they would compare equal, std::type_info::hash_code of those type_info objects would be identical, as would be their std::type_index.
 * [如何攻克 C++ 中复杂的类型转换？](https://mp.weixin.qq.com/s/lJiva3BUJXUV0cpX1dOe2Q)
   * https://github.com/yingyulou
 * [详解 C++ 的隐式类型转换与函数重载！](https://mp.weixin.qq.com/s/S_1KPn_GWJ7hmLH19Dajfg)
