@@ -218,19 +218,32 @@ In programming contests, people do focus more on finding the algorithm to solve 
 ##### Type conversions
 
 * [Type conversions](https://www.cplusplus.com/doc/tutorial/typecasting/)
-	* Unrestricted explicit type-casting allows to convert any pointer into any other pointer type, independently of the types they point to. The subsequent call to member result will produce either a run-time error or some other unexpected results.
-	* In order to control these types of conversions between classes, we have four specific casting operators: dynamic_cast, reinterpret_cast, static_cast and const_cast. Their format is to follow the new type enclosed between angle-brackets (<>) and immediately after, the expression to be converted between parentheses.
-		* dynamic_cast <new_type> (expression)
-		* reinterpret_cast <new_type> (expression)
-		* static_cast <new_type> (expression)
-		* const_cast <new_type> (expression)
-	* The traditional type-casting equivalents to these expressions would be:
-		* (new_type) expression
-		* new_type (expression)
-	* but each one with its own special characteristics
+	* Implicit conversion
+	* Implicit conversions with classes
+	* Keyword explicit
+		* [explicit specifier - cppreference.com](https://en.cppreference.com/w/cpp/language/explicit)
+			* expression	-	contextually converted constant expression of type bool
+				* 1) Specifies that a constructor or conversion function (since C++11) or deduction guide (since C++17) is explicit, that is, it cannot be used for implicit conversions and copy-initialization.
+				* 2) The explicit specifier may be used with a constant expression. The function is explicit if and only if that constant expression evaluates to true. (since C++20)
+			* The explicit specifier may only appear within the decl-specifier-seq of the declaration of a constructor or conversion function (since C++11) within its class definition.
+	* Type casting
+		* Unrestricted explicit type-casting allows to convert any pointer into any other pointer type, independently of the types they point to. The subsequent call to member result will produce either a run-time error or some other unexpected results.
+		* In order to control these types of conversions between classes, we have four specific casting operators: dynamic_cast, reinterpret_cast, static_cast and const_cast. Their format is to follow the new type enclosed between angle-brackets (<>) and immediately after, the expression to be converted between parentheses.
+			* dynamic_cast <new_type> (expression)
+			* reinterpret_cast <new_type> (expression)
+			* static_cast <new_type> (expression)
+			* const_cast <new_type> (expression)
+		* The traditional type-casting equivalents to these expressions would be:
+			* (new_type) expression
+			* new_type (expression)
+		* but each one with its own special characteristics
 	* [dynamic_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/dynamic_cast)
 		* Safely converts pointers and references to classes up, down, and sideways along the inheritance hierarchy.
 		* If the cast is successful, dynamic_cast returns a value of type new-type. If the cast fails and new-type is a pointer type, it returns a null pointer of that type. If the cast fails and new-type is a reference type, it throws an exception that matches a handler of type std::bad_cast.
+  * [static_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/static_cast)
+  	* Converts between types using a combination of implicit and user-defined conversions.
+  * [reinterpret_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/reinterpret_cast)
+  	* Converts between types by reinterpreting the underlying bit pattern.
   * [const_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/const_cast)
     * Converts between types with different cv-qualification.
     * Syntax
@@ -247,16 +260,19 @@ In programming contests, people do focus more on finding the algorithm to solve 
         * an xvalue if new_type is an rvalue reference to 
         type;
         * a prvalue otherwise.
-  * [const_cast Operator | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/const-cast-operator?view=msvc-160)
-    * Removes the const, volatile, and __unaligned attribute(s) from a class.
-    * Syntax
-      * const_cast \<type-id> (expression)
-  * [const_cast examples](https://www.geeksforgeeks.org/const_cast-in-c-type-casting-operators/)
-    * C++ supports following 4 types of casting operators:
-      * 1. const_cast
-      * 2. static_cast
-      * 3. dynamic_cast
-      * 4. reinterpret_cast
+		* [const_cast Operator | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/const-cast-operator?view=msvc-160)
+			* Removes the const, volatile, and __unaligned attribute(s) from a class.
+			* Syntax
+				* const_cast \<type-id> (expression)
+		* [const_cast examples](https://www.geeksforgeeks.org/const_cast-in-c-type-casting-operators/)
+			* C++ supports following 4 types of casting operators:
+				* 1. const_cast
+				* 2. static_cast
+				* 3. dynamic_cast
+				* 4. reinterpret_cast
+  * [typeid operator - cppreference.com](https://en.cppreference.com/w/cpp/language/typeid)
+		* Queries information of a type.
+		* Used where the dynamic type of a polymorphic object must be known and for static type identification.
 * [如何攻克 C++ 中复杂的类型转换？](https://mp.weixin.qq.com/s/lJiva3BUJXUV0cpX1dOe2Q)
   * https://github.com/yingyulou
 * [详解 C++ 的隐式类型转换与函数重载！](https://mp.weixin.qq.com/s/S_1KPn_GWJ7hmLH19Dajfg)
@@ -293,9 +309,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 * [五分钟小知识：为什么说 ++i 的效率比 i++ 高？](https://mp.weixin.qq.com/s/___R-0mc7zezAEVG-1-b5w)
   * 对于内置类型，前置和后置自增或者自减在编译器优化的情况下，两者并无多大差别，而对于自定义类型，如无特别需要，人们似乎更加偏爱前置自增或自减，因为后置自增常常会产生临时对象。
-* [typeid operator - cppreference.com](https://en.cppreference.com/w/cpp/language/typeid)
-	* Queries information of a type.
-	* Used where the dynamic type of a polymorphic object must be known and for static type identification.
 
 #### Decision Making
 
