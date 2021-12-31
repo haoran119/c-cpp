@@ -215,203 +215,202 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * 位域
 * [谈一谈 C++ 中的值的类型 (qq.com)](https://mp.weixin.qq.com/s/MQNIkeS3eMUmaezyUL8ZkQ)
 
-##### Type conversions
+##### [Type conversions](https://www.cplusplus.com/doc/tutorial/typecasting/)
+ 
+* Implicit conversion
+* Implicit conversions with classes
+* Keyword explicit
+	* [explicit specifier - cppreference.com](https://en.cppreference.com/w/cpp/language/explicit)
+		* expression	-	contextually converted constant expression of type bool
+			1) Specifies that a constructor or conversion function (since C++11) or deduction guide (since C++17) is explicit, that is, it cannot be used for implicit conversions and copy-initialization.
+			2) The explicit specifier may be used with a constant expression. The function is explicit if and only if that constant expression evaluates to true. (since C++20)
+		* The explicit specifier may only appear within the decl-specifier-seq of the declaration of a constructor or conversion function (since C++11) within its class definition.
+* Type casting
+	* Unrestricted explicit type-casting allows to convert any pointer into any other pointer type, independently of the types they point to. The subsequent call to member result will produce either a run-time error or some other unexpected results.
+	* In order to control these types of conversions between classes, we have four specific casting operators: dynamic_cast, reinterpret_cast, static_cast and const_cast. Their format is to follow the new type enclosed between angle-brackets (<>) and immediately after, the expression to be converted between parentheses.
+		* dynamic_cast <new_type> (expression)
+		* reinterpret_cast <new_type> (expression)
+		* static_cast <new_type> (expression)
+		* const_cast <new_type> (expression)
+	* The traditional type-casting equivalents to these expressions would be:
+		* (new_type) expression
+		* new_type (expression)
+	* but each one with its own special characteristics
+* [dynamic_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/dynamic_cast)
+	* Safely converts pointers and references to classes up, down, and sideways along the inheritance hierarchy.
+	* If the cast is successful, dynamic_cast returns a value of type new-type. If the cast fails and new-type is a pointer type, it returns a null pointer of that type. If the cast fails and new-type is a reference type, it throws an exception that matches a handler of type std::bad_cast.
+```c++
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
 
-* [Type conversions](https://www.cplusplus.com/doc/tutorial/typecasting/)
-	* Implicit conversion
-	* Implicit conversions with classes
-	* Keyword explicit
-		* [explicit specifier - cppreference.com](https://en.cppreference.com/w/cpp/language/explicit)
-			* expression	-	contextually converted constant expression of type bool
-				1) Specifies that a constructor or conversion function (since C++11) or deduction guide (since C++17) is explicit, that is, it cannot be used for implicit conversions and copy-initialization.
-				2) The explicit specifier may be used with a constant expression. The function is explicit if and only if that constant expression evaluates to true. (since C++20)
-			* The explicit specifier may only appear within the decl-specifier-seq of the declaration of a constructor or conversion function (since C++11) within its class definition.
-	* Type casting
-		* Unrestricted explicit type-casting allows to convert any pointer into any other pointer type, independently of the types they point to. The subsequent call to member result will produce either a run-time error or some other unexpected results.
-		* In order to control these types of conversions between classes, we have four specific casting operators: dynamic_cast, reinterpret_cast, static_cast and const_cast. Their format is to follow the new type enclosed between angle-brackets (<>) and immediately after, the expression to be converted between parentheses.
-			* dynamic_cast <new_type> (expression)
-			* reinterpret_cast <new_type> (expression)
-			* static_cast <new_type> (expression)
-			* const_cast <new_type> (expression)
-		* The traditional type-casting equivalents to these expressions would be:
-			* (new_type) expression
-			* new_type (expression)
-		* but each one with its own special characteristics
-	* [dynamic_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/dynamic_cast)
-		* Safely converts pointers and references to classes up, down, and sideways along the inheritance hierarchy.
-		* If the cast is successful, dynamic_cast returns a value of type new-type. If the cast fails and new-type is a pointer type, it returns a null pointer of that type. If the cast fails and new-type is a reference type, it throws an exception that matches a handler of type std::bad_cast.
-	```c++
-	#include <iostream>
-	#include <vector>
-	#include <string>
-	using namespace std;
+class Spell { 
+		private:
+				string scrollName;
+		public:
+				Spell(): scrollName("") { }
+				Spell(string name): scrollName(name) { }
+				virtual ~Spell() { }
+				string revealScrollName() {
+						return scrollName;
+				}
+};
 
-	class Spell { 
-			private:
-					string scrollName;
-			public:
-					Spell(): scrollName("") { }
-					Spell(string name): scrollName(name) { }
-					virtual ~Spell() { }
-					string revealScrollName() {
-							return scrollName;
-					}
-	};
+class Fireball : public Spell { 
+		private: int power;
+		public:
+				Fireball(int power): power(power) { }
+				void revealFirepower(){
+						cout << "Fireball: " << power << endl;
+				}
+};
 
-	class Fireball : public Spell { 
-			private: int power;
-			public:
-					Fireball(int power): power(power) { }
-					void revealFirepower(){
-							cout << "Fireball: " << power << endl;
-					}
-	};
+class Frostbite : public Spell {
+		private: int power;
+		public:
+				Frostbite(int power): power(power) { }
+				void revealFrostpower(){
+						cout << "Frostbite: " << power << endl;
+				}
+};
 
-	class Frostbite : public Spell {
-			private: int power;
-			public:
-					Frostbite(int power): power(power) { }
-					void revealFrostpower(){
-							cout << "Frostbite: " << power << endl;
-					}
-	};
+class Thunderstorm : public Spell { 
+		private: int power;
+		public:
+				Thunderstorm(int power): power(power) { }
+				void revealThunderpower(){
+						cout << "Thunderstorm: " << power << endl;
+				}
+};
 
-	class Thunderstorm : public Spell { 
-			private: int power;
-			public:
-					Thunderstorm(int power): power(power) { }
-					void revealThunderpower(){
-							cout << "Thunderstorm: " << power << endl;
-					}
-	};
+class Waterbolt : public Spell { 
+		private: int power;
+		public:
+				Waterbolt(int power): power(power) { }
+				void revealWaterpower(){
+						cout << "Waterbolt: " << power << endl;
+				}
+};
 
-	class Waterbolt : public Spell { 
-			private: int power;
-			public:
-					Waterbolt(int power): power(power) { }
-					void revealWaterpower(){
-							cout << "Waterbolt: " << power << endl;
-					}
-	};
+class SpellJournal {
+		public:
+				static string journal;
+				static string read() {
+						return journal;
+				}
+}; 
+string SpellJournal::journal = "";
 
-	class SpellJournal {
-			public:
-					static string journal;
-					static string read() {
-							return journal;
-					}
-	}; 
-	string SpellJournal::journal = "";
+void counterspell(Spell *spell) {
 
-	void counterspell(Spell *spell) {
+/* Enter your code here. Read input from STDIN. Print output to STDOUT */
+		if (auto* fb = dynamic_cast<Fireball*>(spell)) {
+				fb->revealFirepower();
+		}
+		else if (auto* fb = dynamic_cast<Frostbite*>(spell)) {
+				fb->revealFrostpower();
+		}
+		else if (auto* ts = dynamic_cast<Thunderstorm*>(spell)) {
+				ts->revealThunderpower();
+		}
+		else if (auto* wb = dynamic_cast<Waterbolt*>(spell)) {
+				wb->revealWaterpower();
+		}
+		else {
+				const auto spellN = spell->revealScrollName();
+				const auto spellJ = SpellJournal::read();
+				const auto nSpellN = spellN.length();
+				const auto nSpellJ = spellJ.length();
+				// pay attention to the size of vector
+				vector<vector<int> > vResult(nSpellN + 1, vector<int>(nSpellJ + 1, 0));
 
-	/* Enter your code here. Read input from STDIN. Print output to STDOUT */
-			if (auto* fb = dynamic_cast<Fireball*>(spell)) {
-					fb->revealFirepower();
-			}
-			else if (auto* fb = dynamic_cast<Frostbite*>(spell)) {
-					fb->revealFrostpower();
-			}
-			else if (auto* ts = dynamic_cast<Thunderstorm*>(spell)) {
-					ts->revealThunderpower();
-			}
-			else if (auto* wb = dynamic_cast<Waterbolt*>(spell)) {
-					wb->revealWaterpower();
-			}
-			else {
-					const auto spellN = spell->revealScrollName();
-					const auto spellJ = SpellJournal::read();
-					const auto nSpellN = spellN.length();
-					const auto nSpellJ = spellJ.length();
-					// pay attention to the size of vector
-					vector<vector<int> > vResult(nSpellN + 1, vector<int>(nSpellJ + 1, 0));
+				for (auto i = 1; i <= nSpellN; ++ i) {
+						for (auto j = 1; j <= nSpellJ; ++ j) {
+								if (spellN.at(i - 1) == spellJ.at(j - 1)) {
+										vResult[i][j] = vResult[i - 1][j - 1] + 1;
+								}
+								else {
+										vResult[i][j] = max(vResult[i - 1][j], vResult[i][j - 1]);
+								}
+						}
+				}
 
-					for (auto i = 1; i <= nSpellN; ++ i) {
-							for (auto j = 1; j <= nSpellJ; ++ j) {
-									if (spellN.at(i - 1) == spellJ.at(j - 1)) {
-											vResult[i][j] = vResult[i - 1][j - 1] + 1;
-									}
-									else {
-											vResult[i][j] = max(vResult[i - 1][j], vResult[i][j - 1]);
-									}
-							}
-					}
+				cout << vResult[nSpellN][nSpellJ] << endl;
+		}
+}
 
-					cout << vResult[nSpellN][nSpellJ] << endl;
-			}
-	}
+class Wizard {
+		public:
+				Spell *cast() {
+						Spell *spell;
+						string s; cin >> s;
+						int power; cin >> power;
+						if(s == "fire") {
+								spell = new Fireball(power);
+						}
+						else if(s == "frost") {
+								spell = new Frostbite(power);
+						}
+						else if(s == "water") {
+								spell = new Waterbolt(power);
+						}
+						else if(s == "thunder") {
+								spell = new Thunderstorm(power);
+						} 
+						else {
+								spell = new Spell(s);
+								cin >> SpellJournal::journal;
+						}
+						return spell;
+				}
+};
 
-	class Wizard {
-			public:
-					Spell *cast() {
-							Spell *spell;
-							string s; cin >> s;
-							int power; cin >> power;
-							if(s == "fire") {
-									spell = new Fireball(power);
-							}
-							else if(s == "frost") {
-									spell = new Frostbite(power);
-							}
-							else if(s == "water") {
-									spell = new Waterbolt(power);
-							}
-							else if(s == "thunder") {
-									spell = new Thunderstorm(power);
-							} 
-							else {
-									spell = new Spell(s);
-									cin >> SpellJournal::journal;
-							}
-							return spell;
-					}
-	};
-
-	int main() {
-			int T;
-			cin >> T;
-			Wizard Arawn;
-			while(T--) {
-					Spell *spell = Arawn.cast();
-					counterspell(spell);
-			}
-			return 0;
-	}
-	```
-  * [static_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/static_cast)
-  	* Converts between types using a combination of implicit and user-defined conversions.
-  * [reinterpret_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/reinterpret_cast)
-  	* Converts between types by reinterpreting the underlying bit pattern.
-  * [const_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/const_cast)
-    * Converts between types with different cv-qualification.
-    * Syntax
-      * const_cast < new_type > ( expression )		
-    * Returns a value of type new_type.
-    * Explanation
-      * Only the following conversions can be done with const_cast. In particular, only const_cast may be used to cast away (remove) constness or volatility.
-        1) Two possibly multilevel pointers to the same type may be converted between each other, regardless of cv-qualifiers at each level.
-        2) lvalue of any type T may be converted to a lvalue or rvalue reference to the same type T, more or less cv-qualified. Likewise, a prvalue of class type or an xvalue of any type may be converted to a more or less cv-qualified rvalue reference. The result of a reference const_cast refers to the original object if expression is a glvalue and to the materialized temporary otherwise (since C++17).
-        3) Same rules apply to possibly multilevel pointers to data members and possibly multilevel pointers to arrays of known and unknown bound (arrays to cv-qualified elements are considered to be cv-qualified themselves) (since C++17)
-        4) null pointer value may be converted to the null pointer value of new_type
-      * As with all cast expressions, the result is:
-        * an lvalue if new_type is an lvalue reference type or an rvalue reference to function type;
-        * an xvalue if new_type is an rvalue reference to 
-        type;
-        * a prvalue otherwise.
-		* [const_cast Operator | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/const-cast-operator?view=msvc-160)
-			* Removes the const, volatile, and __unaligned attribute(s) from a class.
-			* Syntax
-				* const_cast \<type-id> (expression)
-		* [const_cast examples](https://www.geeksforgeeks.org/const_cast-in-c-type-casting-operators/)
-			* C++ supports following 4 types of casting operators:
-				1. const_cast
-				2. static_cast
-				3. dynamic_cast
-				4. reinterpret_cast
-  * [typeid operator - cppreference.com](https://en.cppreference.com/w/cpp/language/typeid)
-  	* Queries information of a type.
-  	* Used where the dynamic type of a polymorphic object must be known and for static type identification.
-  	* There is no guarantee that the same std::type_info instance will be referred to by all evaluations of the typeid expression on the same type, although they would compare equal, std::type_info::hash_code of those type_info objects would be identical, as would be their std::type_index.
+int main() {
+		int T;
+		cin >> T;
+		Wizard Arawn;
+		while(T--) {
+				Spell *spell = Arawn.cast();
+				counterspell(spell);
+		}
+		return 0;
+}
+```
+* [static_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/static_cast)
+	* Converts between types using a combination of implicit and user-defined conversions.
+* [reinterpret_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/reinterpret_cast)
+	* Converts between types by reinterpreting the underlying bit pattern.
+* [const_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/const_cast)
+	* Converts between types with different cv-qualification.
+	* Syntax
+		* const_cast < new_type > ( expression )		
+	* Returns a value of type new_type.
+	* Explanation
+		* Only the following conversions can be done with const_cast. In particular, only const_cast may be used to cast away (remove) constness or volatility.
+			1) Two possibly multilevel pointers to the same type may be converted between each other, regardless of cv-qualifiers at each level.
+			2) lvalue of any type T may be converted to a lvalue or rvalue reference to the same type T, more or less cv-qualified. Likewise, a prvalue of class type or an xvalue of any type may be converted to a more or less cv-qualified rvalue reference. The result of a reference const_cast refers to the original object if expression is a glvalue and to the materialized temporary otherwise (since C++17).
+			3) Same rules apply to possibly multilevel pointers to data members and possibly multilevel pointers to arrays of known and unknown bound (arrays to cv-qualified elements are considered to be cv-qualified themselves) (since C++17)
+			4) null pointer value may be converted to the null pointer value of new_type
+		* As with all cast expressions, the result is:
+			* an lvalue if new_type is an lvalue reference type or an rvalue reference to function type;
+			* an xvalue if new_type is an rvalue reference to 
+			type;
+			* a prvalue otherwise.
+	* [const_cast Operator | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/const-cast-operator?view=msvc-160)
+		* Removes the const, volatile, and __unaligned attribute(s) from a class.
+		* Syntax
+			* const_cast \<type-id> (expression)
+	* [const_cast examples](https://www.geeksforgeeks.org/const_cast-in-c-type-casting-operators/)
+		* C++ supports following 4 types of casting operators:
+			1. const_cast
+			2. static_cast
+			3. dynamic_cast
+			4. reinterpret_cast
+* [typeid operator - cppreference.com](https://en.cppreference.com/w/cpp/language/typeid)
+	* Queries information of a type.
+	* Used where the dynamic type of a polymorphic object must be known and for static type identification.
+	* There is no guarantee that the same std::type_info instance will be referred to by all evaluations of the typeid expression on the same type, although they would compare equal, std::type_info::hash_code of those type_info objects would be identical, as would be their std::type_index.
 * [如何攻克 C++ 中复杂的类型转换？](https://mp.weixin.qq.com/s/lJiva3BUJXUV0cpX1dOe2Q)
   * https://github.com/yingyulou
 * [详解 C++ 的隐式类型转换与函数重载！](https://mp.weixin.qq.com/s/S_1KPn_GWJ7hmLH19Dajfg)
