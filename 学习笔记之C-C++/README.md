@@ -1720,6 +1720,10 @@ int main() {
   * [std::unique_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr)
 * How to check if process is in deadlock ?
 	* Task Manager > Performance > Open Resource Monitor > Select process > Analyze Wait Chain...
+* How to modifying the "Path to executable" of a windows service ?
+	* [Modifying the "Path to executable" of a windows service - Stack Overflow](https://stackoverflow.com/questions/7190480/modifying-the-path-to-executable-of-a-windows-service)
+		* It involves editing the registry, but service information can be found in HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services. Find the service you want to redirect, locate the ImagePath subkey and change that value.
+		* Or There is also this approach seen on SuperUser which uses the sc command line instead of modifying the registry
 
 ### ERROR FIX
 
