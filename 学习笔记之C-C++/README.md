@@ -672,6 +672,91 @@ int main() {
   }
   ```
 
+#### Data Structures
+
+* [Data structures - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/structures/)
+* [Attending Workshops | HackerRank](https://www.hackerrank.com/challenges/attending-workshops/problem)
+```c++
+// #include<bits/stdc++.h>
+#include<algorithm>
+#include<iostream>
+#include<vector>
+using namespace std;
+
+//Define the structs Workshops and Available_Workshops.
+//Implement the functions initialize and CalculateMaxWorkshops
+struct Workshop {
+    int start, duration, end;
+};
+
+struct Available_Workshops {
+    Available_Workshops(int n) : m_n(n) {}
+
+    int m_n;
+    vector<Workshop> m_vWorkshop;
+};
+
+Available_Workshops* initialize(int* start_time, int* duration, int n)
+{
+    Available_Workshops* pAW = new Available_Workshops(n);
+    Workshop temp;
+
+    for (auto i = 0; i < n; ++ i) {
+        temp.start = start_time[i];
+        temp.duration = duration[i];
+        temp.end = start_time[i] + duration[i];
+        pAW->m_vWorkshop.push_back(temp);
+    }
+
+    sort(pAW->m_vWorkshop.begin(),
+        pAW->m_vWorkshop.end(),
+        [](const Workshop& w1, const Workshop& w2) {
+            return w1.end < w2.end;
+        });
+
+    return pAW;
+}
+
+int CalculateMaxWorkshops(Available_Workshops* ptr)
+{
+    auto maxWorkshops = 0;
+    auto currentEnd = 0;
+
+    for (auto i = 0; i < ptr->m_n; ++ i) {
+        if (ptr->m_vWorkshop.at(i).start >= currentEnd) {
+            currentEnd = ptr->m_vWorkshop.at(i).end;
+            ++ maxWorkshops;
+        }
+    }
+
+    return maxWorkshops;
+}
+
+int main(int argc, char *argv[]) {
+    // freopen("input.txt", "r", stdin);
+
+    int n; // number of workshops
+    cin >> n;
+    // create arrays of unknown size n
+    int* start_time = new int[n];
+    int* duration = new int[n];
+
+    for(int i = 0; i < n; i ++) {
+        cin >> start_time[i];
+    }
+
+    for(int i = 0; i < n; i ++) {
+        cin >> duration[i];
+    }
+
+    Available_Workshops * ptr;
+    ptr = initialize(start_time,duration, n);
+    cout << CalculateMaxWorkshops(ptr) << endl;
+    return 0;
+}
+
+```
+
 ### Object Oriented Programming
 
 * [Abstract Classes - Polymorphism | HackerRank](https://www.hackerrank.com/challenges/abstract-classes-polymorphism/problem)
