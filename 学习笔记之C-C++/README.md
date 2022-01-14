@@ -1491,6 +1491,8 @@ int main() {
     * Find element in range
       * Returns an iterator to the first element in the range \[first,last) for which pred returns true. If no such element is found, the function returns last.
   * [std::find_if , std::find_if_not in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdfind_if-stdfind_if_not-in-c/)
+* [std::sort - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/sort)
+	* Sorts the elements in the range \[first, last) in non-descending order. The order of equal elements is not guaranteed to be preserved.
 
 #### Iterator library
 
