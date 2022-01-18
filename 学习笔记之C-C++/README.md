@@ -597,6 +597,45 @@ int main() {
   * std::unique_ptr
   * std::weak_ptr
 
+#### Date and Time
+
+* [C++ Date and Time](https://www.tutorialspoint.com/cplusplus/cpp_date_time.htm)
+* [Date and time utilities - cppreference.com](https://en.cppreference.com/w/cpp/chrono)
+	* C++ includes support for two types of time manipulation:
+		* The chrono library, a flexible collection of types that track time with varying degrees of precision (e.g. std::chrono::time_point).
+		* C-style date and time library (e.g. std::time)
+	* [\<chrono> - C++ Reference](https://www.cplusplus.com/reference/chrono/)
+		* [std::chrono::time_point - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point)
+			* Class template std::chrono::time_point represents a point in time. It is implemented as if it stores a value of type Duration indicating the time interval from the start of the Clock's epoch.
+			* [operator==,!=,<,<=,>,>=,<=>(std::chrono::time_point) - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point/operator_cmp)
+				* Compares two time points. The comparison is done by comparing the results time_since_epoch() for the time points.
+		* [std::chrono::duration - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration)
+			* Class template std::chrono::duration represents a time interval.
+			* [std::chrono::duration<Rep,Period>::count - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration/count)
+				* Returns the number of ticks for this duration.
+			* [std::chrono::duration_cast - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration/duration_cast)
+				* Converts a std::chrono::duration to a duration of different type ToDuration.
+		* [std::chrono::system_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock) 
+			* Class std::chrono::system_clock represents the system-wide real time wall clock.
+			* It may not be monotonic: on most systems, the system time can be adjusted at any moment. It is the only C++ clock that has the ability to map its time points to C-style time.
+			* std::chrono::system_clock meets the requirements of TrivialClock.
+		* []() 
+		* []() 
+		* [std::chrono::steady_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/steady_clock) 
+			* Class std::chrono::steady_clock represents a monotonic clock. The time points of this clock cannot decrease as physical time moves forward and the time between ticks of this clock is constant. This clock is not related to wall clock time (for example, it can be time since last reboot), and is most suitable for measuring intervals.
+			* std::chrono::steady_clock meets the requirements of TrivialClock.
+		* []() 
+		* [std::chrono::high_resolution_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/high_resolution_clock) 
+			* Class std::chrono::high_resolution_clock represents the clock with the smallest tick period provided by the implementation. It may be an alias of std::chrono::system_clock or std::chrono::steady_clock, or a third, independent clock.
+			* std::chrono::high_resolution_clock meets the requirements of TrivialClock.
+		* []() 
+		* []() 
+		* []() 
+		* []() 
+		* []() 
+		* []() 
+		* [Chrono in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/chrono-in-c/)
+
 #### Basic Input/Output
 
 * [【ZZ】cin、cin.get()、cin.getline()、getline()、gets()等函数的用法 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2011/04/21/2024345.html)
@@ -1513,13 +1552,6 @@ int main() {
  
 #### Utility library
 
-* [\<chrono> - C++ Reference](https://www.cplusplus.com/reference/chrono/)
-  * [Date and time utilities - cppreference.com](https://en.cppreference.com/w/cpp/chrono)
-    * C++ includes support for two types of time manipulation:
-      * The chrono library, a flexible collection of types that track time with varying degrees of precision (e.g. std::chrono::time_point).
-      * C-style date and time library (e.g. std::time)
-  * [\<chrono> | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/chrono?view=msvc-160)
-  * [Chrono in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/chrono-in-c/)
 * [std::function - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/function)
   * [function - C++ Reference](https://www.cplusplus.com/reference/functional/function/)
     * Function wrapper
