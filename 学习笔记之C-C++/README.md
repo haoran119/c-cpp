@@ -604,7 +604,7 @@ int main() {
 	* C++ includes support for two types of time manipulation:
 		* The chrono library, a flexible collection of types that track time with varying degrees of precision (e.g. std::chrono::time_point).
 		* C-style date and time library (e.g. std::time)
-	* [\<chrono> - C++ Reference](https://www.cplusplus.com/reference/chrono/)
+	* [Standard library header \<chrono> - cppreference.com](https://en.cppreference.com/w/cpp/header/chrono)
 		* [std::chrono::time_point - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point)
 			* Class template std::chrono::time_point represents a point in time. It is implemented as if it stores a value of type Duration indicating the time interval from the start of the Clock's epoch.
 			* [operator==,!=,<,<=,>,>=,<=>(std::chrono::time_point) - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point/operator_cmp)
@@ -619,17 +619,23 @@ int main() {
 			* Class std::chrono::system_clock represents the system-wide real time wall clock.
 			* It may not be monotonic: on most systems, the system time can be adjusted at any moment. It is the only C++ clock that has the ability to map its time points to C-style time.
 			* std::chrono::system_clock meets the requirements of TrivialClock.
-		* []() 
-		* []() 
+			* [std::chrono::system_clock::now - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/now)
+				* Returns a time point representing the current point in time.
+			* [std::chrono::system_clock::to_time_t - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/to_time_t)
+				* Converts t to a std::time_t type.
+				* If std::time_t has lower precision, it is implementation-defined whether the value is rounded or truncated.
+			* [std::chrono::system_clock::from_time_t - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/from_time_t) 
+				* Converts t to a time point type, using the coarser precision of the two types.
+				* If time_point has lower precision, it is implementation defined whether the value is rounded or truncated.
+			* [How to get current time and date in C++? - Stack Overflow](https://stackoverflow.com/questions/997946/how-to-get-current-time-and-date-in-c) 
+				* In C++ 11 you can use std::chrono::system_clock::now()
 		* [std::chrono::steady_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/steady_clock) 
 			* Class std::chrono::steady_clock represents a monotonic clock. The time points of this clock cannot decrease as physical time moves forward and the time between ticks of this clock is constant. This clock is not related to wall clock time (for example, it can be time since last reboot), and is most suitable for measuring intervals.
-			* std::chrono::steady_clock meets the requirements of TrivialClock.
-		* []() 
+			* std::chrono::steady_clock meets the requirements of TrivialClock.		
 		* [std::chrono::high_resolution_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/high_resolution_clock) 
 			* Class std::chrono::high_resolution_clock represents the clock with the smallest tick period provided by the implementation. It may be an alias of std::chrono::system_clock or std::chrono::steady_clock, or a third, independent clock.
-			* std::chrono::high_resolution_clock meets the requirements of TrivialClock.
-		* []() 
-		* []() 
+			* std::chrono::high_resolution_clock meets the requirements of TrivialClock.		
+		* [The Three Clocks - ModernesCpp.com](https://www.modernescpp.com/index.php/the-three-clocks)
 		* []() 
 		* []() 
 		* []() 
