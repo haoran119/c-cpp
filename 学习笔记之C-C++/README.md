@@ -605,16 +605,16 @@ int main() {
 		* The chrono library, a flexible collection of types that track time with varying degrees of precision (e.g. std::chrono::time_point).
 		* C-style date and time library (e.g. std::time)
 	* [Standard library header \<chrono> - cppreference.com](https://en.cppreference.com/w/cpp/header/chrono)
-		* [std::chrono::time_point - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point)
-			* Class template std::chrono::time_point represents a point in time. It is implemented as if it stores a value of type Duration indicating the time interval from the start of the Clock's epoch.
-			* [operator==,!=,<,<=,>,>=,<=>(std::chrono::time_point) - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point/operator_cmp)
-				* Compares two time points. The comparison is done by comparing the results time_since_epoch() for the time points.
 		* [std::chrono::duration - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration)
 			* Class template std::chrono::duration represents a time interval.
 			* [std::chrono::duration<Rep,Period>::count - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration/count)
 				* Returns the number of ticks for this duration.
 			* [std::chrono::duration_cast - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration/duration_cast)
 				* Converts a std::chrono::duration to a duration of different type ToDuration.
+		* [std::chrono::time_point - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point)
+			* Class template std::chrono::time_point represents a point in time. It is implemented as if it stores a value of type Duration indicating the time interval from the start of the Clock's epoch.
+			* [operator==,!=,<,<=,>,>=,<=>(std::chrono::time_point) - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point/operator_cmp)
+				* Compares two time points. The comparison is done by comparing the results time_since_epoch() for the time points.
 		* [std::chrono::system_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock) 
 			* Class std::chrono::system_clock represents the system-wide real time wall clock.
 			* It may not be monotonic: on most systems, the system time can be adjusted at any moment. It is the only C++ clock that has the ability to map its time points to C-style time.
