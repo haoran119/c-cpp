@@ -1078,10 +1078,9 @@ int main() {
     * （3）对于C++来说，由于各编译器的差异，大量依赖模板元编程（特别是最新形式的）的代码可能会有移植性的问题。
     * 所以，对于模板元编程，我们需要扬其长避其短，合理使用模板元编程。
 
-##### Function Template
-
 ##### Class Template
 
+* [Class template - cppreference.com](https://en.cppreference.com/w/cpp/language/class_template)
 * [C++ Class Template Specialization | HackerRank](https://www.hackerrank.com/challenges/cpp-class-template-specialization/problem) 
 ```c++
 #include <iostream>
@@ -1119,6 +1118,56 @@ int main()
     }
 	
 	return 0;
+}
+```
+
+##### Function Template
+
+* [Function template - cppreference.com](https://en.cppreference.com/w/cpp/language/function_template)
+
+##### [Parameter pack(since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/parameter_pack)
+
+* [C++ Variadics | HackerRank](https://www.hackerrank.com/challenges/cpp-variadics/problem)
+```c++
+#include <iostream>
+using namespace std;
+
+// Enter your code for reversed_binary_value<bool...>()
+template <bool a> int reversed_binary_value() { return a; }
+
+template <bool a, bool b, bool... d> int reversed_binary_value() {
+  return (reversed_binary_value<b, d...>() << 1) + a;
+}
+
+
+template <int n, bool...digits>
+struct CheckValues {
+  	static void check(int x, int y)
+  	{
+    	CheckValues<n-1, 0, digits...>::check(x, y);
+    	CheckValues<n-1, 1, digits...>::check(x, y);
+  	}
+};
+
+template <bool...digits>
+struct CheckValues<0, digits...> {
+  	static void check(int x, int y)
+  	{
+    	int z = reversed_binary_value<digits...>();
+    	std::cout << (z+64*y==x);
+  	}
+};
+
+int main()
+{
+  	int t; std::cin >> t;
+
+  	for (int i=0; i!=t; ++i) {
+		int x, y;
+    	cin >> x >> y;
+    	CheckValues<6>::check(x, y);
+    	cout << "\n";
+  	}
 }
 ```
 
