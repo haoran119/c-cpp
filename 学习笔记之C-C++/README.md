@@ -75,7 +75,7 @@
   * [CPL: C-style programming](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-cpl)
   * [SF: Source files](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-source)
   * [SL: The Standard Library](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-stdlib)
-  * Supporting sections:
+	* Supporting sections:
 		* A: Architectural ideas
 		* NR: Non-Rules and myths
 		* RF: References
@@ -89,7 +89,7 @@
 		* Appendix D: Supporting tools
 		* Glossary
 		* To-do: Unclassified proto-rules
-  * You can sample rules for specific language features:
+	* You can sample rules for specific language features:
 		* assignment: regular types – prefer initialization – copy – move – other operations – default
 		* class: data – invariant – members – helpers – concrete types – ctors, =, and dtors – hierarchy – operators
 		* concept: rules – in generic programming – template arguments – semantics
