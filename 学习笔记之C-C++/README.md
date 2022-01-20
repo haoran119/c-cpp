@@ -75,6 +75,40 @@
   * [CPL: C-style programming](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-cpl)
   * [SF: Source files](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-source)
   * [SL: The Standard Library](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-stdlib)
+	* Supporting sections:
+		* A: Architectural ideas
+		* NR: Non-Rules and myths
+		* RF: References
+		* Pro: Profiles
+		* GSL: Guidelines support library
+		* NL: Naming and layout rules
+		* FAQ: Answers to frequently asked questions
+		* Appendix A: Libraries
+		* Appendix B: Modernizing code
+		* Appendix C: Discussion
+		* Appendix D: Supporting tools
+		* Glossary
+		* To-do: Unclassified proto-rules
+	* You can sample rules for specific language features:
+		* assignment: regular types – prefer initialization – copy – move – other operations – default
+		* class: data – invariant – members – helpers – concrete types – ctors, =, and dtors – hierarchy – operators
+		* concept: rules – in generic programming – template arguments – semantics
+		* constructor: invariant – establish invariant – throw – default – not needed – explicit – delegating – virtual
+		* derived class: when to use – as interface – destructors – copy – getters and setters – multiple inheritance – overloading – slicing – dynamic_cast
+		* destructor: and constructors – when needed? – must not fail
+		* exception: errors – throw – for errors only – noexcept – minimize try – what if no exceptions?
+		* for: range-for and for – for and while – for-initializer – empty body – loop variable – loop variable type ???
+		* function: naming – single operation – no throw – arguments – argument passing – multiple return values – pointers – lambdas
+		* inline: small functions – in headers
+		* initialization: always – prefer {} – lambdas – in-class initializers – class members – factory functions
+		* lambda expression: when to use
+		* operator: conventional – avoid conversion operators – and lambdas
+		* public, private, and protected: information hiding – consistency – protected
+		* static_assert: compile-time checking – and concepts
+		* struct: for organizing data – use if no invariant – no private members
+		* template: abstraction – containers – concepts
+		* unsigned: and signed – bit manipulation
+		* virtual: interfaces – not virtual – destructor – never fail
 
 ### Effective C++
 * [学习笔记之Effective C++ 2nd Edition - 浩然119 - 博客园 (cnblogs.com)](https://www.cnblogs.com/pegasus923/archive/2011/04/24/1930631.html)
