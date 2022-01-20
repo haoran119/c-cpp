@@ -1125,8 +1125,9 @@ int main()
 
 * [Function template - cppreference.com](https://en.cppreference.com/w/cpp/language/function_template)
 
-##### [Parameter pack(since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/parameter_pack)
+##### Parameter pack
 
+* [Parameter pack(since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/parameter_pack)
 * [C++ Variadics | HackerRank](https://www.hackerrank.com/challenges/cpp-variadics/problem)
 ```c++
 #include <iostream>
