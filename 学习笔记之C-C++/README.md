@@ -849,10 +849,13 @@ int main(int argc, char *argv[]) {
 
 ### Object Oriented Programming
 
+* [Initialization - cppreference.com](https://en.cppreference.com/w/cpp/language/initialization)
 * [Copy constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/copy_constructor)
 	* A copy constructor of class T is a non-template constructor whose first parameter is T&‍, const T&‍, volatile T&‍, or const volatile T&‍, and either there are no other parameters, or the rest of the parameters all have default values.
 * [Move constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/move_constructor)
 	* A move constructor of class T is a non-template constructor whose first parameter is T&&, const T&&, volatile T&&, or const volatile T&&, and either there are no other parameters, or the rest of the parameters all have default values.
+	* [std::exchange - cppreference.com](https://en.cppreference.com/w/cpp/utility/exchange)
+		* Replaces the value of obj with new_value and returns the old value of obj.
 * [Abstract Classes - Polymorphism | HackerRank](https://www.hackerrank.com/challenges/abstract-classes-polymorphism/problem)
   * [LRU Cache Implementation - GeeksforGeeks](https://www.geeksforgeeks.org/lru-cache-implementation/)
   * [list - C++ Reference](http://www.cplusplus.com/reference/list/list/?kw=list)
