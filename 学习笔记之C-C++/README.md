@@ -520,6 +520,10 @@ int main() {
 
 #### [Strings](https://en.cppreference.com/w/cpp/string)
 
+* The C++ strings library includes support for three general types of strings:
+	* std::basic_string - a templated class designed to manipulate strings of any character type.
+	* std::basic_string_view (C++17) - a lightweight non-owning read-only view into a subsequence of a string.
+	* Null-terminated strings - arrays of characters terminated by a special null character.
 * [basic_string - C++ Reference](https://www.cplusplus.com/reference/string/basic_string/)
 	* Generic string class
 	* The basic_string is the generalization of class string for any character type (see string for a description).
@@ -547,10 +551,10 @@ int main() {
 			* Notice that unlike member find_first_of, whenever more than one character is being searched for, it is not enough that just one of these characters match, but the entire sequence must match.
 		* [std::basic_string<CharT,Traits,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find)
 	* [std::basic_string<CharT,Traits,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/erase)
-	* Removes specified characters from the string.
-		1) Removes min(count, size() - index) characters starting at index.
-		2) Removes the character at position.
-		3) Removes the characters in the range \[first, last).
+		* Removes specified characters from the string.
+			1) Removes min(count, size() - index) characters starting at index.
+			2) Removes the character at position.
+			3) Removes the characters in the range \[first, last).
 	* [std::basic_string<CharT,Traits,Allocator>::substr - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/substr)
 		* Returns a substring [pos, pos+count). If the requested substring extends past the end of the string, i.e. the count is greater than size() - pos (e.g. if count == npos), the returned substring is [pos, size()).
 	* [std::to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
