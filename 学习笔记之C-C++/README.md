@@ -518,14 +518,14 @@ int main() {
   * Be-aware of capturing local variables by Reference in Lambda
 * [c++ - an enclosing-function local variable cannot be referenced in a lambda body unless if it is in capture list - Stack Overflow](https://stackoverflow.com/questions/26903602/an-enclosing-function-local-variable-cannot-be-referenced-in-a-lambda-body-unles)
 
-#### Strings
+#### [Strings](https://en.cppreference.com/w/cpp/string)
 
 * [basic_string - C++ Reference](https://www.cplusplus.com/reference/string/basic_string/)
 	* Generic string class
 	* The basic_string is the generalization of class string for any character type (see string for a description).
 	* [std::basic_string - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string) 
 		* The class template basic_string stores and manipulates sequences of char-like objects, which are non-array objects of trivial standard-layout type. The class is dependent neither on the character type nor on the nature of operations on that type. The definitions of the operations are supplied via the Traits template parameter - a specialization of std::char_traits or a compatible traits class. Traits::char_type and CharT must name the same type; otherwise the program is ill-formed.
-		* The elements of a basic_string are stored contiguously, that is, for a basic_string s, &*(s.begin() + n) == &*s.begin() + n for any n in [0, s.size()), or, equivalently, a pointer to s[0] can be passed to functions that expect a pointer to the first element of a null-terminated (since C++11)CharT[] array.
+		* The elements of a basic_string are stored contiguously, that is, for a basic_string s, &*(s.begin() + n) == &*s.begin() + n for any n in \[0, s.size()), or, equivalently, a pointer to s\[0] can be passed to functions that expect a pointer to the first element of a null-terminated (since C++11)CharT\[] array.
 		* std::basic_string satisfies the requirements of AllocatorAwareContainer, SequenceContainer and ContiguousContainer (since C++17)
 	* [std::basic_string_view - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string_view)
 		* The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
@@ -546,11 +546,21 @@ int main() {
 			* When pos is specified, the search only includes characters at or after position pos, ignoring any possible occurrences that include characters before pos.
 			* Notice that unlike member find_first_of, whenever more than one character is being searched for, it is not enough that just one of these characters match, but the entire sequence must match.
 		* [std::basic_string<CharT,Traits,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find)
+	* [std::basic_string<CharT,Traits,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/erase)
+	* Removes specified characters from the string.
+		1) Removes min(count, size() - index) characters starting at index.
+		2) Removes the character at position.
+		3) Removes the characters in the range \[first, last).
 	* [std::basic_string<CharT,Traits,Allocator>::substr - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/substr)
 		* Returns a substring [pos, pos+count). If the requested substring extends past the end of the string, i.e. the count is greater than size() - pos (e.g. if count == npos), the returned substring is [pos, size()).
 	* [std::to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
 		* Convert numerical value to string
 			* Returns a string with the representation of val.
+* [std::isspace - cppreference.com](https://en.cppreference.com/w/cpp/string/byte/isspace)
+	* Defined in header \<cctype>
+	* int isspace( int ch );
+	* [c++ - std::remove_if and std::isspace - compile-time error - Stack Overflow](https://stackoverflow.com/questions/21578544/stdremove-if-and-stdisspace-compile-time-error)
+		* There is another overload of std::isspace, so you need to specify which one to use. An easy way is to use a lambda (or write your own one-line function if you don't have C++11 support)
 * [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
   * Output stream class to operate on strings.
   * Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
