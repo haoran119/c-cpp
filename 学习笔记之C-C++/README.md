@@ -876,6 +876,11 @@ int main(int argc, char *argv[]) {
 		* A move constructor of class T is a non-template constructor whose first parameter is T&&, const T&&, volatile T&&, or const volatile T&&, and either there are no other parameters, or the rest of the parameters all have default values.
 		* [std::exchange - cppreference.com](https://en.cppreference.com/w/cpp/utility/exchange)
 			* Replaces the value of obj with new_value and returns the old value of obj.
+	* [operator overloading - cppreference.com](https://en.cppreference.com/w/cpp/language/operators#Assignment_operator)
+	* [Copy assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/copy_assignment)
+		* A copy assignment operator of class T is a non-template non-static member function with the name operator= that takes exactly one parameter of type T, T&, const T&, volatile T&, or const volatile T&. For a type to be CopyAssignable, it must have a public copy assignment operator.
+	* [Move assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/move_assignment)
+		* A move assignment operator of class T is a non-template non-static member function with the name operator= that takes exactly one parameter of type T&&, const T&&, volatile T&&, or const volatile T&&.
 * [Abstract Classes - Polymorphism | HackerRank](https://www.hackerrank.com/challenges/abstract-classes-polymorphism/problem)
   * [LRU Cache Implementation - GeeksforGeeks](https://www.geeksforgeeks.org/lru-cache-implementation/)
   * [list - C++ Reference](http://www.cplusplus.com/reference/list/list/?kw=list)
