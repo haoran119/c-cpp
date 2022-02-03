@@ -495,6 +495,15 @@ int main() {
 #### Functions
 
 * [Functions - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/functions/)
+* [std::function - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/function)
+  * [function - C++ Reference](https://www.cplusplus.com/reference/functional/function/)
+    * Function wrapper
+      * Class that can wrap any kind of callable element (such as functions and function objects) into a copyable object, and whose type depends solely on its call signature (and not on the callable element type itself).
+      * An object of a function class instantiation can wrap any of the following kinds of callable objects: a function, a function pointer, a pointer to member, or any kind of function object (i.e., an object whose class defines operator(), including closures).
+      * A decay copy of the wrapped callable object is stored internally by the object, which becomes the function's target. The specific type of this target callable object is not needed in order to instantiate the function wrapper class; only its call signature.
+      * The function object can be copied and moved around, and can be used to directly invoke the callable object with the specified call signature (see member operator()).
+      * function objects can also be in a state with no target callable object. In this case they are known as empty functions, and calling them throws a bad_function_call exception.
+  * [C++ Library - \<functional>](https://www.tutorialspoint.com/cpp_standard_library/functional.htm)
 * [进入编译器后，一个函数经历了什么？](https://mp.weixin.qq.com/s/kYilpl4K_XpVDF3gaKoRAQ)
 * [C/C++ 中的 argc，argv 到底是什么？](https://mp.weixin.qq.com/s/Mik2n9oLP-PuFNU3lP48Zw)
 * [exit(0) vs exit(1) in C/C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/exit0-vs-exit1-in-c-c-with-examples/)
@@ -1687,17 +1696,11 @@ int main() {
 * [起底 C++ Range 令人惊讶的局限性！](https://mp.weixin.qq.com/s/iB70FXO-D7C-72N4l9KnzA)
   * https://www.fluentcpp.com/2019/09/13/the-surprising-limitations-of-c-ranges-beyond-trivial-use-cases/
  
-#### Utility library
+#### [Utility library](https://en.cppreference.com/w/cpp/utility)
 
-* [std::function - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/function)
-  * [function - C++ Reference](https://www.cplusplus.com/reference/functional/function/)
-    * Function wrapper
-      * Class that can wrap any kind of callable element (such as functions and function objects) into a copyable object, and whose type depends solely on its call signature (and not on the callable element type itself).
-      * An object of a function class instantiation can wrap any of the following kinds of callable objects: a function, a function pointer, a pointer to member, or any kind of function object (i.e., an object whose class defines operator(), including closures).
-      * A decay copy of the wrapped callable object is stored internally by the object, which becomes the function's target. The specific type of this target callable object is not needed in order to instantiate the function wrapper class; only its call signature.
-      * The function object can be copied and moved around, and can be used to directly invoke the callable object with the specified call signature (see member operator()).
-      * function objects can also be in a state with no target callable object. In this case they are known as empty functions, and calling them throws a bad_function_call exception.
-  * [C++ Library - \<functional>](https://www.tutorialspoint.com/cpp_standard_library/functional.htm)
+* [Program support utilities - cppreference.com](https://en.cppreference.com/w/cpp/utility/program)
+	* [std::abort - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/abort)
+		* Causes abnormal program termination unless SIGABRT is being caught by a signal handler passed to std::signal and the handler does not return.
 * [is_same - C++ Reference](https://www.cplusplus.com/reference/type_traits/is_same/)
   * template \<class T, class U> struct is_same;
   * Trait class that identifies whether T is the same type as U, including having the same const and/or volatile qualification, if any.
