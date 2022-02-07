@@ -1991,6 +1991,10 @@ int main() {
 
 ### ERROR FIX
 
+* How to fix "Compiler error C2653: not a class or namespace name" ?
+	* Fix circular dependency in header files. Need to look into the included header files as well.
+	* [c++ - Compiler error C2653: not a class or namespace name - Stack Overflow](https://stackoverflow.com/questions/15740952/compiler-error-c2653-not-a-class-or-namespace-name)
+	* [c# - What is a circular dependency and how can I solve it? - Stack Overflow](https://stackoverflow.com/questions/38042130/what-is-a-circular-dependency-and-how-can-i-solve-it)
 * How to fix "LNK1104: cannot open file 'libboost_log-vc142-mt-x32-1_72.lib'" when building project in MSVS ?
   * check the path, e.g. "BOOST_ROOT", in system enviroment variable to see if "\\" is appended at the end, e.g. C:\Program Files\boost\boost_1_72_0\
 * How to fix "error LNK2019: unresolved external symbol "char * __stdcall _com_util::ConvertBSTRToString(wchar_t *)" (?ConvertBSTRToString@_com_util@@YGPADPA_W@Z) referenced in function "public: char const * __thiscall _bstr_t::Data_t::GetString(void)const " (?GetString@Data_t@_bstr_t@@QBEPBDXZ)" when #include \<comutil.h>?
