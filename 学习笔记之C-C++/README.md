@@ -1373,17 +1373,6 @@ int main(){
     * When a lock_guard object is created, it attempts to take ownership of the mutex it is given. When control leaves the scope in which the lock_guard object was created, the lock_guard is destructed and the mutex is released.
     * The lock_guard class is non-copyable.
     * [std::lock_guard\<Mutex>::lock_guard - cppreference.com](https://en.cppreference.com/w/cpp/thread/lock_guard/lock_guard)
-  * [RAII - cppreference.com](https://en.cppreference.com/w/cpp/language/raii)
-    * Resource Acquisition Is Initialization or RAII, is a C++ programming technique[1][2] which binds the life cycle of a resource that must be acquired before use (allocated heap memory, thread of execution, open socket, open file, locked mutex, disk space, database connection—anything that exists in limited supply) to the lifetime of an object.
-    * RAII can be summarized as follows:
-      * encapsulate each resource into a class, where
-        * the constructor acquires the resource and establishes all class invariants or throws an exception if that cannot be done,
-        * the destructor releases the resource and never throws exceptions;
-      * always use the resource via an instance of a RAII-class that either
-        * has automatic storage duration or temporary lifetime itself, or
-        * has lifetime that is bounded by the lifetime of an automatic or temporary object
-    * Move semantics make it possible to safely transfer resource ownership between objects, across scopes, and in and out of threads, while maintaining resource safety.
-    * Classes with open()/close(), lock()/unlock(), or init()/copyFrom()/destroy() member functions are typical examples of non-RAII classes
 * [用三个线程按顺序循环打印ABC三个字母 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/8575543.html)
 * [Sleep v.s. sleep - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/5584088.html)
 * [Multithreading in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/multithreading-in-cpp/)
