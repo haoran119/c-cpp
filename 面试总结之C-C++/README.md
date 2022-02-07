@@ -724,6 +724,12 @@ int main()
 		* however, this makes the class prone to slicing, which is why polymorphic classes often define copy as deleted (see [C.67: A polymorphic class should suppress copying](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c67-a-polymorphic-class-should-suppress-public-copymove) in C++ Core Guidelines), which leads to the following generic wording for the Rule of Five:
 		* [C.21: If you define or =delete any default operation, define or =delete them all](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c21-if-you-define-or-delete-any-copy-move-or-destructor-function-define-or-delete-them-all)
 	* [Rule of three (C++ programming) - Wikipedia](https://en.wikipedia.org/wiki/Rule_of_three_(C%2B%2B_programming))
+* [Zero-overhead principle - cppreference.com](https://en.cppreference.com/w/cpp/language/Zero-overhead_principle)
+	* The zero-overhead principle is a C++ design principle that states:
+		* You don't pay for what you don't use.
+		* What you do use is just as efficient as what you could reasonably write by hand.
+	* In general, this means that no feature should be added to C++ that would impose any overhead, whether in time or space, greater than a programmer would introduce without using the feature.
+	* The only two features in the language that do not follow the zero-overhead principle are [runtime type identification](https://en.cppreference.com/w/cpp/language/typeid) and [exceptions](https://en.cppreference.com/w/cpp/language/exceptions), and are why most compilers include a switch to turn them off.
 
 ## CODE
 
