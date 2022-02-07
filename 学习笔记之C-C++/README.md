@@ -1994,6 +1994,8 @@ int main() {
 * How to fix "Compiler error C2653: not a class or namespace name" ?
 	* Fix circular dependency in header files. Need to look into the included header files as well.
 	* [c++ - Compiler error C2653: not a class or namespace name - Stack Overflow](https://stackoverflow.com/questions/15740952/compiler-error-c2653-not-a-class-or-namespace-name)
+		* You have a circular dependency in your headers. BaseEntity.h includes Input.h, which includes ScreenSystem.h, which includes GameScreen.h, which in turn re-includes BaseEntity.h. This leads to class names appearing before they are declared, causing compilation failure.
+		* To avoid this, do not include headers unnecessarily. 
 	* [c# - What is a circular dependency and how can I solve it? - Stack Overflow](https://stackoverflow.com/questions/38042130/what-is-a-circular-dependency-and-how-can-i-solve-it)
 * How to fix "LNK1104: cannot open file 'libboost_log-vc142-mt-x32-1_72.lib'" when building project in MSVS ?
   * check the path, e.g. "BOOST_ROOT", in system enviroment variable to see if "\\" is appended at the end, e.g. C:\Program Files\boost\boost_1_72_0\
