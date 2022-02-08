@@ -350,7 +350,7 @@
 * 菱形继承
   * The "diamond problem" (sometimes referred to as the "Deadly Diamond of Death") is an ambiguity that arises when two classes B and C inherit from A, and class D inherits from both B and C. If there is a method in A that B and C have overridden, and D does not override it, then which version of the method does D inherit: that of B, or that of C?
   * [关于C++中菱形继承的解释和处理](https://mp.weixin.qq.com/s/OBSTK3kvjvqEpbmj8vXzpQ)
-		* 派生类继承父类，同时也会继承父类中的所有成员副本，但如果在继承时一个基类同时被两个子类继承，然后一个新类又分别由上面的两个子类派生出来。这样从某种程度来说就形成了C++中的菱形继承，也可以叫做钻石继承
+  	* 派生类继承父类，同时也会继承父类中的所有成员副本，但如果在继承时一个基类同时被两个子类继承，然后一个新类又分别由上面的两个子类派生出来。这样从某种程度来说就形成了C++中的菱形继承，也可以叫做钻石继承
 ```c++
 #include <iostream>
 using namespace std;
