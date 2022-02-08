@@ -1817,6 +1817,8 @@ int main() {
     * 右值引用和移动语义
     * 智能指针
     * C++11多线程编程：thread库及其相配套的同步原语mutex, lock_guard, condition_variable, 以及异步std::furture
+* [C++ 中的各种特性](https://mp.weixin.qq.com/s?__biz=MzA4MjI3NzQ1Nw==&mid=2247502245&idx=1&sn=9e472ebac369ffc5219ebd9e5cf67b9f&chksm=9f8aac9ba8fd258db6d136449963bbe2669fb65183a58822824314995faad442f5e5211444cc&scene=178&cur_album_id=1511180677537464321#rd)
+	* https://blog.csdn.net/a15920804211/article/details/90691525
 * [解读C++即将迎来的重大更新（一）：C++20的四大新特性](https://mp.weixin.qq.com/s/QpqvZ3a7nFdHGjIBiKX67g)
   * https://www.modernescpp.com/index.php/thebigfour
 
