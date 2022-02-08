@@ -349,6 +349,8 @@
   * 实际上，vbptr 指的是虚基类表指针（virtual base table pointer），该指针指向了一个虚基类表（virtual table），虚表中记录了虚基类与本类的偏移地址；通过偏移地址，这样就找到了虚基类成员，而虚继承也不用像普通多继承那样维持着公共基类（虚基类）的两份同样的拷贝，节省了存储空间。
 * 菱形继承
   * The "diamond problem" (sometimes referred to as the "Deadly Diamond of Death") is an ambiguity that arises when two classes B and C inherit from A, and class D inherits from both B and C. If there is a method in A that B and C have overridden, and D does not override it, then which version of the method does D inherit: that of B, or that of C?
+  * [关于C++中菱形继承的解释和处理](https://mp.weixin.qq.com/s/OBSTK3kvjvqEpbmj8vXzpQ)
+		* 派生类继承父类，同时也会继承父类中的所有成员副本，但如果在继承时一个基类同时被两个子类继承，然后一个新类又分别由上面的两个子类派生出来。这样从某种程度来说就形成了C++中的菱形继承，也可以叫做钻石继承
 ```c++
 #include <iostream>
 using namespace std;
