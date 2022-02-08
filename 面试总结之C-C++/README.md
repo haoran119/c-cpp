@@ -127,10 +127,15 @@
   * [你们要的C++面试题答案来了--基础篇](https://mp.weixin.qq.com/s/YRo5Lm9pbbZnjY1DQfW6yw)
 * [2021 年 C++ 岗就业如何？附学习路线图 (qq.com)](https://mp.weixin.qq.com/s/g6dHxYN7jhw_bLXqnFdEyA)
 * [C++ 八股文（一）](https://mp.weixin.qq.com/s/qVSdP0hXbC7le5DC3vJHKw)
+* [C/C++ 八股文（二）](https://mp.weixin.qq.com/s?__biz=MzA4MjI3NzQ1Nw==&mid=2247497197&idx=1&sn=eda5b49d1abaa48cdfa948744efba95a&chksm=9f8a90d3a8fd19c51ad9071de207ade8929d45071c7b9191acfea3d65cd3ff01b009aec303dd&scene=178&cur_album_id=1511180677537464321#rd)
 * [C++来了，详细知识点思维导图！](https://mp.weixin.qq.com/s/0x_mWC7M0WhqJ03y1w6w2Q)
 * [腾讯C++后台开发面试笔试知识点参考笔记](https://mp.weixin.qq.com/s/kdZVU4W7mEVGQKQgP64elw)
 * [腾讯 C++ 笔试/面试题及答案](https://mp.weixin.qq.com/s/lX9mmmRecu2gw84xkInsww)
 * [面试必备 | 常见C++笔试面试题整理](https://mp.weixin.qq.com/s/tpQTBlwAJTqxMe6krw9C_Q)
+* [C/C++ 面试知识大集合](https://mp.weixin.qq.com/s?__biz=MzA4MjI3NzQ1Nw==&mid=2247500737&idx=1&sn=0c74108ae764d4c246eaea7c59736a07&chksm=9f8aa6ffa8fd2fe9dc4f4a4c371a615e710a5560bc38c3e7cd1487e0d27567cc3f7177ce0de2&scene=178&cur_album_id=1511180677537464321#rd)
+	* https://github.com/huihut/interview#effective
+* [重磅干货 | 五万字长文总结 C/C++ 知识（上）](https://mp.weixin.qq.com/s?__biz=MzA4MjI3NzQ1Nw==&mid=2247492098&idx=1&sn=e250dd4483b7d784ca91975b93fb25f3&chksm=9f8a873ca8fd0e2a53cc6b3f90f81198af01d4b8481b449f36387b7e798bef75e22d23608dce&scene=178&cur_album_id=1511180677537464321#rd)
+* [重磅干货 | 五万字长文总结 C/C++ 知识（下）](https://mp.weixin.qq.com/s?__biz=MzA4MjI3NzQ1Nw==&mid=2247492170&idx=1&sn=c03b00547fbaee0da0217d8c4ec9a71d&chksm=9f8a8774a8fd0e62a4382eba643f8f60c6062b29a0f3add36f782e71177120ffac84e3b40337&scene=178&cur_album_id=1511180677537464321#rd)
 * [C/C++ 易错点 56 条，干货收藏！](https://mp.weixin.qq.com/s/gO2fk25_TK4YDcNdcl676g)
 
 ## 编译内存相关
