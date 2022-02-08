@@ -129,6 +129,9 @@
 * [C++ 八股文（一）](https://mp.weixin.qq.com/s/qVSdP0hXbC7le5DC3vJHKw)
 * [C++来了，详细知识点思维导图！](https://mp.weixin.qq.com/s/0x_mWC7M0WhqJ03y1w6w2Q)
 * [腾讯C++后台开发面试笔试知识点参考笔记](https://mp.weixin.qq.com/s/kdZVU4W7mEVGQKQgP64elw)
+* [腾讯 C++ 笔试/面试题及答案](https://mp.weixin.qq.com/s/lX9mmmRecu2gw84xkInsww)
+* [面试必备 | 常见C++笔试面试题整理](https://mp.weixin.qq.com/s/tpQTBlwAJTqxMe6krw9C_Q)
+* [C/C++ 易错点 56 条，干货收藏！](https://mp.weixin.qq.com/s/gO2fk25_TK4YDcNdcl676g)
 
 ## 编译内存相关
 
@@ -738,5 +741,6 @@ int main()
 ## CODE
 
 * [c-cpp/面试总结之C-C++ at main · haoran119/c-cpp](https://github.com/haoran119/c-cpp/tree/main/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93%E4%B9%8BC-C%2B%2B)
+* [C/C++ 10 大常见基础算法](https://mp.weixin.qq.com/s/tGGNGpaRcWwKiNoQyo-TXw)
 * 用C语言，将一个数字乘以7倍的效率最快的方法是什么？ 
   * 先左移三位（*8）然后再减去原值：X << 3 – X
