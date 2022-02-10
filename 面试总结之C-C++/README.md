@@ -693,6 +693,10 @@ int main()
 * [PImpl - cppreference.com](https://en.cppreference.com/w/cpp/language/pimpl)
 	* "Pointer to implementation" or "pImpl" is a C++ programming technique[1] that removes implementation details of a class from its object representation by placing them in a separate class, accessed through an opaque pointer
 	* This technique is used to construct C++ library interfaces with stable ABI and to reduce compile-time dependencies.
+* [Race condition](https://en.wikipedia.org/wiki/Race_condition)
+	* A race condition or race hazard is the condition of an electronics, software, or other system where the system's substantive behavior is dependent on the sequence or timing of other uncontrollable events. It becomes a bug when one or more of the possible behaviors is undesirable.
+	* [multithreading - What is a race condition? - Stack Overflow](https://stackoverflow.com/questions/34510/what-is-a-race-condition)
+	* A race condition occurs when two or more threads can access shared data and they try to change it at the same time. Because the thread scheduling algorithm can swap between threads at any time, you don't know the order in which the threads will attempt to access the shared data. Therefore, the result of the change in data is dependent on the thread scheduling algorithm, i.e. both threads are "racing" to access/change the data.
 * [RAII - cppreference.com](https://en.cppreference.com/w/cpp/language/raii)
 	* Resource Acquisition Is Initialization or RAII, is a C++ programming technique[1][2] which binds the life cycle of a resource that must be acquired before use (allocated heap memory, thread of execution, open socket, open file, locked mutex, disk space, database connection—anything that exists in limited supply) to the lifetime of an object.
 	* RAII can be summarized as follows:
