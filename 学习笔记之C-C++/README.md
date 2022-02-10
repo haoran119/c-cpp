@@ -1488,12 +1488,20 @@ int main() {
   * An array can also be used as a tuple of N elements of the same type.
 * [std::vector - cppreference.com](https://en.cppreference.com/w/cpp/container/vector)
 	* [std::vector<T,Allocator>::emplace_back - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/emplace_back)
+		* Appends a new element to the end of the container. The element is constructed through std::allocator_traits::construct, which typically uses placement-new to construct the element in-place at the location provided by the container. The arguments args... are forwarded to the constructor as std::forward\<Args>(args)....
+		* If the new size() is greater than capacity() then all iterators and references (including the past-the-end iterator) are invalidated. Otherwise only the past-the-end iterator is invalidated.
 	* [vector::emplace_back - C++ Reference](http://www.cplusplus.com/reference/vector/vector/emplace_back/)
 		* Construct and insert element at the end
 			* Inserts a new element at the end of the vector, right after its current last element. This new element is constructed in place using args as the arguments for its constructor.
 			* This effectively increases the container size by one, which causes an automatic reallocation of the allocated storage space if -and only if- the new vector size surpasses the current vector capacity.
 			* The element is constructed in-place by calling allocator_traits::construct with args forwarded.
 			* A similar member function exists, push_back, which either copies or moves an existing object into the container.
+	* [push_back() vs emplace_back() in C++ STL Vectors - GeeksforGeeks](https://www.geeksforgeeks.org/push_back-vs-emplace_back-in-cpp-stl-vectors/)
+		* push_back():
+			* This method is used to insert elements in a vector from the end of the container. As the flexibility in the size of the vector is dynamic, the size of the container also increased by 1 after inserting any new element.
+			* Note: reserve() is used instead of using “vector\<Point> vertices(3)”, as the below syntax sometimes doesn’t work because there is no default constructor defined in the class.
+		* emplace_back():
+			* This method is used instead of creating the object using parameterized constructor and allocating it into a different memory, then passing it to the copy constructor, which will insert it into the vector. This function can directly insert the object without calling the copy constructor.
 	* [ES.23: Prefer the {}-initializer syntax - C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#es23-prefer-the--initializer-syntax)
 		* Exception For containers, there is a tradition for using {...} for a list of elements and (...) for sizes
 	* [2D Vector In C++ With User Defined Size - GeeksforGeeks](https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/)
