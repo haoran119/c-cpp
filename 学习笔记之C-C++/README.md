@@ -1494,6 +1494,8 @@ int main() {
 			* This effectively increases the container size by one, which causes an automatic reallocation of the allocated storage space if -and only if- the new vector size surpasses the current vector capacity.
 			* The element is constructed in-place by calling allocator_traits::construct with args forwarded.
 			* A similar member function exists, push_back, which either copies or moves an existing object into the container.
+	* [ES.23: Prefer the {}-initializer syntax - C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#es23-prefer-the--initializer-syntax)
+		* Exception For containers, there is a tradition for using {...} for a list of elements and (...) for sizes
 	* [2D Vector In C++ With User Defined Size - GeeksforGeeks](https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/)
 * [deque - C++ Reference](http://www.cplusplus.com/reference/deque/deque/)
   * deque (usually pronounced like "deck") is an irregular acronym of double-ended queue. Double-ended queues are sequence containers with dynamic sizes that can be expanded or contracted on both ends (either its front or its back).
