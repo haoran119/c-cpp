@@ -192,9 +192,15 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 #### Data Types
 
+* [Data Type Ranges | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/data-type-ranges?view=msvc-170)
 * [【ZZ】C++11之统一初始化语法 | 桃子的博客志 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/8674208.html)
-* [为什么将 0.1f 改为 0 会使性能降低 10 倍？](https://mp.weixin.qq.com/s/bMacxnC_JBuqFDz8k2fp3w)
-  * http://cenalulu.github.io/linux/about-denormalized-float-number/
+* [Integer literal - cppreference.com](https://en.cppreference.com/w/cpp/language/integer_literal)
+	* Allows values of integer type to be used in expressions directly.
+	* [为什么将 0.1f 改为 0 会使性能降低 10 倍？](https://mp.weixin.qq.com/s/bMacxnC_JBuqFDz8k2fp3w)
+		* http://cenalulu.github.io/linux/about-denormalized-float-number/
+* [std::size_t - cppreference.com](https://en.cppreference.com/w/cpp/types/size_t)
+	* std::size_t is the unsigned integer type of the result of the sizeof operator as well as the sizeof... operator and the alignof operator (since C++11).
+	* The bit width of std::size_t is not less than 16.(since C++11)
 * [Wide character - Wikipedia](https://en.wikipedia.org/wiki/Wide_character)
   * A wide character is a computer character datatype that generally has a size greater than the traditional 8-bit character. The increased datatype size allows for the use of larger coded character sets.
   * Programming specifics
@@ -657,6 +663,14 @@ int main() {
 
 * [std::unique_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr)
 	* std::unique_ptr is a smart pointer that owns and manages another object through a pointer and disposes of that object when the unique_ptr goes out of scope.
+	* [std::unique_ptr<T,Deleter>::unique_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/unique_ptr)
+		* (constructor)
+	* [std::unique_ptr<T,Deleter>::operator*, std::unique_ptr<T,Deleter>::operator-> - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/operator*)
+		* Single-object version, unique_ptr\<T>
+		* dereferences pointer to the managed object	
+	* [std::unique_ptr<T,Deleter>::operator[] - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/operator_at)
+		* Array version, unique_ptr\<T[]>
+		* provides indexed access to the managed array
 	* [std::make_unique, std::make_unique_for_overwrite - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique)
 		* Constructs an object of type T and wraps it in a std::unique_ptr.
 * [一文掌握 C++ 智能指针的使用](https://mp.weixin.qq.com/s/bn7BAzBSxgbrkgRMnuy8-A)
