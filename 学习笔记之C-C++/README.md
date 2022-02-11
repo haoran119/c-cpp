@@ -574,6 +574,8 @@ int main() {
 	* [std::to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
 		* Convert numerical value to string
 			* Returns a string with the representation of val.
+	* [std::literals::string_literals::operator""s - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/operator%22%22s)
+		* Forms a string literal of the desired type.
 * [std::isspace - cppreference.com](https://en.cppreference.com/w/cpp/string/byte/isspace)
 	* Defined in header \<cctype>
 	* int isspace( int ch );
