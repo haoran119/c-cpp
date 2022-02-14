@@ -1530,7 +1530,6 @@ int main()
   * 3. 静态函数
   * 4. C 线程库
     * [C语言线程库的使用](https://mp.weixin.qq.com/s?__biz=MzI3ODQ3OTczMw==&mid=2247491745&idx=1&sn=d995e1617ed6ad3d56de28b5be127e73&scene=21#wechat_redirect)
-* [C/C++ 线程库的详细使用](https://mp.weixin.qq.com/s/2PCUSTXrTGuOVgpNmWdA_Q)
 
 #### Parse command line
 
