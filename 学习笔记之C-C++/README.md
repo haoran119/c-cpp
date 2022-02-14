@@ -1390,6 +1390,7 @@ int main(){
 		* Each instantiation and full specialization of the std::atomic template defines an atomic type. If one thread writes to an atomic object while another thread reads from it, the behavior is well-defined (see memory model for details on data races).
 		* In addition, accesses to atomic objects may establish inter-thread synchronization and order non-atomic memory accesses as specified by std::memory_order.
 		* std::atomic is neither copyable nor movable.
+* [C++ 11 开发中的 Atomic 原子操作](https://mp.weixin.qq.com/s/FSE95BtgA2PT59HCX3EzsQ)
 
 ##### [\<mutex>](https://www.cplusplus.com/reference/mutex/)
 
