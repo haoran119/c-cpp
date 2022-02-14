@@ -1413,7 +1413,7 @@ int main(){
 		* mutex objects provide exclusive ownership and do not support recursivity (i.e., a thread shall not lock a mutex it already owns) -- see recursive_mutex for an alternative class that does.
 		* It is guaranteed to be a standard-layout class.
 
-##### [\<thread>]()
+##### [\<thread>](https://www.cplusplus.com/reference/thread/)
 
 * [std::thread - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread)
 	* The class thread represents a single thread of execution. Threads allow multiple functions to execute concurrently.
