@@ -1730,9 +1730,10 @@ int main() {
  
 #### [Utility library](https://en.cppreference.com/w/cpp/utility)
 
-* [Program support utilities - cppreference.com](https://en.cppreference.com/w/cpp/utility/program)
-	* [std::abort - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/abort)
-		* Causes abnormal program termination unless SIGABRT is being caught by a signal handler passed to std::signal and the handler does not return.
+##### Language support
+
+###### [Type support (basic types, RTTI, type traits) - cppreference.com](https://en.cppreference.com/w/cpp/types)
+
 * [is_same - C++ Reference](https://www.cplusplus.com/reference/type_traits/is_same/)
   * template \<class T, class U> struct is_same;
   * Trait class that identifies whether T is the same type as U, including having the same const and/or volatile qualification, if any.
@@ -1742,8 +1743,27 @@ int main() {
     * If T and U name the same type (taking into account const/volatile qualifications), provides the member constant value equal to true. Otherwise value is false.
     * Commutativity is satisfied, i.e. for any two types T and U, is_same\<T, U>::value == true if and only if is_same\<U, T>::value == true.
     * The behavior of a program that adds specializations for is_same or is_same_v (since C++17) is undefined.
+
+###### [Program support utilities - cppreference.com](https://en.cppreference.com/w/cpp/utility/program)
+
+* [std::abort - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/abort)
+	* Causes abnormal program termination unless SIGABRT is being caught by a signal handler passed to std::signal and the handler does not return.
+
+##### General-purpose utilities
+
+###### Swap and type operations
+
+* Defined in header /<utility>
+* [std::forward - cppreference.com](https://en.cppreference.com/w/cpp/utility/forward)
+	* forwards a function argument (function template)
+	* 1) Forwards lvalues as either lvalues or as rvalues, depending on T
+	* 2) Forwards rvalues as rvalues and prohibits forwarding of rvalues as lvalues
+
+###### Optional, variant and any
+
+* Defined in header \<optional>
 * [std::optional - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional)
-  * Defined in header \<optional>
+	* a wrapper that may or may not hold an object (class template)
   * template\< class T > class optional; (since C++17)
   * The class template std::optional manages an optional contained value, i.e. a value that may or may not be present.
   * A common use case for optional is the return value of a function that may fail. As opposed to other approaches, such as std::pair\<T,bool\>, optional handles expensive-to-construct objects well and is more readable, as the intent is expressed explicitly.
