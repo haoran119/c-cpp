@@ -1382,6 +1382,99 @@ int main(){
 
 #### Multithreading
 
+* [Multithreading in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/multithreading-in-cpp/)
+```c++
+// CPP program to demonstrate multithreading
+// using three different callables.
+#include <iostream>
+#include <thread>
+using namespace std;
+
+// A dummy function
+void foo(int Z)
+{
+	for (int i = 0; i < Z; i++) {
+		cout << "Thread using function"
+			" pointer as callable\n";
+	}
+}
+
+// A callable object
+class thread_obj {
+public:
+	void operator()(int x)
+	{
+		for (int i = 0; i < x; i++)
+			cout << "Thread using function"
+				" object as callable\n";
+	}
+};
+
+int main()
+{
+	cout << "Threads 1 and 2 and 3 "
+		"operating independently" << endl;
+
+	// This thread is launched by using
+	// function pointer as callable
+	thread th1(foo, 3);
+
+	// This thread is launched by using
+	// function object as callable
+	thread th2(thread_obj(), 3);
+
+	// Define a Lambda Expression
+	auto f = [](int x) {
+		for (int i = 0; i < x; i++)
+			cout << "Thread using lambda"
+			" expression as callable\n";
+	};
+
+	// This thread is launched by using
+	// lamda expression as callable
+	thread th3(f, 3);
+
+	// Wait for the threads to finish
+	// Wait for thread t1 to finish
+	th1.join();
+
+	// Wait for thread t2 to finish
+	th2.join();
+
+	// Wait for thread t3 to finish
+	th3.join();
+
+	return 0;
+}
+```
+* [现代 C++ 并发编程基础](https://mp.weixin.qq.com/s/GGIczr97q-RxAfAnQKeDRg)
+  * https://changkun.de/modern-cpp/zh-cn/07-thread/index.html
+  * 并行基础
+  * 互斥量与临界区
+  * 期物
+  * 条件变量
+* [C++并发编程（C++11到C++17）](https://mp.weixin.qq.com/s/sLaJQl4cj_c-M2qy7iX__A)
+  * 为什么要并发编程
+  * 并发与并行
+    * 并发（Concurrent）与并行（Parallel）都是很常见的术语。
+  * 进程与线程
+  * 并发系统的性能
+  * C++与并发编程
+  * 编译器与C++标准
+  * 测试环境
+  * 线程
+  * 管理当前线程
+  * 一次调用
+  * 并发任务
+  * 竞争条件与临界区
+  * 互斥体与锁
+  * 通用锁定算法
+  * 通用互斥管理
+  * 并行算法
+* [异步编程到底在说啥？](https://mp.weixin.qq.com/s/aaCVgXekO6unpFDfKchVlA)
+	* 同步就好比你排队去自助售票机取电影票，你必须排队等待前一个人取完电影票才能到你，你不能在前一个取票的过程中取自己的票，这时我们说取电影票时你和前一个人是同步的。
+	* 而异步就好比去吃大餐，你在座位上看菜单点菜，其它人也可以点菜，你不需要等待其它人吃完饭才能下单，这时我们说你点菜和其它人吃饭是异步的。
+
 ##### [\<atomic>](https://www.cplusplus.com/reference/atomic/atomic/)
 
 * [Atomic operations library - cppreference.com](https://en.cppreference.com/w/cpp/atomic)
@@ -1424,7 +1517,6 @@ int main(){
 
 * [用三个线程按顺序循环打印ABC三个字母 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/8575543.html)
 * [Sleep v.s. sleep - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/5584088.html)
-* [Multithreading in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/multithreading-in-cpp/)
 * [C++ 线程的使用](https://mp.weixin.qq.com/s/tMWxvw4Kmga5ayUfXHaaIw)
   * C++11 之前，C++ 语言没有对并发编程提供语言级别的支持，这使得我们在编写可移植的并发程序时，存在诸多的不便。现在 C++11 中增加了线程以及线程相关的类，很方便地支持了并发编程，使得编写的多线程程序的可移植性得到了很大的提高。
   * C++11 中提供的线程类叫做 std::thread，基于这个类创建一个新的线程非常的简单，只需要提供线程函数或者函数对象即可，并且可以同时指定线程函数的参数。我们首先来了解一下这个类提供的一些常用 API：
@@ -1439,33 +1531,6 @@ int main(){
   * 4. C 线程库
     * [C语言线程库的使用](https://mp.weixin.qq.com/s?__biz=MzI3ODQ3OTczMw==&mid=2247491745&idx=1&sn=d995e1617ed6ad3d56de28b5be127e73&scene=21#wechat_redirect)
 * [C/C++ 线程库的详细使用](https://mp.weixin.qq.com/s/2PCUSTXrTGuOVgpNmWdA_Q)
-* [现代 C++ 并发编程基础](https://mp.weixin.qq.com/s/GGIczr97q-RxAfAnQKeDRg)
-  * https://changkun.de/modern-cpp/zh-cn/07-thread/index.html
-  * 并行基础
-  * 互斥量与临界区
-  * 期物
-  * 条件变量
-* [C++并发编程（C++11到C++17）](https://mp.weixin.qq.com/s/sLaJQl4cj_c-M2qy7iX__A)
-  * 为什么要并发编程
-  * 并发与并行
-    * 并发（Concurrent）与并行（Parallel）都是很常见的术语。
-  * 进程与线程
-  * 并发系统的性能
-  * C++与并发编程
-  * 编译器与C++标准
-  * 测试环境
-  * 线程
-  * 管理当前线程
-  * 一次调用
-  * 并发任务
-  * 竞争条件与临界区
-  * 互斥体与锁
-  * 通用锁定算法
-  * 通用互斥管理
-  * 并行算法
-* [异步编程到底在说啥？](https://mp.weixin.qq.com/s/aaCVgXekO6unpFDfKchVlA)
-	* 同步就好比你排队去自助售票机取电影票，你必须排队等待前一个人取完电影票才能到你，你不能在前一个取票的过程中取自己的票，这时我们说取电影票时你和前一个人是同步的。
-	* 而异步就好比去吃大餐，你在座位上看菜单点菜，其它人也可以点菜，你不需要等待其它人吃完饭才能下单，这时我们说你点菜和其它人吃饭是异步的。
 
 #### Parse command line
 
