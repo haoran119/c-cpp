@@ -1833,7 +1833,7 @@ int main() {
 
 ###### Swap and type operations
 
-* Defined in header /<utility>
+* Defined in header \<utility>
 * [std::forward - cppreference.com](https://en.cppreference.com/w/cpp/utility/forward)
 	* forwards a function argument (function template)
 	* 1) Forwards lvalues as either lvalues or as rvalues, depending on T
@@ -1846,7 +1846,7 @@ int main() {
 	* a wrapper that may or may not hold an object (class template)
   * template\< class T > class optional; (since C++17)
   * The class template std::optional manages an optional contained value, i.e. a value that may or may not be present.
-  * A common use case for optional is the return value of a function that may fail. As opposed to other approaches, such as std::pair\<T,bool\>, optional handles expensive-to-construct objects well and is more readable, as the intent is expressed explicitly.
+  * A common use case for optional is the return value of a function that may fail. As opposed to other approaches, such as std::pair\<T,bool>, optional handles expensive-to-construct objects well and is more readable, as the intent is expressed explicitly.
   * Any instance of optional\<T> at any given point in time either contains a value or does not contain a value.
   * If an optional\<T> contains a value, the value is guaranteed to be allocated as part of the optional object footprint, i.e. no dynamic memory allocation ever takes place. Thus, an optional object models an object, not a pointer, even though operator*() and operator->() are defined.
   * When an object of type optional\<T> is contextually converted to bool, the conversion returns true if the object contains a value and false if it does not contain a value.
@@ -2017,6 +2017,9 @@ int main() {
 
 ### Unit Testing
 
+* [CMake - Wikipedia](https://en.wikipedia.org/wiki/CMake)
+	* [CMake Tutorial — CMake 3.23.0-rc2 Documentation](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)
+	* [Examples | CMake](https://cmake.org/examples/)
 * [c-cpp/学习笔记之Catch2 at main · haoran119/c-cpp](https://github.com/haoran119/c-cpp/tree/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BCatch2)
 * [C++ 单元测试与代码覆盖率](https://mp.weixin.qq.com/s/QV62sN4ILPGk4Ko-a0ZsfA)
   * 本文以C++语言为基础，讲解如何进行单元测试并生成测试报告。
