@@ -1791,6 +1791,7 @@ int main() {
   * [std::find_if , std::find_if_not in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdfind_if-stdfind_if_not-in-c/)
 * [std::sort - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/sort)
 	* Sorts the elements in the range \[first, last) in non-descending order. The order of equal elements is not guaranteed to be preserved.
+	* [std::sort() in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/sort-c-stl/)
 
 #### Iterator library
 
