@@ -601,7 +601,7 @@ int main() {
 		* Forms a string literal of the desired type.
 * [How to split a string in C/C++, Python and Java? - GeeksforGeeks](https://www.geeksforgeeks.org/how-to-split-a-string-in-cc-python-and-java/)
 	* Method 1: Using  stringstream API of C++
-	* Stringstream object can be initialized using a string object, it automatically tokenizes strings on space char. Just like “cin” stream stringstream allows you to read a string as a stream of words.
+		* Stringstream object can be initialized using a string object, it automatically tokenizes strings on space char. Just like “cin” stream stringstream allows you to read a string as a stream of words.
 	```c++
 	#include <bits/stdc++.h>
 	using namespace std;
