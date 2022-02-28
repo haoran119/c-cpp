@@ -599,6 +599,94 @@ int main() {
 			* Returns a string with the representation of val.
 	* [std::literals::string_literals::operator""s - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/operator%22%22s)
 		* Forms a string literal of the desired type.
+* [How to split a string in C/C++, Python and Java? - GeeksforGeeks](https://www.geeksforgeeks.org/how-to-split-a-string-in-cc-python-and-java/)
+	* Method 1: Using  stringstream API of C++
+	* Stringstream object can be initialized using a string object, it automatically tokenizes strings on space char. Just like “cin” stream stringstream allows you to read a string as a stream of words.
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+
+// A quick way to split strings separated via spaces.
+void simple_tokenizer(string s)
+{
+	stringstream ss(s);
+	string word;
+	while (ss >> word) {
+		cout << word << endl;
+	}
+}
+
+int main(int argc, char const* argv[])
+{
+	string a = "How do you do!";
+	// Takes only space separated C++ strings.
+	simple_tokenizer(a);
+	cout << endl;
+	return 0;
+}
+```
+* Method 2: Using C++ find() and substr() APIs.
+	* This method is more robust and can parse a string with any delimiter, not just spaces(though the default behavior is to separate on spaces.) The logic is pretty simple to understand from the code below.
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+
+void tokenize(string s, string del = " ")
+{
+	int start = 0;
+	int end = s.find(del);
+	while (end != -1) {
+		cout << s.substr(start, end - start) << endl;
+		start = end + del.size();
+		end = s.find(del, start);
+	}
+	cout << s.substr(start, end - start);
+}
+int main(int argc, char const* argv[])
+{
+	// Takes C++ string with any separator
+	string a = "Hi$%do$%you$%do$%!";
+	tokenize(a, "$%");
+	cout << endl;
+
+	return 0;
+}
+```
+* Method 3: Using temporary string
+	* If you are given that the length of the delimiter is 1, then you can simply use a temp string to split the string. This will save the function overhead time in the case of method 2.
+```c++
+#include <iostream>
+using namespace std;
+
+void split(string str, char del){
+	// declaring temp string to store the curr "word" upto del
+	string temp = "";
+
+	for(int i=0; i<(int)str.size(); i++){
+		// If cur char is not del, then append it to the cur "word", otherwise
+		// you have completed the word, print it, and start a new word.
+		if(str[i] != del){
+			temp += str[i];
+		}
+		else{
+			cout << temp << " ";
+			temp = "";
+		}
+	}
+	
+	cout << temp;
+}
+
+int main() {
+
+	string str = "geeks_for_geeks"; // string to be split
+	char del = '_'; // delimiter around which string is to be split
+
+	split(str, del);
+	
+	return 0;
+}
+```
 * [std::isspace - cppreference.com](https://en.cppreference.com/w/cpp/string/byte/isspace)
 	* Defined in header \<cctype>
 	* int isspace( int ch );
