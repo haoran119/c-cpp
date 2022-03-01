@@ -1571,6 +1571,20 @@ int main()
 		* Each instantiation and full specialization of the std::atomic template defines an atomic type. If one thread writes to an atomic object while another thread reads from it, the behavior is well-defined (see memory model for details on data races).
 		* In addition, accesses to atomic objects may establish inter-thread synchronization and order non-atomic memory accesses as specified by std::memory_order.
 		* std::atomic is neither copyable nor movable.
+		* [std::atomic\<T>::atomic - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/atomic)
+			* constructs an atomic object
+		* [std::atomic\<T>::compare_exchange_weak, std::atomic\<T>::compare_exchange_strong - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange)
+			* atomically compares the value of the atomic object with non-atomic argument and performs atomic exchange if equal or atomic load if not
+		* [atomic_compare_exchange_strong - C++ Reference](https://www.cplusplus.com/reference/atomic/atomic_compare_exchange_strong/)
+			* Compare and exchange contained value (strong)
+			* Compares the contents of the value contained in obj with the value pointed by expected:
+			* - if true, it replaces the contained value with val.
+			* - if false, it replaces the value pointed by expected with the contained value .
+		* [std::atomic\<T>::load - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/load)
+			* atomically obtains the value of the atomic object
+		* [std::atomic\<T>::store - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/store)
+			* atomically replaces the value of the atomic object with a non-atomic argument
+* [The Atomic Boolean - ModernesCpp.com](https://www.modernescpp.com/index.php/the-atomic-boolean)
 * [C++ 11 开发中的 Atomic 原子操作](https://mp.weixin.qq.com/s/FSE95BtgA2PT59HCX3EzsQ)
 
 ##### [\<mutex>](https://www.cplusplus.com/reference/mutex/)
