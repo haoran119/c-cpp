@@ -1584,17 +1584,27 @@ int main()
 			* atomically obtains the value of the atomic object
 		* [std::atomic\<T>::store - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/store)
 			* atomically replaces the value of the atomic object with a non-atomic argument
+		* [Non-blocking algorithm - Wikipedia](https://en.wikipedia.org/wiki/Non-blocking_algorithm)
+			* In computer science, an algorithm is called non-blocking if failure or suspension of any thread cannot cause failure or suspension of another thread;[1] for some operations, these algorithms provide a useful alternative to traditional blocking implementations. A non-blocking algorithm is lock-free if there is guaranteed system-wide progress, and wait-free if there is also guaranteed per-thread progress. "Non-blocking" was used as a synonym for "lock-free" in the literature until the introduction of obstruction-freedom in 2003.[2]
+		* [Linearizability - Wikipedia](https://en.wikipedia.org/wiki/Linearizability)
+			* In concurrent programming, an operation (or set of operations) is linearizable if it consists of an ordered list of invocation and response events (callbacks), that may be extended by adding response events such that:
+				* The extended list can be re-expressed as a sequential history (is serializable).
+				* That sequential history is a subset of the original unextended list.
+			* Informally, this means that the unmodified list of events is linearizable if and only if its invocations were serializable, but some of the responses of the serial schedule have yet to return.[1]
+			* In a concurrent system, processes can access a shared object at the same time. Because multiple processes are accessing a single object, there may arise a situation in which while one process is accessing the object, another process changes its contents. Making a system linearizable is one solution to this problem. In a linearizable system, although operations overlap on a shared object, each operation appears to take place instantaneously. Linearizability is a strong correctness condition, which constrains what outputs are possible when an object is accessed by multiple processes concurrently. It is a safety property which ensures that operations do not complete in an unexpected or unpredictable manner. If a system is linearizable it allows a programmer to reason about the system.[2]
+		* [Compare-and-swap - Wikipedia](https://en.wikipedia.org/wiki/Compare-and-swap)
+			* In computer science, compare-and-swap (CAS) is an atomic instruction used in multithreading to achieve synchronization. It compares the contents of a memory location with a given value and, only if they are the same, modifies the contents of that memory location to a new given value. This is done as a single atomic operation. The atomicity guarantees that the new value is calculated based on up-to-date information; if the value had been updated by another thread in the meantime, the write would fail. The result of the operation must indicate whether it performed the substitution; this can be done either with a simple boolean response (this variant is often called compare-and-set), or by returning the value read from the memory location (not the value written to it).
 ```c++
 #include <atomic>
 #include <chrono>
 
-mutable std::atomic_bool	_wait{ false };
+mutable std::atomic_bool _wait{ false };
 
 void _setWaitInProgress() const
 {
   auto expected = false;
 	
-	// if _wait is not able to exchange, it will keep looping unless it is released to exchange
+  // if _wait is not able to exchange, it will keep looping unless it is released to exchange
   while (!(_wait.compare_exchange_strong(expected, true))) {
     expected = false;
     std::this_thread::sleep_for(std::chrono::milliseconds(5));
