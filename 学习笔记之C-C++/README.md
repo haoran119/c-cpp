@@ -1584,7 +1584,86 @@ int main()
 			* atomically obtains the value of the atomic object
 		* [std::atomic\<T>::store - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/store)
 			* atomically replaces the value of the atomic object with a non-atomic argument
+```c++
+#include <atomic>
+#include <chrono>
+
+mutable std::atomic_bool	_wait{ false };
+
+void _setWaitInProgress() const
+{
+  auto expected = false;
+	
+	// if _wait is not able to exchange, it will keep looping unless it is released to exchange
+  while (!(_wait.compare_exchange_strong(expected, true))) {
+    expected = false;
+    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+  }
+}
+
+void _setWaitDone() const
+{
+  _wait.store(false);
+}
+
+void TestAtomic()
+{
+  _setWaitInProgress();
+
+  DoSomething();
+
+  _setWaitDone();
+}
+```
 * [The Atomic Boolean - ModernesCpp.com](https://www.modernescpp.com/index.php/the-atomic-boolean)
+```c++
+// atomicCondition.cpp
+
+#include <atomic>
+#include <chrono>
+#include <iostream>
+#include <thread>
+#include <vector>
+
+std::vector<int> mySharedWork;
+std::atomic<bool> dataReady(false);
+
+void waitingForWork(){
+    std::cout << "Waiting " << std::endl;
+    while ( !dataReady.load() ){             // (3)
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    }
+    mySharedWork[1]= 2;                      // (4)
+    std::cout << "Work done " << std::endl;
+}
+
+void setDataReady(){
+    mySharedWork={1,0,3};                    // (1)
+    dataReady= true;                         // (2)
+    std::cout << "Data prepared" << std::endl;
+}
+
+int main(){
+    
+  std::cout << std::endl;
+
+  std::thread t1(waitingForWork);
+  std::thread t2(setDataReady);
+
+  t1.join();
+  t2.join();
+  
+  for (auto v: mySharedWork){
+      std::cout << v << " ";
+  }
+      
+  
+  std::cout << "\n\n";
+  
+}
+```
+![image](https://user-images.githubusercontent.com/34557994/156122924-ede55b2c-d15d-47cc-af2c-0b219f1d3391.png)
+
 * [C++ 11 开发中的 Atomic 原子操作](https://mp.weixin.qq.com/s/FSE95BtgA2PT59HCX3EzsQ)
 
 ##### [\<mutex>](https://www.cplusplus.com/reference/mutex/)
