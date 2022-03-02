@@ -1785,47 +1785,64 @@ int main() {
 
 #### Sequence
 
-* [std::array - cppreference.com](https://en.cppreference.com/w/cpp/container/array)
-  * std::array is a container that encapsulates fixed size arrays.
-  * This container is an aggregate type with the same semantics as a struct holding a C-style array T[N] as its only non-static data member. Unlike a C-style array, it doesn't decay to T* automatically. As an aggregate type, it can be initialized with aggregate-initialization given at most N initializers that are convertible to T: std::array\<int, 3> a = {1,2,3};.
-  * The struct combines the performance and accessibility of a C-style array with the benefits of a standard container, such as knowing its own size, supporting assignment, random access iterators, etc.
-  * std::array satisfies the requirements of Container and ReversibleContainer except that default-constructed array is not empty and that the complexity of swapping is linear, satisfies the requirements of ContiguousContainer, (since C++17) and partially satisfies the requirements of SequenceContainer.
-  * There is a special case for a zero-length array (N == 0). In that case, array.begin() == array.end(), which is some unique value. The effect of calling front() or back() on a zero-sized array is undefined.
-  * An array can also be used as a tuple of N elements of the same type.
-* [std::vector - cppreference.com](https://en.cppreference.com/w/cpp/container/vector)
-	* [std::vector\<T,Allocator>::emplace_back - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/emplace_back)
-		* Appends a new element to the end of the container. The element is constructed through std::allocator_traits::construct, which typically uses placement-new to construct the element in-place at the location provided by the container. The arguments args... are forwarded to the constructor as std::forward\<Args>(args)....
-		* If the new size() is greater than capacity() then all iterators and references (including the past-the-end iterator) are invalidated. Otherwise only the past-the-end iterator is invalidated.
-	* [std::vector\<T,Allocator>::clear - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/clear)
-		* Erases all elements from the container. After this call, size() returns zero.
-		* Invalidates any references, pointers, or iterators referring to contained elements. Any past-the-end iterators are also invalidated.  
-		* Leaves the capacity() of the vector unchanged (note: the standard's restriction on the changes to capacity is in the specification of vector::reserve, see [1])	
-	* [vector::emplace_back - C++ Reference](http://www.cplusplus.com/reference/vector/vector/emplace_back/)
-		* Construct and insert element at the end
-			* Inserts a new element at the end of the vector, right after its current last element. This new element is constructed in place using args as the arguments for its constructor.
-			* This effectively increases the container size by one, which causes an automatic reallocation of the allocated storage space if -and only if- the new vector size surpasses the current vector capacity.
-			* The element is constructed in-place by calling allocator_traits::construct with args forwarded.
-			* A similar member function exists, push_back, which either copies or moves an existing object into the container.
-	* [push_back() vs emplace_back() in C++ STL Vectors - GeeksforGeeks](https://www.geeksforgeeks.org/push_back-vs-emplace_back-in-cpp-stl-vectors/)
-		* push_back():
-			* This method is used to insert elements in a vector from the end of the container. As the flexibility in the size of the vector is dynamic, the size of the container also increased by 1 after inserting any new element.
-			* Note: reserve() is used instead of using “vector\<Point> vertices(3)”, as the below syntax sometimes doesn’t work because there is no default constructor defined in the class.
-		* emplace_back():
-			* This method is used instead of creating the object using parameterized constructor and allocating it into a different memory, then passing it to the copy constructor, which will insert it into the vector. This function can directly insert the object without calling the copy constructor.
-	* [std::vector\<T,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/erase)
-		* Erases the specified elements from the container.
-			* 1) Removes the element at pos.
-			* 2) Removes the elements in the range [first, last).
-		* Invalidates iterators and references at or after the point of the erase, including the end() iterator.
-		* The iterator pos must be valid and dereferenceable. Thus the end() iterator (which is valid, but is not dereferenceable) cannot be used as a value for pos.
-		* The iterator first does not need to be dereferenceable if first==last: erasing an empty range is a no-op.	
-	* [ES.23: Prefer the {}-initializer syntax - C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#es23-prefer-the--initializer-syntax)
-		* Exception For containers, there is a tradition for using {...} for a list of elements and (...) for sizes
-	* [2D Vector In C++ With User Defined Size - GeeksforGeeks](https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/)
-* [deque - C++ Reference](http://www.cplusplus.com/reference/deque/deque/)
-  * deque (usually pronounced like "deck") is an irregular acronym of double-ended queue. Double-ended queues are sequence containers with dynamic sizes that can be expanded or contracted on both ends (either its front or its back).
-  * [Sliding Window Maximum (Maximum of all subarrays of size k) - GeeksforGeeks](https://www.geeksforgeeks.org/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/#disqus_thread)
-  * [Deque-STL | HackerRank](https://www.hackerrank.com/challenges/deque-stl/problem)
+##### [std::array](https://en.cppreference.com/w/cpp/container/array)
+
+* std::array is a container that encapsulates fixed size arrays.
+* This container is an aggregate type with the same semantics as a struct holding a C-style array T[N] as its only non-static data member. Unlike a C-style array, it doesn't decay to T* automatically. As an aggregate type, it can be initialized with aggregate-initialization given at most N initializers that are convertible to T: std::array\<int, 3> a = {1,2,3};.
+* The struct combines the performance and accessibility of a C-style array with the benefits of a standard container, such as knowing its own size, supporting assignment, random access iterators, etc.
+* std::array satisfies the requirements of Container and ReversibleContainer except that default-constructed array is not empty and that the complexity of swapping is linear, satisfies the requirements of ContiguousContainer, (since C++17) and partially satisfies the requirements of SequenceContainer.
+* There is a special case for a zero-length array (N == 0). In that case, array.begin() == array.end(), which is some unique value. The effect of calling front() or back() on a zero-sized array is undefined.
+* An array can also be used as a tuple of N elements of the same type.
+
+##### [std::vector](https://en.cppreference.com/w/cpp/container/vector)
+
+* [std::vector\<T,Allocator>::emplace_back - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/emplace_back)
+	* Appends a new element to the end of the container. The element is constructed through std::allocator_traits::construct, which typically uses placement-new to construct the element in-place at the location provided by the container. The arguments args... are forwarded to the constructor as std::forward\<Args>(args)....
+	* If the new size() is greater than capacity() then all iterators and references (including the past-the-end iterator) are invalidated. Otherwise only the past-the-end iterator is invalidated.
+* [std::vector\<T,Allocator>::clear - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/clear)
+	* Erases all elements from the container. After this call, size() returns zero.
+	* Invalidates any references, pointers, or iterators referring to contained elements. Any past-the-end iterators are also invalidated.  
+	* Leaves the capacity() of the vector unchanged (note: the standard's restriction on the changes to capacity is in the specification of vector::reserve, see [1])	
+* [vector::emplace_back - C++ Reference](http://www.cplusplus.com/reference/vector/vector/emplace_back/)
+	* Construct and insert element at the end
+		* Inserts a new element at the end of the vector, right after its current last element. This new element is constructed in place using args as the arguments for its constructor.
+		* This effectively increases the container size by one, which causes an automatic reallocation of the allocated storage space if -and only if- the new vector size surpasses the current vector capacity.
+		* The element is constructed in-place by calling allocator_traits::construct with args forwarded.
+		* A similar member function exists, push_back, which either copies or moves an existing object into the container.
+* [push_back() vs emplace_back() in C++ STL Vectors - GeeksforGeeks](https://www.geeksforgeeks.org/push_back-vs-emplace_back-in-cpp-stl-vectors/)
+	* push_back():
+		* This method is used to insert elements in a vector from the end of the container. As the flexibility in the size of the vector is dynamic, the size of the container also increased by 1 after inserting any new element.
+		* Note: reserve() is used instead of using “vector\<Point> vertices(3)”, as the below syntax sometimes doesn’t work because there is no default constructor defined in the class.
+	* emplace_back():
+		* This method is used instead of creating the object using parameterized constructor and allocating it into a different memory, then passing it to the copy constructor, which will insert it into the vector. This function can directly insert the object without calling the copy constructor.
+* [std::vector<T,Allocator>::empty - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/empty)
+	* Checks if the container has no elements, i.e. whether begin() == end().
+* [std::vector\<T,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/erase)
+	* Erases the specified elements from the container.
+		* 1) Removes the element at pos.
+		* 2) Removes the elements in the range [first, last).
+	* Invalidates iterators and references at or after the point of the erase, including the end() iterator.
+	* The iterator pos must be valid and dereferenceable. Thus the end() iterator (which is valid, but is not dereferenceable) cannot be used as a value for pos.
+	* The iterator first does not need to be dereferenceable if first==last: erasing an empty range is a no-op.	
+* [std::vector<T,Allocator>::insert - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/insert)
+	* Inserts elements at the specified location in the container.
+		* 1-2) inserts value before pos
+		* 3) inserts count copies of the value before pos
+		* 4) inserts elements from range [first, last) before pos.
+		* The behavior is undefined if first and last are iterators into *this.
+		* 5) inserts elements from initializer list ilist before pos.
+	* Causes reallocation if the new size() is greater than the old capacity(). If the new size() is greater than capacity(), all iterators and references are invalidated. Otherwise, only the iterators and references before the insertion point remain valid. The past-the-end iterator is also invalidated.
+* [std::vector<T,Allocator>::rbegin, std::vector<T,Allocator>::crbegin - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/rbegin)
+	* Returns a reverse iterator to the first element of the reversed vector. It corresponds to the last element of the non-reversed vector. If the vector is empty, the returned iterator is equal to rend().
+* [ES.23: Prefer the {}-initializer syntax - C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#es23-prefer-the--initializer-syntax)
+	* Exception For containers, there is a tradition for using {...} for a list of elements and (...) for sizes
+* [2D Vector In C++ With User Defined Size - GeeksforGeeks](https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/)
+
+##### [deque - C++ Reference](http://www.cplusplus.com/reference/deque/deque/)
+
+* deque (usually pronounced like "deck") is an irregular acronym of double-ended queue. Double-ended queues are sequence containers with dynamic sizes that can be expanded or contracted on both ends (either its front or its back).
+* [Sliding Window Maximum (Maximum of all subarrays of size k) - GeeksforGeeks](https://www.geeksforgeeks.org/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/#disqus_thread)
+* [Deque-STL | HackerRank](https://www.hackerrank.com/challenges/deque-stl/problem)
 ```c++
 #include <iostream>
 #include <deque> 
@@ -1885,21 +1902,64 @@ int main(){
 
 #### Associative
 
-* [std::map - cppreference.com](https://en.cppreference.com/w/cpp/container/map)
-	* [map - C++ Reference](http://www.cplusplus.com/reference/map/map/)
-	* [map::cbegin - C++ Reference](http://www.cplusplus.com/reference/map/map/cbegin/)
-		* Return const_iterator to beginning
-			* Returns a const_iterator pointing to the first element in the container.
-			* A const_iterator is an iterator that points to const content. This iterator can be increased and decreased (unless it is itself also const), just like the iterator returned by map::begin, but it cannot be used to modify the contents it points to, even if the map object is not itself const.
-			* If the container is empty, the returned iterator value shall not be dereferenced.
-  * [map::operator[] - C++ Reference](http://www.cplusplus.com/reference/map/map/operator[]/)
-    * If k matches the key of an element in the container, the function returns a reference to its mapped value.
-    * If k does not match the key of any element in the container, the function inserts a new element with that key and returns a reference to its mapped value. Notice that this always increases the container size by one, even if no mapped value is assigned to the element (the element is constructed using its default constructor).
-    * A similar member function, map::at, has the same behavior when an element with the key exists, but throws an exception when it does not.
-    * A call to this function is equivalent to:
-      * (*((this->insert(make_pair(k,mapped_type()))).first)).second
-	* [map::begin() and end() in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/mapbegin-end-c-stl/)
-  * [Maps-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-maps/problem)
+##### [std::set](https://en.cppreference.com/w/cpp/container/set)
+
+* std::set is an associative container that contains a sorted set of unique objects of type Key. Sorting is done using the key comparison function Compare. Search, removal, and insertion operations have logarithmic complexity. Sets are usually implemented as red-black trees.
+* [std::set<Key,Compare,Allocator>::contains - cppreference.com](https://en.cppreference.com/w/cpp/container/set/contains)
+	* 1) Checks if there is an element with key equivalent to key in the container.
+	* 2) Checks if there is an element with key that compares equivalent to the value x. This overload participates in overload resolution only if the qualified-id Compare::is_transparent is valid and denotes a type. It allows calling this function without constructing an instance of Key.
+* [std::set<Key,Compare,Allocator>::count - cppreference.com](https://en.cppreference.com/w/cpp/container/set/count)
+	* Returns the number of elements with key that compares equivalent to the specified argument, which is either 1 or 0 since this container does not allow duplicates.
+	* 1) Returns the number of elements with key key.
+	* 2) Returns the number of elements with key that compares equivalent to the value x. This overload participates in overload resolution only if the qualified-id Compare::is_transparent is valid and denotes a type. They allow calling this function without constructing an instance of Key.
+* [std::set<Key,Compare,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/container/set/erase)
+	* Removes specified elements from the container.
+	* 1) Removes the element at pos. Only one overload is provided if iterator and const_iterator are the same type. (since C++11)
+	* 2) Removes the elements in the range [first; last), which must be a valid range in *this.
+	* 3) Removes the element (if one exists) with the key equivalent to key.
+	* 4) Removes the element (if one exists) with key that compares equivalent to the value x. This overload participates in overload resolution only if the qualified-id Compare::is_transparent is valid and denotes a type, and neither iterator nor const_iterator is implicitly convertible from K. It allows calling this function without constructing an instance of Key.
+	* References and iterators to the erased elements are invalidated. Other references and iterators are not affected.
+	* The iterator pos must be valid and dereferenceable. Thus the end() iterator (which is valid, but is not dereferenceable) cannot be used as a value for pos.
+* [std::set<Key,Compare,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/container/set/find)
+	* 1,2) Finds an element with key equivalent to key.
+	* 3,4) Finds an element with key that compares equivalent to the value x. This overload participates in overload resolution only if the qualified-id Compare::is_transparent is valid and denotes a type. It allows calling this function without constructing an instance of Key.
+	* [set find() function in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/set-find-function-in-c-stl/)
+		* The set::find is a built-in function in C++ STL which returns an iterator to the element which is searched in the set container. If the element is not found,  then the iterator points to the position just after the last element in the set.
+		* Time Complexity: The time complexity of set_name.find( key ) is O( log N ). As the elements are stored in a sorted manner by default.
+* [std::set<Key,Compare,Allocator>::insert - cppreference.com](https://en.cppreference.com/w/cpp/container/set/insert)
+	* Inserts element(s) into the container, if the container doesn't already contain an element with an equivalent key.
+
+##### [std::map](https://en.cppreference.com/w/cpp/container/map)
+
+* [map - C++ Reference](http://www.cplusplus.com/reference/map/map/)
+* [map::cbegin - C++ Reference](http://www.cplusplus.com/reference/map/map/cbegin/)
+	* Return const_iterator to beginning
+		* Returns a const_iterator pointing to the first element in the container.
+		* A const_iterator is an iterator that points to const content. This iterator can be increased and decreased (unless it is itself also const), just like the iterator returned by map::begin, but it cannot be used to modify the contents it points to, even if the map object is not itself const.
+		* If the container is empty, the returned iterator value shall not be dereferenced.
+* [std::map<Key,T,Compare,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/container/map/erase)
+	* Removes specified elements from the container.
+	* 1) Removes the element at pos.
+	* 2) Removes the elements in the range [first; last), which must be a valid range in *this.
+	* 3) Removes the element (if one exists) with the key equivalent to key.
+	* 4) Removes the element (if one exists) with key that compares equivalent to the value x. This overload participates in overload resolution only if the qualified-id Compare::is_transparent is valid and denotes a type, and neither iterator nor const_iterator is implicitly convertible from K. It allows calling this function without constructing an instance of Key.
+	* References and iterators to the erased elements are invalidated. Other references and iterators are not affected.
+	* The iterator pos must be valid and dereferenceable. Thus the end() iterator (which is valid, but is not dereferenceable) cannot be used as a value for pos.
+* [map::operator[] - C++ Reference](http://www.cplusplus.com/reference/map/map/operator[]/)
+	* If k matches the key of an element in the container, the function returns a reference to its mapped value.
+	* If k does not match the key of any element in the container, the function inserts a new element with that key and returns a reference to its mapped value. Notice that this always increases the container size by one, even if no mapped value is assigned to the element (the element is constructed using its default constructor).
+	* A similar member function, map::at, has the same behavior when an element with the key exists, but throws an exception when it does not.
+	* A call to this function is equivalent to:
+		* (*((this->insert(make_pair(k,mapped_type()))).first)).second
+* [map::begin() and end() in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/mapbegin-end-c-stl/)
+* [Descending Order in Map and Multimap of C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/descending-order-map-multimap-c-stl/)
+	* We can use the third parameter, that is std::greater along with map and multimap to store elements in descending order.
+	* Descending order in the map: 
+		* A map stores key-value pairs. A self-balancing-BST (typically Red-Black tree) is used to implement it.
+```c++
+map<key_datatype, value_datatype, greater<int> > mapName;
+```
+* [Maps-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-maps/problem)
 ```c++
 #include <cmath>
 #include <cstdio>
@@ -1943,29 +2003,30 @@ int main() {
 
 #### Unordered associative
 
-* [std::unordered_set - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_set)
-	* Unordered set is an associative container that contains a set of unique objects of type Key. Search, insertion, and removal have average constant-time complexity.
-	* Internally, the elements are not sorted in any particular order, but organized into buckets. Which bucket an element is placed into depends entirely on the hash of its value. This allows fast access to individual elements, since once a hash is computed, it refers to the exact bucket the element is placed into.
-	* Container elements may not be modified (even by non const iterators) since modification could change an element's hash and corrupt the container.
-	* std::unordered_set meets the requirements of Container, AllocatorAwareContainer, UnorderedAssociativeContainer.
-	* [std::unordered_set<Key,Hash,KeyEqual,Allocator>::count - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_set/count)
+##### [std::unordered_set](https://en.cppreference.com/w/cpp/container/unordered_set)
+
+* Unordered set is an associative container that contains a set of unique objects of type Key. Search, insertion, and removal have average constant-time complexity.
+* Internally, the elements are not sorted in any particular order, but organized into buckets. Which bucket an element is placed into depends entirely on the hash of its value. This allows fast access to individual elements, since once a hash is computed, it refers to the exact bucket the element is placed into.
+* Container elements may not be modified (even by non const iterators) since modification could change an element's hash and corrupt the container.
+* std::unordered_set meets the requirements of Container, AllocatorAwareContainer, UnorderedAssociativeContainer.
+* [std::unordered_set<Key,Hash,KeyEqual,Allocator>::count - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_set/count)
 * [std::unordered_map - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map)
-	* [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::begin(size_type), std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::cbegin(size_type) - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/begin2)
-	* [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::size - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/size)
-  * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::at - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/at)
-    * Returns a reference to the mapped value of the element with key equivalent to key. If no such element exists, an exception of type std::out_of_range is thrown.
-  * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::operator[] - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/operator_at)
-    * Returns a reference to the value that is mapped to a key equivalent to key, performing an insertion if such key does not already exist.
-  * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::count - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/count)
-  * [unordered_map - C++ Reference](https://www.cplusplus.com/reference/unordered_map/unordered_map/)
-    * Unordered Map
-    * Unordered maps are associative containers that store elements formed by the combination of a key value and a mapped value, and which allows for fast retrieval of individual elements based on their keys.
-    * In an unordered_map, the key value is generally used to uniquely identify the element, while the mapped value is an object with the content associated to this key. Types of key and mapped value may differ.
-    * Internally, the elements in the unordered_map are not sorted in any particular order with respect to either their key or mapped values, but organized into buckets depending on their hash values to allow for fast access to individual elements directly by their key values (with a constant average time complexity on average).
-    * unordered_map containers are faster than map containers to access individual elements by their key, although they are generally less efficient for range iteration through a subset of their elements.
-    * Unordered maps implement the direct access operator (operator[]) which allows for direct access of the mapped value using its key value as argument.
-    * Iterators in the container are at least forward iterators.
-    * [Static const map inside class/struct - C++ Forum](http://www.cplusplus.com/forum/general/266519/)
+* [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::begin(size_type), std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::cbegin(size_type) - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/begin2)
+* [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::size - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/size)
+* [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::at - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/at)
+	* Returns a reference to the mapped value of the element with key equivalent to key. If no such element exists, an exception of type std::out_of_range is thrown.
+* [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::operator[] - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/operator_at)
+	* Returns a reference to the value that is mapped to a key equivalent to key, performing an insertion if such key does not already exist.
+* [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::count - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/count)
+* [unordered_map - C++ Reference](https://www.cplusplus.com/reference/unordered_map/unordered_map/)
+	* Unordered Map
+	* Unordered maps are associative containers that store elements formed by the combination of a key value and a mapped value, and which allows for fast retrieval of individual elements based on their keys.
+	* In an unordered_map, the key value is generally used to uniquely identify the element, while the mapped value is an object with the content associated to this key. Types of key and mapped value may differ.
+	* Internally, the elements in the unordered_map are not sorted in any particular order with respect to either their key or mapped values, but organized into buckets depending on their hash values to allow for fast access to individual elements directly by their key values (with a constant average time complexity on average).
+	* unordered_map containers are faster than map containers to access individual elements by their key, although they are generally less efficient for range iteration through a subset of their elements.
+	* Unordered maps implement the direct access operator (operator[]) which allows for direct access of the mapped value using its key value as argument.
+	* Iterators in the container are at least forward iterators.
+	* [Static const map inside class/struct - C++ Forum](http://www.cplusplus.com/forum/general/266519/)
 
 #### Adaptors
 
@@ -1986,16 +2047,52 @@ int main() {
   * 我能使用不同版本的实现代码来替代默认实现吗？
   * 如果我们脱离了标准库怎么办？
 
-#### Algorithm library
+#### [Algorithm library](https://en.cppreference.com/w/cpp/algorithm)
+
+##### Non-modifying sequence operations
 
 * [std::find, std::find_if, std::find_if_not - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/find)
   * [find_if - C++ Reference](https://www.cplusplus.com/reference/algorithm/find_if/)
     * Find element in range
       * Returns an iterator to the first element in the range \[first,last) for which pred returns true. If no such element is found, the function returns last.
   * [std::find_if , std::find_if_not in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdfind_if-stdfind_if_not-in-c/)
+
+##### Modifying sequence operations
+
+##### Partitioning operations
+
+##### Sorting operations
+
 * [std::sort - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/sort)
 	* Sorts the elements in the range \[first, last) in non-descending order. The order of equal elements is not guaranteed to be preserved.
 	* [std::sort() in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/sort-c-stl/)
+
+##### Binary search operations (on sorted ranges)
+
+##### Other operations on sorted ranges
+
+##### Set operations (on sorted ranges)
+
+##### Heap operations
+
+##### Minimum/maximum operations
+
+* [std::min - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/min)
+	* Returns the smaller of the given values.
+		* 1-2) Returns the smaller of a and b.
+		* 3-4) Returns the smallest of the values in initializer list ilist.
+	* The (1,3) versions use operator< to compare the values, the (2,4) versions use the given comparison function comp.
+* [std::min in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdmin-in-cpp/)
+
+##### Comparison operations
+
+##### Permutation operations
+
+##### Numeric operations
+
+##### Operations on uninitialized memory
+
+##### C library
 
 #### Iterator library
 
