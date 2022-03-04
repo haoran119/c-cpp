@@ -1768,6 +1768,16 @@ Sequence containers implement data structures which can be accessed sequentially
 
 ###### [std::vector](https://en.cppreference.com/w/cpp/container/vector)
 
+* 1) std::vector is a sequence container that encapsulates dynamic size arrays.
+* 2) std::pmr::vector is an alias template that uses a polymorphic allocator.
+* The elements are stored contiguously, which means that elements can be accessed not only through iterators, but also using offsets to regular pointers to elements. This means that a pointer to an element of a vector may be passed to any function that expects a pointer to an element of an array.
+* The storage of the vector is handled automatically, being expanded and contracted as needed. Vectors usually occupy more space than static arrays, because more memory is allocated to handle future growth. This way a vector does not need to reallocate each time an element is inserted, but only when the additional memory is exhausted. The total amount of allocated memory can be queried using capacity() function. Extra memory can be returned to the system via a call to shrink_to_fit(). (since C++11)
+* Reallocations are usually costly operations in terms of performance. The reserve() function can be used to eliminate reallocations if the number of elements is known beforehand.
+* The complexity (efficiency) of common operations on vectors is as follows:
+	* Random access - constant 𝓞(1)
+	* Insertion or removal of elements at the end - amortized constant 𝓞(1)
+	* Insertion or removal of elements - linear in the distance to the end of the vector 𝓞(n)
+* std::vector (for T other than bool) meets the requirements of Container, AllocatorAwareContainer, SequenceContainer , ContiguousContainer (since C++17) and ReversibleContainer.
 * [std::vector\<T,Allocator>::emplace_back - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/emplace_back)
 	* Appends a new element to the end of the container. The element is constructed through std::allocator_traits::construct, which typically uses placement-new to construct the element in-place at the location provided by the container. The arguments args... are forwarded to the constructor as std::forward\<Args>(args)....
 	* If the new size() is greater than capacity() then all iterators and references (including the past-the-end iterator) are invalidated. Otherwise only the past-the-end iterator is invalidated.
@@ -1792,7 +1802,7 @@ Sequence containers implement data structures which can be accessed sequentially
 * [std::vector\<T,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/erase)
 	* Erases the specified elements from the container.
 		* 1) Removes the element at pos.
-		* 2) Removes the elements in the range [first, last).
+		* 2) Removes the elements in the range \[first, last).
 	* Invalidates iterators and references at or after the point of the erase, including the end() iterator.
 	* The iterator pos must be valid and dereferenceable. Thus the end() iterator (which is valid, but is not dereferenceable) cannot be used as a value for pos.
 	* The iterator first does not need to be dereferenceable if first==last: erasing an empty range is a no-op.	
@@ -1800,7 +1810,7 @@ Sequence containers implement data structures which can be accessed sequentially
 	* Inserts elements at the specified location in the container.
 		* 1-2) inserts value before pos
 		* 3) inserts count copies of the value before pos
-		* 4) inserts elements from range [first, last) before pos.
+		* 4) inserts elements from range \[first, last) before pos.
 		* The behavior is undefined if first and last are iterators into *this.
 		* 5) inserts elements from initializer list ilist before pos.
 	* Causes reallocation if the new size() is greater than the old capacity(). If the new size() is greater than capacity(), all iterators and references are invalidated. Otherwise, only the iterators and references before the insertion point remain valid. The past-the-end iterator is also invalidated.
@@ -1810,9 +1820,18 @@ Sequence containers implement data structures which can be accessed sequentially
 	* Exception For containers, there is a tradition for using {...} for a list of elements and (...) for sizes
 * [2D Vector In C++ With User Defined Size - GeeksforGeeks](https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/)
 
-###### [deque - C++ Reference](http://www.cplusplus.com/reference/deque/deque/)
+###### [std::deque](https://en.cppreference.com/w/cpp/container/deque)
 
-* deque (usually pronounced like "deck") is an irregular acronym of double-ended queue. Double-ended queues are sequence containers with dynamic sizes that can be expanded or contracted on both ends (either its front or its back).
+* std::deque (double-ended queue) is an indexed sequence container that allows fast insertion and deletion at both its beginning and its end. In addition, insertion and deletion at either end of a deque never invalidates pointers or references to the rest of the elements.
+* As opposed to std::vector, the elements of a deque are not stored contiguously: typical implementations use a sequence of individually allocated fixed-size arrays, with additional bookkeeping, which means indexed access to deque must perform two pointer dereferences, compared to vector's indexed access which performs only one.
+* The storage of a deque is automatically expanded and contracted as needed. Expansion of a deque is cheaper than the expansion of a std::vector because it does not involve copying of the existing elements to a new memory location. On the other hand, deques typically have large minimal memory cost; a deque holding just one element has to allocate its full internal array (e.g. 8 times the object size on 64-bit libstdc++; 16 times the object size or 4096 bytes, whichever is larger, on 64-bit libc++).
+* The complexity (efficiency) of common operations on deques is as follows:
+	* Random access - constant O(1)
+	* Insertion or removal of elements at the end or beginning - constant O(1)
+	* Insertion or removal of elements - linear O(n)
+* std::deque meets the requirements of Container, AllocatorAwareContainer, SequenceContainer and ReversibleContainer.
+* [deque - C++ Reference](http://www.cplusplus.com/reference/deque/deque/)
+	* deque (usually pronounced like "deck") is an irregular acronym of double-ended queue. Double-ended queues are sequence containers with dynamic sizes that can be expanded or contracted on both ends (either its front or its back).
 * [Sliding Window Maximum (Maximum of all subarrays of size k) - GeeksforGeeks](https://www.geeksforgeeks.org/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/#disqus_thread)
 * [Deque-STL | HackerRank](https://www.hackerrank.com/challenges/deque-stl/problem)
 ```c++
@@ -1885,6 +1904,8 @@ int main(){
 ###### [std::set](https://en.cppreference.com/w/cpp/container/set)
 
 * std::set is an associative container that contains a sorted set of unique objects of type Key. Sorting is done using the key comparison function Compare. Search, removal, and insertion operations have logarithmic complexity. Sets are usually implemented as red-black trees.
+* Everywhere the standard library uses the Compare requirements, uniqueness is determined by using the equivalence relation. In imprecise terms, two objects a and b are considered equivalent if neither compares less than the other: !comp(a, b) && !comp(b, a).
+* std::set meets the requirements of Container, AllocatorAwareContainer, AssociativeContainer and ReversibleContainer.
 * [std::set<Key,Compare,Allocator>::contains - cppreference.com](https://en.cppreference.com/w/cpp/container/set/contains)
 	* 1) Checks if there is an element with key equivalent to key in the container.
 	* 2) Checks if there is an element with key that compares equivalent to the value x. This overload participates in overload resolution only if the qualified-id Compare::is_transparent is valid and denotes a type. It allows calling this function without constructing an instance of Key.
@@ -1895,7 +1916,7 @@ int main(){
 * [std::set<Key,Compare,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/container/set/erase)
 	* Removes specified elements from the container.
 	* 1) Removes the element at pos. Only one overload is provided if iterator and const_iterator are the same type. (since C++11)
-	* 2) Removes the elements in the range [first; last), which must be a valid range in *this.
+	* 2) Removes the elements in the range \[first; last), which must be a valid range in *this.
 	* 3) Removes the element (if one exists) with the key equivalent to key.
 	* 4) Removes the element (if one exists) with key that compares equivalent to the value x. This overload participates in overload resolution only if the qualified-id Compare::is_transparent is valid and denotes a type, and neither iterator nor const_iterator is implicitly convertible from K. It allows calling this function without constructing an instance of Key.
 	* References and iterators to the erased elements are invalidated. Other references and iterators are not affected.
@@ -1911,6 +1932,9 @@ int main(){
 
 ###### [std::map](https://en.cppreference.com/w/cpp/container/map)
 
+* std::map is a sorted associative container that contains key-value pairs with unique keys. Keys are sorted by using the comparison function Compare. Search, removal, and insertion operations have logarithmic complexity. Maps are usually implemented as red-black trees.
+* Everywhere the standard library uses the Compare requirements, uniqueness is determined by using the equivalence relation. In imprecise terms, two objects a and b are considered equivalent (not unique) if neither compares less than the other: !comp(a, b) && !comp(b, a).
+* std::map meets the requirements of Container, AllocatorAwareContainer, AssociativeContainer and ReversibleContainer.
 * [map - C++ Reference](http://www.cplusplus.com/reference/map/map/)
 * [map::cbegin - C++ Reference](http://www.cplusplus.com/reference/map/map/cbegin/)
 	* Return const_iterator to beginning
@@ -1920,7 +1944,7 @@ int main(){
 * [std::map<Key,T,Compare,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/container/map/erase)
 	* Removes specified elements from the container.
 	* 1) Removes the element at pos.
-	* 2) Removes the elements in the range [first; last), which must be a valid range in *this.
+	* 2) Removes the elements in the range \[first; last), which must be a valid range in *this.
 	* 3) Removes the element (if one exists) with the key equivalent to key.
 	* 4) Removes the element (if one exists) with key that compares equivalent to the value x. This overload participates in overload resolution only if the qualified-id Compare::is_transparent is valid and denotes a type, and neither iterator nor const_iterator is implicitly convertible from K. It allows calling this function without constructing an instance of Key.
 	* References and iterators to the erased elements are invalidated. Other references and iterators are not affected.
@@ -2025,9 +2049,23 @@ int main() {
 | queue | adapts a container to provide queue (FIFO data structure) | 
 | priority_queue | adapts a container to provide priority queue | 
 
+###### [std::stack](https://en.cppreference.com/w/cpp/container/stack)
+
+* The std::stack class is a container adaptor that gives the programmer the functionality of a stack - specifically, a LIFO (last-in, first-out) data structure.
+* The class template acts as a wrapper to the underlying container - only a specific set of functions is provided. The stack pushes and pops the element from the back of the underlying container, known as the top of the stack.
+
+###### [std::queue](https://en.cppreference.com/w/cpp/container/queue)
+
+* The std::queue class is a container adaptor that gives the programmer the functionality of a queue - specifically, a FIFO (first-in, first-out) data structure.
+* The class template acts as a wrapper to the underlying container - only a specific set of functions is provided. The queue pushes the elements on the back of the underlying container and pops them from the front.
+
+###### [std::priority_queue](https://en.cppreference.com/w/cpp/container/priority_queue)
+
 ##### Views
 
 #### [Algorithm library](https://en.cppreference.com/w/cpp/algorithm)
+
+* The algorithms library defines functions for a variety of purposes (e.g. searching, sorting, counting, manipulating) that operate on ranges of elements. Note that a range is defined as \[first, last) where last refers to the element past the last element to inspect or modify.
 
 ##### Non-modifying sequence operations
 
