@@ -1738,11 +1738,26 @@ int main(){
 
 * [一文详解 C++ 日志框架](https://mp.weixin.qq.com/s/0heKciXbMl95WMTXLfr8UA)
 
-### Standard Template Library (STL)
+### [Standard Template Library (STL)](https://www.tutorialspoint.com/cplusplus/cpp_stl_tutorial.htm)
 
-#### Sequence
+#### [Containers library - cppreference.com](https://en.cppreference.com/w/cpp/container)
 
-##### [std::array](https://en.cppreference.com/w/cpp/container/array)
+* The Containers library is a generic collection of class templates and algorithms that allow programmers to easily implement common data structures like queues, lists and stacks. There are three classes of containers -- sequence containers, associative containers, and unordered associative containers -- each of which is designed to support a different set of operations.
+* The container manages the storage space that is allocated for its elements and provides member functions to access them, either directly or through iterators (objects with properties similar to pointers).
+* Most containers have at least several member functions in common, and share functionalities. Which container is the best for the particular application depends not only on the offered functionality, but also on its efficiency for different workloads.
+
+##### Sequence
+
+Sequence containers implement data structures which can be accessed sequentially.
+
+| array | static contiguous array |
+| - | - |
+| vector | dynamic contiguous array |
+| deque | double-ended queue | 
+| forward_list | singly-linked list| 
+| list | doubly-linked list| 
+
+###### [std::array](https://en.cppreference.com/w/cpp/container/array)
 
 * std::array is a container that encapsulates fixed size arrays.
 * This container is an aggregate type with the same semantics as a struct holding a C-style array T[N] as its only non-static data member. Unlike a C-style array, it doesn't decay to T* automatically. As an aggregate type, it can be initialized with aggregate-initialization given at most N initializers that are convertible to T: std::array\<int, 3> a = {1,2,3};.
@@ -1751,7 +1766,7 @@ int main(){
 * There is a special case for a zero-length array (N == 0). In that case, array.begin() == array.end(), which is some unique value. The effect of calling front() or back() on a zero-sized array is undefined.
 * An array can also be used as a tuple of N elements of the same type.
 
-##### [std::vector](https://en.cppreference.com/w/cpp/container/vector)
+###### [std::vector](https://en.cppreference.com/w/cpp/container/vector)
 
 * [std::vector\<T,Allocator>::emplace_back - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/emplace_back)
 	* Appends a new element to the end of the container. The element is constructed through std::allocator_traits::construct, which typically uses placement-new to construct the element in-place at the location provided by the container. The arguments args... are forwarded to the constructor as std::forward\<Args>(args)....
@@ -1795,7 +1810,7 @@ int main(){
 	* Exception For containers, there is a tradition for using {...} for a list of elements and (...) for sizes
 * [2D Vector In C++ With User Defined Size - GeeksforGeeks](https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/)
 
-##### [deque - C++ Reference](http://www.cplusplus.com/reference/deque/deque/)
+###### [deque - C++ Reference](http://www.cplusplus.com/reference/deque/deque/)
 
 * deque (usually pronounced like "deck") is an irregular acronym of double-ended queue. Double-ended queues are sequence containers with dynamic sizes that can be expanded or contracted on both ends (either its front or its back).
 * [Sliding Window Maximum (Maximum of all subarrays of size k) - GeeksforGeeks](https://www.geeksforgeeks.org/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/#disqus_thread)
@@ -1857,9 +1872,17 @@ int main(){
 }
 ```
 
-#### Associative
+##### Associative
 
-##### [std::set](https://en.cppreference.com/w/cpp/container/set)
+* Associative containers implement sorted data structures that can be quickly searched (O(log n) complexity).
+
+| set | collection of unique keys, sorted by keys |
+| - | - |
+| map | collection of key-value pairs, sorted by keys, keys are unique | 
+| multiset | collection of keys, sorted by keys | 
+| multimap | collection of key-value pairs, sorted by keys
+
+###### [std::set](https://en.cppreference.com/w/cpp/container/set)
 
 * std::set is an associative container that contains a sorted set of unique objects of type Key. Sorting is done using the key comparison function Compare. Search, removal, and insertion operations have logarithmic complexity. Sets are usually implemented as red-black trees.
 * [std::set<Key,Compare,Allocator>::contains - cppreference.com](https://en.cppreference.com/w/cpp/container/set/contains)
@@ -1886,7 +1909,7 @@ int main(){
 * [std::set<Key,Compare,Allocator>::insert - cppreference.com](https://en.cppreference.com/w/cpp/container/set/insert)
 	* Inserts element(s) into the container, if the container doesn't already contain an element with an equivalent key.
 
-##### [std::map](https://en.cppreference.com/w/cpp/container/map)
+###### [std::map](https://en.cppreference.com/w/cpp/container/map)
 
 * [map - C++ Reference](http://www.cplusplus.com/reference/map/map/)
 * [map::cbegin - C++ Reference](http://www.cplusplus.com/reference/map/map/cbegin/)
@@ -1958,9 +1981,17 @@ int main() {
 }
 ```
 
-#### Unordered associative
+##### Unordered associative
 
-##### [std::unordered_set](https://en.cppreference.com/w/cpp/container/unordered_set)
+* Unordered associative containers implement unsorted (hashed) data structures that can be quickly searched (O(1) amortized, O(n) worst-case complexity).
+
+| unordered_set | collection of unique keys, hashed by keys | 
+| - | - | 
+| unordered_map | collection of key-value pairs, hashed by keys, keys are unique | 
+| unordered_multiset | collection of keys, hashed by keys | 
+| unordered_multimap | collection of key-value pairs, hashed by keys | 
+
+###### [std::unordered_set](https://en.cppreference.com/w/cpp/container/unordered_set)
 
 * Unordered set is an associative container that contains a set of unique objects of type Key. Search, insertion, and removal have average constant-time complexity.
 * Internally, the elements are not sorted in any particular order, but organized into buckets. Which bucket an element is placed into depends entirely on the hash of its value. This allows fast access to individual elements, since once a hash is computed, it refers to the exact bucket the element is placed into.
@@ -1985,24 +2016,16 @@ int main() {
 	* Iterators in the container are at least forward iterators.
 	* [Static const map inside class/struct - C++ Forum](http://www.cplusplus.com/forum/general/266519/)
 
-#### Adaptors
+##### Adaptors
 
-#### Views
+* Container adaptors provide a different interface for sequential containers.
 
-### C++ Standard Library
+| stack | adapts a container to provide stack (LIFO data structure) | 
+| - | - | 
+| queue | adapts a container to provide queue (FIFO data structure) | 
+| priority_queue | adapts a container to provide priority queue | 
 
-* [什么是 C 和 C++ 标准库？](https://mp.weixin.qq.com/s/wErRQ3AzgJ9lzQKsNG9SzA)
-  * https://www.oschina.net/translate/c-c-standard-library
-  * C 和 C++ 是如何制订的
-  * C 标准库
-  * C++ 标准库
-  * 实现 C/C++ 标准库
-  * GNU/Linux 版实现
-  * Mac 和 iOS 版实现
-  * Windows 版实现
-  * Android 版实现
-  * 我能使用不同版本的实现代码来替代默认实现吗？
-  * 如果我们脱离了标准库怎么办？
+##### Views
 
 #### [Algorithm library](https://en.cppreference.com/w/cpp/algorithm)
 
@@ -2095,7 +2118,7 @@ int main() {
 
 ##### C library
 
-#### Iterator library
+#### [Iterator library](https://en.cppreference.com/w/cpp/iterator)
 
 * [std::advance - cppreference.com](https://en.cppreference.com/w/cpp/iterator/advance)
 	* Increments given iterator it by n elements.
@@ -2105,6 +2128,21 @@ int main() {
 			* Advances the iterator it by n element positions.
 			* If it is a random-access iterator, the function uses just once operator+ or operator-. Otherwise, the function uses repeatedly the increase or decrease operator (operator++ or operator--) until n elements have been advanced.
 	* [std::advance in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdadvance-in-cpp/)
+
+### [C++ Standard Library](https://www.tutorialspoint.com/cplusplus/cpp_standard_library.htm)
+
+* [什么是 C 和 C++ 标准库？](https://mp.weixin.qq.com/s/wErRQ3AzgJ9lzQKsNG9SzA)
+  * https://www.oschina.net/translate/c-c-standard-library
+  * C 和 C++ 是如何制订的
+  * C 标准库
+  * C++ 标准库
+  * 实现 C/C++ 标准库
+  * GNU/Linux 版实现
+  * Mac 和 iOS 版实现
+  * Windows 版实现
+  * Android 版实现
+  * 我能使用不同版本的实现代码来替代默认实现吗？
+  * 如果我们脱离了标准库怎么办？
 
 #### Ranges library
 
