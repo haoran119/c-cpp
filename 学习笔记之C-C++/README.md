@@ -2199,8 +2199,8 @@ int main() {
 
 ###### [Type support (basic types, RTTI, type traits) - cppreference.com](https://en.cppreference.com/w/cpp/types)
 
-####### Numeric limits
-
+#
+Numeric limits 
 * Defined in header \<limits>
 
 | numeric_limits | provides an interface to query properties of all fundamental numeric types. |
@@ -2213,19 +2213,19 @@ int main() {
 * [std::numeric_limits\<T>::max - cppreference.com](https://en.cppreference.com/w/cpp/types/numeric_limits/max)
 	* Returns the maximum finite value representable by the numeric type T. Meaningful for all bounded types.
 * [std::numeric_limits\<T>::infinity - cppreference.com](https://en.cppreference.com/w/cpp/types/numeric_limits/infinity)
-	* Returns the special value "positive infinity", as represented by the floating-point type T. Only meaningful if std::numeric_limits<T>::has_infinity == true. In IEEE 754, the most common binary representation of floating-point numbers, the positive infinity is the value with all bits of the exponent set and all bits of the fraction cleared.
-	
-####### Type relationships
+	* Returns the special value "positive infinity", as represented by the floating-point type T. Only meaningful if std::numeric_limits\<T>::has_infinity == true. In IEEE 754, the most common binary representation of floating-point numbers, the positive infinity is the value with all bits of the exponent set and all bits of the fraction cleared.
 
+#
+Type relationships
 * [is_same - C++ Reference](https://www.cplusplus.com/reference/type_traits/is_same/)
-  * template \<class T, class U> struct is_same;
-  * Trait class that identifies whether T is the same type as U, including having the same const and/or volatile qualification, if any.
-  * Two different type names are considered to represent the same type if -and only if- one is a typedef of the other: Two names representing types with the exact same characteristics but which none is a typedef of the other are not considered the same type.
-  * is_same inherits from integral_constant as being either true_type or false_type, depending on whether T and U are the same type.
-  * [std::is_same - cppreference.com](https://en.cppreference.com/w/cpp/types/is_same)
-    * If T and U name the same type (taking into account const/volatile qualifications), provides the member constant value equal to true. Otherwise value is false.
-    * Commutativity is satisfied, i.e. for any two types T and U, is_same\<T, U>::value == true if and only if is_same\<U, T>::value == true.
-    * The behavior of a program that adds specializations for is_same or is_same_v (since C++17) is undefined.
+	* template \<class T, class U> struct is_same;
+	* Trait class that identifies whether T is the same type as U, including having the same const and/or volatile qualification, if any.
+	* Two different type names are considered to represent the same type if -and only if- one is a typedef of the other: Two names representing types with the exact same characteristics but which none is a typedef of the other are not considered the same type.
+	* is_same inherits from integral_constant as being either true_type or false_type, depending on whether T and U are the same type.
+	* [std::is_same - cppreference.com](https://en.cppreference.com/w/cpp/types/is_same)
+		* If T and U name the same type (taking into account const/volatile qualifications), provides the member constant value equal to true. Otherwise value is false.
+		* Commutativity is satisfied, i.e. for any two types T and U, is_same\<T, U>::value == true if and only if is_same\<U, T>::value == true.
+		* The behavior of a program that adds specializations for is_same or is_same_v (since C++17) is undefined.
 
 ###### [Program support utilities - cppreference.com](https://en.cppreference.com/w/cpp/utility/program)
 
