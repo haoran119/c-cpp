@@ -2053,6 +2053,8 @@ int main() {
 
 * The std::stack class is a container adaptor that gives the programmer the functionality of a stack - specifically, a LIFO (last-in, first-out) data structure.
 * The class template acts as a wrapper to the underlying container - only a specific set of functions is provided. The stack pushes and pops the element from the back of the underlying container, known as the top of the stack.
+* [std::stack<T,Container>::top - cppreference.com](https://en.cppreference.com/w/cpp/container/stack/top)
+	* Returns reference to the top element in the stack. This is the most recently pushed element. This element will be removed on a call to pop(). Effectively calls c.back().
 
 ###### [std::queue](https://en.cppreference.com/w/cpp/container/queue)
 
@@ -2196,6 +2198,24 @@ int main() {
 ##### Language support
 
 ###### [Type support (basic types, RTTI, type traits) - cppreference.com](https://en.cppreference.com/w/cpp/types)
+
+####### Numeric limits
+
+* Defined in header \<limits>
+
+| numeric_limits | provides an interface to query properties of all fundamental numeric types. |
+| - | - |
+
+* [std::numeric_limits\<T>::min - cppreference.com](https://en.cppreference.com/w/cpp/types/numeric_limits/min)
+	* Returns the minimum finite value representable by the numeric type T.
+	* For floating-point types with denormalization, min returns the minimum positive normalized value. Note that this behavior may be unexpected, especially when compared to the behavior of min for integral types. To find the value that has no values less than it, use numeric_limits::lowest.
+	* min is only meaningful for bounded types and for unbounded unsigned types, that is, types that represent an infinite set of negative values have no meaningful minimum.
+* [std::numeric_limits\<T>::max - cppreference.com](https://en.cppreference.com/w/cpp/types/numeric_limits/max)
+	* Returns the maximum finite value representable by the numeric type T. Meaningful for all bounded types.
+* [std::numeric_limits\<T>::infinity - cppreference.com](https://en.cppreference.com/w/cpp/types/numeric_limits/infinity)
+	* Returns the special value "positive infinity", as represented by the floating-point type T. Only meaningful if std::numeric_limits<T>::has_infinity == true. In IEEE 754, the most common binary representation of floating-point numbers, the positive infinity is the value with all bits of the exponent set and all bits of the fraction cleared.
+	
+####### Type relationships
 
 * [is_same - C++ Reference](https://www.cplusplus.com/reference/type_traits/is_same/)
   * template \<class T, class U> struct is_same;
