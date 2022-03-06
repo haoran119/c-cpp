@@ -2047,6 +2047,12 @@ int main() {
 	* Iterators in the container are at least forward iterators.
 	* [Static const map inside class/struct - C++ Forum](http://www.cplusplus.com/forum/general/266519/)
 
+###### [std::unordered_map](https://en.cppreference.com/w/cpp/container/unordered_map)
+
+* Unordered map is an associative container that contains key-value pairs with unique keys. Search, insertion, and removal of elements have average constant-time complexity.
+* Internally, the elements are not sorted in any particular order, but organized into buckets. Which bucket an element is placed into depends entirely on the hash of its key. Keys with the same hash code appear in the same bucket. This allows fast access to individual elements, since once the hash is computed, it refers to the exact bucket the element is placed into.
+* std::unordered_map meets the requirements of Container, AllocatorAwareContainer, UnorderedAssociativeContainer.
+
 ##### Adaptors
 
 * Container adaptors provide a different interface for sequential containers.
