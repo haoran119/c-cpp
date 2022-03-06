@@ -11,13 +11,6 @@ Given an array of n distinct elements, find the minimum number of swaps required
 
 using namespace std;
 
-/*
- * Complete the 'minimumSwaps' function below.
- *
- * The function is expected to return an INTEGER.
- * The function accepts INTEGER_ARRAY popularity as parameter.
- */
-
 // put one element at the correct position one round
 // Time Complexity O(n * n)
 int minimumSwaps1(vector<int> popularity) {
