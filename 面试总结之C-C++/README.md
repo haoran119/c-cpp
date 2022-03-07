@@ -162,6 +162,12 @@
 * delete数组指针，只delete第一个后果
   * 内存泄漏 
 * 智能指针
+	* Move Semantics and Smart Pointers
+		* [M.1 — Intro to smart pointers and move semantics – Learn C++](https://www.learncpp.com/cpp-tutorial/intro-to-smart-pointers-move-semantics/)
+		* [M.6 — std::unique_ptr – Learn C++](https://www.learncpp.com/cpp-tutorial/stdunique_ptr/)
+		* [M.7 — std::shared_ptr – Learn C++](https://www.learncpp.com/cpp-tutorial/stdshared_ptr/)
+		* [M.8 — Circular dependency issues with std::shared_ptr, and std::weak_ptr – Learn C++](https://www.learncpp.com/cpp-tutorial/circular-dependency-issues-with-stdshared_ptr-and-stdweak_ptr/)
+		* [M.x — Chapter M comprehensive review – Learn C++](https://www.learncpp.com/cpp-tutorial/chapter-m-comprehensive-review/)
   * 智能指针是为了解决动态内存分配时带来的内存泄漏以及多次释放同一块内存空间而提出的。C++11 中封装在了 \<memory\> 头文件中。
   * C++11 中智能指针包括以下三种：
     * 共享指针（shared_ptr）：资源可以被多个指针共享，使用计数机制表明资源被几个指针共享。通过 use_count() 查看资源的所有者的个数，可以通过 unique_ptr、weak_ptr 来构造，调用 release() 释放资源的所有权，计数减一，当计数减为 0 时，会自动释放内存空间，从而避免了内存泄漏。
