@@ -709,6 +709,10 @@ int main()
 
 ### Modern C++
 
+* [B.1 — Introduction to C++11 – Learn C++](https://www.learncpp.com/cpp-tutorial/b-1-introduction-to-c11/)
+* [B.2 — Introduction to C++14 – Learn C++](https://www.learncpp.com/cpp-tutorial/b-2-introduction-to-c14/)
+* [B.3 — Introduction to C++17 – Learn C++](https://www.learncpp.com/cpp-tutorial/b-3-introduction-to-c17/)
+* [B.4 — Introduction to C++20 – Learn C++](https://www.learncpp.com/cpp-tutorial/introduction-to-c20/)
 * [每个开发者都应该了解的一些C++特性](https://mp.weixin.qq.com/s/Hpn7KqYlBKz0JdryiozqyQ)
   * https://www.freecodecamp.org/news/some-awesome-modern-c-features-that-every-developer-should-know-5e3bf6f79a3c/
   * C++ 是一种强大的编程语言，但也因为其复杂性一直让用户望而却步。后来，C++ 决定做出改变，然后发展至今，成了编程社区最受欢迎的语言之一。C++ 有一些新特性非常好用，本文对此进行了介绍，比如 auto、lambda、constexpr、tuple、智能指针等。
