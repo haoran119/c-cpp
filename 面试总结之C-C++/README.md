@@ -672,11 +672,26 @@ int main()
     * [unordered_set](https://github.com/huihut/interview/tree/master/STL#unordered_set) / [unordered_multiset](https://github.com/huihut/interview/tree/master/STL#unordered_multiset) / [unordered_map](https://github.com/huihut/interview/tree/master/STL#unordered_map) / [unordered_multimap](https://github.com/huihut/interview/tree/master/STL#unordered_multimap) ：Hash表
   * [Containers - C++ Reference](http://www.cplusplus.com/reference/stl/)
   * [STL实现的底层数据结构简介 - CSDN博客](http://blog.csdn.net/huangkq1989/article/details/7277282)
-* list v.s. vector
+* [C++之旅-vector](https://mp.weixin.qq.com/s/Pizq2-UcJi7rJLTwwxtRlw)
+* [Difference Between Vector and List - GeeksforGeeks](https://www.geeksforgeeks.org/difference-between-vector-and-list/)
+	* Vector: Vector is a type of dynamic array which has the ability to resize automatically after insertion or deletion of elements. The elements in vector are placed in contiguous storage so that they can be accessed and traversed using iterators. Element is inserted at the end of the vector.
+	* List: List is a double linked sequence that supports both forward and backward traversal. The time taken in the insertion and deletion in the beginning, end and middle is constant. It has the non-contiguous memory and there is no pre-allocated memory.
+
+| Vector | List | 
+| - | - | 
+| It has contiguous memory.	| While it has non-contiguous memory. | 
+| It is synchronized. | While it is not synchronized. | 
+| Vector may have a default size. | List does not have default size. | 
+| In vector, each element only requires the space for itself only. | In list, each element requires extra space for the node which holds the element, including pointers to the next and previous elements in the list. | 
+| Insertion at the end requires constant time but insertion elsewhere is costly. | Insertion is cheap no matter where in the list it occurs. | 
+| Vector is thread safe. | List is not thread safe. | 
+| Deletion at the end of the vector needs constant time but for the rest it is O(n). | Deletion is cheap no matter where in the list it occurs. | 
+| Random access of elements is possible. | Random access of elements is not possible. | 
+| Iterators become invalid if elements are added to or removed from the vector. | Iterators are valid if elements are added to or removed from the list. | 
+
 * class std::string
   * [string - C++ Reference](https://www.cplusplus.com/reference/string/string/)
   * [C++之旅-string](https://mp.weixin.qq.com/s/P2nd-9fmhpn20bB45hBioQ)
-* [C++之旅-vector](https://mp.weixin.qq.com/s/Pizq2-UcJi7rJLTwwxtRlw)
 * Object Slicing
   * [Object slicing - Wikipedia](https://en.wikipedia.org/wiki/Object_slicing)
   * In C++ programming, object slicing occurs when an object of a subclass type is copied to an object of superclass type: the superclass copy will not have any of the member variables defined in the subclass. These variables have, in effect, been "sliced off".) More subtly, object slicing can also occur when an object of a subclass type is copied to an object of the same type by the superclass's assignment operator, in which case some of the target object's member variables will retain their original values instead of being copied from the source object.
