@@ -673,6 +673,15 @@ int main()
   * [Containers - C++ Reference](http://www.cplusplus.com/reference/stl/)
   * [STL实现的底层数据结构简介 - CSDN博客](http://blog.csdn.net/huangkq1989/article/details/7277282)
 * [C++之旅-vector](https://mp.weixin.qq.com/s/Pizq2-UcJi7rJLTwwxtRlw)
+* Is Vector allocated on stack or heap ?
+	* Heap
+	* [c++ - When vectors are allocated, do they use memory on the heap or the stack? - Stack Overflow](https://stackoverflow.com/questions/8036474/when-vectors-are-allocated-do-they-use-memory-on-the-heap-or-the-stack#:~:text=So%20no%20matter%20how%20you,always%20allocated%20on%20the%20heap%20.)
+		* vector\<Type> vect;
+			* will allocate the vector, i.e. the header info, on the stack, but the elements on the free store ("heap").
+		* vector\<Type> *vect = new vector\<Type>;
+			* allocates everything on the free store.
+		* vector\<Type*> vect;
+			* will allocate the vector on the stack and a bunch of pointers on the free store, but where these point is determined by how you use them (you could point element 0 to the free store and element 1 to the stack, say).
 * [Difference Between Vector and List - GeeksforGeeks](https://www.geeksforgeeks.org/difference-between-vector-and-list/)
 	* Vector: Vector is a type of dynamic array which has the ability to resize automatically after insertion or deletion of elements. The elements in vector are placed in contiguous storage so that they can be accessed and traversed using iterators. Element is inserted at the end of the vector.
 	* List: List is a double linked sequence that supports both forward and backward traversal. The time taken in the insertion and deletion in the beginning, end and middle is constant. It has the non-contiguous memory and there is no pre-allocated memory.
