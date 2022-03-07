@@ -10,6 +10,7 @@
 * [Solve C++ | HackerRank](https://www.hackerrank.com/domains/cpp)
 * [STL Time Complexity (Detailed)](http://www.cplusplus.com/reference/stl/)
 * [STL Time Complexity (Summary)](http://john-ahlgren.blogspot.com/2013/10/stl-container-performance.html)
+* [C++ Syntax Cheat Sheet](https://github.com/gibsjose/cpp-cheat-sheet/blob/master/C++%20Syntax.md)
 * [Data Structure and Algorithms Cheat Sheet](https://github.com/gibsjose/cpp-cheat-sheet/blob/master/Data%20Structures%20and%20Algorithms.md)
 * [C++ 面试突击 - LeetBook - 力扣（LeetCode）全球极客挚爱的技术成长平台](https://leetcode-cn.com/leetbook/detail/cpp-interview-highlights/)
   * [2021 秋招 100 道 C++ 面试高频题汇总](https://mp.weixin.qq.com/s/wPq-fJFua0xt5zfJf0fLJA)
