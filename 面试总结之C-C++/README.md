@@ -8,8 +8,7 @@
 
 ## RESOURCES
 * [Solve C++ | HackerRank](https://www.hackerrank.com/domains/cpp)
-* [STL Time Complexity (Detailed)](http://www.cplusplus.com/reference/stl/)
-* [STL Time Complexity (Summary)](http://john-ahlgren.blogspot.com/2013/10/stl-container-performance.html)
+* [STL Containers - C++ Reference](http://www.cplusplus.com/reference/stl/)
 * [C++ Data Structures and Algorithms Cheat Sheet](https://github.com/gibsjose/cpp-cheat-sheet/blob/master/Data%20Structures%20and%20Algorithms.md)
 * [C 语言与 C++ 面试知识总结 (qq.com)](https://mp.weixin.qq.com/s/x6DMkh54NQBOlDMqNxvf7w)
   * [huihut/interview: 📚 C/C++ 技术面试基础知识总结](https://github.com/huihut/interview)
