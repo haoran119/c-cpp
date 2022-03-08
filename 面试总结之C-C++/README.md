@@ -664,6 +664,9 @@ int main()
   * 可以用作类似C里的回调函数，也可以用作函数功能的组合
 * C++模板
   * 简化对类似函数的设计，比如要设计两个函数 abs(int a), abs(float a),就可以用模板去设计一个函数就可以了
+
+### [STL](https://github.com/huihut/interview#-stl)
+
 * [STL 容器](https://github.com/huihut/interview#stl-%E5%AE%B9%E5%99%A8)
 
 容器 | 底层数据结构 | 时间复杂度 | 有无序 | 可不可重复 | 其他
@@ -676,7 +679,7 @@ int main()
 [stack](https://github.com/huihut/interview/tree/master/STL#stack)|deque / list|顶部插入、顶部删除 O(1)|无序|可重复|deque 或 list 封闭头端开口，不用 vector 的原因应该是容量大小有限制，扩容耗时
 [queue](https://github.com/huihut/interview/tree/master/STL#queue)|deque / list|尾部插入、头部删除 O(1)|无序|可重复|deque 或 list 封闭头端开口，不用 vector 的原因应该是容量大小有限制，扩容耗时
 [priority_queue](https://github.com/huihut/interview/tree/master/STL#priority_queue)|vector + max-heap|插入、删除 O(log<sub>2</sub>n)|有序|可重复|vector容器+heap处理规则
-[set](https://github.com/huihut/interview/tree/master/STL#set)|红黑树|插入、删除、查找 O(log<sub>2</sub>n)|有序|不可重复|
+[set](https://github.com/huihut/interview/tree/master/STL#set)|[红黑树](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree)|插入、删除、查找 O(log<sub>2</sub>n)|有序|不可重复|
 [multiset](https://github.com/huihut/interview/tree/master/STL#multiset)|红黑树|插入、删除、查找 O(log<sub>2</sub>n)|有序|可重复|
 [map](https://github.com/huihut/interview/tree/master/STL#map)|红黑树|插入、删除、查找 O(log<sub>2</sub>n)|有序|不可重复|
 [multimap](https://github.com/huihut/interview/tree/master/STL#multimap)|红黑树|插入、删除、查找 O(log<sub>2</sub>n)|有序|可重复|
@@ -692,21 +695,6 @@ int main()
 [find](http://www.cplusplus.com/reference/algorithm/find/)|顺序查找|O(n)|可重复
 [sort](https://github.com/gcc-mirror/gcc/blob/master/libstdc++-v3/include/bits/stl_algo.h#L4808)|[内省排序](https://en.wikipedia.org/wiki/Introsort)|O(n*log<sub>2</sub>n)|可重复
 
-* STL containers内部实现的数据结构
-  * Sequence containers
-    * [array](https://github.com/huihut/interview/tree/master/STL#array) / [vector](https://github.com/huihut/interview/tree/master/STL#vector) ：数组
-    * [deque](https://github.com/huihut/interview/tree/master/STL#deque) : 双端队列
-    * [forward_list](https://github.com/huihut/interview/tree/master/STL#forward_list) : 单向链表
-    * [list](https://github.com/huihut/interview/tree/master/STL#list) ：双向链表
-  * Container adaptors
-    * [stack](https://github.com/huihut/interview/tree/master/STL#stack) / [queue](https://github.com/huihut/interview/tree/master/STL#queue) : deque / list
-    * [priority_queue](https://github.com/huihut/interview/tree/master/STL#priority_queue) : vector + max-heap
-  * Associative containers
-    * [set](https://github.com/huihut/interview/tree/master/STL#set) / [multiset](https://github.com/huihut/interview/tree/master/STL#multiset) / [map](https://github.com/huihut/interview/tree/master/STL#map)  / [multimap](https://github.com/huihut/interview/tree/master/STL#multimap) ：红黑树([Red–black tree - Wikipedia](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree))
-  * Unordered associative containers
-    * [unordered_set](https://github.com/huihut/interview/tree/master/STL#unordered_set) / [unordered_multiset](https://github.com/huihut/interview/tree/master/STL#unordered_multiset) / [unordered_map](https://github.com/huihut/interview/tree/master/STL#unordered_map) / [unordered_multimap](https://github.com/huihut/interview/tree/master/STL#unordered_multimap) ：Hash表
-  * [Containers - C++ Reference](http://www.cplusplus.com/reference/stl/)
-  * [STL实现的底层数据结构简介 - CSDN博客](http://blog.csdn.net/huangkq1989/article/details/7277282)
 * [C++之旅-vector](https://mp.weixin.qq.com/s/Pizq2-UcJi7rJLTwwxtRlw)
 * Is Vector allocated on stack or heap ?
 	* Heap
