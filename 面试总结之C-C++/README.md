@@ -678,7 +678,7 @@ int main()
 [stack](https://github.com/huihut/interview/tree/master/STL#stack)|deque / list|顶部插入、顶部删除 O(1)|无序|可重复|deque 或 list 封闭头端开口，不用 vector 的原因应该是容量大小有限制，扩容耗时
 [queue](https://github.com/huihut/interview/tree/master/STL#queue)|deque / list|尾部插入、头部删除 O(1)|无序|可重复|deque 或 list 封闭头端开口，不用 vector 的原因应该是容量大小有限制，扩容耗时
 [priority_queue](https://github.com/huihut/interview/tree/master/STL#priority_queue)|vector + max-heap|插入、删除 O(log<sub>2</sub>n)|有序|可重复|vector容器+heap处理规则
-[set](https://github.com/huihut/interview/tree/master/STL#set)|[红黑树](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree)|插入、删除、查找 O(log<sub>2</sub>n)|有序|不可重复|
+[set](https://github.com/huihut/interview/tree/master/STL#set)|[红黑树](https://github.com/huihut/interview#%E7%BA%A2%E9%BB%91%E6%A0%91)|插入、删除、查找 O(log<sub>2</sub>n)|有序|不可重复|
 [multiset](https://github.com/huihut/interview/tree/master/STL#multiset)|红黑树|插入、删除、查找 O(log<sub>2</sub>n)|有序|可重复|
 [map](https://github.com/huihut/interview/tree/master/STL#map)|红黑树|插入、删除、查找 O(log<sub>2</sub>n)|有序|不可重复|
 [multimap](https://github.com/huihut/interview/tree/master/STL#multimap)|红黑树|插入、删除、查找 O(log<sub>2</sub>n)|有序|可重复|
