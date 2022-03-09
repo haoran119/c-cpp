@@ -648,6 +648,12 @@ int main()
     * 利用引用折叠原理将右值经过 T&& 传递类型保持不变还是右值，而左值经过 T&& 变为普通的左值引用，以保证模板可以传递任意实参，且保持类型不变；
     * 然后通过 remove_refrence 移除引用，得到具体的类型 T；
     * 最后通过 static_cast<> 进行强制类型转换，返回 T&& 右值引用。
+* [Pointers vs References in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/pointers-vs-references-cpp/)
+	* [Pointers](https://www.geeksforgeeks.org/pointers-in-c-and-c-set-1-introduction-arithmetic-and-array/)
+		* A pointer is a variable that holds memory address of another variable. A pointer needs to be dereferenced with * operator to access the memory location it points to. 
+	* [References](https://www.geeksforgeeks.org/references-in-c/)
+		* A reference variable is an alias, that is, another name for an already existing variable. A reference, like a pointer, is also implemented by storing the address of an object. 
+		* A reference can be thought of as a constant pointer (not to be confused with a pointer to a constant value!) with automatic indirection, i.e the compiler will apply the * operator for you. 
 * 指针和引用的初始化区别
   * 引用被创建的同时必须被初始化（指针则可以在任何时候被初始化）。
   * 不能有NULL 引用，引用必须与合法的存储单元关联（指针则可以是NULL）。
