@@ -777,6 +777,12 @@ int main() {
 	* std::unique_ptr is a smart pointer that owns and manages another object through a pointer and disposes of that object when the unique_ptr goes out of scope.
 	* [std::unique_ptr<T,Deleter>::unique_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/unique_ptr)
 		* (constructor)
+	* [std::unique_ptr<T,Deleter>::get - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/get)
+		* Returns a pointer to the managed object or nullptr if no object is owned.
+	* [std::unique_ptr<T,Deleter>::release - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/release)
+		* Releases the ownership of the managed object, if any.
+		* get() returns nullptr after the call.
+		* The caller is responsible for deleting the object.
 	* [std::unique_ptr<T,Deleter>::operator*, std::unique_ptr<T,Deleter>::operator-> - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/operator*)
 		* Single-object version, unique_ptr\<T>
 		* dereferences pointer to the managed object	
