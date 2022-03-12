@@ -851,3 +851,104 @@ int main()
 * [C/C++ 10 大常见基础算法](https://mp.weixin.qq.com/s/tGGNGpaRcWwKiNoQyo-TXw)
 * 用C语言，将一个数字乘以7倍的效率最快的方法是什么？ 
   * 先左移三位（*8）然后再减去原值：X << 3 – X
+* 判断输出结果
+```c++
+#include <iostream>
+using namespace std;
+
+void f(string x, string& y)
+{
+    x += "x";
+    y += "y";
+
+    cout << x << " " << y << " ";
+}
+
+int main()
+{
+    string x = "x";
+    string y = "y";
+
+    f(x, y);
+    cout << x << " " << y << "\n";
+
+    return 0;
+}
+
+// xx yy x yy
+```
+```c++
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int a[] = {4, 5, 6};
+
+    cout << *a << endl; // 4
+
+    return 0;
+}
+```
+```c++
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main()
+{
+    vector<int> v = {1, 2, 3};
+    auto it = v.begin();
+    cout << *it << endl;    // 1
+    v.push_back(4);
+    cout << *it << endl;    // undefined behavior
+
+    return 0;
+}
+```
+```c++
+#include <iostream>
+#include <set>
+using namespace std;
+
+int main()
+{
+    set<int> s;
+    s.insert(3);
+    s.insert(3);
+    s.insert(2);
+
+    // 2 3
+    for (auto it = s.begin(); it != s.end(); ++ it) {
+        cout << *it << endl;
+    }
+
+    return 0;
+}
+```
+```c++
+#include <iostream>
+
+class A
+{
+public:
+    A() { std::cout << "A()\n"; }
+    ~A() { std::cout << "~A()\n"; }
+};
+
+class B : public A
+{
+public:
+    B() { std::cout << "B()\n"; }
+    ~B() { std::cout << "~B()\n"; }
+};
+
+int main()
+{
+    B b;    // A() B()
+    A* p = new B;   // A() B()
+    delete p;   // ~A()
+
+    return 0;
+}   // ~B() ~A()
+```
