@@ -31,7 +31,7 @@ public:
     }
 
     List(const List& list);
-    List(List&& list);
+    List(List&& list) noexcept;
 
     void push(int data);
     void pop();
@@ -71,7 +71,7 @@ inline List::List(const List& list)
     m_pHead = std::move(newHead);
 }
 
-inline List::List(List&& list)
+inline List::List(List&& list) noexcept
 {
     std::cout << __func__ << "(List&& list)" << std::endl;
 
