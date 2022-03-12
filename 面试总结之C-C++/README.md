@@ -654,6 +654,24 @@ int main()
 	* [References](https://www.geeksforgeeks.org/references-in-c/)
 		* A reference variable is an alias, that is, another name for an already existing variable. A reference, like a pointer, is also implemented by storing the address of an object. 
 		* A reference can be thought of as a constant pointer (not to be confused with a pointer to a constant value!) with automatic indirection, i.e the compiler will apply the * operator for you. 
+	* Differences
+
+		Features|Pointers|References
+		-|-|-
+		Initialization|we can declare and initialize pointer at same step or in multiple line.|we should declare and initialize references at single step.
+		Reassignment|Pointer can be re-assigned. This property is useful for implementation of data structures like linked list, tree, etc.|Reference cannot be re-assigned, and must be assigned at initialization.
+		Memory Address|Pointer has its own memory address and size on the stack|Reference shares the same memory address (with the original variable) but also takes up some space on the stack
+		NULL value|Pointer can be assigned NULL directly|Reference cannot. The constraints associated with references (no NULL, no reassignment) ensure that the underlying operations do not run into exception situation.
+		Indirection|You can have pointers to pointers offering extra levels of indirection|References only offer one level of indirection
+		Arithmetic operations|Various arithmetic operations can be performed on pointers|There is no such thing called Reference Arithmetic.(but you can take the address of an object pointed by a reference and do pointer arithmetics on it as in &obj + 5).) 
+
+	* When to use What
+		* The performances are exactly the same, as references are implemented internally as pointers. But still you can keep some points in your mind to decide when to use what :
+			* Use references 
+				* In function parameters and return types.
+			* Use pointers: 
+				* Use pointers if pointer arithmetic or passing NULL-pointer is needed. For example for arrays (Note that array access is implemented using pointer arithmetic).
+				* To implement data structures like linked list, tree, etc and their algorithms because to point different cell, we have to use the concept of pointers.
 * 指针和引用的初始化区别
   * 引用被创建的同时必须被初始化（指针则可以在任何时候被初始化）。
   * 不能有NULL 引用，引用必须与合法的存储单元关联（指针则可以是NULL）。
