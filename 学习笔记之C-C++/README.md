@@ -1935,6 +1935,55 @@ int main(){
 }
 ```
 
+###### [std::forward_list](https://en.cppreference.com/w/cpp/container/forward_list)
+
+* std::forward_list is a container that supports fast insertion and removal of elements from anywhere in the container. Fast random access is not supported. It is implemented as a singly-linked list. Compared to std::list this container provides more space efficient storage when bidirectional iteration is not needed.
+* Adding, removing and moving the elements within the list, or across several lists, does not invalidate the iterators currently referring to other elements in the list. However, an iterator or reference referring to an element is invalidated when the corresponding element is removed (via erase_after) from the list.
+* std::forward_list meets the requirements of Container (except for the size member function and that operator=='s complexity is always linear), AllocatorAwareContainer and SequenceContainer.
+* [std::forward_list<T,Allocator>::emplace_front - cppreference.com](https://en.cppreference.com/w/cpp/container/forward_list/emplace_front)
+	* Inserts a new element to the beginning of the container. The element is constructed through std::allocator_traits::construct, which typically uses placement-new to construct the element in-place at the location provided by the container. The arguments args... are forwarded to the constructor as std::forward\<Args>(args)....
+	* No iterators or references are invalidated.
+* [std::forward_list<T,Allocator>::reverse - cppreference.com](https://en.cppreference.com/w/cpp/container/forward_list/reverse)
+	* Reverses the order of the elements in the container. No references or iterators become invalidated.
+* [std::forward_list<T,Allocator>::sort - cppreference.com](https://en.cppreference.com/w/cpp/container/forward_list/sort)
+	* Sorts the elements in ascending order. The order of equal elements is preserved. The first version uses operator< to compare the elements, the second version uses the given comparison function comp.
+	* If an exception is thrown, the order of elements in *this is unspecified.
+```c++
+#include <iostream>
+#include <forward_list>
+
+std::ostream& operator<<(std::ostream& ostr, const std::forward_list<int>& list)
+{
+    for (auto &i : list) {
+        ostr << " " << i;
+    }
+    return ostr;
+}
+
+int main()
+{
+    std::forward_list<int> list = { 8,7,5,9,0,1,3,2,6,4 };
+
+    list.emplace_front(10);
+
+    std::cout << "before:     " << list << "\n";    // before:      10 8 7 5 9 0 1 3 2 6 4
+
+    list.sort();
+    std::cout << "ascending:  " << list << "\n";    // ascending:   0 1 2 3 4 5 6 7 8 9 10
+
+    list.reverse();
+    std::cout << "descending: " << list << "\n";    // descending:  10 9 8 7 6 5 4 3 2 1 0
+
+    return 0;
+}
+```
+
+###### [std::list](https://en.cppreference.com/w/cpp/container/list)
+
+* std::list is a container that supports constant time insertion and removal of elements from anywhere in the container. Fast random access is not supported. It is usually implemented as a doubly-linked list. Compared to std::forward_list this container provides bidirectional iteration capability while being less space efficient.
+* Adding, removing and moving the elements within the list or across several lists does not invalidate the iterators or references. An iterator is invalidated only when the corresponding element is deleted.
+* std::list meets the requirements of Container, AllocatorAwareContainer, SequenceContainer and ReversibleContainer.
+
 ##### Associative
 
 * Associative containers implement sorted data structures that can be quickly searched (O(log n) complexity).
