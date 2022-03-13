@@ -979,6 +979,9 @@ int main()
     return 0;
 }
 ```
+
+#### Class
+
 ```c++
 /*
 What's wrong, and how to fix?
@@ -1012,9 +1015,6 @@ int main(int argc, char* argv[])
     return 0;
 }
 ```
-
-#### Class
-
 ```c++
 /*
 What's wrong, and how to fix?
