@@ -1066,7 +1066,7 @@ int main()
         doSomething
         */
     for (Thing *ptr = myThings.First(); myThings.OK(); myThings.Next()) {
-            ptr->doSomething();
+        ptr->doSomething();
     }
 
     return 0;
@@ -1204,7 +1204,7 @@ int main()
 
     // 2 3
     for (auto it = s.begin(); it != s.end(); ++ it) {
-            cout << *it << endl;
+        cout << *it << endl;
     }
 
     return 0;
