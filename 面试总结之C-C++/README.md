@@ -852,103 +852,348 @@ int main()
 * 用C语言，将一个数字乘以7倍的效率最快的方法是什么？ 
   * 先左移三位（*8）然后再减去原值：X << 3 – X
 * 判断输出结果
-```c++
-#include <iostream>
-using namespace std;
+	* Const
+	```c++
+	/*
+	What's wrong, and how to fix?
 
-void f(string x, string& y)
-{
-    x += "x";
-    y += "y";
+	Const variable aaa should be initialized when being defined.
+	To fix it, we could take any one action as below.
+	1) Initialize aaa in construct function
+	2) Assign a value in this statement const int aaa;
+	3) Remove keyword const
+	*/
 
-    cout << x << " " << y << " ";
-}
+	class TryConst
+	{
+	public:
+			TryConst () {}
+	private:
+			const int aaa;
+	};
+	```
+	* Static
+	```c++
+	/*
+	What's wrong, and how to fix?
 
-int main()
-{
-    string x = "x";
-    string y = "y";
+	Static variable could not be initialized inside the class.
+	To fix it, we could initialize it outside the class, e.g. int aa = 0.
+	*/
 
-    f(x, y);
-    cout << x << " " << y << "\n";
+	class TryStatic
+	{
+	public:
+			TryStatic () : aa (0) {}
+	private:
+			static int aa;
+	};
 
-    return 0;
-}
+	// int TryStatic::aa = 1;
+	```
+	* String
+	```c++
+	#include <iostream>
+	using namespace std;
 
-// xx yy x yy
-```
-```c++
-#include <iostream>
-using namespace std;
+	void compare_str()
+	{
+			string s1 = "Abc";
+			string s2 = "A";
 
-int main()
-{
-    int a[] = {4, 5, 6};
+			s1 = s1 + s2;
+			s2 = s2 + s1;
 
-    cout << *a << endl; // 4
+			cout << s1 << endl;  // AbcA
+			cout << s2 << endl;  // AAbcA
+			cout << s1.length() << endl; // 4
+			cout << s2.length() << endl; // 5
+			cout << (s1.compare(s2) > 0) << endl; // 1
+	}
 
-    return 0;
-}
-```
-```c++
-#include <iostream>
-#include <vector>
-using namespace std;
+	int main()
+	{
+			compare_str();
 
-int main()
-{
-    vector<int> v = {1, 2, 3};
-    auto it = v.begin();
-    cout << *it << endl;    // 1
-    v.push_back(4);
-    cout << *it << endl;    // undefined behavior
+			return 0;
+	}
+	```
+	```c++
+	#include <iostream>
+	using namespace std;
 
-    return 0;
-}
-```
-```c++
-#include <iostream>
-#include <set>
-using namespace std;
+	void f(string x, string& y)
+	{
+			x += "x";
+			y += "y";
 
-int main()
-{
-    set<int> s;
-    s.insert(3);
-    s.insert(3);
-    s.insert(2);
+			cout << x << " " << y << " ";
+	}
 
-    // 2 3
-    for (auto it = s.begin(); it != s.end(); ++ it) {
-        cout << *it << endl;
-    }
+	int main()
+	{
+			string x = "x";
+			string y = "y";
 
-    return 0;
-}
-```
-```c++
-#include <iostream>
+			f(x, y);
+			cout << x << " " << y << "\n";
 
-class A
-{
-public:
-    A() { std::cout << "A()\n"; }
-    ~A() { std::cout << "~A()\n"; }
-};
+			return 0;
+	}
 
-class B : public A
-{
-public:
-    B() { std::cout << "B()\n"; }
-    ~B() { std::cout << "~B()\n"; }
-};
+	// xx yy x yy
+	```
+	* Pointer
+	```c++
+	#include <iostream>
+	using namespace std;
 
-int main()
-{
-    B b;    // A() B()
-    A* p = new B;   // A() B()
-    delete p;   // ~A()
+	int foo(int &p)
+	{
+			++ p;
 
-    return 0;
-}   // ~B() ~A()
-```
+			return p ++;
+	}
+
+	int main()
+	{
+			int a = 1, b, d;
+			int * const c = &d;
+			b = foo(a);
+			*c = 10;
+
+			cout << a << endl;  // 3
+			cout << b << endl;  // 2
+			cout << *c << endl; // 10
+			cout << d << endl;  // 10
+
+			return 0;
+	}
+	```
+	```c++
+	/*
+	What's wrong, and how to fix?
+
+	~P2 would not be executed, which would cause memory leak.
+	To fix it, define ~P1() as virtual ~P1().
+	*/
+
+	class P1
+	{
+	public:
+			P1 () { p = new char [10]; }
+			~P1 () { delete [] p; }
+	private:
+			char * p;
+	};
+	class P2 : public P1
+	{
+	public:
+			P2 () { q = new char [20]; }
+			~P2 () { delete [] q; }
+	private:
+			char * q;
+	};
+
+	int main(int argc, char* argv[])
+	{
+			P1 * pp = new P2;
+			...
+			delete pp;
+			return 0;
+	}
+	```
+	* Class
+	```c++
+	/*
+	What's wrong, and how to fix?
+
+	When multiple access, the Next function will make the current pointer behave unexpected. E.g. A is calling doSomething(), and B issues Next(). When A issues Next(), actually the current node is not current->next but current->next->next.
+	To fix it, add a parameter for Next() => Next(Thing *currentNode) so that it could make sure that the next node would not be changed by others.
+	*/
+
+	#include <iostream>
+	using namespace std;
+
+	class Thing {
+	public:
+			void    doSomething() { cout << __func__ << endl; }
+			Thing*    next;
+	};
+
+	class Things {
+	public:
+			Things(Thing *myThing) : head(myThing), current(myThing) {}
+
+			Thing*  First() {
+					return head;
+			}
+
+			Thing*  Next() {
+					current = current->next;
+					return current;
+			}
+
+			bool OK() {
+					if (current != nullptr)
+							return true;
+					else
+							return false;
+			}
+
+	private:
+			Thing *head, *current;
+	};
+
+	int main()
+	{
+			Thing*   myThing = new Thing;
+			Things myThings(myThing);
+
+			// This is how we do with class Things
+			/*
+			 doSomething
+			 */
+			for (Thing *ptr = myThings.First(); myThings.OK(); myThings.Next()) {
+					ptr->doSomething();
+			}
+
+			return 0;
+	}
+	```
+	```c++
+	/*
+	What will be printed, and why?
+
+	In 32-bit environment, size of TestSize2 = 12.
+	12 = TestSize2 virtual table pointer(4) + TestSize2::b(4) + TestSize1::a(4)
+	*/
+
+	class TestSize1
+	{
+	public:
+			TestSize1 () : a (0) {}
+			virtual void F () = 0;
+	private:
+			int a;
+	};
+	class TestSize2 : public TestSize1
+	{
+	public:
+			TestSize2 () : b (1) {}
+			virtual void F () { b = 3; }
+	private:
+			int b;
+	};
+	int main(int argc, char* argv[])
+	{
+			printf ("size of TestSize2 = %d", sizeof (TestSize2));
+			return 0;
+	}
+	```
+	```c++
+	/*
+	What will be printed, and why?
+
+	data=1.
+	Because class B inherits class A, it would call constructor of A and B when constructing b. When calling the constructor of A, A::SetData() was called, so data was set to 1.
+	*/
+
+	class A
+	{
+	public:
+			A () : data (0) { SetData (); printf ("data=%d", data); }
+			virtual void SetData () { data = 1; }
+	protected:
+			int data;
+	};
+
+	class B : public A
+	{
+	public:
+			B () {}
+			virtual void SetData () { data = 2; }
+	};
+
+	int main(int argc, char* argv[])
+	{
+			B b;
+			return 0;
+	}
+	```
+	```c++
+	#include <iostream>
+
+	class A
+	{
+	public:
+			A() { std::cout << "A()\n"; }
+			~A() { std::cout << "~A()\n"; }
+	};
+
+	class B : public A
+	{
+	public:
+			B() { std::cout << "B()\n"; }
+			~B() { std::cout << "~B()\n"; }
+	};
+
+	int main()
+	{
+			B b;    // A() B()
+			A* p = new B;   // A() B()
+			delete p;   // ~A()
+
+			return 0;
+	}   // ~B() ~A()
+	```
+	* STL
+	```c++
+	#include <iostream>
+	using namespace std;
+
+	int main()
+	{
+			int a[] = {4, 5, 6};
+
+			cout << *a << endl; // 4
+
+			return 0;
+	}
+	```
+	```c++
+	#include <iostream>
+	#include <vector>
+	using namespace std;
+
+	int main()
+	{
+			vector<int> v = {1, 2, 3};
+			auto it = v.begin();
+			cout << *it << endl;    // 1
+			v.push_back(4);
+			cout << *it << endl;    // undefined behavior
+
+			return 0;
+	}
+	```
+	```c++
+	#include <iostream>
+	#include <set>
+	using namespace std;
+
+	int main()
+	{
+			set<int> s;
+			s.insert(3);
+			s.insert(3);
+			s.insert(2);
+
+			// 2 3
+			for (auto it = s.begin(); it != s.end(); ++ it) {
+					cout << *it << endl;
+			}
+
+			return 0;
+	}
+	```
