@@ -1283,13 +1283,6 @@ int main() {
   	* Reason A destructor must not fail. If a destructor tries to exit with an exception, it’s a bad design error and the program had better terminate.
   	* Note A destructor (either user-defined or compiler-generated) is implicitly declared noexcept (independently of what code is in its body) if all of the members of its class have noexcept destructors. By explicitly marking destructors noexcept, an author guards against the destructor becoming implicitly noexcept(false) through the addition or modification of a class member.
   	* Example Not all destructors are noexcept by default; one throwing member poisons the whole class hierarchy
-		```c++
-		struct X {
-				Details x;  // happens to have a throwing destructor
-				// ...
-				~X() { }    // implicitly noexcept(false); aka can throw
-		};
-		```
 		* So, if in doubt, declare a destructor noexcept.
 		* Note Why not then declare all destructors noexcept? Because that would in many cases – especially simple cases – be distracting clutter.Enforcement (Simple) A destructor should be declared noexcept if it could throw.
 	* [C++ Core Guidelines - E.12: Use noexcept when exiting a function because of a throw is impossible or unacceptable](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#e12-use-noexcept-when-exiting-a-function-because-of-a-throw-is-impossible-or-unacceptable)
