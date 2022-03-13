@@ -773,6 +773,14 @@ int main() {
 
 #### Pointers
 
+* [new expression - cppreference.com](https://en.cppreference.com/w/cpp/language/new)
+	* Creates and initializes objects with dynamic storage duration, that is, objects whose lifetime is not necessarily limited by the scope in which they were created.
+* [Placement new operator in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/placement-new-operator-cpp/)
+	* Advantages of placement new operator over new operator
+		* The address of memory allocation is known before hand.
+		* Useful when building a memory pool, a garbage collector or simply when performance and exception safety are paramount.
+		* There’s no danger of allocation failure since the memory has already been allocated, and constructing an object on a pre-allocated buffer takes less time.
+		* This feature becomes useful while working in an environment with limited resources.
 * [std::unique_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr)
 	* std::unique_ptr is a smart pointer that owns and manages another object through a pointer and disposes of that object when the unique_ptr goes out of scope.
 	* [std::unique_ptr<T,Deleter>::unique_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/unique_ptr)
