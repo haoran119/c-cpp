@@ -14,7 +14,7 @@
   * [huihut/interview: 📚 C/C++ 技术面试基础知识总结](https://github.com/huihut/interview)
     * [STL](https://github.com/huihut/interview#-stl)
     * [Effective C++](https://github.com/huihut/interview#effective-c)
-			* 为多态基类声明 virtual 析构函数（如果 class 带有任何 virtual 函数，它就应该拥有一个 virtual 析构函数）
+    	* 为多态基类声明 virtual 析构函数（如果 class 带有任何 virtual 函数，它就应该拥有一个 virtual 析构函数）
 			* 别让异常逃离析构函数（析构函数应该吞下不传播异常，或者结束程序，而不是吐出异常；如果要处理异常应该在非析构的普通函数处理）
 			* 绝不在构造和析构过程中调用 virtual 函数（因为这类调用从不下降至 derived class）
 			* 令 operator= 返回一个 reference to *this （用于连锁赋值）
