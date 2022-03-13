@@ -1343,42 +1343,44 @@ int main()
 	return 0;
 }
 ```
-* [Curiously Recurring Template Pattern - cppreference.com](https://en.cppreference.com/w/cpp/language/crtp)
-	* The Curiously Recurring Template Pattern is an idiom in which a class X derives from a class template Y, taking a template parameter Z, where Y is instantiated with Z=X.
-    ```c++
-    template<class Z>
-    class Y {};
 
-    class X : public Y<X> {};
-    ```
-	* CRTP may be used to implement "compile-time polymorphism", when a base class exposes an interface, and derived classes implement such interface.
-    ```c++
-    #include <iostream>
+###### [Curiously Recurring Template Pattern - cppreference.com](https://en.cppreference.com/w/cpp/language/crtp)
 
-    template <class Derived>
-    struct Base { void name() { (static_cast<Derived*>(this))->impl(); } };
+* The Curiously Recurring Template Pattern is an idiom in which a class X derives from a class template Y, taking a template parameter Z, where Y is instantiated with Z=X.
+```c++
+template<class Z>
+class Y {};
 
-    struct D1 : public Base<D1> { void impl() { std::cout << "D1::impl()\n"; } };
-    struct D2 : public Base<D2> { void impl() { std::cout << "D2::impl()\n"; } };
+class X : public Y<X> {};
+```
+* CRTP may be used to implement "compile-time polymorphism", when a base class exposes an interface, and derived classes implement such interface.
+```c++
+#include <iostream>
 
-    int main()
-    {
-        Base<D1> b1; b1.name();
-        Base<D2> b2; b2.name();
+template <class Derived>
+struct Base { void name() { (static_cast<Derived*>(this))->impl(); } };
 
-        D1 d1; d1.name();
-        D2 d2; d2.name();
-    }
-    /*
-    D1::impl()
-    D2::impl()
-    D1::impl()
-    D2::impl()
-    */
-    ```
-	* [Curiously recurring template pattern - Wikipedia](https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern)
-		* The curiously recurring template pattern (CRTP) is an idiom in C++ in which a class X derives from a class template instantiation using X itself as a template argument.[1] More generally it is known as F-bound polymorphism, and it is a form of F-bounded quantification.
-	* [Curiously recurring template pattern (CRTP) - GeeksforGeeks](https://www.geeksforgeeks.org/curiously-recurring-template-pattern-crtp-2/)
+struct D1 : public Base<D1> { void impl() { std::cout << "D1::impl()\n"; } };
+struct D2 : public Base<D2> { void impl() { std::cout << "D2::impl()\n"; } };
+
+int main()
+{
+    Base<D1> b1; b1.name();
+    Base<D2> b2; b2.name();
+
+    D1 d1; d1.name();
+    D2 d2; d2.name();
+}
+/*
+D1::impl()
+D2::impl()
+D1::impl()
+D2::impl()
+*/
+```
+* [Curiously recurring template pattern - Wikipedia](https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern)
+	* The curiously recurring template pattern (CRTP) is an idiom in C++ in which a class X derives from a class template instantiation using X itself as a template argument.[1] More generally it is known as F-bound polymorphism, and it is a form of F-bounded quantification.
+* [Curiously recurring template pattern (CRTP) - GeeksforGeeks](https://www.geeksforgeeks.org/curiously-recurring-template-pattern-crtp-2/)
 
 ##### Function Template
 
