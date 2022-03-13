@@ -1279,10 +1279,10 @@ int main() {
   * [noexcept (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/noexcept-cpp?view=msvc-160)
   * [Exception specifications (throw, noexcept) (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/exception-specifications-throw-cpp?view=msvc-160)
   * [Modern C++ best practices for exceptions and error handling | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/errors-and-exception-handling-modern-cpp?view=msvc-160)
-	* [C.37: Make destructors noexcept](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c37-make-destructors-noexcept)
-		* Reason A destructor must not fail. If a destructor tries to exit with an exception, it’s a bad design error and the program had better terminate.
-		* Note A destructor (either user-defined or compiler-generated) is implicitly declared noexcept (independently of what code is in its body) if all of the members of its class have noexcept destructors. By explicitly marking destructors noexcept, an author guards against the destructor becoming implicitly noexcept(false) through the addition or modification of a class member.
-		* Example Not all destructors are noexcept by default; one throwing member poisons the whole class hierarchy
+  * [C.37: Make destructors noexcept](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c37-make-destructors-noexcept)
+  	* Reason A destructor must not fail. If a destructor tries to exit with an exception, it’s a bad design error and the program had better terminate.
+  	* Note A destructor (either user-defined or compiler-generated) is implicitly declared noexcept (independently of what code is in its body) if all of the members of its class have noexcept destructors. By explicitly marking destructors noexcept, an author guards against the destructor becoming implicitly noexcept(false) through the addition or modification of a class member.
+  	* Example Not all destructors are noexcept by default; one throwing member poisons the whole class hierarchy
 		```c++
 		struct X {
 				Details x;  // happens to have a throwing destructor
