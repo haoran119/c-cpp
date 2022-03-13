@@ -327,7 +327,7 @@
     #include <string>
     #include <iostream>
 
-    class A                     {
+    class A {
         private:
             std::string _msg;
         public:
@@ -551,21 +551,19 @@ int main()
   ```c++
   class Abstract {
   public:
-     virtual void pure_virtual() = 0;
+      virtual void pure_virtual() = 0;
   };
 
   void Abstract::pure_virtual() {
-     // do something
+      // do something
    }
 
    class Child : public Abstract {
-     virtual void pure_virtual(); // no longer abstract, this class may be
-                                  // instantiated.
+       virtual void pure_virtual(); // no longer abstract, this class may be instantiated.
    };
 
    void Child::pure_virtual() {
-     Abstract::pure_virtual(); // the implementation in the abstract class
-                               // is executed
+       Abstract::pure_virtual(); // the implementation in the abstract class is executed
    }   
   ```
   * [Virtual function - Wikipedia](https://en.wikipedia.org/wiki/Virtual_function)
@@ -1019,8 +1017,11 @@ int main(int argc, char* argv[])
 /*
 What's wrong, and how to fix?
 
-When multiple access, the Next function will make the current pointer behave unexpected. E.g. A is calling doSomething(), and B issues Next(). When A issues Next(), actually the current node is not current->next but current->next->next.
-To fix it, add a parameter for Next() => Next(Thing *currentNode) so that it could make sure that the next node would not be changed by others.
+When multiple access, the Next function will make the current pointer behave unexpected. 
+E.g. A is calling doSomething(), and B issues Next(). When A issues Next(), 
+actually the current node is not current->next but current->next->next.
+To fix it, add a parameter for Next() => Next(Thing *currentNode) 
+so that it could make sure that the next node would not be changed by others.
 */
 
 #include <iostream>
