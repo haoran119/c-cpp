@@ -151,6 +151,8 @@
     * 从操作系统的本身来讲，以上存储区在内存中的分布是如下形式(从低地址到高地址)：.text 段 --> .data 段 --> .bss 段 --> 堆 --> unused --> 栈 --> env
 * 变量的内存分区
   * [C/C++的四大内存分区 - CSDN博客](https://blog.csdn.net/K346K346/article/details/45592329)
+* 对象创建限制在堆或栈
+	* [如何定义一个只能在堆上（栈上）生成对象的类？](https://github.com/huihut/interview#%E5%A6%82%E4%BD%95%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA%E5%8F%AA%E8%83%BD%E5%9C%A8%E5%A0%86%E4%B8%8A%E6%A0%88%E4%B8%8A%E7%94%9F%E6%88%90%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%B1%BB)
 * C structure，数据结构里有inter,char,float时，数据的内存布局会是怎样
   * 数据会以4位或是8位，16位等等方式对齐
 * 为什么会有这种对齐
