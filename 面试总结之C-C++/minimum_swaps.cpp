@@ -21,13 +21,6 @@ int minimumSwaps1(vector<int> popularity) {
     auto n = popularity.size();
     auto result = 0;
     auto vTemp = popularity;
-    unordered_map<int, int> dict{};
-
-    sort(vTemp.begin(), vTemp.end(), greater<int>());
-
-    for (auto i = 0; i < n; ++ i) {
-        dict[popularity.at(i)] = i;
-    }
 
     for (auto i = 0; i < n; ++ i) {
         if (popularity.at(i) != (n - i)) {
