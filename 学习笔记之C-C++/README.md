@@ -2346,11 +2346,17 @@ int main() {
   * 我能使用不同版本的实现代码来替代默认实现吗？
   * 如果我们脱离了标准库怎么办？
 
-#### Ranges library
+#### [Ranges library](https://en.cppreference.com/w/cpp/ranges)
 
 * [起底 C++ Range 令人惊讶的局限性！](https://mp.weixin.qq.com/s/iB70FXO-D7C-72N4l9KnzA)
   * https://www.fluentcpp.com/2019/09/13/the-surprising-limitations-of-c-ranges-beyond-trivial-use-cases/
- 
+
+#### [Numerics library](https://en.cppreference.com/w/cpp/numeric)
+
+* The C++ numerics library includes common mathematical functions and types, as well as optimized numeric arrays and support for random number generation.
+* [How to use the PI constant in C++?](https://www.tutorialspoint.com/how-to-use-the-pi-constant-in-cplusplus)
+	* The PI constant is present in the cmath header file. The name of the constant is M_PI. 
+
 #### [Utility library](https://en.cppreference.com/w/cpp/utility)
 
 ##### Language support
