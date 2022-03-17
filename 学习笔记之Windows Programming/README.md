@@ -23,3 +23,6 @@
 * How to add host in Windows ?
   * code %windir%\system32\drivers\etc\hosts
   * [Create a new Windows hosts file](https://support.norton.com/sp/en/au/home/current/solutions/v72822654)
+* How to check PowerShell version ?
+  * $PSVersionTable.PSVersion
+  * [How to Check your PowerShell Version (All the Ways!)](https://adamtheautomator.com/powershell-version/)
