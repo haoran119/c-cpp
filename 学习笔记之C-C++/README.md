@@ -2683,6 +2683,9 @@ Type relationships
   * Append "comsuppw.lib" to MSVS > Project Property > Linker > Input
   * [error LNK2019 related to ConvertStringToBSTR](https://social.microsoft.com/Forums/windows/he-IL/8e2b44f4-3884-445c-9da9-e6abb2783b4c/error-lnk2019-related-to-convertstringtobstr?forum=Vsexpressvc)
   * [ConvertStringToBSTR | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/convertstringtobstr?redirectedfrom=MSDN&view=msvc-160)
+* How to fix "error LNK2019: unresolved external symbol __imp__UuidCreate@4" ?
+	* Under Project menu, open <project name> Properties -> Configuration Properties -> Linker -> Command Line. Type Rpcrt4.lib into the Additional Options box.
+	* [How to Link with .lib file -- UuidCreate()](https://forums.codeguru.com/showthread.php?448070-How-to-Link-with-lib-file-UuidCreate())
 * How to fix "warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification" ?
   * Change default to below values in MSVS > Your project property > Linker > Optimization :
     * References = Keep Unreferenced Data (/OPT:NOREF)
