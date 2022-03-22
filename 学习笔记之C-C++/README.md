@@ -2674,6 +2674,8 @@ Type relationships
 ### ERROR FIX
 
 * How to fix "Compiler error C2653: not a class or namespace name" ?
+	* Generate full list of includes files to see include stack
+		* MSVS > Property > C/C++ > Advanced > Show Includes > Yes
 	* Fix circular dependency in header files. Need to look into the included header files as well.
 	* [c++ - Compiler error C2653: not a class or namespace name - Stack Overflow](https://stackoverflow.com/questions/15740952/compiler-error-c2653-not-a-class-or-namespace-name)
 		* You have a circular dependency in your headers. BaseEntity.h includes Input.h, which includes ScreenSystem.h, which includes GameScreen.h, which in turn re-includes BaseEntity.h. This leads to class names appearing before they are declared, causing compilation failure.
