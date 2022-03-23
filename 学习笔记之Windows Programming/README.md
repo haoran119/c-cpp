@@ -26,3 +26,8 @@
 * How to check PowerShell version ?
   * $PSVersionTable.PSVersion
   * [How to Check your PowerShell Version (All the Ways!)](https://adamtheautomator.com/powershell-version/)
+* How to check all environment variables ?
+```sh
+ls env:
+dir env:
+```
