@@ -31,3 +31,5 @@
 ls env:
 dir env:
 ```
+* How to edit environmet variables ?
+  * [How to edit, clear, and delete environment variables in Windows - Digital Citizen](https://www.digitalcitizen.life/remove-edit-clear-environment-variables/)
