@@ -264,6 +264,9 @@
   * C++用inline，内联函数机制。
   * 内联函数可以得到宏的替换功能，所有可预见的状态和常规函数的类型检查。
 * malloc / new operator / operator new的区别？
+	* [malloc() vs new - GeeksforGeeks](https://www.geeksforgeeks.org/malloc-vs-new/)
+	* [new vs operator new in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/new-vs-operator-new-in-cpp/)
+	* [Difference between "new operator" and "operator new" in C++?](https://www.tutorialspoint.com/difference-between-new-operator-and-operator-new-in-cplusplus)
 
 Item | malloc | new operator | operator new
 -|-|-|-
