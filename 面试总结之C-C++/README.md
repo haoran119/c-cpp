@@ -263,6 +263,13 @@
   * C语言用宏代替。
   * C++用inline，内联函数机制。
   * 内联函数可以得到宏的替换功能，所有可预见的状态和常规函数的类型检查。
+* malloc / new operator / operator new的区别？
+	* In general, malloc is a C function, new operator is an operator and C++ keyword, and operator new is a C++ function to overload the new operator.
+
+Item | malloc | new operator | operator new
+-|-|-|-
+call constructor|No|Yes|No but after returning the pointer from this overloaded method, the compiler calls the constructor after that.
+
 * [struct和union的区别](http://blog.csdn.net/firefly_2002/article/details/7954458)
   * 在存储多个成员信息时，编译器会自动给struct第个成员分配存储空间，struct可以存储多个成员信息，而union每个成员会用同一个存储空间，只能存储最后一个成员的信息。
   * 都是由多个不同的数据类型成员组成，但在任何同一时刻，Union只存放了一个被先选中的成员，而结构体的所有成员都存在。
