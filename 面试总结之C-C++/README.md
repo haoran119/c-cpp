@@ -271,7 +271,7 @@
 Item | malloc | new operator | operator new
 -|-|-|-
 Type|C function|operator and C++ keyword|C++ function to overload the new operator
-Call constructor?|No|Yes|No but after returning the pointer from this overloaded method, the compiler calls the constructor after that.
+Call constructor?|No|Yes|No but after returning the pointer from this overloaded method, the compiler calls the constructor
 Return type|void*|exact data type|exact data type
 Exception handling on failure|return NULL|throws bad_alloc exception|throws bad_alloc exception
 Required size of memory|calculated manually|caculated by compiler|caculated by compiler
