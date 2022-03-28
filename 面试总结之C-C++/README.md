@@ -938,10 +938,10 @@ lexicographical_compare(beg1, end1, beg2, end2, comp);
 * Exception safety
 	* [Exception safety - Wikipedia](https://en.wikipedia.org/wiki/Exception_safety)
 		* The C++ standard library provides several levels of exception safety (in decreasing order of safety):[6]
-		* No-throw guarantee, also known as failure transparency: Operations are guaranteed to succeed and satisfy all requirements even in exceptional situations. If an exception occurs, it will be handled internally and not observed by clients.
-		* Strong exception safety, also known as commit or rollback semantics: Operations can fail, but failed operations are guaranteed to have no side effects, leaving the original values intact.[7]
-		* Basic exception safety: Partial execution of failed operations can result in side effects, but all invariants are preserved. Any stored data will contain valid values which may differ from the original values. Resource leaks (including memory leaks) are commonly ruled out by an invariant stating that all resources are accounted for and managed.
-		* No exception safety: No guarantees are made.
+			* No-throw guarantee, also known as failure transparency: Operations are guaranteed to succeed and satisfy all requirements even in exceptional situations. If an exception occurs, it will be handled internally and not observed by clients.
+			* Strong exception safety, also known as commit or rollback semantics: Operations can fail, but failed operations are guaranteed to have no side effects, leaving the original values intact.[7]
+			* Basic exception safety: Partial execution of failed operations can result in side effects, but all invariants are preserved. Any stored data will contain valid values which may differ from the original values. Resource leaks (including memory leaks) are commonly ruled out by an invariant stating that all resources are accounted for and managed.
+			* No exception safety: No guarantees are made.
 	* [How to: Design for exception safety | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/how-to-design-for-exception-safety?view=msvc-170#:~:text=A%20basic%20axiom%20of%20C%2B%2B,on%20all%20destructors%20it%20defines.)
 		* Typically, exception safety is discussed in terms of the three exception guarantees that a function can provide: the no-fail guarantee, the strong guarantee, and the basic guarantee.
 		* No-fail guarantee
