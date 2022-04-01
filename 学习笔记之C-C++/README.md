@@ -516,7 +516,7 @@ int main() {
 * 你会发现，除了文件名不同，其余都相同。
 * 当然，这里额外说一下，不同代码、不同编译器，以及不同优化等级，可能最终结果有所差异。
 
-#### Functions
+#### [Functions](https://www.tutorialspoint.com/cplusplus/cpp_functions.htm)
 
 * [Functions - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/functions/)
 * [std::function - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/function)
@@ -528,17 +528,41 @@ int main() {
       * The function object can be copied and moved around, and can be used to directly invoke the callable object with the specified call signature (see member operator()).
       * function objects can also be in a state with no target callable object. In this case they are known as empty functions, and calling them throws a bad_function_call exception.
   * [C++ Library - \<functional>](https://www.tutorialspoint.com/cpp_standard_library/functional.htm)
-* [进入编译器后，一个函数经历了什么？](https://mp.weixin.qq.com/s/kYilpl4K_XpVDF3gaKoRAQ)
-* [C/C++ 中的 argc，argv 到底是什么？](https://mp.weixin.qq.com/s/Mik2n9oLP-PuFNU3lP48Zw)
-* [exit(0) vs exit(1) in C/C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/exit0-vs-exit1-in-c-c-with-examples/)
-	* Exit Success: Exit Success is indicated by exit(0) statement which means successful termination of the program, i.e. program has been executed without any error or interrupt.
-	* Exit Failure: Exit Failure is indicated by exit(1) which means the abnormal termination of the program, i.e. some error or interrupt has occurred. We can use different integer other than 1 to indicate different types of errors.
 * [std::not_fn - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/not_fn)
 	* Defined in header \<functional>
 	* Creates a forwarding call wrapper that returns the negation of the callable object it holds.
 	* [\<functional> functions | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/functional-functions?view=msvc-170#not_fn)
 		* The not_fn function template takes a callable object and returns a callable object. When the returned callable object is later invoked with some arguments, it passes them to the original callable object, and logically negates the result. It preserves the const qualification and value category behavior of the wrapped callable object. not_fn is new in C++17, and replaces the deprecated std::not1, std::not2, std::unary_negate, and std::binary_negate.
+* [进入编译器后，一个函数经历了什么？](https://mp.weixin.qq.com/s/kYilpl4K_XpVDF3gaKoRAQ)
+* [C/C++ 中的 argc，argv 到底是什么？](https://mp.weixin.qq.com/s/Mik2n9oLP-PuFNU3lP48Zw)
+* [exit(0) vs exit(1) in C/C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/exit0-vs-exit1-in-c-c-with-examples/)
+	* Exit Success: Exit Success is indicated by exit(0) statement which means successful termination of the program, i.e. program has been executed without any error or interrupt.
+	* Exit Failure: Exit Failure is indicated by exit(1) which means the abnormal termination of the program, i.e. some error or interrupt has occurred. We can use different integer other than 1 to indicate different types of errors.
 
+##### [inline specifier](https://en.cppreference.com/w/cpp/language/inline)
+
+* The inline specifier, when used in a function's decl-specifier-seq, declares the function to be an inline function.
+* A function defined entirely inside a class/struct/union definition, whether it's a member function or a non-member friend function, is implicitly an inline function if it is attached to the global module (since C++20).
+* A function declared constexpr is implicitly an inline function.
+* A deleted function is implicitly an inline function: its (deleted) definition can appear in more than one translation unit.(since C++11)
+* The inline specifier, when used in a decl-specifier-seq of a variable with static storage duration (static class member or namespace-scope variable), declares the variable to be an inline variable.
+* A static member variable (but not a namespace-scope variable) declared constexpr is implicitly an inline variable.(since C++17)
+* [F.5: If a function is very small and time-critical, declare it inline](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f5-if-a-function-is-very-small-and-time-critical-declare-it-inline)
+	* Exception: Do not put an inline function in what is meant to be a stable interface unless you are certain that it will not change. An inline function is part of the ABI.
+	* Exception: Function templates (including member functions of class templates A\<T>::function() and member function templates A::function\<T>()) are normally defined in headers and therefore inline.
+* [SF.2: A .h file must not contain object definitions or non-inline function definitions](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#sf2-a-h-file-must-not-contain-object-definitions-or-non-inline-function-definitions)
+	* Reason: Including entities subject to the one-definition rule leads to linkage errors.
+	* Alternative formulation: A .h file must contain only:
+		* #includes of other .h files (possibly with include guards)
+		* templates
+		* class definitions
+		* function declarations
+		* extern declarations
+		* inline function definitions
+		* constexpr definitions
+		* const definitions
+		* using alias definitions
+ 
 ##### Lambda
 
 * [Lambda expressions in C++ | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/lambda-expressions-in-cpp?view=msvc-160)
