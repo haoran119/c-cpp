@@ -2350,17 +2350,6 @@ int main() {
   * 我能使用不同版本的实现代码来替代默认实现吗？
   * 如果我们脱离了标准库怎么办？
 
-#### [Ranges library](https://en.cppreference.com/w/cpp/ranges)
-
-* [起底 C++ Range 令人惊讶的局限性！](https://mp.weixin.qq.com/s/iB70FXO-D7C-72N4l9KnzA)
-  * https://www.fluentcpp.com/2019/09/13/the-surprising-limitations-of-c-ranges-beyond-trivial-use-cases/
-
-#### [Numerics library](https://en.cppreference.com/w/cpp/numeric)
-
-* The C++ numerics library includes common mathematical functions and types, as well as optimized numeric arrays and support for random number generation.
-* [How to use the PI constant in C++?](https://www.tutorialspoint.com/how-to-use-the-pi-constant-in-cplusplus)
-	* The PI constant is present in the cmath header file. The name of the constant is M_PI. 
-
 #### [Utility library](https://en.cppreference.com/w/cpp/utility)
 
 ##### Language support
@@ -2434,6 +2423,17 @@ Type relationships
       * optional is particularly well-suited to the delayed initialization problem because it is itself an instance of delayed initialization. The contained T may be initialized at construction, or sometime later, or never. Any contained T must be destroyed when the optional is destroyed. The designers of optional have already answered most of the questions that arise in this context.
     * Conclusions
       * Any time you need a tool to express “value-or-not-value”, or “possibly an answer”, or “object with delayed initialization”, you should reach into your toolbox for std::optional. Using a vocabulary type for these cases raises the level of abstraction, making it easier for others to understand what your code is doing. The declarations optional/<T/> f(); and void g(optional/<T/>); express intent more clearly and concisely than do pair/<T, bool> f(); or void g(T t, bool is_valid);. Just as is the case with words, adding to our vocabulary of types increases our capacity to describe complex problems simply – it makes us more efficient.
+
+#### [Ranges library](https://en.cppreference.com/w/cpp/ranges)
+
+* [起底 C++ Range 令人惊讶的局限性！](https://mp.weixin.qq.com/s/iB70FXO-D7C-72N4l9KnzA)
+  * https://www.fluentcpp.com/2019/09/13/the-surprising-limitations-of-c-ranges-beyond-trivial-use-cases/
+
+#### [Numerics library](https://en.cppreference.com/w/cpp/numeric)
+
+* The C++ numerics library includes common mathematical functions and types, as well as optimized numeric arrays and support for random number generation.
+* [How to use the PI constant in C++?](https://www.tutorialspoint.com/how-to-use-the-pi-constant-in-cplusplus)
+	* The PI constant is present in the cmath header file. The name of the constant is M_PI. 
 
 ## Best Practice
 
