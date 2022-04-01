@@ -1,4 +1,4 @@
-# 学习笔记之Component Object Model (COM)
+# 学习笔记之COM(Component Object Model)
 
 * [Component Object Model (COM) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal)
   * Purpose
