@@ -1536,6 +1536,8 @@ int main(){
 
 #### Multithreading
 
+* [Concurrency support library - cppreference.com](https://en.cppreference.com/w/cpp/thread)
+	* C++ includes built-in support for threads, atomic operations, mutual exclusion, condition variables, and futures.
 * [Multithreading in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/multithreading-in-cpp/)
 ```c++
 // CPP program to demonstrate multithreading
@@ -1547,58 +1549,58 @@ using namespace std;
 // A dummy function
 void foo(int Z)
 {
-	for (int i = 0; i < Z; i++) {
-		cout << "Thread using function"
-			" pointer as callable\n";
-	}
+    for (int i = 0; i < Z; i++) {
+        cout << "Thread using function"
+            " pointer as callable\n";
+    }
 }
 
 // A callable object
 class thread_obj {
 public:
-	void operator()(int x)
-	{
-		for (int i = 0; i < x; i++)
-			cout << "Thread using function"
-				" object as callable\n";
-	}
+    void operator()(int x)
+    {
+        for (int i = 0; i < x; i++)
+            cout << "Thread using function"
+                " object as callable\n";
+    }
 };
 
 int main()
 {
-	cout << "Threads 1 and 2 and 3 "
-		"operating independently" << endl;
+    cout << "Threads 1 and 2 and 3 "
+        "operating independently" << endl;
 
-	// This thread is launched by using
-	// function pointer as callable
-	thread th1(foo, 3);
+    // This thread is launched by using
+    // function pointer as callable
+    thread th1(foo, 3);
 
-	// This thread is launched by using
-	// function object as callable
-	thread th2(thread_obj(), 3);
+    // This thread is launched by using
+    // function object as callable
+    thread th2(thread_obj(), 3);
 
-	// Define a Lambda Expression
-	auto f = [](int x) {
-		for (int i = 0; i < x; i++)
-			cout << "Thread using lambda"
-			" expression as callable\n";
-	};
+    // Define a Lambda Expression
+    auto f = [](int x) {
+        for (int i = 0; i < x; i++)
+            cout << "Thread using lambda"
+            " expression as callable\n";
+    };
 
-	// This thread is launched by using
-	// lamda expression as callable
-	thread th3(f, 3);
+    // This thread is launched by using
+    // lamda expression as callable
+    thread th3(f, 3);
 
-	// Wait for the threads to finish
-	// Wait for thread t1 to finish
-	th1.join();
+    // Wait for the threads to finish
+    // Wait for thread t1 to finish
+    th1.join();
 
-	// Wait for thread t2 to finish
-	th2.join();
+    // Wait for thread t2 to finish
+    th2.join();
 
-	// Wait for thread t3 to finish
-	th3.join();
+    // Wait for thread t3 to finish
+    th3.join();
 
-	return 0;
+    return 0;
 }
 ```
 * [现代 C++ 并发编程基础](https://mp.weixin.qq.com/s/GGIczr97q-RxAfAnQKeDRg)
@@ -1628,6 +1630,14 @@ int main()
 * [异步编程到底在说啥？](https://mp.weixin.qq.com/s/aaCVgXekO6unpFDfKchVlA)
 	* 同步就好比你排队去自助售票机取电影票，你必须排队等待前一个人取完电影票才能到你，你不能在前一个取票的过程中取自己的票，这时我们说取电影票时你和前一个人是同步的。
 	* 而异步就好比去吃大餐，你在座位上看菜单点菜，其它人也可以点菜，你不需要等待其它人吃完饭才能下单，这时我们说你点菜和其它人吃饭是异步的。
+
+##### [\<thread>](https://en.cppreference.com/w/cpp/header/thread)
+
+* Threads enable programs to execute across several processor cores.
+* [std::this_thread::sleep_for - cppreference.com](https://en.cppreference.com/w/cpp/thread/sleep_for)
+	* Blocks the execution of the current thread for at least the specified sleep_duration.
+	* This function may block for longer than sleep_duration due to scheduling or resource contention delays.
+	* The standard recommends that a steady clock is used to measure the duration. If an implementation uses a system clock instead, the wait time may also be sensitive to clock adjustments.
 
 ##### [\<atomic>](https://www.cplusplus.com/reference/atomic/atomic/)
 
