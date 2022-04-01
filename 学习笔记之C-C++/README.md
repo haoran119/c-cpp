@@ -1746,23 +1746,21 @@ void setDataReady(){
     std::cout << "Data prepared" << std::endl;
 }
 
-int main(){
-    
-  std::cout << std::endl;
+int main()
+{
+    std::cout << std::endl;
 
-  std::thread t1(waitingForWork);
-  std::thread t2(setDataReady);
+    std::thread t1(waitingForWork);
+    std::thread t2(setDataReady);
 
-  t1.join();
-  t2.join();
-  
-  for (auto v: mySharedWork){
-      std::cout << v << " ";
-  }
-      
-  
-  std::cout << "\n\n";
-  
+    t1.join();
+    t2.join();
+
+    for (auto v: mySharedWork){
+        std::cout << v << " ";
+    }
+
+    std::cout << "\n\n";
 }
 ```
 ![image](https://user-images.githubusercontent.com/34557994/156122924-ede55b2c-d15d-47cc-af2c-0b219f1d3391.png)
