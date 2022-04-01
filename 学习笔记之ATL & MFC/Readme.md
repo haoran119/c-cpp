@@ -16,6 +16,11 @@
       * [CTime::GetCurrentTime](https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/reference/ctime-class?view=msvc-160#getcurrenttime)
       * [CTime::Format](https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/reference/ctime-class?view=msvc-160#format)
       * [strftime, wcsftime, _strftime_l, _wcsftime_l | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/strftime-wcsftime-strftime-l-wcsftime-l?view=msvc-160)
+* [CComVariant class | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/atl/reference/ccomvariant-class?view=msvc-170)
+  * This class wraps the VARIANT type, providing a member indicating the type of data stored.
+  * [VARIANT (oaidl.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/oaidl/ns-oaidl-variant)
+    * VARIANTARG describes arguments passed within DISPPARAMS, and VARIANT to specify variant data that cannot be passed by reference.
+    * When a variant refers to another variant by using the VT_VARIANT | VT_BYREF vartype, the variant being referred to cannot also be of type VT_VARIANT | VT_BYREF. VARIANTs can be passed by value, even if VARIANTARGs cannot.
 * [Using CString | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/using-cstring?view=msvc-160)
   * The topics in this section describe how to program with CString. For reference documentation about the CString class, see the documentation for CStringT.
   * To use CString, include the atlstr.h header.
