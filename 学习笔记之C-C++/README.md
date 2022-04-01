@@ -1656,8 +1656,9 @@ int main()
   * 4. C 线程库
     * [C语言线程库的使用](https://mp.weixin.qq.com/s?__biz=MzI3ODQ3OTczMw==&mid=2247491745&idx=1&sn=d995e1617ed6ad3d56de28b5be127e73&scene=21#wechat_redirect)
 
-##### [\<atomic>](https://www.cplusplus.com/reference/atomic/atomic/)
+##### [\<atomic>](https://en.cppreference.com/w/cpp/header/atomic)
 
+* These components are provided for fine-grained atomic operations allowing for lockless concurrent programming. Each atomic operation is indivisible with regards to any other atomic operation that involves the same object. Atomic objects are [free of data races](https://en.cppreference.com/w/cpp/language/memory_model#Threads_and_data_races).
 * [Atomic operations library - cppreference.com](https://en.cppreference.com/w/cpp/atomic)
 	* The atomic library provides components for fine-grained atomic operations allowing for lockless concurrent programming. Each atomic operation is indivisible with regards to any other atomic operation that involves the same object. Atomic objects are free of data races.
 	* [std::atomic - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic)
@@ -1764,17 +1765,28 @@ int main()
 }
 ```
 ![image](https://user-images.githubusercontent.com/34557994/156122924-ede55b2c-d15d-47cc-af2c-0b219f1d3391.png)
-
 * [C++ 11 开发中的 Atomic 原子操作](https://mp.weixin.qq.com/s/FSE95BtgA2PT59HCX3EzsQ)
 
-##### [\<mutex>](https://www.cplusplus.com/reference/mutex/)
+##### [\<mutex>](https://en.cppreference.com/w/cpp/header/mutex)
 
-* [lock_guard - C++ Reference](https://www.cplusplus.com/reference/mutex/lock_guard/)
-  * template \<class Mutex> class lock_guard;
-  * Lock guard
-    * A lock guard is an object that manages a mutex object by keeping it always locked.
-    * On construction, the mutex object is locked by the calling thread, and on destruction, the mutex is unlocked. It is the simplest lock, and is specially useful as an object with automatic duration that lasts until the end of its context. In this way, it guarantees the mutex object is properly unlocked in case an exception is thrown.
-    * Note though that the lock_guard object does not manage the lifetime of the mutex object in any way: the duration of the mutex object shall extend at least until the destruction of the lock_guard that locks it.
+* Mutual exclusion algorithms prevent multiple threads from simultaneously accessing shared resources. This prevents data races and provides support for synchronization between threads.
+* [std::mutex - cppreference.com](https://en.cppreference.com/w/cpp/thread/mutex)
+	* The mutex class is a synchronization primitive that can be used to protect shared data from being simultaneously accessed by multiple threads.
+	* mutex offers exclusive, non-recursive ownership semantics:
+		* A calling thread owns a mutex from the time that it successfully calls either lock or try_lock until it calls unlock.
+		* When a thread owns a mutex, all other threads will block (for calls to lock) or receive a false return value (for try_lock) if they attempt to claim ownership of the mutex.
+		* A calling thread must not own the mutex prior to calling lock or try_lock.
+	* The behavior of a program is undefined if a mutex is destroyed while still owned by any threads, or a thread terminates while owning a mutex. The mutex class satisfies all requirements of Mutex and StandardLayoutType.
+	* std::mutex is neither copyable nor movable.
+* [mutex - C++ Reference](https://www.cplusplus.com/reference/mutex/mutex/)
+	* class mutex;
+	* Mutex class
+		* A mutex is a lockable object that is designed to signal when critical sections of code need exclusive access, preventing other threads with the same protection from executing concurrently and access the same memory locations.
+		* mutex objects provide exclusive ownership and do not support recursivity (i.e., a thread shall not lock a mutex it already owns) -- see recursive_mutex for an alternative class that does.
+		* It is guaranteed to be a standard-layout class.
+
+###### Generic mutex management
+
 * [std::lock_guard - cppreference.com](https://en.cppreference.com/w/cpp/thread/lock_guard)
 	* Defined in header \<mutex>
 	* template\< class Mutex > class lock_guard; (since C++11)
@@ -1782,12 +1794,20 @@ int main()
 	* When a lock_guard object is created, it attempts to take ownership of the mutex it is given. When control leaves the scope in which the lock_guard object was created, the lock_guard is destructed and the mutex is released.
 	* The lock_guard class is non-copyable.
 	* [std::lock_guard\<Mutex>::lock_guard - cppreference.com](https://en.cppreference.com/w/cpp/thread/lock_guard/lock_guard)
-* [mutex - C++ Reference](https://www.cplusplus.com/reference/mutex/mutex/)
-	* class mutex;
-	* Mutex class
-		* A mutex is a lockable object that is designed to signal when critical sections of code need exclusive access, preventing other threads with the same protection from executing concurrently and access the same memory locations.
-		* mutex objects provide exclusive ownership and do not support recursivity (i.e., a thread shall not lock a mutex it already owns) -- see recursive_mutex for an alternative class that does.
-		* It is guaranteed to be a standard-layout class.
+* [lock_guard - C++ Reference](https://www.cplusplus.com/reference/mutex/lock_guard/)
+  * template \<class Mutex> class lock_guard;
+  * Lock guard
+    * A lock guard is an object that manages a mutex object by keeping it always locked.
+    * On construction, the mutex object is locked by the calling thread, and on destruction, the mutex is unlocked. It is the simplest lock, and is specially useful as an object with automatic duration that lasts until the end of its context. In this way, it guarantees the mutex object is properly unlocked in case an exception is thrown.
+    * Note though that the lock_guard object does not manage the lifetime of the mutex object in any way: the duration of the mutex object shall extend at least until the destruction of the lock_guard that locks it.
+
+###### Generic locking algorithms
+
+###### Call once
+
+##### [\<future>](https://en.cppreference.com/w/cpp/header/future)
+
+* The standard library provides facilities to obtain values that are returned and to catch exceptions that are thrown by asynchronous tasks (i.e. functions launched in separate threads). These values are communicated in a shared state, in which the asynchronous task may write its return value or store an exception, and which may be examined, waited for, and otherwise manipulated by other threads that hold instances of std::future or std::shared_future that reference that shared state.
 
 #### Parse command line
 
