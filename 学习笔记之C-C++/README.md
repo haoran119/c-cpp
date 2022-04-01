@@ -613,91 +613,91 @@ int main() {
 * [How to split a string in C/C++, Python and Java? - GeeksforGeeks](https://www.geeksforgeeks.org/how-to-split-a-string-in-cc-python-and-java/)
 	* Method 1: Using  stringstream API of C++
 		* Stringstream object can be initialized using a string object, it automatically tokenizes strings on space char. Just like “cin” stream stringstream allows you to read a string as a stream of words.
-	```c++
-	#include <bits/stdc++.h>
-	using namespace std;
+    ```c++
+    #include <bits/stdc++.h>
+    using namespace std;
 
-	// A quick way to split strings separated via spaces.
-	void simple_tokenizer(string s)
-	{
-		stringstream ss(s);
-		string word;
-		while (ss >> word) {
-			cout << word << endl;
-		}
-	}
+    // A quick way to split strings separated via spaces.
+    void simple_tokenizer(string s)
+    {
+        stringstream ss(s);
+        string word;
+        while (ss >> word) {
+            cout << word << endl;
+        }
+    }
 
-	int main(int argc, char const* argv[])
-	{
-		string a = "How do you do!";
-		// Takes only space separated C++ strings.
-		simple_tokenizer(a);
-		cout << endl;
-		return 0;
-	}
-	```
+    int main(int argc, char const* argv[])
+    {
+        string a = "How do you do!";
+        // Takes only space separated C++ strings.
+        simple_tokenizer(a);
+        cout << endl;
+        return 0;
+    }
+    ```
 	* Method 2: Using C++ find() and substr() APIs.
 		* This method is more robust and can parse a string with any delimiter, not just spaces(though the default behavior is to separate on spaces.) The logic is pretty simple to understand from the code below.
-	```c++
-	#include <bits/stdc++.h>
-	using namespace std;
+    ```c++
+    #include <bits/stdc++.h>
+    using namespace std;
 
-	void tokenize(string s, string del = " ")
-	{
-		int start = 0;
-		int end = s.find(del);
-		while (end != -1) {
-			cout << s.substr(start, end - start) << endl;
-			start = end + del.size();
-			end = s.find(del, start);
-		}
-		cout << s.substr(start, end - start);
-	}
-	int main(int argc, char const* argv[])
-	{
-		// Takes C++ string with any separator
-		string a = "Hi$%do$%you$%do$%!";
-		tokenize(a, "$%");
-		cout << endl;
+    void tokenize(string s, string del = " ")
+    {
+        int start = 0;
+        int end = s.find(del);
+        while (end != -1) {
+            cout << s.substr(start, end - start) << endl;
+            start = end + del.size();
+            end = s.find(del, start);
+        }
+        cout << s.substr(start, end - start);
+    }
+    int main(int argc, char const* argv[])
+    {
+        // Takes C++ string with any separator
+        string a = "Hi$%do$%you$%do$%!";
+        tokenize(a, "$%");
+        cout << endl;
 
-		return 0;
-	}
-	```
+        return 0;
+    }
+    ```
 	* Method 3: Using temporary string
 		* If you are given that the length of the delimiter is 1, then you can simply use a temp string to split the string. This will save the function overhead time in the case of method 2.
-	```c++
-	#include <iostream>
-	using namespace std;
+    ```c++
+    #include <iostream>
+    using namespace std;
 
-	void split(string str, char del){
-		// declaring temp string to store the curr "word" upto del
-		string temp = "";
+    void split(string str, char del){
+        // declaring temp string to store the curr "word" upto del
+        string temp = "";
 
-		for(int i=0; i<(int)str.size(); i++){
-			// If cur char is not del, then append it to the cur "word", otherwise
-			// you have completed the word, print it, and start a new word.
-			if(str[i] != del){
-				temp += str[i];
-			}
-			else{
-				cout << temp << " ";
-				temp = "";
-			}
-		}
+        for(int i=0; i<(int)str.size(); i++){
+            // If cur char is not del, then append it to the cur "word", otherwise
+            // you have completed the word, print it, and start a new word.
+            if(str[i] != del){
+                temp += str[i];
+            }
+            else{
+                cout << temp << " ";
+                temp = "";
+            }
+        }
 
-		cout << temp;
-	}
+        cout << temp;
+    }
 
-	int main() {
+    int main() {
 
-		string str = "geeks_for_geeks"; // string to be split
-		char del = '_'; // delimiter around which string is to be split
+        string str = "geeks_for_geeks"; // string to be split
+        char del = '_'; // delimiter around which string is to be split
 
-		split(str, del);
+        split(str, del);
 
-		return 0;
-	}
-	```
+        return 0;
+    }
+    ```
 * [std::isspace - cppreference.com](https://en.cppreference.com/w/cpp/string/byte/isspace)
 	* Defined in header \<cctype>
 	* int isspace( int ch );
@@ -1046,33 +1046,31 @@ int main(int argc, char *argv[]) {
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Node{
-   Node* next;
-   Node* prev;
-   int value;
-   int key;
-   Node(Node* p, Node* n, int k, int val):prev(p),next(n),key(k),value(val){};
-   Node(int k, int val):prev(NULL),next(NULL),key(k),value(val){};
+struct Node {
+    Node* next;
+    Node* prev;
+    int value;
+    int key;
+    Node(Node* p, Node* n, int k, int val):prev(p),next(n),key(k),value(val){};
+    Node(int k, int val):prev(NULL),next(NULL),key(k),value(val){};
 };
 
-class Cache{
-   
-   protected: 
-   map<int,Node*> mp; //map the key to the node in the linked list
-   int cp;  //capacity
-   Node* tail; // double linked list tail pointer
-   Node* head; // double linked list head pointer
-   virtual void set(int, int) = 0; //set function
-   virtual int get(int) = 0; //get function
-
+class Cache {
+protected:
+    map<int,Node*> mp; //map the key to the node in the linked list
+    int cp;  //capacity
+    Node* tail; // double linked list tail pointer
+    Node* head; // double linked list head pointer
+    virtual void set(int, int) = 0; //set function
+    virtual int get(int) = 0; //get function
 };
 
 // Sometimes timeout
 class LRUCache : public Cache {
     private:
-        list< pair<int, int> >   lru;   
+        list< pair<int, int> >   lru;
         unordered_map<int, list< pair<int, int> >::iterator> mp;
-        
+
     public:
         LRUCache(int);
         ~LRUCache(){};
@@ -1083,7 +1081,7 @@ class LRUCache : public Cache {
 LRUCache::LRUCache(int capacity)
 {
     // note that member initializer does not name a non-static data member or base class
-    cp = capacity;    
+    cp = capacity;
 }
 
 void LRUCache::set(int key, int value)
@@ -1099,10 +1097,10 @@ void LRUCache::set(int key, int value)
     } else {
         lru.erase(mp[key]);
     }
-    
+
     // update reference
     lru.push_front({key, value});
-    mp[key] = lru.begin();       
+    mp[key] = lru.begin();
 }
 
 int LRUCache::get(int key)
@@ -1119,25 +1117,25 @@ int LRUCache::get(int key)
 
 
 int main() {
-   int n, capacity,i;
-   cin >> n >> capacity;
-   LRUCache l(capacity);
-   for(i=0;i<n;i++) {
-      string command;
-      cin >> command;
-      if(command == "get") {
-         int key;
-         cin >> key;
-         cout << l.get(key) << endl;
-      } 
-      else if(command == "set") {
-         int key, value;
-         cin >> key >> value;
-         l.set(key,value);
-      }
-   }
-   
-   return 0;
+    int n, capacity,i;
+    cin >> n >> capacity;
+    LRUCache l(capacity);
+    for(i=0;i<n;i++) {
+        string command;
+        cin >> command;
+        if(command == "get") {
+            int key;
+            cin >> key;
+            cout << l.get(key) << endl;
+        }
+        else if(command == "set") {
+            int key, value;
+            cin >> key >> value;
+            l.set(key,value);
+        }
+    }
+
+    return 0;
 }
 ```
 * [C++虚函数表原理浅析 (qq.com)](https://mp.weixin.qq.com/s/lKfOZUM1txbUncD6ZBSO4w)
@@ -1338,10 +1336,9 @@ template<typename T> struct Traits {
     }
 };
 
-
 int main()
 {
-	int t = 0; std::cin >> t;
+    int t = 0; std::cin >> t;
 
     for (int i=0; i!=t; ++i) {
         int index1; std::cin >> index1;
@@ -1349,8 +1346,8 @@ int main()
         cout << Traits<Color>::name(index1) << " ";
         cout << Traits<Fruit>::name(index2) << "\n";
     }
-	
-	return 0;
+    
+    return 0;
 }
 ```
 
@@ -1460,25 +1457,25 @@ using namespace std;
 
 #if !defined toStr || !defined io || !defined FUNCTION || !defined INF
 #error Missing preprocessor definitions
-#endif 
+#endif
 
 FUNCTION(minimum, <)
 FUNCTION(maximum, >)
 
 int main(){
-	int n; cin >> n;
-	vector<int> v(n);
-	foreach(v, i) {
-		io(v)[i];
-	}
-	int mn = INF;
-	int mx = -INF;
-	foreach(v, i) {
-		minimum(mn, v[i]);
-		maximum(mx, v[i]);
-	}
-	int ans = mx - mn;
-	cout << toStr(Result =) << ' '<< ans;
+    int n; cin >> n;
+    vector<int> v(n);
+    foreach(v, i) {
+        io(v)[i];
+    }
+    int mn = INF;
+    int mx = -INF;
+    foreach(v, i) {
+        minimum(mn, v[i]);
+        maximum(mx, v[i]);
+    }
+    int ans = mx - mn;
+    cout << toStr(Result =) << ' '<< ans;
 
  return 0;
 }
@@ -1634,10 +1631,30 @@ int main()
 ##### [\<thread>](https://en.cppreference.com/w/cpp/header/thread)
 
 * Threads enable programs to execute across several processor cores.
+* [std::thread - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread)
+	* The class thread represents a single thread of execution. Threads allow multiple functions to execute concurrently.
+	* Threads begin execution immediately upon construction of the associated thread object (pending any OS scheduling delays), starting at the top-level function provided as a constructor argument. The return value of the top-level function is ignored and if it terminates by throwing an exception, std::terminate is called. The top-level function may communicate its return value or an exception to the caller via std::promise or by modifying shared variables (which may require synchronization, see std::mutex and std::atomic)
+	* std::thread objects may also be in the state that does not represent any thread (after default construction, move from, detach, or join), and a thread of execution may not be associated with any thread objects (after detach).
+	* No two std::thread objects may represent the same thread of execution; std::thread is not CopyConstructible or CopyAssignable, although it is MoveConstructible and MoveAssignable.
 * [std::this_thread::sleep_for - cppreference.com](https://en.cppreference.com/w/cpp/thread/sleep_for)
 	* Blocks the execution of the current thread for at least the specified sleep_duration.
 	* This function may block for longer than sleep_duration due to scheduling or resource contention delays.
 	* The standard recommends that a steady clock is used to measure the duration. If an implementation uses a system clock instead, the wait time may also be sensitive to clock adjustments.
+* [用三个线程按顺序循环打印ABC三个字母 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/8575543.html)
+* [Sleep v.s. sleep - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/5584088.html)
+* [C++ 线程的使用](https://mp.weixin.qq.com/s/tMWxvw4Kmga5ayUfXHaaIw)
+  * C++11 之前，C++ 语言没有对并发编程提供语言级别的支持，这使得我们在编写可移植的并发程序时，存在诸多的不便。现在 C++11 中增加了线程以及线程相关的类，很方便地支持了并发编程，使得编写的多线程程序的可移植性得到了很大的提高。
+  * C++11 中提供的线程类叫做 std::thread，基于这个类创建一个新的线程非常的简单，只需要提供线程函数或者函数对象即可，并且可以同时指定线程函数的参数。我们首先来了解一下这个类提供的一些常用 API：
+  * 1. 构造函数
+  * 2. 公共成员函数
+    * 2.1 get_id()
+    * 2.2 join()
+    * 2.3 detach()
+    * 2.5 joinable()
+    * 2.6 operator=
+  * 3. 静态函数
+  * 4. C 线程库
+    * [C语言线程库的使用](https://mp.weixin.qq.com/s?__biz=MzI3ODQ3OTczMw==&mid=2247491745&idx=1&sn=d995e1617ed6ad3d56de28b5be127e73&scene=21#wechat_redirect)
 
 ##### [\<atomic>](https://www.cplusplus.com/reference/atomic/atomic/)
 
@@ -1678,27 +1695,27 @@ mutable std::atomic_bool _wait{ false };
 
 void _setWaitInProgress() const
 {
-  auto expected = false;
-	
-  // if _wait is not able to exchange, it will keep looping unless it is released to exchange
-  while (!(_wait.compare_exchange_strong(expected, true))) {
-    expected = false;
-    std::this_thread::sleep_for(std::chrono::milliseconds(5));
-  }
+    auto expected = false;
+
+    // if _wait is not able to exchange, it will keep looping unless it is released to exchange
+    while (!(_wait.compare_exchange_strong(expected, true))) {
+        expected = false;
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    }
 }
 
 void _setWaitDone() const
 {
-  _wait.store(false);
+    _wait.store(false);
 }
 
 void TestAtomic()
 {
-  _setWaitInProgress();
+    _setWaitInProgress();
 
-  DoSomething();
+    DoSomething();
 
-  _setWaitDone();
+    _setWaitDone();
 }
 ```
 * [The Atomic Boolean - ModernesCpp.com](https://www.modernescpp.com/index.php/the-atomic-boolean)
@@ -1773,30 +1790,6 @@ int main(){
 		* A mutex is a lockable object that is designed to signal when critical sections of code need exclusive access, preventing other threads with the same protection from executing concurrently and access the same memory locations.
 		* mutex objects provide exclusive ownership and do not support recursivity (i.e., a thread shall not lock a mutex it already owns) -- see recursive_mutex for an alternative class that does.
 		* It is guaranteed to be a standard-layout class.
-
-##### [\<thread>](https://www.cplusplus.com/reference/thread/)
-
-* [std::thread - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread)
-	* The class thread represents a single thread of execution. Threads allow multiple functions to execute concurrently.
-	* Threads begin execution immediately upon construction of the associated thread object (pending any OS scheduling delays), starting at the top-level function provided as a constructor argument. The return value of the top-level function is ignored and if it terminates by throwing an exception, std::terminate is called. The top-level function may communicate its return value or an exception to the caller via std::promise or by modifying shared variables (which may require synchronization, see std::mutex and std::atomic)
-	* std::thread objects may also be in the state that does not represent any thread (after default construction, move from, detach, or join), and a thread of execution may not be associated with any thread objects (after detach).
-	* No two std::thread objects may represent the same thread of execution; std::thread is not CopyConstructible or CopyAssignable, although it is MoveConstructible and MoveAssignable.
-
-* [用三个线程按顺序循环打印ABC三个字母 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/8575543.html)
-* [Sleep v.s. sleep - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/5584088.html)
-* [C++ 线程的使用](https://mp.weixin.qq.com/s/tMWxvw4Kmga5ayUfXHaaIw)
-  * C++11 之前，C++ 语言没有对并发编程提供语言级别的支持，这使得我们在编写可移植的并发程序时，存在诸多的不便。现在 C++11 中增加了线程以及线程相关的类，很方便地支持了并发编程，使得编写的多线程程序的可移植性得到了很大的提高。
-  * C++11 中提供的线程类叫做 std::thread，基于这个类创建一个新的线程非常的简单，只需要提供线程函数或者函数对象即可，并且可以同时指定线程函数的参数。我们首先来了解一下这个类提供的一些常用 API：
-  * 1. 构造函数
-  * 2. 公共成员函数
-    * 2.1 get_id()
-    * 2.2 join()
-    * 2.3 detach()
-    * 2.5 joinable()
-    * 2.6 operator=
-  * 3. 静态函数
-  * 4. C 线程库
-    * [C语言线程库的使用](https://mp.weixin.qq.com/s?__biz=MzI3ODQ3OTczMw==&mid=2247491745&idx=1&sn=d995e1617ed6ad3d56de28b5be127e73&scene=21#wechat_redirect)
 
 #### Parse command line
 
@@ -1910,58 +1903,58 @@ Sequence containers implement data structures which can be accessed sequentially
 * [Deque-STL | HackerRank](https://www.hackerrank.com/challenges/deque-stl/problem)
 ```c++
 #include <iostream>
-#include <deque> 
+#include <deque>
 using namespace std;
 
 void printKMax(int arr[], int n, int k){
-	//Write your code here.
+    //Write your code here.
     deque<int>  queue(k);
-    
+
     int i;
     // the first window with k elements
     for (i = 0; i < k; ++ i) {
         // remove smaller elements in queue
         while (!queue.empty() and arr[i] >= arr[queue.back()])
             queue.pop_back();
-        // add new element            
+        // add new element
         queue.push_back(i);
     }
-    
+
     // the remaining elements
     for (; i < n; ++ i) {
         cout << arr[queue.front()] << " ";
-        
+
         // remove elements out of window
         while (!queue.empty() and queue.front() <= i - k)
             queue.pop_front();
-        
+
         // remove smaller elements in queue
         while (!queue.empty() and arr[i] >= arr[queue.back()])
             queue.pop_back();
-        
+
         // add new element
-        queue.push_back(i);                
+        queue.push_back(i);
     }
-    
+
     // print the maximum element of the last window
-    cout << arr[queue.front()] << endl;    
+    cout << arr[queue.front()] << endl;
 }
 
 int main(){
-  
-	int t;
-	cin >> t;
-	while(t>0) {
-		int n,k;
-    	cin >> n >> k;
-    	int i;
-    	int arr[n];
-    	for(i=0;i<n;i++)
-      		cin >> arr[i];
-    	printKMax(arr, n, k);
-    	t--;
-  	}
-  	return 0;
+
+    int t;
+    cin >> t;
+    while(t>0) {
+        int n,k;
+        cin >> n >> k;
+        int i;
+        int arr[n];
+        for(i=0;i<n;i++)
+            cin >> arr[i];
+        printKMax(arr, n, k);
+        t--;
+    }
+    return 0;
 }
 ```
 
