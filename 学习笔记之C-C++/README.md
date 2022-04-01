@@ -289,136 +289,137 @@ In programming contests, people do focus more on finding the algorithm to solve 
 #include <string>
 using namespace std;
 
-class Spell { 
-		private:
-				string scrollName;
-		public:
-				Spell(): scrollName("") { }
-				Spell(string name): scrollName(name) { }
-				virtual ~Spell() { }
-				string revealScrollName() {
-						return scrollName;
-				}
+class Spell {
+private:
+    string scrollName;
+public:
+    Spell(): scrollName("") { }
+    Spell(string name): scrollName(name) { }
+    virtual ~Spell() { }
+    string revealScrollName() {
+        return scrollName;
+    }
 };
 
-class Fireball : public Spell { 
-		private: int power;
-		public:
-				Fireball(int power): power(power) { }
-				void revealFirepower(){
-						cout << "Fireball: " << power << endl;
-				}
+class Fireball : public Spell {
+private: int power;
+public:
+    Fireball(int power): power(power) { }
+    void revealFirepower(){
+        cout << "Fireball: " << power << endl;
+    }
 };
 
 class Frostbite : public Spell {
-		private: int power;
-		public:
-				Frostbite(int power): power(power) { }
-				void revealFrostpower(){
-						cout << "Frostbite: " << power << endl;
-				}
+private: int power;
+public:
+    Frostbite(int power): power(power) { }
+    void revealFrostpower(){
+        cout << "Frostbite: " << power << endl;
+    }
 };
 
-class Thunderstorm : public Spell { 
-		private: int power;
-		public:
-				Thunderstorm(int power): power(power) { }
-				void revealThunderpower(){
-						cout << "Thunderstorm: " << power << endl;
-				}
+class Thunderstorm : public Spell {
+private: int power;
+public:
+    Thunderstorm(int power): power(power) { }
+    void revealThunderpower(){
+        cout << "Thunderstorm: " << power << endl;
+    }
 };
 
-class Waterbolt : public Spell { 
-		private: int power;
-		public:
-				Waterbolt(int power): power(power) { }
-				void revealWaterpower(){
-						cout << "Waterbolt: " << power << endl;
-				}
+class Waterbolt : public Spell {
+private: int power;
+public:
+    Waterbolt(int power): power(power) { }
+    void revealWaterpower(){
+        cout << "Waterbolt: " << power << endl;
+    }
 };
 
 class SpellJournal {
-		public:
-				static string journal;
-				static string read() {
-						return journal;
-				}
-}; 
+public:
+    static string journal;
+    static string read() {
+        return journal;
+    }
+};
 string SpellJournal::journal = "";
 
-void counterspell(Spell *spell) {
+void counterspell(Spell *spell)
+{
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */
+    if (auto* fb = dynamic_cast<Fireball*>(spell)) {
+        fb->revealFirepower();
+    }
+    else if (auto* fb = dynamic_cast<Frostbite*>(spell)) {
+        fb->revealFrostpower();
+    }
+    else if (auto* ts = dynamic_cast<Thunderstorm*>(spell)) {
+        ts->revealThunderpower();
+    }
+    else if (auto* wb = dynamic_cast<Waterbolt*>(spell)) {
+        wb->revealWaterpower();
+    }
+    else {
+        const auto spellN = spell->revealScrollName();
+        const auto spellJ = SpellJournal::read();
+        const auto nSpellN = spellN.length();
+        const auto nSpellJ = spellJ.length();
+        // pay attention to the size of vector
+        vector<vector<int> > vResult(nSpellN + 1, vector<int>(nSpellJ + 1, 0));
 
-/* Enter your code here. Read input from STDIN. Print output to STDOUT */
-		if (auto* fb = dynamic_cast<Fireball*>(spell)) {
-				fb->revealFirepower();
-		}
-		else if (auto* fb = dynamic_cast<Frostbite*>(spell)) {
-				fb->revealFrostpower();
-		}
-		else if (auto* ts = dynamic_cast<Thunderstorm*>(spell)) {
-				ts->revealThunderpower();
-		}
-		else if (auto* wb = dynamic_cast<Waterbolt*>(spell)) {
-				wb->revealWaterpower();
-		}
-		else {
-				const auto spellN = spell->revealScrollName();
-				const auto spellJ = SpellJournal::read();
-				const auto nSpellN = spellN.length();
-				const auto nSpellJ = spellJ.length();
-				// pay attention to the size of vector
-				vector<vector<int> > vResult(nSpellN + 1, vector<int>(nSpellJ + 1, 0));
+        for (auto i = 1; i <= nSpellN; ++ i) {
+            for (auto j = 1; j <= nSpellJ; ++ j) {
+                if (spellN.at(i - 1) == spellJ.at(j - 1)) {
+                    vResult[i][j] = vResult[i - 1][j - 1] + 1;
+                }
+                else {
+                    vResult[i][j] = max(vResult[i - 1][j], vResult[i][j - 1]);
+                }
+            }
+        }
 
-				for (auto i = 1; i <= nSpellN; ++ i) {
-						for (auto j = 1; j <= nSpellJ; ++ j) {
-								if (spellN.at(i - 1) == spellJ.at(j - 1)) {
-										vResult[i][j] = vResult[i - 1][j - 1] + 1;
-								}
-								else {
-										vResult[i][j] = max(vResult[i - 1][j], vResult[i][j - 1]);
-								}
-						}
-				}
-
-				cout << vResult[nSpellN][nSpellJ] << endl;
-		}
+        cout << vResult[nSpellN][nSpellJ] << endl;
+    }
 }
 
 class Wizard {
-		public:
-				Spell *cast() {
-						Spell *spell;
-						string s; cin >> s;
-						int power; cin >> power;
-						if(s == "fire") {
-								spell = new Fireball(power);
-						}
-						else if(s == "frost") {
-								spell = new Frostbite(power);
-						}
-						else if(s == "water") {
-								spell = new Waterbolt(power);
-						}
-						else if(s == "thunder") {
-								spell = new Thunderstorm(power);
-						} 
-						else {
-								spell = new Spell(s);
-								cin >> SpellJournal::journal;
-						}
-						return spell;
-				}
+public:
+    Spell *cast()
+    {
+        Spell *spell;
+        string s; cin >> s;
+        int power; cin >> power;
+        if(s == "fire") {
+            spell = new Fireball(power);
+        }
+        else if(s == "frost") {
+            spell = new Frostbite(power);
+        }
+        else if(s == "water") {
+            spell = new Waterbolt(power);
+        }
+        else if(s == "thunder") {
+            spell = new Thunderstorm(power);
+        }
+        else {
+            spell = new Spell(s);
+            cin >> SpellJournal::journal;
+        }
+        return spell;
+    }
 };
 
 int main() {
-		int T;
-		cin >> T;
-		Wizard Arawn;
-		while(T--) {
-				Spell *spell = Arawn.cast();
-				counterspell(spell);
-		}
-		return 0;
+    int T;
+    cin >> T;
+    Wizard Arawn;
+    while(T--) {
+        Spell *spell = Arawn.cast();
+        counterspell(spell);
+    }
+    return 0;
 }
 ```
 * [static_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/static_cast)
