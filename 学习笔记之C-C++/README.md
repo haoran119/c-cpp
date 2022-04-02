@@ -552,6 +552,23 @@ int main() {
 	* Exception: Function templates (including member functions of class templates A\<T>::function() and member function templates A::function\<T>()) are normally defined in headers and therefore inline.
 * [SF.2: A .h file must not contain object definitions or non-inline function definitions](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#sf2-a-h-file-must-not-contain-object-definitions-or-non-inline-function-definitions)
 	* Reason: Including entities subject to the one-definition rule leads to linkage errors.
+	* Example
+    ```c++
+    // file.h:
+    namespace Foo {
+        int x = 7;
+        int xx() { return x+x; }
+    }
+
+    // file1.cpp:
+    #include <file.h>
+    // ... more ...
+
+     // file2.cpp:
+    #include <file.h>
+    // ... more ...
+    ```
+		* Linking file1.cpp and file2.cpp will give two linker errors.
 	* Alternative formulation: A .h file must contain only:
 		* #includes of other .h files (possibly with include guards)
 		* templates
