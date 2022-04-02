@@ -553,6 +553,7 @@ int main() {
 * [SF.2: A .h file must not contain object definitions or non-inline function definitions](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#sf2-a-h-file-must-not-contain-object-definitions-or-non-inline-function-definitions)
 	* Reason: Including entities subject to the one-definition rule leads to linkage errors.
 	* Example
+		* Linking file1.cpp and file2.cpp will give two linker errors.
     ```c++
     // file.h:
     namespace Foo {
@@ -568,7 +569,6 @@ int main() {
     #include <file.h>
     // ... more ...
     ```
-		* Linking file1.cpp and file2.cpp will give two linker errors.
 	* Alternative formulation: A .h file must contain only:
 		* #includes of other .h files (possibly with include guards)
 		* templates
