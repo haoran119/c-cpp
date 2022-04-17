@@ -12,7 +12,7 @@
 * [Clean Code - Uncle Bob / Lesson 1 - YouTube](https://www.youtube.com/watch?v=7EmboKQH8lM)
 * [Cᐩᐩ Weekly With Jason Turner - YouTube](https://www.youtube.com/channel/UCxHAlbZQNFU2LgEtiqd2Maw)
 * [Compiler Explorer](https://godbolt.org/)
-* [Coliru](http://coliru.stacked-crooked.com/)
+* [Coliru - Compile, link and run](http://coliru.stacked-crooked.com/)
 
 #
 
