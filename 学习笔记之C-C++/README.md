@@ -186,6 +186,7 @@
     * 杂项运算符
     * C++ 中的运算符优先级
 * [C/C++ PK 各大编程语言](https://mp.weixin.qq.com/s/zTuPyQRkjkVWp_KIjMh_Kw)
+* [C++ 后端开发路线](https://mp.weixin.qq.com/s/QvFQEjUPEw_2zexaZi6GNQ)
 
 ### Basics
 
@@ -747,6 +748,11 @@ int main() {
         return 0;
     }
     ```
+* [string和c_str()使用时的坑](https://mp.weixin.qq.com/s/2k2fjBUB-P1PpEfP-HJz-Q)
+	* 这里主要说两个问题:
+		* 1、声明了一个string实例,使用c_str()进行赋值后,可以正常输出c_str()的值,但是直接输出string实例的实现,实际是空字符串
+		* 2、在第一个问题后,对string实例进行字符串追加,然后对string和c_str()进行输出.原来对字符串变量被覆盖了.
+	* 在使用string中的c_str()进行字符串赋值时,如果后面对string中的char*进行改变.那么c_str()中的值就不在可靠了.
 * [std::isspace - cppreference.com](https://en.cppreference.com/w/cpp/string/byte/isspace)
 	* Defined in header \<cctype>
 	* int isspace( int ch );
@@ -2621,6 +2627,17 @@ Type relationships
   * 1、堆栈溢出应该是一个原因，之前我有遇到的情况是栈空间设置太小，然后溢出到堆空间导致问题。
   * 2、使用某个函数导致溢出，我们使用的函数，比如，内存拷贝函数，如果长度设置不对，也会导致影响到其他的代码。
   * 3、还有就是上面说的编译器优化导致的问题。
+* [C++编程新手容易犯的 10 种编程错误](https://mp.weixin.qq.com/s/tUT9sDR-d1aTzWof3TCjNg)
+	* 1、有些关键字在 cpp 文件中多写了
+	* 2、函数参数的默认值写到函数实现中了
+	* 3、在编写类的时候，在类的结尾处忘记添加 ";" 分号了
+	* 4、只添加了函数声明，没有函数实现
+	* 5、cpp 文件忘记添加到工程中，导致没有生成供链接使用的 obj 文件
+	* 6、函数中返回了一个局部变量的地址或者引用
+	* 7、忘记将父类中的接口声明 virtual 函数，导致多态没有生效
+	* 8、该使用双指针的地方，却使用了单指针
+	* 9、发布 exe 程序时，忘记将 exe 依赖的 C 运行时库和 MFC 库带上
+	* 10、应该使用深拷贝，却使用了浅拷贝
 
 ### Memory Leak
 
