@@ -159,6 +159,8 @@
 * [腾讯C++后台开发面试笔试知识点参考笔记](https://mp.weixin.qq.com/s/kdZVU4W7mEVGQKQgP64elw)
 * [腾讯 C++ 笔试/面试题及答案](https://mp.weixin.qq.com/s/lX9mmmRecu2gw84xkInsww)
 * [面试必备 | 常见C++笔试面试题整理](https://mp.weixin.qq.com/s/tpQTBlwAJTqxMe6krw9C_Q)
+* [面试常问的 C/C++ 问题，你能答上来几个？](https://mp.weixin.qq.com/s/7hcT6HV7vx58PWHVO9Zmqw)
+	* https://www.cnblogs.com/hjhgogo/p/9953506.html
 * [重磅干货 | 五万字长文总结 C/C++ 知识（上）](https://mp.weixin.qq.com/s?__biz=MzA4MjI3NzQ1Nw==&mid=2247492098&idx=1&sn=e250dd4483b7d784ca91975b93fb25f3&chksm=9f8a873ca8fd0e2a53cc6b3f90f81198af01d4b8481b449f36387b7e798bef75e22d23608dce&scene=178&cur_album_id=1511180677537464321#rd)
 * [重磅干货 | 五万字长文总结 C/C++ 知识（下）](https://mp.weixin.qq.com/s?__biz=MzA4MjI3NzQ1Nw==&mid=2247492170&idx=1&sn=c03b00547fbaee0da0217d8c4ec9a71d&chksm=9f8a8774a8fd0e62a4382eba643f8f60c6062b29a0f3add36f782e71177120ffac84e3b40337&scene=178&cur_album_id=1511180677537464321#rd)
 * [C/C++ 易错点 56 条，干货收藏！](https://mp.weixin.qq.com/s/gO2fk25_TK4YDcNdcl676g)
@@ -968,6 +970,8 @@ lexicographical_compare(beg1, end1, beg2, end2, comp);
   * tuple
   * 类模版参数推断
   * 智能指针
+* [C++ 中的各种特性](https://mp.weixin.qq.com/s?__biz=MzA4MjI3NzQ1Nw==&mid=2247502245&idx=1&sn=9e472ebac369ffc5219ebd9e5cf67b9f&chksm=9f8aac9ba8fd258db6d136449963bbe2669fb65183a58822824314995faad442f5e5211444cc&scene=178&cur_album_id=1511180677537464321#rd)
+	* https://blog.csdn.net/a15920804211/article/details/90691525
 * [C++ 11 新特性梳理](https://mp.weixin.qq.com/s/c6BCvqbmwU6jCOhjL7qQPQ)
   * https://www.jianshu.com/p/78c700c8d72d
   * 在面试中，经常被问的一个问题就是：你了解C++11哪些新特性？一般而言，回答以下四个方面就够了：
@@ -975,10 +979,11 @@ lexicographical_compare(beg1, end1, beg2, end2, comp);
     * 右值引用和移动语义
     * 智能指针
     * C++11多线程编程：thread库及其相配套的同步原语mutex, lock_guard, condition_variable, 以及异步std::furture
-* [C++ 中的各种特性](https://mp.weixin.qq.com/s?__biz=MzA4MjI3NzQ1Nw==&mid=2247502245&idx=1&sn=9e472ebac369ffc5219ebd9e5cf67b9f&chksm=9f8aac9ba8fd258db6d136449963bbe2669fb65183a58822824314995faad442f5e5211444cc&scene=178&cur_album_id=1511180677537464321#rd)
+* [【C++面试知识】C++11新特性](https://mp.weixin.qq.com/s/jZRnb8WxNoJvdbiHrSuFlQ)
 	* https://blog.csdn.net/a15920804211/article/details/90691525
 * [解读C++即将迎来的重大更新（一）：C++20的四大新特性](https://mp.weixin.qq.com/s/QpqvZ3a7nFdHGjIBiKX67g)
   * https://www.modernescpp.com/index.php/thebigfour
+* [Google “战败”后，C++20 用微软的提案进入协程时代！](https://mp.weixin.qq.com/s/SlTObQQeDXvLLXuoxbO1yg)
 
 ## Idioms
 
