@@ -33,3 +33,9 @@ dir env:
 ```
 * How to edit environmet variables ?
   * [How to edit, clear, and delete environment variables in Windows - Digital Citizen](https://www.digitalcitizen.life/remove-edit-clear-environment-variables/)
+* How to calculate the difference of two timestamp columns ans sort it descending order in excel?
+  * =IF(G2<>"", G2-F2+(F2>G2), "")
+  * [How to calculate time difference with milliseconds in Excel?](https://www.extendoffice.com/documents/excel/4693-excel-time-difference-with-milliseconds.html)
+  * [Excel formula: If cell is not blank | Exceljet](https://exceljet.net/formula/if-cell-is-not-blank)
+  * [Fill a formula down into adjacent cells](https://support.microsoft.com/en-us/office/fill-a-formula-down-into-adjacent-cells-041edfe2-05bc-40e6-b933-ef48c3f308c6#ID0EBBF=Web)
+  * [How to Sort and Ignore Blanks in Excel & Google Sheets - Automate Excel](https://www.automateexcel.com/how-to/sort-ignore-blanks/#:~:text=Now%20you%20can%20sort%20the,Filter%20%3E%20Sort%20Largest%20to%20Smallest.)
