@@ -3,6 +3,7 @@
 * [Get Started with Win32 and C++ - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/learnwin32/learn-to-program-for-windows)
   * The aim of this Get Started series is to teach you how to write a desktop program in C++ using Win32 and COM APIs.
   * In the first module, you'll learn step-by-step how to create and show a window. Later modules will introduce the Component Object Model (COM), graphics and text, and user input.
+  * [Working with Strings - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/learnwin32/working-with-strings)
 * [Windows API - Wikipedia](https://en.wikipedia.org/wiki/Windows_API)
   * The Windows API, informally WinAPI, is Microsoft's core set of application programming interfaces (APIs) available in the Microsoft Windows operating systems. The name Windows API collectively refers to several different platform implementations that are often referred to by their own names (for example, Win32 API); see the versions section. Almost all Windows programs interact with the Windows API. On the Windows NT line of operating systems, a small number (such as programs started early in the Windows startup process) use the Native API.[1]
   * Developer support is available in the form of a software development kit, Microsoft Windows SDK, providing documentation and tools needed to build software based on the Windows API and associated Windows interfaces.
