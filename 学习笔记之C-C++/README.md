@@ -2210,7 +2210,12 @@ int main() {
 * Container elements may not be modified (even by non const iterators) since modification could change an element's hash and corrupt the container.
 * std::unordered_set meets the requirements of Container, AllocatorAwareContainer, UnorderedAssociativeContainer.
 * [std::unordered_set<Key,Hash,KeyEqual,Allocator>::count - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_set/count)
-* [std::unordered_map - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map)
+
+###### [std::unordered_map](https://en.cppreference.com/w/cpp/container/unordered_map)
+
+* Unordered map is an associative container that contains key-value pairs with unique keys. Search, insertion, and removal of elements have average constant-time complexity.
+* Internally, the elements are not sorted in any particular order, but organized into buckets. Which bucket an element is placed into depends entirely on the hash of its key. Keys with the same hash code appear in the same bucket. This allows fast access to individual elements, since once the hash is computed, it refers to the exact bucket the element is placed into.
+* std::unordered_map meets the requirements of Container, AllocatorAwareContainer, UnorderedAssociativeContainer.
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::begin(size_type), std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::cbegin(size_type) - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/begin2)
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::size - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/size)
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::at - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/at)
@@ -2227,12 +2232,6 @@ int main() {
 	* Unordered maps implement the direct access operator (operator[]) which allows for direct access of the mapped value using its key value as argument.
 	* Iterators in the container are at least forward iterators.
 	* [Static const map inside class/struct - C++ Forum](http://www.cplusplus.com/forum/general/266519/)
-
-###### [std::unordered_map](https://en.cppreference.com/w/cpp/container/unordered_map)
-
-* Unordered map is an associative container that contains key-value pairs with unique keys. Search, insertion, and removal of elements have average constant-time complexity.
-* Internally, the elements are not sorted in any particular order, but organized into buckets. Which bucket an element is placed into depends entirely on the hash of its key. Keys with the same hash code appear in the same bucket. This allows fast access to individual elements, since once the hash is computed, it refers to the exact bucket the element is placed into.
-* std::unordered_map meets the requirements of Container, AllocatorAwareContainer, UnorderedAssociativeContainer.
 
 ##### Adaptors
 
