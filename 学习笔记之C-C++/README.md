@@ -236,17 +236,17 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
     int main()
     {
-            char *orig = "Hello, World!";
-            cout << orig << " (char *)" << endl;
+        char *orig = "Hello, World!";
+        cout << orig << " (char *)" << endl;
 
-            // Convert to a wchar_t*
-            size_t origsize = strlen(orig) + 1;
-            const size_t newsize = 100;
-            size_t convertedChars = 0;
-            wchar_t wcstring[newsize];
-            mbstowcs_s(&convertedChars, wcstring, origsize, orig, _TRUNCATE);
-            wcscat_s(wcstring, L" (wchar_t *)");
-            wcout << wcstring << endl;
+        // Convert to a wchar_t*
+        size_t origsize = strlen(orig) + 1;
+        const size_t newsize = 100;
+        size_t convertedChars = 0;
+        wchar_t wcstring[newsize];
+        mbstowcs_s(&convertedChars, wcstring, origsize, orig, _TRUNCATE);
+        wcscat_s(wcstring, L" (wchar_t *)");
+        wcout << wcstring << endl;
     }
     ```
   * [Predefined macros | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160)
