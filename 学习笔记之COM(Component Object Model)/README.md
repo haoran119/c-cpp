@@ -121,3 +121,7 @@
       return 0;
   }
   ```
+  * [c++ - How to initialize a constant CLSID - Stack Overflow](https://stackoverflow.com/questions/29975918/how-to-initialize-a-constant-clsid)
+  ```c++
+  const CLSID clsid2 = { 0x557cf406, 0x1a04, 0x11d3, { 0x9a,0x73,0x00,0x00,0xf8,0x1e,0xf3,0x2e } };
+  ```
