@@ -224,6 +224,31 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * [char, wchar_t, char8_t, char16_t, char32_t | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/char-wchar-t-char16-t-char32-t?view=msvc-160)
     * The types char, wchar_t, char8_t, char16_t, and char32_t are built-in types that represent alphanumeric characters, non-alphanumeric glyphs, and non-printing characters.
     * The wchar_t type is an implementation-defined wide character type. In the Microsoft compiler, it represents a 16-bit wide character used to store Unicode encoded as UTF-16LE, the native character type on Windows operating systems. The wide character versions of the Universal C Runtime (UCRT) library functions use wchar_t and its pointer and array types as parameters and return values, as do the wide character versions of the native Windows API.
+	* [c++ - how to convert char array to wchar_t array? - Stack Overflow](https://stackoverflow.com/questions/3074776/how-to-convert-char-array-to-wchar-t-array)
+		* [mbstowcs_s, _mbstowcs_s_l | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/mbstowcs-s-mbstowcs-s-l?view=msvc-170)
+    ```c++
+    #include <iostream>
+    #include <stdlib.h>
+    #include <string>
+
+    using namespace std;
+    using namespace System;
+
+    int main()
+    {
+            char *orig = "Hello, World!";
+            cout << orig << " (char *)" << endl;
+
+            // Convert to a wchar_t*
+            size_t origsize = strlen(orig) + 1;
+            const size_t newsize = 100;
+            size_t convertedChars = 0;
+            wchar_t wcstring[newsize];
+            mbstowcs_s(&convertedChars, wcstring, origsize, orig, _TRUNCATE);
+            wcscat_s(wcstring, L" (wchar_t *)");
+            wcout << wcstring << endl;
+    }
+    ```
   * [Predefined macros | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160)
     * _NATIVE_WCHAR_T_DEFINED Defined as 1 when the /Zc:wchar_t compiler option is set. Otherwise, undefined.
     * [/Zc:wchar_t (wchar_t Is Native Type) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/build/reference/zc-wchar-t-wchar-t-is-native-type?view=msvc-160)
