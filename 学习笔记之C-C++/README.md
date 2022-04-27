@@ -778,6 +778,11 @@ int main() {
 		* 1、声明了一个string实例,使用c_str()进行赋值后,可以正常输出c_str()的值,但是直接输出string实例的实现,实际是空字符串
 		* 2、在第一个问题后,对string实例进行字符串追加,然后对string和c_str()进行输出.原来对字符串变量被覆盖了.
 	* 在使用string中的c_str()进行字符串赋值时,如果后面对string中的char*进行改变.那么c_str()中的值就不在可靠了.
+* [c++ - Displaying the address of a string - Stack Overflow](https://stackoverflow.com/questions/9377407/displaying-the-address-of-a-string)
+	* If you use &hello it prints the address of the pointer, not the address of the string. Cast the pointer to a void* to use the correct overload of operator<<.
+    ```c++
+    std::cout << "String address = " << static_cast<void*>(hello) << std::endl;
+    ```
 * [std::isspace - cppreference.com](https://en.cppreference.com/w/cpp/string/byte/isspace)
 	* Defined in header \<cctype>
 	* int isspace( int ch );
