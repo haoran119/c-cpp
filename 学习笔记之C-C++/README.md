@@ -2792,6 +2792,8 @@ Type relationships
 
 ### ERROR FIX
 
+* How to fix "error C1853: '.pch' precompiled header file is from a previous version of the compiler, or the precompiled header is C++ and you are using it from C (or vice versa)" ?
+	* Rebuild All
 * How to fix "Compiler error C2653: not a class or namespace name" ?
 	* Generate full list of includes files to see include stack
 		* MSVS > Property > C/C++ > Advanced > Show Includes > Yes
