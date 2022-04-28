@@ -824,8 +824,13 @@ int main() {
 	* [c++ - std::remove_if and std::isspace - compile-time error - Stack Overflow](https://stackoverflow.com/questions/21578544/stdremove-if-and-stdisspace-compile-time-error)
 		* There is another overload of std::isspace, so you need to specify which one to use. An easy way is to use a lambda (or write your own one-line function if you don't have C++11 support)
 
-##### [std::basic_stringstream](https://en.cppreference.com/w/cpp/io/basic_stringstream)
+##### [String I/O](https://en.cppreference.com/w/cpp/io)
 
+* Defined in header \<sstream>
+	
+###### [std::basic_stringstream](https://en.cppreference.com/w/cpp/io/basic_stringstream)
+
+* implements high-level string stream input/output operations (class template)
 * [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
 * [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
 	* A stringstream associates a string object with a stream allowing you to read from the string as if it were a stream (like cin).
@@ -875,6 +880,10 @@ int main() {
     return 0;
 }
 ```
+
+###### [std::basic_ostringstream](https://en.cppreference.com/w/cpp/io/basic_ostringstream)
+
+* implements high-level string stream output operations (class template)
 * [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
   * Output stream class to operate on strings.
   * Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
