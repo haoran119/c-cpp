@@ -640,6 +640,10 @@ int main() {
 * Member functions of std::basic_string are constexpr: it is possible to create and use std::string objects in the evaluation of a constant expression.
 * However, std::string objects generally cannot be constexpr, because any dynamically allocated storage must be released in the same evaluation of constant expression. (since C++20)
 
+###### Member functions
+
+####### Operations
+
 * [string::append - C++ Reference](https://www.cplusplus.com/reference/string/string/append/)
 	* Append to string
 		* Extends the string by appending additional characters at the end of its current value:
