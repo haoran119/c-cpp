@@ -631,61 +631,62 @@ int main() {
 	* std::basic_string - a templated class designed to manipulate strings of any character type.
 	* std::basic_string_view (C++17) - a lightweight non-owning read-only view into a subsequence of a string.
 	* Null-terminated strings - arrays of characters terminated by a special null character.
-* [basic_string - C++ Reference](https://www.cplusplus.com/reference/string/basic_string/)
-	* Generic string class
-	* The basic_string is the generalization of class string for any character type (see string for a description).
-	* [std::basic_string - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string) 
-		* The class template basic_string stores and manipulates sequences of char-like objects, which are non-array objects of trivial standard-layout type. The class is dependent neither on the character type nor on the nature of operations on that type. The definitions of the operations are supplied via the Traits template parameter - a specialization of std::char_traits or a compatible traits class. Traits::char_type and CharT must name the same type; otherwise the program is ill-formed.
-		* The elements of a basic_string are stored contiguously, that is, for a basic_string s, &*(s.begin() + n) == &*s.begin() + n for any n in \[0, s.size()), or, equivalently, a pointer to s\[0] can be passed to functions that expect a pointer to the first element of a null-terminated (since C++11)CharT\[] array.
-		* std::basic_string satisfies the requirements of AllocatorAwareContainer, SequenceContainer and ContiguousContainer (since C++17)
-	* [std::basic_string_view - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string_view)
-		* The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
-	* [string::append - C++ Reference](https://www.cplusplus.com/reference/string/string/append/)
-		* Append to string
-			* Extends the string by appending additional characters at the end of its current value:
-		* Complexity
-			* Unspecified, but generally up to linear in the new string length.
-	* [string::c_str - C++ Reference](https://www.cplusplus.com/reference/string/string/c_str/)
-	* [string::compare - C++ Reference](https://www.cplusplus.com/reference/string/string/compare/)
-		* Compare strings
-			* Compares the value of the string object (or a substring) to the sequence of characters specified by its arguments.
-			* The compared string is the value of the string object or -if the signature used has a pos and a len parameters- the substring that begins at its character in position pos and spans len characters.
-			* This string is compared to a comparing string, which is determined by the other arguments passed to the function.
-	* [std::basic_string<CharT,Traits,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/erase)
-		* Removes specified characters from the string.
-			1) Removes min(count, size() - index) characters starting at index.
-			2) Removes the character at position.
-			3) Removes the characters in the range \[first, last).
-		* [c++ - How to trim a std::string? - Stack Overflow](https://stackoverflow.com/questions/216823/how-to-trim-a-stdstring)
-		```c++
-		s.erase(s.find_last_not_of(" \n\r\t")+1);
-		```
-	* [string::find - C++ Reference](https://www.cplusplus.com/reference/string/string/find/)
-		* Find content in string
-			* Searches the string for the first occurrence of the sequence specified by its arguments.
-			* When pos is specified, the search only includes characters at or after position pos, ignoring any possible occurrences that include characters before pos.
-			* Notice that unlike member find_first_of, whenever more than one character is being searched for, it is not enough that just one of these characters match, but the entire sequence must match.
-		* [std::basic_string<CharT,Traits,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find)
-	* [std::basic_string<CharT,Traits,Allocator>::find_last_not_of - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find_last_not_of)
-		* Finds the last character equal to none of the characters in the given character sequence. The search considers only the interval [0, pos]. If the character is not present in the interval, npos will be returned.
-		* 1) Finds the last character equal to none of characters in str.
-		* 2) Finds the last character equal to none of characters in the range [s, s+count). This range can include null characters.
-		* 3) Finds the last character equal to none of characters in character string pointed to by s. The length of the string is determined by the first null character using Traits::length(s).
-		* 4) Finds the last character not equal to ch.
-		* 5) Implicitly converts t to a string view sv as if by std::basic_string_view<CharT, Traits> sv = t;, then finds the last character equal to none of characters in sv. This overload participates in overload resolution only if std::is_convertible_v<const StringViewLike&, std::basic_string_view<CharT, Traits>> is true and std::is_convertible_v<const StringViewLike&, const CharT*> is false.
-		* In all cases, equality is checked by calling Traits::eq.
-	* [std::basic_string<CharT,Traits,Allocator>::npos - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/npos)
-		* static const size_type npos = -1;
-		* This is a special value equal to the maximum value representable by the type size_type. The exact meaning depends on context, but it is generally used either as end of string indicator by the functions that expect a string index or as the error indicator by the functions that return a string index.
-		* Note
-			* Although the definition uses -1, size_type is an unsigned integer type, and the value of npos is the largest positive value it can hold, due to signed-to-unsigned implicit conversion. This is a portable way to specify the largest value of any unsigned type.
-	* [std::basic_string<CharT,Traits,Allocator>::substr - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/substr)
-		* Returns a substring [pos, pos+count). If the requested substring extends past the end of the string, i.e. the count is greater than size() - pos (e.g. if count == npos), the returned substring is [pos, size()).
-	* [std::to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
-		* Convert numerical value to string
-			* Returns a string with the representation of val.
-	* [std::literals::string_literals::operator""s - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/operator%22%22s)
-		* Forms a string literal of the desired type.
+
+##### [basic_string - C++ Reference](https://www.cplusplus.com/reference/string/basic_string/)
+* Generic string class
+* The basic_string is the generalization of class string for any character type (see string for a description).
+* [std::basic_string - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string) 
+	* The class template basic_string stores and manipulates sequences of char-like objects, which are non-array objects of trivial standard-layout type. The class is dependent neither on the character type nor on the nature of operations on that type. The definitions of the operations are supplied via the Traits template parameter - a specialization of std::char_traits or a compatible traits class. Traits::char_type and CharT must name the same type; otherwise the program is ill-formed.
+	* The elements of a basic_string are stored contiguously, that is, for a basic_string s, &*(s.begin() + n) == &*s.begin() + n for any n in \[0, s.size()), or, equivalently, a pointer to s\[0] can be passed to functions that expect a pointer to the first element of a null-terminated (since C++11)CharT\[] array.
+	* std::basic_string satisfies the requirements of AllocatorAwareContainer, SequenceContainer and ContiguousContainer (since C++17)
+* [std::basic_string_view - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string_view)
+	* The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
+* [string::append - C++ Reference](https://www.cplusplus.com/reference/string/string/append/)
+	* Append to string
+		* Extends the string by appending additional characters at the end of its current value:
+	* Complexity
+		* Unspecified, but generally up to linear in the new string length.
+* [string::c_str - C++ Reference](https://www.cplusplus.com/reference/string/string/c_str/)
+* [string::compare - C++ Reference](https://www.cplusplus.com/reference/string/string/compare/)
+	* Compare strings
+		* Compares the value of the string object (or a substring) to the sequence of characters specified by its arguments.
+		* The compared string is the value of the string object or -if the signature used has a pos and a len parameters- the substring that begins at its character in position pos and spans len characters.
+		* This string is compared to a comparing string, which is determined by the other arguments passed to the function.
+* [std::basic_string<CharT,Traits,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/erase)
+	* Removes specified characters from the string.
+		1) Removes min(count, size() - index) characters starting at index.
+		2) Removes the character at position.
+		3) Removes the characters in the range \[first, last).
+	* [c++ - How to trim a std::string? - Stack Overflow](https://stackoverflow.com/questions/216823/how-to-trim-a-stdstring)
+	```c++
+	s.erase(s.find_last_not_of(" \n\r\t")+1);
+	```
+* [string::find - C++ Reference](https://www.cplusplus.com/reference/string/string/find/)
+	* Find content in string
+		* Searches the string for the first occurrence of the sequence specified by its arguments.
+		* When pos is specified, the search only includes characters at or after position pos, ignoring any possible occurrences that include characters before pos.
+		* Notice that unlike member find_first_of, whenever more than one character is being searched for, it is not enough that just one of these characters match, but the entire sequence must match.
+	* [std::basic_string<CharT,Traits,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find)
+* [std::basic_string<CharT,Traits,Allocator>::find_last_not_of - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find_last_not_of)
+	* Finds the last character equal to none of the characters in the given character sequence. The search considers only the interval [0, pos]. If the character is not present in the interval, npos will be returned.
+	* 1) Finds the last character equal to none of characters in str.
+	* 2) Finds the last character equal to none of characters in the range [s, s+count). This range can include null characters.
+	* 3) Finds the last character equal to none of characters in character string pointed to by s. The length of the string is determined by the first null character using Traits::length(s).
+	* 4) Finds the last character not equal to ch.
+	* 5) Implicitly converts t to a string view sv as if by std::basic_string_view<CharT, Traits> sv = t;, then finds the last character equal to none of characters in sv. This overload participates in overload resolution only if std::is_convertible_v<const StringViewLike&, std::basic_string_view<CharT, Traits>> is true and std::is_convertible_v<const StringViewLike&, const CharT*> is false.
+	* In all cases, equality is checked by calling Traits::eq.
+* [std::basic_string<CharT,Traits,Allocator>::npos - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/npos)
+	* static const size_type npos = -1;
+	* This is a special value equal to the maximum value representable by the type size_type. The exact meaning depends on context, but it is generally used either as end of string indicator by the functions that expect a string index or as the error indicator by the functions that return a string index.
+	* Note
+		* Although the definition uses -1, size_type is an unsigned integer type, and the value of npos is the largest positive value it can hold, due to signed-to-unsigned implicit conversion. This is a portable way to specify the largest value of any unsigned type.
+* [std::basic_string<CharT,Traits,Allocator>::substr - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/substr)
+	* Returns a substring [pos, pos+count). If the requested substring extends past the end of the string, i.e. the count is greater than size() - pos (e.g. if count == npos), the returned substring is [pos, size()).
+* [std::to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
+	* Convert numerical value to string
+		* Returns a string with the representation of val.
+* [std::literals::string_literals::operator""s - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/operator%22%22s)
+	* Forms a string literal of the desired type.
 * [How to split a string in C/C++, Python and Java? - GeeksforGeeks](https://www.geeksforgeeks.org/how-to-split-a-string-in-cc-python-and-java/)
 	* Method 1: Using  stringstream API of C++
 		* Stringstream object can be initialized using a string object, it automatically tokenizes strings on space char. Just like “cin” stream stringstream allows you to read a string as a stream of words.
