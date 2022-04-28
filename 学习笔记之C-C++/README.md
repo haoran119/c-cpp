@@ -671,27 +671,32 @@ int main() {
 * [std::basic_string<CharT,Traits,Allocator>::find_last_not_of - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find_last_not_of)
 	* Finds the last character equal to none of the characters in the given character sequence. The search considers only the interval [0, pos]. If the character is not present in the interval, npos will be returned.
 	* 1) Finds the last character equal to none of characters in str.
-	* 2) Finds the last character equal to none of characters in the range [s, s+count). This range can include null characters.
+	* 2) Finds the last character equal to none of characters in the range \[s, s+count). This range can include null characters.
 	* 3) Finds the last character equal to none of characters in character string pointed to by s. The length of the string is determined by the first null character using Traits::length(s).
 	* 4) Finds the last character not equal to ch.
 	* 5) Implicitly converts t to a string view sv as if by std::basic_string_view<CharT, Traits> sv = t;, then finds the last character equal to none of characters in sv. This overload participates in overload resolution only if std::is_convertible_v<const StringViewLike&, std::basic_string_view<CharT, Traits>> is true and std::is_convertible_v<const StringViewLike&, const CharT*> is false.
 	* In all cases, equality is checked by calling Traits::eq.
+* [std::basic_string<CharT,Traits,Allocator>::substr - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/substr)
+	* Returns a substring \[pos, pos+count). If the requested substring extends past the end of the string, i.e. the count is greater than size() - pos (e.g. if count == npos), the returned substring is \[pos, size()).
+* [std::literals::string_literals::operator""s - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/operator%22%22s)
+	* Forms a string literal of the desired type.
+
+###### Constants
+
 * [std::basic_string<CharT,Traits,Allocator>::npos - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/npos)
 	* static const size_type npos = -1;
 	* This is a special value equal to the maximum value representable by the type size_type. The exact meaning depends on context, but it is generally used either as end of string indicator by the functions that expect a string index or as the error indicator by the functions that return a string index.
 	* Note
 		* Although the definition uses -1, size_type is an unsigned integer type, and the value of npos is the largest positive value it can hold, due to signed-to-unsigned implicit conversion. This is a portable way to specify the largest value of any unsigned type.
-* [std::basic_string<CharT,Traits,Allocator>::substr - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/substr)
-	* Returns a substring [pos, pos+count). If the requested substring extends past the end of the string, i.e. the count is greater than size() - pos (e.g. if count == npos), the returned substring is [pos, size()).
+
+###### Non-member functions
+
+* [std::stoi, std::stol, std::stoll - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/stol)
+	* converts a string to a signed integer
 * [std::to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
 	* Convert numerical value to string
 		* Returns a string with the representation of val.
-* [std::literals::string_literals::operator""s - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/operator%22%22s)
-	* Forms a string literal of the desired type.
-
-##### [std::basic_string_view](https://en.cppreference.com/w/cpp/string/basic_string_view)
-
-* The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
+		* Discards any whitespace characters (as identified by calling std::isspace) until the first non-whitespace character is found, then takes as many characters as possible to form a valid base-n (where n=base) integer number representation and converts them to an integer value. 
 
 * [How to split a string in C/C++, Python and Java? - GeeksforGeeks](https://www.geeksforgeeks.org/how-to-split-a-string-in-cc-python-and-java/)
 	* Method 1: Using stringstream API of C++
@@ -788,14 +793,22 @@ int main() {
 	* 在使用string中的c_str()进行字符串赋值时,如果后面对string中的char*进行改变.那么c_str()中的值就不在可靠了.
 * [c++ - Displaying the address of a string - Stack Overflow](https://stackoverflow.com/questions/9377407/displaying-the-address-of-a-string)
 	* If you use &hello it prints the address of the pointer, not the address of the string. Cast the pointer to a void* to use the correct overload of operator<<.
-    ```c++
-    std::cout << "String address = " << static_cast<void*>(hello) << std::endl;
-    ```
+	```c++
+	std::cout << "String address = " << static_cast<void*>(hello) << std::endl;
+	```
+##### [std::basic_string_view](https://en.cppreference.com/w/cpp/string/basic_string_view)
+
+* The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
+
+##### [Null-terminated byte strings](https://en.cppreference.com/w/cpp/string/byte)
+
+* A null-terminated byte string (NTBS) is a sequence of nonzero bytes followed by a byte with value zero (the terminating null character). Each byte in a byte string encodes one character of some character set. For example, the character array {'\x63', '\x61', '\x74', '\0'} is an NTBS holding the string "cat" in ASCII encoding.
 * [std::isspace - cppreference.com](https://en.cppreference.com/w/cpp/string/byte/isspace)
 	* Defined in header \<cctype>
 	* int isspace( int ch );
 	* [c++ - std::remove_if and std::isspace - compile-time error - Stack Overflow](https://stackoverflow.com/questions/21578544/stdremove-if-and-stdisspace-compile-time-error)
 		* There is another overload of std::isspace, so you need to specify which one to use. An easy way is to use a lambda (or write your own one-line function if you don't have C++11 support)
+
 * [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
   * [std::basic_stringstream - cppreference.com](https://en.cppreference.com/w/cpp/io/basic_stringstream)
   * [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
