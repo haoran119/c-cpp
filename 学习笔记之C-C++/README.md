@@ -642,8 +642,6 @@ int main() {
 
 ###### Member functions
 
-####### Operations
-
 * [string::append - C++ Reference](https://www.cplusplus.com/reference/string/string/append/)
 	* Append to string
 		* Extends the string by appending additional characters at the end of its current value:
@@ -661,9 +659,9 @@ int main() {
 		2) Removes the character at position.
 		3) Removes the characters in the range \[first, last).
 	* [c++ - How to trim a std::string? - Stack Overflow](https://stackoverflow.com/questions/216823/how-to-trim-a-stdstring)
-	```c++
-	s.erase(s.find_last_not_of(" \n\r\t")+1);
-	```
+    ```c++
+    s.erase(s.find_last_not_of(" \n\r\t")+1);
+    ```
 * [string::find - C++ Reference](https://www.cplusplus.com/reference/string/string/find/)
 	* Find content in string
 		* Searches the string for the first occurrence of the sequence specified by its arguments.
