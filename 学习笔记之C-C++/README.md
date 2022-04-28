@@ -13,6 +13,7 @@
 * [Cᐩᐩ Weekly With Jason Turner - YouTube](https://www.youtube.com/channel/UCxHAlbZQNFU2LgEtiqd2Maw)
 * [Compiler Explorer](https://godbolt.org/)
 * [Coliru - Compile, link and run](http://coliru.stacked-crooked.com/)
+* [C++ Insights](https://cppinsights.io/)
 
 #
 
