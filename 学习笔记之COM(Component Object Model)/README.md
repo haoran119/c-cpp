@@ -126,6 +126,7 @@
   const CLSID clsid2 = { 0x557cf406, 0x1a04, 0x11d3, { 0x9a,0x73,0x00,0x00,0xf8,0x1e,0xf3,0x2e } };
   ```
   * How to convert from CLSID to string ?
+    * [[MS-OAUT]: LPOLESTR | Microsoft Docs](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-oaut/b2c46afb-4717-4cbb-8828-d6e0ae743463)
   ```c++
   auto getSCLSID = []() {
       lpolestr sCLSID{};
