@@ -678,8 +678,6 @@ int main() {
 	* In all cases, equality is checked by calling Traits::eq.
 * [std::basic_string<CharT,Traits,Allocator>::substr - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/substr)
 	* Returns a substring \[pos, pos+count). If the requested substring extends past the end of the string, i.e. the count is greater than size() - pos (e.g. if count == npos), the returned substring is \[pos, size()).
-* [std::literals::string_literals::operator""s - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/operator%22%22s)
-	* Forms a string literal of the desired type.
 
 ###### Constants
 
@@ -697,6 +695,13 @@ int main() {
 	* Convert numerical value to string
 		* Returns a string with the representation of val.
 		* Discards any whitespace characters (as identified by calling std::isspace) until the first non-whitespace character is found, then takes as many characters as possible to form a valid base-n (where n=base) integer number representation and converts them to an integer value. 
+
+###### Literals
+
+* [std::literals::string_literals::operator""s - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/operator%22%22s)
+	* Forms a string literal of the desired type.
+
+###### MISC
 
 * [How to split a string in C/C++, Python and Java? - GeeksforGeeks](https://www.geeksforgeeks.org/how-to-split-a-string-in-cc-python-and-java/)
 	* Method 1: Using stringstream API of C++
@@ -796,6 +801,16 @@ int main() {
 	```c++
 	std::cout << "String address = " << static_cast<void*>(hello) << std::endl;
 	```
+* [使用 C++ 的 StringBuilder 提升 4350% 的性能](https://mp.weixin.qq.com/s/YfY_c4D_kWSth5tETqnhkg)
+  * 经常出现客户端打电话抱怨说：你们的程序慢如蜗牛。你开始检查可能的疑点：文件IO，数据库访问速度，甚至查看web服务。但是这些可能的疑点都很正常，一点问题都没有。
+  * 你使用最顺手的性能分析工具分析，发现瓶颈在于一个小函数，这个函数的作用是将一个长的字符串链表写到一文件中。
+  * 你对这个函数做了如下优化：将所有的小字符串连接成一个长的字符串，执行一次文件写入操作，避免成千上万次的小字符串写文件操作。
+  * 这个优化只做对了一半。
+  * 你先测试大字符串写文件的速度，发现快如闪电。然后你再测试所有字符串拼接的速度。
+  * 好几年。
+  * 怎么回事？你会怎么克服这个问题呢？
+  * 你或许知道.net程序员可以使用StringBuilder来解决此问题。这也是本文的起点。
+
 ##### [std::basic_string_view](https://en.cppreference.com/w/cpp/string/basic_string_view)
 
 * The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
@@ -809,16 +824,17 @@ int main() {
 	* [c++ - std::remove_if and std::isspace - compile-time error - Stack Overflow](https://stackoverflow.com/questions/21578544/stdremove-if-and-stdisspace-compile-time-error)
 		* There is another overload of std::isspace, so you need to specify which one to use. An easy way is to use a lambda (or write your own one-line function if you don't have C++11 support)
 
+##### [std::basic_stringstream](https://en.cppreference.com/w/cpp/io/basic_stringstream)
+
 * [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
-  * [std::basic_stringstream - cppreference.com](https://en.cppreference.com/w/cpp/io/basic_stringstream)
-  * [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
-    * A stringstream associates a string object with a stream allowing you to read from the string as if it were a stream (like cin).
-    * Basic methods are –
-      * clear() — to clear the stream
-      * str() — to get and set string object whose content is present in stream.
-      * operator << — add a string to the stringstream object.
-      * operator >> — read something from the stringstream object,
-  * [StringStream | HackerRank](https://www.hackerrank.com/challenges/c-tutorial-stringstream/problem)
+* [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
+	* A stringstream associates a string object with a stream allowing you to read from the string as if it were a stream (like cin).
+	* Basic methods are –
+		* clear() — to clear the stream
+		* str() — to get and set string object whose content is present in stream.
+		* operator << — add a string to the stringstream object.
+		* operator >> — read something from the stringstream object,
+* [StringStream | HackerRank](https://www.hackerrank.com/challenges/c-tutorial-stringstream/problem)
 ```c++
 #include <cmath>
 #include <cstdio>
@@ -870,16 +886,6 @@ int main() {
       * The first form (1) returns a string object with a copy of the current contents of the stream.
       * The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
       * Internally, the function calls the str member of its internal string buffer object.
-
-* [使用 C++ 的 StringBuilder 提升 4350% 的性能](https://mp.weixin.qq.com/s/YfY_c4D_kWSth5tETqnhkg)
-  * 经常出现客户端打电话抱怨说：你们的程序慢如蜗牛。你开始检查可能的疑点：文件IO，数据库访问速度，甚至查看web服务。但是这些可能的疑点都很正常，一点问题都没有。
-  * 你使用最顺手的性能分析工具分析，发现瓶颈在于一个小函数，这个函数的作用是将一个长的字符串链表写到一文件中。
-  * 你对这个函数做了如下优化：将所有的小字符串连接成一个长的字符串，执行一次文件写入操作，避免成千上万次的小字符串写文件操作。
-  * 这个优化只做对了一半。
-  * 你先测试大字符串写文件的速度，发现快如闪电。然后你再测试所有字符串拼接的速度。
-  * 好几年。
-  * 怎么回事？你会怎么克服这个问题呢？
-  * 你或许知道.net程序员可以使用StringBuilder来解决此问题。这也是本文的起点。
 
 #### Pointers
 
