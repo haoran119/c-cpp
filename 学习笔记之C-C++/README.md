@@ -632,15 +632,14 @@ int main() {
 	* std::basic_string_view (C++17) - a lightweight non-owning read-only view into a subsequence of a string.
 	* Null-terminated strings - arrays of characters terminated by a special null character.
 
-##### [std::basic_string - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string) 
+##### [std::basic_string](https://en.cppreference.com/w/cpp/string/basic_string) 
 
 * The class template basic_string stores and manipulates sequences of char-like objects, which are non-array objects of trivial standard-layout type. The class is dependent neither on the character type nor on the nature of operations on that type. The definitions of the operations are supplied via the Traits template parameter - a specialization of std::char_traits or a compatible traits class. Traits::char_type and CharT must name the same type; otherwise the program is ill-formed.
 * The elements of a basic_string are stored contiguously, that is, for a basic_string s, &*(s.begin() + n) == &*s.begin() + n for any n in \[0, s.size()), or, equivalently, a pointer to s\[0] can be passed to functions that expect a pointer to the first element of a null-terminated (since C++11) CharT\[] array.
 * std::basic_string satisfies the requirements of AllocatorAwareContainer, SequenceContainer and ContiguousContainer (since C++17)
 * Member functions of std::basic_string are constexpr: it is possible to create and use std::string objects in the evaluation of a constant expression.
 * However, std::string objects generally cannot be constexpr, because any dynamically allocated storage must be released in the same evaluation of constant expression. (since C++20)
-* [std::basic_string_view - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string_view)
-	* The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
+
 * [string::append - C++ Reference](https://www.cplusplus.com/reference/string/string/append/)
 	* Append to string
 		* Extends the string by appending additional characters at the end of its current value:
@@ -687,8 +686,13 @@ int main() {
 		* Returns a string with the representation of val.
 * [std::literals::string_literals::operator""s - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/operator%22%22s)
 	* Forms a string literal of the desired type.
+
+##### [std::basic_string_view](https://en.cppreference.com/w/cpp/string/basic_string_view)
+
+* The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
+
 * [How to split a string in C/C++, Python and Java? - GeeksforGeeks](https://www.geeksforgeeks.org/how-to-split-a-string-in-cc-python-and-java/)
-	* Method 1: Using  stringstream API of C++
+	* Method 1: Using stringstream API of C++
 		* Stringstream object can be initialized using a string object, it automatically tokenizes strings on space char. Just like “cin” stream stringstream allows you to read a string as a stream of words.
     ```c++
     #include <bits/stdc++.h>
@@ -790,17 +794,6 @@ int main() {
 	* int isspace( int ch );
 	* [c++ - std::remove_if and std::isspace - compile-time error - Stack Overflow](https://stackoverflow.com/questions/21578544/stdremove-if-and-stdisspace-compile-time-error)
 		* There is another overload of std::isspace, so you need to specify which one to use. An easy way is to use a lambda (or write your own one-line function if you don't have C++11 support)
-* [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
-  * Output stream class to operate on strings.
-  * Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
-  * Characters can be inserted into the stream with any operation allowed on output streams.
-  * [ostringstream::str - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/str/)
-    * string str() const;
-    * void str (const string& s);
-    * Get/set content
-      * The first form (1) returns a string object with a copy of the current contents of the stream.
-      * The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
-      * Internally, the function calls the str member of its internal string buffer object.
 * [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
   * [std::basic_stringstream - cppreference.com](https://en.cppreference.com/w/cpp/io/basic_stringstream)
   * [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
@@ -851,6 +844,17 @@ int main() {
     return 0;
 }
 ```
+* [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
+  * Output stream class to operate on strings.
+  * Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
+  * Characters can be inserted into the stream with any operation allowed on output streams.
+  * [ostringstream::str - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/str/)
+    * string str() const;
+    * void str (const string& s);
+    * Get/set content
+      * The first form (1) returns a string object with a copy of the current contents of the stream.
+      * The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
+      * Internally, the function calls the str member of its internal string buffer object.
 
 * [使用 C++ 的 StringBuilder 提升 4350% 的性能](https://mp.weixin.qq.com/s/YfY_c4D_kWSth5tETqnhkg)
   * 经常出现客户端打电话抱怨说：你们的程序慢如蜗牛。你开始检查可能的疑点：文件IO，数据库访问速度，甚至查看web服务。但是这些可能的疑点都很正常，一点问题都没有。
