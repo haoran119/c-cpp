@@ -89,38 +89,38 @@
   * [StringFromCLSID function (combaseapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/combaseapi/nf-combaseapi-stringfromclsid?redirectedfrom=MSDN)
     * Converts a CLSID into a string of printable characters. Different CLSIDs always convert to different strings.
   * [c++ - Print a GUID variable - Stack Overflow](https://stackoverflow.com/questions/1672677/print-a-guid-variable)
-    ```c++
-    #include <iostream>
-    #include <string>
-    #include <stdexcept>
-    #include <comutil.h>
+  ```c++
+  #include <iostream>
+  #include <string>
+  #include <stdexcept>
+  #include <comutil.h>
 
-    int main()
-    {
-        GUID guid{};
-        HRESULT hr = CoCreateGuid(&guid);
-        std::string toFilename{};
+  int main()
+  {
+      GUID guid{};
+      HRESULT hr = CoCreateGuid(&guid);
+      std::string toFilename{};
 
-        if (S_OK == hr) {
-            OLECHAR buffer[64];
+      if (S_OK == hr) {
+          OLECHAR buffer[64];
 
-            auto size = StringFromGUID2(guid, buffer, 64);
-            if (size > 0) {
-                _bstr_t tempFilename = _bstr_t(buffer);
+          auto size = StringFromGUID2(guid, buffer, 64);
+          if (size > 0) {
+              _bstr_t tempFilename = _bstr_t(buffer);
 
-                // remove enclosing braces
-                toFilename += std::string(tempFilename).substr(1, tempFilename.length() - 2);
-            }
-        }
-        else {
-            throw std::runtime_error("Error creating a GUID!");
-        }
+              // remove enclosing braces
+              toFilename += std::string(tempFilename).substr(1, tempFilename.length() - 2);
+          }
+      }
+      else {
+          throw std::runtime_error("Error creating a GUID!");
+      }
 
-        std::cout << toFilename << std::endl;
+      std::cout << toFilename << std::endl;
 
-        return 0;
-    }
-    ```
+      return 0;
+  }
+  ```
   * [c++ - How to initialize a constant CLSID - Stack Overflow](https://stackoverflow.com/questions/29975918/how-to-initialize-a-constant-clsid)
   ```c++
   const CLSID clsid2 = { 0x557cf406, 0x1a04, 0x11d3, { 0x9a,0x73,0x00,0x00,0xf8,0x1e,0xf3,0x2e } };
