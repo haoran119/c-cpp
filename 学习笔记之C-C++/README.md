@@ -1148,7 +1148,7 @@ int main(int argc, char *argv[]) {
 
 * [Initialization - cppreference.com](https://en.cppreference.com/w/cpp/language/initialization)
 
-#### [Classes - cppreference.com](https://en.cppreference.com/w/cpp/language/classes)
+#### [Classes](https://en.cppreference.com/w/cpp/language/classes)
 
 ##### Special member functions
 
@@ -1170,6 +1170,28 @@ int main(int argc, char *argv[]) {
 	* Specifies that a virtual function overrides another virtual function.
 * [final specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/final)
 	* Specifies that a virtual function cannot be overridden in a derived class or that a class cannot be derived from.
+* [C.128: Virtual functions should specify exactly one of virtual, override, or final](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-override)
+	* Reason
+		* Readability. Detection of mistakes. Writing explicit virtual, override, or final is self-documenting and enables the compiler to catch mismatch of types and/or names between base and derived classes. However, writing more than one of these three is both redundant and a potential source of errors.
+		* It’s simple and clear:
+			* virtual means exactly and only “this is a new virtual function.”
+			* override means exactly and only “this is a non-final overrider.”
+			* final means exactly and only “this is a final overrider.”
+	* Discussion
+		* We want to eliminate two particular classes of errors:
+			* implicit virtual: the programmer intended the function to be implicitly virtual and it is (but readers of the code can’t tell); or the programmer intended the function to be implicitly virtual but it isn’t (e.g., because of a subtle parameter list mismatch); or the programmer did not intend the function to be virtual but it is (because it happens to have the same signature as a virtual in the base class)
+			* implicit override: the programmer intended the function to be implicitly an overrider and it is (but readers of the code can’t tell); or the programmer intended the function to be implicitly an overrider but it isn’t (e.g., because of a subtle parameter list mismatch); or the programmer did not intend the function to be an overrider but it is (because it happens to have the same signature as a virtual in the base class – note this problem arises whether or not the function is explicitly declared virtual, because the programmer might have intended to create either a new virtual function or a new non-virtual function)
+		* Note: On a class defined as final, it doesn’t matter whether you put override or final on an individual virtual function.
+		* Note: Use final on functions sparingly. It does not necessarily lead to optimization, and it precludes further overriding.
+	* Enforcement
+		* Compare virtual function names in base and derived classes and flag uses of the same name that does not override.
+		* Flag overrides with neither override nor final.
+		* Flag function declarations that use more than one of virtual, override, and final.
+* [C.140: Do not provide different default arguments for a virtual function and an overrider](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-virtual-default-arg)
+	* Reason
+		* That can cause confusion: An overrider does not inherit default arguments.
+	* Enforcement
+		* Flag default arguments on virtual functions if they differ between base and derived declarations.
 * [Abstract Classes - Polymorphism | HackerRank](https://www.hackerrank.com/challenges/abstract-classes-polymorphism/problem)
   * [LRU Cache Implementation - GeeksforGeeks](https://www.geeksforgeeks.org/lru-cache-implementation/)
   * [list - C++ Reference](http://www.cplusplus.com/reference/list/list/?kw=list)
