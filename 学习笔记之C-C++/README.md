@@ -1152,6 +1152,15 @@ int main(int argc, char *argv[]) {
 
 ##### Special member functions
 
+* [Default constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/default_constructor)
+	* A default constructor is a constructor which can be called with no arguments (either defined with an empty parameter list, or with default arguments provided for every parameter). A type with a public default constructor is DefaultConstructible.
+	* Explanation
+		1) Declaration of a default constructor inside of class definition.
+		2) Definition of the constructor outside of class definition (the class must contain a declaration (1)). See constructors and member initializer lists for details on the constructor body.
+		3) Deleted default constructor: if it is selected by overload resolution, the program fails to compile.
+		4) Defaulted default constructor: the compiler will define the implicit default constructor even if other constructors are present.
+		5) Defaulted default constructor outside of class definition (the class must contain a declaration (1)). Such constructor is treated as user-provided (see below and value initialization).
+	* Default constructors are called during default initializations and value initializations.
 * [Copy constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/copy_constructor)
 	* A copy constructor of class T is a non-template constructor whose first parameter is T&‍, const T&‍, volatile T&‍, or const volatile T&‍, and either there are no other parameters, or the rest of the parameters all have default values.
 * [Move constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/move_constructor)
