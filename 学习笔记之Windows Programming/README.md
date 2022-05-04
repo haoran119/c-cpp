@@ -234,22 +234,24 @@
 * How to add host in Windows ?
   * code %windir%\system32\drivers\etc\hosts
   * [Create a new Windows hosts file](https://support.norton.com/sp/en/au/home/current/solutions/v72822654)
-* How to check PowerShell version ?
-  * $PSVersionTable.PSVersion
-  * [How to Check your PowerShell Version (All the Ways!)](https://adamtheautomator.com/powershell-version/)
-* How to check all environment variables ?
-```sh
-ls env:
-dir env:
-```
-* How to edit environmet variables ?
-  * [How to edit, clear, and delete environment variables in Windows - Digital Citizen](https://www.digitalcitizen.life/remove-edit-clear-environment-variables/)
 * How to calculate the difference of two timestamp columns ans sort it descending order in excel?
   * =IF(G2<>"", G2-F2+(F2>G2), "")
   * [How to calculate time difference with milliseconds in Excel?](https://www.extendoffice.com/documents/excel/4693-excel-time-difference-with-milliseconds.html)
   * [Excel formula: If cell is not blank | Exceljet](https://exceljet.net/formula/if-cell-is-not-blank)
   * [Fill a formula down into adjacent cells](https://support.microsoft.com/en-us/office/fill-a-formula-down-into-adjacent-cells-041edfe2-05bc-40e6-b933-ef48c3f308c6#ID0EBBF=Web)
   * [How to Sort and Ignore Blanks in Excel & Google Sheets - Automate Excel](https://www.automateexcel.com/how-to/sort-ignore-blanks/#:~:text=Now%20you%20can%20sort%20the,Filter%20%3E%20Sort%20Largest%20to%20Smallest.)
+* How to check all environment variables ?
+```sh
+ls env:
+dir env:
+```
+* How to check PowerShell version ?
+  * $PSVersionTable.PSVersion
+  * [How to Check your PowerShell Version (All the Ways!)](https://adamtheautomator.com/powershell-version/)
+* How to check if process is in deadlock ?
+    * Task Manager > Performance > Open Resource Monitor > Select process > Analyze Wait Chain...
+* How to edit environmet variables ?
+  * [How to edit, clear, and delete environment variables in Windows - Digital Citizen](https://www.digitalcitizen.life/remove-edit-clear-environment-variables/)
 * How to lock files ?
   * You can simply use the Win32 API CreateFile and then specify no sharing rights. This will ensure that no other processes can access the file.
   * The dwShareMode DWORD specifies the type of sharing you would like, for example GENERIC_READ. If you specify 0 then that means no sharing rights should be granted.
@@ -272,13 +274,11 @@ dir env:
     * In a network, the Universal Naming Convention (UNC) is a way to identify a shared file in a computer without having to specify (or know) the storage device it is on. 
     * In Windows operating systems, the UNC name format is:
     * \\servername\sharename\path\filename
-* What's Maximum Path Length Limitation on Windows ?
-    * [Maximum Path Length Limitation - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd)
-      * In the Windows API (with some exceptions discussed in the following paragraphs), the maximum length for a path is MAX_PATH, which is defined as 260 characters. A local path is structured in the following order: drive letter, colon, backslash, name components separated by backslashes, and a terminating null character. 
-      * [Naming Files, Paths, and Namespaces - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file)
-* How to check if process is in deadlock ?
-    * Task Manager > Performance > Open Resource Monitor > Select process > Analyze Wait Chain...
 * How to modifying the "Path to executable" of a windows service ?
     * [Modifying the "Path to executable" of a windows service - Stack Overflow](https://stackoverflow.com/questions/7190480/modifying-the-path-to-executable-of-a-windows-service)
       * It involves editing the registry, but service information can be found in HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services. Find the service you want to redirect, locate the ImagePath subkey and change that value.
       * Or There is also this approach seen on SuperUser which uses the sc command line instead of modifying the registry
+* What's Maximum Path Length Limitation on Windows ?
+    * [Maximum Path Length Limitation - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd)
+      * In the Windows API (with some exceptions discussed in the following paragraphs), the maximum length for a path is MAX_PATH, which is defined as 260 characters. A local path is structured in the following order: drive letter, colon, backslash, name components separated by backslashes, and a terminating null character. 
+      * [Naming Files, Paths, and Namespaces - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file)
