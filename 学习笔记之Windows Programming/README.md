@@ -21,6 +21,198 @@
     * The return value from the thread function.
     * The exit value of the thread's process.
   * [c++ - How can you get the return value of a Windows thread? - Stack Overflow](https://stackoverflow.com/questions/7100441/how-can-you-get-the-return-value-of-a-windows-thread)
+
+## ATL(Active Template Library) & MFC
+
+* [Microsoft C/C++ Documentation | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/?view=msvc-160)
+  * [ATL COM Desktop Components | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/atl/atl-com-desktop-components?view=msvc-160)
+    * The ATL Reference documents the Active Template Library (ATL), a set of template-based C++ classes that simplify the programming of Component Object Model (COM) objects. COM is a binary specification for creating and consuming software components on Windows. To fully take advantage of ATL, a working familiarity with COM is highly recommended. For more information about COM, see Component Object Model (COM).
+    * [Active Template Library (ATL) Concepts | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/atl/active-template-library-atl-concepts?view=msvc-160)
+      * The Active Template Library (ATL) is a set of template-based C++ classes that let you create small, fast Component Object Model (COM) objects. It has special support for key COM features, including stock implementations, dual interfaces, standard COM enumerator interfaces, connection points, tear-off interfaces, and ActiveX controls.
+      * If you do a lot of ATL programming, you will want to learn more about COM and .NET attributes, which is designed to simplify COM programming. For more information, see Attributed Programming. (COM and .NET attributes are not to be confused with the [[attribute]] feature in the C++ standard.)
+  * [MFC Desktop Applications | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/mfc/mfc-desktop-applications?view=msvc-160)
+    * The Microsoft Foundation Class (MFC) Library provides an object-oriented wrapper over much of the Win32 and COM APIs. Although it can be used to create very simple desktop applications, it is most useful when you need to develop more complex user interfaces with multiple controls. You can use MFC to create applications with Office-style user interfaces. For documentation on the Windows platform itself, see Windows documentation. For information on building Windows applications in C++ without MFC, see Build desktop Windows apps using the Win32 API.
+* [ATL-MFC Shared Classes | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/atl-mfc-shared-classes?view=msvc-160)
+  * These utility classes can be used in any native C++ project without requiring any MFC DLL.
+  * [Classes Shared by MFC and ATL | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/reference/classes-shared-by-mfc-and-atl?view=msvc-160)
+    * [CTime Class | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/reference/ctime-class?view=msvc-160)
+      * Represents an absolute time and date.
+      * [CTime::GetCurrentTime](https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/reference/ctime-class?view=msvc-160#getcurrenttime)
+      * [CTime::Format](https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/reference/ctime-class?view=msvc-160#format)
+      * [strftime, wcsftime, _strftime_l, _wcsftime_l | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/strftime-wcsftime-strftime-l-wcsftime-l?view=msvc-160)
+* [CComVariant class | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/atl/reference/ccomvariant-class?view=msvc-170)
+  * This class wraps the VARIANT type, providing a member indicating the type of data stored.
+  * [VARIANT (oaidl.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/oaidl/ns-oaidl-variant)
+    * VARIANTARG describes arguments passed within DISPPARAMS, and VARIANT to specify variant data that cannot be passed by reference.
+    * When a variant refers to another variant by using the VT_VARIANT | VT_BYREF vartype, the variant being referred to cannot also be of type VT_VARIANT | VT_BYREF. VARIANTs can be passed by value, even if VARIANTARGs cannot.
+* [Using CString | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/using-cstring?view=msvc-160)
+  * The topics in this section describe how to program with CString. For reference documentation about the CString class, see the documentation for CStringT.
+  * To use CString, include the atlstr.h header.
+  * The CString, CStringA, and CStringW classes are specializations of a class template called CStringT based on the type of character data they support.
+  * A CStringW object contains the wchar_t type and supports Unicode strings. A CStringA object contains the char type, and supports single-byte and multi-byte (MBCS) strings. A CString object supports either the char type or the wchar_t type, depending on whether the MBCS symbol or the UNICODE symbol is defined at compile time.
+  * A CString object keeps character data in a CStringData object. CString accepts NULL-terminated C-style strings. CString tracks the string length for faster performance, but it also retains the NULL character in the stored character data to support conversion to LPCWSTR. CString includes the null terminator when it exports a C-style string. You can insert a NULL at other locations in a CString, but it may produce unexpected results.
+  * The following set of string classes can be used without linking an MFC library, with or without CRT support: CAtlString, CAtlStringA, and CAtlStringW.
+  * CString is used in native projects. For managed-code (C++/CLI) projects, use System::String.
+  * To add more capabilities than CString, CStringA, or CStringW currently offer, you should create a subclass of CStringT that contains the additional features.
+  * [CString Operations Relating to C-Style Strings | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/cstring-operations-relating-to-c-style-strings?view=msvc-160)
+  * [CString::operator LPCTSTR | Microsoft Docs](https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-6.0/aa300569(v=vs.60)?redirectedfrom=MSDN)
+  * [c++ - What is LPCTSTR? - Software Engineering Stack Exchange](https://softwareengineering.stackexchange.com/questions/194764/what-is-lpctstr)
+    * LPCTSTR = L‌ong P‌ointer to a C‌onst T‌CHAR STR‌ing (Don't worry, a long pointer is the same as a pointer. There were two flavors of pointers under 16-bit windows.)
+    * Here's the table:
+      * LPSTR = char*
+      * LPCSTR = const char*
+      * LPWSTR = wchar_t*
+      * LPCWSTR = const wchar_t*
+      * LPTSTR = char* or wchar_t* depending on _UNICODE
+      * LPCTSTR = const char* or const wchar_t* depending on _UNICODE
+  * [[MS-DTYP]: LPCSTR | Microsoft Docs](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/f8d4fe46-6be8-44c9-8823-615a21d17a61)
+  * [[MS-DTYP]: LPCWSTR | Microsoft Docs](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/76f10dd8-699d-45e6-a53c-5aefc586da20)
+  * [CSimpleStringT Class | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/reference/csimplestringt-class?view=msvc-170)
+    * [CSimpleStringT::GetString](https://docs.microsoft.com/en-us/cpp/atl-mfc-shared/reference/csimplestringt-class?view=msvc-170#getstring)
+      * Retrieves the character string.
+      * Return Value
+        * A pointer to a null-terminated character string.
+
+## COM(Component Object Model)
+
+* [Component Object Model (COM) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal)
+  * Purpose
+    * COM is a platform-independent, distributed, object-oriented system for creating binary software components that can interact. COM is the foundation technology for Microsoft's OLE (compound documents) and ActiveX (Internet-enabled components) technologies.
+  * Where applicable
+    * COM objects can be created with a variety of programming languages. Object-oriented languages, such as C++, provide programming mechanisms that simplify the implementation of COM objects. These objects can be within a single process, in other processes, even on remote computers.
+* [Component Object Model - Wikipedia](https://en.wikipedia.org/wiki/Component_Object_Model)
+  * Component Object Model (COM) is a binary-interface standard for software components introduced by Microsoft in 1993. It is used to enable inter-process communication object creation in a large range of programming languages. COM is the basis for several other Microsoft technologies and frameworks, including OLE, OLE Automation, Browser Helper Object, ActiveX, COM+, DCOM, the Windows shell, DirectX, UMDF and Windows Runtime. The essence of COM is a language-neutral way of implementing objects that can be used in environments different from the one in which they were created, even across machine boundaries. For well-authored components, COM allows reuse of objects with no knowledge of their internal implementation, as it forces component implementers to provide well-defined interfaces that are separated from the implementation. The different allocation semantics of languages are accommodated by making objects responsible for their own creation and destruction through reference-counting. Type conversion casting between different interfaces of an object is achieved through the QueryInterface method. The preferred method of "inheritance" within COM is the creation of sub-objects to which method "calls" are delegated.
+  * COM is an interface technology defined and implemented as standard only on Microsoft Windows and Apple's Core Foundation 1.3 and later plug-in application programming interface (API).[1] The latter only implements a subset of the whole COM interface.[2] For some applications, COM has been replaced at least to some extent by the Microsoft .NET framework, and support for Web Services through the Windows Communication Foundation (WCF). However, COM objects can be used with all .NET languages through .NET COM Interop. Networked DCOM uses binary proprietary formats, while WCF encourages the use of XML-based SOAP messaging. COM is very similar to other component software interface technologies, such as CORBA and Enterprise JavaBeans, although each has its own strengths and weaknesses. Unlike C++, COM provides a stable application binary interface (ABI) that does not change between compiler releases.[3] This makes COM interfaces attractive for object-oriented C++ libraries that are to be used by clients compiled using different compiler versions.
+* [Is component object model still used?](https://livebook.manning.com/book/powershell-in-depth-second-edition/chapter-34/)
+  * .NET Framework, folks relied on an earlier technology called the Component Object Model (COM). COM is basically a set of rules that enable developers to write software components that can easily interoperate. COM is still in wide use today, although it's considered an older cousin to the . NET Framework.
+* [c++ - What is COM (Component Object Model) in a nutshell? - Stack Overflow](https://stackoverflow.com/questions/455687/what-is-com-component-object-model-in-a-nutshell)
+* [Essential COM - Don Box - Google Books](https://books.google.co.uk/books?id=kfRWvKSePmAC&dq=essential+com&printsec=frontcover&source=bn&hl=en&sa=X&oi=book_result&ct=result#v=onepage&q=essential%20com&f=false)
+* [Migrating COM/DCOM Applications in Microsoft .NET Framework](https://www.c-sharpcorner.com/article/migrating-comdcom-applications-in-microsoft-net-framework/)
+* [Managed and Unmanaged Code - Key Differences - ParTech](https://www.partech.nl/en/publications/2021/03/managed-and-unmanaged-code---key-differences#)
+  * DIFFERENCE BETWEEN MANAGED AND UNMANAGED CODE?
+    * Managed code is the one that is executed by the CLR of the .NET framework while unmanaged or unsafe code is executed by the operating system.
+    * The managed code provides security to the code while undamaged code creates security threats.
+    * In unsafe or unmanaged code the unsafe modifier is used to write the block of code while any other code written outside the unsafe code block is managed code.
+    * Memory buffer overflow problems do not occur in managed code as it is taken care of by the runtime environment but these problems occur in unmanaged code.
+    * Runtime services are provided in managed code while they are not provided in unmanaged code.
+    * Source code is first converted to intermediate language and then to native language in managed code while it is directly converted into the native language in unmanaged code.
+    * Unmanaged code provides low-level access while managed code does not provide that.
+    * In unsafe or unmanaged code the unsafe modifier is used to write the block of code while any other code written outside the unsafe code block is managed code.
+* [Compiler COM Support | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/compiler-com-support?view=msvc-160)
+  * The Microsoft C++ compiler can directly read component object model (COM) type libraries and translate the contents into C++ source code that can be included in the compilation. Language extensions are available to facilitate COM programming on the client side for desktop apps.
+  * By using the #import preprocessor directive, the compiler can read a type library and convert it into a C++ header file that describes the COM interfaces as classes. A set of #import attributes is available for user control of the content for the resulting type library header files.
+  * You can use the __declspec extended attribute uuid to assign a globally unique identifier (GUID) to a COM object. The keyword __uuidof can be used to extract the GUID associated with a COM object. Another __declspec attribute, property, can be used to specify the get and set methods for a data member of a COM object.
+  * A set of COM support global functions and classes is provided to support the VARIANT and BSTR types, implement smart pointers, and encapsulate the error object thrown by _com_raise_error:
+    * Compiler COM Global Functions
+    * _bstr_t
+    * _com_error
+    * _com_ptr_t
+    * _variant_t
+  * [BSTR | Microsoft Docs](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/automat/bstr)
+    * A BSTR (Basic string or binary string) is a string data type that is used by COM, Automation, and Interop functions. Use the BSTR data type in all interfaces that will be accessed from script.
+  * [_bstr_t class | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/bstr-t-class?view=msvc-160)
+    * A _bstr_t object encapsulates the BSTR data type. The class manages resource allocation and deallocation through function calls to SysAllocString and SysFreeString and other BSTR APIs when appropriate. The _bstr_t class uses reference counting to avoid excessive overhead.
+  * [_bstr_t::operator +=, _bstr_t::operator + | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/bstr-t-operator-add-equal-plus?view=msvc-160)
+    * Appends characters to the end of the _bstr_t object, or concatenates two strings.
+  * [_bstr_t::wchar_t*, _bstr_t::char* | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/bstr-t-wchar-t-star-bstr-t-char-star?view=msvc-160)
+    * Returns the BSTR characters as a narrow or wide character array.
+* [CoInitialize function (objbase.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/objbase/nf-objbase-coinitialize)
+  * Initializes the COM library on the current thread and identifies the concurrency model as single-thread apartment (STA).
+  * New applications should call CoInitializeEx instead of CoInitialize.
+  * If you want to use the Windows Runtime, you must call Windows::Foundation::Initialize instead.
+* [CoUninitialize function (combaseapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/combaseapi/nf-combaseapi-couninitialize)
+  * Closes the COM library on the current thread, unloads all DLLs loaded by the thread, frees any other resources that the thread maintains, and forces all RPC connections on the thread to close.
+* [HRESULT - Wikipedia](https://en.wikipedia.org/wiki/HRESULT)
+  * In the field of computer programming, the HRESULT is a data type used in Windows operating systems, and the earlier IBM/Microsoft OS/2 operating system, to represent error conditions, and warning conditions.
+  * The original purpose of HRESULTs was to formally lay out ranges of error codes for both public and Microsoft internal use in order to prevent collisions between error codes in different subsystems of the OS/2 operating system.
+  * HRESULTs are numerical error codes. Various bits within an HRESULT encode information about the nature of the error code, and where it came from.
+  * HRESULT error codes are most commonly encountered in COM programming, where they form the basis for a standardized COM error handling convention.
+  * [HRESULT | Microsoft Docs](https://docs.microsoft.com/en-us/office/client-developer/outlook/mapi/hresult)
+    * The following HRESULT values are the most common. More values are contained in the header file Winerror.h.
+  * [Common HRESULT Values - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/seccrypto/common-hresult-values)
+  * [COM Error Codes (Generic) (Winerror.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-1)
+
+  Name	| Description	| Value
+  -|-|-
+  S_OK	| Operation successful	| 0x00000000
+  E_ABORT	| Operation aborted	| 0x80004004
+  E_ACCESSDENIED	| General access denied error	| 0x80070005
+  E_FAIL	| Unspecified failure	| 0x80004005
+  E_HANDLE	| Handle that is not valid	| 0x80070006
+  E_INVALIDARG	| One or more arguments are not valid	| 0x80070057
+  E_NOINTERFACE	| No such interface supported	| 0x80004002
+  E_NOTIMPL	| Not implemented	| 0x80004001
+  E_OUTOFMEMORY	| Failed to allocate necessary memory	| 0x8007000E
+  E_POINTER	| Pointer that is not valid	| 0x80004003
+  E_UNEXPECTED	| Unexpected failure	| 0x8000FFFF
+
+* [Universally unique identifier - Wikipedia](https://en.wikipedia.org/wiki/Universally_unique_identifier)
+  * A universally unique identifier (UUID) is a 128-bit label used for information in computer systems. The term globally unique identifier (GUID) is also used, often in software created by Microsoft.[1]
+  * When generated according to the standard methods, UUIDs are, for practical purposes, unique. Their uniqueness does not depend on a central registration authority or coordination between the parties generating them, unlike most other numbering schemes. While the probability that a UUID will be duplicated is not zero, it is close enough to zero to be negligible.[2][3]
+  * Thus, anyone can create a UUID and use it to identify something with near certainty that the identifier does not duplicate one that has already been, or will be, created to identify something else. Information labeled with UUIDs by independent parties can therefore be later combined into a single database or transmitted on the same channel, with a negligible probability of duplication.
+  * Adoption of UUIDs is widespread, with many computing platforms providing support for generating them and for parsing their textual representation.
+  * [GUID - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/guiddef/ns-guiddef-guid)
+    * A GUID identifies an object such as a COM interfaces, or a COM class object, or a manager entry-point vector (EPV). A GUID is a 128-bit value consisting of one group of 8 hexadecimal digits, followed by three groups of 4 hexadecimal digits each, followed by one group of 12 hexadecimal digits. The following example GUID shows the groupings of hexadecimal digits in a GUID: 6B29FC40-CA47-1067-B31D-00DD010662DA.
+    * The GUID structure stores a GUID.
+  * [CLSIDFromString function (combaseapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/combaseapi/nf-combaseapi-clsidfromstring)
+    * Converts a string generated by the StringFromCLSID function back into the original CLSID.
+  * [CoCreateGuid function (combaseapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/combaseapi/nf-combaseapi-cocreateguid?redirectedfrom=MSDN)
+    * Creates a GUID, a unique 128-bit integer used for CLSIDs and interface identifiers.
+    * [windows - What's the C++ version of Guid.NewGuid()? - Stack Overflow](https://stackoverflow.com/questions/1327157/whats-the-c-version-of-guid-newguid)
+  * [StringFromGUID2 function (combaseapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/combaseapi/nf-combaseapi-stringfromguid2)
+    * Converts a globally unique identifier (GUID) into a string of printable characters.
+  * [StringFromCLSID function (combaseapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/combaseapi/nf-combaseapi-stringfromclsid?redirectedfrom=MSDN)
+    * Converts a CLSID into a string of printable characters. Different CLSIDs always convert to different strings.
+  * [c++ - Print a GUID variable - Stack Overflow](https://stackoverflow.com/questions/1672677/print-a-guid-variable)
+  ```c++
+  #include <iostream>
+  #include <string>
+  #include <stdexcept>
+  #include <comutil.h>
+
+  int main()
+  {
+      GUID guid{};
+      HRESULT hr = CoCreateGuid(&guid);
+      std::string toFilename{};
+
+      if (S_OK == hr) {
+          OLECHAR buffer[64];
+
+          auto size = StringFromGUID2(guid, buffer, 64);
+          if (size > 0) {
+              _bstr_t tempFilename = _bstr_t(buffer);
+
+              // remove enclosing braces
+              toFilename += std::string(tempFilename).substr(1, tempFilename.length() - 2);
+          }
+      }
+      else {
+          throw std::runtime_error("Error creating a GUID!");
+      }
+
+      std::cout << toFilename << std::endl;
+
+      return 0;
+  }
+  ```
+  * [c++ - How to initialize a constant CLSID - Stack Overflow](https://stackoverflow.com/questions/29975918/how-to-initialize-a-constant-clsid)
+  ```c++
+  const CLSID clsid2 = { 0x557cf406, 0x1a04, 0x11d3, { 0x9a,0x73,0x00,0x00,0xf8,0x1e,0xf3,0x2e } };
+  ```
+  * How to convert from CLSID to string ?
+    * [[MS-OAUT]: LPOLESTR | Microsoft Docs](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-oaut/b2c46afb-4717-4cbb-8828-d6e0ae743463)
+  ```c++
+  auto getSCLSID = []() {
+      lpolestr sCLSID{};
+      auto hr = stringfromclsid(clsid, &sCLSID);
+      cotaskmemfree(sCLSID);
+
+      return sCLSID;
+  ```
+
+## FAQ
+
 * How to add host in Windows ?
   * code %windir%\system32\drivers\etc\hosts
   * [Create a new Windows hosts file](https://support.norton.com/sp/en/au/home/current/solutions/v72822654)
