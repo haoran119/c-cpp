@@ -273,12 +273,12 @@ dir env:
     * In Windows operating systems, the UNC name format is:
     * \\servername\sharename\path\filename
 * What's Maximum Path Length Limitation on Windows ?
-	* [Maximum Path Length Limitation - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd)
-		* In the Windows API (with some exceptions discussed in the following paragraphs), the maximum length for a path is MAX_PATH, which is defined as 260 characters. A local path is structured in the following order: drive letter, colon, backslash, name components separated by backslashes, and a terminating null character. 
-		* [Naming Files, Paths, and Namespaces - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file)
+    * [Maximum Path Length Limitation - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd)
+      * In the Windows API (with some exceptions discussed in the following paragraphs), the maximum length for a path is MAX_PATH, which is defined as 260 characters. A local path is structured in the following order: drive letter, colon, backslash, name components separated by backslashes, and a terminating null character. 
+      * [Naming Files, Paths, and Namespaces - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file)
 * How to check if process is in deadlock ?
-	* Task Manager > Performance > Open Resource Monitor > Select process > Analyze Wait Chain...
+    * Task Manager > Performance > Open Resource Monitor > Select process > Analyze Wait Chain...
 * How to modifying the "Path to executable" of a windows service ?
-	* [Modifying the "Path to executable" of a windows service - Stack Overflow](https://stackoverflow.com/questions/7190480/modifying-the-path-to-executable-of-a-windows-service)
-		* It involves editing the registry, but service information can be found in HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services. Find the service you want to redirect, locate the ImagePath subkey and change that value.
-		* Or There is also this approach seen on SuperUser which uses the sc command line instead of modifying the registry
+    * [Modifying the "Path to executable" of a windows service - Stack Overflow](https://stackoverflow.com/questions/7190480/modifying-the-path-to-executable-of-a-windows-service)
+      * It involves editing the registry, but service information can be found in HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services. Find the service you want to redirect, locate the ImagePath subkey and change that value.
+      * Or There is also this approach seen on SuperUser which uses the sc command line instead of modifying the registry
