@@ -1092,6 +1092,13 @@ int main() {
 * [c++ - Where is `%p` useful with printf? - Stack Overflow](https://stackoverflow.com/questions/2369541/where-is-p-useful-with-printf)
 	* Always use %p for pointers.
 
+##### [{fmt}](https://fmt.dev/latest/index.html)
+
+* {fmt} is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
+* [Usage — fmt 8.1.1 documentation](https://fmt.dev/latest/usage.html)
+	* To use the {fmt} library, add fmt/core.h, fmt/format.h, fmt/format-inl.h, src/format.cc and optionally other headers from a release archive or the Git repository to your project. Alternatively, you can build the library with CMake.
+* [Format String Syntax — fmt 8.1.1 documentation](https://fmt.dev/latest/syntax.html)
+
 #### Data Structures
 
 * [Data structures - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/structures/)
