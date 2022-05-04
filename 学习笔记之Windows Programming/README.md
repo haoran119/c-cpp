@@ -22,7 +22,7 @@
     * The exit value of the thread's process.
   * [c++ - How can you get the return value of a Windows thread? - Stack Overflow](https://stackoverflow.com/questions/7100441/how-can-you-get-the-return-value-of-a-windows-thread)
 
-## ATL (Active Template Library) & MFC
+## ATL & MFC
 
 * [Microsoft C/C++ Documentation | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/?view=msvc-160)
   * [ATL COM Desktop Components | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/atl/atl-com-desktop-components?view=msvc-160)
@@ -73,9 +73,9 @@
       * Return Value
         * A pointer to a null-terminated character string.
 
-## COM(Component Object Model)
+## COM
 
-* [Component Object Model (COM) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal)
+* [`Component Object Model (COM)` - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal)
   * Purpose
     * COM is a platform-independent, distributed, object-oriented system for creating binary software components that can interact. COM is the foundation technology for Microsoft's OLE (compound documents) and ActiveX (Internet-enabled components) technologies.
   * Where applicable
