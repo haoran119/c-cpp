@@ -1075,6 +1075,15 @@ int main() {
       return 0;
   }
   ```
+* How to set precision of float / double in output ?
+  * [std::setprecision - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/setprecision)
+    * /*unspecified*/ setprecision( int n );
+    * When used in an expression out << setprecision(n) or in >> setprecision(n), sets the precision parameter of the stream out or in to exactly n.
+  * [std::fixed, std::scientific, std::hexfloat, std::defaultfloat - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/fixed)
+    * This is an I/O manipulator, it may be called with an expression such as out << std::fixed for any out of type std::basic_ostream or with an expression such as in >> std::scientific for any in of type std::basic_istream.
+  ```c++
+  cout << fixed << setprecision(9) << e << endl; // 14049.304930000  
+  ```
 
 ###### [C-style file input/output](https://en.cppreference.com/w/cpp/io/c)
 
@@ -1335,6 +1344,20 @@ int main() {
 * [C++如何用system命令获取文件夹下所有文件名 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/3873250.html)
 * [C++实现获取当前执行文件全路径 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2010/11/02/1867584.html)
 * [freopen - C/C++文件输入输出利器 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2011/04/22/2024418.html)
+* How to read csv files with BOM ?
+	* read as UTF-8 file or
+	* skip BOM in ifstream or
+	* remove BOM in input files
+	* [Byte order mark - Wikipedia](https://en.wikipedia.org/wiki/Byte_order_mark#Representations_of_byte_order_marks_by_encoding)
+		* The byte order mark (BOM) is a particular usage of the special Unicode character, U+FEFF BYTE ORDER MARK, whose appearance as a magic number at the start of a text stream can signal several things to a program reading the text
+	* [Byte Order Mark - Globalization | Microsoft Docs](https://docs.microsoft.com/en-us/globalization/encoding/byte-order-mark)
+	* [c++ - Why am i getting these invalid characters before my file data? - Stack Overflow](https://stackoverflow.com/questions/30720619/why-am-i-getting-these-invalid-characters-before-my-file-data)
+	* [c++ - Characters not recognized while reading from file - Stack Overflow](https://stackoverflow.com/questions/48985128/characters-not-recognized-while-reading-from-file)
+		* [C++ read and write UTF-8 file using standard libarary | sockbandit](https://sockbandit.wordpress.com/2012/05/31/c-read-and-write-utf-8-file-using-standard-libarary/)
+	* [byte - How do I remove the character "ï»¿" from the beginning of a text file in C++? - Stack Overflow](https://stackoverflow.com/questions/20778921/how-do-i-remove-the-character-%C3%AF-from-the-beginning-of-a-text-file-in-c/20778970)
+	* [C++ reading from file puts three weird characters - Stack Overflow](https://stackoverflow.com/questions/10417613/c-reading-from-file-puts-three-weird-characters)
+	* [r - Weird characters added to first column name after reading a toad-exported csv file - Stack Overflow](https://stackoverflow.com/questions/22974765/weird-characters-added-to-first-column-name-after-reading-a-toad-exported-csv-fi)
+	* [How to remove BOM from any text/XML file](https://www.ibm.com/support/pages/how-remove-bom-any-textxml-file)
 
 ##### \<filesystem>
  
@@ -2876,55 +2899,6 @@ int main()
 
 ## FAQ
 
-* How to set precision of float / double in output ?
-  * [std::setprecision - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/setprecision)
-    * /*unspecified*/ setprecision( int n );
-    * When used in an expression out << setprecision(n) or in >> setprecision(n), sets the precision parameter of the stream out or in to exactly n.
-  * [std::fixed, std::scientific, std::hexfloat, std::defaultfloat - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/fixed)
-    * This is an I/O manipulator, it may be called with an expression such as out << std::fixed for any out of type std::basic_ostream or with an expression such as in >> std::scientific for any in of type std::basic_istream.
-  ```c++
-  cout << fixed << setprecision(9) << e << endl; // 14049.304930000  
-  ```
-* How to read csv files with BOM ?
-	* read as UTF-8 file or
-	* skip BOM in ifstream or
-	* remove BOM in input files
-	* [Byte order mark - Wikipedia](https://en.wikipedia.org/wiki/Byte_order_mark#Representations_of_byte_order_marks_by_encoding)
-		* The byte order mark (BOM) is a particular usage of the special Unicode character, U+FEFF BYTE ORDER MARK, whose appearance as a magic number at the start of a text stream can signal several things to a program reading the text
-	* [Byte Order Mark - Globalization | Microsoft Docs](https://docs.microsoft.com/en-us/globalization/encoding/byte-order-mark)
-	* [c++ - Why am i getting these invalid characters before my file data? - Stack Overflow](https://stackoverflow.com/questions/30720619/why-am-i-getting-these-invalid-characters-before-my-file-data)
-	* [c++ - Characters not recognized while reading from file - Stack Overflow](https://stackoverflow.com/questions/48985128/characters-not-recognized-while-reading-from-file)
-		* [C++ read and write UTF-8 file using standard libarary | sockbandit](https://sockbandit.wordpress.com/2012/05/31/c-read-and-write-utf-8-file-using-standard-libarary/)
-	* [byte - How do I remove the character "ï»¿" from the beginning of a text file in C++? - Stack Overflow](https://stackoverflow.com/questions/20778921/how-do-i-remove-the-character-%C3%AF-from-the-beginning-of-a-text-file-in-c/20778970)
-	* [C++ reading from file puts three weird characters - Stack Overflow](https://stackoverflow.com/questions/10417613/c-reading-from-file-puts-three-weird-characters)
-	* [r - Weird characters added to first column name after reading a toad-exported csv file - Stack Overflow](https://stackoverflow.com/questions/22974765/weird-characters-added-to-first-column-name-after-reading-a-toad-exported-csv-fi)
-	* [How to remove BOM from any text/XML file](https://www.ibm.com/support/pages/how-remove-bom-any-textxml-file)
-* How to lock files ?
-  * You can simply use the Win32 API CreateFile and then specify no sharing rights. This will ensure that no other processes can access the file.
-  * The dwShareMode DWORD specifies the type of sharing you would like, for example GENERIC_READ. If you specify 0 then that means no sharing rights should be granted.
-  ```c++
-  HANDLE hFile = CreateFile(_T("c:\\file.txt"), GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL);
-  ```
-  * If you want to only lock a certain part of the file you can use LockFile or LockFileEx.
-  ```c++
-  //Lock the first 1024 bytes
-  BOOL bLocked = LockFile(hFile, 0, 0, 1024, 0);
-  ```
-  * [Locking files using C++ on Windows - Stack Overflow](https://stackoverflow.com/questions/853805/locking-files-using-c-on-windows)
-  * [CreateFileA function (fileapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea?redirectedfrom=MSDN)
-  * [c++ - Using std:fstream how to deny access (read and write) to the file - Stack Overflow](https://stackoverflow.com/questions/839856/using-stdfstream-how-to-deny-access-read-and-write-to-the-file)
-* How to get UNC path of local folder ?
-  * [windows - UNC path to a folder on my local computer - Stack Overflow](https://stackoverflow.com/questions/2787203/unc-path-to-a-folder-on-my-local-computer)
-    * If you're going to access your local computer (or any computer) using UNC, you'll need to setup a share. If you haven't already setup a share, you could use the default administrative shares. Example: 
-    * \\localhost\c$\my_dir
-  * [What is Universal Naming Convention (UNC)? - Definition from WhatIs.com](https://whatis.techtarget.com/definition/Universal-Naming-Convention-UNC)
-    * In a network, the Universal Naming Convention (UNC) is a way to identify a shared file in a computer without having to specify (or know) the storage device it is on. 
-    * In Windows operating systems, the UNC name format is:
-    * \\servername\sharename\path\filename
-* What's Maximum Path Length Limitation on Windows ?
-	* [Maximum Path Length Limitation - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd)
-		* In the Windows API (with some exceptions discussed in the following paragraphs), the maximum length for a path is MAX_PATH, which is defined as 260 characters. A local path is structured in the following order: drive letter, colon, backslash, name components separated by backslashes, and a terminating null character. 
-		* [Naming Files, Paths, and Namespaces - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file)
 * How to execute command and get output ?
   * [process - How do I execute a command and get the output of the command within C++ using POSIX? - Stack Overflow](https://stackoverflow.com/questions/478898/how-do-i-execute-a-command-and-get-the-output-of-the-command-within-c-using-po)
   * [system - C++ Reference](https://www.cplusplus.com/reference/cstdlib/system/)
@@ -2933,12 +2907,6 @@ int main()
       * If command is a null pointer, the function only checks whether a command processor is available through this function, without invoking any command.
       * The effects of invoking a command depend on the system and library implementation, and may cause a program to behave in a non-standard manner or to terminate.
   * [std::unique_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr)
-* How to check if process is in deadlock ?
-	* Task Manager > Performance > Open Resource Monitor > Select process > Analyze Wait Chain...
-* How to modifying the "Path to executable" of a windows service ?
-	* [Modifying the "Path to executable" of a windows service - Stack Overflow](https://stackoverflow.com/questions/7190480/modifying-the-path-to-executable-of-a-windows-service)
-		* It involves editing the registry, but service information can be found in HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services. Find the service you want to redirect, locate the ImagePath subkey and change that value.
-		* Or There is also this approach seen on SuperUser which uses the sc command line instead of modifying the registry
 * How to set Product Version of .dll files?
 	* MSVS > Project *** > Resource Files > ***.rc > Version > VS_VERSION_INFO > ProductVersion
 
