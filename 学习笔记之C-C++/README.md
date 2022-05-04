@@ -983,6 +983,15 @@ int main() {
 
 #### Basic Input/Output
 
+##### [Input/output library](https://en.cppreference.com/w/cpp/io)
+
+* C++ includes two input/output libraries: an OOP-style stream-based I/O library and the standard set of C-style I/O functions.
+
+###### Stream-based I/O
+
+* The stream-based input/output library is organized around abstract input/output devices. These abstract devices allow the same code to handle input/output to files, memory streams, or custom adaptor devices that perform arbitrary operations (e.g. compression) on the fly.
+* Most of the classes are templated, so they can be adapted to any basic character type. Separate typedefs are provided for the most common basic character types (char and wchar_t). The classes are organized into the following hierarchy:
+![image](https://user-images.githubusercontent.com/34557994/166664893-b2b25c27-7205-42f2-8836-cc67245bd81b.png)
 * [【ZZ】cin、cin.get()、cin.getline()、getline()、gets()等函数的用法 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2011/04/21/2024345.html)
 * [getline (string) in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/getline-string-c/)
 	* The C++ getline() is a standard library function that is used to read a string or a line from an input stream. It is a part of the \<string> header. The getline() function extracts characters from the input stream and appends it to the string object until the delimiting character is encountered. While doing so the previously stored value in the string object str will be replaced by the input string if any.
@@ -1003,6 +1012,14 @@ int main() {
   * [c++ - Significance of ios_base::sync_with_stdio(false); cin.tie(NULL); - Stack Overflow](https://stackoverflow.com/questions/31162367/significance-of-ios-basesync-with-stdiofalse-cin-tienull/31165481#31165481)
   * [std::ios_base::sync_with_stdio - cppreference.com](https://en.cppreference.com/w/cpp/io/ios_base/sync_with_stdio)
   * [ios::tie - C++ Reference](https://www.cplusplus.com/reference/ios/ios/tie/)
+
+###### [Input/output manipulators](https://en.cppreference.com/w/cpp/io/manip)
+
+* The stream-based I/O library uses I/O manipulators (e.g. std::boolalpha, std::hex, etc.) to control how streams behave.
+* [std::boolalpha, std::noboolalpha - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/boolalpha)
+	* switches between textual and numeric representation of booleans
+* [std::quoted - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/quoted)
+	* inserts and extracts quoted strings with embedded spaces
 * [manipulators - C++ Reference](http://www.cplusplus.com/reference/library/manipulators/)
   * Basic format flags
     * These manipulators are usable on both input and output streams, although many only have an effect when applied to either output or input streams.
@@ -1058,6 +1075,11 @@ int main() {
       return 0;
   }
   ```
+
+###### [C-style file input/output](https://en.cppreference.com/w/cpp/io/c)
+
+* The C I/O subset of the C++ standard library implements C-style stream input/output operations. The \<cstdio> header provides generic file operation support and supplies functions with narrow and multibyte character input/output capabilities, and the \<cwchar> header provides functions with wide character input/output capabilities.
+* C streams are denoted by objects of type std::FILE that can only be accessed and manipulated through pointers of type std::FILE*. Each C stream is associated with an external physical device (file, standard input stream, printer, serial port, etc).
 
 #### Data Structures
 
