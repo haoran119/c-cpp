@@ -1080,6 +1080,8 @@ int main() {
 
 * The C I/O subset of the C++ standard library implements C-style stream input/output operations. The \<cstdio> header provides generic file operation support and supplies functions with narrow and multibyte character input/output capabilities, and the \<cwchar> header provides functions with wide character input/output capabilities.
 * C streams are denoted by objects of type std::FILE that can only be accessed and manipulated through pointers of type std::FILE*. Each C stream is associated with an external physical device (file, standard input stream, printer, serial port, etc).
+* [c++ - Where is `%p` useful with printf? - Stack Overflow](https://stackoverflow.com/questions/2369541/where-is-p-useful-with-printf)
+	* Always use %p for pointers.
 
 #### Data Structures
 
