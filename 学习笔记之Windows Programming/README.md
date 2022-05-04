@@ -211,11 +211,11 @@
       return sCLSID;
   ```
 
-## MSXML(Microsoft XML Core Services)
+## MSXML
 
 * [MSXML SDK Overview | Microsoft Docs](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ms760399(v=vs.85))
   * What Is MSXML?
-    * Microsoft XML Core Services (MSXML) allows customers to build high-performance XML-based applications that provide a high degree of interoperability with other applications that adhere to the XML 1.0 standard.
+    * `Microsoft XML Core Services (MSXML)` allows customers to build high-performance XML-based applications that provide a high degree of interoperability with other applications that adhere to the XML 1.0 standard.
     * Among the core services MSXML provides is developer support for the following:
     * The Document Object Model (DOM), a standard library of application programming interfaces (APIs) for accessing XML documents.
     * Helper APIs to assist with programming for the XML namespace or the HyperText Transfer Protocol (HTTP) when it is used to send data directly between Web servers.
