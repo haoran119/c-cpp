@@ -250,3 +250,35 @@ dir env:
   * [Excel formula: If cell is not blank | Exceljet](https://exceljet.net/formula/if-cell-is-not-blank)
   * [Fill a formula down into adjacent cells](https://support.microsoft.com/en-us/office/fill-a-formula-down-into-adjacent-cells-041edfe2-05bc-40e6-b933-ef48c3f308c6#ID0EBBF=Web)
   * [How to Sort and Ignore Blanks in Excel & Google Sheets - Automate Excel](https://www.automateexcel.com/how-to/sort-ignore-blanks/#:~:text=Now%20you%20can%20sort%20the,Filter%20%3E%20Sort%20Largest%20to%20Smallest.)
+* How to lock files ?
+  * You can simply use the Win32 API CreateFile and then specify no sharing rights. This will ensure that no other processes can access the file.
+  * The dwShareMode DWORD specifies the type of sharing you would like, for example GENERIC_READ. If you specify 0 then that means no sharing rights should be granted.
+  ```c++
+  HANDLE hFile = CreateFile(_T("c:\\file.txt"), GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL);
+  ```
+  * If you want to only lock a certain part of the file you can use LockFile or LockFileEx.
+  ```c++
+  //Lock the first 1024 bytes
+  BOOL bLocked = LockFile(hFile, 0, 0, 1024, 0);
+  ```
+  * [Locking files using C++ on Windows - Stack Overflow](https://stackoverflow.com/questions/853805/locking-files-using-c-on-windows)
+  * [CreateFileA function (fileapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea?redirectedfrom=MSDN)
+  * [c++ - Using std:fstream how to deny access (read and write) to the file - Stack Overflow](https://stackoverflow.com/questions/839856/using-stdfstream-how-to-deny-access-read-and-write-to-the-file)
+* How to get UNC path of local folder ?
+  * [windows - UNC path to a folder on my local computer - Stack Overflow](https://stackoverflow.com/questions/2787203/unc-path-to-a-folder-on-my-local-computer)
+    * If you're going to access your local computer (or any computer) using UNC, you'll need to setup a share. If you haven't already setup a share, you could use the default administrative shares. Example: 
+    * \\localhost\c$\my_dir
+  * [What is Universal Naming Convention (UNC)? - Definition from WhatIs.com](https://whatis.techtarget.com/definition/Universal-Naming-Convention-UNC)
+    * In a network, the Universal Naming Convention (UNC) is a way to identify a shared file in a computer without having to specify (or know) the storage device it is on. 
+    * In Windows operating systems, the UNC name format is:
+    * \\servername\sharename\path\filename
+* What's Maximum Path Length Limitation on Windows ?
+	* [Maximum Path Length Limitation - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=cmd)
+		* In the Windows API (with some exceptions discussed in the following paragraphs), the maximum length for a path is MAX_PATH, which is defined as 260 characters. A local path is structured in the following order: drive letter, colon, backslash, name components separated by backslashes, and a terminating null character. 
+		* [Naming Files, Paths, and Namespaces - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file)
+* How to check if process is in deadlock ?
+	* Task Manager > Performance > Open Resource Monitor > Select process > Analyze Wait Chain...
+* How to modifying the "Path to executable" of a windows service ?
+	* [Modifying the "Path to executable" of a windows service - Stack Overflow](https://stackoverflow.com/questions/7190480/modifying-the-path-to-executable-of-a-windows-service)
+		* It involves editing the registry, but service information can be found in HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services. Find the service you want to redirect, locate the ImagePath subkey and change that value.
+		* Or There is also this approach seen on SuperUser which uses the sc command line instead of modifying the registry
