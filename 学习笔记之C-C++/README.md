@@ -906,6 +906,13 @@ int main() {
 		* Useful when building a memory pool, a garbage collector or simply when performance and exception safety are paramount.
 		* There’s no danger of allocation failure since the memory has already been allocated, and constructing an object on a pre-allocated buffer takes less time.
 		* This feature becomes useful while working in an environment with limited resources.
+
+##### [Dynamic memory management](https://en.cppreference.com/w/cpp/memory)
+
+###### Smart pointers
+
+* Smart pointers enable automatic, exception-safe, object lifetime management.
+* Defined in header \<memory>
 * [std::unique_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr)
 	* std::unique_ptr is a smart pointer that owns and manages another object through a pointer and disposes of that object when the unique_ptr goes out of scope.
 	* [std::unique_ptr<T,Deleter>::unique_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/unique_ptr)
