@@ -2930,6 +2930,13 @@ int main()
       * If command is a null pointer, the function only checks whether a command processor is available through this function, without invoking any command.
       * The effects of invoking a command depend on the system and library implementation, and may cause a program to behave in a non-standard manner or to terminate.
   * [std::unique_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr)
+* [What are Forward declarations in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/what-are-forward-declarations-in-c/)
+	* Forward Declaration refers to the beforehand declaration of the syntax or signature of an identifier, variable, function, class, etc. prior to its usage (done later in the program).
+	* [c++ forward declaration of a static class member - Stack Overflow](https://stackoverflow.com/questions/15806331/c-forward-declaration-of-a-static-class-member)
+		* No, you can't. You can either include the header in the header, or separate the implementation Use::f in an implementation file and include M's header there.
+	* [Enum.7: Specify the underlying type of an enumeration only when necessary](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#enum7-specify-the-underlying-type-of-an-enumeration-only-when-necessary)
+		* Reason: The default is the easiest to read and write. int is the default integer type. int is compatible with C enums.
+		* Note: Specifying the underlying type is necessary in forward declarations of enumerations
 * How to set Product Version of .dll files?
 	* MSVS > Project *** > Resource Files > ***.rc > Version > VS_VERSION_INFO > ProductVersion
 
