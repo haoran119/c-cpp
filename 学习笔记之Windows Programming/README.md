@@ -250,6 +250,26 @@ dir env:
   * [How to Check your PowerShell Version (All the Ways!)](https://adamtheautomator.com/powershell-version/)
 * How to check if process is in deadlock ?
     * Task Manager > Performance > Open Resource Monitor > Select process > Analyze Wait Chain...
+* How to create a MiniDump for a process when it crashes ?
+  * [Arnavion/crashdump: An example of an out-of-process crash dumper](https://github.com/Arnavion/crashdump)
+    * Demonstrates how to have a C process (crasher.exe) have a stack trace and minidump taken if it crashes. Both are done by another process (dumper.exe), which is crucial to getting a dump with a sane stack trace.
+    * crasher registers an exception handler with SetUnhandledExceptionFilter. This handler starts dumper and waits for it to exit. It passes its process ID, thread ID, and exception pointers (containing the context record) to dumper in the commandline. The exception pointer is useful because it contains the context of the original exception instead of the current context (inside the exception handler). crasher then waits for dumper to finish (but see miscellaneous 1 below).
+    * On startup, dumper use the process and thread IDs from its commandline to open handles to crasher. Then it uses some calls to ReadProcessMemory to fetch dumper's exception pointers and context record. It then uses this context record to set up the original stack frame and starts walking the stack using StackWalk64. It also uses the Sym* API to load crasher's PDB and other PDBs so that it can print function names, and parameter names and values for each frame. This verbose code is under printStack(), and is mostly composed of interpreting the types of the function parameters and extracting their values into human-readable form.
+    * Lastly, dumper uses MiniDumpWriteDump to write a minidump.
+    * The motivation to have a stack printer separate from a minidump writer is to cover the cases where the user of crasher may be concerned about private data in the dump that they would not like to share with you. With a textual stack trace, they can vet it to strip private data before sending it to you.
+  * [How to write Mini Dump on software crash - Mecanik Dev](https://mecanik.dev/2020/09/24/how-to-write-mini-dump-on-software-crash/)
+    * That’s not a solution because there are functions in place for these situations in Windows API. More simply put, you can make your software write a Mini Dump upon crash and then you can just open it inside Visual Studio (or whatever debugger you want) and see exactly where it crashed.
+  * []()
+  * []()
+  * []()
+  * []()
+  * []()
+  * []()
+  * []()
+  * []()
+  * []()
+  * []()
+
 * How to edit environmet variables ?
   * [How to edit, clear, and delete environment variables in Windows - Digital Citizen](https://www.digitalcitizen.life/remove-edit-clear-environment-variables/)
 * How to lock files ?
