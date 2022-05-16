@@ -259,17 +259,34 @@ dir env:
     * The motivation to have a stack printer separate from a minidump writer is to cover the cases where the user of crasher may be concerned about private data in the dump that they would not like to share with you. With a textual stack trace, they can vet it to strip private data before sending it to you.
   * [How to write Mini Dump on software crash - Mecanik Dev](https://mecanik.dev/2020/09/24/how-to-write-mini-dump-on-software-crash/)
     * That’s not a solution because there are functions in place for these situations in Windows API. More simply put, you can make your software write a Mini Dump upon crash and then you can just open it inside Visual Studio (or whatever debugger you want) and see exactly where it crashed.
-  * []()
-  * []()
-  * []()
-  * []()
-  * []()
-  * []()
-  * []()
-  * []()
-  * []()
-  * []()
-
+  * [c++ - Creating a MiniDump of a running process - Stack Overflow](https://stackoverflow.com/questions/2598615/creating-a-minidump-of-a-running-process)
+  * [DbgHelp Functions - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/debug/dbghelp-functions)
+  * [Minidump Files - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/debug/minidump-files)
+    * Applications can produce user-mode minidump files, which contain a useful subset of the information contained in a crash dump file. Applications can create minidump files very quickly and efficiently. Because minidump files are small, they can be easily sent over the internet to technical support for the application.
+    * A minidump file does not contain as much information as a full crash dump file, but it contains enough information to perform basic debugging operations. To read a minidump file, you must have the binaries and symbol files available for the debugger.
+  * [MiniDumpWriteDump function (minidumpapiset.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/nf-minidumpapiset-minidumpwritedump)
+    * Writes user-mode minidump information to the specified file.
+  * [MINIDUMP_EXCEPTION_INFORMATION (minidumpapiset.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ns-minidumpapiset-minidump_exception_information)
+    * Contains the exception information written to the minidump file by the MiniDumpWriteDump function.
+  * [GetLastError function (errhandlingapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-getlasterror)
+    * Retrieves the calling thread's last-error code value. The last-error code is maintained on a per-thread basis. Multiple threads do not overwrite each other's last-error code.
+  * [SetErrorMode function (errhandlingapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-seterrormode)
+    * Controls whether the system will handle the specified types of serious errors or whether the process will handle them.
+  * [SetUnhandledExceptionFilter function (errhandlingapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-setunhandledexceptionfilter)
+    * Enables an application to supersede the top-level exception handler of each thread of a process.
+    * After calling this function, if an exception occurs in a process that is not being debugged, and the exception makes it to the unhandled exception filter, that filter will call the exception filter function specified by the lpTopLevelExceptionFilter parameter.
+  * [CreateProcessW function (processthreadsapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw)
+    * Creates a new process and its primary thread. The new process runs in the security context of the calling process.
+    * If the calling process is impersonating another user, the new process uses the token for the calling process, not the impersonation token. To run the new process in the security context of the user represented by the impersonation token, use the CreateProcessAsUser or CreateProcessWithLogonW function.
+  * [GetModuleFileNameW function (libloaderapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulefilenamew)
+    * Retrieves the fully qualified path for the file that contains the specified module. The module must have been loaded by the current process.
+    * To locate the file for a module that was loaded by another process, use the GetModuleFileNameEx function.
+  * [What happens to custom unhandled exception filters if a debugger is not running? - The Old New Thing](https://devblogs.microsoft.com/oldnewthing/20180726-00/?p=99345)
+  * [How to debug application using SetUnhandledExceptionFilter function for exception handling.](https://microsoft.public.vc.language.narkive.com/1vxrvZ1J/how-to-debug-application-using-setunhandledexceptionfilter-function-for-exception-handling)
+  * [calloc | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/calloc?view=msvc-170)
+    * Allocates an array in memory with elements initialized to 0.
+  * [sprintf_s, _sprintf_s_l, swprintf_s, _swprintf_s_l | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/sprintf-s-sprintf-s-l-swprintf-s-swprintf-s-l?view=msvc-170)
+    * Write formatted data to a string. These are versions of sprintf, _sprintf_l, swprintf, _swprintf_l, __swprintf_l with security enhancements as described in Security Features in the CRT.
 * How to edit environmet variables ?
   * [How to edit, clear, and delete environment variables in Windows - Digital Citizen](https://www.digitalcitizen.life/remove-edit-clear-environment-variables/)
 * How to lock files ?
