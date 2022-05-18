@@ -279,6 +279,8 @@ dir env:
     * After calling this function, if an exception occurs in a process that is not being debugged, and the exception makes it to the unhandled exception filter, that filter will call the exception filter function specified by the lpTopLevelExceptionFilter parameter.
     * Return value
       * The SetUnhandledExceptionFilter function returns the address of the previous exception filter established with the function. A NULL return value means that there is no current top-level exception handler.
+  * [Exception-Handling Constants | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/c-runtime-library/exception-handling-constants?view=msvc-170)
+    * The constant EXCEPTION_CONTINUE_SEARCH, EXCEPTION_CONTINUE_EXECUTION, or EXCEPTION_EXECUTE_HANDLER is returned when an exception occurs during execution of the guarded section of a try-except statement. The return value determines how the exception is handled. For more information, see try-except Statement in the C++ Language Reference.
   * [CreateProcessW function (processthreadsapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw)
     * Creates a new process and its primary thread. The new process runs in the security context of the calling process.
     * If the calling process is impersonating another user, the new process uses the token for the calling process, not the impersonation token. To run the new process in the security context of the user represented by the impersonation token, use the CreateProcessAsUser or CreateProcessWithLogonW function.
