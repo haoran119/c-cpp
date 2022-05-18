@@ -2654,7 +2654,7 @@ Type relationships
 		* Commutativity is satisfied, i.e. for any two types T and U, is_same\<T, U>::value == true if and only if is_same\<U, T>::value == true.
 		* The behavior of a program that adds specializations for is_same or is_same_v (since C++17) is undefined.
 
-###### [Program support utilities - cppreference.com](https://en.cppreference.com/w/cpp/utility/program)
+###### [Program support utilities](https://en.cppreference.com/w/cpp/utility/program)
 
 * [std::abort - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/abort)
 	* Causes abnormal program termination unless SIGABRT is being caught by a signal handler passed to std::signal and the handler does not return.
