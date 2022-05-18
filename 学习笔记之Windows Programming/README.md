@@ -289,6 +289,8 @@ dir env:
     * To locate the file for a module that was loaded by another process, use the GetModuleFileNameEx function.
   * [What happens to custom unhandled exception filters if a debugger is not running? - The Old New Thing](https://devblogs.microsoft.com/oldnewthing/20180726-00/?p=99345)
   * [How to debug application using SetUnhandledExceptionFilter function for exception handling.](https://microsoft.public.vc.language.narkive.com/1vxrvZ1J/how-to-debug-application-using-setunhandledexceptionfilter-function-for-exception-handling)
+  * [Effective Exception Handling in Visual C++ - CodeProject](https://www.codeproject.com/Articles/207464/Exception-Handling-in-Visual-Cplusplus)
+    * This article describes the standard techniques of handling exceptions and errors in Visual C++ programs running in Windows.
   * [calloc | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/calloc?view=msvc-170)
     * Allocates an array in memory with elements initialized to 0.
   * [sprintf_s, _sprintf_s_l, swprintf_s, _swprintf_s_l | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/sprintf-s-sprintf-s-l-swprintf-s-swprintf-s-l?view=msvc-170)
