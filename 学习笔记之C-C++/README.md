@@ -985,6 +985,7 @@ int main() {
 			* Class std::chrono::high_resolution_clock represents the clock with the smallest tick period provided by the implementation. It may be an alias of std::chrono::system_clock or std::chrono::steady_clock, or a third, independent clock.
 			* std::chrono::high_resolution_clock meets the requirements of TrivialClock.		
 		* [The Three Clocks - ModernesCpp.com](https://www.modernescpp.com/index.php/the-three-clocks)
+		* [Chrono in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/chrono-in-c/)
 		* [c++ - How to parse a date string into a c++11 std::chrono time_point or similar? - Stack Overflow](https://stackoverflow.com/questions/21021388/how-to-parse-a-date-string-into-a-c11-stdchrono-time-point-or-similar) 
 			* [std::get_time - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/get_time) 
 				* When used in an expression in >> get_time(tmb, fmt), parses the character input as a date/time value according to format string fmt according to the std::time_get facet of the locale currently imbued in the input stream in. The resultant value is stored in a std::tm object pointed to by tmb.
@@ -995,7 +996,16 @@ int main() {
 		* [Print System Time in C++ | Delft Stack](https://www.delftstack.com/howto/cpp/system-time-in-cpp/) 
 			* [std::strftime - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/strftime)
 				* Converts the date and time information from a given calendar time time to a null-terminated multibyte character string str according to format string format. Up to count bytes are written.
-		* [Chrono in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/chrono-in-c/)
+		* [c++11 - how to convert "std::chrono::system_clock::now()" to double - Stack Overflow](https://stackoverflow.com/questions/45464711/how-to-convert-stdchronosystem-clocknow-to-double)
+      * https://wandbox.org/permlink/qe1MNGQAR5X3zJl8
+		* [Outputting Date and Time in C++ using std::chrono - Stack Overflow](https://stackoverflow.com/questions/17223096/outputting-date-and-time-in-c-using-stdchrono)
+		* [c++ - C++11 get current date and time as string - Stack Overflow](https://stackoverflow.com/questions/34963738/c11-get-current-date-and-time-as-string)
+		* [c++ - Format no such file or directory - Stack Overflow](https://stackoverflow.com/questions/65083544/format-no-such-file-or-directory)
+		  * According to this: https://en.cppreference.com/w/cpp/compiler_support there are currently no compilers that support "Text formatting" (P0645R10, std::format). (As of December 2020)
+		* [c++ - can't include std::format - Stack Overflow](https://stackoverflow.com/questions/63017719/cant-include-stdformat)
+		  * As of July 2020 none of the standard library implementations provide std::format. Until they do you can use the {fmt} library std::format is based on:
+		* [c++ - How to use the \<format> header - Stack Overflow](https://stackoverflow.com/questions/61441494/how-to-use-the-format-header)
+		  * Use libfmt. The \<format> header is essentially a standardized libfmt (with a few small features removed, if I remember correctly).
 
 #### Basic Input/Output
 
