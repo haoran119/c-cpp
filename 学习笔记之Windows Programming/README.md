@@ -279,6 +279,8 @@ dir env:
     * After calling this function, if an exception occurs in a process that is not being debugged, and the exception makes it to the unhandled exception filter, that filter will call the exception filter function specified by the lpTopLevelExceptionFilter parameter.
     * Return value
       * The SetUnhandledExceptionFilter function returns the address of the previous exception filter established with the function. A NULL return value means that there is no current top-level exception handler.
+  * [UnhandledExceptionFilter function (errhandlingapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-unhandledexceptionfilter)
+    * An application-defined function that passes unhandled exceptions to the debugger, if the process is being debugged. Otherwise, it optionally displays an Application Error message box and causes the exception handler to be executed. This function can be called only from within the filter expression of an exception handler.
   * [Exception-Handling Constants | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/c-runtime-library/exception-handling-constants?view=msvc-170)
     * The constant EXCEPTION_CONTINUE_SEARCH, EXCEPTION_CONTINUE_EXECUTION, or EXCEPTION_EXECUTE_HANDLER is returned when an exception occurs during execution of the guarded section of a try-except statement. The return value determines how the exception is handled. For more information, see try-except Statement in the C++ Language Reference.
   * [CreateProcessW function (processthreadsapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw)
