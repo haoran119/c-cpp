@@ -297,6 +297,17 @@ dir env:
     * Allocates an array in memory with elements initialized to 0.
   * [sprintf_s, _sprintf_s_l, swprintf_s, _swprintf_s_l | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/sprintf-s-sprintf-s-l-swprintf-s-swprintf-s-l?view=msvc-170)
     * Write formatted data to a string. These are versions of sprintf, _sprintf_l, swprintf, _swprintf_l, __swprintf_l with security enhancements as described in Security Features in the CRT.
+  * How to compress dump file ?
+    * cdb -c ".dump small.dmp ; q" -z large.dmp
+    * [CDB Command-Line Options - Windows drivers | Microsoft Docs](https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/cdb-command-line-options)
+      * -c " command "
+        * Specifies the initial debugger command to run at start-up. This command must be surrounded with quotation marks. Multiple commands can be separated with semicolons. (If you have a long command list, it may be easier to put them in a script and then use the -c option with the $<, $><, $><, $$>< (Run Script File) command.)
+      * -z DumpFile
+        * Specifies the name of a crash dump file to debug. If the path and file name contain spaces, this must be surrounded by quotation marks. It is possible to open several dump files at once by including multiple -z options, each followed by a different DumpFile value. For details, see Analyzing a User-Mode Dump File.
+    * [Debugging Using CDB and NTSD - Windows drivers | Microsoft Docs](https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/debugging-using-cdb-and-ntsd)
+    * [Analyzing a User-Mode Dump File - Windows drivers | Microsoft Docs](https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/analyzing-a-user-mode-dump-file)
+    * [.dump (Create Dump File) - Windows drivers | Microsoft Docs](https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/-dump--create-dump-file-)
+      * The .dump command creates a user-mode or kernel-mode crash dump file.
 * How to edit environmet variables ?
   * [How to edit, clear, and delete environment variables in Windows - Digital Citizen](https://www.digitalcitizen.life/remove-edit-clear-environment-variables/)
 * How to lock files ?
