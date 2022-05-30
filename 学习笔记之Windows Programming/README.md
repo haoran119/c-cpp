@@ -298,7 +298,7 @@ dir env:
   * [sprintf_s, _sprintf_s_l, swprintf_s, _swprintf_s_l | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/sprintf-s-sprintf-s-l-swprintf-s-swprintf-s-l?view=msvc-170)
     * Write formatted data to a string. These are versions of sprintf, _sprintf_l, swprintf, _swprintf_l, __swprintf_l with security enhancements as described in Security Features in the CRT.
   * How to compress dump file ?
-    * cdb -c ".dump small.dmp ; q" -z large.dmp
+    * cdb -c ".dump small.dmp; q" -z big.dmp
     * [CDB Command-Line Options - Windows drivers | Microsoft Docs](https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/cdb-command-line-options)
       * -c " command "
         * Specifies the initial debugger command to run at start-up. This command must be surrounded with quotation marks. Multiple commands can be separated with semicolons. (If you have a long command list, it may be easier to put them in a script and then use the -c option with the $<, $><, $><, $$>< (Run Script File) command.)
