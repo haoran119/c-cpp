@@ -324,6 +324,23 @@ dir env:
   * [Locking files using C++ on Windows - Stack Overflow](https://stackoverflow.com/questions/853805/locking-files-using-c-on-windows)
   * [CreateFileA function (fileapi.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea?redirectedfrom=MSDN)
   * [c++ - Using std:fstream how to deny access (read and write) to the file - Stack Overflow](https://stackoverflow.com/questions/839856/using-stdfstream-how-to-deny-access-read-and-write-to-the-file)
+* How to read from registry ?
+  * [ReadStringsFromRegistry/README.md at master · GiovanniDicanio/ReadStringsFromRegistry](https://github.com/GiovanniDicanio/ReadStringsFromRegistry/blob/master/README.md)
+    * To retrieve a string value from the Windows registry, the Win32 RegGetValue() API can be used.
+  * [c++ - How to read a value from the Windows registry - Stack Overflow](https://stackoverflow.com/questions/34065/how-to-read-a-value-from-the-windows-registry)
+    * Since Windows >=Vista/Server 2008, RegGetValue is available, which is a safer function than RegQueryValueEx. No need for RegOpenKeyEx, RegCloseKey or NUL termination checks of string values (REG_SZ, REG_MULTI_SZ, REG_EXPAND_SZ).
+    * [C++ - Use Modern C++ to Access the Windows Registry | Microsoft Docs](https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/may/c-use-modern-c-to-access-the-windows-registry)
+  * [RegGetValueA function (winreg.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-reggetvaluea)
+    * Retrieves the type and data for the specified registry value.
+  * [RegGetValueW function (winreg.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-reggetvaluew)
+    * Retrieves the type and data for the specified registry value.
+  * [Registering Classes | Microsoft Docs](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/automat/registering-classes?redirectedfrom=MSDN)
+  * [windows - How to find an absolute path to DLL registered in registry with C++? - Stack Overflow](https://stackoverflow.com/questions/15265837/how-to-find-an-absolute-path-to-dll-registered-in-registry-with-c)
+    * SOFTWARE\Classes\WOW6432Node\CLSID\{CLSID}\InprocServer32
+  * [CLSID Key - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/clsid-key-hklm)
+    * A CLSID is a globally unique identifier that identifies a COM class object. If your server or container allows linking to its embedded objects, you need to register a CLSID for each supported class of objects.
+  * [c# - How to get the default value of key from the registry - Stack Overflow](https://stackoverflow.com/questions/45349967/how-to-get-the-default-value-of-key-from-the-registry)
+    * Instead of using "(Default)", you'll need to use an empty string ("").
 * How to get UNC path of local folder ?
   * [windows - UNC path to a folder on my local computer - Stack Overflow](https://stackoverflow.com/questions/2787203/unc-path-to-a-folder-on-my-local-computer)
     * If you're going to access your local computer (or any computer) using UNC, you'll need to setup a share. If you haven't already setup a share, you could use the default administrative shares. Example: 
