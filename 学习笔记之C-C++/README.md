@@ -2671,6 +2671,17 @@ Type relationships
 * [std::system - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/system)
 	* Calls the host environment's command processor (e.g. /bin/sh, cmd.exe, command.com) with the parameter command. Returns an implementation-defined value (usually the value that the invoked program returns).
 	* If command is a null pointer, checks if the host environment has a command processor and returns a nonzero value if and only if the command processor exists.
+```c++
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+ 
+int main()
+{
+    std::system("ls -l >test.txt"); // execute the UNIX command "ls -l >test.txt"
+    std::cout << std::ifstream("test.txt").rdbuf();
+}
+```
 
 ##### General-purpose utilities
 
