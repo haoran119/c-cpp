@@ -2668,6 +2668,7 @@ Type relationships
 
 * [std::abort - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/abort)
 	* Causes abnormal program termination unless SIGABRT is being caught by a signal handler passed to std::signal and the handler does not return.
+	* Note: it will cause Application Error in Windows Logs under Event Viewer
 * [std::system - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/system)
 	* Calls the host environment's command processor (e.g. /bin/sh, cmd.exe, command.com) with the parameter command. Returns an implementation-defined value (usually the value that the invoked program returns).
 	* If command is a null pointer, checks if the host environment has a command processor and returns a nonzero value if and only if the command processor exists.
