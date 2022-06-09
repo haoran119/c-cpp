@@ -25,6 +25,7 @@
 * [学习笔记之高质量C++/C编程指南 - 浩然119 - 博客园 (cnblogs.com)](https://www.cnblogs.com/pegasus923/p/5577934.html)
 * [学习笔记之Linux开发(C语言) - 浩然119 - 博客园 (cnblogs.com)](https://www.cnblogs.com/pegasus923/p/5122821.html)
 * [学习笔记之C/C++指针使用常见的坑 - 浩然119 - 博客园 (cnblogs.com)](https://www.cnblogs.com/pegasus923/p/8464520.html)
+* [学习笔记之C++入门到精通（名师教学·手把手教会）【职坐标】_腾讯课堂 - 浩然119 - 博客园 (cnblogs.com)](https://www.cnblogs.com/pegasus923/p/7904482.html)
 
 ## Resources
 
