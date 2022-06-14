@@ -2945,13 +2945,13 @@ int main()
 		* gtest需要安装有时候带来很多不方便，比如需要经常切换gcc和clang的时候就比较麻烦，安装的gtest可能在另一个编译器下编译不过, 编写跨平台程序的时候需要多次安装gtest，非常不便。另外一个问题是网络原因，下载安装gtest或者git上拉gtest都可能因为网络原因失败。
 	* 现代C++ unit test库
 		* 除了gtest之外，还有很多轻量级易用的单元测试库，比如doctest和catch，相比gtest需要编译/安装，他们都是header only的，直接包含到工程里就可以做单元测试了，portable又没有任何依赖，而且对编译器版本要求也不高，只需要C++11就行了，用了之后只有一个字：爽！
-		* 这里推荐使用doctest(https://github.com/doctest/doctest)，原因是它的性能比catch更好(https://github.com/doctest/doctest/blob/master/doc/markdown/benchmarks.md)，当然也比gtest好, 来看看doctest怎么用的吧。
+		* 这里推荐使用[doctest](https://github.com/doctest/doctest)，原因是[它的性能比catch更好](https://github.com/doctest/doctest/blob/master/doc/markdown/benchmarks.md)，当然也比gtest好, 来看看doctest怎么用的吧。
 	* doctest基本用法
 	* doctest的断言宏
 	* 现代C++ mock库
-		* FakeIt(https://github.com/eranpeer/FakeIt)是C++11写的header only的mock库，用起来也很方便：
+		* [FakeIt](https://github.com/eranpeer/FakeIt)是C++11写的header only的mock库，用起来也很方便：
 	* 现代C++ benchmark库
-		* nanobench(https://github.com/martinus/nanobench)也是C++11写的header only的库，使用起来也很简单，包含头文件即可。
+		* [nanobench](https://github.com/martinus/nanobench)也是C++11写的header only的库，使用起来也很简单，包含头文件即可。
 	* 总结
 		* 用现代C++测试工具链：doctest+FakeIt+nanobench, 可以完美地替代gtest/gmock和google bench，没有任何依赖，无需安装，直接包含头文件就可以用，非常容易集成和使用，是时候抛弃google test和google bench了!
 
