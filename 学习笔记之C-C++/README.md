@@ -2946,6 +2946,12 @@ int main()
 * [C++控制台打飞机小游戏 | CSDN 博文精选](https://mp.weixin.qq.com/s/ML7bm89cBwkLVpyPt1dmkg)
   * https://blog.csdn.net/C20190102/article/details/102727963
 
+### FINANCE
+
+#### QUANT
+
+* [rburkholder/trade-frame: C++ 17 based library (with sample applications) for testing equities, futures, etfs & options based automated trading ideas using DTN IQFeed real time data feed and Interactive Brokers (IB TWS API) for trade execution. [I have a private repository which has more recent changes, which get back-ported randomly][irc: #tradeframe on OFTC]](https://github.com/rburkholder/trade-frame)
+
 ## FAQ
 
 * How to execute command and get output ?
