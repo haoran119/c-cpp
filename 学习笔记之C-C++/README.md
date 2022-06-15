@@ -2648,6 +2648,10 @@ int main() {
 
 #### [Utility library](https://en.cppreference.com/w/cpp/utility)
 
+* C++ includes a variety of utility libraries that provide functionality ranging from bit-counting to partial function application. These libraries can be broadly divided into two groups:
+	* language support libraries, and
+	* general-purpose libraries.
+
 ##### Language support
 
 ###### [Type support (basic types, RTTI, type traits) - cppreference.com](https://en.cppreference.com/w/cpp/types)
@@ -2710,10 +2714,10 @@ int main()
 	* 1) Forwards lvalues as either lvalues or as rvalues, depending on T
 	* 2) Forwards rvalues as rvalues and prohibits forwarding of rvalues as lvalues
 
-###### Optional, variant and any
+###### Sum types and type erased wrappers
 
-* Defined in header \<optional>
 * [std::optional - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional)
+	* Defined in header \<optional>
 	* a wrapper that may or may not hold an object (class template)
   * template\< class T > class optional; (since C++17)
   * The class template std::optional manages an optional contained value, i.e. a value that may or may not be present.
@@ -2736,6 +2740,14 @@ int main()
 		* optional is particularly well-suited to the delayed initialization problem because it is itself an instance of delayed initialization. The contained T may be initialized at construction, or sometime later, or never. Any contained T must be destroyed when the optional is destroyed. The designers of optional have already answered most of the questions that arise in this context.
 	* Conclusions
 		* Any time you need a tool to express “value-or-not-value”, or “possibly an answer”, or “object with delayed initialization”, you should reach into your toolbox for std::optional. Using a vocabulary type for these cases raises the level of abstraction, making it easier for others to understand what your code is doing. The declarations optional/<T/> f(); and void g(optional/<T/>); express intent more clearly and concisely than do pair/<T, bool> f(); or void g(T t, bool is_valid);. Just as is the case with words, adding to our vocabulary of types increases our capacity to describe complex problems simply – it makes us more efficient.
+* [std::any - cppreference.com](https://en.cppreference.com/w/cpp/utility/any)
+	* Defined in header \<any>
+	* Objects that hold instances of any CopyConstructible type. (class)
+	* The class any describes a type-safe container for single values of any copy constructible type.
+		* 1) An object of class any stores an instance of any type that satisfies the constructor requirements or is empty, and this is referred to as the state of the class any object. The stored instance is called the contained object. Two states are equivalent if they are either both empty or if both are not empty and if the contained objects are equivalent.
+		* 2) The non-member any_cast functions provide type-safe access to the contained object.
+	* Implementations are encouraged to avoid dynamic allocations for small objects, but such an optimization may only be applied to types for which std::is_nothrow_move_constructible returns true.
+* [C++17常用新特性(十三)---std::any](https://mp.weixin.qq.com/s/qzm_hYj7JEr0AOpxQkDm4g)
 
 #### [Ranges library](https://en.cppreference.com/w/cpp/ranges)
 
