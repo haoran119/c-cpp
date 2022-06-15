@@ -1049,7 +1049,7 @@ int main() {
   * [ios::tie - C++ Reference](https://www.cplusplus.com/reference/ios/ios/tie/)
 * [C++ cin 的详细用法](https://mp.weixin.qq.com/s/BP3gfSd7Ya_9MLE_ArM9LA)
 	* https://dablelv.blog.csdn.net/article/details/48213811
-	* 1.cin 简介
+	* 1. cin 简介
 	* 2. cin 的常用读取方法
 		* 2.1 cin>> 的用法
 		* 2.2 cin.get() 的用法
@@ -1058,7 +1058,7 @@ int main() {
 		* 2.3 cin.getline() 读取一行
 	* 3. cin 的条件状态
 	* 4. cin 清空输入缓冲区
-	* 5.从标准输入读取一行字符串的其它方法
+	* 5. 从标准输入读取一行字符串的其它方法
 		* 5.1 getline() 读取一行
 		* 5.2 gets() 读取一行
 
