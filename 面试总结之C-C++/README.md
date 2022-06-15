@@ -1190,6 +1190,7 @@ int main()
 
 #### Pointer
 
+* [一道C语言指针的题目](https://mp.weixin.qq.com/s/KqbMSR_rYD7ziWt-YsrYRQ)
 ```c++
 #include <iostream>
 using namespace std;
