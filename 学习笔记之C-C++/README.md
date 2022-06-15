@@ -815,6 +815,14 @@ int main() {
 ##### [std::basic_string_view](https://en.cppreference.com/w/cpp/string/basic_string_view)
 
 * The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
+* [C++17常用新特性(十五)---std::string_view和std::string差异比较](https://mp.weixin.qq.com/s/NxnPG5cVurxlcpNKdVZ-NQ)
+	* 1 std::string_view和std::string内存分配的不同
+	* 2 std::string_view和std::string的substr()方法性能差异10倍左右
+	* 3 总结
+		* 在使用 std::string_view时最好遵循以下约束：
+		* 如果字符串不需要修改时使用std::string_view
+		* std::string_view相对于string来说减少了内存的重新分配和内存拷贝
+		* 对于std::string::substr 算法来说string的时间复杂度是线性增长，字符串越长执行时间越长，string_view时间复杂度为常数级。
 
 ##### [Null-terminated byte strings](https://en.cppreference.com/w/cpp/string/byte)
 
