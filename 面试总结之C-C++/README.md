@@ -991,6 +991,28 @@ lexicographical_compare(beg1, end1, beg2, end2, comp);
     * C++11多线程编程：thread库及其相配套的同步原语mutex, lock_guard, condition_variable, 以及异步std::furture
 * [【C++面试知识】C++11新特性](https://mp.weixin.qq.com/s/jZRnb8WxNoJvdbiHrSuFlQ)
 	* https://blog.csdn.net/a15920804211/article/details/90691525
+* [C++17 在业务代码中最好用的十个特性](https://mp.weixin.qq.com/s/jlM1NWRNpoOvW2qrBtxflQ)
+	* 自从步入现代 C++时代开始，C++语言标准形成了三年一个版本的惯例：C++11 标志着现代 C++的开端，C++14 在 11 的基础上查缺补漏，并未加入许多新特性，而 C++17 作为 C++11 后的第一个大版本，标志着现代 C++逐渐走向成熟。WXG 编译器升级到 gcc7.5 已有一段时间，笔者所在项目组也已经将全部代码升级到 C++17。在使用了 C++17 一年多之后，笔者总结了 C++17 在业务代码中最好用的十个特性。
+	* 笔者将这些特性大体上分为三类：语法糖、性能提升和类型系统。
+	* 语法糖
+		* 结构化绑定
+		* std::tuple 的隐式推导
+		* if constexpr
+		* if 初始化语句
+	* 性能提升
+		* std::shared_mutex
+		* std::string_view
+		* std::map/unordered_map try_emplace
+	* 类型系统
+		* std::any
+		* std::optional
+		* std::variant
+		* 总结一下，c++17 新增的三种类型给 c++带来了更现代更安全的类型系统，它们对应的使用场景是：
+			* std::any适用于之前使用void*作为通用类型的场景。
+			* std::optional适用于之前使用nullptr代表失败状态的场景。
+			* std::variant适用于之前使用union的场景。
+	* 总结
+		* 以上是笔者在生产环境中最常用的 c++17 特性，除了本文描述的十个特性外，c++17 还添加了如lambda 值捕获*this, 钳夹函数 std::clamp(), 强制检查返回值[[nodiscard]]等非常易用的特性，本文篇幅有限不做赘述，欢迎有兴趣的读者自行探索。
 * [解读C++即将迎来的重大更新（一）：C++20的四大新特性](https://mp.weixin.qq.com/s/QpqvZ3a7nFdHGjIBiKX67g)
   * https://www.modernescpp.com/index.php/thebigfour
 * [Google “战败”后，C++20 用微软的提案进入协程时代！](https://mp.weixin.qq.com/s/SlTObQQeDXvLLXuoxbO1yg)
