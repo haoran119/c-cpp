@@ -561,6 +561,14 @@ int main() {
       * The function object can be copied and moved around, and can be used to directly invoke the callable object with the specified call signature (see member operator()).
       * function objects can also be in a state with no target callable object. In this case they are known as empty functions, and calling them throws a bad_function_call exception.
   * [C++ Library - \<functional>](https://www.tutorialspoint.com/cpp_standard_library/functional.htm)
+* [C++ std::function技术浅谈](https://mp.weixin.qq.com/s/v1fz4YVJftuaLxYuJBRLPg)
+	* https://blog.csdn.net/xiangbaohui/article/details/106741654
+	* std::function是一个函数对象的包装器，std::function的实例可以存储，复制和调用任何可调用的目标，包括：
+		* 函数。
+		* lamada表达式。
+		* 绑定表达式或其他函数对象。
+		* 指向成员函数和指向数据成员的指针。
+	* 当std::function对象没有初始化任何实际的可调用元素，调用std::function对象将抛出std::bad_function_call异常。
 * [std::not_fn - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/not_fn)
 	* Defined in header \<functional>
 	* Creates a forwarding call wrapper that returns the negation of the callable object it holds.
