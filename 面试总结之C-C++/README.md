@@ -316,100 +316,106 @@ Required size of memory|calculated manually|caculated by compiler|caculated by c
     * 参数区别：隐藏函数和被隐藏函数参数列表可以相同，也可以不同，但函数名一定相同；当参数不同时，无论基类中的函数是否被 virtual 修饰，基类函数都是被隐藏，而不是重写。
 * C++虚拟机制
   * 用来实现多态
-* 多重继承
-  * 可以为一个派生类指定多个基类，这样的继承结构称为多重继承或多继承
-  * Java/C#中没有多继承，C++中也应避免使用
-  * 当两个父类有同样的成员时会带来模糊性，这样导致了名称冲突(name collision)，在编译时将予以拒绝，也称之为菱形继承
-  * 可以在方法前说明基类，或者用虚继承来解决菱形继承问题
-  * [多重继承 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E5%A4%9A%E9%87%8D%E7%BB%A7%E6%89%BF)
-    * 多重继承可以导致某些令人混淆的情况，所以关于它的好处与风险之间孰轻孰重常常受人争论。Java使用了一个折衷的办法：Java允许一个类别继承自多于一个父接口（可以指定某一个类别，它继承了所有父类的类型，并必须拥有所有父类接口的外部可见方法的具体实现，并允许编译器强制以上要求），但只可以从一个父类继承实现（方法与数据）。微软的.NET编程语言，例如C#和Visual Basic .NET也使用了这种接口的做法。
-  * [Multiple inheritance - Wikipedia](https://en.wikipedia.org/wiki/Multiple_inheritance)
-    * Multiple inheritance has been a controversial issue for many years, with opponents pointing to its increased complexity and ambiguity in situations such as the "diamond problem", where it may be ambiguous as to which parent class a particular feature is inherited from if more than one parent class implements same feature. This can be addressed in various ways, including using virtual inheritance. Alternate methods of object composition not based on inheritance such as mixins and traits have also been proposed to address the ambiguity.
-    * The "diamond problem" (sometimes referred to as the "Deadly Diamond of Death") is an ambiguity that arises when two classes B and C inherit from A, and class D inherits from both B and C. If there is a method in A that B and C have overridden, and D does not override it, then which version of the method does D inherit: that of B, or that of C?
-    * For example, in the context of GUI software development, a class Button may inherit from both classes Rectangle (for appearance) and Clickable (for functionality/input handling), and classes Rectangle and Clickable both inherit from the Object class. Now if the equals method is called for a Button object and there is no such method in the Button class but there is an overridden equals method in Rectangle or Clickable (or both), which method should be eventually called?
-    * It is called the "diamond problem" because of the shape of the class inheritance diagram in this situation. In this case, class A is at the top, both B and C separately beneath it, and D joins the two together at the bottom to form a diamond shape.
-    * Languages have different ways of dealing with these problems of repeated inheritance.
-      * C++ by default follows each inheritance path separately, so a D object would actually contain two separate A objects, and uses of A's members have to be properly qualified. If the inheritance from A to B and the inheritance from A to C are both marked "virtual" (for example, "class B : virtual public A"), C++ takes special care to only create one A object, and uses of A's members work correctly. If virtual inheritance and nonvirtual inheritance are mixed, there is a single virtual A, and a nonvirtual A for each nonvirtual inheritance path to A. C++ requires stating explicitly which parent class the feature to be used is invoked from i.e. Worker::Human.Age. C++ does not support explicit repeated inheritance since there would be no way to qualify which superclass to use (i.e. having a class appear more than once in a single derivation list [class Dog : public Animal, Animal]). C++ also allows a single instance of the multiple class to be created via the virtual inheritance mechanism (i.e. Worker::Human and Musician::Human will reference the same object).
-      * Java 8 introduces default methods on interfaces. If A,B,C are interfaces, B,C can each provide a different implementation to an abstract method of A, causing the diamond problem. Either class D must reimplement the method (the body of which can simply forward the call to one of the super implementations), or the ambiguity will be rejected as a compile error. Prior to Java 8, Java was not subject to the Diamond problem risk, because it did not support multiple inheritance and interface default methods were not available.
-      * Python has the same structure as Perl, but, unlike Perl, includes it in the syntax of the language. The order of inheritance affects the class semantics. Python had to deal with this upon the introduction of new-style classes, all of which have a common ancestor, object. Python creates a list of classes using the C3 linearization (or Method Resolution Order (MRO)) algorithm. That algorithm enforces two constraints: children precede their parents and if a class inherits from multiple classes, they are kept in the order specified in the tuple of base classes (however in this case, some classes high in the inheritance graph may precede classes lower in the graph). Thus, the method resolution order is: D, B, C, A.
-    * Nevertheless, even when several interfaces declare the same method signature, as soon as that method is implemented (defined) anywhere in the inheritance chain, it overrides any implementation of that method in the chain above it (in its superclasses). Hence, at any given level in the inheritance chain, there can be at most one implementation of any method. Thus, single-inheritance method implementation does not exhibit the Diamond Problem even with multiple-inheritance of interfaces. With the introduction of default implementation for interfaces in Java 8 and C# 8, it is still possible to generate a Diamond Problem, although this will only appear as a compile-time error.
-* 虚继承
-  * [虚继承 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E8%99%9A%E7%BB%A7%E6%89%BF)
-    * 虚继承 是面向对象编程中的一种技术，是指一个指定的基类，在继承体系结构中，将其成员数据实例共享给也从这个基类型直接或间接派生的其它类。
-    * 举例来说：假如类A和类B各自从类X派生（非虚继承且假设类X包含一些数据成员），且类C同时多继承自类A和B，那么C的对象就会拥有两套X的实例数据（可分别独立访问，一般要用适当的消歧义限定符）。但是如果类A与B各自虚继承了类X，那么C的对象就只包含一套类X的实例数据。对于这一概念典型实现的编程语言是C++。
-    * 这一特性在多重继承应用中非常有用，可以使得虚基类对于由它直接或间接派生的类来说，拥有一个共同的基类对象实例。避免由于带有歧义的组合而产生的问题（如“菱形继承问题”）。其原理是，间接派生类（C）穿透了其父类（上面例子中的A与B），实质上直接继承了虚基类X。
-    * 这一概念一般用于“继承”在表现为一个整体，而非几个部分的组合时。在C++中，基类可以通过使用关键字virtual来声明虚继承关系。
-    * 虚基类的初始化
-      * 由于虚基类是多个派生类共享的基类，因此由谁来初始化虚基类必须明确。C++标准规定，由最派生类直接初始化虚基类。因此，对间接继承了虚基类的类，也必须能直接访问其虚继承来的祖先类，也即应知道其虚继承来的祖先类的地址偏移值。
-      * 例如，常见的“菱形”虚继承例子中，两个派生类、一个最派生类的构造函数的初始化列表中都可以给出虚基类的初始化；但只由最派生类的构造函数实际执行虚基类的初始化。
-    * 虚继承的应用：不可派生的finally类
-      * 一个类如果不希望被继承，类似于Java中的具有finally性质的类，这在C++中可以用虚继承来实现：
-      ```c++
-      template<typename T> class MakeFinally{
-         private:
-             MakeFinally(){};//只有MakeFinally的友类才可以构造MakeFinally
-             ~MakeFinally(){};
-         friend T;
-      };
 
-      class MyClass:public virtual  MakeFinally<MyClass>{};//MyClass是不可派生类
+### 多重继承
 
-      //由于虚继承，所以D要直接负责构造MakeFinally类，从而导致编译报错，所以D作为派生类是不合法的。
-      class D: public MyClass{};
-      //另外，如果D类没有实例化对象，即没有被使用，实际上D类是被编译器忽略掉而不报错
+* 可以为一个派生类指定多个基类，这样的继承结构称为多重继承或多继承
+* Java/C#中没有多继承，C++中也应避免使用
+* 当两个父类有同样的成员时会带来模糊性，这样导致了名称冲突(name collision)，在编译时将予以拒绝，也称之为菱形继承
+* 可以在方法前说明基类，或者用虚继承来解决菱形继承问题
+* [多重继承 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E5%A4%9A%E9%87%8D%E7%BB%A7%E6%89%BF)
+	* 多重继承可以导致某些令人混淆的情况，所以关于它的好处与风险之间孰轻孰重常常受人争论。Java使用了一个折衷的办法：Java允许一个类别继承自多于一个父接口（可以指定某一个类别，它继承了所有父类的类型，并必须拥有所有父类接口的外部可见方法的具体实现，并允许编译器强制以上要求），但只可以从一个父类继承实现（方法与数据）。微软的.NET编程语言，例如C#和Visual Basic .NET也使用了这种接口的做法。
+* [Multiple inheritance - Wikipedia](https://en.wikipedia.org/wiki/Multiple_inheritance)
+	* Multiple inheritance has been a controversial issue for many years, with opponents pointing to its increased complexity and ambiguity in situations such as the "diamond problem", where it may be ambiguous as to which parent class a particular feature is inherited from if more than one parent class implements same feature. This can be addressed in various ways, including using virtual inheritance. Alternate methods of object composition not based on inheritance such as mixins and traits have also been proposed to address the ambiguity.
+	* The "diamond problem" (sometimes referred to as the "Deadly Diamond of Death") is an ambiguity that arises when two classes B and C inherit from A, and class D inherits from both B and C. If there is a method in A that B and C have overridden, and D does not override it, then which version of the method does D inherit: that of B, or that of C?
+	* For example, in the context of GUI software development, a class Button may inherit from both classes Rectangle (for appearance) and Clickable (for functionality/input handling), and classes Rectangle and Clickable both inherit from the Object class. Now if the equals method is called for a Button object and there is no such method in the Button class but there is an overridden equals method in Rectangle or Clickable (or both), which method should be eventually called?
+	* It is called the "diamond problem" because of the shape of the class inheritance diagram in this situation. In this case, class A is at the top, both B and C separately beneath it, and D joins the two together at the bottom to form a diamond shape.
+	* Languages have different ways of dealing with these problems of repeated inheritance.
+		* C++ by default follows each inheritance path separately, so a D object would actually contain two separate A objects, and uses of A's members have to be properly qualified. If the inheritance from A to B and the inheritance from A to C are both marked "virtual" (for example, "class B : virtual public A"), C++ takes special care to only create one A object, and uses of A's members work correctly. If virtual inheritance and nonvirtual inheritance are mixed, there is a single virtual A, and a nonvirtual A for each nonvirtual inheritance path to A. C++ requires stating explicitly which parent class the feature to be used is invoked from i.e. Worker::Human.Age. C++ does not support explicit repeated inheritance since there would be no way to qualify which superclass to use (i.e. having a class appear more than once in a single derivation list [class Dog : public Animal, Animal]). C++ also allows a single instance of the multiple class to be created via the virtual inheritance mechanism (i.e. Worker::Human and Musician::Human will reference the same object).
+		* Java 8 introduces default methods on interfaces. If A,B,C are interfaces, B,C can each provide a different implementation to an abstract method of A, causing the diamond problem. Either class D must reimplement the method (the body of which can simply forward the call to one of the super implementations), or the ambiguity will be rejected as a compile error. Prior to Java 8, Java was not subject to the Diamond problem risk, because it did not support multiple inheritance and interface default methods were not available.
+		* Python has the same structure as Perl, but, unlike Perl, includes it in the syntax of the language. The order of inheritance affects the class semantics. Python had to deal with this upon the introduction of new-style classes, all of which have a common ancestor, object. Python creates a list of classes using the C3 linearization (or Method Resolution Order (MRO)) algorithm. That algorithm enforces two constraints: children precede their parents and if a class inherits from multiple classes, they are kept in the order specified in the tuple of base classes (however in this case, some classes high in the inheritance graph may precede classes lower in the graph). Thus, the method resolution order is: D, B, C, A.
+	* Nevertheless, even when several interfaces declare the same method signature, as soon as that method is implemented (defined) anywhere in the inheritance chain, it overrides any implementation of that method in the chain above it (in its superclasses). Hence, at any given level in the inheritance chain, there can be at most one implementation of any method. Thus, single-inheritance method implementation does not exhibit the Diamond Problem even with multiple-inheritance of interfaces. With the introduction of default implementation for interfaces in Java 8 and C# 8, it is still possible to generate a Diamond Problem, although this will only appear as a compile-time error.
 
+### 虚继承
 
-      int main()
-      {
-      MyClass var1;
-      // D var2;  //这一行编译将导致错误，因为D类的默认构造函数不合法
-      }
-      ```
-  * [Virtual inheritance - Wikipedia](https://en.wikipedia.org/wiki/Virtual_inheritance)
-    * This example to illustrates a case where base class A has a constructor variable msg and an additional ancestor E is derived from grandchild class D.
-    * Here, A must be constructed in both D and E. Further, inspection of the variable msg illustrates the how class A becomes a direct base class of its deriving class, as opposed to a base class of any intermediate deriving classed between A and the final deriving class.
-    ```c++
-    #include <string>
-    #include <iostream>
+* [虚继承 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E8%99%9A%E7%BB%A7%E6%89%BF)
+	* 虚继承 是面向对象编程中的一种技术，是指一个指定的基类，在继承体系结构中，将其成员数据实例共享给也从这个基类型直接或间接派生的其它类。
+	* 举例来说：假如类A和类B各自从类X派生（非虚继承且假设类X包含一些数据成员），且类C同时多继承自类A和B，那么C的对象就会拥有两套X的实例数据（可分别独立访问，一般要用适当的消歧义限定符）。但是如果类A与B各自虚继承了类X，那么C的对象就只包含一套类X的实例数据。对于这一概念典型实现的编程语言是C++。
+	* 这一特性在多重继承应用中非常有用，可以使得虚基类对于由它直接或间接派生的类来说，拥有一个共同的基类对象实例。避免由于带有歧义的组合而产生的问题（如“菱形继承问题”）。其原理是，间接派生类（C）穿透了其父类（上面例子中的A与B），实质上直接继承了虚基类X。
+	* 这一概念一般用于“继承”在表现为一个整体，而非几个部分的组合时。在C++中，基类可以通过使用关键字virtual来声明虚继承关系。
+	* 虚基类的初始化
+		* 由于虚基类是多个派生类共享的基类，因此由谁来初始化虚基类必须明确。C++标准规定，由最派生类直接初始化虚基类。因此，对间接继承了虚基类的类，也必须能直接访问其虚继承来的祖先类，也即应知道其虚继承来的祖先类的地址偏移值。
+		* 例如，常见的“菱形”虚继承例子中，两个派生类、一个最派生类的构造函数的初始化列表中都可以给出虚基类的初始化；但只由最派生类的构造函数实际执行虚基类的初始化。
+	* 虚继承的应用：不可派生的finally类
+		* 一个类如果不希望被继承，类似于Java中的具有finally性质的类，这在C++中可以用虚继承来实现：
+		```c++
+		template<typename T> class MakeFinally{
+			 private:
+					 MakeFinally(){};//只有MakeFinally的友类才可以构造MakeFinally
+					 ~MakeFinally(){};
+			 friend T;
+		};
 
-    class A {
-        private:
-            std::string _msg;
-        public:
-            A(std::string x): _msg(x) {}
-            void test(){ std::cout<<"hello from A: "<<_msg <<"\n"; }
-    };
+		class MyClass:public virtual  MakeFinally<MyClass>{};//MyClass是不可派生类
 
-    // B,C inherit A virtually
-    class B: virtual public A   { public: B(std::string x):A("b"){}  };
-    class C: virtual public A   { public: C(std::string x):A("c"){}  };
-
-    // since B,C inherit A virtually, A must be constructed in each child
-    class D: public         B,C { public: D(std::string x):A("d_a"),B("d_b"),C("d_c"){}  };
-    class E: public         D   { public: E(std::string x):A("e_a"),D("e_d"){}  };
-
-    // breaks without constructing A
-    // class D: public         B,C { public: D(std::string x):B(x),C(x){}  };
-
-    // breaks without constructing A
-    //class E: public         D   { public: E(std::string x):D(x){}  };
+		//由于虚继承，所以D要直接负责构造MakeFinally类，从而导致编译报错，所以D作为派生类是不合法的。
+		class D: public MyClass{};
+		//另外，如果D类没有实例化对象，即没有被使用，实际上D类是被编译器忽略掉而不报错
 
 
-    int main(int argc, char ** argv){
-        D d("d");
-        d.test(); // hello from A: d_a
+		int main()
+		{
+		MyClass var1;
+		// D var2;  //这一行编译将导致错误，因为D类的默认构造函数不合法
+		}
+		```
+* [Virtual inheritance - Wikipedia](https://en.wikipedia.org/wiki/Virtual_inheritance)
+	* This example to illustrates a case where base class A has a constructor variable msg and an additional ancestor E is derived from grandchild class D.
+	* Here, A must be constructed in both D and E. Further, inspection of the variable msg illustrates the how class A becomes a direct base class of its deriving class, as opposed to a base class of any intermediate deriving classed between A and the final deriving class.
+	```c++
+	#include <string>
+	#include <iostream>
 
-        E e("e");
-        e.test(); // hello from A: e_a
-    }    
-    ```
-  * 虚继承用于解决多继承条件下的菱形继承问题（浪费存储空间、存在二义性）。
-  * 底层实现原理与编译器相关，一般通过虚基类指针和虚基类表实现，每个虚继承的子类都有一个虚基类指针（占用一个指针的存储空间，4字节）和虚基类表（不占用类对象的存储空间）（需要强调的是，虚基类依旧会在子类里面存在拷贝，只是仅仅最多存在一份而已，并不是不在子类里面了）；当虚继承的子类被当做父类继承时，虚基类指针也会被继承。
-  * 实际上，vbptr 指的是虚基类表指针（virtual base table pointer），该指针指向了一个虚基类表（virtual table），虚表中记录了虚基类与本类的偏移地址；通过偏移地址，这样就找到了虚基类成员，而虚继承也不用像普通多继承那样维持着公共基类（虚基类）的两份同样的拷贝，节省了存储空间。
-* 菱形继承
-  * The "diamond problem" (sometimes referred to as the "Deadly Diamond of Death") is an ambiguity that arises when two classes B and C inherit from A, and class D inherits from both B and C. If there is a method in A that B and C have overridden, and D does not override it, then which version of the method does D inherit: that of B, or that of C?
-  * [关于C++中菱形继承的解释和处理](https://mp.weixin.qq.com/s/OBSTK3kvjvqEpbmj8vXzpQ)
-  	* 派生类继承父类，同时也会继承父类中的所有成员副本，但如果在继承时一个基类同时被两个子类继承，然后一个新类又分别由上面的两个子类派生出来。这样从某种程度来说就形成了C++中的菱形继承，也可以叫做钻石继承
+	class A {
+			private:
+					std::string _msg;
+			public:
+					A(std::string x): _msg(x) {}
+					void test(){ std::cout<<"hello from A: "<<_msg <<"\n"; }
+	};
+
+	// B,C inherit A virtually
+	class B: virtual public A   { public: B(std::string x):A("b"){}  };
+	class C: virtual public A   { public: C(std::string x):A("c"){}  };
+
+	// since B,C inherit A virtually, A must be constructed in each child
+	class D: public         B,C { public: D(std::string x):A("d_a"),B("d_b"),C("d_c"){}  };
+	class E: public         D   { public: E(std::string x):A("e_a"),D("e_d"){}  };
+
+	// breaks without constructing A
+	// class D: public         B,C { public: D(std::string x):B(x),C(x){}  };
+
+	// breaks without constructing A
+	//class E: public         D   { public: E(std::string x):D(x){}  };
+
+
+	int main(int argc, char ** argv){
+			D d("d");
+			d.test(); // hello from A: d_a
+
+			E e("e");
+			e.test(); // hello from A: e_a
+	}    
+	```
+* 虚继承用于解决多继承条件下的菱形继承问题（浪费存储空间、存在二义性）。
+* 底层实现原理与编译器相关，一般通过虚基类指针和虚基类表实现，每个虚继承的子类都有一个虚基类指针（占用一个指针的存储空间，4字节）和虚基类表（不占用类对象的存储空间）（需要强调的是，虚基类依旧会在子类里面存在拷贝，只是仅仅最多存在一份而已，并不是不在子类里面了）；当虚继承的子类被当做父类继承时，虚基类指针也会被继承。
+* 实际上，vbptr 指的是虚基类表指针（virtual base table pointer），该指针指向了一个虚基类表（virtual table），虚表中记录了虚基类与本类的偏移地址；通过偏移地址，这样就找到了虚基类成员，而虚继承也不用像普通多继承那样维持着公共基类（虚基类）的两份同样的拷贝，节省了存储空间。
+
+### 菱形继承
+
+* The "diamond problem" (sometimes referred to as the "Deadly Diamond of Death") is an ambiguity that arises when two classes B and C inherit from A, and class D inherits from both B and C. If there is a method in A that B and C have overridden, and D does not override it, then which version of the method does D inherit: that of B, or that of C?
+* [关于C++中菱形继承的解释和处理](https://mp.weixin.qq.com/s/OBSTK3kvjvqEpbmj8vXzpQ)
+	* 派生类继承父类，同时也会继承父类中的所有成员副本，但如果在继承时一个基类同时被两个子类继承，然后一个新类又分别由上面的两个子类派生出来。这样从某种程度来说就形成了C++中的菱形继承，也可以叫做钻石继承
 ```c++
 #include <iostream>
 using namespace std;
@@ -477,32 +483,34 @@ int main()
     return 0;
 }
 ```
-* 多态
-  * [多态 (计算机科学) - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E5%A4%9A%E6%80%81_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6))
-  * [Polymorphism (computer science) - Wikipedia](https://en.wikipedia.org/wiki/Polymorphism_(computer_science))
-    * 在编程语言和类型论中，多态（英语：polymorphism）指为不同数据类型的实体提供统一的接口，或使用一个单一的符号来表示多个不同的类型。
-    * 多态的最常见主要类别有：
-      * 特设多态(Ad hoc polymorphism)：为个体的特定类型的任意集合定义一个共同接口。
-      * 参数多态(Parametric polymorphism)：指定一个或多个类型不靠名字而是靠可以标识任何类型的抽象符号。
-      * 子类型(Subtyping)（也叫做子类型多态或包含多态）：一个名字指称很多不同的类的实例，这些类有某个共同的超类。
-    * “特设多态”来指称一个多态函数可以应用于有不同类型的实际参数上，但是以来它们所应用到的实际参数类型而有不同的表现（也叫做为函数重载或运算符重载）
-    * 参数多态允许函数或数据类型被一般性的书写，从而它可以“统一”的处理值而不用依赖于它们的类型。参数多态是使语言更加有表现力而仍维持完全的静态类型安全的一种方式。这种函数和数据类型被分别称为“泛化函数”和“泛化数据类型”从而形成了泛型编程的基础。
-    * 子类型
-      * 在面向对象程序设计中，计算机程序运行时，相同的消息可能会送给多个不同的类别之对象，而系统可依据对象所属类别，引发对应类别的方法，而有不同的行为。简单来说，所谓多态意指相同的消息给予不同的对象会引发不同的动作。比如有动物之类别，而且由动物继承出类别猫和类别狗，并对同一源自类别动物（父类）之一消息有不同的响应，如类别动物有“叫”之动作，而类别猫会“喵喵”，类别狗则会“汪汪”，则称之为多态。
-      * 多态可分为变量多态与函数多态。变量多态是指：基类型的变量（对于C++是引用或指针）可以被赋值基类型对象，也可以被赋值派生类型的对象。函数多态是指，相同的函数调用界面（函数名与实参表），传送给一个对象变量，可以有不同的行为，这视该对象变量所指向的对象类型而定。多态也可定义为“一种将不同的特殊行为和单个泛化记号相关联的能力”，变量多态是函数多态的基础。
-    * 依据实现时做出的选择，多态可分为：
-      * 动态多态（dynamic polymorphism）:生效于运行期。
-      * 静态多态（static polymorphism）：将不同的特殊行为和单个泛化记号相关联，由于这种关联处理于编译期而非运行期，因此被称为“静态”。可以用来实现类型安全、运行高效的同质对象集合操作。C++ STL不采用动态多态来实现就是个例子。
-    * 对于C++语言，带变量的宏和函数重载机制也允许将不同的特殊行为和单个泛化记号相关联。然而，习惯上并不将这种函数多态、宏多态展现出来的行为称为多态（或静态多态），否则就连C语言也具有宏多态了。谈及多态时，默认就是指动态多态，而静态多态则是指基于模板的多态。
-  * 什么是多态？多态如何实现？
-    * 多态：多态就是不同继承类的对象，对同一消息做出不同的响应，基类的指针指向或绑定到派生类的对象，使得基类指针呈现不同的表现方式。在基类的函数前加上 virtual 关键字，在派生类中重写该函数，运行时将会根据对象的实际类型来调用相应的函数。如果对象类型是派生类，就调用派生类的函数；如果对象类型是基类，就调用基类的函数。
-    * 实现方法：多态是通过虚函数实现的，虚函数的地址保存在虚函数表中，虚函数表的地址保存在含有虚函数的类的实例对象的内存空间中。
-    * 实现过程：
-      * 在类中用 virtual 关键字声明的函数叫做虚函数；
-      * 存在虚函数的类都有一个虚函数表，当创建一个该类的对象时，该对象有一个指向虚函数表的虚表指针（虚函数表和类对应的，虚表指针是和对象对应）；
-      * 当基类指针指向派生类对象，基类指针调用虚函数时，基类指针指向派生类的虚表指针，由于该虚表指针指向派生类虚函数表，通过遍历虚表，寻找相应的虚函数。
-	* [C++编译期多态与运行期多态](https://mp.weixin.qq.com/s/Xyo97HNDaelUy6F8aiMwIA)
-		* https://www.cnblogs.com/QG-whz/p/5132745.html
+
+### 多态
+
+* [多态 (计算机科学) - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E5%A4%9A%E6%80%81_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6))
+* [Polymorphism (computer science) - Wikipedia](https://en.wikipedia.org/wiki/Polymorphism_(computer_science))
+	* 在编程语言和类型论中，多态（英语：polymorphism）指为不同数据类型的实体提供统一的接口，或使用一个单一的符号来表示多个不同的类型。
+	* 多态的最常见主要类别有：
+		* 特设多态(Ad hoc polymorphism)：为个体的特定类型的任意集合定义一个共同接口。
+		* 参数多态(Parametric polymorphism)：指定一个或多个类型不靠名字而是靠可以标识任何类型的抽象符号。
+		* 子类型(Subtyping)（也叫做子类型多态或包含多态）：一个名字指称很多不同的类的实例，这些类有某个共同的超类。
+	* “特设多态”来指称一个多态函数可以应用于有不同类型的实际参数上，但是以来它们所应用到的实际参数类型而有不同的表现（也叫做为函数重载或运算符重载）
+	* 参数多态允许函数或数据类型被一般性的书写，从而它可以“统一”的处理值而不用依赖于它们的类型。参数多态是使语言更加有表现力而仍维持完全的静态类型安全的一种方式。这种函数和数据类型被分别称为“泛化函数”和“泛化数据类型”从而形成了泛型编程的基础。
+	* 子类型
+		* 在面向对象程序设计中，计算机程序运行时，相同的消息可能会送给多个不同的类别之对象，而系统可依据对象所属类别，引发对应类别的方法，而有不同的行为。简单来说，所谓多态意指相同的消息给予不同的对象会引发不同的动作。比如有动物之类别，而且由动物继承出类别猫和类别狗，并对同一源自类别动物（父类）之一消息有不同的响应，如类别动物有“叫”之动作，而类别猫会“喵喵”，类别狗则会“汪汪”，则称之为多态。
+		* 多态可分为变量多态与函数多态。变量多态是指：基类型的变量（对于C++是引用或指针）可以被赋值基类型对象，也可以被赋值派生类型的对象。函数多态是指，相同的函数调用界面（函数名与实参表），传送给一个对象变量，可以有不同的行为，这视该对象变量所指向的对象类型而定。多态也可定义为“一种将不同的特殊行为和单个泛化记号相关联的能力”，变量多态是函数多态的基础。
+	* 依据实现时做出的选择，多态可分为：
+		* 动态多态（dynamic polymorphism）:生效于运行期。
+		* 静态多态（static polymorphism）：将不同的特殊行为和单个泛化记号相关联，由于这种关联处理于编译期而非运行期，因此被称为“静态”。可以用来实现类型安全、运行高效的同质对象集合操作。C++ STL不采用动态多态来实现就是个例子。
+	* 对于C++语言，带变量的宏和函数重载机制也允许将不同的特殊行为和单个泛化记号相关联。然而，习惯上并不将这种函数多态、宏多态展现出来的行为称为多态（或静态多态），否则就连C语言也具有宏多态了。谈及多态时，默认就是指动态多态，而静态多态则是指基于模板的多态。
+* 什么是多态？多态如何实现？
+	* 多态：多态就是不同继承类的对象，对同一消息做出不同的响应，基类的指针指向或绑定到派生类的对象，使得基类指针呈现不同的表现方式。在基类的函数前加上 virtual 关键字，在派生类中重写该函数，运行时将会根据对象的实际类型来调用相应的函数。如果对象类型是派生类，就调用派生类的函数；如果对象类型是基类，就调用基类的函数。
+	* 实现方法：多态是通过虚函数实现的，虚函数的地址保存在虚函数表中，虚函数表的地址保存在含有虚函数的类的实例对象的内存空间中。
+	* 实现过程：
+		* 在类中用 virtual 关键字声明的函数叫做虚函数；
+		* 存在虚函数的类都有一个虚函数表，当创建一个该类的对象时，该对象有一个指向虚函数表的虚表指针（虚函数表和类对应的，虚表指针是和对象对应）；
+		* 当基类指针指向派生类对象，基类指针调用虚函数时，基类指针指向派生类的虚表指针，由于该虚表指针指向派生类虚函数表，通过遍历虚表，寻找相应的虚函数。
+* [C++编译期多态与运行期多态](https://mp.weixin.qq.com/s/Xyo97HNDaelUy6F8aiMwIA)
+	* https://www.cnblogs.com/QG-whz/p/5132745.html
 
 ## 类相关
 
