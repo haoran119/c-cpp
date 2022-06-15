@@ -308,6 +308,12 @@ dir env:
     * [Analyzing a User-Mode Dump File - Windows drivers | Microsoft Docs](https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/analyzing-a-user-mode-dump-file)
     * [.dump (Create Dump File) - Windows drivers | Microsoft Docs](https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/-dump--create-dump-file-)
       * The .dump command creates a user-mode or kernel-mode crash dump file.
+  * [学会这个绝招，让 C++ 崩溃无处可逃！](https://mp.weixin.qq.com/s/mHYBFB0PuN4kDtj_j51gUQ)
+    * Breakpad 是 Google 用 C++ 编写的一个开源、跨平台的崩溃报告系统，它支持 Windows、Linux 和 macOS，并提供了一个上传器，可以在进程崩溃时向一个配置好的 URL 提交 minidump 文件。
+    * 目前，有很多大型项目都在使用 Breakpad，例如：Google Chrome、Firefox、Google Picasa、Camino、Google Earth 等。
+    * 主页：https://chromium.googlesource.com/breakpad/breakpad/
+    * 文档：https://chromium.googlesource.com/breakpad/breakpad/+/HEAD/docs
+    * GitHub 地址：https://github.com/google/breakpad
 * How to edit environmet variables ?
   * [How to edit, clear, and delete environment variables in Windows - Digital Citizen](https://www.digitalcitizen.life/remove-edit-clear-environment-variables/)
 * How to lock files ?
