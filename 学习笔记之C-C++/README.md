@@ -298,6 +298,10 @@ In programming contests, people do focus more on finding the algorithm to solve 
 			1) Specifies that a constructor or conversion function (since C++11) or deduction guide (since C++17) is explicit, that is, it cannot be used for implicit conversions and copy-initialization.
 			2) The explicit specifier may be used with a constant expression. The function is explicit if and only if that constant expression evaluates to true. (since C++20)
 		* The explicit specifier may only appear within the decl-specifier-seq of the declaration of a constructor or conversion function (since C++11) within its class definition.
+* [如何避免类构造函数中的隐式转换](https://mp.weixin.qq.com/s/VrMHxOwDkzTIfPFXVuaOJw)
+	* 为了避免这种情况的发生，C++提供了explicit关键字，通过在构造函数前加上该关键字可以避免隐式类型转换。当然，explicit也有其自身的生效范围。如：
+	* explicit只能对具有一个参数的构造函数有效。如果有多个可能不生效
+	* 如果构造函数存在多个参数，那么需要将其余的参数以默认值参数的方式使用。这样explicit关键字将继续生效。
 * Type casting
 	* Unrestricted explicit type-casting allows to convert any pointer into any other pointer type, independently of the types they point to. The subsequent call to member result will produce either a run-time error or some other unexpected results.
 	* In order to control these types of conversions between classes, we have four specific casting operators: dynamic_cast, reinterpret_cast, static_cast and const_cast. Their format is to follow the new type enclosed between angle-brackets (<>) and immediately after, the expression to be converted between parentheses.
