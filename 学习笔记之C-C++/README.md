@@ -1426,6 +1426,45 @@ int main() {
 	* [C++ reading from file puts three weird characters - Stack Overflow](https://stackoverflow.com/questions/10417613/c-reading-from-file-puts-three-weird-characters)
 	* [r - Weird characters added to first column name after reading a toad-exported csv file - Stack Overflow](https://stackoverflow.com/questions/22974765/weird-characters-added-to-first-column-name-after-reading-a-toad-exported-csv-fi)
 	* [How to remove BOM from any text/XML file](https://www.ibm.com/support/pages/how-remove-bom-any-textxml-file)
+```c++
+std::unordered_map<std::string, std::vector<std::string> > readCSVFile()
+{
+    std::ifstream ifs(filename, std::ifstream::in);
+    std::unordered_map<std::string, std::vector<std::string> > mData{};
+
+    if (ifs.is_open()) {
+        std::string line{};
+        auto checkedBOM = false;
+        const std::unordered_set<std::string> setBOM{ "\xef\xbb\xbf" };
+
+        while (std::getline(ifs, line)) {
+            if (!checkedBOM) {
+                if (setBOM.count(line.substr(0, 3)) > 0) {
+                    line = line.substr(3);
+                }
+                checkedBOM = true;
+            }
+
+            std::stringstream ss{ line };
+            std::string value{};
+            std::vector<std::string> vValue{};
+
+            while (std::getline(ss, value, ',')) {
+                vValue.push_back(value);
+            }
+
+            mData[vValue[0]] = vValue;
+        }
+
+        ifs.close();
+    }
+    else {
+        LOG_ERROR("Error opening file [" << filename << "]!");
+    }
+
+    return mData;
+}
+```
 
 ##### \<filesystem>
  
