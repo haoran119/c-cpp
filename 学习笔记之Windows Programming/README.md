@@ -250,6 +250,11 @@ dir env:
   * [How to Check your PowerShell Version (All the Ways!)](https://adamtheautomator.com/powershell-version/)
 * How to check if process is in deadlock ?
     * Task Manager > Performance > Open Resource Monitor > Select process > Analyze Wait Chain...
+* How to check if TCP port is open ?
+  * [How do I know if a TCP port is open or closed? - Synology Knowledge Center](https://kb.synology.com/en-global/DSM/tutorial/Whether_TCP_port_is_open_or_closed)
+    * `telnet www.example.com 1723`
+  * [How to Check Which Ports Are Open on a Windows 10 PC](https://www.alphr.com/how-to-check-which-ports-open-windows-10-pc/#:~:text=Windows%2010%20Open%20Ports%20FAQs&text=Run%20the%20Command%20Prompt%20as,to%20the%20local%20IP%20address.)
+    * `netstat -ab`
 * How to create a MiniDump for a process when it crashes ?
   * [Arnavion/crashdump: An example of an out-of-process crash dumper](https://github.com/Arnavion/crashdump)
     * Demonstrates how to have a C process (crasher.exe) have a stack trace and minidump taken if it crashes. Both are done by another process (dumper.exe), which is crucial to getting a dump with a sane stack trace.
