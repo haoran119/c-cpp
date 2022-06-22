@@ -117,6 +117,8 @@
 		* unsigned: and signed – bit manipulation
 		* virtual: interfaces – not virtual – destructor – never fail
 
+### [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)
+
 ### Effective C++
 * [学习笔记之Effective C++ 2nd Edition - 浩然119 - 博客园 (cnblogs.com)](https://www.cnblogs.com/pegasus923/archive/2011/04/24/1930631.html)
 * [Effective C++学习笔记](https://mp.weixin.qq.com/s/Sn-AeA41-ZjLzCMtmNnx_A)
