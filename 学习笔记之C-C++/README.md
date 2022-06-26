@@ -194,11 +194,27 @@
 
 ### Basics
 
-* [[ZZ]C++编译器—gcc的用法 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2010/10/08/1845888.html)
 * [<bits/stdc++.h> in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/bitsstdc-h-c/)
   * It is basically a header file that includes every standard library. In programming contests, using this file is a good idea, when you want to reduce the time wasted in doing chores; especially when your rank is time sensitive.
 In programming contests, people do focus more on finding the algorithm to solve a problem than on software engineering. From, software engineering perspective, it is a good idea to minimize the include. If you use it actually includes a lot of files, which your program may not need, thus increases both compile time and program size unnecessarily.
 * [一个合格的ACMer的代码当中，都藏着哪些秘密？ (qq.com)](https://mp.weixin.qq.com/s/0_qWix8jARKulLFKUR5UNg)
+
+#### Compiler
+
+* [C++17 - Wikipedia](https://en.wikipedia.org/wiki/C%2B%2B17)
+	* Compiler support
+		* GCC has had complete support for C++17 language features since version 8.[48]
+		* Clang 5 and later supports all C++17 language features.[49]
+		* Visual Studio 2017 15.8 (MSVC 19.15) and later supports all C++17 language features.[50][51]
+
+##### [GCC](https://gcc.gnu.org/)
+
+* GCC, the GNU Compiler Collection - GNU Project
+* [[ZZ]C++编译器—gcc的用法 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2010/10/08/1845888.html)
+* [C++ Standards Support in GCC - GNU Project](https://gcc.gnu.org/projects/cxx-status.html#cxx17)
+	* C++17 Support in GCC
+		* GCC has almost full support for the previous revision of the C++ standard, which was published in 2017. Some library features are missing or incomplete, as described in the library documentation.
+		* C++17 features are available since GCC 5. This mode is the default in GCC 11; it can be explicitly selected with the -std=c++17 command-line flag, or -std=gnu++17 to enable GNU extensions as well.
 
 #### Data Types
 
