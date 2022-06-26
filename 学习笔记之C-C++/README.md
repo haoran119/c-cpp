@@ -2992,6 +2992,13 @@ int main()
 			* 惊群现象：仔细分析您的锁调用的特征。当锁被释放时，是所有的等待线程都被唤醒还是只唤醒一个线程？唤醒所有线程会威胁到应用的可扩展性。
 		* 要使用的存储器离处理器越远，访问所需的时间就越长。离处理器最近的是寄存器，虽然容量很少，但是速度很快。对寄存器的优化对程序的性能提升而言是极为有益的。
 		* 上下文切换的开销巨大，请尽量避免上下文切换。
+* [C/C++ include header file order - Stack Overflow](https://stackoverflow.com/questions/2762568/c-c-include-header-file-order)
+	* My personal preference is to go from local to global, each subsection in alphabetical order, i.e.:
+		* h file corresponding to this cpp file (if applicable)
+		* headers from the same component,
+		* headers from other components,
+		* system headers.
+	* My rationale for 1. is that it should prove that each header (for which there is a cpp) can be #included without prerequisites (terminus technicus: header is "self-contained"). And the rest just seems to flow logically from there.
 
 ### Bug
 
