@@ -3157,6 +3157,18 @@ int main()
 #### QUANT
 
 * [rburkholder/trade-frame: C++ 17 based library (with sample applications) for testing equities, futures, etfs & options based automated trading ideas using DTN IQFeed real time data feed and Interactive Brokers (IB TWS API) for trade execution. [I have a private repository which has more recent changes, which get back-ported randomly][irc: #tradeframe on OFTC]](https://github.com/rburkholder/trade-frame)
+* How to build a order book ?
+	* https://www.google.com/search?q=c%2B%2B+order+book+implementation&oq=c%2B%2B+order+book&aqs=edge.1.69i57j0i512j0i22i30l2j0i390l3.13525j0j1&sourceid=chrome&ie=UTF-8#scso=_TI-5Yt2ZPMPTz7sP5q6-8Ao27:740.9090576171875
+	* https://github.com/bigfatwhale/orderbook
+	* https://alexabosi.wordpress.com/2014/08/28/limit-order-book-implementation-for-low-latency-trading-in-c/
+	* https://quant.stackexchange.com/questions/3783/what-is-an-efficient-data-structure-to-model-order-book
+	* https://web.archive.org/web/20110219163448/http://howtohft.wordpress.com/2011/02/15/how-to-build-a-fast-limit-order-book/
+	* https://github.com/charles-cooper/itch-order-book
+	* https://www.google.com/search?q=c%2B%2B+tse+order+book&sxsrf=ALiCzsbmZMhBQv6SNPDcogDsFVIRhTLY-A%3A1656329814805&ei=Vpa5YuviMIjSz7sPoZ2G6AQ&ved=0ahUKEwjr5fexxc34AhUI6XMBHaGOAU0Q4dUDCA4&uact=5&oq=c%2B%2B+tse+order+book&gs_lcp=Cgdnd3Mtd2l6EAM6BwgAEEcQsANKBAhBGABKBAhGGABQxQpYrRFgwxRoAXABeACAAdABiAG_BZIBBTAuMy4xmAEAoAEByAEIwAEB&sclient=gws-wiz#scso=_bJa5YvmuMoGq4t4PltaniA822:0
+	* https://objectcomputing.com/resources/publications/sett/august-2013-building-a-market-data-feed-with-liquibook
+	* https://www.youtube.com/watch?v=fxN4xEZvrxI
+	* https://github.com/olibre/Cpp14-OrderBook
+	* https://github.com/topics/order-book?o=desc&s=forks
 
 ## FAQ
 
