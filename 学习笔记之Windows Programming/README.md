@@ -370,3 +370,5 @@ dir env:
       * [Naming Files, Paths, and Namespaces - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file)
 * How to map network driver on Windows ?
   * Computer -> Map Network Drive -> Folder : \\\server.au\usrname  -> DOMAIN/USRNAME
+* How to restore right-click menu to classic one in Win11 ?
+  * [How to Restore Right-Click Context menu in Windows 11. - wintips.org - Windows Tips & How-tos](https://www.wintips.org/how-to-restore-right-click-context-menu-in-windows-11/)
