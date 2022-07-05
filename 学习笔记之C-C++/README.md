@@ -1479,7 +1479,7 @@ std::unordered_map<std::string, std::vector<std::string> > readCSVFile()
         ifs.close();
     }
     else {
-        LOG_ERROR("Error opening file [" << filename << "]!");
+        std::cerr << "Error opening file [" << filename << "]!";
     }
 
     return mData;
