@@ -2772,6 +2772,7 @@ int main() {
 [Fixed width integer types (since C++11)](https://en.cppreference.com/w/cpp/types/integer)
 * Types
 * Defined in header \<cstdint>
+* [g77-mingw32/include/stdint.h](https://www.rpi.edu/dept/cis/software/g77-mingw32/include/stdint.h)
 
 |uint8_t/uint16_t/uint32_t/uint64_t(optional) | unsigned integer type with width of exactly 8, 16, 32 and 64 bits respectively (provided if and only if the implementation directly supports the type) (typedef) |
 | - | - |
@@ -2791,10 +2792,11 @@ Numeric limits
 	* Returns the maximum finite value representable by the numeric type T. Meaningful for all bounded types.
 * [std::numeric_limits\<T>::infinity - cppreference.com](https://en.cppreference.com/w/cpp/types/numeric_limits/infinity)
 	* Returns the special value "positive infinity", as represented by the floating-point type T. Only meaningful if std::numeric_limits\<T>::has_infinity == true. In IEEE 754, the most common binary representation of floating-point numbers, the positive infinity is the value with all bits of the exponent set and all bits of the fraction cleared.
-* [C numeric limits interface](https://en.cppreference.com/w/cpp/types/climits)
-	* INT_MAX        = 2147483647
-	* UINT_MAX       = 4294967295
-* [g77-mingw32/include/stdint.h](https://www.rpi.edu/dept/cis/software/g77-mingw32/include/stdint.h)
+
+#
+[C numeric limits interface](https://en.cppreference.com/w/cpp/types/climits)
+* INT_MAX        = 2147483647
+* UINT_MAX       = 4294967295
 
 #
 Type relationships
