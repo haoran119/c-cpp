@@ -1447,7 +1447,7 @@ int main() {
 	* [r - Weird characters added to first column name after reading a toad-exported csv file - Stack Overflow](https://stackoverflow.com/questions/22974765/weird-characters-added-to-first-column-name-after-reading-a-toad-exported-csv-fi)
 	* [How to remove BOM from any text/XML file](https://www.ibm.com/support/pages/how-remove-bom-any-textxml-file)
 ```c++
-std::unordered_map<std::string, std::vector<std::string> > readCSVFile()
+std::unordered_map<std::string, std::vector<std::string> > ReadCSV(const std::string& filename)
 {
     std::ifstream ifs(filename, std::ifstream::in);
     std::unordered_map<std::string, std::vector<std::string> > mData{};
