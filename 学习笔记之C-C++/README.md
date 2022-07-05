@@ -2794,6 +2794,7 @@ Numeric limits
 * [C numeric limits interface](https://en.cppreference.com/w/cpp/types/climits)
 	* INT_MAX        = 2147483647
 	* UINT_MAX       = 4294967295
+* [g77-mingw32/include/stdint.h](https://www.rpi.edu/dept/cis/software/g77-mingw32/include/stdint.h)
 
 #
 Type relationships
