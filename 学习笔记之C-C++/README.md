@@ -1281,6 +1281,20 @@ int main(int argc, char *argv[]) {
 
 #### [Classes](https://en.cppreference.com/w/cpp/language/classes)
 
+* class v.s. struct
+	* [Structure vs class in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/structure-vs-class-in-cpp/)
+	* [C.1: Organize related data into structures (structs or classes)](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c1-organize-related-data-into-structures-structs-or-classes)
+		* Reason Ease of comprehension. If data is related (for fundamental reasons), that fact should be reflected in code.
+		* Example
+		```c++
+		void draw(int x, int y, int x2, int y2);  // BAD: unnecessary implicit relationships
+		void draw(Point from, Point to);          // better
+		```
+		* Note A simple class without virtual functions implies no space or time overhead.
+		* Note From a language perspective class and struct differ only in the default visibility of their members.
+		* Enforcement Probably impossible. Maybe a heuristic looking for data items used together is possible.
+	* [C.8: Use class rather than struct if any member is non-public](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c8-use-class-rather-than-struct-if-any-member-is-non-public)
+
 ##### Special member functions
 
 * [Default constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/default_constructor)
