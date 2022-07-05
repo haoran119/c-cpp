@@ -1094,6 +1094,16 @@ int main() {
 		* 5.1 getline() 读取一行
 		* 5.2 gets() 读取一行
 
+###### Predefined standard stream objects
+
+* Defined in header \<iostream>
+
+| cin / wcin | reads from the standard C input stream stdin (global object) |
+| - | - |
+| cout / wcout | writes to the standard C output stream stdout (global object) | 
+| [cerr / wcerr](https://en.cppreference.com/w/cpp/io/cerr) | writes to the standard C error stream stderr, unbuffered (global object) | 
+| clog / wclog | writes to the standard C error stream stderr (global object) | 
+
 ###### [Input/output manipulators](https://en.cppreference.com/w/cpp/io/manip)
 
 * The stream-based I/O library uses I/O manipulators (e.g. std::boolalpha, std::hex, etc.) to control how streams behave.
