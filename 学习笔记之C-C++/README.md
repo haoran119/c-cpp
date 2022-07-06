@@ -1565,6 +1565,7 @@ std::unordered_map<std::string, std::vector<std::string> > ReadCSV(const std::st
 
 ##### \<fstream>
 
+* [std::basic_ifstream - cppreference.com](https://en.cppreference.com/w/cpp/io/basic_ifstream)
 * [ifstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/)
   * Input file stream class
     * Input stream class to operate on files.
