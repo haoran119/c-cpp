@@ -729,8 +729,6 @@ int main() {
 | [to_string](https://en.cppreference.com/w/cpp/string/basic_string/to_string) | converts an integral or floating point value to string |
 | [to_wstring](https://en.cppreference.com/w/cpp/string/basic_string/to_wstring) | converts an integral or floating point value to wstring |
 
-* [std::stoi, std::stol, std::stoll - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/stol)
-	* converts a string to a signed integer
 * [std::to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
 	* Convert numerical value to string
 		* Returns a string with the representation of val.
