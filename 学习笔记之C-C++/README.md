@@ -872,6 +872,14 @@ int main() {
 ##### [Null-terminated byte strings](https://en.cppreference.com/w/cpp/string/byte)
 
 * A null-terminated byte string (NTBS) is a sequence of nonzero bytes followed by a byte with value zero (the terminating null character). Each byte in a byte string encodes one character of some character set. For example, the character array {'\x63', '\x61', '\x74', '\0'} is an NTBS holding the string "cat" in ASCII encoding.
+* [std::isdigit - cppreference.com](https://en.cppreference.com/w/cpp/string/byte/isdigit)
+	* `int isdigit( int ch );`
+	* Checks if the given character is one of the 10 decimal digits: 0123456789.
+	* The behavior is undefined if the value of ch is not representable as unsigned char and is not equal to EOF.
+	* [Determine if a String Is a Number in C++ | Delft Stack](https://www.delftstack.com/howto/cpp/how-to-determine-if-a-string-is-number-cpp/#:~:text=Use%20std%3A%3Aisdigit%20Method%20to%20Determine%20if%20a%20String%20Is%20a%20Number,-The%20first%20version&text=Namely%2C%20pass%20a%20string%20as,none%20is%20found%20returns%20true.)
+		* Use std::isdigit Method to Determine if a String Is a Number
+		* Use std::isdigit With std::ranges::all_of to Determine if a String Is a Number
+		* Use find_first_not_of Method to Determine if a String Is a Number
 * [std::isspace - cppreference.com](https://en.cppreference.com/w/cpp/string/byte/isspace)
 	* Defined in header \<cctype>
 	* int isspace( int ch );
