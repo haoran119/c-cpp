@@ -722,12 +722,22 @@ int main() {
 
 ###### Non-member functions
 
+| [stoi/stol/stoll](https://en.cppreference.com/w/cpp/string/basic_string/stol) | converts a string to a signed integer |
+| - | - |
+| [stoul/stoull](https://en.cppreference.com/w/cpp/string/basic_string/stoul) | converts a string to an unsigned integer |
+| [stof/stod/stold](https://en.cppreference.com/w/cpp/string/basic_string/stof) | converts a string to a floating point value |
+| [to_string](https://en.cppreference.com/w/cpp/string/basic_string/to_string) | converts an integral or floating point value to string |
+| [to_wstring](https://en.cppreference.com/w/cpp/string/basic_string/to_wstring) | converts an integral or floating point value to wstring |
+
 * [std::stoi, std::stol, std::stoll - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/stol)
 	* converts a string to a signed integer
 * [std::to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
 	* Convert numerical value to string
 		* Returns a string with the representation of val.
 		* Discards any whitespace characters (as identified by calling std::isspace) until the first non-whitespace character is found, then takes as many characters as possible to form a valid base-n (where n=base) integer number representation and converts them to an integer value. 
+* [C++ String to float/double and vice-versa](https://www.programiz.com/cpp-programming/string-float-conversion#:~:text=C%2B%2B%20string%20to%20float%20and,convert%20string%20to%20long%20double%20.)
+* [c++ - How to convert a string to uint32_t - Stack Overflow](https://stackoverflow.com/questions/57253837/how-to-convert-a-string-to-uint32-t)
+	* `static_cast<uint32_t>(std::stoul(str))`
 
 ###### Literals
 
