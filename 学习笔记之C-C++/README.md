@@ -2566,6 +2566,7 @@ int main() {
 * Unordered map is an associative container that contains key-value pairs with unique keys. Search, insertion, and removal of elements have average constant-time complexity.
 * Internally, the elements are not sorted in any particular order, but organized into buckets. Which bucket an element is placed into depends entirely on the hash of its key. Keys with the same hash code appear in the same bucket. This allows fast access to individual elements, since once the hash is computed, it refers to the exact bucket the element is placed into.
 * std::unordered_map meets the requirements of Container, AllocatorAwareContainer, UnorderedAssociativeContainer.
+* [(constructor)](https://en.cppreference.com/w/cpp/container/unordered_map/unordered_map)
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::begin(size_type), std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::cbegin(size_type) - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/begin2)
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::size - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/size)
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::at - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/at)
@@ -2573,6 +2574,9 @@ int main() {
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::operator[] - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/operator_at)
 	* Returns a reference to the value that is mapped to a key equivalent to key, performing an insertion if such key does not already exist.
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::count - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/count)
+	* returns the number of elements matching specific key
+* [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/find)
+	* finds element with specific key
 * [unordered_map - C++ Reference](https://www.cplusplus.com/reference/unordered_map/unordered_map/)
 	* Unordered Map
 	* Unordered maps are associative containers that store elements formed by the combination of a key value and a mapped value, and which allows for fast retrieval of individual elements based on their keys.
