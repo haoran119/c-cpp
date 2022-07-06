@@ -311,6 +311,11 @@ In programming contests, people do focus more on finding the algorithm to solve 
 ##### [Type conversions](https://www.cplusplus.com/doc/tutorial/typecasting/)
  
 * Implicit conversion
+	* [C.164: Avoid implicit conversion operators](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c164-avoid-implicit-conversion-operators)
+		* Reason 
+			* Implicit conversions can be essential (e.g., double to int) but often cause surprises (e.g., String to C-style string).
+		* Note 
+			* Prefer explicitly named conversions until a serious need is demonstrated. By “serious need” we mean a reason that is fundamental in the application domain (such as an integer to complex number conversion) and frequently needed. Do not introduce implicit conversions (through conversion operators or non-explicit constructors) just to gain a minor convenience.
 * Implicit conversions with classes
 * Keyword explicit
 	* [explicit specifier - cppreference.com](https://en.cppreference.com/w/cpp/language/explicit)
