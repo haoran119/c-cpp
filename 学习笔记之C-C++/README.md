@@ -2872,9 +2872,17 @@ Type relationships
 
 ###### [Program support utilities](https://en.cppreference.com/w/cpp/utility/program)
 
+* Defined in header \<cstdlib>
 * [std::abort - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/abort)
 	* Causes abnormal program termination unless SIGABRT is being caught by a signal handler passed to std::signal and the handler does not return.
 	* Note: it will cause Application Error in Windows Logs under Event Viewer
+* [std::exit - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/exit)
+	* Causes normal program termination to occur.
+	* Several cleanup steps are performed
+	* [Exit codes in C/C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/exit-codes-in-c-c-with-examples/)
+		* The purpose of the exit() function is to terminate the execution of a program. The “return 0”(or EXIT_SUCCESS) implies that the code has executed successfully without any error. Exit codes other than “0”(or EXIT_FAILURE) indicate the presence of an error in the code. Among all the exit codes, the codes 1, 2, 126 – 165 and 255 have special meanings and hence these should be avoided for user-defined exit codes.
+* [EXIT_SUCCESS, EXIT_FAILURE - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/EXIT_status)
+	* The EXIT_SUCCESS and EXIT_FAILURE macros expand into integral expressions that can be used as arguments to the std::exit function (and, therefore, as the values to return from the main function), and indicate program execution status.
 * [std::system - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/system)
 	* Calls the host environment's command processor (e.g. /bin/sh, cmd.exe, command.com) with the parameter command. Returns an implementation-defined value (usually the value that the invoked program returns).
 	* If command is a null pointer, checks if the host environment has a command processor and returns a nonzero value if and only if the command processor exists.
@@ -2889,6 +2897,7 @@ int main()
     std::cout << std::ifstream("test.txt").rdbuf();
 }
 ```
+
 
 ##### General-purpose utilities
 
