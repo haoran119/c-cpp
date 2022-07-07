@@ -2673,11 +2673,21 @@ int main() {
 
 * [std::for_each - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/for_each)
 	* applies a function to a range of elements(function template)
+	* [c++ - How can I change the value of the elements in a vector? - Stack Overflow](https://stackoverflow.com/questions/4807709/how-can-i-change-the-value-of-the-elements-in-a-vector)
+```c++
+double total = 0;
+for_each( v.begin(), v.end(), [&total](double  v) { total += v; });
+cout << "The sum of the values is: " << total << endl;
+
+double total = std::accumulate(v.begin(), v.end(), 0.0);
+```
 * [std::find, std::find_if, std::find_if_not - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/find)
   * [find_if - C++ Reference](https://www.cplusplus.com/reference/algorithm/find_if/)
     * Find element in range
       * Returns an iterator to the first element in the range \[first,last) for which pred returns true. If no such element is found, the function returns last.
   * [std::find_if , std::find_if_not in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdfind_if-stdfind_if_not-in-c/)
+  * [c++ - How to find out if an item is present in a std::vector? - Stack Overflow](https://stackoverflow.com/questions/571394/how-to-find-out-if-an-item-is-present-in-a-stdvector)
+  	* `std::find(vec.begin(), vec.end(), item) != vec.end()`
 
 ##### Modifying sequence operations
 
