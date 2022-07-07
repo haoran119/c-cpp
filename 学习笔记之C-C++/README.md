@@ -2815,6 +2815,9 @@ int main() {
 
 #### [Iterator library](https://en.cppreference.com/w/cpp/iterator)
 
+##### Iterator operations
+
+* Defined in header \<iterator>
 * [std::advance - cppreference.com](https://en.cppreference.com/w/cpp/iterator/advance)
 	* Increments given iterator it by n elements.
 	* If n is negative, the iterator is decremented. In this case, InputIt must meet the requirements of LegacyBidirectionalIterator, otherwise the behavior is undefined.
@@ -2823,6 +2826,14 @@ int main() {
 			* Advances the iterator it by n element positions.
 			* If it is a random-access iterator, the function uses just once operator+ or operator-. Otherwise, the function uses repeatedly the increase or decrease operator (operator++ or operator--) until n elements have been advanced.
 	* [std::advance in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdadvance-in-cpp/)
+
+##### Range access
+
+* These non-member functions provide a generic interface for containers, plain arrays, and [std::initializer_list](https://en.cppreference.com/w/cpp/utility/initializer_list).
+* [std::begin, std::cbegin - cppreference.com](https://en.cppreference.com/w/cpp/iterator/begin)
+	* returns an iterator to the beginning of a container or array(function template)
+* [std::end, std::cend - cppreference.com](https://en.cppreference.com/w/cpp/iterator/end)
+	* returns an iterator to the end of a container or array(function template)
 
 ### [C++ Standard Library](https://www.tutorialspoint.com/cplusplus/cpp_standard_library.htm)
 
