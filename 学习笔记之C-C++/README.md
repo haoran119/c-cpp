@@ -2671,6 +2671,8 @@ int main() {
 
 ##### Non-modifying sequence operations
 
+* [std::for_each - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/for_each)
+	* applies a function to a range of elements(function template)
 * [std::find, std::find_if, std::find_if_not - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/find)
   * [find_if - C++ Reference](https://www.cplusplus.com/reference/algorithm/find_if/)
     * Find element in range
