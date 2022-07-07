@@ -2542,6 +2542,32 @@ int main()
 	* A similar member function, map::at, has the same behavior when an element with the key exists, but throws an exception when it does not.
 	* A call to this function is equivalent to:
 		* (*((this->insert(make_pair(k,mapped_type()))).first)).second
+* [std::map<Key,T,Compare,Allocator>::extract - cppreference.com](https://en.cppreference.com/w/cpp/container/map/extract)
+	* extracts nodes from the container(public member function)
+	* [How to Modify a Key in a C++ Map or Set - Fluent C++](https://www.fluentcpp.com/2020/05/01/how-to-change-a-key-in-a-map-or-set-in-cpp/)
+```c++
+auto myMap = std::map<std::string, int>{ {"one", 1}, {"two", 2}, {"three", 3} };
+
+auto node = myMap.extract("two");
+if (!node.empty())
+{
+    node.key() = "dos";
+    myMap.insert(std::move(node));
+}
+
+template<typename Container>
+void replaceKey(Container& container,
+                const typename Container::key_type& oldKey,
+                const typename Container::key_type& newKey)
+{
+    auto node = container.extract(oldKey);
+    if(!node.empty())
+    {
+        node.key() = newKey;
+        container.insert(std::move(node));
+    }
+}
+```
 * [map::begin() and end() in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/mapbegin-end-c-stl/)
 * [Descending Order in Map and Multimap of C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/descending-order-map-multimap-c-stl/)
 	* We can use the third parameter, that is std::greater along with map and multimap to store elements in descending order.
