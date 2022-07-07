@@ -717,7 +717,9 @@ int main() {
 	* 5) Implicitly converts t to a string view sv as if by std::basic_string_view<CharT, Traits> sv = t;, then finds the last character equal to none of characters in sv. This overload participates in overload resolution only if std::is_convertible_v<const StringViewLike&, std::basic_string_view<CharT, Traits>> is true and std::is_convertible_v<const StringViewLike&, const CharT*> is false.
 	* In all cases, equality is checked by calling Traits::eq.
 * [std::basic_string<CharT,Traits,Allocator>::substr - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/substr)
-	* Returns a substring \[pos, pos+count). If the requested substring extends past the end of the string, i.e. the count is greater than size() - pos (e.g. if count == npos), the returned substring is \[pos, size()).
+	* Returns a substring \[pos, pos+count). If the requested substring extends past the end of the string, i.e. the count is greater than size() - pos (e.g. if count == npos), the returned substring is \[pos, [size()](https://en.cppreference.com/w/cpp/string/basic_string/size)).
+	* Exceptions
+		* [std::out_of_range](https://en.cppreference.com/w/cpp/error/out_of_range) if pos > size()
 
 ###### Constants
 
