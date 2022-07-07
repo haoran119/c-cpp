@@ -2924,6 +2924,7 @@ int main()
 
 | [pair](https://en.cppreference.com/w/cpp/utility/pair) | implements binary tuple, i.e. a pair of values(class template) |
 | - | - |
+| [tuple](https://en.cppreference.com/w/cpp/utility/tuple) | implements fixed size container, which holds elements of possibly different types(class template) |
 
 * [std::pair - cppreference.com](https://en.cppreference.com/w/cpp/utility/pair)
 	* std::pair is a class template that provides a way to store two heterogeneous objects as a single unit. A pair is a specific case of a std::tuple with two elements.
@@ -2935,6 +2936,13 @@ int main()
 	* Non-member functions
 		* [make_pair](https://en.cppreference.com/w/cpp/utility/pair/make_pair)
 			* creates a pair object of type, defined by the argument types(function template)
+* [std::tuple - cppreference.com](https://en.cppreference.com/w/cpp/utility/tuple)
+	* Class template std::tuple is a fixed-size collection of heterogeneous values. It is a generalization of std::pair.
+	* If std::is_trivially_destructible\<Ti>::value is true for every Ti in Types, the destructor of tuple is trivial.
+	* Non-member functions
+		* [make_tuple](https://en.cppreference.com/w/cpp/utility/tuple/make_tuple)
+			* creates a tuple object of the type defined by the argument types(function template)
+	* [Tuples in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/tuples-in-c/)
 
 ###### Sum types and type erased wrappers
 
