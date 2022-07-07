@@ -873,6 +873,11 @@ int main() {
 		* std::string_view相对于string来说减少了内存的重新分配和内存拷贝
 		* 对于std::string::substr 算法来说string的时间复杂度是线性增长，字符串越长执行时间越长，string_view时间复杂度为常数级。
 
+###### Literals
+
+* [std::literals::string_view_literals::operator""sv - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string_view/operator%22%22sv)
+	* Creates a string view of a character array literal(function)
+
 ##### [Null-terminated byte strings](https://en.cppreference.com/w/cpp/string/byte)
 
 * A null-terminated byte string (NTBS) is a sequence of nonzero bytes followed by a byte with value zero (the terminating null character). Each byte in a byte string encodes one character of some character set. For example, the character array {'\x63', '\x61', '\x74', '\0'} is an NTBS holding the string "cat" in ASCII encoding.
