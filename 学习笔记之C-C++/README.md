@@ -2898,6 +2898,24 @@ int main()
 	* 1) Forwards lvalues as either lvalues or as rvalues, depending on T
 	* 2) Forwards rvalues as rvalues and prohibits forwarding of rvalues as lvalues
 
+###### Pairs and tuples
+
+* Defined in header \<utility>
+
+| [pair](https://en.cppreference.com/w/cpp/utility/pair) | implements binary tuple, i.e. a pair of values(class template) |
+| - | - |
+
+* [std::pair - cppreference.com](https://en.cppreference.com/w/cpp/utility/pair)
+	* std::pair is a class template that provides a way to store two heterogeneous objects as a single unit. A pair is a specific case of a std::tuple with two elements.
+	* If neither T1 nor T2 is a possibly cv-qualified class type with non-trivial destructor, or array thereof, the destructor of pair is trivial.
+	* Member objects
+		* Member name
+			* first
+			* second
+	* Non-member functions
+		* [make_pair](https://en.cppreference.com/w/cpp/utility/pair/make_pair)
+			* creates a pair object of type, defined by the argument types(function template)
+
 ###### Sum types and type erased wrappers
 
 * [std::optional - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional)
