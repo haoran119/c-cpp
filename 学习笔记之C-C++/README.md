@@ -1560,6 +1560,8 @@ std::unordered_map<std::string, std::vector<std::string> > ReadCSV(const std::st
 * [std::filesystem::filesystem_error - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/filesystem_error)
 * [std::filesystem::directory_entry - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/directory_entry)
   * Represents a directory entry. The object stores a path as a member and may also store additional file attributes (hard link count, status, symlink status file size, and last write time) during directory iteration.
+  * [std::filesystem::directory_entry::path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/directory_entry/path)
+  	* Returns the full path the directory entry refers to.
   * [How can I get the list of files in a directory using C or C++? - Stack Overflow](https://stackoverflow.com/questions/612097/how-can-i-get-the-list-of-files-in-a-directory-using-c-or-c)
 ```c++
 #include <string>
