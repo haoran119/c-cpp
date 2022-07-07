@@ -893,6 +893,9 @@ int main() {
 ###### [std::basic_stringstream](https://en.cppreference.com/w/cpp/io/basic_stringstream)
 
 * implements high-level string stream input/output operations (class template)
+* Inherited from [std::basic_istream](https://en.cppreference.com/w/cpp/io/basic_istream)
+	* [operator>>](https://en.cppreference.com/w/cpp/io/basic_istream/operator_gtgt)
+		* extracts formatted data (public member function of std::basic_istream\<CharT,Traits>)
 * [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
 * [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
 	* A stringstream associates a string object with a stream allowing you to read from the string as if it were a stream (like cin).
