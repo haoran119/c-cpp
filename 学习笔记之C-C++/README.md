@@ -222,10 +222,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
 
 * [Data Type Ranges | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/data-type-ranges?view=msvc-170)
 * [【ZZ】C++11之统一初始化语法 | 桃子的博客志 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/8674208.html)
-* [Integer literal - cppreference.com](https://en.cppreference.com/w/cpp/language/integer_literal)
-	* Allows values of integer type to be used in expressions directly.
-	* [为什么将 0.1f 改为 0 会使性能降低 10 倍？](https://mp.weixin.qq.com/s/bMacxnC_JBuqFDz8k2fp3w)
-		* http://cenalulu.github.io/linux/about-denormalized-float-number/
 * [std::size_t - cppreference.com](https://en.cppreference.com/w/cpp/types/size_t)
 	* std::size_t is the unsigned integer type of the result of the sizeof operator as well as the sizeof... operator and the alignof operator (since C++11).
 	* The bit width of std::size_t is not less than 16.(since C++11)
@@ -307,6 +303,31 @@ In programming contests, people do focus more on finding the algorithm to solve 
   * 枚举
   * 位域
 * [谈一谈 C++ 中的值的类型 (qq.com)](https://mp.weixin.qq.com/s/MQNIkeS3eMUmaezyUL8ZkQ)
+
+##### Literals
+
+* Literals are the tokens of a C++ program that represent constant values embedded in the source code.
+	* [integer literals](https://en.cppreference.com/w/cpp/language/integer_literal) are decimal, octal, hexadecimal or binary numbers of integer type.
+		* Allows values of integer type to be used in expressions directly.
+	* [character literals](https://en.cppreference.com/w/cpp/language/character_literal) are individual characters of type
+		* char or wchar_t
+		* char16_t or char32_t(since C++11)
+		* char8_t(since C++20)
+	* [floating-point literals](https://en.cppreference.com/w/cpp/language/floating_literal) are values of type float, double, or long double
+		* suffix, if present, is one of f, F, l, or L. The suffix determines the type of the floating-point literal:
+			* (no suffix) defines double
+			* f F defines float
+			* l L defines long double
+			* Optional single quotes (') may be inserted between the digits as a separator; they are ignored during compilation.(since C++14)
+		* [为什么将 0.1f 改为 0 会使性能降低 10 倍？](https://mp.weixin.qq.com/s/bMacxnC_JBuqFDz8k2fp3w)
+			* http://cenalulu.github.io/linux/about-denormalized-float-number/
+	* [string literals](https://en.cppreference.com/w/cpp/language/string_literal) are sequences of characters of type
+		* const char[] or const wchar_t[]
+		* const char16_t[] or const char32_t[](since C++11)
+		* const char8_t[](since C++20)
+	* [boolean literals](https://en.cppreference.com/w/cpp/language/bool_literal) are values of type bool, that is true and false
+	* [nullptr](https://en.cppreference.com/w/cpp/language/nullptr) is the pointer literal which specifies a null pointer value
+	* [user-defined literals](https://en.cppreference.com/w/cpp/language/user_literal) are constant values of user-specified type(since C++11)
 
 ##### [Type conversions](https://www.cplusplus.com/doc/tutorial/typecasting/)
  
