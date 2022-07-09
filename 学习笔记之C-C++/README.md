@@ -2828,6 +2828,23 @@ double total = std::accumulate(v.begin(), v.end(), 0.0);
 
 ##### Modifying sequence operations
 
+* [std::remove, std::remove_if - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/remove)
+	* removes elements satisfying specific criteria (function template)
+	* Return value
+		* Past-the-end iterator for the new range of values (if this is not end, then it points to an unspecified value, and so do iterators to any values between this iterator and end).
+	* Complexity
+		* Exactly std::distance(first, last) applications of the predicate.
+	* Notes
+		* A call to remove is typically followed by a call to a container's erase method, which erases the unspecified values and reduces the physical size of the container to match its new logical size. These two invocations together constitute a so-called [Erase–remove idiom](https://en.wikipedia.org/wiki/Erase-remove_idiom), which can be achieved by the free function std::erase that has overloads for all standard sequence containers, or std::erase_if that has overloads for all standard containers (since C++20).
+		* The similarly-named container member functions list::remove, list::remove_if, forward_list::remove, and forward_list::remove_if erase the removed elements.
+		* These algorithms cannot be used with associative containers such as std::set and std::map because their iterator types do not dereference to MoveAssignable types (the keys in these containers are not modifiable).
+		* The standard library also defines an overload of std::remove in \<cstdio>, which takes a const char* and is used to delete files.
+		* Because std::remove takes value by reference, it can have unexpected behavior if it is a reference to an element of the range \[first, last).
+	* [std::remove, std::remove_if in c++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdremove-stdremove_if-c/)
+	* [c++ - difference between erase and remove/remove_if algorithms? - Stack Overflow](https://stackoverflow.com/questions/3031923/difference-between-erase-and-remove-remove-if-algorithms)
+		* No, std::remove_if will move the elements that don't match the predicate to the end of list and will return an iterator to the new "end". Erase will effectively drop the element (call the dtor) from the container.
+		* The difference is perfectly illustrated by the examples
+			* [remove_if - C++ Reference](https://cplusplus.com/reference/algorithm/remove_if/)
 * [std::swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/swap)
   * [swap() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/swap-in-cpp/)
 
