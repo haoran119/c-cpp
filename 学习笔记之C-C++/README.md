@@ -2845,6 +2845,7 @@ double total = std::accumulate(v.begin(), v.end(), 0.0);
 		* No, std::remove_if will move the elements that don't match the predicate to the end of list and will return an iterator to the new "end". Erase will effectively drop the element (call the dtor) from the container.
 		* The difference is perfectly illustrated by the examples
 			* [remove_if - C++ Reference](https://cplusplus.com/reference/algorithm/remove_if/)
+
 * [std::swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/swap)
   * [swap() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/swap-in-cpp/)
 
@@ -2950,6 +2951,11 @@ int main() {
 
 ##### Minimum/maximum operations
 
+* [std::max - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/max)
+	* returns the greater of the given values (function template)
+* [std::max_element - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/max_element)
+	* returns the largest element in a range (function template)
+	* Finds the greatest element in the range [first, last).
 * [std::min - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/min)
 	* Returns the smaller of the given values.
 		* 1-2) Returns the smaller of a and b.
