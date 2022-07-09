@@ -2594,6 +2594,13 @@ int main()
 * Everywhere the standard library uses the Compare requirements, uniqueness is determined by using the equivalence relation. In imprecise terms, two objects a and b are considered equivalent (not unique) if neither compares less than the other: !comp(a, b) && !comp(b, a).
 * std::map meets the requirements of Container, AllocatorAwareContainer, AssociativeContainer and ReversibleContainer.
 * [map - C++ Reference](http://www.cplusplus.com/reference/map/map/)
+* [map::operator[] - C++ Reference](http://www.cplusplus.com/reference/map/map/operator[]/)
+	* access or insert specified element (public member function)
+	* If k matches the key of an element in the container, the function returns a reference to its mapped value.
+	* If k does not match the key of any element in the container, the function inserts a new element with that key and returns a reference to its mapped value. Notice that this always increases the container size by one, even if no mapped value is assigned to the element (the element is constructed using its default constructor).
+	* A similar member function, map::at, has the same behavior when an element with the key exists, but throws an exception when it does not.
+	* A call to this function is equivalent to:
+		* (*((this->insert(make_pair(k,mapped_type()))).first)).second
 * [map::cbegin - C++ Reference](http://www.cplusplus.com/reference/map/map/cbegin/)
 	* Return const_iterator to beginning
 		* Returns a const_iterator pointing to the first element in the container.
@@ -2607,12 +2614,29 @@ int main()
 	* 4) Removes the element (if one exists) with key that compares equivalent to the value x. This overload participates in overload resolution only if the qualified-id Compare::is_transparent is valid and denotes a type, and neither iterator nor const_iterator is implicitly convertible from K. It allows calling this function without constructing an instance of Key.
 	* References and iterators to the erased elements are invalidated. Other references and iterators are not affected.
 	* The iterator pos must be valid and dereferenceable. Thus the end() iterator (which is valid, but is not dereferenceable) cannot be used as a value for pos.
-* [map::operator[] - C++ Reference](http://www.cplusplus.com/reference/map/map/operator[]/)
-	* If k matches the key of an element in the container, the function returns a reference to its mapped value.
-	* If k does not match the key of any element in the container, the function inserts a new element with that key and returns a reference to its mapped value. Notice that this always increases the container size by one, even if no mapped value is assigned to the element (the element is constructed using its default constructor).
-	* A similar member function, map::at, has the same behavior when an element with the key exists, but throws an exception when it does not.
-	* A call to this function is equivalent to:
-		* (*((this->insert(make_pair(k,mapped_type()))).first)).second
+```c++
+#include <map>
+#include <iostream>
+int main()
+{
+    std::map<int, std::string> c = {
+        {1, "one" }, {2, "two" }, {3, "three"},
+        {4, "four"}, {5, "five"}, {6, "six"  }
+    };
+ 
+    // erase all odd numbers from c
+    for(auto it = c.begin(); it != c.end(); ) {
+        if(it->first % 2 != 0)
+            it = c.erase(it);
+        else
+            ++it;
+    }
+ 
+    for(auto& p : c) {
+        std::cout << p.second << ' ';
+    }
+}
+```
 * [std::map<Key,T,Compare,Allocator>::extract - cppreference.com](https://en.cppreference.com/w/cpp/container/map/extract)
 	* extracts nodes from the container(public member function)
 	* [How to Modify a Key in a C++ Map or Set - Fluent C++](https://www.fluentcpp.com/2020/05/01/how-to-change-a-key-in-a-map-or-set-in-cpp/)
@@ -2639,6 +2663,22 @@ void replaceKey(Container& container,
     }
 }
 ```
+* [std::map<Key,T,Compare,Allocator>::merge - cppreference.com](https://en.cppreference.com/w/cpp/container/map/merge)
+	* splices nodes from another container (public member function)
+	* Attempts to extract ("splice") each element in source and insert it into *this using the comparison object of *this. If there is an element in *this with key equivalent to the key of an element from source, then that element is not extracted from source. No elements are copied or moved, only the internal pointers of the container nodes are repointed. All pointers and references to the transferred elements remain valid, but now refer into *this, not into source.
+	* The behavior is undefined if get_allocator() != source.get_allocator().
+	* [Merge two maps, summing values for same keys in C++ - Stack Overflow](https://stackoverflow.com/questions/20771786/merge-two-maps-summing-values-for-same-keys-in-c)
+* [std::map<Key,T,Compare,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/container/map/find)
+	* finds element with specific key (public member function)
+	* Return value
+		* Iterator to an element with key equivalent to key. If no such element is found, past-the-end (see end()) iterator is returned.
+	* Complexity
+		* Logarithmic in the size of the container.
+* [std::erase_if (std::map) - cppreference.com](https://en.cppreference.com/w/cpp/container/map/erase_if)
+	* Erases all elements satisfying specific criteria (function template)
+	* `erase_if( std::map<Key,T,Compare,Alloc>& c, Pred pred );` (since C++20)
+	* Return value
+		* The number of erased elements.
 * [map::begin() and end() in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/mapbegin-end-c-stl/)
 * [Descending Order in Map and Multimap of C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/descending-order-map-multimap-c-stl/)
 	* We can use the third parameter, that is std::greater along with map and multimap to store elements in descending order.
