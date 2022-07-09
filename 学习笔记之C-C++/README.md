@@ -2878,6 +2878,17 @@ int main() {
 
 ##### Numeric operations
 
+* Defined in header \<numeric>
+* [std::accumulate - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/accumulate)
+	* sums up a range of elements(function template)
+	* Return value
+		* 1) The sum of the given value and elements in the given range.
+		* 2) The result of left fold of the given range over op
+* [std::partial_sum - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/partial_sum)
+	* computes the partial sum of a range of elements(function template)
+	* Return value
+		* Iterator to the element past the last element written.
+
 ##### Operations on uninitialized memory
 
 ##### C library
