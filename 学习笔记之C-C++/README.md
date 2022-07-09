@@ -550,26 +550,26 @@ int main() {
 	* static
 		* avoid static class members variables (race conditions, almost-global variables)
 		* [SF.22: Use an unnamed (anonymous) namespace for all internal/non-exported entities](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#sf22-use-an-unnamed-anonymous-namespace-for-all-internalnon-exported-entities)
-		* Reason 
-			* Nothing external can depend on an entity in a nested unnamed namespace. Consider putting every definition in an implementation source file in an unnamed namespace unless that is defining an “external/exported” entity.
-		* Example; bad
-		```c++
-		static int f();
-		int g();
-		static bool h();
-		int k();
-		```
-		* Example; good
-        ```c++
-        namespace {
-            int f();
-            bool h();
-        }
-        int g();
-        int k();
-        ```
-		* Example 
-			* An API class and its members can’t live in an unnamed namespace; but any “helper” class or function that is defined in an implementation source file should be at an unnamed namespace scope.
+			* Reason 
+				* Nothing external can depend on an entity in a nested unnamed namespace. Consider putting every definition in an implementation source file in an unnamed namespace unless that is defining an “external/exported” entity.
+			* Example; bad
+			```c++
+			static int f();
+			int g();
+			static bool h();
+			int k();
+			```
+			* Example; good
+			```c++
+			namespace {
+				int f();
+				bool h();
+			}
+			int g();
+			int k();
+			```
+			* Example 
+				* An API class and its members can’t live in an unnamed namespace; but any “helper” class or function that is defined in an implementation source file should be at an unnamed namespace scope.
 	* extern
 	* mutable
 * [constexpr (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/constexpr-cpp?view=msvc-160)
