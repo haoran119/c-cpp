@@ -560,14 +560,14 @@ int main() {
 		int k();
 		```
 		* Example; good
-    ```c++
-    namespace {
-        int f();
-        bool h();
-    }
-    int g();
-    int k();
-    ```
+		```c++
+		namespace {
+				int f();
+				bool h();
+		}
+		int g();
+		int k();
+		```
 		* Example 
 			* An API class and its members can’t live in an unnamed namespace; but any “helper” class or function that is defined in an implementation source file should be at an unnamed namespace scope.
 	* extern
