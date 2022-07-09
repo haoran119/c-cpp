@@ -919,6 +919,7 @@ int main() {
 ###### Literals
 
 * [std::literals::string_view_literals::operator""sv - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string_view/operator%22%22sv)
+	* Defined in header \<string_view>
 	* Creates a string view of a character array literal(function)
 
 ##### [Null-terminated byte strings](https://en.cppreference.com/w/cpp/string/byte)
