@@ -309,6 +309,28 @@ In programming contests, people do focus more on finding the algorithm to solve 
 * Literals are the tokens of a C++ program that represent constant values embedded in the source code.
 	* [integer literals](https://en.cppreference.com/w/cpp/language/integer_literal) are decimal, octal, hexadecimal or binary numbers of integer type.
 		* Allows values of integer type to be used in expressions directly.
+		* (no suffix)	
+			* int
+			* long int
+			* long long int (since C++11)
+		* u or U	
+			* unsigned int
+			* unsigned long int
+			* unsigned long long int (since C++11)
+		* l or L	
+			* long int
+			* long long int (since C++11)
+		* both l/L and u/U	
+			* unsigned long int
+			* unsigned long long int (since C++11)
+		* ll or LL	
+			* long long int (since C++11)
+		* both ll/LL and u/U	
+			* unsigned long long int (since C++11)
+		* z or Z	
+			* the signed version of std::size_t (since C++23)
+		* both z/Z and u/U	
+			* std::size_t (since C++23)
 	* [character literals](https://en.cppreference.com/w/cpp/language/character_literal) are individual characters of type
 		* char or wchar_t
 		* char16_t or char32_t(since C++11)
