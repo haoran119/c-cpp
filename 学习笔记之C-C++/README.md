@@ -562,8 +562,8 @@ int main() {
 		* Example; good
 		```c++
 		namespace {
-				int f();
-				bool h();
+			int f();
+			bool h();
 		}
 		int g();
 		int k();
