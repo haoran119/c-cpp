@@ -1238,9 +1238,9 @@ Synchronized output
 
 * Defined in header \<syncstream>
 
-[basic_syncbuf (C++20)](https://en.cppreference.com/w/cpp/io/basic_syncbuf) | synchronized output device wrapper (class template)
-- | -
-[basic_osyncstream (C++20)](https://en.cppreference.com/w/cpp/io/basic_osyncstream) | synchronized output stream wrapper (class template)
+| [basic_syncbuf (C++20)](https://en.cppreference.com/w/cpp/io/basic_syncbuf) | synchronized output device wrapper (class template) |
+| - | - |
+| [basic_osyncstream (C++20)](https://en.cppreference.com/w/cpp/io/basic_osyncstream) | synchronized output stream wrapper (class template) |
 
 * [Synchronized Output Streams with C++20 - ModernesCpp.com](https://www.modernescpp.com/index.php/synchronized-outputstreams#:~:text=std%3A%3Acout%20is%20thread,Each%20character%20is%20written%20atomically.)
 	* With C++20, writing synchronized to std::cout is a piece of cake. std::basic_syncbuf is a wrapper for a std::basic_streambuf. It accumulates output in its buffer. The wrapper sets its content to the wrapped buffer when it is destructed. Consequently, the content appears as a contiguous sequence of characters, and no interleaving of characters can happen.
