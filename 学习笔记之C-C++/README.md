@@ -1264,7 +1264,8 @@ int main() {
 		* 5.1 getline() 读取一行
 		* 5.2 gets() 读取一行
 
-###### Predefined standard stream objects
+#
+Predefined standard stream objects
 
 * Defined in header \<iostream>
 
