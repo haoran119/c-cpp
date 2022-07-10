@@ -1232,6 +1232,64 @@ int main() {
 * [【ZZ】cin、cin.get()、cin.getline()、getline()、gets()等函数的用法 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2011/04/21/2024345.html)
 * [getline (string) in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/getline-string-c/)
 	* The C++ getline() is a standard library function that is used to read a string or a line from an input stream. It is a part of the \<string> header. The getline() function extracts characters from the input stream and appends it to the string object until the delimiting character is encountered. While doing so the previously stored value in the string object str will be replaced by the input string if any.
+
+#
+Synchronized output
+
+* Defined in header \<syncstream>
+
+[basic_syncbuf (C++20)](https://en.cppreference.com/w/cpp/io/basic_syncbuf) | synchronized output device wrapper (class template)
+- | -
+[basic_osyncstream (C++20)](https://en.cppreference.com/w/cpp/io/basic_osyncstream) | synchronized output stream wrapper (class template)
+
+* [Synchronized Output Streams with C++20 - ModernesCpp.com](https://www.modernescpp.com/index.php/synchronized-outputstreams#:~:text=std%3A%3Acout%20is%20thread,Each%20character%20is%20written%20atomically.)
+	* With C++20, writing synchronized to std::cout is a piece of cake. std::basic_syncbuf is a wrapper for a std::basic_streambuf. It accumulates output in its buffer. The wrapper sets its content to the wrapped buffer when it is destructed. Consequently, the content appears as a contiguous sequence of characters, and no interleaving of characters can happen.
+	* Thanks to std::basic_osyncstream, you can directly write synchronously to std::cout by using a named synchronized output stream.
+	* Here is how the previous program coutUnsynchronized.cpp is refactored to write synchronized to std::cout. So far, only GCC 11 supports synchronized output streams.
+
+#
+Predefined standard stream objects
+
+* Defined in header \<iostream>
+
+| cin / wcin | reads from the standard C input stream stdin (global object) |
+| - | - |
+| cout / wcout | writes to the standard C output stream stdout (global object) | 
+| [cerr / wcerr](https://en.cppreference.com/w/cpp/io/cerr) | writes to the standard C error stream stderr, unbuffered (global object) | 
+| clog / wclog | writes to the standard C error stream stderr (global object) | 
+
+* [std::cin, std::wcin - cppreference.com](https://en.cppreference.com/w/cpp/io/cin)
+	* reads from the standard C input stream stdin (global object)
+	* The global objects std::cin and std::wcin control input from a stream buffer of implementation-defined type (derived from std::streambuf), associated with the standard C input stream stdin.
+	* These objects are guaranteed to be initialized during or before the first time an object of type std::ios_base::Init is constructed and are available for use in the constructors and destructors of static objects with ordered initialization (as long as \<iostream> is included before the object is defined).
+	* `Unless sync_with_stdio(false) has been issued, it is safe to concurrently access these objects from multiple threads for both formatted and unformatted input.`
+	* Once std::cin is constructed, std::cin.tie() returns &std::cout, and likewise, std::wcin.tie() returns &std::wcout. This means that any formatted input operation on std::cin forces a call to std::cout.flush() if any characters are pending for output.
+	* Notes
+		* The 'c' in the name refers to "character" (stroustrup.com FAQ); cin means "character input" and wcin means "wide character input"
+	* [C++ cin 的详细用法](https://mp.weixin.qq.com/s/BP3gfSd7Ya_9MLE_ArM9LA)
+		* https://dablelv.blog.csdn.net/article/details/48213811
+		* 1. cin 简介
+		* 2. cin 的常用读取方法
+			* 2.1 cin>> 的用法
+			* 2.2 cin.get() 的用法
+				* 2.2.1 cin.get() 读取一个字符
+				* 2.2.2 cin.get() 读取一行
+			* 2.3 cin.getline() 读取一行
+		* 3. cin 的条件状态
+		* 4. cin 清空输入缓冲区
+		* 5. 从标准输入读取一行字符串的其它方法
+			* 5.1 getline() 读取一行
+			* 5.2 gets() 读取一行
+* [std::cout, std::wcout - cppreference.com](https://en.cppreference.com/w/cpp/io/cout)
+	* writes to the standard C output stream stdout (global object)
+	* The global objects std::cout and std::wcout control output to a stream buffer of implementation-defined type (derived from std::streambuf), associated with the standard C output stream stdout.
+	* These objects are guaranteed to be initialized during or before the first time an object of type std::ios_base::Init is constructed and are available for use in the constructors and destructors of static objects with ordered initialization (as long as \<iostream> is included before the object is defined).
+	* Unless std::ios_base::sync_with_stdio(false) has been issued, it is safe to concurrently access these objects from multiple threads for both formatted and unformatted output.
+	* By specification of std::cin, std::cin.tie() returns &std::cout. This means that any input operation on std::cin executes std::cout.flush() (via std::basic_istream::sentry's constructor). Similarly, std::wcin.tie() returns &std::wcout.
+	* By specification of std::cerr, std::cerr.tie() returns &std::cout. This means that any output operation on std::cerr executes std::cout.flush() (via std::basic_ostream::sentry's constructor). Similarly, std::wcerr.tie() returns &std::wcout. (since C++11)
+	* Notes
+		* The 'c' in the name refers to "character" (stroustrup.com FAQ); cout means "character output" and wcout means "wide character output".
+		* Because dynamic initialization of templated variables are unordered, it is not guaranteed that std::cout has been initialized to a usable state before the initialization of such variables begins, unless an object of type std::ios_base::Init has been constructed.
 * [Fast I/O for Competitive Programming - GeeksforGeeks](https://www.geeksforgeeks.org/fast-io-for-competitive-programming/)
   ```c++
   #include <bits/stdc++.h>
@@ -1249,31 +1307,6 @@ int main() {
   * [c++ - Significance of ios_base::sync_with_stdio(false); cin.tie(NULL); - Stack Overflow](https://stackoverflow.com/questions/31162367/significance-of-ios-basesync-with-stdiofalse-cin-tienull/31165481#31165481)
   * [std::ios_base::sync_with_stdio - cppreference.com](https://en.cppreference.com/w/cpp/io/ios_base/sync_with_stdio)
   * [ios::tie - C++ Reference](https://www.cplusplus.com/reference/ios/ios/tie/)
-* [C++ cin 的详细用法](https://mp.weixin.qq.com/s/BP3gfSd7Ya_9MLE_ArM9LA)
-	* https://dablelv.blog.csdn.net/article/details/48213811
-	* 1. cin 简介
-	* 2. cin 的常用读取方法
-		* 2.1 cin>> 的用法
-		* 2.2 cin.get() 的用法
-			* 2.2.1 cin.get() 读取一个字符
-			* 2.2.2 cin.get() 读取一行
-		* 2.3 cin.getline() 读取一行
-	* 3. cin 的条件状态
-	* 4. cin 清空输入缓冲区
-	* 5. 从标准输入读取一行字符串的其它方法
-		* 5.1 getline() 读取一行
-		* 5.2 gets() 读取一行
-
-#
-Predefined standard stream objects
-
-* Defined in header \<iostream>
-
-| cin / wcin | reads from the standard C input stream stdin (global object) |
-| - | - |
-| cout / wcout | writes to the standard C output stream stdout (global object) | 
-| [cerr / wcerr](https://en.cppreference.com/w/cpp/io/cerr) | writes to the standard C error stream stderr, unbuffered (global object) | 
-| clog / wclog | writes to the standard C error stream stderr (global object) | 
 
 ###### [Input/output manipulators](https://en.cppreference.com/w/cpp/io/manip)
 
