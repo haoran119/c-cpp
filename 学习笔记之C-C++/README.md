@@ -402,6 +402,22 @@ In programming contests, people do focus more on finding the algorithm to solve 
 	* [boolean literals](https://en.cppreference.com/w/cpp/language/bool_literal) are values of type bool, that is true and false
 	* [nullptr](https://en.cppreference.com/w/cpp/language/nullptr) is the pointer literal which specifies a null pointer value
 	* [user-defined literals](https://en.cppreference.com/w/cpp/language/user_literal) are constant values of user-specified type(since C++11)
+	* [NL.11: Make literals readable](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#nl11-make-literals-readable)
+		* Reason Readability.
+		* Example Use digit separators to avoid long strings of digits
+		```c++
+		auto c = 299'792'458; // m/s2
+		auto q2 = 0b0000'1111'0000'0000;
+		auto ss_number = 123'456'7890;
+		```
+		* Example Use literal suffixes where clarification is needed
+		```c++
+		auto hello = "Hello!"s; // a std::string
+		auto world = "world";   // a C-style string
+		auto interval = 100ms;  // using <chrono>
+		```
+		* Note Literals should not be sprinkled all over the code as “magic constants”, but it is still a good idea to make them readable where they are defined. It is easy to make a typo in a long string of integers.
+		* Enforcement Flag long digit sequences. The trouble is to define “long”; maybe 7.
 
 ##### [Type conversions](https://www.cplusplus.com/doc/tutorial/typecasting/)
  
