@@ -75,7 +75,39 @@
   * [R: Resource management](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-resource)
   * [ES: Expressions and statements](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-expr)
   * [Per: Performance](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-performance)
+  	* Per.1: Don’t optimize without reason
+  	* Per.2: Don’t optimize prematurely
+  	* Per.3: Don’t optimize something that’s not performance critical
+  	* Per.4: Don’t assume that complicated code is necessarily faster than simple code
+  	* Per.5: Don’t assume that low-level code is necessarily faster than high-level code
+  	* Per.6: Don’t make claims about performance without measurements
+  	* Per.7: Design to enable optimization
+  	* Per.10: Rely on the static type system
+  	* Per.11: Move computation from run time to compile time
+  	* Per.12: Eliminate redundant aliases
+  	* Per.13: Eliminate redundant indirections
+  	* Per.14: Minimize the number of allocations and deallocations
+  	* Per.15: Do not allocate on a critical branch
+  	* Per.16: Use compact data structures
+  	* Per.17: Declare the most used member of a time-critical struct first
+  	* Per.18: Space is time
+  	* Per.19: Access memory predictably
+  	* Per.30: Avoid context switches on the critical path
   * [CP: Concurrency and parallelism](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-concurrency)
+  	* CP.1: Assume that your code will run as part of a multi-threaded program
+  	* CP.2: Avoid data races
+  	* CP.3: Minimize explicit sharing of writable data
+  	* CP.4: Think in terms of tasks, rather than threads
+  	* CP.8: Don’t try to use volatile for synchronization
+  	* CP.9: Whenever feasible use tools to validate your concurrent code
+  	* See also:
+  	* CP.con: Concurrency
+  	* CP.coro: Coroutines
+  	* CP.par: Parallelism
+  	* CP.mess: Message passing
+  	* CP.vec: Vectorization
+  	* CP.free: Lock-free programming
+  	* CP.etc: Etc. concurrency rules
   * [E: Error handling](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-errors)
   * [Con: Constants and immutability](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-const)
   * [T: Templates and generic programming](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-templates)
