@@ -102,6 +102,21 @@
   	* CP.9: Whenever feasible use tools to validate your concurrent code
   	* See also:
   	* CP.con: Concurrency
+  		* CP.20: Use RAII, never plain lock()/unlock()
+  		* CP.21: Use std::lock() or std::scoped_lock to acquire multiple mutexes
+  		* CP.22: Never call unknown code while holding a lock (e.g., a callback)
+  		* CP.23: Think of a joining thread as a scoped container
+  		* CP.24: Think of a thread as a global container
+  		* CP.25: Prefer gsl::joining_thread over std::thread
+  		* CP.26: Don’t detach() a thread
+  		* CP.31: Pass small amounts of data between threads by value, rather than by reference or pointer
+  		* CP.32: To share ownership between unrelated threads use shared_ptr
+  		* CP.40: Minimize context switching
+  		* CP.41: Minimize thread creation and destruction
+  		* CP.42: Don’t wait without a condition
+  		* CP.43: Minimize time spent in a critical section
+  		* CP.44: Remember to name your lock_guards and unique_locks
+  		* CP.50: Define a mutex together with the data it guards. Use synchronized_value\<T> where possible
   	* CP.coro: Coroutines
   	* CP.par: Parallelism
   	* CP.mess: Message passing
