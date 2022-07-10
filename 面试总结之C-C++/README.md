@@ -729,6 +729,20 @@ int main()
   * 引用被创建的同时必须被初始化（指针则可以在任何时候被初始化）。
   * 不能有NULL 引用，引用必须与合法的存储单元关联（指针则可以是NULL）。
   * 一旦引用被初始化，就不能改变引用的关系（指针则可以随时改变所指的对象）。
+* [Passing By Pointer Vs Passing By Reference in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/passing-by-pointer-vs-passing-by-reference-in-c/)
+	* 1) Passing by Pointer: Here, the memory location of the variables is passed to the parameters in the function, and then the operations are performed.
+	* 2) Passing by Reference: It allows a function to modify a variable without having to create a copy of it. We have to declare reference variables. The memory location of the passed variable and parameter is the same and therefore, any change to the parameter reflects in the variable as well.
+	* Difference Between Reference Variable and Pointer Variable:
+		* A reference is the same object, just with a different name and a reference must refer to an object. Since references can’t be NULL, they are safer to use. 
+		* A pointer can be re-assigned while a reference cannot, and must be assigned at initialization only.
+		* The pointer can be assigned NULL directly, whereas the reference cannot.
+		* Pointers can iterate over an array, we can use increment/decrement operators to go to the next/previous item that a pointer is pointing to.
+		* A pointer is a variable that holds a memory address. A reference has the same memory address as the item it references.
+		* A pointer to a class/struct uses ‘->’ (arrow operator) to access its members whereas a reference uses a ‘.’ (dot operator)
+		* A pointer needs to be dereferenced with * to access the memory location it points to, whereas a reference can be used directly.
+	* Which is preferred in Passing by Pointer Vs Passing by Reference in C++? 
+		* References are usually preferred over pointers whenever we don’t need “reseating”.
+		* Overall, Use references when you can, and pointers when you have to. But if we want to write C code that compiles with both C and a C++ compiler, you’ll have to restrict yourself to using pointers.	
 * 函数指针,什么是函数指针，有什么用处
   * 函数指针是指向函数的指针，最大的用处是做回调函数，可以做接口函数，就像系统中断中的中断处理函数
 * 设计一个函数，函数中有一段功能是对相关数据的结理，但具体的处理方式是不定的。
