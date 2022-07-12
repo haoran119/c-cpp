@@ -2710,11 +2710,14 @@ int main()
 	* A similar member function, map::at, has the same behavior when an element with the key exists, but throws an exception when it does not.
 	* A call to this function is equivalent to:
 		* (*((this->insert(make_pair(k,mapped_type()))).first)).second
+* [map::begin() and end() in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/mapbegin-end-c-stl/)
 * [map::cbegin - C++ Reference](http://www.cplusplus.com/reference/map/map/cbegin/)
 	* Return const_iterator to beginning
 		* Returns a const_iterator pointing to the first element in the container.
 		* A const_iterator is an iterator that points to const content. This iterator can be increased and decreased (unless it is itself also const), just like the iterator returned by map::begin, but it cannot be used to modify the contents it points to, even if the map object is not itself const.
 		* If the container is empty, the returned iterator value shall not be dereferenced.
+* [std::map<Key,T,Compare,Allocator>::insert - cppreference.com](https://en.cppreference.com/w/cpp/container/map/insert)
+	* inserts elements or nodes (since C++17) (public member function)
 * [std::map<Key,T,Compare,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/container/map/erase)
 	* Removes specified elements from the container.
 	* 1) Removes the element at pos.
@@ -2788,7 +2791,6 @@ void replaceKey(Container& container,
 	* `erase_if( std::map<Key,T,Compare,Alloc>& c, Pred pred );` (since C++20)
 	* Return value
 		* The number of erased elements.
-* [map::begin() and end() in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/mapbegin-end-c-stl/)
 * [Descending Order in Map and Multimap of C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/descending-order-map-multimap-c-stl/)
 	* We can use the third parameter, that is std::greater along with map and multimap to store elements in descending order.
 	* Descending order in the map: 
