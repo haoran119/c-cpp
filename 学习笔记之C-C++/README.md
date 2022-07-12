@@ -3297,6 +3297,16 @@ int main()
 	* Implementations are encouraged to avoid dynamic allocations for small objects, but such an optimization may only be applied to types for which std::is_nothrow_move_constructible returns true.
 * [C++17常用新特性(十三)---std::any](https://mp.weixin.qq.com/s/qzm_hYj7JEr0AOpxQkDm4g)
 
+###### [Function objects](https://en.cppreference.com/w/cpp/utility/functional)
+
+* A function object is any object for which the function call operator is defined. C++ provides many built-in function objects as well as support for creation and manipulation of new function objects.
+
+#
+Operator function objects
+
+* [std::greater - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/greater)
+	* function object implementing x > y (class template)
+
 #### [Ranges library](https://en.cppreference.com/w/cpp/ranges)
 
 * [起底 C++ Range 令人惊讶的局限性！](https://mp.weixin.qq.com/s/iB70FXO-D7C-72N4l9KnzA)
