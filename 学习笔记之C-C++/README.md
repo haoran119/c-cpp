@@ -3066,13 +3066,18 @@ int main() {
 	* returns the greater of the given values (function template)
 * [std::max_element - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/max_element)
 	* returns the largest element in a range (function template)
-	* Finds the greatest element in the range [first, last).
+	* Finds the greatest element in the range \[first, last).
 * [std::min - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/min)
 	* Returns the smaller of the given values.
 		* 1-2) Returns the smaller of a and b.
 		* 3-4) Returns the smallest of the values in initializer list ilist.
 	* The (1,3) versions use operator< to compare the values, the (2,4) versions use the given comparison function comp.
-* [std::min in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdmin-in-cpp/)
+	* [std::min in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdmin-in-cpp/)
+* [std::min_element - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/min_element)
+	* returns the smallest element in a range (function template)
+	* returns the smallest element in a range (function template)
+	* Return value
+		* Iterator to the smallest element in the range \[first, last). If several elements in the range are equivalent to the smallest element, returns the iterator to the first such element. Returns last if the range is empty.
 
 ##### Comparison operations
 
