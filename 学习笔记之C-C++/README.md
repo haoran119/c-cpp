@@ -2923,14 +2923,31 @@ int main() {
 	* checks if a predicate is true for all, any or none of the elements in a range (function template)
 * [std::for_each - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/for_each)
 	* applies a function to a range of elements(function template)
+	* [for_each loop in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/for_each-loop-c/)
+		* It is versatile, i.e.  Can work with any container.
+		* It reduces chances of errors one can commit using generic for loop
+		* It makes code more readable
+		* for_each loops improve overall performance of code
 	* [c++ - How can I change the value of the elements in a vector? - Stack Overflow](https://stackoverflow.com/questions/4807709/how-can-i-change-the-value-of-the-elements-in-a-vector)
-```c++
-double total = 0;
-for_each( v.begin(), v.end(), [&total](double  v) { total += v; });
-cout << "The sum of the values is: " << total << endl;
+	```c++
+	double total = 0;
+	for_each( v.begin(), v.end(), [&total](double  v) { total += v; });
+	cout << "The sum of the values is: " << total << endl;
 
-double total = std::accumulate(v.begin(), v.end(), 0.0);
-```
+	double total = std::accumulate(v.begin(), v.end(), 0.0);
+	```
+	* [c++ - Use of for_each on map elements - Stack Overflow](https://stackoverflow.com/questions/2850312/use-of-for-each-on-map-elements)
+		* You can iterate through a std::map object. Each iterator will point to a std::pair<const T,S> where T and S are the same types you specified on your map.
+		* If you still want to use std::for_each, pass a function that takes a std::pair<const int, MyClass>& as an argument instead.
+		* And pass it to std::for_each:
+		```c++
+		void CallMyMethod(std::pair<const int, MyClass>& pair) // could be a class static method as well
+		{
+		  pair.second.Method();
+		}
+		
+		std::for_each(Map.begin(), Map.end(), CallMyMethod);
+		```
 * [std::find, std::find_if, std::find_if_not - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/find)
   * [find_if - C++ Reference](https://www.cplusplus.com/reference/algorithm/find_if/)
     * Find element in range
