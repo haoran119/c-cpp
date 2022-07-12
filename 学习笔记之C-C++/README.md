@@ -2919,6 +2919,8 @@ int main() {
 
 ##### Non-modifying sequence operations
 
+* [std::all_of, std::any_of, std::none_of - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/all_any_none_of)
+	* checks if a predicate is true for all, any or none of the elements in a range (function template)
 * [std::for_each - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/for_each)
 	* applies a function to a range of elements(function template)
 	* [c++ - How can I change the value of the elements in a vector? - Stack Overflow](https://stackoverflow.com/questions/4807709/how-can-i-change-the-value-of-the-elements-in-a-vector)
