@@ -2941,6 +2941,10 @@ double total = std::accumulate(v.begin(), v.end(), 0.0);
 
 ##### Modifying sequence operations
 
+* [std::copy, std::copy_if - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/copy)
+	* copies a range of elements to a new location (function template)
+	* Copies the elements in the range, defined by \[first, last), to another range beginning at d_first.
+	* [c++ - How to use copy_if for maps - Stack Overflow](https://stackoverflow.com/questions/23548139/how-to-use-copy-if-for-maps)
 * [std::remove, std::remove_if - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/remove)
 	* removes elements satisfying specific criteria (function template)
 	* Return value
