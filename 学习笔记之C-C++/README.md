@@ -784,7 +784,9 @@ int main() {
 		* constexpr definitions
 		* const definitions
 		* using alias definitions
- 
+* How to fix compile error "multiple definition of 'utils::var' ... first defined here" ?
+	* declare var as `inline var` in namespace utils
+
 ##### Lambda
 
 * [Lambda expressions in C++ | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/lambda-expressions-in-cpp?view=msvc-160)
