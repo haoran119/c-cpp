@@ -2791,6 +2791,37 @@ void replaceKey(Container& container,
 		* Iterator to an element with key equivalent to key. If no such element is found, past-the-end (see end()) iterator is returned.
 	* Complexity
 		* Logarithmic in the size of the container.
+```c++
+std::map<int,char> example = {{1,'a'},{2,'b'}};
+
+auto search = example.find(2);
+if (search != example.end()) {
+	std::cout << "Found " << search->first << " " << search->second << '\n';
+} else {
+	std::cout << "Not found\n";
+}
+```
+* [std::map<Key,T,Compare,Allocator>::contains - cppreference.com](https://en.cppreference.com/w/cpp/container/map/contains)
+	* checks if the container contains element with specific key (public member function)
+* [std::map<Key,T,Compare,Allocator>::equal_range - cppreference.com](https://en.cppreference.com/w/cpp/container/map/equal_range)
+	* returns range of elements matching a specific key (public member function)
+	* Return value
+		* std::pair containing a pair of iterators defining the wanted range: the first pointing to the first element that is not less than key and the second pointing to the first element greater than key.
+		* If there are no elements not less than key, past-the-end (see end()) iterator is returned as the first element. Similarly if there are no elements greater than key, past-the-end iterator is returned as the second element.
+	* Complexity
+		* Logarithmic in the size of the container.
+* [std::map<Key,T,Compare,Allocator>::lower_bound - cppreference.com](https://en.cppreference.com/w/cpp/container/map/lower_bound)
+	* returns an iterator to the first element not less than the given key (public member function)
+	* Return value
+		* Iterator pointing to the first element that is not less than key. If no such element is found, a past-the-end iterator (see end()) is returned.
+	* Complexity
+		* Logarithmic in the size of the container.
+* [std::map<Key,T,Compare,Allocator>::upper_bound - cppreference.com](https://en.cppreference.com/w/cpp/container/map/upper_bound)
+	* returns an iterator to the first element greater than the given key (public member function)
+	* Return value
+		* Iterator pointing to the first element that is greater than key. If no such element is found, past-the-end (see end()) iterator is returned.
+	* Complexity
+		* Logarithmic in the size of the container.
 * [std::erase_if (std::map) - cppreference.com](https://en.cppreference.com/w/cpp/container/map/erase_if)
 	* Erases all elements satisfying specific criteria (function template)
 	* `erase_if( std::map<Key,T,Compare,Alloc>& c, Pred pred );` (since C++20)
