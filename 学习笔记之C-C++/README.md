@@ -2796,9 +2796,9 @@ std::map<int,char> example = {{1,'a'},{2,'b'}};
 
 auto search = example.find(2);
 if (search != example.end()) {
-	std::cout << "Found " << search->first << " " << search->second << '\n';
+    std::cout << "Found " << search->first << " " << search->second << '\n';
 } else {
-	std::cout << "Not found\n";
+    std::cout << "Not found\n";
 }
 ```
 * [std::map<Key,T,Compare,Allocator>::contains - cppreference.com](https://en.cppreference.com/w/cpp/container/map/contains)
@@ -2822,6 +2822,37 @@ if (search != example.end()) {
 		* Iterator pointing to the first element that is greater than key. If no such element is found, past-the-end (see end()) iterator is returned.
 	* Complexity
 		* Logarithmic in the size of the container.
+	* [upper_bound in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/upper_bound-in-cpp/)
+```c++
+// CPP program to illustrate using
+// std :: upper_bound with vectors
+#include <bits/stdc++.h>
+
+// Driver code
+int main()
+{
+    std::vector<int> v{ 10, 20, 30, 40, 50 };
+
+    // Print vector
+    std::cout << "Vector contains :";
+    for (int i = 0; i < v.size(); i++)
+        std::cout << " " << v[i];
+    std::cout << "\n";
+
+    std::vector<int>::iterator upper1, upper2;
+
+    // std :: upper_bound
+    upper1 = std::upper_bound(v.begin(), v.end(), 35);
+    upper2 = std::upper_bound(v.begin(), v.end(), 45);
+
+    std::cout << "\nupper_bound for element 35 is at position : "
+            << (upper1 - v.begin());
+    std::cout << "\nupper_bound for element 45 is at position : "
+            << (upper2 - v.begin());
+
+    return 0;
+}
+```
 * [std::erase_if (std::map) - cppreference.com](https://en.cppreference.com/w/cpp/container/map/erase_if)
 	* Erases all elements satisfying specific criteria (function template)
 	* `erase_if( std::map<Key,T,Compare,Alloc>& c, Pred pred );` (since C++20)
