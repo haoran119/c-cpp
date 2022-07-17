@@ -1008,6 +1008,30 @@ void S2::f(int i)
     ```
 	* Enforcement 
 		* Flag a lambda that captures by reference, but is used other than locally within the function scope or passed to a function by reference. (Note: This rule is an approximation, but does flag passing by pointer as those are more likely to be stored by the callee, writing to a heap location accessed via a parameter, returning the lambda, etc. The Lifetime rules will also provide general rules that flag escaping pointers and references including via lambdas.)
+* [F.53: Avoid capturing by reference in lambdas that will be used non-locally, including returned, stored on the heap, or passed to another thread](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f53-avoid-capturing-by-reference-in-lambdas-that-will-be-used-non-locally-including-returned-stored-on-the-heap-or-passed-to-another-thread)
+	* Reason 
+		* Pointers and references to locals shouldn’t outlive their scope. Lambdas that capture by reference are just another place to store a reference to a local object, and shouldn’t do so if they (or a copy) outlive the scope.
+	* Example, bad
+    ```c++
+    int local = 42;
+
+    // Want a reference to local.
+    // Note, that after program exits this scope,
+    // local no longer exists, therefore
+    // process() call will have undefined behavior!
+    thread_pool.queue_work([&] { process(local); });
+    ```
+	* Example, good
+    ```c++
+    int local = 42;
+    // Want a copy of local.
+    // Since a copy of local is made, it will
+    // always be available for the call.
+    thread_pool.queue_work([=] { process(local); });
+    ```
+	* Enforcement
+		* (Simple) Warn when capture-list contains a reference to a locally declared variable
+		* (Complex) Flag when capture-list contains a reference to a locally declared variable and the lambda is passed to a non-const and non-local context
 
 #### [Strings](https://en.cppreference.com/w/cpp/string)
 
