@@ -715,7 +715,7 @@ int main() {
 
 #### [Functions](https://www.tutorialspoint.com/cplusplus/cpp_functions.htm)
 
-* [Functions - cppreference.com](Functions - cppreference.com)
+* [Functions - cppreference.com](https://en.cppreference.com/w/cpp/language/functions)
 * [Functions - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/functions/)
 * [std::function - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/function)
   * [function - C++ Reference](https://www.cplusplus.com/reference/functional/function/)
@@ -793,6 +793,73 @@ int main() {
 * Constructs a [closure](https://en.wikipedia.org/wiki/Closure_(computer_programming)): an unnamed function object capable of capturing variables in scope.
 * [Lambda expressions (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/lambda)
 	* If auto is used as a type of a parameter or an explicit template parameter list is provided (since C++20), the lambda is a generic lambda. (since C++14)
+```c++
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <functional>
+ 
+int main()
+{
+    std::vector<int> c = {1, 2, 3, 4, 5, 6, 7};
+    int x = 5;
+    c.erase(std::remove_if(c.begin(), c.end(), [x](int n) { return n < x; }), c.end());
+ 
+    std::cout << "c: ";
+    std::for_each(c.begin(), c.end(), [](int i){ std::cout << i << ' '; });
+    std::cout << '\n';
+ 
+    // the type of a closure cannot be named, but can be inferred with auto
+    // since C++14, lambda could own default arguments
+    auto func1 = [](int i = 6) { return i + 4; };
+    std::cout << "func1: " << func1() << '\n';
+ 
+    // like all callable objects, closures can be captured in std::function
+    // (this may incur unnecessary overhead)
+    std::function<int(int)> func2 = [](int i) { return i + 4; };
+    std::cout << "func2: " << func2(6) << '\n';
+ 
+    constexpr int fib_max {8};
+    std::cout << "Emulate `recursive lambda` calls:\nFibonacci numbers: ";
+    auto nth_fibonacci = [](int n)
+    {
+        std::function<int(int, int, int)> fib = [&](int n, int a, int b)
+        {
+            return n ? fib(n - 1, a + b, a) : b;
+        };
+        return fib(n, 0, 1);
+    };
+ 
+    for (int i{1}; i <= fib_max; ++i)
+    {
+        std::cout << nth_fibonacci(i) << (i < fib_max ? ", " : "\n");
+    }
+ 
+    std::cout << "Alternative approach to lambda recursion:\nFibonacci numbers: ";
+    auto nth_fibonacci2 = [](auto self, int n, int a = 0, int b = 1) -> int
+    {
+        return n ? self(self, n - 1, a + b, a) : b;
+    };
+ 
+    for (int i{1}; i <= fib_max; ++i)
+    {
+        std::cout << nth_fibonacci2(nth_fibonacci2, i) << (i < fib_max ? ", " : "\n");
+    }
+ 
+#ifdef __cpp_explicit_this_parameter
+    std::cout << "C++23 approach to lambda recursion:\n";
+    auto nth_fibonacci3 = [](this auto self, int n, int a = 0, int b = 1)
+    {
+         return n ? self(n - 1, a + b, a) : b;
+    };
+ 
+    for (int i{1}; i <= fib_max; ++i)
+    {
+        std::cout << nth_fibonacci3(i) << (i < fib_max ? ", " : "\n");
+    }
+#endif
+}
+```
 * [Lambda expressions in C++ | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/lambda-expressions-in-cpp?view=msvc-160)
   * In C++11 and later, a lambda expression—often called a lambda—is a convenient way of defining an anonymous function object (a closure) right at the location where it's invoked or passed as an argument to a function. Typically lambdas are used to encapsulate a few lines of code that are passed to algorithms or asynchronous functions. This article defines what lambdas are, and compares them to other programming techniques. It describes their advantages, and provides some basic examples.
 * [Lambda expression in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/lambda-expression-in-c/)
@@ -806,6 +873,73 @@ int main() {
   * Mixing capturing by value and Reference
   * Be-aware of capturing local variables by Reference in Lambda
 * [c++ - an enclosing-function local variable cannot be referenced in a lambda body unless if it is in capture list - Stack Overflow](https://stackoverflow.com/questions/26903602/an-enclosing-function-local-variable-cannot-be-referenced-in-a-lambda-body-unles)
+
+###### Lambda capture
+
+* The captures is a comma-separated list of zero or more captures, optionally beginning with the capture-default. The capture list defines the outside variables that are accessible from within the lambda function body. The only capture defaults are
+	* & (implicitly capture the used automatic variables by reference) and
+	* = (implicitly capture the used automatic variables by copy).
+* The syntax of an individual capture in captures is
+
+| identifier | (1) |
+| - | - |
+| identifier ...	| (2)	 |
+| identifier initializer	| (3)	(since C++14) |
+| & identifier	| (4)	 |
+| & identifier ...	| (5) |	
+| & identifier initializer	| (6)	(since C++14) |
+| this	| (7)	 |
+| * this	| (8)	(since C++17) |
+| ... identifier initializer	| (9)	(since C++20) |
+| & ... identifier initializer	| (10)	(since C++20) |
+
+* 1) simple by-copy capture
+* 2) simple by-copy capture that is a pack expansion
+* 3) by-copy capture with an initializer
+* 4) simple by-reference capture
+* 5) simple by-reference capture that is a pack expansion
+* 6) by-reference capture with an initializer
+* 7) simple by-reference capture of the current object
+* 8) simple by-copy capture of the current object
+* 9) by-copy capture with an initializer that is a pack expansion
+* 10) by-reference capture with an initializer that is a pack expansion
+
+* If the capture-default is &, subsequent simple captures must not begin with &.
+```c++
+struct S2 { void f(int i); };
+void S2::f(int i)
+{
+    [&]{};          // OK: by-reference capture default
+    [&, i]{};       // OK: by-reference capture, except i is captured by copy
+    [&, &i] {};     // Error: by-reference capture when by-reference is the default
+    [&, this] {};   // OK, equivalent to [&]
+    [&, this, i]{}; // OK, equivalent to [&, i]
+}
+```
+* If the capture-default is =, subsequent simple captures must begin with & or be *this (since C++17) or this (since C++20).
+```c++
+struct S2 { void f(int i); };
+void S2::f(int i)
+{
+    [=]{};        // OK: by-copy capture default
+    [=, &i]{};    // OK: by-copy capture, except i is captured by reference
+    [=, *this]{}; // until C++17: Error: invalid syntax
+                  // since C++17: OK: captures the enclosing S2 by copy
+    [=, this] {}; // until C++20: Error: this when = is the default
+                  // since C++20: OK, same as [=]
+}
+```
+* Any capture may appear only once, and its name must be different from any parameter name:
+```c++
+struct S2 { void f(int i); };
+void S2::f(int i)
+{
+    [i, i] {};        // Error: i repeated
+    [this, *this] {}; // Error: "this" repeated (C++17)
+ 
+    [i] (int i) {};   // Error: parameter and capture have the same name
+}
+```
 
 #### [Strings](https://en.cppreference.com/w/cpp/string)
 
