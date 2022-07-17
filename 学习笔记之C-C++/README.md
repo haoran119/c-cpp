@@ -3471,6 +3471,8 @@ int main()
 		* 3-4) Returns the smallest of the values in initializer list ilist.
 	* The (1,3) versions use operator< to compare the values, the (2,4) versions use the given comparison function comp.
 	* [std::min in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdmin-in-cpp/)
+	* [max - Find the smallest amongst 3 numbers in C++ - Stack Overflow](https://stackoverflow.com/questions/9424173/find-the-smallest-amongst-3-numbers-in-c)
+		* `std::min({x, y, z})`
 * [std::min_element - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/min_element)
 	* returns the smallest element in a range (function template)
 	* returns the smallest element in a range (function template)
@@ -3681,6 +3683,19 @@ int main()
 }
 ```
 
+###### [Initializer lists](https://en.cppreference.com/w/cpp/utility/initializer_list)
+
+* Defined in header \<initializer_list>
+* [std::initializer_list - cppreference.com](https://en.cppreference.com/w/cpp/utility/initializer_list)(C++11)
+	* creates a temporary array in [list-initialization](https://en.cppreference.com/w/cpp/language/list_initialization) and then references it (class template)
+	* An object of type std::initializer_list\<T> is a lightweight proxy object that provides access to an array of objects of type const T.
+	* A std::initializer_list object is automatically constructed when:
+		* a braced-init-list is used to list-initialize an object, where the corresponding constructor accepts an std::initializer_list parameter
+		* a braced-init-list is used as the right operand of assignment or as a function call argument, and the corresponding assignment operator/function accepts an std::initializer_list parameter
+		* a braced-init-list is bound to auto, including in a ranged for loop
+	* Initializer lists may be implemented as a pair of pointers or pointer and length. Copying a std::initializer_list does not copy the underlying objects.
+	* The underlying array is a temporary array of type const T[N], in which each element is copy-initialized (except that narrowing conversions are invalid) from the corresponding element of the original initializer list. The lifetime of the underlying array is the same as any other temporary object, except that initializing an initializer_list object from the array extends the lifetime of the array exactly like binding a reference to a temporary (with the same exceptions, such as for initializing a non-static class member). The underlying array may be allocated in read-only memory.
+	* The program is ill-formed if an explicit or partial specialization of std::initializer_list is declared.
 
 ##### General-purpose utilities
 
