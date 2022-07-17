@@ -715,6 +715,7 @@ int main() {
 
 #### [Functions](https://www.tutorialspoint.com/cplusplus/cpp_functions.htm)
 
+* [Functions - cppreference.com](Functions - cppreference.com)
 * [Functions - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/functions/)
 * [std::function - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/function)
   * [function - C++ Reference](https://www.cplusplus.com/reference/functional/function/)
@@ -787,12 +788,14 @@ int main() {
 * How to fix compile error "multiple definition of 'utils::var' ... first defined here" ?
 	* declare var as `inline var` in namespace utils
 
-##### Lambda
+##### [Lambda expressions](https://en.cppreference.com/w/cpp/language/lambda)
 
+* Constructs a [closure](https://en.wikipedia.org/wiki/Closure_(computer_programming)): an unnamed function object capable of capturing variables in scope.
+* [Lambda expressions (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/lambda)
+	* If auto is used as a type of a parameter or an explicit template parameter list is provided (since C++20), the lambda is a generic lambda. (since C++14)
 * [Lambda expressions in C++ | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/lambda-expressions-in-cpp?view=msvc-160)
   * In C++11 and later, a lambda expression—often called a lambda—is a convenient way of defining an anonymous function object (a closure) right at the location where it's invoked or passed as an argument to a function. Typically lambdas are used to encapsulate a few lines of code that are passed to algorithms or asynchronous functions. This article defines what lambdas are, and compares them to other programming techniques. It describes their advantages, and provides some basic examples.
-  * [Lambda expressions (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/lambda)
-  * [Lambda expression in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/lambda-expression-in-c/)
+* [Lambda expression in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/lambda-expression-in-c/)
 * [贯穿 C++ 11 与 C++ 17 的 Lambda 到底是个什么？](https://mp.weixin.qq.com/s/ok5xND2q4kPqBguhcvU42g)
   * https://hackernoon.com/all-about-Lambda-functions-in-cfrom-c11-to-c17-2t1j32qw
 * [C++11 Lambda : How to capture local variables inside Lambda ? – thisPointer](https://thispointer.com/c11-lambda-how-to-capture-local-variables-inside-lambda/)
