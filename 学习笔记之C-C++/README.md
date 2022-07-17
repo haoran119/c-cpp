@@ -3696,6 +3696,98 @@ int main()
 	* Initializer lists may be implemented as a pair of pointers or pointer and length. Copying a std::initializer_list does not copy the underlying objects.
 	* The underlying array is a temporary array of type const T[N], in which each element is copy-initialized (except that narrowing conversions are invalid) from the corresponding element of the original initializer list. The lifetime of the underlying array is the same as any other temporary object, except that initializing an initializer_list object from the array extends the lifetime of the array exactly like binding a reference to a temporary (with the same exceptions, such as for initializing a non-static class member). The underlying array may be allocated in read-only memory.
 	* The program is ill-formed if an explicit or partial specialization of std::initializer_list is declared.
+* [List-initialization (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/list_initialization)
+	* Initializes an object from braced-init-list.
+	* Syntax
+		* Direct-list-initialization
+			* T object { arg1, arg2, ... };	(1)	
+			* T { arg1, arg2, ... }	(2)	
+			* new T { arg1, arg2, ... }	(3)	
+			* Class { T member { arg1, arg2, ... }; };	(4)	
+			* Class::Class() : member { arg1, arg2, ... } {...	(5)	
+		* Copy-list-initialization
+			* T object = { arg1, arg2, ... };	(6)	
+			* function ({ arg1, arg2, ... })	(7)	
+			* return { arg1, arg2, ... };	(8)	
+			* object [{ arg1, arg2, ... }]	(9)	
+			* object = { arg1, arg2, ... }	(10)	
+			* U ({ arg1, arg2, ... })	(11)	
+			* Class { T member = { arg1, arg2, ... }; };	(12)	
+	* Narrowing conversions
+		* List-initialization limits the allowed implicit conversions by prohibiting the following:
+			* conversion from a floating-point type to an integer type
+			* conversion from a long double to double or to float and conversion from double to float, except where the source is a constant expression and overflow does not occur
+			* conversion from an integer type to a floating-point type, except where the source is a constant expression whose value can be stored exactly in the target type
+			* conversion from integer or unscoped enumeration type to integer type that cannot represent all values of the original, except where source is a constant expression whose value can be stored exactly in the target type
+			* conversion from a pointer type or pointer-to-member type to bool
+	* Notes
+		* Every initializer clause is sequenced before any initializer clause that follows it in the braced-init-list. This is in contrast with the arguments of a function call expression, which are unsequenced (until C++17)indeterminately sequenced (since C++17).
+		* A braced-init-list is not an expression and therefore has no type, e.g. decltype({1,2}) is ill-formed. Having no type implies that template type deduction cannot deduce a type that matches a braced-init-list, so given the declaration template\<class T> void f(T); the expression f({1,2,3}) is ill-formed. However, the template parameter can otherwise be deduced, as is the case for std::vector\<int> v(std::istream_iterator\<int>(std::cin), {}), where the iterator type is deduced by the first argument but also used in the second parameter position. A special exception is made for type deduction using the keyword auto , which deduces any braced-init-list as std::initializer_list in copy-list-initialization.
+		* Also because a braced-init-list has no type, special rules for overload resolution apply when it is used as an argument to an overloaded function call.
+		* Aggregates copy/move initialize directly from single-element braced-init-list of the same type, but non-aggregates consider initializer_list constructors first
+		* Some compilers (e.g., gcc 10) only consider conversion from a pointer or a pointer-to-member to bool narrowing in C++20 mode.
+```c++
+#include <iostream>
+#include <vector>
+#include <map>
+#include <string>
+ 
+struct Foo
+{
+    std::vector<int> mem = {1, 2, 3}; // list-initialization of a non-static member
+    std::vector<int> mem2;
+ 
+    Foo() : mem2{-1, -2, -3} {} // list-initialization of a member in constructor
+};
+ 
+std::pair<std::string, std::string> f(std::pair<std::string, std::string> p)
+{
+    return {p.second, p.first}; // list-initialization in return statement
+}
+ 
+int main()
+{
+    int n0{};  // value-initialization (to zero)
+    int n1{1}; // direct-list-initialization
+ 
+    std::string s1{'a', 'b', 'c', 'd'}; // initializer-list constructor call
+    std::string s2{s1, 2, 2};           // regular constructor call
+    std::string s3{0x61, 'a'}; // initializer-list ctor is preferred to (int, char)
+ 
+    int n2 = {1}; // copy-list-initialization
+    double d = double{1.2}; // list-initialization of a prvalue, then copy-init
+    auto s4 = std::string{"HelloWorld"}; // same as above, no temporary created since C++17
+ 
+    std::map<int, std::string> m = // nested list-initialization
+    {
+        {1, "a"},
+        {2, {'a', 'b', 'c'}},
+        {3, s1}
+    };
+ 
+    std::cout << f({"hello", "world"}).first // list-initialization in function call
+              << '\n';
+ 
+    const int (&ar)[2] = {1, 2}; // binds a lvalue reference to a temporary array
+    int&& r1 = {1}; // binds a rvalue reference to a temporary int
+//  int& r2 = {2}; // error: cannot bind rvalue to a non-const lvalue ref
+ 
+//  int bad{1.0}; // error: narrowing conversion
+    unsigned char uc1{10}; // okay
+//  unsigned char uc2{-1}; // error: narrowing conversion
+ 
+    Foo f;
+ 
+    std::cout << n0 << ' ' << n1 << ' ' << n2 << '\n'
+              << s1 << ' ' << s2 << ' ' << s3 << '\n';
+    for(auto p: m)
+        std::cout << p.first << ' ' << p.second << '\n';
+    for(auto n: f.mem)
+        std::cout << n << ' ';
+    for(auto n: f.mem2)
+        std::cout << n << ' ';
+}
+```
 
 ##### General-purpose utilities
 
