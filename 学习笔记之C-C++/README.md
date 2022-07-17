@@ -3423,6 +3423,10 @@ int main() {
     void for_each( ExecutionPolicy&& policy, ForwardIt first, ForwardIt last, UnaryFunction2 f );
     (2) (since C++17)
     ```
+	* 1) Applies the given function object f to the result of dereferencing every iterator in the range \[first, last), in order.
+	* 2) Applies the given function object f to the result of dereferencing every iterator in the range \[first, last) (not necessarily in order). The algorithm is executed according to policy. This overload does not participate in overload resolution unless std::is_execution_policy_v\<std::decay_t\<ExecutionPolicy>> (until C++20) std::is_execution_policy_v\<std::remove_cvref_t\<ExecutionPolicy>> (since C++20) is true.
+	* For both overloads, if the iterator type is mutable, f may modify the elements of the range through the dereferenced iterator. If f returns a result, the result is ignored.
+	* Unlike the rest of the parallel algorithms, for_each is not allowed to make copies of the elements in the sequence even if they are trivially copyable.
 	* [for_each loop in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/for_each-loop-c/)
 		* It is versatile, i.e.  Can work with any container.
 		* It reduces chances of errors one can commit using generic for loop
