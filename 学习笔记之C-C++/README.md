@@ -3411,6 +3411,18 @@ int main() {
 	* checks if a predicate is true for all, any or none of the elements in a range (function template)
 * [std::for_each - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/for_each)
 	* applies a function to a range of elements(function template)
+    ```c++
+    template< class InputIt, class UnaryFunction >
+    UnaryFunction for_each( InputIt first, InputIt last, UnaryFunction f );
+    (1) (until C++20)
+    template< class InputIt, class UnaryFunction >
+    constexpr UnaryFunction for_each( InputIt first, InputIt last, UnaryFunction f );
+    (1) (since C++20)
+
+    template< class ExecutionPolicy, class ForwardIt, class UnaryFunction2 >
+    void for_each( ExecutionPolicy&& policy, ForwardIt first, ForwardIt last, UnaryFunction2 f );
+    (2) (since C++17)
+    ```
 	* [for_each loop in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/for_each-loop-c/)
 		* It is versatile, i.e.  Can work with any container.
 		* It reduces chances of errors one can commit using generic for loop
