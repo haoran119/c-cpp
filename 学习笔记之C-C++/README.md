@@ -814,6 +814,8 @@ int main() {
 		* using alias definitions
 * How to fix compile error "multiple definition of 'utils::var' ... first defined here" ?
 	* declare var as `inline var` in namespace utils
+	* [c - "Multiple definition", "first defined here" errors - Stack Overflow](https://stackoverflow.com/questions/30821356/multiple-definition-first-defined-here-errors)
+	* [c++ - How do inline variables work? - Stack Overflow](https://stackoverflow.com/questions/38043442/how-do-inline-variables-work)
 
 ##### [Lambda expressions](https://en.cppreference.com/w/cpp/language/lambda)
 
