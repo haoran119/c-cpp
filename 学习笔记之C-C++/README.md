@@ -990,6 +990,15 @@ void S2::f(int i)
 
 ###### Member functions
 
+* [std::basic_string<CharT,Traits,Allocator>::at - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/at)
+	* accesses the specified character with bounds checking (public member function)
+	* Returns a reference to the character at specified location pos. Bounds checking is performed, exception of type std::out_of_range will be thrown on invalid access.
+	* Return value
+		* Reference to the requested character.
+	* Exceptions
+		* Throws std::out_of_range if pos >= size().
+	* Complexity
+		* Constant.
 * [string::append - C++ Reference](https://www.cplusplus.com/reference/string/string/append/)
 	* Append to string
 		* Extends the string by appending additional characters at the end of its current value:
