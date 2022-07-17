@@ -3096,6 +3096,17 @@ int main() {
 * [(constructor)](https://en.cppreference.com/w/cpp/container/unordered_map/unordered_map)
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::begin(size_type), std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::cbegin(size_type) - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/begin2)
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::size - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/size)
+* [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::extract - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/extract)
+	* extracts nodes from the container (public member function)
+	* Return value
+		* A node handle that owns the extracted element, or empty node handle in case the element is not found in (2,3).
+	* Exceptions
+		* 1) Throws nothing.
+		* 2,3) Any exceptions thrown by the Hash and KeyEqual object.
+	* Complexity
+		* 1,2,3) Average case O(1), worst case O(a.size()).
+	* Notes
+		* extract is the only way to change a key of a map element without reallocation:
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::at - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/at)
 	* Returns a reference to the mapped value of the element with key equivalent to key. If no such element exists, an exception of type std::out_of_range is thrown.
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::operator[] - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/operator_at)
