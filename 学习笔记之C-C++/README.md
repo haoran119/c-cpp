@@ -744,8 +744,29 @@ int main() {
   * 其他情况下，switch-case其实就是逐个分支判断，性能与if-else无异。
   * switch-case中的case只能是常量，而if-else用途更广一些，本文仅讨论分支是常量的情况。
 * [while(1) 和 for(;;)有什么区别？](https://mp.weixin.qq.com/s/a9g9PAwgc3oXoQXBvT49bA)
-* 你会发现，除了文件名不同，其余都相同。
-* 当然，这里额外说一下，不同代码、不同编译器，以及不同优化等级，可能最终结果有所差异。
+	* 你会发现，除了文件名不同，其余都相同。
+	* 当然，这里额外说一下，不同代码、不同编译器，以及不同优化等级，可能最终结果有所差异。
+* [C++ keywords: for - cppreference.com](https://en.cppreference.com/w/cpp/keyword/for)
+	* [for loop](https://en.cppreference.com/w/cpp/language/for): as the declaration of the loop
+		* Executes init-statement once, then executes statement and iteration-expression repeatedly, until the value of condition becomes false. The test takes place before each iteration.
+	* [range-based for loop](https://en.cppreference.com/w/cpp/language/range-for): as the declaration of the loop (since C++11)
+		* Executes a for loop over a range.
+		* Used as a more readable equivalent to the traditional for loop operating over a range of values, such as all elements in a container.
+* [Will range based for loop in c++ preserve the index order - Stack Overflow](https://stackoverflow.com/questions/19052026/will-range-based-for-loop-in-c-preserve-the-index-order)
+	* Yes the two codes are guaranteed to do the same. Though I don't have a link to the standard you can have a look here. I quote: `You can read that as "for all x in v" going through starting with v.begin() and iterating to v.end()`.
+	* [C++11 FAQ](https://www.stroustrup.com/C++11FAQ.html#for)
+		* Range-for statement
+			* A range for statement allows you to iterate through a "range", which is anything you can iterate through like an STL-sequence defined by a begin() and end(). All standard containers can be used as a range, as can a std::string, an initializer list, an array, and anything for which you define begin() and end(), e.g. an istream. For example:
+            ```c++
+            void f(vector<double>& v)
+            {
+                for (auto x : v) cout << x << '\n';
+                for (auto& x : v) ++x;  // using a reference to allow us to change the value
+            }
+            ```
+			* You can read that as "for all x in v" going through starting with v.begin() and iterating to v.end(). Another example:
+				* `for (const auto x : { 1,2,3,5,8,13,21,34 }) cout << x << '\n';`
+			* The begin() (and end()) can be a member to be called x.begin() or a free-standing function to be called begin(x). The member version takes precedence.
 
 #### [Functions](https://www.tutorialspoint.com/cplusplus/cpp_functions.htm)
 
