@@ -3438,6 +3438,33 @@ int main() {
 * [std::max_element - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/max_element)
 	* returns the largest element in a range (function template)
 	* Finds the greatest element in the range \[first, last).
+	* Return value
+		* Iterator to the greatest element in the range \[first, last). If several elements in the range are equivalent to the greatest element, returns the iterator to the first such element. Returns last if the range is empty.
+	* Complexity
+		* Exactly max(N-1,0) comparisons, where N = std::distance(first, last).
+```c++
+#include <algorithm>
+#include <iostream>
+#include <vector>
+#include <cmath>
+ 
+static bool abs_compare(int a, int b)
+{
+    return (std::abs(a) < std::abs(b));
+}
+ 
+int main()
+{
+    std::vector<int> v{ 3, 1, -14, 1, 5, 9 }; 
+    std::vector<int>::iterator result;
+ 
+    result = std::max_element(v.begin(), v.end());
+    std::cout << "max element at: " << std::distance(v.begin(), result) << '\n';
+ 
+    result = std::max_element(v.begin(), v.end(), abs_compare);
+    std::cout << "max element (absolute) at: " << std::distance(v.begin(), result) << '\n';
+}
+```
 * [std::min - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/min)
 	* Returns the smaller of the given values.
 		* 1-2) Returns the smaller of a and b.
