@@ -321,12 +321,40 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * _NATIVE_WCHAR_T_DEFINED Defined as 1 when the /Zc:wchar_t compiler option is set. Otherwise, undefined.
     * [/Zc:wchar_t (wchar_t Is Native Type) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/build/reference/zc-wchar-t-wchar-t-is-native-type?view=msvc-160)
       * Parse wchar_t as a built-in type according to the C++ standard.
-* [Enumeration declaration - cppreference.com](https://en.cppreference.com/w/cpp/language/enum)
-	* An enumeration is a distinct type whose value is restricted to a range of values (see below for details), which may include several explicitly named constants ("enumerators"). The values of the constants are values of an integral type known as the underlying type of the enumeration.
-	* Unscoped enumerations
-		* `enum Color { red, green, blue };`
-	* Scoped enumerations
-		* `enum class Color { red, green = 20, blue };`
+* [谈一谈 C++ 中的值的类型 (qq.com)](https://mp.weixin.qq.com/s/MQNIkeS3eMUmaezyUL8ZkQ)
+
+##### [Enumeration](https://en.cppreference.com/w/cpp/language/enum)
+
+* An enumeration is a distinct type whose value is restricted to a range of values (see below for details), which may include several explicitly named constants ("enumerators"). The values of the constants are values of an integral type known as the underlying type of the enumeration.
+* Unscoped enumerations
+	* `enum Color { red, green, blue };`
+* Scoped enumerations
+	* `enum class Color { red, green = 20, blue };`
+
+##### [struct](https://en.cppreference.com/w/cpp/keyword/struct)
+
+* C++ keywords: struct
+	* [declaration of a compound type](https://en.cppreference.com/w/cpp/language/class)
+	* [declaration of a scoped enumeration type (since C++11)](https://en.cppreference.com/w/cpp/language/enum)
+	* If a function or a variable exists in scope with the name identical to the name of a non-union class type, struct can be prepended to the name for disambiguation, resulting in an [elaborated type specifier](https://en.cppreference.com/w/cpp/language/elaborated_type_specifier)
+* [Struct declaration - cppreference.com](https://en.cppreference.com/w/c/language/struct)
+	* A struct is a type consisting of a sequence of members whose storage is allocated in an ordered sequence (as opposed to union, which is a type consisting of a sequence of members whose storage overlaps).
+* [Struct and union initialization - cppreference.com](https://en.cppreference.com/w/c/language/struct_initialization)
+```c++
+#include <stdio.h>
+#include <time.h>
+ 
+int main(void)
+{
+    char buff[70];
+    // designated initializers simplify the use of structs whose
+    // order of members is unspecified
+    struct tm my_time = { .tm_year=2012-1900, .tm_mon=9, .tm_mday=9,
+                          .tm_hour=8, .tm_min=10, .tm_sec=20 };
+    strftime(buff, sizeof buff, "%A %c", &my_time);
+    puts(buff);
+}
+```
 * [C/C++ 结构体就这样被攻克了！](https://mp.weixin.qq.com/s/-RoBZ9Gge-6HtYH8tUS8xw)
   * 结构体的声明与定义
     * 声明
@@ -357,7 +385,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * 初始化
   * 枚举
   * 位域
-* [谈一谈 C++ 中的值的类型 (qq.com)](https://mp.weixin.qq.com/s/MQNIkeS3eMUmaezyUL8ZkQ)
 
 ##### Literals
 
