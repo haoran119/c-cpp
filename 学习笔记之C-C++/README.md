@@ -2774,17 +2774,6 @@ Sequence containers implement data structures which can be accessed sequentially
 	* Causes reallocation if the new size() is greater than the old capacity(). If the new size() is greater than capacity(), all iterators and references are invalidated. Otherwise, only the iterators and references before the insertion point remain valid. The past-the-end iterator is also invalidated.
 * [std::vector<T,Allocator>::rbegin, std::vector<T,Allocator>::crbegin - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/rbegin)
 	* Returns a reverse iterator to the first element of the reversed vector. It corresponds to the last element of the non-reversed vector. If the vector is empty, the returned iterator is equal to rend().
-* [ES.23: Prefer the {}-initializer syntax - C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#es23-prefer-the--initializer-syntax)
-	* Reason Prefer {}. The rules for {} initialization are simpler, more general, less ambiguous, and safer than for other forms of initialization.
-Use = only when you are sure that there can be no narrowing conversions. For built-in arithmetic types, use = only with auto.
-	* Avoid () initialization, which allows parsing ambiguities.
-	* Exception For containers, there is a tradition for using {...} for a list of elements and (...) for sizes
-	* Note {}-initializers do not allow narrowing conversions (and that is usually a good thing) and allow explicit constructors (which is fine, we’re intentionally initializing a new variable).
-	* Note {} initialization can be used for nearly all initialization; other forms of initialization can’t
-	* Note Initialization of a variable declared using auto with a single value, e.g., {v}, had surprising results until C++17. The C++17 rules are somewhat less surprising
-	* Use ={...} if you really want an initializer_list\<T>
-	* Note ={} gives copy initialization whereas {} gives direct initialization. Like the distinction between copy-initialization and direct-initialization itself, this can lead to surprises. {} accepts explicit constructors; ={} does not.
-	* Use plain {}-initialization unless you specifically want to disable explicit constructors.	
 * [2D Vector In C++ With User Defined Size - GeeksforGeeks](https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/)
 
 ###### [std::deque](https://en.cppreference.com/w/cpp/container/deque)
@@ -3788,6 +3777,17 @@ int main()
         std::cout << n << ' ';
 }
 ```
+* [ES.23: Prefer the {}-initializer syntax - C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#es23-prefer-the--initializer-syntax)
+	* Reason Prefer {}. The rules for {} initialization are simpler, more general, less ambiguous, and safer than for other forms of initialization.
+Use = only when you are sure that there can be no narrowing conversions. For built-in arithmetic types, use = only with auto.
+	* Avoid () initialization, which allows parsing ambiguities.
+	* Exception For containers, there is a tradition for using {...} for a list of elements and (...) for sizes
+	* Note {}-initializers do not allow narrowing conversions (and that is usually a good thing) and allow explicit constructors (which is fine, we’re intentionally initializing a new variable).
+	* Note {} initialization can be used for nearly all initialization; other forms of initialization can’t
+	* Note Initialization of a variable declared using auto with a single value, e.g., {v}, had surprising results until C++17. The C++17 rules are somewhat less surprising
+	* Use ={...} if you really want an initializer_list\<T>
+	* Note ={} gives copy initialization whereas {} gives direct initialization. Like the distinction between copy-initialization and direct-initialization itself, this can lead to surprises. {} accepts explicit constructors; ={} does not.
+	* Use plain {}-initialization unless you specifically want to disable explicit constructors.	
 
 ##### General-purpose utilities
 
