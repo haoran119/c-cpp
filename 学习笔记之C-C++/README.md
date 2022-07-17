@@ -3203,6 +3203,16 @@ int main() {
 			* Advances the iterator it by n element positions.
 			* If it is a random-access iterator, the function uses just once operator+ or operator-. Otherwise, the function uses repeatedly the increase or decrease operator (operator++ or operator--) until n elements have been advanced.
 	* [std::advance in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdadvance-in-cpp/)
+* [std::next - cppreference.com](https://en.cppreference.com/w/cpp/iterator/next)
+	* increment an iterator (function template)
+	* Return the nth successor of iterator it.
+	* Notes
+		* Although the expression ++c.begin() often compiles, it is not guaranteed to do so: c.begin() is an rvalue expression, and there is no LegacyInputIterator requirement that specifies that increment of an rvalue is guaranteed to work. In particular, when iterators are implemented as pointers or its operator++ is lvalue-ref-qualified, ++c.begin() does not compile, while std::next(c.begin()) does.
+* [std::prev - cppreference.com](https://en.cppreference.com/w/cpp/iterator/prev)
+	* decrement an iterator (function template)
+	* Return the nth predecessor of iterator it.
+	* Notes
+		* Although the expression --c.end() often compiles, it is not guaranteed to do so: c.end() is an rvalue expression, and there is no iterator requirement that specifies that decrement of an rvalue is guaranteed to work. In particular, when iterators are implemented as pointers or its operator-- is lvalue-ref-qualified, --c.end() does not compile, while std::prev(c.end()) does.
 
 ##### Range access
 
