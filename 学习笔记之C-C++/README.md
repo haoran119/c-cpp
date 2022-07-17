@@ -323,14 +323,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
       * Parse wchar_t as a built-in type according to the C++ standard.
 * [谈一谈 C++ 中的值的类型 (qq.com)](https://mp.weixin.qq.com/s/MQNIkeS3eMUmaezyUL8ZkQ)
 
-##### [Enumeration](https://en.cppreference.com/w/cpp/language/enum)
-
-* An enumeration is a distinct type whose value is restricted to a range of values (see below for details), which may include several explicitly named constants ("enumerators"). The values of the constants are values of an integral type known as the underlying type of the enumeration.
-* Unscoped enumerations
-	* `enum Color { red, green, blue };`
-* Scoped enumerations
-	* `enum class Color { red, green = 20, blue };`
-
 ##### [struct](https://en.cppreference.com/w/cpp/keyword/struct)
 
 * C++ keywords: struct
@@ -385,6 +377,21 @@ int main(void)
     * 初始化
   * 枚举
   * 位域
+
+##### [Enumeration](https://en.cppreference.com/w/cpp/language/enum)
+
+* An enumeration is a distinct type whose value is restricted to a range of values (see below for details), which may include several explicitly named constants ("enumerators"). The values of the constants are values of an integral type known as the underlying type of the enumeration.
+* Unscoped enumerations
+	* `enum Color { red, green, blue };`
+* Scoped enumerations
+	* `enum class Color { red, green = 20, blue };`
+
+##### [decltype](https://en.cppreference.com/w/cpp/language/decltype)
+
+* Inspects the declared type of an entity or the type and value category of an expression.
+* Keywords decltype
+	* [decltype specifier](https://en.cppreference.com/w/cpp/language/decltype) (since C++11)
+	* [decltype(auto)](https://en.cppreference.com/w/cpp/language/auto) (since C++14)
 
 ##### Literals
 
