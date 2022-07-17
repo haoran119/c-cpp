@@ -3206,6 +3206,12 @@ int main() {
 		* No, std::remove_if will move the elements that don't match the predicate to the end of list and will return an iterator to the new "end". Erase will effectively drop the element (call the dtor) from the container.
 		* The difference is perfectly illustrated by the examples
 			* [remove_if - C++ Reference](https://cplusplus.com/reference/algorithm/remove_if/)
+	* [c++ - using remove_if for a map container - Stack Overflow](https://stackoverflow.com/questions/29004092/using-remove-if-for-a-map-container)
+		* remove_if works by scanning the elements and once an element is to be removed, it remembers the "gap" that will leave (keeping an iterator pointing thereto) while advancing another iterator to find the next element to retain... it then starts copying or moving elements from the latter position to the former until it reaches end().
+		* That doesn't work for map, because you can't overwrite the pair<key,value> elements wholesale: the key values aren't allowed to be modified or the sorted-order invariant the implementation needs could be invalidated.
+		* So, you'll need to abandon remove_if. You could use a normal loop, being careful to save the iterator-to-next-element rather than attempting to advance from a just-erased iterator. Lots of other questions about how to erase elements from a map while iterating, e.g. here....
+		* [c++ - How to remove from a map while iterating it? - Stack Overflow](https://stackoverflow.com/questions/8234779/how-to-remove-from-a-map-while-iterating-it)
+	* [c++ - remove_if equivalent for std::map - Stack Overflow](https://stackoverflow.com/questions/800955/remove-if-equivalent-for-stdmap)
 
 * [std::swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/swap)
   * [swap() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/swap-in-cpp/)
