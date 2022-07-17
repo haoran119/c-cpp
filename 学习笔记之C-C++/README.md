@@ -1050,6 +1050,53 @@ void S2::f(int i)
 
 ###### Non-member functions
 
+* [operator<<,>>(std::basic_string) - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/operator_ltltgtgt)
+	* performs stream input and output on strings (function template)
+* [std::getline - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/getline)
+	* read data from an I/O stream into a string (function template)
+	* getline reads characters from an input stream and places them into a string
+	* Parameters
+		* input	-	the stream to get data from
+		* str	-	the string to put the data into
+		* delim	-	the delimiter character
+	* Return value
+		* input
+	* Notes
+		* When consuming whitespace-delimited input (e.g. int n; std::cin >> n;) any whitespace that follows, including a newline character, will be left on the input stream. Then when switching to line-oriented input, the first line retrieved with getline will be just that whitespace. In the likely case that this is unwanted behaviour, possible solutions include:
+			* An explicit extraneous initial call to getline
+			* Removing consecutive whitespace with std::cin >> std::ws 
+			* Ignoring all leftover characters on the line of input with cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+```c++
+#include <string>
+#include <iostream>
+#include <sstream>
+ 
+int main()
+{
+    // greet the user
+    std::string name;
+    std::cout << "What is your name? ";
+    std::getline(std::cin, name);
+    std::cout << "Hello " << name << ", nice to meet you.\n";
+ 
+    // read file line by line
+    std::istringstream input;
+    input.str("1\n2\n3\n4\n5\n6\n7\n");
+    int sum = 0;
+    for (std::string line; std::getline(input, line); ) {
+        sum += std::stoi(line);
+    }
+    std::cout << "\nThe sum is: " << sum << "\n\n";
+ 
+    // use separator to read parts of the line
+    std::istringstream input2;
+    input2.str("a;b;c;d");
+    for (std::string line; std::getline(input2, line, ';'); ) {
+        std::cout << line << '\n';
+    }
+}
+```
+
 | [stoi/stol/stoll](https://en.cppreference.com/w/cpp/string/basic_string/stol) | converts a string to a signed integer |
 | - | - |
 | [stoul/stoull](https://en.cppreference.com/w/cpp/string/basic_string/stoul) | converts a string to an unsigned integer |
