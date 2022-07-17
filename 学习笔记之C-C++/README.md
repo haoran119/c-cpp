@@ -4058,3 +4058,7 @@ std::string exec(const char* cmd) {
 	* check .cpp if FileUtils::func() exists
 	* for template function, move the definition to .h
 		* [c++ - undefined reference to template function - Stack Overflow](https://stackoverflow.com/questions/10632251/undefined-reference-to-template-function)
+* How to fix link error `undefined reference to 'std::filesystem::__cxx11::directory_iterator::operator*() const` ?
+	* It need to add `-lstdc++fs` to option.
+		* `g++ -lstdc++fs -std=c++17 -o fs fs.cpp -lstdc++fs`
+	* [c++ - std::filesystem link error on ubuntu 18.10 - Stack Overflow](https://stackoverflow.com/questions/53852684/stdfilesystem-link-error-on-ubuntu-18-10) 
