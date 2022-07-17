@@ -3639,6 +3639,7 @@ Numeric limits
 [C numeric limits interface](https://en.cppreference.com/w/cpp/types/climits)
 * INT_MAX        = 2147483647
 * UINT_MAX       = 4294967295
+* DBL_MAX          = 1.79769e+308
 
 #
 Type relationships
