@@ -2715,12 +2715,32 @@ int main()
 	* A similar member function, map::at, has the same behavior when an element with the key exists, but throws an exception when it does not.
 	* A call to this function is equivalent to:
 		* (*((this->insert(make_pair(k,mapped_type()))).first)).second
-* [map::begin() and end() in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/mapbegin-end-c-stl/)
-* [map::cbegin - C++ Reference](http://www.cplusplus.com/reference/map/map/cbegin/)
-	* Return const_iterator to beginning
-		* Returns a const_iterator pointing to the first element in the container.
-		* A const_iterator is an iterator that points to const content. This iterator can be increased and decreased (unless it is itself also const), just like the iterator returned by map::begin, but it cannot be used to modify the contents it points to, even if the map object is not itself const.
-		* If the container is empty, the returned iterator value shall not be dereferenced.
+* [std::map<Key,T,Compare,Allocator>::begin, std::map<Key,T,Compare,Allocator>::cbegin - cppreference.com](https://en.cppreference.com/w/cpp/container/map/begin)
+	* Returns an iterator to the first element of the map.
+	* If the map is empty, the returned iterator will be equal to end().
+	* returns an iterator to the beginning (public member function)
+	* [map::cbegin - C++ Reference](http://www.cplusplus.com/reference/map/map/cbegin/)
+		* Return const_iterator to beginning
+			* Returns a const_iterator pointing to the first element in the container.
+			* A const_iterator is an iterator that points to const content. This iterator can be increased and decreased (unless it is itself also const), just like the iterator returned by map::begin, but it cannot be used to modify the contents it points to, even if the map object is not itself const.
+			* If the container is empty, the returned iterator value shall not be dereferenced.
+	* [map::begin() and end() in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/mapbegin-end-c-stl/)
+* [std::map<Key,T,Compare,Allocator>::end, std::map<Key,T,Compare,Allocator>::cend - cppreference.com](https://en.cppreference.com/w/cpp/container/map/end)
+	* returns an iterator to the end (public member function)
+	* Returns an iterator to the element following the last element of the map.
+	* This element acts as a placeholder; attempting to access it results in undefined behavior.
+* [std::map<Key,T,Compare,Allocator>::rbegin, std::map<Key,T,Compare,Allocator>::crbegin - cppreference.com](https://en.cppreference.com/w/cpp/container/map/rbegin)
+	* returns a reverse iterator to the beginning (public member function)
+	* [map rbegin() function in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/map-rbegin-function-in-c-stl/)
+	* [c++ - Last key in a std::map - Stack Overflow](https://stackoverflow.com/questions/289715/last-key-in-a-stdmap)
+		* `map.rbegin()->first`
+* [std::map<Key,T,Compare,Allocator>::empty - cppreference.com](https://en.cppreference.com/w/cpp/container/map/empty)
+	* checks whether the container is empty (public member function)
+	* Checks if the container has no elements, i.e. whether begin() == end().
+	* Return value
+		* true if the container is empty, false otherwise
+	* Complexity
+		* Constant. 
 * [std::map<Key,T,Compare,Allocator>::insert - cppreference.com](https://en.cppreference.com/w/cpp/container/map/insert)
 	* inserts elements or nodes (since C++17) (public member function)
 * [std::map<Key,T,Compare,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/container/map/erase)
