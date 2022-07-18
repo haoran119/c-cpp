@@ -3215,6 +3215,14 @@ void replaceKey(Container& container,
 	* splices nodes from another container (public member function)
 	* Attempts to extract ("splice") each element in source and insert it into *this using the comparison object of *this. If there is an element in *this with key equivalent to the key of an element from source, then that element is not extracted from source. No elements are copied or moved, only the internal pointers of the container nodes are repointed. All pointers and references to the transferred elements remain valid, but now refer into *this, not into source.
 	* The behavior is undefined if get_allocator() != source.get_allocator().
+	* Parameters
+		* source	-	compatible container to transfer the nodes from
+	* Return value
+		* (none)
+	* Exceptions
+		* Does not throw unless comparison throws.
+	* Complexity
+		* N*log(size()+N)), where N is source.size().
 	* [Merge two maps, summing values for same keys in C++ - Stack Overflow](https://stackoverflow.com/questions/20771786/merge-two-maps-summing-values-for-same-keys-in-c)
 * [std::map<Key,T,Compare,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/container/map/find)
 	* finds element with specific key (public member function)
