@@ -4224,8 +4224,64 @@ int main()
     * The object is initialized with/assigned from a value of type std::nullopt_t or an optional object that does not contain a value.
     * The member function reset() is called.
   * There are no optional references; a program is ill-formed if it instantiates an optional with a reference type. Alternatively, an optional of a std::reference_wrapper of type T may be used to hold a reference. In addition, a program is ill-formed if it instantiates an optional with the (possibly cv-qualified) tag types std::nullopt_t or std::in_place_t.
+  * [std::optional\<T>::operator->, std::optional\<T>::operator* - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/operator*)
+  	* accesses the contained value (public member function)
+  	* The behavior is undefined if *this does not contain a value.
+  	* Return value
+	  	* Pointer or reference to the contained value.
+  	* Notes
+  		* This operator does not check whether the optional contains a value! You can do so manually by using has_value() or simply operator bool(). Alternatively, if checked access is needed, value() or value_or() may be used.
+  * [std::optional\<T>::value - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/value)
+  	* returns the contained value (public member function)	
+  	* If *this contains a value, returns a reference to the contained value.
+  	* Otherwise, throws a std::bad_optional_access exception.
+  	* Notes
+  		* The dereference operator operator*() does not check if this optional contains a value, which may be more efficient than value().
   * [std::make_optional - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/make_optional)
   	* creates an optional object
+```c++
+#include <string>
+#include <functional>
+#include <iostream>
+#include <optional>
+ 
+// optional can be used as the return type of a factory that may fail
+std::optional<std::string> create(bool b) {
+    if (b)
+        return "Godzilla";
+    return {};
+}
+ 
+// std::nullopt can be used to create any (empty) std::optional
+auto create2(bool b) {
+    return b ? std::optional<std::string>{"Godzilla"} : std::nullopt;
+}
+ 
+// std::reference_wrapper may be used to return a reference
+auto create_ref(bool b) {
+    static std::string value = "Godzilla";
+    return b ? std::optional<std::reference_wrapper<std::string>>{value}
+             : std::nullopt;
+}
+ 
+int main()
+{
+    std::cout << "create(false) returned "
+              << create(false).value_or("empty") << '\n';
+ 
+    // optional-returning factory functions are usable as conditions of while and if
+    if (auto str = create2(true)) {
+        std::cout << "create2(true) returned " << *str << '\n';
+    }
+ 
+    if (auto str = create_ref(true)) {
+        // using get() to access the reference_wrapper's value
+        std::cout << "create_ref(true) returned " << str->get() << '\n';
+        str->get() = "Mothra";
+        std::cout << "modifying it changed it to " << str->get() << '\n';
+    }
+}
+```
 * [optional Class | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/optional-class?view=msvc-170)
 * [std::optional: How, when, and why - C++ Team Blog](https://devblogs.microsoft.com/cppblog/stdoptional-how-when-and-why/)
 	* optional is mandatory
