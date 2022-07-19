@@ -3152,8 +3152,94 @@ int main()
 		* true if the container is empty, false otherwise
 	* Complexity
 		* Constant. 
+* [std::map<Key,T,Compare,Allocator>::clear - cppreference.com](https://en.cppreference.com/w/cpp/container/map/clear)
+	* clears the contents (public member function)
+	* Erases all elements from the container. After this call, size() returns zero.
+	* Invalidates any references, pointers, or iterators referring to contained elements. Any past-the-end iterator remains valid.
 * [std::map<Key,T,Compare,Allocator>::insert - cppreference.com](https://en.cppreference.com/w/cpp/container/map/insert)
 	* inserts elements or nodes (since C++17) (public member function)
+	* Inserts element(s) into the container, if the container doesn't already contain an element with an equivalent key.
+```c++
+#include <iomanip>
+#include <iostream>
+#include <map>
+#include <string>
+ 
+using namespace std::literals;
+ 
+template<typename It>
+void printInsertionStatus(It it, bool success)
+{
+    std::cout << "Insertion of " << it->first << (success ? " succeeded\n" : " failed\n");
+}
+ 
+int main()
+{
+    std::map<std::string, float> karasunoPlayerHeights;
+ 
+    // Overload 3: insert from rvalue reference
+    const auto [it_hinata, success] = karasunoPlayerHeights.insert({"Hinata"s, 162.8});
+    printInsertionStatus(it_hinata, success);
+ 
+    {
+        // Overload 1: insert from lvalue reference
+        const auto [it, success2] = karasunoPlayerHeights.insert(*it_hinata);
+        printInsertionStatus(it, success2);
+    }
+    {
+        // Overload 2: insert via forwarding to emplace
+        const auto [it, success] = karasunoPlayerHeights.insert(std::pair{"Kageyama", 180.6});
+        printInsertionStatus(it, success);
+    }
+ 
+    {
+        // Overload 6: insert from rvalue reference with positional hint
+        const std::size_t n = std::size(karasunoPlayerHeights);
+        const auto it = karasunoPlayerHeights.insert(it_hinata, {"Azumane"s, 184.7});
+        printInsertionStatus(it, std::size(karasunoPlayerHeights) != n);
+    }
+    {
+        // Overload 4: insert from lvalue reference with positional hint
+        const std::size_t n = std::size(karasunoPlayerHeights);
+        const auto it = karasunoPlayerHeights.insert(it_hinata, *it_hinata);
+        printInsertionStatus(it, std::size(karasunoPlayerHeights) != n);
+    }
+    {
+        // Overload 5: insert via forwarding to emplace with positional hint
+        const std::size_t n = std::size(karasunoPlayerHeights);
+        const auto it = karasunoPlayerHeights.insert(it_hinata, std::pair{"Tsukishima", 188.3});
+        printInsertionStatus(it, std::size(karasunoPlayerHeights) != n);
+    }
+ 
+    auto node_hinata = karasunoPlayerHeights.extract(it_hinata);
+    std::map<std::string, float> playerHeights;
+ 
+    // Overload 7: insert from iterator range
+    playerHeights.insert(std::begin(karasunoPlayerHeights), std::end(karasunoPlayerHeights));
+ 
+    // Overload 8: insert from initializer_list
+    playerHeights.insert({{"Kozume"s, 169.2}, {"Kuroo", 187.7}});
+ 
+ 
+    // Overload 9: insert node
+    const auto status = playerHeights.insert(std::move(node_hinata));
+    printInsertionStatus(status.position, status.inserted);
+ 
+    node_hinata = playerHeights.extract(status.position);
+    {
+        // Overload 10: insert node with positional hint
+        const std::size_t n = std::size(playerHeights);
+        const auto it = playerHeights.insert(std::begin(playerHeights), std::move(node_hinata));
+        printInsertionStatus(it, std::size(playerHeights) != n);
+    }
+ 
+ 
+    // Print resulting map
+    std::cout << std::left << '\n';
+    for (const auto& [name, height] : playerHeights)
+        std::cout << std::setw(10) << name << " | " << height << "cm\n";
+}
+```
 * [std::map<Key,T,Compare,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/container/map/erase)
 	* Removes specified elements from the container.
 	* 1) Removes the element at pos.
@@ -3186,7 +3272,7 @@ int main()
 }
 ```
 * [std::map<Key,T,Compare,Allocator>::extract - cppreference.com](https://en.cppreference.com/w/cpp/container/map/extract)
-	* extracts nodes from the container(public member function)
+	* extracts nodes from the container (public member function)
 	* [How to Modify a Key in a C++ Map or Set - Fluent C++](https://www.fluentcpp.com/2020/05/01/how-to-change-a-key-in-a-map-or-set-in-cpp/)
 ```c++
 auto myMap = std::map<std::string, int>{ {"one", 1}, {"two", 2}, {"three", 3} };
@@ -3224,6 +3310,49 @@ void replaceKey(Container& container,
 	* Complexity
 		* N*log(size()+N)), where N is source.size().
 	* [Merge two maps, summing values for same keys in C++ - Stack Overflow](https://stackoverflow.com/questions/20771786/merge-two-maps-summing-values-for-same-keys-in-c)
+```c++
+#include <map>
+#include <iostream>
+#include <string>
+ 
+int main()
+{
+  std::map<int, std::string> ma {{1, "apple"}, {5, "pear"}, {10, "banana"}};
+  std::map<int, std::string> mb {{2, "zorro"}, {4, "batman"}, {5, "X"}, {8, "alpaca"}};
+  std::map<int, std::string> u;
+
+  std::cout << "u.size(): " << u.size() << '\n';
+  std::cout << "ma.size(): " << ma.size() << '\n';
+
+  u.merge(ma);
+
+  std::cout << "u.size(): " << u.size() << '\n';
+  std::cout << "ma.size(): " << ma.size() << '\n';
+
+  u.merge(mb);
+
+  std::cout << "mb.size(): " << mb.size() << '\n';
+  std::cout << "mb.at(5): " << mb.at(5) << '\n';
+
+  for(auto const &kv: u)
+    std::cout << kv.first << ", " << kv.second << '\n';
+}
+
+/*
+u.size(): 0
+ma.size(): 3
+u.size(): 3
+ma.size(): 0
+mb.size(): 1
+mb.at(5): X
+1, apple
+2, zorro
+4, batman
+5, pear
+8, alpaca
+10, banana
+*/
+```
 * [std::map<Key,T,Compare,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/container/map/find)
 	* finds element with specific key (public member function)
 	* Return value
