@@ -4148,6 +4148,17 @@ Use = only when you are sure that there can be no narrowing conversions. For bui
 	* Non-member functions
 		* [make_pair](https://en.cppreference.com/w/cpp/utility/pair/make_pair)
 			* creates a pair object of type, defined by the argument types(function template)
+* [c++ - Check if pair is empty or uninitialized - Stack Overflow](https://stackoverflow.com/questions/57109084/check-if-pair-is-empty-or-uninitialized)
+```c++
+#include <optional>
+
+std::optional<std::pair<int, int>> res;
+
+if (res) // the pair is initialized and usable
+   doStuff(*res);
+else // ... it's not, hence initialize it
+   res = std::make_pair(42, 43);
+```
 * [std::tuple - cppreference.com](https://en.cppreference.com/w/cpp/utility/tuple)
 	* Class template std::tuple is a fixed-size collection of heterogeneous values. It is a generalization of std::pair.
 	* If std::is_trivially_destructible\<Ti>::value is true for every Ti in Types, the destructor of tuple is trivial.
