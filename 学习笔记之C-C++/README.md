@@ -3794,6 +3794,36 @@ int main()
     std::cout << "max element (absolute) at: " << std::distance(v.begin(), result) << '\n';
 }
 ```
+* [Find element with the maximum value in a map in C++ | Techie Delight](https://www.techiedelight.com/find-element-with-the-maximum-value-in-a-map-in-cpp/)
+	* 1. Using std::max_element
+	* 2. Using Loop
+	* Note that user defined condition, e.g. x.second < 4 && y.second < 4, doesn't work
+```c++
+#include <iostream>
+#include <map>
+#include <algorithm>
+ 
+int main()
+{
+    std::map<std::string, int> map = {
+        {"two", 2}, {"one", 1}, {"four", 4}, {"three", 3}
+    };
+ 
+    auto pr = std::max_element(map.begin(), map.end(), [](const auto &x, const auto &y) {
+                    return x.second < y.second;
+                });
+ 
+    std::cout << pr->first << std::endl;        // four
+
+    pr = std::max_element(map.begin(), map.end(), [](const auto &x, const auto &y) {
+                    return x.second < y.second && x.second < 4 && y.second < 4;
+                });
+ 
+    std::cout << pr->first << std::endl;        // still four rather than three
+ 
+    return 0;
+}
+```
 * [std::min - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/min)
 	* Returns the smaller of the given values.
 		* 1-2) Returns the smaller of a and b.
