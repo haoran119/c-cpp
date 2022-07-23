@@ -2186,6 +2186,16 @@ int main()
   * directory_iterator is a LegacyInputIterator that iterates over the directory_entry elements of a directory (but does not visit the subdirectories). The iteration order is unspecified, except that each directory entry is visited only once. The special pathnames dot and dot-dot are skipped.
   * If the directory_iterator reports an error or is advanced past the last directory entry, it becomes equal to the default-constructed iterator, also known as the end iterator. Two end iterators are always equal, dereferencing or incrementing the end iterator is undefined behavior.
   * If a file or a directory is deleted or added to the directory tree after the directory iterator has been created, it is unspecified whether the change would be observed through the iterator.
+  * [c++ - Get an ordered list of files in a folder - Stack Overflow](https://stackoverflow.com/questions/30983154/get-an-ordered-list-of-files-in-a-folder)
+    ```c++
+    std::vector<std::filesystem::path> files_in_directory;
+    std::copy(std::filesystem::directory_iterator(myFolder), std::filesystem::directory_iterator(), std::back_inserter(files_in_directory));
+    std::sort(files_in_directory.begin(), files_in_directory.end());
+
+    for (const std::string & filename : files_in_directory) {
+        std::cout << path.string() << std::endl; // printed in alphabetical order
+    }
+    ```
 * [std::filesystem::copy_options - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy_options)
   * [c++ - How to copy a file from a folder to another folder - Stack Overflow](https://stackoverflow.com/questions/9125122/how-to-copy-a-file-from-a-folder-to-another-folder)
 * [std::filesystem::copy - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy)
