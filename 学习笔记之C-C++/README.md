@@ -267,6 +267,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
 * [CMake - Wikipedia](https://en.wikipedia.org/wiki/CMake)
 	* [CMake Tutorial — CMake 3.23.0-rc2 Documentation](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)
 	* [Examples | CMake](https://cmake.org/examples/)
+* [GDB (Step by Step Introduction) - GeeksforGeeks](https://www.geeksforgeeks.org/gdb-step-by-step-introduction/)
 
 #### Data Types
 
