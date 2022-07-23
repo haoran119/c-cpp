@@ -3119,6 +3119,13 @@ int main()
 * Everywhere the standard library uses the Compare requirements, uniqueness is determined by using the equivalence relation. In imprecise terms, two objects a and b are considered equivalent (not unique) if neither compares less than the other: !comp(a, b) && !comp(b, a).
 * std::map meets the requirements of Container, AllocatorAwareContainer, AssociativeContainer and ReversibleContainer.
 * [map - C++ Reference](http://www.cplusplus.com/reference/map/map/)
+* [(constructor)](https://en.cppreference.com/w/cpp/container/map/map)
+	* constructs the map (public member function)
+	* Constructs new container from a variety of data sources and optionally using user supplied allocator alloc or comparison function object comp.
+	* [Copy a map in C++ | Techie Delight](https://www.techiedelight.com/copy-a-map-in-cpp/)
+		* 1. Using copy constructor
+		* 2. Using std::map::insert
+		* 3. Using std::copy 
 * [map::operator[] - C++ Reference](http://www.cplusplus.com/reference/map/map/operator[]/)
 	* access or insert specified element (public member function)
 	* If k matches the key of an element in the container, the function returns a reference to its mapped value.
