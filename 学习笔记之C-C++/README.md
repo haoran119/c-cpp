@@ -3862,6 +3862,27 @@ dash-separated string: 1-2-3-4-5-6-7-8-9-10
 dash-separated string (right-folded): 10-9-8-7-6-5-4-3-2-1
 */
 ```
+* [std::inner_product - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/inner_product)
+	* computes the inner product of two ranges of elements (function template)
+	* Computes inner product (i.e. sum of products) or performs ordered map/reduce operation on the range \[first1, last1) and the range beginning at first2.
+```c++
+#include <numeric>
+#include <iostream>
+#include <vector>
+#include <functional>
+int main()
+{
+    std::vector<int> a{0, 1, 2, 3, 4};
+    std::vector<int> b{5, 4, 2, 3, 1};
+ 
+    int r1 = std::inner_product(a.begin(), a.end(), b.begin(), 0);
+    std::cout << "Inner product of a and b: " << r1 << '\n';
+ 
+    int r2 = std::inner_product(a.begin(), a.end(), b.begin(), 0,
+                                std::plus<>(), std::equal_to<>());
+    std::cout << "Number of pairwise matches between a and b: " <<  r2 << '\n';
+}
+```
 * [std::partial_sum - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/partial_sum)
 	* computes the partial sum of a range of elements(function template)
 	* Return value
