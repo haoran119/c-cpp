@@ -3144,6 +3144,9 @@ int main()
 	* A similar member function, map::at, has the same behavior when an element with the key exists, but throws an exception when it does not.
 	* A call to this function is equivalent to:
 		* (*((this->insert(make_pair(k,mapped_type()))).first)).second
+* !!! DON'T use double as the key as it could not be found due to the double precision
+	* [c++ - Floating point keys in std:map - Stack Overflow](https://stackoverflow.com/questions/6684573/floating-point-keys-in-stdmap)
+	* use static_cast\<int>(std::round(key * 10)) as key instead
 * [std::map<Key,T,Compare,Allocator>::begin, std::map<Key,T,Compare,Allocator>::cbegin - cppreference.com](https://en.cppreference.com/w/cpp/container/map/begin)
 	* Returns an iterator to the first element of the map.
 	* If the map is empty, the returned iterator will be equal to end().
