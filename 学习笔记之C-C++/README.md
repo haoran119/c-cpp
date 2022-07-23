@@ -4463,6 +4463,14 @@ int main()
 * A function object is any object for which the function call operator is defined. C++ provides many built-in function objects as well as support for creation and manipulation of new function objects.
 
 #
+Partial function application
+
+* std::bind_front and std::bind provide support for [partial function application](https://en.wikipedia.org/wiki/Partial_application), i.e. binding arguments to functions to produce new functions.
+* [std::bind - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/bind)
+	* binds one or more arguments to a function object (function template)
+	* The function template bind generates a forwarding call wrapper for f. Calling this wrapper is equivalent to invoking f with some of its arguments bound to args.
+
+#
 Operator function objects
 
 * [std::multiplies - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/multiplies)
