@@ -4120,7 +4120,9 @@ Numeric limits
 #
 [C numeric limits interface](https://en.cppreference.com/w/cpp/types/climits)
 * INT_MAX        = 2147483647
+* LONG_MAX       = 9223372036854775807
 * UINT_MAX       = 4294967295
+* ULONG_MAX      = 18446744073709551615
 * DBL_MAX          = 1.79769e+308
 
 #
