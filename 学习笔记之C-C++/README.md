@@ -4434,8 +4434,73 @@ Operator function objects
 
 ##### Mathematical functions and types
 
+###### [Common mathematical functions]()
+
+* The header \<cmath> provides standard C library mathematical functions such as std::fabs, std::sqrt, and std::sin.
+
+#
+Nearest integer floating point operations
+
+* [std::round, std::roundf, std::roundl, std::lround, std::lroundf, std::lroundl, std::llround, std::llroundf - cppreference.com](https://en.cppreference.com/w/cpp/numeric/math/round)
+	* nearest integer, rounding away from zero in halfway cases (function)
+```c++
+#include <iostream>
+#include <cmath>
+#include <cfenv>
+#include <climits>
+ 
+// #pragma STDC FENV_ACCESS ON
+ 
+int main()
+{
+    // round
+    std::cout << "round(+2.3) = " << std::round(2.3)
+              << "  round(+2.5) = " << std::round(2.5)
+              << "  round(+2.7) = " << std::round(2.7) << '\n'
+              << "round(-2.3) = " << std::round(-2.3)
+              << "  round(-2.5) = " << std::round(-2.5)
+              << "  round(-2.7) = " << std::round(-2.7) << '\n';
+ 
+    std::cout << "round(-0.0) = " << std::round(-0.0)  << '\n'
+              << "round(-Inf) = " << std::round(-INFINITY) << '\n';
+ 
+    // lround
+    std::cout << "lround(+2.3) = " << std::lround(2.3)
+              << "  lround(+2.5) = " << std::lround(2.5)
+              << "  lround(+2.7) = " << std::lround(2.7) << '\n'
+              << "lround(-2.3) = " << std::lround(-2.3)
+              << "  lround(-2.5) = " << std::lround(-2.5)
+              << "  lround(-2.7) = " << std::lround(-2.7) << '\n';
+ 
+    std::cout << "lround(-0.0) = " << std::lround(-0.0)  << '\n'
+              << "lround(-Inf) = " << std::lround(-INFINITY) << '\n';
+ 
+    // error handling
+    std::feclearexcept(FE_ALL_EXCEPT);
+    std::cout << "std::lround(LONG_MAX+1.5) = "
+              << std::lround(LONG_MAX+1.5) << '\n';
+    if (std::fetestexcept(FE_INVALID))
+              std::cout << "    FE_INVALID was raised\n";
+}
+/*
+round(+2.3) = 2  round(+2.5) = 3  round(+2.7) = 3
+round(-2.3) = -2  round(-2.5) = -3  round(-2.7) = -3
+round(-0.0) = -0
+round(-Inf) = -inf
+lround(+2.3) = 2  lround(+2.5) = 3  lround(+2.7) = 3
+lround(-2.3) = -2  lround(-2.5) = -3  lround(-2.7) = -3
+lround(-0.0) = 0
+lround(-Inf) = -9223372036854775808
+std::lround(LONG_MAX+1.5) = -9223372036854775808
+    FE_INVALID was raised
+*/
+```
+* [Round to 2 decimal places in C++ - Java2Blog](https://java2blog.com/round-to-2-decimal-places-cpp/#:~:text=double%20type%20variables.-,Using%20the%20ceil()%20function%20to%20round%20to%202%20decimal,decimal%20places%20in%20C%2B%2B.)
+	* `std::round(x * 100.0) / 100.0`
+
 ###### [Mathematical constants (since C++20)](https://en.cppreference.com/w/cpp/numeric/constants)
 
+* The header \<numbers> provides several mathematical constants, such as std::numbers::pi or std::numbers::sqrt2
 * [How to use the PI constant in C++?](https://www.tutorialspoint.com/how-to-use-the-pi-constant-in-cplusplus)
 	* The PI constant is present in the cmath header file. The name of the constant is M_PI. 
 
