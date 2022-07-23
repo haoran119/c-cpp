@@ -4201,6 +4201,45 @@ Use = only when you are sure that there can be no narrowing conversions. For bui
 	* forwards a function argument (function template)
 	* 1) Forwards lvalues as either lvalues or as rvalues, depending on T
 	* 2) Forwards rvalues as rvalues and prohibits forwarding of rvalues as lvalues
+* [std::move - cppreference.com](https://en.cppreference.com/w/cpp/utility/move)
+	* obtains an rvalue reference (function template)
+	* std::move is used to indicate that an object t may be "moved from", i.e. allowing the efficient transfer of resources from t to another object.
+	* In particular, std::move produces an [xvalue expression](https://en.cppreference.com/w/cpp/language/value_category) that identifies its argument t. It is exactly equivalent to a static_cast to an rvalue reference type.
+	* Return value
+		* `static_cast<typename std::remove_reference<T>::type&&>(t)`
+```c++
+#include <iomanip>
+#include <iostream>
+#include <utility>
+#include <vector>
+#include <string>
+ 
+int main()
+{
+    std::string str = "Salut";
+    std::vector<std::string> v;
+ 
+    // uses the push_back(const T&) overload, which means 
+    // we'll incur the cost of copying str
+    v.push_back(str);
+    std::cout << "After copy, str is " << std::quoted(str) << '\n';
+ 
+    // uses the rvalue reference push_back(T&&) overload, 
+    // which means no strings will be copied; instead, the contents
+    // of str will be moved into the vector.  This is less
+    // expensive, but also means str might now be empty.
+    v.push_back(std::move(str));
+    std::cout << "After move, str is " << std::quoted(str) << '\n';
+ 
+    std::cout << "The contents of the vector are { " << std::quoted(v[0])
+                                             << ", " << std::quoted(v[1]) << " }\n";
+}
+/*
+After copy, str is "Salut"
+After move, str is ""
+The contents of the vector are { "Salut", "Salut" }
+*/
+```
 
 ###### Pairs and tuples
 
