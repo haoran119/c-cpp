@@ -4114,6 +4114,9 @@ Numeric limits
 	* min is only meaningful for bounded types and for unbounded unsigned types, that is, types that represent an infinite set of negative values have no meaningful minimum.
 * [std::numeric_limits\<T>::max - cppreference.com](https://en.cppreference.com/w/cpp/types/numeric_limits/max)
 	* Returns the maximum finite value representable by the numeric type T. Meaningful for all bounded types.
+* [std::numeric_limits\<T>::epsilon - cppreference.com](https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon)
+	* returns the difference between 1.0 and the next representable value of the given floating-point type (public static member function)
+	* Returns the machine epsilon, that is, the difference between 1.0 and the next value representable by the floating-point type T. It is only meaningful if std::numeric_limits\<T>::is_integer == false.
 * [std::numeric_limits\<T>::infinity - cppreference.com](https://en.cppreference.com/w/cpp/types/numeric_limits/infinity)
 	* Returns the special value "positive infinity", as represented by the floating-point type T. Only meaningful if std::numeric_limits\<T>::has_infinity == true. In IEEE 754, the most common binary representation of floating-point numbers, the positive infinity is the value with all bits of the exponent set and all bits of the fraction cleared.
 
