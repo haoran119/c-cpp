@@ -4547,6 +4547,54 @@ Operator function objects
 * The header \<cmath> provides standard C library mathematical functions such as std::fabs, std::sqrt, and std::sin.
 
 #
+Basic operations
+
+* [std::fmod, std::fmodf, std::fmodl - cppreference.com](https://en.cppreference.com/w/cpp/numeric/math/fmod)
+	* remainder of the floating point division operation (function)
+	* The floating-point remainder of the division operation x/y calculated by this function is exactly the value x - n*y, where n is x/y with its fractional part truncated.
+	* The returned value has the same sign as x and is less than y in magnitude.
+```c++
+#include <iostream>
+#include <cmath>
+#include <cfenv>
+ 
+// #pragma STDC FENV_ACCESS ON
+int main()
+{
+    std::cout << "fmod(+5.1, +3.0) = " << std::fmod(5.1,3) << '\n'
+              << "fmod(-5.1, +3.0) = " << std::fmod(-5.1,3) << '\n'
+              << "fmod(+5.1, -3.0) = " << std::fmod(5.1,-3) << '\n'
+              << "fmod(-5.1, -3.0) = " << std::fmod(-5.1,-3) << '\n'
+              << "fmod(1.1, 0.2) = " << std::fmod(1.1,0.2) << '\n'
+              << "fmod(1.0, 0.2) = " << std::fmod(1.0,0.2) << '\n';
+ 
+    // special values
+    std::cout << "fmod(+0.0, 1.0) = " << std::fmod(0, 1) << '\n'
+              << "fmod(-0.0, 1.0) = " << std::fmod(-0.0, 1) << '\n'
+              << "fmod(5.1, Inf) = " << std::fmod(5.1, INFINITY) << '\n';
+ 
+    // error handling
+    std::feclearexcept(FE_ALL_EXCEPT);
+    std::cout << "fmod(+5.1, 0) = " << std::fmod(5.1, 0) << '\n';
+    if(std::fetestexcept(FE_INVALID))
+        std::cout << "    FE_INVALID raised\n";
+}
+/*
+fmod(+5.1, +3.0) = 2.1
+fmod(-5.1, +3.0) = -2.1
+fmod(+5.1, -3.0) = 2.1
+fmod(-5.1, -3.0) = -2.1
+fmod(1.1, 0.2) = 0.1
+fmod(1.0, 0.2) = 0.2
+fmod(+0.0, 1.0) = 0
+fmod(-0.0, 1.0) = -0
+fmod(5.1, Inf) = 5.1
+fmod(+5.1, 0) = -nan
+    FE_INVALID raised
+*/
+```
+
+#
 Nearest integer floating point operations
 
 * [std::round, std::roundf, std::roundl, std::lround, std::lroundf, std::lroundl, std::llround, std::llroundf - cppreference.com](https://en.cppreference.com/w/cpp/numeric/math/round)
