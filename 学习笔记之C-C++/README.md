@@ -4525,6 +4525,9 @@ Operator function objects
 * [std::multiplies - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/multiplies)
 	* function object implementing x * y (class template)
 	* Function object for performing multiplication. Effectively calls operator* on two instances of type T.
+* [std::modulus - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/modulus)
+	* function object implementing x % y (class template)
+	* Function object for computing remainders of divisions. Implements operator% for type T.
 * [std::greater - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/greater)
 	* function object implementing x > y (class template)
 
