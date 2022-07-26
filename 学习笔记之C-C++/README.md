@@ -4337,6 +4337,25 @@ After move, str is ""
 The contents of the vector are { "Salut", "Salut" }
 */
 ```
+* [F.48: Don’t return std::move(local)](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f48-dont-return-stdmovelocal)
+	* `Reason` With guaranteed copy elision, it is now almost always a pessimization to expressly use std::move in a return statement.
+	* `Example, bad`
+    ```c++
+    S f()
+    {
+      S result;
+      return std::move(result);
+    }
+    ```
+	* `Example, good`
+    ```c++
+    S f()
+    {
+      S result;
+      return result;
+    }
+    ```
+	* `Enforcement` This should be enforced by tooling by checking the return expression .
 
 ###### Pairs and tuples
 
