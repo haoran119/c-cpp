@@ -4356,6 +4356,38 @@ The contents of the vector are { "Salut", "Salut" }
     }
     ```
 	* `Enforcement` This should be enforced by tooling by checking the return expression .
+```c++
+#include <iostream>
+#include <vector>
+  
+void f(std::vector<int>& v)
+{
+    std::vector<int> result = {1, 2};
+    v = std::move(result);
+    
+    return;
+}
+
+std::vector<int> f1()
+{
+    std::vector<int> result = {1, 2};
+    return std::move(result);   
+    // warning: moving a local object in a return statement prevents copy elision [-Wpessimizing-move]
+    // note: remove 'std::move' call
+}
+
+int main()
+{
+    std::vector<int> z{};
+    
+    f(z);
+
+    for (auto it : z)
+        std::cout << it << " "; // 1 2     
+ 
+    return 0;
+}
+```
 
 ###### Pairs and tuples
 
