@@ -4950,6 +4950,44 @@ int main()
 		* headers from other components,
 		* system headers.
 	* My rationale for 1. is that it should prove that each header (for which there is a cpp) can be #included without prerequisites (terminus technicus: header is "self-contained"). And the rest just seems to flow logically from there.
+* [性能统计类](https://mp.weixin.qq.com/s/6LHThiscLQ1gNCwLlTSHRQ)
+```c++
+#include <iostream>
+#include <chrono>
+using namespace std;
+class PerfSum{
+    public:
+        PerfSum()
+        {
+            _beginTime = std::chrono::high_resolution_clock::now();
+        }
+        ~PerfSum()
+        {
+            auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now()-_beginTime);
+            std::cout<<"统计性能结束，时间过去了"<< ms.count() <<"毫秒"<<std::endl;
+        }
+    private:
+        std::chrono::high_resolution_clock::time_point _beginTime;
+ };
+
+//使用方法：
+void TestStdVec()
+{
+    std::vector<int> vec ;
+    PerfSum t;
+    
+    for(long i=0;i<1000000;i++) {
+        vec.push_back(i);
+    }
+    std::cout<<"End"<<std::endl;
+}
+
+int main() 
+{
+    std::cout<<"标准容器插入1000000次:"<<std::endl;
+    TestStdVec();
+}
+```
 
 ### Bug
 
