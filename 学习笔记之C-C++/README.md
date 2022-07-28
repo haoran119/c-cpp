@@ -5126,6 +5126,8 @@ std::string exec(const char* cmd) {
 			* Inlines must be defined in the same translation unit where they are used. By defining your "inline" function in the .cpp file, it is only usable in the same .cpp file. You need to move it either to the header file, or some special "inlines" file that some projects prefer to keep their implementation details a bit more hidden (you'd then #include that inlines file, either in your header or in main.cpp).
 		* [inline - C++ inlining class methods causes undefined reference - Stack Overflow](https://stackoverflow.com/questions/4769479/c-inlining-class-methods-causes-undefined-reference)
 			* The body of an inline function needs to be in the header so that the compiler can actually substitute it wherever required. 
+* How to fix compile error "error: unterminated #ifdef" ?
+	* add missing `#endif`
 * How to fix link error "undefined reference to 'std::filesystem::__cxx11::directory_iterator::operator*() const" ?
 	* It need to add `-lstdc++fs` to option.
 		* `g++ -lstdc++fs -std=c++17 -o fs fs.cpp -lstdc++fs`
