@@ -725,6 +725,9 @@ int main() {
 	* See also: [Pimpl](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Ri-pimpl)
 	* `Enforcement` 
 		* Flag a member function that is not marked const, but that does not perform a non-const operation on any member variable.
+* [C++ - Why static member function can't be created with 'const' qualifier - Stack Overflow](https://stackoverflow.com/questions/7035356/c-why-static-member-function-cant-be-created-with-const-qualifier)
+	* When you apply the const qualifier to a nonstatic member function, it affects the this pointer. For a const-qualified member function of class C, the this pointer is of type C const*, whereas for a member function that is not const-qualified, the this pointer is of type C*.
+	* A static member function does not have a this pointer (such a function is not called on a particular instance of a class), so const qualification of a static member function doesn't make any sense.
 
 #### [Storage Classes](https://www.tutorialspoint.com/cplusplus/cpp_storage_classes.htm)
 
