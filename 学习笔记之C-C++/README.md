@@ -3048,6 +3048,8 @@ Sequence containers implement data structures which can be accessed sequentially
 * [std::vector<T,Allocator>::rbegin, std::vector<T,Allocator>::crbegin - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/rbegin)
 	* Returns a reverse iterator to the first element of the reversed vector. It corresponds to the last element of the non-reversed vector. If the vector is empty, the returned iterator is equal to rend().
 * [2D Vector In C++ With User Defined Size - GeeksforGeeks](https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/)
+* [vector初始化与否导致的巨大性能差异](https://mp.weixin.qq.com/s/HISHvxxd1LVBwouAE-uZHg)
+	* 最近在优化引擎代码，在优化的过程中发现一个很奇怪的问题，一个简单的对象，存放在std::vector<> v中，如果v定义的时候为每个元素指定初值，那么后面对v中每个元素的写就飞快；相反的，如果v定义的时候，不指定初始值，那么后面对v中元素写操作的时候，就花费大约前一种2-3倍的时间。
 
 ###### [std::deque](https://en.cppreference.com/w/cpp/container/deque)
 
