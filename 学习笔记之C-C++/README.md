@@ -3786,6 +3786,61 @@ int main() {
 	* copies a range of elements to a new location (function template)
 	* Copies the elements in the range, defined by \[first, last), to another range beginning at d_first.
 	* [c++ - How to use copy_if for maps - Stack Overflow](https://stackoverflow.com/questions/23548139/how-to-use-copy-if-for-maps)
+* [std::transform - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/transform)
+	* applies a function to a range of elements, storing results in a destination range (function template)
+	* std::transform applies the given function to a range and stores the result in another range, keeping the original elements order and beginning at d_first.
+	* Return value
+		* Output iterator to the element past the last element transformed.
+	* Notes
+		* std::transform does not guarantee in-order application of unary_op or binary_op. To apply a function to a sequence in-order or to apply a function that modifies the elements of a sequence, use std::for_each.
+```c++
+#include <algorithm>
+#include <cctype>
+#include <iomanip>
+#include <iostream>
+#include <string>
+#include <vector>
+ 
+int main()
+{
+    std::string s{"hello"};
+    std::transform(s.cbegin(), s.cend(),
+                   s.begin(), // write to the same location
+                   [](unsigned char c) { return std::toupper(c); });
+    std::cout << "s = " << quoted(s) << '\n';
+ 
+    // achieving the same with std::for_each (see Notes above)
+    std::string g{"hello"};
+    std::for_each(g.begin(), g.end(), [](char& c) { // modify in-place
+        c = std::toupper(static_cast<unsigned char>(c));
+    });
+    std::cout << "g = " << quoted(g) << '\n';
+ 
+    std::vector<std::size_t> ordinals;
+    std::transform(s.cbegin(), s.cend(), std::back_inserter(ordinals),
+                   [](unsigned char c) { return c; });
+ 
+    std::cout << "ordinals: ";
+    for (auto ord : ordinals) {
+       std::cout << ord << ' ';
+    }
+ 
+    std::transform(ordinals.cbegin(), ordinals.cend(), ordinals.cbegin(),
+                   ordinals.begin(), std::plus<>{});
+ 
+    std::cout << "\nordinals: ";
+    for (auto ord : ordinals) {
+       std::cout << ord << ' ';
+    }
+    std::cout << '\n';
+}
+/*
+s = "HELLO"
+g = "HELLO"
+ordinals: 72 69 76 76 79 
+ordinals: 144 138 152 152 158
+*/
+```
 * [std::remove, std::remove_if - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/remove)
 	* removes elements satisfying specific criteria (function template)
 	* Return value
