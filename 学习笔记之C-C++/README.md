@@ -721,6 +721,8 @@ int main() {
     ```
 	* Another way of saying this is that constness is not transitive. It is possible for a const member function to change the value of mutable members and the value of objects accessed through non-const pointers. It is the job of the class to ensure such mutation is done only when it makes sense according to the semantics (invariants) it offers to its users.
 	* See also: [Pimpl](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Ri-pimpl)
+	* `Enforcement` 
+		* Flag a member function that is not marked const, but that does not perform a non-const operation on any member variable.
 
 #### [Storage Classes](https://www.tutorialspoint.com/cplusplus/cpp_storage_classes.htm)
 
