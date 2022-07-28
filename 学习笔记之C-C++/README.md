@@ -701,7 +701,7 @@ int main() {
     void f(int* p);   // old code: f() does not modify `*p`
     void f(const int* p) { f(const_cast<int*>(p)); } // wrapper
     ```
-		* Note that this wrapper solution is a patch that should be used only when the declaration of f() cannot be modified, e.g. because it is in a library that you cannot modify.
+	* Note that this wrapper solution is a patch that should be used only when the declaration of f() cannot be modified, e.g. because it is in a library that you cannot modify.
 	* `Note` A const member function can modify the value of an object that is mutable or accessed through a pointer member. A common use is to maintain a cache rather than repeatedly do a complicated computation. For example, here is a Date that caches (memoizes) its string representation to simplify repeated uses:
     ```c++
     class Date {
