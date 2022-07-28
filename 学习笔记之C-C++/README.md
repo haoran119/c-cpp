@@ -988,6 +988,16 @@ int main()
 * [C++ Tutorial => Generic lambdas](https://riptutorial.com/cplusplus/example/1969/generic-lambdas)
 	* [c++ - How to use lambda auto parameters in C++11 - Stack Overflow](https://stackoverflow.com/questions/30071453/how-to-use-lambda-auto-parameters-in-c11)
 	* [c++ - How does generic lambda work in C++14? - Stack Overflow](https://stackoverflow.com/questions/17233547/how-does-generic-lambda-work-in-c14)
+* [Lambda Expressions - Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#Formatting_Lambda_Expressions)
+	* Short lambdas may be written inline as function arguments.
+```c++
+std::set<int> to_remove = {7, 8, 9};
+std::vector<int> digits = {3, 9, 1, 8, 4, 7, 1};
+digits.erase(std::remove_if(digits.begin(), digits.end(), [&to_remove](int i) {
+               return to_remove.find(i) != to_remove.end();
+             }),
+             digits.end());
+```
 
 ###### Lambda capture
 
