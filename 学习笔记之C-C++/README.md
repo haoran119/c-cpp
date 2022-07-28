@@ -2575,8 +2575,9 @@ int main()
 }
 ```
 
-#### Preprocessor
+#### [Preprocessor](https://en.cppreference.com/w/cpp/preprocessor)
 
+* The preprocessor is executed at [translation phase 4](https://en.cppreference.com/w/cpp/language/translation_phases#Phase_4), before the compilation. The result of preprocessing is a single file which is then passed to the actual compiler.
 * [Preprocessor directives - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/preprocessor/)
 * [Preprocessor Solution | HackerRank](https://www.hackerrank.com/challenges/preprocessor-solution/problem)
 ```c++
@@ -2622,7 +2623,7 @@ int main(){
   * Removes (undefines) a name previously created with #define.
   * #undef identifier
 
-##### Conditional inclusions (#ifdef, #ifndef, #if, #endif, #else and #elif)
+##### [Conditional inclusions (#ifdef, #ifndef, #if, #endif, #else and #elif)](https://en.cppreference.com/w/cpp/preprocessor/conditional)
 
 ##### Line control (#line)
 
