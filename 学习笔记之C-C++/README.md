@@ -3809,9 +3809,46 @@ int main() {
 		* So, you'll need to abandon remove_if. You could use a normal loop, being careful to save the iterator-to-next-element rather than attempting to advance from a just-erased iterator. Lots of other questions about how to erase elements from a map while iterating, e.g. here....
 		* [c++ - How to remove from a map while iterating it? - Stack Overflow](https://stackoverflow.com/questions/8234779/how-to-remove-from-a-map-while-iterating-it)
 	* [c++ - remove_if equivalent for std::map - Stack Overflow](https://stackoverflow.com/questions/800955/remove-if-equivalent-for-stdmap)
-
 * [std::swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/swap)
   * [swap() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/swap-in-cpp/)
+* [std::reverse - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/reverse)
+	* reverses the order of elements in a range (function template)
+	* Parameters
+		* first, last	-	the range of elements to reverse
+		* policy	-	the execution policy to use. See execution policy for details.
+	* Type requirements
+		* -BidirIt must meet the requirements of ValueSwappable and LegacyBidirectionalIterator.
+	* Return value
+		* (none)
+	* Complexity
+		* Exactly (last - first)/2 swaps.
+	* Exceptions
+		* The overload with a template parameter named ExecutionPolicy reports errors as follows:
+		* If execution of a function invoked as part of the algorithm throws an exception and ExecutionPolicy is one of the standard policies, std::terminate is called. For any other ExecutionPolicy, the behavior is implementation-defined.
+		* If the algorithm fails to allocate memory, std::bad_alloc is thrown.
+```c++
+#include <vector>
+#include <iostream>
+#include <iterator>
+#include <algorithm>
+ 
+int main()
+{
+    std::vector<int> v{1, 2, 3};
+    std::reverse(v.begin(), v.end());
+    for(auto e : v) std::cout << e;
+    std::cout << '\n';
+ 
+    int a[] = {4, 5, 6, 7};
+    std::reverse(std::begin(a), std::end(a));
+    for(auto e : a) std::cout << e;
+}
+/*
+321
+7654
+*/
+```
+* [Reverse For Loops in C++ - Fluent C++](https://www.fluentcpp.com/2020/02/11/reverse-for-loops-in-cpp/)
 
 ##### Partitioning operations
 
