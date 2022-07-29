@@ -869,8 +869,13 @@ int main() {
 * The inline specifier, when used in a decl-specifier-seq of a variable with static storage duration (static class member or namespace-scope variable), declares the variable to be an inline variable.
 * A static member variable (but not a namespace-scope variable) declared constexpr is implicitly an inline variable.(since C++17)
 * [F.5: If a function is very small and time-critical, declare it inline](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f5-if-a-function-is-very-small-and-time-critical-declare-it-inline)
-	* Exception: Do not put an inline function in what is meant to be a stable interface unless you are certain that it will not change. An inline function is part of the ABI.
-	* Exception: Function templates (including member functions of class templates A\<T>::function() and member function templates A::function\<T>()) are normally defined in headers and therefore inline.
+	* `Reason` Some optimizers are good at inlining without hints from the programmer, but don’t rely on it. Measure! Over the last 40 years or so, we have been promised compilers that can inline better than humans without hints from humans. We are still waiting. Specifying inline (explicitly, or implicitly when writing member functions inside a class definition) encourages the compiler to do a better job.
+	* `Example`
+		* `inline string cat(const string& s, const string& s2) { return s + s2; }`
+	* `Exception` Do not put an inline function in what is meant to be a stable interface unless you are certain that it will not change. An inline function is part of the ABI.
+	* `Note` constexpr implies inline.
+	* `Note` Member functions defined in-class are inline by default.
+	* `Exception` Function templates (including member functions of class templates A\<T>::function() and member function templates A::function\<T>()) are normally defined in headers and therefore inline.
 * [SF.2: A .h file must not contain object definitions or non-inline function definitions](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#sf2-a-h-file-must-not-contain-object-definitions-or-non-inline-function-definitions)
 	* Reason: Including entities subject to the one-definition rule leads to linkage errors.
 	* Example
@@ -900,6 +905,34 @@ int main() {
 		* constexpr definitions
 		* const definitions
 		* using alias definitions
+* [Inline Functions - Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#Inline_Functions)
+	* Define functions inline only when they are small, say, 10 lines or fewer.
+	* Definition
+		* You can declare functions in a way that allows the compiler to expand them inline rather than calling them through the usual function call mechanism.
+	* Pros
+		* Inlining a function can generate more efficient object code, as long as the inlined function is small. Feel free to inline accessors and mutators, and other short, performance-critical functions.
+	* Cons
+		* Overuse of inlining can actually make programs slower. Depending on a function's size, inlining it can cause the code size to increase or decrease. Inlining a very small accessor function will usually decrease code size while inlining a very large function can dramatically increase code size. On modern processors smaller code usually runs faster due to better use of the instruction cache.
+	* Decision
+		* A decent rule of thumb is to not inline a function if it is more than 10 lines long. Beware of destructors, which are often longer than they appear because of implicit member- and base-destructor calls!
+		* Another useful rule of thumb: it's typically not cost effective to inline functions with loops or switch statements (unless, in the common case, the loop or switch statement is never executed).
+		* It is important to know that functions are not always inlined even if they are declared as such; for example, virtual and recursive functions are not normally inlined. Usually recursive functions should not be inline. The main reason for making a virtual function inline is to place its definition in the class, either for convenience or to document its behavior, e.g., for accessors and mutators.
+* [Self-contained Headers - Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#Self_contained_Headers)
+	* When a header declares inline functions or templates that clients of the header will instantiate, `the inline functions and templates must also have definitions in the header, either directly or in files it includes`. Do not move these definitions to separately included header (-inl.h) files; this practice was common in the past, but is no longer allowed. When all instantiations of a template occur in one .cc file, either because they're explicit or because the definition is accessible to only the .cc file, the template definition can be kept in that file.
+* [Inline Functions in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/inline-functions-cpp/)
+	* Compiler may not perform inlining in such circumstances like:
+		* 1) If a function contains a loop. (for, while, do-while)
+		* 2) If a function contains static variables.
+		* 3) If a function is recursive.
+		* 4) If a function return type is other than void, and the return statement doesn’t exist in function body.
+		* 5) If a function contains switch or goto statement.
+	* Inline functions provide following advantages:
+	* Inline function disadvantages:
+	* Inline function and classes:
+	* What is wrong with macro?
+* [Why are C++ inline functions in the header? - Stack Overflow](https://stackoverflow.com/questions/5057021/why-are-c-inline-functions-in-the-header#:~:text=The%20definition%20of%20an%20inline,definition%20in%20a%20header%20file.)
+	* The definition of an inline function doesn't have to be in a header file but, because of the one definition rule [(ODR)](https://en.cppreference.com/w/cpp/language/definition) for inline functions, an identical definition for the function must exist in every translation unit that uses it.
+	* The easiest way to achieve this is by putting the definition in a header file.
 * How to fix compile error "multiple definition of 'utils::var' ... first defined here" ?
 	* declare var as `inline var` in namespace utils
 	* [c - "Multiple definition", "first defined here" errors - Stack Overflow](https://stackoverflow.com/questions/30821356/multiple-definition-first-defined-here-errors)
