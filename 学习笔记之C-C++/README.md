@@ -709,6 +709,14 @@ int main() {
 		* naked new and delete
 		* functions with many parameters of built-in types
 	* There is a huge scope for cleverness and semi-automated program transformation.
+* [Con: Constants and immutability](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#con-constants-and-immutability)
+	* You can’t have a race condition on a constant. It is easier to reason about a program when many of the objects cannot change their values. Interfaces that promises “no change” of objects passed as arguments greatly increase readability.
+	* Constant rule summary:
+		* Con.1: By default, make objects immutable
+		* Con.2: By default, make member functions const
+		* Con.3: By default, pass pointers and references to consts
+		* Con.4: Use const to define objects with values that do not change after construction
+		* Con.5: Use constexpr for values that can be computed at compile time
 * [Con.2: By default, make member functions const](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#con2-by-default-make-member-functions-const)
 	* `Reason` A member function should be marked const unless it changes the object’s observable state. This gives a more precise statement of design intent, better readability, more errors caught by the compiler, and sometimes more optimization opportunities.
 	* `Example, bad`
