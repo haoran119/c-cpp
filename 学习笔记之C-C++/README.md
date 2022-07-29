@@ -1954,6 +1954,9 @@ int main(int argc, char *argv[]) {
 		* Note From a language perspective class and struct differ only in the default visibility of their members.
 		* Enforcement Probably impossible. Maybe a heuristic looking for data items used together is possible.
 	* [C.8: Use class rather than struct if any member is non-public](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c8-use-class-rather-than-struct-if-any-member-is-non-public)
+* [static members - cppreference.com](https://en.cppreference.com/w/cpp/language/static)
+	* Inside a class definition, the keyword static declares members that are not bound to class instances.
+	* Outside a class definition, it has a different meaning: see storage duration.
 
 ##### Special member functions
 
