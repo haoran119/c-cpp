@@ -4304,6 +4304,21 @@ int main()
 		* c	-	container that supports a push_back operation
 	* Return value
 		* A std::back_insert_iterator which can be used to add elements to the end of the container c
+```c++
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <iterator>
+ 
+int main()
+{
+    std::vector<int> v{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    std::fill_n(std::back_inserter(v), 3, -1);
+    for (int n : v)
+        std::cout << n << ' ';
+}
+// 1 2 3 4 5 6 7 8 9 10 -1 -1 -1
+```
 * [std::inserter - cppreference.com](https://en.cppreference.com/w/cpp/iterator/inserter)
 	* creates a std::insert_iterator of type inferred from the argument (function template)
 	* inserter is a convenience function template that constructs a std::insert_iterator for the container c and its iterator i with the type deduced from the type of the argument.
