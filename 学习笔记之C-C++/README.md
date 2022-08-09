@@ -4931,6 +4931,57 @@ Partial function application
 * [std::bind - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/bind)
 	* binds one or more arguments to a function object (function template)
 	* The function template bind generates a forwarding call wrapper for f. Calling this wrapper is equivalent to invoking f with some of its arguments bound to args.
+* [Bind Function and Placeholders in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/bind-function-placeholders-c/)
+	* Sometimes we need to manipulate the operation of a function according to the need, i.e changing some arguments to default, etc. Predefining a function to have default arguments restricts the versatility of a function and forces us to use the default arguments and that too with similar values each time. From C++11 onwards, the introduction of the bind function has made this task easier. 
+	* How does bind() work? 
+		* Bind function with the help of placeholders helps to manipulate the position and number of values to be used by the function and modifies the function according to the desired output. 
+	* What are placeholders? 
+		* Placeholders are namespaces that direct the position of a value in a function. They are represented by _1, _2, _3...
+```c++
+// C++ code to demonstrate bind() and
+// placeholders
+#include <iostream>
+#include <functional> // for bind()
+using namespace std;
+
+// for placeholders
+using namespace std::placeholders;
+
+// Driver function to demonstrate bind()
+void func(int a, int b, int c)
+{
+	cout << (a - b - c) << endl;
+}
+
+int main()
+{
+	// for placeholders
+	using namespace std::placeholders;
+
+	// Use of bind() to bind the function
+	// _1 is for first parameter and assigned
+	// to 'a' in above declaration.
+	// 2 is assigned to b
+	// 3 is assigned to c
+	auto fn1 = bind(func, _1, 2, 3);
+
+	// 2 is assigned to a.
+	// _1 is for first parameter and assigned
+	// to 'b' in above declaration.
+	// 3 is assigned to c.
+	auto fn2 = bind(func, 2, _1, 3);
+
+	// calling of modified functions
+	fn1(10);
+	fn2(10);
+
+	return 0;
+}
+/*
+5
+-11
+*/
+```
 
 #
 Operator function objects
