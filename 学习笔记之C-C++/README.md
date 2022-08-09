@@ -5490,6 +5490,9 @@ std::string exec(const char* cmd) {
     * Enable COMDAT Folding = Do Not Remove Redundant COMDATs (/OPT:NOICF)
   * [c++ - LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:ICF' specification - Stack Overflow](https://stackoverflow.com/questions/1574367/lnk4075-ignoring-editandcontinue-due-to-opticf-specification)
   * [Linker Tools Warning LNK4075 | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/error-messages/tool-errors/linker-tools-warning-lnk4075?view=msvc-160)
+* How to fix warning "control reaches end of non-void function -wreturn-type" ?
+	* [c++ - control reaches end of non-void functions -wreturn-type - Stack Overflow](https://stackoverflow.com/questions/60863967/control-reaches-end-of-non-void-functions-wreturn-type)
+	* check the conditions of return statement. Return statement is not executed under all conditions.
 * How to fix compile error "has initializer but incomplete type" ?
 	* `#include <sstream>`
 	* [compilation - C++ compile error: has initializer but incomplete type - Stack Overflow](https://stackoverflow.com/questions/13428164/c-compile-error-has-initializer-but-incomplete-type)
