@@ -3983,6 +3983,38 @@ After
 		* So, you'll need to abandon remove_if. You could use a normal loop, being careful to save the iterator-to-next-element rather than attempting to advance from a just-erased iterator. Lots of other questions about how to erase elements from a map while iterating, e.g. here....
 		* [c++ - How to remove from a map while iterating it? - Stack Overflow](https://stackoverflow.com/questions/8234779/how-to-remove-from-a-map-while-iterating-it)
 	* [c++ - remove_if equivalent for std::map - Stack Overflow](https://stackoverflow.com/questions/800955/remove-if-equivalent-for-stdmap)
+* [std::replace, std::replace_if - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/replace)
+	* replaces all values satisfying specific criteria with another value (function template)
+	* Replaces all elements satisfying specific criteria with new_value in the range \[first, last).
+```c++
+#include <algorithm>
+#include <array>
+#include <iostream>
+#include <functional>
+ 
+int main()
+{
+    std::array<int, 10> s{5, 7, 4, 2, 8, 6, 1, 9, 0, 3};
+ 
+    std::replace(s.begin(), s.end(), 8, 88);
+ 
+    for (int a : s) {
+        std::cout << a << " ";
+    }
+    std::cout << '\n';
+ 
+    std::replace_if(s.begin(), s.end(), 
+                    std::bind(std::less<int>(), std::placeholders::_1, 5), 55);
+    for (int a : s) {
+        std::cout << a << " ";
+    }
+    std::cout << '\n';
+}
+/*
+5 7 4 2 88 6 1 9 0 3
+5 7 55 55 88 6 55 9 55 55
+*/
+```
 * [std::swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/swap)
   * [swap() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/swap-in-cpp/)
 * [std::reverse - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/reverse)
