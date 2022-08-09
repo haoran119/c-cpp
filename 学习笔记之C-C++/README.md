@@ -4904,6 +4904,8 @@ Operator function objects
 #
 Basic operations
 
+* [std::abs(float), std::fabs, std::fabsf, std::fabsl - cppreference.com](https://en.cppreference.com/w/cpp/numeric/math/fabs)
+	* absolute value of a floating point value (|x|) (function)
 * [std::fmod, std::fmodf, std::fmodl - cppreference.com](https://en.cppreference.com/w/cpp/numeric/math/fmod)
 	* remainder of the floating point division operation (function)
 	* The floating-point remainder of the division operation x/y calculated by this function is exactly the value x - n*y, where n is x/y with its fractional part truncated.
