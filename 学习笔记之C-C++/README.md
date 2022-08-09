@@ -3917,6 +3917,49 @@ ordinals: 72 69 76 76 79
 ordinals: 144 138 152 152 158
 */
 ```
+```c++
+#include <algorithm>
+#include <iostream>
+#include <vector>
+
+struct myStruct
+{
+    int a, b;
+};
+
+
+int main()
+{
+    std::vector<myStruct> vMyStruct{ {1, 2}, {3, 4} };
+
+    for (auto it : vMyStruct) {
+        std::cout << it.a << " " << it.b << "\n";
+    }
+
+    std::transform(vMyStruct.cbegin(),
+                    vMyStruct.cend(),
+                    vMyStruct.begin(),
+                    [](auto x) {
+                        x.a += 10;
+                        x.b += 10;
+                        return x;
+                    });
+
+    std::cout << "After\n";
+    for (auto it : vMyStruct) {
+        std::cout << it.a << " " << it.b << "\n";
+    }
+
+    return 0;
+}
+/*
+1 2
+3 4
+After
+11 12
+13 14
+*/
+```
 * [std::remove, std::remove_if - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/remove)
 	* removes elements satisfying specific criteria (function template)
 	* Return value
