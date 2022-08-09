@@ -4982,6 +4982,48 @@ int main()
 -11
 */
 ```
+* [std::placeholders::_1, std::placeholders::_2, ..., std::placeholders::_N - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/placeholders)
+	* placeholders for the unbound arguments in a std::bind expression (constant)
+	* The std::placeholders namespace contains the placeholder objects [_1, ..., _N] where N is an implementation defined maximum number.
+	* When used as an argument in a std::bind expression, the placeholder objects are stored in the generated function object, and when that function object is invoked with unbound arguments, each placeholder _N is replaced by the corresponding Nth unbound argument.
+
+#
+Reference wrappers
+
+* Reference wrappers allow reference arguments to be stored in copyable function objects
+* [std::ref, std::cref - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/ref)
+	* creates a std::reference_wrapper with a type deduced from its argument (function template)
+	* Function templates ref and cref are helper functions that generate an object of type std::reference_wrapper, using template argument deduction to determine the template argument of the result.
+	* T may be an incomplete type. (since C++20)
+```c++
+#include <functional>
+#include <iostream>
+ 
+void f(int& n1, int& n2, const int& n3)
+{
+    std::cout << "In function: " << n1 << ' ' << n2 << ' ' << n3 << '\n';
+    ++n1; // increments the copy of n1 stored in the function object
+    ++n2; // increments the main()'s n2
+    // ++n3; // compile error
+}
+ 
+int main()
+{
+    int n1 = 1, n2 = 2, n3 = 3;
+    std::function<void()> bound_f = std::bind(f, n1, std::ref(n2), std::cref(n3));
+    n1 = 10;
+    n2 = 11;
+    n3 = 12;
+    std::cout << "Before function: " << n1 << ' ' << n2 << ' ' << n3 << '\n';
+    bound_f();
+    std::cout << "After function: " << n1 << ' ' << n2 << ' ' << n3 << '\n';
+}
+/*
+Before function: 10 11 12
+In function: 1 11 12
+After function: 10 12 12
+*/
+```
 
 #
 Operator function objects
