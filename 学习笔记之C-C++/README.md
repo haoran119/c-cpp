@@ -4387,6 +4387,44 @@ Numeric limits
 * [std::numeric_limits\<T>::epsilon - cppreference.com](https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon)
 	* returns the difference between 1.0 and the next representable value of the given floating-point type (public static member function)
 	* Returns the machine epsilon, that is, the difference between 1.0 and the next value representable by the floating-point type T. It is only meaningful if std::numeric_limits\<T>::is_integer == false.
+```c++
+#include <cmath>
+#include <limits>
+#include <iomanip>
+#include <iostream>
+#include <type_traits>
+
+template<class T>
+typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
+    almost_equal(T x, T y)
+{
+    return std::fabs(x-y) < std::numeric_limits<T>::epsilon();
+}
+ 
+int main()
+{
+    double d1 = 0.2;
+    double d2 = 1 / std::sqrt(5) / std::sqrt(5);
+    std::cout << std::fixed << std::setprecision(20) 
+        << "d1=" << d1 << "\nd2=" << d2 << '\n';
+ 
+    if(d1 == d2)
+        std::cout << "d1 == d2\n";
+    else
+        std::cout << "d1 != d2\n";
+ 
+    if(almost_equal(d1, d2))
+        std::cout << "d1 almost equals d2\n";
+    else
+        std::cout << "d1 does not almost equal d2\n";
+}
+/*
+d1=0.20000000000000001110
+d2=0.19999999999999998335
+d1 != d2
+d1 almost equals d2
+*/
+```
 * [std::numeric_limits\<T>::infinity - cppreference.com](https://en.cppreference.com/w/cpp/types/numeric_limits/infinity)
 	* Returns the special value "positive infinity", as represented by the floating-point type T. Only meaningful if std::numeric_limits\<T>::has_infinity == true. In IEEE 754, the most common binary representation of floating-point numbers, the positive infinity is the value with all bits of the exponent set and all bits of the fraction cleared.
 
