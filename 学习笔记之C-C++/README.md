@@ -2492,6 +2492,11 @@ int main()
     * Example Put noexcept on every function written completely in C or in any other language without exceptions. The C++ Standard Library does that implicitly for all functions in the C Standard Library.
     * Note constexpr functions can throw when evaluated at run time, so you might need conditional noexcept for some of those.
     * noexcept is most useful (and most clearly correct) for frequently used, low-level functions.
+* [std::terminate - cppreference.com](https://en.cppreference.com/w/cpp/error/terminate)
+	* function called when exception handling fails (function)
+	* std::terminate() is called by the C++ runtime when the program cannot continue for any of the following reasons
+	* std::terminate() may also be called directly from the program.
+	* In any case, std::terminate calls the currently installed std::terminate_handler. The default std::terminate_handler calls std::abort.
 
 ##### Exception categories
 
