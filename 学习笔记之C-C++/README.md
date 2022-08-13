@@ -1636,6 +1636,7 @@ int main() {
 	* C-style date and time library (e.g. std::time)
 * [C++ Date and Time](https://www.tutorialspoint.com/cplusplus/cpp_date_time.htm)
 * [Chrono in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/chrono-in-c/)
+* [现代C++编程实践(五)—如何使用时间库](https://mp.weixin.qq.com/s/JrXYKSm7sEHV8X87X-Bgzg)
 
 ##### [Standard library header \<chrono> - cppreference.com](https://en.cppreference.com/w/cpp/header/chrono)
 
