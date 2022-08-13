@@ -5644,6 +5644,9 @@ std::string exec(const char* cmd) {
 * How to fix compile error "has initializer but incomplete type" ?
 	* `#include <sstream>`
 	* [compilation - C++ compile error: has initializer but incomplete type - Stack Overflow](https://stackoverflow.com/questions/13428164/c-compile-error-has-initializer-but-incomplete-type)
+* How to fix compile error `c - Undefined reference to pthread_create` ?
+	* `gcc -pthread -o term term.c`
+	* [c - Undefined reference to pthread_create in Linux - Stack Overflow](https://stackoverflow.com/questions/1662909/undefined-reference-to-pthread-create-in-linux)
 * How to fix compile error "undefined reference to utils::FileUtils::func()" ?
 	* check .cpp if FileUtils::func() exists
 	* for template function, move the definition to .h
