@@ -2023,6 +2023,16 @@ int main(int argc, char *argv[]) {
 		4) Defaulted default constructor: the compiler will define the implicit default constructor even if other constructors are present.
 		5) Defaulted default constructor outside of class definition (the class must contain a declaration (1)). Such constructor is treated as user-provided (see below and value initialization).
 	* Default constructors are called during default initializations and value initializations.
+* [C.49: Prefer initialization to assignment in constructors](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c49-prefer-initialization-to-assignment-in-constructors)
+	* `Reason` An initialization explicitly states that initialization, rather than assignment, is done and can be more elegant and efficient. Prevents “use before set” errors.
+    ```c++
+    class D {   // Good
+        string s1;
+    public:
+        D(string_view v) : s1{v} { }    // GOOD: directly construct
+        // ...
+    };
+    ```
 * [Copy constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/copy_constructor)
 	* A copy constructor of class T is a non-template constructor whose first parameter is T&‍, const T&‍, volatile T&‍, or const volatile T&‍, and either there are no other parameters, or the rest of the parameters all have default values.
 * [Move constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/move_constructor)
