@@ -1454,6 +1454,8 @@ int main()
         return 0;
     }
     ```
+* [现代C++编程实践(四)—手动撸一个泛型分割函数](https://mp.weixin.qq.com/s/rCf7qe6LmBdzngSdWsGdQQ)
+	* 熟悉Java、C#以及Python的人都知道，在字符串处理时有一个split函数，非常有用，尤其在使用文件接口时，对方按照协议将内容以一定格式保存到文件中，我们要做的就是读取文件并解析文件。但是作为C/C++的我们，标准库里并没有现成的split接口可用，今天我们就使用现代C++手动实现一个C++版的分割函数。
 * [string和c_str()使用时的坑](https://mp.weixin.qq.com/s/2k2fjBUB-P1PpEfP-HJz-Q)
 	* 这里主要说两个问题:
 		* 1、声明了一个string实例,使用c_str()进行赋值后,可以正常输出c_str()的值,但是直接输出string实例的实现,实际是空字符串
