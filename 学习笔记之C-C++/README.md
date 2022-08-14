@@ -456,6 +456,9 @@ int main(void)
 		```
 		* Note Literals should not be sprinkled all over the code as “magic constants”, but it is still a good idea to make them readable where they are defined. It is easy to make a typo in a long string of integers.
 		* Enforcement Flag long digit sequences. The trouble is to define “long”; maybe 7.
+	* [SF.7: Don’t write using namespace at global scope in a header file](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#sf7-dont-write-using-namespace-at-global-scope-in-a-header-file)
+		* `Reason` Doing so takes away an #includer’s ability to effectively disambiguate and to use alternatives. It also makes #included headers order-dependent as they might have different meaning when included in different orders.
+		* `Note` An exception is using namespace std::literals;. This is necessary to use string literals in header files and given the rules - users are required to name their own UDLs operator""_x - they will not collide with the standard library.
 
 ##### [Type conversions](https://www.cplusplus.com/doc/tutorial/typecasting/)
  
