@@ -1055,6 +1055,14 @@ int main()
 * [Lambda expression in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/lambda-expression-in-c/)
 * [贯穿 C++ 11 与 C++ 17 的 Lambda 到底是个什么？](https://mp.weixin.qq.com/s/ok5xND2q4kPqBguhcvU42g)
   * https://hackernoon.com/all-about-Lambda-functions-in-cfrom-c11-to-c17-2t1j32qw
+* [【C++11】让程序更简洁—lambda表达式](https://mp.weixin.qq.com/s/56cH0IK1DbnZX6ZZKVJRwQ)
+	* C++11中，Lambda表达式是最常用的特性之一，有过java、python以及C#开发经验的人对lambda功能都不会陌生。lambda表达式来源于函数式编程，具备以下优点：
+		* 代码简洁、避免代码膨胀和功能分散，也利于功能维护
+		* 功能就近实现，程序更加灵活
+		* 函数式编程，可读性强
+	* lambda表达式概念和语法
+	* 如何修改按值捕获的变量？
+	* lambda表达式和std::function配合使用
 * [C++11 Lambda : How to capture local variables inside Lambda ? – thisPointer](https://thispointer.com/c11-lambda-how-to-capture-local-variables-inside-lambda/)
   * Capturing Local Variables by value inside Lambda Function
   * Capturing Local Variables by Reference inside Lambda
