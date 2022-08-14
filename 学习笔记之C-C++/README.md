@@ -5046,6 +5046,13 @@ int main()
 -11
 */
 ```
+* [【C++11】让程序更简洁—std::bind绑定器](https://mp.weixin.qq.com/s/z2rG7n7sViBosGuzFB3paQ)
+	* 在上一期中，介绍了std::function，本节将和大家说一下bind绑定器，它可以将调用对象与调用参数一起绑定，然后将绑定的结果保存在std::function中，在后面我们需要使用的时候在执行函数功能。主要包含两个方面：
+		* 将调用对象和参数绑定成一个仿函数
+		* 将多元调用对象转成一元可用对象，只绑定部分参数；(多元：参数个数为n，n>1)
+	* std::bind的基本用法
+	* std::bind的占位符
+	* std::bind和std::function配合使用
 * [std::placeholders::_1, std::placeholders::_2, ..., std::placeholders::_N - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/placeholders)
 	* placeholders for the unbound arguments in a std::bind expression (constant)
 	* The std::placeholders namespace contains the placeholder objects [_1, ..., _N] where N is an implementation defined maximum number.
