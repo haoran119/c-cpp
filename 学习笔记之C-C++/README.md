@@ -4972,6 +4972,8 @@ int main()
               << "name: " << name2 << '\n';
 }
 ```
+* [【C++11】让程序更简洁—tuple元组](https://mp.weixin.qq.com/s/TiU3L9vkyD-gSr5UD3jAGw)
+	* tuple元组是一个泛化的std::pair，可以在一个数据结构中保存不同类型的变量，这一点和C#里面的tupe类似，由此可见，C++也在逐渐吸收其他编程语言的优良特性，加入到自己的势力范围里面来。
 
 ###### Sum types and type erased wrappers
 
