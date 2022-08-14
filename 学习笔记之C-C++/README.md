@@ -3551,6 +3551,7 @@ void replaceKey(Container& container,
     }
 }
 ```
+* [现代C++编程实践(三)—虐虐map容器](https://mp.weixin.qq.com/s/Pp9Gbp_NYqaTYHbqkQ09AQ)
 * [std::map<Key,T,Compare,Allocator>::merge - cppreference.com](https://en.cppreference.com/w/cpp/container/map/merge)
 	* splices nodes from another container (public member function)
 	* Attempts to extract ("splice") each element in source and insert it into *this using the comparison object of *this. If there is an element in *this with key equivalent to the key of an element from source, then that element is not extracted from source. No elements are copied or moved, only the internal pointers of the container nodes are repointed. All pointers and references to the transferred elements remain valid, but now refer into *this, not into source.
