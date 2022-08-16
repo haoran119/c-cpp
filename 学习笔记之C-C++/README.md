@@ -2944,9 +2944,41 @@ int main()
   * 通用锁定算法
   * 通用互斥管理
   * 并行算法
+* [多线程一定能优化程序性能吗？](https://mp.weixin.qq.com/s/tZn8Og6p_1nPc3vqeK_BZw)
+	* 多线程与CPU
+	* 多线程与IO
+	* 多线程与内存
+* [thread、future、promise、packaged_task、async之间有什么关系？](https://mp.weixin.qq.com/s/fUD4HxtUNhnpVlqGNAbc6Q)
+	* 并发编程一般指多线程编程，C++11之后关于多线程编程有几个高级API：
+		* std::thread 
+		* std::future
+		* std::shared_future
+		* std::promise
+		* std::packaged_task
+		* std::async
+* [打开线程 | 进程 | 协程的大门](https://mp.weixin.qq.com/s/2rVYPeKBnTrFoSxmUEM08g)
+	* 进程和线程是什么
+	* 进程和线程有什么区别
+	* 为什么有了进程又出现线程
+	* 内核态和用户态有啥不同
+	* 协程有什么特点
+* [协程到底有什么用？6种I/O模式告诉你！](https://mp.weixin.qq.com/s/xSf3eHG4CX3rJkzuU8p5IQ)
+	* 为了高效进行IO操作，我们采用的技术是这样演进的：
+		* 单线程串行 + 阻塞式IO(同步)
+		* 多线程并行 + 阻塞式IO(并行)
+		* 单线程 + 非阻塞式IO(异步) + event loop
+		* 单线程 + 非阻塞式IO(异步) + event loop + 回调
+		* Reactor模式(更好的单线程 + 非阻塞式IO+ event loop + 回调)
+		* 单线程 + 非阻塞式IO(异步) + event loop + 协程
+	* 最终我们采用协程技术获取到了异步编程的高效以及同步编程的简单理解，这也是当今高性能服务器常用的一种技术组合。
 * [异步编程到底在说啥？](https://mp.weixin.qq.com/s/aaCVgXekO6unpFDfKchVlA)
 	* 同步就好比你排队去自助售票机取电影票，你必须排队等待前一个人取完电影票才能到你，你不能在前一个取票的过程中取自己的票，这时我们说取电影票时你和前一个人是同步的。
 	* 而异步就好比去吃大餐，你在座位上看菜单点菜，其它人也可以点菜，你不需要等待其它人吃完饭才能下单，这时我们说你点菜和其它人吃饭是异步的。
+* [C++异步从理论到实践总览篇](https://mp.weixin.qq.com/s/tnADuXt4FXIx46JuhgnrPw)
+* [async的两个坑](https://mp.weixin.qq.com/s/gmF5WXHsuFwblYDu_jDeTA)
+	* 一般人可能都知道C++异步操作有async这个东西。但不知道大家是否注意过，其实它有两个坑：
+		* 它不一定真的会异步执行
+		* 它有可能会阻塞
 
 ##### [\<thread>](https://en.cppreference.com/w/cpp/header/thread)
 
