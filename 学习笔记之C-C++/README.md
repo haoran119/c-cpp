@@ -5582,6 +5582,65 @@ int main()
 			* 惊群现象：仔细分析您的锁调用的特征。当锁被释放时，是所有的等待线程都被唤醒还是只唤醒一个线程？唤醒所有线程会威胁到应用的可扩展性。
 		* 要使用的存储器离处理器越远，访问所需的时间就越长。离处理器最近的是寄存器，虽然容量很少，但是速度很快。对寄存器的优化对程序的性能提升而言是极为有益的。
 		* 上下文切换的开销巨大，请尽量避免上下文切换。
+* [C++ 性能优化，简直太硬核了！](https://mp.weixin.qq.com/s/PdLeGRQs-VihsPZjtlx-vA)
+	* https://developer.aliyun.com/article/412574
+	* 整型
+		* 类型转换
+			* int--> short/char (0~1 clock cycle)
+			* int --> float/double (4~16个clock cycle), signed int 快于 unsigned int，唯一一个场景 signed 比 unsigned 快的
+			* short/char 的计算通常使用 32bit 存储，只是返回的时候做了截取，故只在要考虑内存大小的时候才使用 short/char，如 array
+			* 注：隐式类型转换可能会溢出，有符号的溢出变成负数，无符号的溢出变成小的整数
+		* 运算
+			* 除法、取余运算unsigned int 快于 signed int
+			* 除以常量比除以变量效率高，因为可以在编译期做优化，尤其是常量可以表示成2^n时
+			* ++i和i++本身性能一样，但不同的语境效果不一样，如array[i++]比arry[++i]性能好；当依赖自增结果时，++i性能更好，如a=++b,a和b可复用同一个寄存器
+	* 浮点
+		* 单精度、双精度的计算性能是一样的
+		* 常量的默认精度是双精度
+		* 不要混淆单精度、双精度，混合精度计算会带来额外的精度转换开销
+	* 实例2
+		* 读取效率
+			* 对于内存的写，最好的办法就是减少写的次数，那么内存的读取呢？教科书的答案是：尽可能顺序访问内存。理解这句话还是得从 cache line 开始
+			* cache line
+			* cache miss
+			* 建议
+				* 一起使用的函数存储在一起。函数的存储通常按照源码中的顺序来的，如果函数A,B,C是一起调用的，那尽量让ABC的声明也是这个顺序
+				* 一起使用的变量存储在一起。使用结构体、对象来定义变量，并通过局部变量方式来声明，都是一些较好的选择。例子见后文：
+				* 合理使用对齐(attribute((aligned(64)))、预取(prefecting data)，让一个cacheline能获取到更多有效的数据
+				* 动态内存分配、STL容器、string都是一些常容易cache不友好的场景，核心代码处尽量不用
+		* 静态变量
+		* 回顾
+		* 流水线
+	* 函数
+		* 本身开销
+			* 函数调用使得处理器跳到另外一个代码地址并回来，一般需要4 clock cycles，大多数情况处理器会把函数调用、返回和其他指令一起执行以节约时间。
+			* 函数参数存储在栈上需要额外的时间( 包括栈帧的建立、saving and restoring registers、可能还有异常信息)。在64bit linux上，前6个整型参数(包括指针、引用)、前8个浮点参数会放到寄存器中；64bit windows上不管整型、浮点，会放置4个参数。
+			* 在内存中过于分散的代码可能会导致较差的code cache
+		* 常见的优化手段
+			* 避免不必要的函数，特别在最底层的循环，应该尽量让代码在一个函数内。看起来与良好的编码习惯冲突(一个函数最好不要超过80行)，其实不然，跟这个系列其他优化一样，我们应该知道何时去使用这些优化，而不是一上来就让代码不可读。
+			* 尝试使用inline函数，让函数调用的地方直接用函数体替换。inline对编译器来说是个建议，而且不是inline了性能就好，一般当函数比较小或者只有一个地方调用的时候，inline效果会比较好
+			* 在函数内部使用循环(e.g., change for(i=0;i<100;i++) DoSomething(); into DoSomething() { for(i=0;i<100;i++) { ... } } )
+			* 减少函数的间接调用，如偏向静态链接而不是动态链接，尽量少用或者不用多继承、虚拟继承
+			* 优先使用迭代而不是递归
+			* 使用函数来替换define，从而避免多次求值。宏的其他缺点：不能overload和限制作用域（undef除外）
+	* 分支预测
+		* 应用场景
+		* 关键因素
+		* 常见的优化手段
+			* 1. 消除条件分支
+			* 2. 循环展开
+			* 3. 边界检查
+			* 4. 使用数组
+			* 5. 整形的 bit array 语义，适用于 enum、const、define
+		* 本块小结
+			* 尽可能的减少跳转和分支
+			* 优先使用迭代而不是递归
+			* 对于长的if...else，使用switch case，以减少后面条件的判断，把最容易出现的条件放在最前面
+			* 为小函数使用inline，减少函数调用开销
+			* 在函数内使用循环
+			* 在跳转之间的代码尽量减少数据依赖
+			* 尝试展开循环
+			* 尝试通过计算来消除分支
 * [C/C++ include header file order - Stack Overflow](https://stackoverflow.com/questions/2762568/c-c-include-header-file-order)
 	* My personal preference is to go from local to global, each subsection in alphabetical order, i.e.:
 		* h file corresponding to this cpp file (if applicable)
