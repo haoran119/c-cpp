@@ -1229,6 +1229,11 @@ void S2::f(int i)
 
 ###### Member functions
 
+* [std::basic_string<CharT,Traits,Allocator>::basic_string - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/basic_string)
+	* constructs a basic_string (public member function)
+	* Constructs new string from a variety of data sources and optionally using user supplied allocator alloc.
+* [c++ - Converting int to String of its ASCII - Stack Overflow](https://stackoverflow.com/questions/34462964/converting-int-to-string-of-its-ascii)
+	* `std::string(1, char(97))	// 'a'`
 * [std::basic_string<CharT,Traits,Allocator>::at - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/at)
 	* accesses the specified character with bounds checking (public member function)
 	* Returns a reference to the character at specified location pos. Bounds checking is performed, exception of type std::out_of_range will be thrown on invalid access.
