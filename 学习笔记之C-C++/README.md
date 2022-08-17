@@ -5331,6 +5331,11 @@ Operator function objects
 ###### [Common mathematical functions]()
 
 * The header \<cmath> provides standard C library mathematical functions such as std::fabs, std::sqrt, and std::sin.
+* [std::div, std::ldiv, std::lldiv - cppreference.com](https://en.cppreference.com/w/cpp/numeric/math/div)
+	* Defined in header \<cstdlib>
+	* computes quotient and remainder of integer division (function)
+	* Computes both the quotient and the remainder of the division of the numerator x by the denominator y.
+	* The quotient is the result of the expression x/y. The remainder is the result of the expression x%y.
 
 #
 Basic operations
