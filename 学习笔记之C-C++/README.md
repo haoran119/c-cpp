@@ -5029,6 +5029,7 @@ int main()
 	* Non-member functions
 		* [make_pair](https://en.cppreference.com/w/cpp/utility/pair/make_pair)
 			* creates a pair object of type, defined by the argument types(function template)
+* [Pair in C++ Standard Template Library (STL) - GeeksforGeeks](https://www.geeksforgeeks.org/pair-in-cpp-stl/)
 * [c++ - Check if pair is empty or uninitialized - Stack Overflow](https://stackoverflow.com/questions/57109084/check-if-pair-is-empty-or-uninitialized)
 ```c++
 #include <optional>
@@ -5046,6 +5047,11 @@ else // ... it's not, hence initialize it
 	* Non-member functions
 		* [make_tuple](https://en.cppreference.com/w/cpp/utility/tuple/make_tuple)
 			* creates a tuple object of the type defined by the argument types(function template)
+		* [std::tie - cppreference.com](https://en.cppreference.com/w/cpp/utility/tuple/tie)
+			* creates a tuple of lvalue references or unpacks a tuple into individual objects (function template)
+			* Creates a tuple of lvalue references to its arguments or instances of std::ignore.
+			* Notes
+				* std::tie may be used to unpack a std::pair because std::tuple has a converting assignment from pairs
 	* [Tuples in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/tuples-in-c/)
 ```c++
 #include <tuple>
