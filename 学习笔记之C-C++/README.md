@@ -3226,10 +3226,15 @@ Sequence containers implement data structures which can be accessed sequentially
 	* Insertion or removal of elements at the end - amortized constant 𝓞(1)
 	* Insertion or removal of elements - linear in the distance to the end of the vector 𝓞(n)
 * std::vector (for T other than bool) meets the requirements of Container, AllocatorAwareContainer, SequenceContainer , ContiguousContainer (since C++17) and ReversibleContainer.
-* [std::vector\<T,Allocator>::emplace_back - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/emplace_back)
+* [std::vector<T,Allocator>::operator[] - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/operator_at)
+	* access specified element (public member function)
+	* Returns a reference to the element at specified location pos. No bounds checking is performed.
+	* Notes
+		* Unlike std::map::operator[], this operator never inserts a new element into the container. Accessing a nonexistent element through this operator is undefined behavior.
+* [std::vector<T,Allocator>::emplace_back - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/emplace_back)
 	* Appends a new element to the end of the container. The element is constructed through std::allocator_traits::construct, which typically uses placement-new to construct the element in-place at the location provided by the container. The arguments args... are forwarded to the constructor as std::forward\<Args>(args)....
 	* If the new size() is greater than capacity() then all iterators and references (including the past-the-end iterator) are invalidated. Otherwise only the past-the-end iterator is invalidated.
-* [std::vector\<T,Allocator>::clear - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/clear)
+* [std::vector<T,Allocator>::clear - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/clear)
 	* Erases all elements from the container. After this call, size() returns zero.
 	* Invalidates any references, pointers, or iterators referring to contained elements. Any past-the-end iterators are also invalidated.  
 	* Leaves the capacity() of the vector unchanged (note: the standard's restriction on the changes to capacity is in the specification of vector::reserve, see [1])	
