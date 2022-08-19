@@ -875,15 +875,6 @@ int main() {
 
 * [Functions - cppreference.com](https://en.cppreference.com/w/cpp/language/functions)
 * [Functions - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/functions/)
-* [std::function - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/function)
-  * [function - C++ Reference](https://www.cplusplus.com/reference/functional/function/)
-    * Function wrapper
-      * Class that can wrap any kind of callable element (such as functions and function objects) into a copyable object, and whose type depends solely on its call signature (and not on the callable element type itself).
-      * An object of a function class instantiation can wrap any of the following kinds of callable objects: a function, a function pointer, a pointer to member, or any kind of function object (i.e., an object whose class defines operator(), including closures).
-      * A decay copy of the wrapped callable object is stored internally by the object, which becomes the function's target. The specific type of this target callable object is not needed in order to instantiate the function wrapper class; only its call signature.
-      * The function object can be copied and moved around, and can be used to directly invoke the callable object with the specified call signature (see member operator()).
-      * function objects can also be in a state with no target callable object. In this case they are known as empty functions, and calling them throws a bad_function_call exception.
-  * [C++ Library - \<functional>](https://www.tutorialspoint.com/cpp_standard_library/functional.htm)
 * [C++ std::function技术浅谈](https://mp.weixin.qq.com/s/v1fz4YVJftuaLxYuJBRLPg)
 	* https://blog.csdn.net/xiangbaohui/article/details/106741654
 	* std::function是一个函数对象的包装器，std::function的实例可以存储，复制和调用任何可调用的目标，包括：
@@ -892,11 +883,6 @@ int main() {
 		* 绑定表达式或其他函数对象。
 		* 指向成员函数和指向数据成员的指针。
 	* 当std::function对象没有初始化任何实际的可调用元素，调用std::function对象将抛出std::bad_function_call异常。
-* [std::not_fn - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/not_fn)
-	* Defined in header \<functional>
-	* Creates a forwarding call wrapper that returns the negation of the callable object it holds.
-	* [\<functional> functions | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/functional-functions?view=msvc-170#not_fn)
-		* The not_fn function template takes a callable object and returns a callable object. When the returned callable object is later invoked with some arguments, it passes them to the original callable object, and logically negates the result. It preserves the const qualification and value category behavior of the wrapped callable object. not_fn is new in C++17, and replaces the deprecated std::not1, std::not2, std::unary_negate, and std::binary_negate.
 * [进入编译器后，一个函数经历了什么？](https://mp.weixin.qq.com/s/kYilpl4K_XpVDF3gaKoRAQ)
 * [C/C++ 中的 argc，argv 到底是什么？](https://mp.weixin.qq.com/s/Mik2n9oLP-PuFNU3lP48Zw)
 * [exit(0) vs exit(1) in C/C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/exit0-vs-exit1-in-c-c-with-examples/)
@@ -5205,6 +5191,24 @@ int main()
 * A function object is any object for which the function call operator is defined. C++ provides many built-in function objects as well as support for creation and manipulation of new function objects.
 
 #
+Function wrappers
+
+* std::function provides support for storing arbitrary function objects.
+* [std::function - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/function)
+	* wraps callable object of any copy constructible type with specified function call signature (class template)
+	* Class template std::function is a general-purpose polymorphic function wrapper. Instances of std::function can store, copy, and invoke any CopyConstructible Callable target -- functions, lambda expressions, bind expressions, or other function objects, as well as pointers to member functions and pointers to data members.
+	* The stored callable object is called the target of std::function. If a std::function contains no target, it is called empty. Invoking the target of an empty std::function results in std::bad_function_call exception being thrown.
+	* std::function satisfies the requirements of CopyConstructible and CopyAssignable.
+  * [function - C++ Reference](https://www.cplusplus.com/reference/functional/function/)
+    * Function wrapper
+      * Class that can wrap any kind of callable element (such as functions and function objects) into a copyable object, and whose type depends solely on its call signature (and not on the callable element type itself).
+      * An object of a function class instantiation can wrap any of the following kinds of callable objects: a function, a function pointer, a pointer to member, or any kind of function object (i.e., an object whose class defines operator(), including closures).
+      * A decay copy of the wrapped callable object is stored internally by the object, which becomes the function's target. The specific type of this target callable object is not needed in order to instantiate the function wrapper class; only its call signature.
+      * The function object can be copied and moved around, and can be used to directly invoke the callable object with the specified call signature (see member operator()).
+      * function objects can also be in a state with no target callable object. In this case they are known as empty functions, and calling them throws a bad_function_call exception.
+  * [C++ Library - \<functional>](https://www.tutorialspoint.com/cpp_standard_library/functional.htm)
+
+#
 Partial function application
 
 * std::bind_front and std::bind provide support for [partial function application](https://en.wikipedia.org/wiki/Partial_application), i.e. binding arguments to functions to produce new functions.
@@ -5273,6 +5277,17 @@ int main()
 	* placeholders for the unbound arguments in a std::bind expression (constant)
 	* The std::placeholders namespace contains the placeholder objects [_1, ..., _N] where N is an implementation defined maximum number.
 	* When used as an argument in a std::bind expression, the placeholder objects are stored in the generated function object, and when that function object is invoked with unbound arguments, each placeholder _N is replaced by the corresponding Nth unbound argument.
+
+#
+Negators
+
+* std::not_fn creates a function object that negates the result of the callable object passed to it.
+* [std::not_fn - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/not_fn)
+	* Defined in header \<functional>
+	* Creates a function object that returns the complement of the result of the function object it holds (function template)
+	* Creates a forwarding call wrapper that returns the negation of the callable object it holds.
+	* [\<functional> functions | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/functional-functions?view=msvc-170#not_fn)
+		* The not_fn function template takes a callable object and returns a callable object. When the returned callable object is later invoked with some arguments, it passes them to the original callable object, and logically negates the result. It preserves the const qualification and value category behavior of the wrapped callable object. not_fn is new in C++17, and replaces the deprecated std::not1, std::not2, std::unary_negate, and std::binary_negate.
 
 #
 Reference wrappers
