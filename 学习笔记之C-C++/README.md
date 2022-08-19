@@ -875,14 +875,6 @@ int main() {
 
 * [Functions - cppreference.com](https://en.cppreference.com/w/cpp/language/functions)
 * [Functions - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/functions/)
-* [C++ std::function技术浅谈](https://mp.weixin.qq.com/s/v1fz4YVJftuaLxYuJBRLPg)
-	* https://blog.csdn.net/xiangbaohui/article/details/106741654
-	* std::function是一个函数对象的包装器，std::function的实例可以存储，复制和调用任何可调用的目标，包括：
-		* 函数。
-		* lamada表达式。
-		* 绑定表达式或其他函数对象。
-		* 指向成员函数和指向数据成员的指针。
-	* 当std::function对象没有初始化任何实际的可调用元素，调用std::function对象将抛出std::bad_function_call异常。
 * [进入编译器后，一个函数经历了什么？](https://mp.weixin.qq.com/s/kYilpl4K_XpVDF3gaKoRAQ)
 * [C/C++ 中的 argc，argv 到底是什么？](https://mp.weixin.qq.com/s/Mik2n9oLP-PuFNU3lP48Zw)
 * [exit(0) vs exit(1) in C/C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/exit0-vs-exit1-in-c-c-with-examples/)
@@ -5199,14 +5191,22 @@ Function wrappers
 	* Class template std::function is a general-purpose polymorphic function wrapper. Instances of std::function can store, copy, and invoke any CopyConstructible Callable target -- functions, lambda expressions, bind expressions, or other function objects, as well as pointers to member functions and pointers to data members.
 	* The stored callable object is called the target of std::function. If a std::function contains no target, it is called empty. Invoking the target of an empty std::function results in std::bad_function_call exception being thrown.
 	* std::function satisfies the requirements of CopyConstructible and CopyAssignable.
-  * [function - C++ Reference](https://www.cplusplus.com/reference/functional/function/)
-    * Function wrapper
-      * Class that can wrap any kind of callable element (such as functions and function objects) into a copyable object, and whose type depends solely on its call signature (and not on the callable element type itself).
-      * An object of a function class instantiation can wrap any of the following kinds of callable objects: a function, a function pointer, a pointer to member, or any kind of function object (i.e., an object whose class defines operator(), including closures).
-      * A decay copy of the wrapped callable object is stored internally by the object, which becomes the function's target. The specific type of this target callable object is not needed in order to instantiate the function wrapper class; only its call signature.
-      * The function object can be copied and moved around, and can be used to directly invoke the callable object with the specified call signature (see member operator()).
-      * function objects can also be in a state with no target callable object. In this case they are known as empty functions, and calling them throws a bad_function_call exception.
-  * [C++ Library - \<functional>](https://www.tutorialspoint.com/cpp_standard_library/functional.htm)
+* [function - C++ Reference](https://www.cplusplus.com/reference/functional/function/)
+	* Function wrapper
+		* Class that can wrap any kind of callable element (such as functions and function objects) into a copyable object, and whose type depends solely on its call signature (and not on the callable element type itself).
+		* An object of a function class instantiation can wrap any of the following kinds of callable objects: a function, a function pointer, a pointer to member, or any kind of function object (i.e., an object whose class defines operator(), including closures).
+		* A decay copy of the wrapped callable object is stored internally by the object, which becomes the function's target. The specific type of this target callable object is not needed in order to instantiate the function wrapper class; only its call signature.
+		* The function object can be copied and moved around, and can be used to directly invoke the callable object with the specified call signature (see member operator()).
+		* function objects can also be in a state with no target callable object. In this case they are known as empty functions, and calling them throws a bad_function_call exception.
+* [C++ Library - \<functional>](https://www.tutorialspoint.com/cpp_standard_library/functional.htm)
+* [C++ std::function技术浅谈](https://mp.weixin.qq.com/s/v1fz4YVJftuaLxYuJBRLPg)
+	* https://blog.csdn.net/xiangbaohui/article/details/106741654
+	* std::function是一个函数对象的包装器，std::function的实例可以存储，复制和调用任何可调用的目标，包括：
+		* 函数。
+		* lamada表达式。
+		* 绑定表达式或其他函数对象。
+		* 指向成员函数和指向数据成员的指针。
+	* 当std::function对象没有初始化任何实际的可调用元素，调用std::function对象将抛出std::bad_function_call异常。
 
 #
 Partial function application
