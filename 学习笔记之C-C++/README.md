@@ -902,6 +902,11 @@ int main() {
 * [exit(0) vs exit(1) in C/C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/exit0-vs-exit1-in-c-c-with-examples/)
 	* Exit Success: Exit Success is indicated by exit(0) statement which means successful termination of the program, i.e. program has been executed without any error or interrupt.
 	* Exit Failure: Exit Failure is indicated by exit(1) which means the abnormal termination of the program, i.e. some error or interrupt has occurred. We can use different integer other than 1 to indicate different types of errors.
+* [现代C++编程实践(二)—函数返回值的处理](https://mp.weixin.qq.com/s/DJB9Axdh9toIBQIUZsujcA)
+	* 先说一种类C的方式，可以通过使用函数出参的方式获取所求复数的实部和虚部。
+	* 除此之外使用C++的方式可以通过std::pair<double,double>这种数据结构结果保存结果值。
+	* std::tie的实现方式相对于std::tuple来讲可读性变强了，返回值可以直接通过std::tie中的定义获取。除此之外，还有一个优势就是，可以忽略不想要的值，这个在std::tuple中是不可能做到的。
+	* C++17版本中提供了结构化绑定
 
 ##### [inline specifier](https://en.cppreference.com/w/cpp/language/inline)
 
