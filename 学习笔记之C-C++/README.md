@@ -5797,7 +5797,7 @@ int main()
 	* 12、抛出异常后导致部分代码被跳过的问题
 	* 13、类对象没有初始化就直接访问问题
 
-### Memory Leak
+#### Memory Leak
 
 * [C++ 如何避免内存泄露](https://mp.weixin.qq.com/s/oBTNXxUiU3StexuyCKPI6w)
   * 内存是如何泄露的
@@ -5829,6 +5829,10 @@ int main()
   * 共享内存实现原理
 * [C/C++ 动态检测内存错误利器 - ASan](https://mp.weixin.qq.com/s/u6UtoXQkdcomtGZxX9vsvw)
   * ASan，即Address Sanitizer，是一个适用于c/c++程序的动态内存错误检测器，它由一个编译器检测模块（LLVM pass）和一个替换malloc函数的运行时库组成，在性能及检测内存错误方面都优于Valgrind，你值得拥有。
+
+### GUI
+
+* [List of platform-independent GUI libraries - Wikipedia](https://en.wikipedia.org/wiki/List_of_platform-independent_GUI_libraries)
 
 ### Unit Testing
 
