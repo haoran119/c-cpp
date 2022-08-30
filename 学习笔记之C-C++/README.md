@@ -1695,7 +1695,18 @@ int main() {
 	* std::chrono::high_resolution_clock meets the requirements of TrivialClock.		
 * [The Three Clocks - ModernesCpp.com](https://www.modernescpp.com/index.php/the-three-clocks)
 
-###### FAQ
+##### [C-style date and time library](https://en.cppreference.com/w/cpp/chrono/c)
+
+* Also provided are the C-style date and time functions, such as std::time_t, std::difftime, and CLOCKS_PER_SEC.
+* Defined in header \<ctime>
+
+###### Functions
+
+###### Constants
+
+###### Types
+
+##### FAQ
 
 * [c++ - How to parse a date string into a c++11 std::chrono time_point or similar? - Stack Overflow](https://stackoverflow.com/questions/21021388/how-to-parse-a-date-string-into-a-c11-stdchrono-time-point-or-similar) 
 	* [std::get_time - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/get_time) 
