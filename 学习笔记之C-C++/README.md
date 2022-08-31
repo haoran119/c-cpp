@@ -1702,9 +1702,84 @@ int main() {
 
 ###### Functions
 
+* [std::mktime - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/mktime)
+	* `std::time_t mktime( std::tm* time );`
+	* converts calendar time to time since epoch (function)
+	* Converts local calendar time to a time since epoch as a time_t object. time->tm_wday and time->tm_yday are ignored. The values in time are permitted to be outside their normal ranges.
+	* A negative value of time->tm_isdst causes mktime to attempt to determine if Daylight Saving Time was in effect.
+	* If the conversion is successful, the time object is modified. All fields of time are updated to fit their proper ranges. time->tm_wday and time->tm_yday are recalculated using information available in other fields.
+	* Parameters
+		* time	-	pointer to a std::tm object specifying local calendar time to convert
+	* Return value
+		* Time since epoch as a std::time_t object on success or -1 if time cannot be represented as a std::time_t object.
+	* Notes
+		* If the std::tm object was obtained from std::get_time or the POSIX strptime, the value of tm_isdst is indeterminate, and needs to be set explicitly before calling mktime.
+```c++
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <ctime>
+ 
+int main()
+{
+    setenv("TZ", "/usr/share/zoneinfo/America/Los_Angeles", 1); // POSIX-specific
+ 
+    std::tm tm{};  // zero initialise
+    tm.tm_year = 2020-1900; // 2020
+    tm.tm_mon = 2-1; // February
+    tm.tm_mday = 15; // 15th
+    tm.tm_hour = 10;
+    tm.tm_min = 15;
+    tm.tm_isdst = 0; // Not daylight saving
+    std::time_t t = std::mktime(&tm); 
+    std::tm local = *std::localtime(&t);
+ 
+    std::cout << "local: " << std::put_time(&local, "%c %Z") << '\n';
+}
+/*
+local: Sat Feb 15 10:15:00 2020 PST
+*/
+```
+
 ###### Constants
 
 ###### Types
+
+* [std::tm - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/tm)
+	* calendar time type (class)
+	* Structure holding a calendar date and time broken down into its components.
+	* Member objects
+
+|int tm_sec | seconds after the minute – [0, 60] (since C++11) (public member object)|
+|-|-|
+|int tm_min|minutes after the hour – [0, 59] (public member object)|
+|int tm_hour|hours since midnight – [0, 23] (public member object)|
+|int tm_mday|day of the month – [1, 31] (public member object)|
+|int tm_mon|months since January – [0, 11] (public member object)|
+|int tm_year|years since 1900 (public member object)|
+|int tm_wday|days since Sunday – [0, 6] (public member object)|
+|int tm_yday|days since January 1 – [0, 365] (public member object)|
+|int tm_isdst|Daylight Saving Time flag. The value is positive if DST is in effect, zero if not and negative if no information is available (public member object)|
+
+```c++
+#include <ctime>
+#include <iostream>
+ 
+int main()
+{
+    std::tm start{};
+    start.tm_mday = 1;
+ 
+    std::mktime(&start);
+    std::cout << std::asctime(&start)
+              << "sizeof(std::tm) = "
+              << sizeof(std::tm) << '\n';
+}
+/*
+Mon Jan  1 00:00:00 1900
+sizeof(std::tm) = 56
+*/
+```
 
 ##### FAQ
 
