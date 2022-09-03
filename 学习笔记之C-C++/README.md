@@ -1644,7 +1644,10 @@ int main() {
 
 ##### [Standard library header \<chrono> - cppreference.com](https://en.cppreference.com/w/cpp/header/chrono)
 
-###### Duration
+###### Classes
+
+#
+Duration
 
 * [std::chrono::duration - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration)
 	* Class template std::chrono::duration represents a time interval.
@@ -1653,7 +1656,8 @@ int main() {
 	* [std::chrono::duration_cast - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration/duration_cast)
 		* Converts a std::chrono::duration to a duration of different type ToDuration.
 
-###### Convenience duration typedefs
+#
+Convenience duration typedefs
 
 | std::chrono::nanoseconds(C++11)  | duration type with Period std::nano |
 |- | - |
@@ -1667,14 +1671,16 @@ int main() {
 | std::chrono::months(C++20)       | duration type with Period std::ratio<2629746> |
 | std::chrono::years(C++20)        | duration type with Period std::ratio<31556952> |
 
-###### Time point
+#
+Time point
 
 * [std::chrono::time_point - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point)
 	* Class template std::chrono::time_point represents a point in time. It is implemented as if it stores a value of type Duration indicating the time interval from the start of the Clock's epoch.
 	* [operator==,!=,<,<=,>,>=,<=>(std::chrono::time_point) - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point/operator_cmp)
 		* Compares two time points. The comparison is done by comparing the results time_since_epoch() for the time points.
 
-###### Clocks
+#
+Clocks
 
 * [std::chrono::system_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock) 
 	* Class std::chrono::system_clock represents the system-wide real time wall clock.
@@ -1697,6 +1703,23 @@ int main() {
 	* Class std::chrono::high_resolution_clock represents the clock with the smallest tick period provided by the implementation. It may be an alias of std::chrono::system_clock or std::chrono::steady_clock, or a third, independent clock.
 	* std::chrono::high_resolution_clock meets the requirements of TrivialClock.		
 * [The Three Clocks - ModernesCpp.com](https://www.modernescpp.com/index.php/the-three-clocks)
+
+###### Functions
+
+#
+Literals
+
+* Defined in inline namespace std::literals::chrono_literals
+
+|[operator""h](https://en.cppreference.com/w/cpp/chrono/operator%22%22h) (C++14)|A std::chrono::duration literal representing hours (function)|
+|-|-|
+|[operator""min](https://en.cppreference.com/w/cpp/chrono/operator%22%22min) (C++14)|A std::chrono::duration literal representing minutes (function)|
+|[operator""s](https://en.cppreference.com/w/cpp/chrono/operator%22%22s) (C++14)|A std::chrono::duration literal representing seconds (function)|
+|[operator""ms](https://en.cppreference.com/w/cpp/chrono/operator%22%22ms) (C++14)|A std::chrono::duration literal representing milliseconds (function)|
+|[operator""us](https://en.cppreference.com/w/cpp/chrono/operator%22%22us) (C++14)|A std::chrono::duration literal representing microseconds (function)|
+|[operator""ns](https://en.cppreference.com/w/cpp/chrono/operator%22%22ns) (C++14)|A std::chrono::duration literal representing nanoseconds (function)|
+|[operator""d](https://en.cppreference.com/w/cpp/chrono/operator%22%22d) (C++20)|A std::chrono::day literal representing a day of a month (function)|
+|[operator""y](https://en.cppreference.com/w/cpp/chrono/operator%22%22y) (C++20)|A std::chrono::year literal representing a particular year (function)|
 
 ##### [C-style date and time library](https://en.cppreference.com/w/cpp/chrono/c)
 
