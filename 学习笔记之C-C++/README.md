@@ -3310,10 +3310,42 @@ Sequence containers implement data structures which can be accessed sequentially
 	* Returns a reference to the element at specified location pos. No bounds checking is performed.
 	* Notes
 		* Unlike std::map::operator[], this operator never inserts a new element into the container. Accessing a nonexistent element through this operator is undefined behavior.
+* [std::vector<T,Allocator>::rbegin, std::vector<T,Allocator>::crbegin - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/rbegin)
+	* Returns a reverse iterator to the first element of the reversed vector. It corresponds to the last element of the non-reversed vector. If the vector is empty, the returned iterator is equal to rend().
+* [std::vector<T,Allocator>::empty - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/empty)
+	* Checks if the container has no elements, i.e. whether begin() == end().
 * [std::vector<T,Allocator>::clear - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/clear)
 	* Erases all elements from the container. After this call, size() returns zero.
 	* Invalidates any references, pointers, or iterators referring to contained elements. Any past-the-end iterators are also invalidated.  
 	* Leaves the capacity() of the vector unchanged (note: the standard's restriction on the changes to capacity is in the specification of vector::reserve, see [1])
+* [std::vector<T,Allocator>::insert - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/insert)
+	* Inserts elements at the specified location in the container.
+		* 1-2) inserts value before pos
+		* 3) inserts count copies of the value before pos
+		* 4) inserts elements from range \[first, last) before pos.
+		* The behavior is undefined if first and last are iterators into *this.
+		* 5) inserts elements from initializer list ilist before pos.
+	* Causes reallocation if the new size() is greater than the old capacity(). If the new size() is greater than capacity(), all iterators and references are invalidated. Otherwise, only the iterators and references before the insertion point remain valid. The past-the-end iterator is also invalidated.
+* [std::vector\<T,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/erase)
+	* Erases the specified elements from the container.
+		* 1) Removes the element at pos.
+		* 2) Removes the elements in the range \[first, last).
+	* Invalidates iterators and references at or after the point of the erase, including the end() iterator.
+	* The iterator pos must be valid and dereferenceable. Thus the end() iterator (which is valid, but is not dereferenceable) cannot be used as a value for pos.
+	* The iterator first does not need to be dereferenceable if first==last: erasing an empty range is a no-op.	
+* How to erase certain value in vector ?
+	* [c++ - How do I remove an item from a stl vector with a certain value? - Stack Overflow](https://stackoverflow.com/questions/39912/how-do-i-remove-an-item-from-a-stl-vector-with-a-certain-value)
+```c++
+std::vector<int> vec;
+// .. put in some values ..
+int int_to_remove = n;
+vec.erase(std::remove(vec.begin(), vec.end(), int_to_remove), vec.end());
+
+std::vector<int> c = {1, 2, 3, 4, 5, 6, 7};
+int x = 5;
+c.erase(std::remove_if(c.begin(), c.end(), [x](int n) { return n < x; }), c.end());
+```
+* [vector erase() and clear() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/vector-erase-and-clear-in-cpp/)
 * [std::vector<T,Allocator>::emplace_back - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/emplace_back)
 	* Appends a new element to the end of the container. The element is constructed through std::allocator_traits::construct, which typically uses placement-new to construct the element in-place at the location provided by the container. The arguments args... are forwarded to the constructor as std::forward\<Args>(args)....
 	* If the new size() is greater than capacity() then all iterators and references (including the past-the-end iterator) are invalidated. Otherwise only the past-the-end iterator is invalidated.	
@@ -3329,25 +3361,6 @@ Sequence containers implement data structures which can be accessed sequentially
 		* Note: reserve() is used instead of using “vector\<Point> vertices(3)”, as the below syntax sometimes doesn’t work because there is no default constructor defined in the class.
 	* emplace_back():
 		* This method is used instead of creating the object using parameterized constructor and allocating it into a different memory, then passing it to the copy constructor, which will insert it into the vector. This function can directly insert the object without calling the copy constructor.
-* [std::vector<T,Allocator>::empty - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/empty)
-	* Checks if the container has no elements, i.e. whether begin() == end().
-* [std::vector\<T,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/erase)
-	* Erases the specified elements from the container.
-		* 1) Removes the element at pos.
-		* 2) Removes the elements in the range \[first, last).
-	* Invalidates iterators and references at or after the point of the erase, including the end() iterator.
-	* The iterator pos must be valid and dereferenceable. Thus the end() iterator (which is valid, but is not dereferenceable) cannot be used as a value for pos.
-	* The iterator first does not need to be dereferenceable if first==last: erasing an empty range is a no-op.	
-* [std::vector<T,Allocator>::insert - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/insert)
-	* Inserts elements at the specified location in the container.
-		* 1-2) inserts value before pos
-		* 3) inserts count copies of the value before pos
-		* 4) inserts elements from range \[first, last) before pos.
-		* The behavior is undefined if first and last are iterators into *this.
-		* 5) inserts elements from initializer list ilist before pos.
-	* Causes reallocation if the new size() is greater than the old capacity(). If the new size() is greater than capacity(), all iterators and references are invalidated. Otherwise, only the iterators and references before the insertion point remain valid. The past-the-end iterator is also invalidated.
-* [std::vector<T,Allocator>::rbegin, std::vector<T,Allocator>::crbegin - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/rbegin)
-	* Returns a reverse iterator to the first element of the reversed vector. It corresponds to the last element of the non-reversed vector. If the vector is empty, the returned iterator is equal to rend().
 * [2D Vector In C++ With User Defined Size - GeeksforGeeks](https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/)
 * [vector初始化与否导致的巨大性能差异](https://mp.weixin.qq.com/s/HISHvxxd1LVBwouAE-uZHg)
 	* 最近在优化引擎代码，在优化的过程中发现一个很奇怪的问题，一个简单的对象，存放在std::vector<> v中，如果v定义的时候为每个元素指定初值，那么后面对v中每个元素的写就飞快；相反的，如果v定义的时候，不指定初始值，那么后面对v中元素写操作的时候，就花费大约前一种2-3倍的时间。
