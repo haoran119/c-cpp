@@ -1194,6 +1194,9 @@ void S2::f(int i)
 	* Enforcement
 		* (Simple) Warn when capture-list contains a reference to a locally declared variable
 		* (Complex) Flag when capture-list contains a reference to a locally declared variable and the lambda is passed to a non-const and non-local context
+* How to fix compile error `capture of variable with non-automatic storage duration` ?
+	* [c++ - Capturing a static variable by reference in a C++11 lambda - Stack Overflow](https://stackoverflow.com/questions/13827855/capturing-a-static-variable-by-reference-in-a-c11-lambda)
+		* Why are you even trying to capture bar? It's static. You don't need to capture it at all. Only automatic variables need capturing. Clang throws a hard error on your code, not just a warning. And if you simply remove the &bar from your lambda capture, then the code works perfectly.
 
 #### [Strings](https://en.cppreference.com/w/cpp/string)
 
