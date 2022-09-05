@@ -1728,6 +1728,31 @@ Literals
 
 ###### Functions
 
+* [std::time - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/time)
+	* `std::time_t time( std::time_t* arg );`
+	* returns the current time of the system as time since epoch (function)
+	* Returns the current calendar time encoded as a std::time_t object, and also stores it in the object pointed to by arg, unless arg is a null pointer.
+	* Parameters
+		* arg	-	pointer to a std::time_t object to store the time, or a null pointer
+	* Return value
+		* Current calendar time encoded as std::time_t object on success, (std::time_t)(-1) on error. If arg is not null, the return value is also stored in the object pointed to by arg.
+	* Notes
+		* The encoding of calendar time in std::time_t is unspecified, but most systems conform to the POSIX specification and return a value of integral type holding 86400 times the number of calendar days since the Epoch plus the number of seconds that have passed since the last midnight UTC. Most notably, POSIX time does not (and can not) take leap seconds into account, so that this integral value is not equal to the number of S.I. seconds that have passed since the epoch, but rather is reduced with the number of leap seconds that have occurred since the epoch. Implementations in which std::time_t is a 32-bit signed integer (many historical implementations) fail in the year 2038.
+```c++
+#include <ctime>
+#include <iostream>
+ 
+int main()
+{
+    std::time_t result = std::time(nullptr);
+    std::cout << std::asctime(std::localtime(&result))
+              << result << " seconds since the Epoch\n";
+}
+/*
+Wed Sep 21 10:27:52 2011
+1316615272 seconds since the Epoch
+*/
+```
 * [std::mktime - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/mktime)
 	* `std::time_t mktime( std::tm* time );`
 	* converts calendar time to time since epoch (function)
@@ -1766,6 +1791,8 @@ int main()
 local: Sat Feb 15 10:15:00 2020 PST
 */
 ```
+* [C library function - mktime()](https://www.tutorialspoint.com/c_standard_library/c_function_mktime.htm)
+* [mktime - C++ Reference](https://cplusplus.com/reference/ctime/mktime/)
 
 ###### Constants
 
@@ -1806,6 +1833,10 @@ Mon Jan  1 00:00:00 1900
 sizeof(std::tm) = 56
 */
 ```
+* [std::time_t - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/time_t)
+	* time since epoch type (typedef)
+	* Arithmetic type capable of representing times.
+	* Although not defined, this is almost always an integral value holding the number of seconds (not counting leap seconds) since 00:00, Jan 1 1970 UTC, corresponding to POSIX time.
 
 ##### FAQ
 
