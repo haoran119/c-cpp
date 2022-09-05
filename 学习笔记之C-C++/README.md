@@ -1676,8 +1676,44 @@ Time point
 
 * [std::chrono::time_point - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point)
 	* Class template std::chrono::time_point represents a point in time. It is implemented as if it stores a value of type Duration indicating the time interval from the start of the Clock's epoch.
+	* [std::chrono::time_point<Clock,Duration>::time_since_epoch - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point/time_since_epoch)
+		* `constexpr duration time_since_epoch() const;`
+		* returns the time point as duration since the start of its clock (public member function)
+		* Returns a duration representing the amount of time between *this and the clock's epoch.
 	* [operator==,!=,<,<=,>,>=,<=>(std::chrono::time_point) - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point/operator_cmp)
 		* Compares two time points. The comparison is done by comparing the results time_since_epoch() for the time points.
+```c++
+#include <iostream>
+#include <chrono>
+#include <ctime>
+ 
+int main()
+{
+    const auto p0 = std::chrono::time_point<std::chrono::system_clock>{};
+    const auto p1 = std::chrono::system_clock::now();
+    const auto p2 = p1 - std::chrono::hours(24);
+ 
+    std::time_t epoch_time = std::chrono::system_clock::to_time_t(p0);
+    std::cout << "epoch: " << std::ctime(&epoch_time);
+    std::time_t today_time = std::chrono::system_clock::to_time_t(p1);
+    std::cout << "today: " << std::ctime(&today_time);
+ 
+    std::cout << "hours since epoch: "
+              << std::chrono::duration_cast<std::chrono::hours>(
+                   p1.time_since_epoch()).count() 
+              << '\n';
+    std::cout << "yesterday, hours since epoch: "
+              << std::chrono::duration_cast<std::chrono::hours>(
+                   p2.time_since_epoch()).count() 
+              << '\n';
+}
+/*
+epoch: Thu Jan  1 00:00:00 1970
+today: Fri Jun 30 10:44:11 2017
+hours since epoch: 416338
+yesterday, hours since epoch: 416314
+*/
+```
 
 #
 Clocks
