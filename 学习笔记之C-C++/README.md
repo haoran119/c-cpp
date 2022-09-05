@@ -1644,37 +1644,41 @@ int main() {
 
 ##### [Standard library header \<chrono> - cppreference.com](https://en.cppreference.com/w/cpp/header/chrono)
 
-###### Classes
+* The chrono library defines three main types as well as utility functions and common typedefs.
+	* clocks
+	* time points
+	* durations
 
-#
-Duration
+###### Clocks
 
-* [std::chrono::duration - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration)
-	* Class template std::chrono::duration represents a time interval.
-	* [std::chrono::duration<Rep,Period>::count - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration/count)
-		* Returns the number of ticks for this duration.
-	* [std::chrono::duration_cast - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration/duration_cast)
-		* Converts a std::chrono::duration to a duration of different type ToDuration.
+* A clock consists of a starting point (or epoch) and a tick rate. For example, a clock may have an epoch of January 1, 1970 and tick every second. C++ defines several clock types:
+* [std::chrono::system_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock) 
+	* Class std::chrono::system_clock represents the system-wide real time wall clock.
+	* It may not be monotonic: on most systems, the system time can be adjusted at any moment. It is the only C++ clock that has the ability to map its time points to C-style time.
+	* std::chrono::system_clock meets the requirements of TrivialClock.
+	* [std::chrono::system_clock::now - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/now)
+		* Returns a time point representing the current point in time.
+	* [std::chrono::system_clock::to_time_t - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/to_time_t)
+		* Converts t to a std::time_t type.
+		* If std::time_t has lower precision, it is implementation-defined whether the value is rounded or truncated.
+	* [std::chrono::system_clock::from_time_t - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/from_time_t) 
+		* Converts t to a time point type, using the coarser precision of the two types.
+		* If time_point has lower precision, it is implementation defined whether the value is rounded or truncated.
+	* [How to get current time and date in C++? - Stack Overflow](https://stackoverflow.com/questions/997946/how-to-get-current-time-and-date-in-c) 
+		* In C++ 11 you can use std::chrono::system_clock::now()
+* [std::chrono::steady_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/steady_clock) 
+	* Class std::chrono::steady_clock represents a monotonic clock. The time points of this clock cannot decrease as physical time moves forward and the time between ticks of this clock is constant. This clock is not related to wall clock time (for example, it can be time since last reboot), and is most suitable for measuring intervals.
+	* std::chrono::steady_clock meets the requirements of TrivialClock.		
+* [std::chrono::high_resolution_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/high_resolution_clock) 
+	* Class std::chrono::high_resolution_clock represents the clock with the smallest tick period provided by the implementation. It may be an alias of std::chrono::system_clock or std::chrono::steady_clock, or a third, independent clock.
+	* std::chrono::high_resolution_clock meets the requirements of TrivialClock.		
+* [The Three Clocks - ModernesCpp.com](https://www.modernescpp.com/index.php/the-three-clocks)
 
-#
-Convenience duration typedefs
+###### Time point
 
-| std::chrono::nanoseconds(C++11)  | duration type with Period std::nano |
-|- | - |
-| std::chrono::microseconds(C++11) | duration type with Period std::micro |
-| std::chrono::milliseconds(C++11) | duration type with Period std::milli |
-| std::chrono::seconds(C++11)      | duration type with Period std::ratio<1> |
-| std::chrono::minutes(C++11)      | duration type with Period std::ratio<60> |
-| std::chrono::hours(C++11)        | duration type with Period std::ratio<3600> |
-| std::chrono::days(C++20)         | duration type with Period std::ratio<86400> |
-| std::chrono::weeks(C++20)        | duration type with Period std::ratio<604800> |
-| std::chrono::months(C++20)       | duration type with Period std::ratio<2629746> |
-| std::chrono::years(C++20)        | duration type with Period std::ratio<31556952> |
-
-#
-Time point
-
+* A time point is a duration of time that has passed since the epoch of a specific clock.
 * [std::chrono::time_point - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point)
+	* a point in time (class template)
 	* Class template std::chrono::time_point represents a point in time. It is implemented as if it stores a value of type Duration indicating the time interval from the start of the Clock's epoch.
 	* [std::chrono::time_point<Clock,Duration>::time_since_epoch - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point/time_since_epoch)
 		* `constexpr duration time_since_epoch() const;`
@@ -1715,32 +1719,33 @@ yesterday, hours since epoch: 416314
 */
 ```
 
+###### Duration
+
+* A duration consists of a span of time, defined as some number of ticks of some time unit. For example, "42 seconds" could be represented by a duration consisting of 42 ticks of a 1-second time unit.
+* [std::chrono::duration - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration)
+	* a time interval (class template)
+	* Class template std::chrono::duration represents a time interval.
+	* It consists of a count of ticks of type Rep and a tick period, where the tick period is a compile-time rational fraction representing the time in seconds from one tick to the next.
+	* The only data stored in a duration is a tick count of type Rep. If Rep is floating point, then the duration can represent fractions of ticks. Period is included as part of the duration's type, and is only used when converting between different durations.
+	* [std::chrono::duration<Rep,Period>::count - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration/count)
+		* Returns the number of ticks for this duration.
+	* [std::chrono::duration_cast - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration/duration_cast)
+		* Converts a std::chrono::duration to a duration of different type ToDuration.
+
 #
-Clocks
+Helper types
 
-* [std::chrono::system_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock) 
-	* Class std::chrono::system_clock represents the system-wide real time wall clock.
-	* It may not be monotonic: on most systems, the system time can be adjusted at any moment. It is the only C++ clock that has the ability to map its time points to C-style time.
-	* std::chrono::system_clock meets the requirements of TrivialClock.
-	* [std::chrono::system_clock::now - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/now)
-		* Returns a time point representing the current point in time.
-	* [std::chrono::system_clock::to_time_t - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/to_time_t)
-		* Converts t to a std::time_t type.
-		* If std::time_t has lower precision, it is implementation-defined whether the value is rounded or truncated.
-	* [std::chrono::system_clock::from_time_t - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/from_time_t) 
-		* Converts t to a time point type, using the coarser precision of the two types.
-		* If time_point has lower precision, it is implementation defined whether the value is rounded or truncated.
-	* [How to get current time and date in C++? - Stack Overflow](https://stackoverflow.com/questions/997946/how-to-get-current-time-and-date-in-c) 
-		* In C++ 11 you can use std::chrono::system_clock::now()
-* [std::chrono::steady_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/steady_clock) 
-	* Class std::chrono::steady_clock represents a monotonic clock. The time points of this clock cannot decrease as physical time moves forward and the time between ticks of this clock is constant. This clock is not related to wall clock time (for example, it can be time since last reboot), and is most suitable for measuring intervals.
-	* std::chrono::steady_clock meets the requirements of TrivialClock.		
-* [std::chrono::high_resolution_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/high_resolution_clock) 
-	* Class std::chrono::high_resolution_clock represents the clock with the smallest tick period provided by the implementation. It may be an alias of std::chrono::system_clock or std::chrono::steady_clock, or a third, independent clock.
-	* std::chrono::high_resolution_clock meets the requirements of TrivialClock.		
-* [The Three Clocks - ModernesCpp.com](https://www.modernescpp.com/index.php/the-three-clocks)
-
-###### Functions
+| std::chrono::nanoseconds(C++11)  | duration type with Period std::nano |
+|- | - |
+| std::chrono::microseconds(C++11) | duration type with Period std::micro |
+| std::chrono::milliseconds(C++11) | duration type with Period std::milli |
+| std::chrono::seconds(C++11)      | duration type with Period std::ratio<1> |
+| std::chrono::minutes(C++11)      | duration type with Period std::ratio<60> |
+| std::chrono::hours(C++11)        | duration type with Period std::ratio<3600> |
+| std::chrono::days(C++20)         | duration type with Period std::ratio<86400> |
+| std::chrono::weeks(C++20)        | duration type with Period std::ratio<604800> |
+| std::chrono::months(C++20)       | duration type with Period std::ratio<2629746> |
+| std::chrono::years(C++20)        | duration type with Period std::ratio<31556952> |
 
 #
 Literals
