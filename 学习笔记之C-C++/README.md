@@ -1770,27 +1770,81 @@ int main() {
 ###### Clocks
 
 * A clock consists of a starting point (or epoch) and a tick rate. For example, a clock may have an epoch of January 1, 1970 and tick every second. C++ defines several clock types:
-* [std::chrono::system_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock) 
-	* Class std::chrono::system_clock represents the system-wide real time wall clock.
-	* It may not be monotonic: on most systems, the system time can be adjusted at any moment. It is the only C++ clock that has the ability to map its time points to C-style time.
-	* std::chrono::system_clock meets the requirements of TrivialClock.
-	* [std::chrono::system_clock::now - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/now)
-		* Returns a time point representing the current point in time.
-	* [std::chrono::system_clock::to_time_t - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/to_time_t)
-		* Converts t to a std::time_t type.
-		* If std::time_t has lower precision, it is implementation-defined whether the value is rounded or truncated.
-	* [std::chrono::system_clock::from_time_t - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/from_time_t) 
-		* Converts t to a time point type, using the coarser precision of the two types.
-		* If time_point has lower precision, it is implementation defined whether the value is rounded or truncated.
-	* [How to get current time and date in C++? - Stack Overflow](https://stackoverflow.com/questions/997946/how-to-get-current-time-and-date-in-c) 
-		* In C++ 11 you can use std::chrono::system_clock::now()
-* [std::chrono::steady_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/steady_clock) 
-	* Class std::chrono::steady_clock represents a monotonic clock. The time points of this clock cannot decrease as physical time moves forward and the time between ticks of this clock is constant. This clock is not related to wall clock time (for example, it can be time since last reboot), and is most suitable for measuring intervals.
-	* std::chrono::steady_clock meets the requirements of TrivialClock.		
-* [std::chrono::high_resolution_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/high_resolution_clock) 
-	* Class std::chrono::high_resolution_clock represents the clock with the smallest tick period provided by the implementation. It may be an alias of std::chrono::system_clock or std::chrono::steady_clock, or a third, independent clock.
-	* std::chrono::high_resolution_clock meets the requirements of TrivialClock.		
 * [The Three Clocks - ModernesCpp.com](https://www.modernescpp.com/index.php/the-three-clocks)
+
+#
+[std::chrono::system_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock) 
+
+* Class std::chrono::system_clock represents the system-wide real time wall clock.
+* It may not be monotonic: on most systems, the system time can be adjusted at any moment. It is the only C++ clock that has the ability to map its time points to C-style time.
+* std::chrono::system_clock meets the requirements of TrivialClock.
+* [std::chrono::system_clock::now - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/now)
+	* Returns a time point representing the current point in time.
+* [How to get current time and date in C++? - Stack Overflow](https://stackoverflow.com/questions/997946/how-to-get-current-time-and-date-in-c) 
+	* In C++ 11 you can use std::chrono::system_clock::now()
+* [c++11 - how to convert "std::chrono::system_clock::now()" to double - Stack Overflow](https://stackoverflow.com/questions/45464711/how-to-convert-stdchronosystem-clocknow-to-double)
+	* https://wandbox.org/permlink/qe1MNGQAR5X3zJl8
+```c++
+#include <chrono>
+#include <iostream>
+int main()
+{
+    auto current_time = std::chrono::system_clock::now();
+    auto duration_in_seconds = std::chrono::duration<double>(current_time.time_since_epoch());
+    
+    std::cout << duration_in_seconds.count() << std::endl; // 1.50169e+09
+}
+```
+* [Get current timestamp in milliseconds since Epoch in C++ | Techie Delight](https://www.techiedelight.com/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/#:~:text=Since%20C%2B%2B11%2C%20we,of%20time%20elapsed%20since%20Epoch.)
+	* 1. Using std::chrono
+	* 2. Using std::time
+```c++
+#include <iostream>
+#include <chrono>
+
+int main()
+{
+	using namespace std::chrono;
+
+	uint64_t ns = (system_clock::now().time_since_epoch()).count();
+	std::cout << ns << " nanoseconds since the Epoch\n";
+
+	uint64_t us = duration_cast<microseconds>(system_clock::now().time_since_epoch()).count();
+	std::cout << us << " microseconds since the Epoch\n";
+
+	uint64_t ms = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+	std::cout << ms << " milliseconds since the Epoch\n";
+
+	uint64_t sec = duration_cast<seconds>(system_clock::now().time_since_epoch()).count();
+	std::cout << sec << " seconds since the Epoch\n";
+
+	return 0;
+}
+/*
+1661387354156146179 nanoseconds since the Epoch
+1661387354156241 microseconds since the Epoch
+1661387354156 milliseconds since the Epoch
+1661387354 seconds since the Epoch
+*/
+```
+* [std::chrono::system_clock::to_time_t - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/to_time_t)
+	* Converts t to a std::time_t type.
+	* If std::time_t has lower precision, it is implementation-defined whether the value is rounded or truncated.
+* [std::chrono::system_clock::from_time_t - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/from_time_t) 
+	* Converts t to a time point type, using the coarser precision of the two types.
+	* If time_point has lower precision, it is implementation defined whether the value is rounded or truncated.
+
+#
+[std::chrono::steady_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/steady_clock) 
+
+* Class std::chrono::steady_clock represents a monotonic clock. The time points of this clock cannot decrease as physical time moves forward and the time between ticks of this clock is constant. This clock is not related to wall clock time (for example, it can be time since last reboot), and is most suitable for measuring intervals.
+* std::chrono::steady_clock meets the requirements of TrivialClock.		
+
+#
+[std::chrono::high_resolution_clock - cppreference.com](https://en.cppreference.com/w/cpp/chrono/high_resolution_clock) 
+
+* Class std::chrono::high_resolution_clock represents the clock with the smallest tick period provided by the implementation. It may be an alias of std::chrono::system_clock or std::chrono::steady_clock, or a third, independent clock.
+* std::chrono::high_resolution_clock meets the requirements of TrivialClock.		
 
 ###### Time point
 
@@ -2009,8 +2063,6 @@ sizeof(std::tm) = 56
 * [Print System Time in C++ | Delft Stack](https://www.delftstack.com/howto/cpp/system-time-in-cpp/) 
 	* [std::strftime - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/strftime)
 		* Converts the date and time information from a given calendar time time to a null-terminated multibyte character string str according to format string format. Up to count bytes are written.
-* [c++11 - how to convert "std::chrono::system_clock::now()" to double - Stack Overflow](https://stackoverflow.com/questions/45464711/how-to-convert-stdchronosystem-clocknow-to-double)
-	* https://wandbox.org/permlink/qe1MNGQAR5X3zJl8
 * [Outputting Date and Time in C++ using std::chrono - Stack Overflow](https://stackoverflow.com/questions/17223096/outputting-date-and-time-in-c-using-stdchrono)
 * [c++ - C++11 get current date and time as string - Stack Overflow](https://stackoverflow.com/questions/34963738/c11-get-current-date-and-time-as-string)
 * [c++ - Format no such file or directory - Stack Overflow](https://stackoverflow.com/questions/65083544/format-no-such-file-or-directory)
