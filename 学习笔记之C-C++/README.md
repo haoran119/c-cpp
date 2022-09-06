@@ -673,6 +673,82 @@ int main() {
 * [谁说 C++ 的强制类型转换很难懂？](https://mp.weixin.qq.com/s/q3iwtvqMSp6lNC_ZR_SP6A)
   * https://github.com/yingyulou
 
+##### [Structured binding declaration](https://en.cppreference.com/w/cpp/language/structured_binding)
+
+* Binds the specified names to subobjects or elements of the initializer.
+* Like a reference, a structured binding is an alias to an existing object. Unlike a reference, a structured binding does not have to be of a reference type.
+* Case 1: binding an array
+* Case 2: binding a tuple-like type
+* Case 3: binding to data members
+```c++
+#include <set>
+#include <string>
+#include <iomanip>
+#include <iostream>
+ 
+int main()
+{
+    std::set<std::string> myset{"hello"};
+ 
+    for (int i{2}; i; --i)
+    {
+        if (auto [iter, success] = myset.insert("Hello"); success) 
+            std::cout << "Insert is successful. The value is "
+                      << std::quoted(*iter) << ".\n";
+        else
+            std::cout << "The value " << std::quoted(*iter)
+                      << " already exists in the set.\n";
+    }
+ 
+    struct BitFields
+    {
+        // C++20: default member initializer for bit-fields
+        int b : 4 {1}, d : 4 {2}, p : 4 {3}, q : 4 {4};
+    };
+ 
+    {
+        const auto [b, d, p, q] = BitFields{};
+        std::cout << b << ' ' << d << ' ' << p << ' ' << q << '\n';
+    }
+ 
+    {
+        const auto [b, d, p, q] = []{ return BitFields{4, 3, 2, 1}; }();
+        std::cout << b << ' ' << d << ' ' << p << ' ' << q << '\n';
+    }
+ 
+    {
+        BitFields s;
+ 
+        auto& [b, d, p, q] = s;
+        std::cout << b << ' ' << d << ' ' << p << ' ' << q << '\n';
+ 
+        b = 4, d = 3, p = 2, q = 1;
+        std::cout << s.b << ' ' << s.d << ' ' << s.p << ' ' << s.q << '\n';
+    }
+}
+/*
+Insert is successful. The value is "Hello".
+The value "Hello" already exists in the set.
+1 2 3 4
+4 3 2 1
+1 2 3 4
+4 3 2 1
+*/
+```
+* [C++17常用新特性(三)---结构化绑定](https://mp.weixin.qq.com/s?__biz=MjM5ODg5MDIzOQ==&mid=2650491856&idx=1&sn=d676113480a097e2b3fd156c5096e0fd&chksm=becc344089bbbd56b357e949b694534a4a8146c548114c9d20f8612b7fe9b1f4297948018fc7&scene=21#wechat_redirect)
+	* 1 结构化绑定概述
+	* 2 细品结构化绑定
+	* 3 哪些场景可以使用结构体绑定
+		* 3.1 结构体和类
+		* 3.2 原生数组
+			* 对原生数组使用结构化绑定时需要注意的是只有在数组的长度一定的情况下才能使用结构化绑定，且声明的对象个数要和数组长度保持一致。数组作为按值传入的参数时是不能使用结构化绑定的，这个时候数组会退化为相应的指针。
+		* 3.3 std::pair, std::tuple 和 std::array
+	* 4 总结
+* [Structured binding in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/structured-binding-c/)
+* [Structured binding may be the new hotness, but we'll always have std::tie - The Old New Thing](https://devblogs.microsoft.com/oldnewthing/20200925-00/?p=104297)
+	* C++17 introduced structured binding, which lets you assign an expression to multiple variables.
+	* However, this is for creating new variables to hold the result. If you want to assign the result to existing variables, then you can use the old standby std::tie.
+
 #### [Constants/Literals](https://www.tutorialspoint.com/cplusplus/cpp_constants_literals.htm)
 
 #### [Modifier Types](https://www.tutorialspoint.com/cplusplus/cpp_modifier_types.htm)
