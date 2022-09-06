@@ -386,6 +386,48 @@ int main(void)
 	* `enum Color { red, green, blue };`
 * Scoped enumerations
 	* `enum class Color { red, green = 20, blue };`
+* How to iterate over enum ?
+	* [C++ Tutorial => Iteration over an enum](https://riptutorial.com/cplusplus/example/13085/iteration-over-an-enum)
+	* [c++ - How can I iterate over an enum? - Stack Overflow](https://stackoverflow.com/questions/261963/how-can-i-iterate-over-an-enum)
+	* [c - Number of elements in an enum - Stack Overflow](https://stackoverflow.com/questions/712463/number-of-elements-in-an-enum)
+```c++
+#include <iostream>
+
+enum color
+{
+    red,
+    yellow,
+    green,
+    blue,
+    ColorCount
+};
+
+std::ostream& operator<<(std::ostream& os, color c)
+{
+    switch(c) {
+        case red   : os << "red";    break;
+        case yellow: os << "yellow"; break;
+        case green : os << "green";  break;
+        case blue  : os << "blue";   break;
+        default    : os.setstate(std::ios_base::failbit);
+    }
+    
+    return os;
+}
+int main()
+{
+    for (auto i = 0; i < color::ColorCount; ++ i)
+        std::cout << static_cast<color>(i) << "\n";
+
+    return 0;
+}
+/*
+red
+yellow
+green
+blue
+*/
+```
 
 ##### [decltype](https://en.cppreference.com/w/cpp/language/decltype)
 
