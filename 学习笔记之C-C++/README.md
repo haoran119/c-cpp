@@ -267,7 +267,31 @@ In programming contests, people do focus more on finding the algorithm to solve 
 * [CMake - Wikipedia](https://en.wikipedia.org/wiki/CMake)
 	* [CMake Tutorial — CMake 3.23.0-rc2 Documentation](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)
 	* [Examples | CMake](https://cmake.org/examples/)
+
+###### [GDB](https://en.wikipedia.org/wiki/GNU_Debugger)
+
 * [GDB (Step by Step Introduction) - GeeksforGeeks](https://www.geeksforgeeks.org/gdb-step-by-step-introduction/)
+* How to debug Core Dumps with GDB in linux ?
+	* [GDB - Core Dumps — Debugging documentation](https://www.cse.unsw.edu.au/~learn/debugging/modules/gdb_coredumps/)
+		* Core Dump Settings
+			* To enable core dumps, first check the maximum core dump size:
+				* `$ ulimit -c`
+			* If the result of this is zero (i.e. no core dump will be produced), set the limit to the maximum:
+				* `$ ulimit -c unlimited`
+		* Generating a Core Dump
+			* Compile the code for use with GDB.
+				* `$ gcc -g <any other flags> -o file_name file_name.c`
+			* Run the program as normal
+				* `$ ./<file_name>` Segmentation fault (core dumped)
+				* An error message like the one above should appear if the program crashes.
+		* Starting a GDB session
+			* Start a GDB session with the program binary and coredump file
+				* `$ gdb <binary-file> <core-dump-file>`
+				* GDB is helpful to inspect the stack frame and the state of variables and registers when the program crashed. Commands such as where, up, down, print, info locals, info args, info registers and list can be helpful in this situation.
+				* It is useful to remember that, while debugging core dumps, the program is not actually running, so commands related to the execution of the program such as step, next and continue are unavailable.
+	* [C++ Tutorial - Debugging: Core/Memory Dump - 2020](https://www.bogotobogo.com/cplusplus/debugging_core_memory_dump_segmentation_fault_gdb.php)
+		* We can use backtrace to list the call stacks that had been made when the program crashed:
+			* `(gdb) backtrace`
 
 #### Data Types
 
