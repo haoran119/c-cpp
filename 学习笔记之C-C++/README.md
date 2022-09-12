@@ -3358,22 +3358,22 @@ int main()
 
 ###### Member functions
 
-* [std::thread::joinable - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/joinable)
+* [`std::thread::joinable` - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/joinable)
 	* checks whether the thread is joinable, i.e. potentially running in parallel context (public member function)
-	* Checks if the std::thread object identifies an active thread of execution. Specifically, returns true if get_id() != std::thread::id(). So a default constructed thread is not joinable.
+	* Checks if the std::thread object identifies an active thread of execution. Specifically, returns true if get_id() != `std::thread::id()`. So a default constructed thread is not joinable.
 	* A thread that has finished executing code, but has not yet been joined is still considered an active thread of execution and is therefore joinable.
 	* Return value
 		* true if the thread object identifies an active thread of execution, false otherwise
-* [std::thread::get_id - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/get_id)
-	* Returns a value of std::thread::id identifying the thread associated with *this.
+* [`std::thread::get_id` - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/get_id)
+	* Returns a value of `std::thread::id` identifying the thread associated with *this.
 	* Return value
-		* A value of type std::thread::id identifying the thread associated with *this. If there is no thread associated, default constructed std::thread::id is returned.
-* [std::thread::hardware_concurrency - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency)
+		* A value of type `std::thread::id` identifying the thread associated with *this. If there is no thread associated, default constructed `std::thread::id` is returned.
+* [`std::thread::hardware_concurrency` - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency)
 	* returns the number of concurrent threads supported by the implementation (public static member function)
 	* Returns the number of concurrent threads supported by the implementation. The value should be considered only a hint.
 	* Return value
 		* Number of concurrent threads supported. If the value is not well defined or not computable, returns ​0​.
-* [std::thread::join - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/join)
+* [`std::thread::join` - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/join)
 	* waits for the thread to finish its execution (public member function)
 	* Blocks the current thread until the thread identified by *this finishes its execution.
 	* The completion of the thread identified by *this synchronizes with the corresponding successful return from join().
