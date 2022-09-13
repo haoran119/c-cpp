@@ -3348,16 +3348,16 @@ int main()
 		* 它不一定真的会异步执行
 		* 它有可能会阻塞
 
-##### [Threads](https://en.cppreference.com/w/cpp/thread/thread)
+##### [Threads](https://en.cppreference.com/w/cpp/header/thread)
 
+###### [std::thread](https://en.cppreference.com/w/cpp/thread/thread)
+
+* manages a separate thread (class)
 * Threads enable programs to execute across several processor cores.
 * The class thread represents [a single thread of execution](https://en.wikipedia.org/wiki/Thread_(computing)). Threads allow multiple functions to execute concurrently.
 * Threads begin execution immediately upon construction of the associated thread object (pending any OS scheduling delays), starting at the top-level function provided as a constructor argument. The return value of the top-level function is ignored and if it terminates by throwing an exception, std::terminate is called. The top-level function may communicate its return value or an exception to the caller via std::promise or by modifying shared variables (which may require synchronization, see std::mutex and std::atomic)
 * std::thread objects may also be in the state that does not represent any thread (after default construction, move from, detach, or join), and a thread of execution may not be associated with any thread objects (after detach).
 * No two std::thread objects may represent the same thread of execution; std::thread is not CopyConstructible or CopyAssignable, although it is MoveConstructible and MoveAssignable.
-
-###### Member functions
-
 * [(constructor)](https://en.cppreference.com/w/cpp/thread/thread/thread)
 	* constructs new thread object (public member function)
 	* 1) Creates new thread object which does not represent a thread.
@@ -3469,15 +3469,7 @@ bar: 10000
 		* resource_deadlock_would_occur if this->get_id() == std::this_thread::get_id() (deadlock detected)
 		* no_such_process if the thread is not valid
 		* invalid_argument if joinable() is false
-
-###### Functions managing the current thread
-
-* [std::this_thread::sleep_for - cppreference.com](https://en.cppreference.com/w/cpp/thread/sleep_for)
-	* Blocks the execution of the current thread for at least the specified sleep_duration.
-	* This function may block for longer than sleep_duration due to scheduling or resource contention delays.
-	* The standard recommends that a steady clock is used to measure the duration. If an implementation uses a system clock instead, the wait time may also be sensitive to clock adjustments.
 * [用三个线程按顺序循环打印ABC三个字母 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/8575543.html)
-* [Sleep v.s. sleep - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/5584088.html)
 * [C++ 线程的使用](https://mp.weixin.qq.com/s/tMWxvw4Kmga5ayUfXHaaIw)
   * C++11 之前，C++ 语言没有对并发编程提供语言级别的支持，这使得我们在编写可移植的并发程序时，存在诸多的不便。现在 C++11 中增加了线程以及线程相关的类，很方便地支持了并发编程，使得编写的多线程程序的可移植性得到了很大的提高。
   * C++11 中提供的线程类叫做 std::thread，基于这个类创建一个新的线程非常的简单，只需要提供线程函数或者函数对象即可，并且可以同时指定线程函数的参数。我们首先来了解一下这个类提供的一些常用 API：
@@ -3491,6 +3483,14 @@ bar: 10000
   * 3. 静态函数
   * 4. C 线程库
     * [C语言线程库的使用](https://mp.weixin.qq.com/s?__biz=MzI3ODQ3OTczMw==&mid=2247491745&idx=1&sn=d995e1617ed6ad3d56de28b5be127e73&scene=21#wechat_redirect)
+
+###### Functions managing the current thread
+
+* [std::this_thread::sleep_for - cppreference.com](https://en.cppreference.com/w/cpp/thread/sleep_for)
+	* Blocks the execution of the current thread for at least the specified sleep_duration.
+	* This function may block for longer than sleep_duration due to scheduling or resource contention delays.
+	* The standard recommends that a steady clock is used to measure the duration. If an implementation uses a system clock instead, the wait time may also be sensitive to clock adjustments.
+* [Sleep v.s. sleep - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/5584088.html)
 
 ##### [\<atomic>](https://en.cppreference.com/w/cpp/header/atomic)
 
