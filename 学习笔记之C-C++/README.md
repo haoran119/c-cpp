@@ -3607,7 +3607,7 @@ int main()
 
 * Mutual exclusion algorithms prevent multiple threads from simultaneously accessing shared resources. This prevents data races and provides support for synchronization between threads.
 
-###### [std::mutex - cppreference.com](https://en.cppreference.com/w/cpp/thread/mutex)
+###### [std::mutex](https://en.cppreference.com/w/cpp/thread/mutex)
 
 * The mutex class is a synchronization primitive that can be used to protect shared data from being simultaneously accessed by multiple threads.
 * mutex offers exclusive, non-recursive ownership semantics:
