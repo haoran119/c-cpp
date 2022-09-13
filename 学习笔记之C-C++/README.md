@@ -3732,6 +3732,30 @@ g_i: 2; in main()
 ##### [\<future>](https://en.cppreference.com/w/cpp/header/future)
 
 * The standard library provides facilities to obtain values that are returned and to catch exceptions that are thrown by asynchronous tasks (i.e. functions launched in separate threads). These values are communicated in a shared state, in which the asynchronous task may write its return value or store an exception, and which may be examined, waited for, and otherwise manipulated by other threads that hold instances of std::future or std::shared_future that reference that shared state.
+* [std::async - cppreference.com](https://en.cppreference.com/w/cpp/thread/async)
+	* runs a function asynchronously (potentially in a new thread) and returns a std::future that will hold the result (function template)
+	* The function template async runs the function f asynchronously (potentially in a separate thread which might be a part of a thread pool) and returns a std::future that will eventually hold the result of that function call.
+	* In any case, the call to std::async synchronizes-with (as defined in std::memory_order) the call to f, and the completion of f is sequenced-before making the shared state ready. If the async policy is chosen, the associated thread completion synchronizes-with the successful return from the first function that is waiting on the shared state, or with the return of the last function that releases the shared state, whichever comes first. If std::decay\<Function>::type or each type in std::decay\<Args>::type is not constructible from its corresponding argument, the program is ill-formed.
+	* Parameters
+		* f	-	Callable object to call
+		* args...	-	parameters to pass to f
+		* policy	-	bitmask value, where individual bits control the allowed methods of execution
+			* Bit	Explanation
+			* std::launch::async	enable asynchronous evaluation
+			* std::launch::deferred	enable lazy evaluation
+		* Return value
+			* std::future referring to the shared state created by this call to std::async.
+		* Exceptions
+			* Throws std::system_error with error condition std::errc::resource_unavailable_try_again if the launch policy equals std::launch::async and the implementation is unable to start a new thread (if the policy is async|deferred or has additional bits set, it will fall back to deferred or the implementation-defined policies in this case), or std::bad_alloc if memory for the internal data structures could not be allocated.
+		* Notes
+			* The implementation may extend the behavior of the first overload of std::async by enabling additional (implementation-defined) bits in the default launch policy.
+			* Examples of implementation-defined launch policies are the sync policy (execute immediately, within the async call) and the task policy (similar to async, but thread-locals are not cleared)
+			* If the std::future obtained from std::async is not moved from or bound to a reference, the destructor of the std::future will block at the end of the full expression until the asynchronous operation completes, essentially making code such as the following synchronous:
+			* (note that the destructors of std::futures obtained by means other than a call to std::async never block)
+```c++
+std::async(std::launch::async, []{ f(); }); // temporary's dtor waits for f()
+std::async(std::launch::async, []{ g(); }); // does not start until f() completes
+```
 
 #### Parse command line
 
