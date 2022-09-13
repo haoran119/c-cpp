@@ -3375,9 +3375,9 @@ int main()
 		* f	-	Callable object to execute in the new thread
 		* args...	-	arguments to pass to the new function
 	* Postconditions
-		* 1) get_id() equal to std::thread::id() (i.e. joinable is false)
-		* 2) other.get_id() equal to std::thread::id() and get_id() returns the value of other.get_id() prior to the start of construction
-		* 3) get_id() not equal to std::thread::id() (i.e. joinable is true)
+		* 1) get_id() equal to `std::thread::id()` (i.e. joinable is false)
+		* 2) other.get_id() equal to `std::thread::id()` and get_id() returns the value of other.get_id() prior to the start of construction
+		* 3) get_id() not equal to `std::thread::id()` (i.e. joinable is true)
 	* Exceptions
 		* 3) std::system_error if the thread could not be started. The exception may represent the error condition std::errc::resource_unavailable_try_again or another implementation-specific error condition.
 	* Notes
