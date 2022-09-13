@@ -3348,7 +3348,7 @@ int main()
 		* 它不一定真的会异步执行
 		* 它有可能会阻塞
 
-##### [Threads](https://en.cppreference.com/w/cpp/header/thread)
+##### [\<thread>](https://en.cppreference.com/w/cpp/header/thread)
 
 ###### [std::thread](https://en.cppreference.com/w/cpp/thread/thread)
 
