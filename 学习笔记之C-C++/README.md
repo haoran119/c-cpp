@@ -3358,6 +3358,89 @@ int main()
 
 ###### Member functions
 
+* [(constructor)](https://en.cppreference.com/w/cpp/thread/thread/thread)
+	* constructs new thread object (public member function)
+	* 1) Creates new thread object which does not represent a thread.
+	* 2) Move constructor. Constructs the thread object to represent the thread of execution that was represented by other. After this call other no longer represents a thread of execution.
+	* 3) Creates new std::thread object and associates it with a thread of execution. The new thread of execution starts executing /*INVOKE*/(std::move(f_copy), std::move(args_copy)...), where
+		* /*INVOKE*/ performs the INVOKE operation specified in Callable, which can be performed by std::invoke (since C++17), and
+		* f_copy is an object of type std::decay\<Function>::type and constructed from std::forward\<Function>(f), and
+		* args_copy... are objects of types std::decay\<Args>::type... and constructed from std::forward\<Args>(args)....
+	* Constructions of these objects are executed in the context of the caller, so that any exceptions thrown during evaluation and copying/moving of the arguments are thrown in the current thread, without starting the new thread. The program is ill-formed if any construction or the INVOKE operation is invalid.
+	* This constructor does not participate in overload resolution if std::decay\<Function>::type is the same type as thread.
+	* The completion of the invocation of the constructor synchronizes-with (as defined in std::memory_order) the beginning of the invocation of the copy of f on the new thread of execution.
+	* 4) The copy constructor is deleted; threads are not copyable. No two std::thread objects may represent the same thread of execution.
+	* Parameters
+		* other	-	another thread object to construct this thread object with
+		* f	-	Callable object to execute in the new thread
+		* args...	-	arguments to pass to the new function
+	* Postconditions
+		* 1) get_id() equal to std::thread::id() (i.e. joinable is false)
+		* 2) other.get_id() equal to std::thread::id() and get_id() returns the value of other.get_id() prior to the start of construction
+		* 3) get_id() not equal to std::thread::id() (i.e. joinable is true)
+	* Exceptions
+		* 3) std::system_error if the thread could not be started. The exception may represent the error condition std::errc::resource_unavailable_try_again or another implementation-specific error condition.
+	* Notes
+		* The arguments to the thread function are moved or copied by value. If a reference argument needs to be passed to the thread function, it has to be wrapped (e.g., with std::ref or std::cref).
+		* Any return value from the function is ignored. If the function throws an exception, std::terminate is called. In order to pass return values or exceptions back to the calling thread, std::promise or std::async may be used.
+* [thread::thread - C++ Reference](https://cplusplus.com/reference/thread/thread/thread/)
+	* Data races
+		* The move constructor (4) modifies x.
+```c++
+// constructing threads
+#include <iostream>       // std::cout
+#include <atomic>         // std::atomic
+#include <thread>         // std::thread
+#include <vector>         // std::vector
+
+std::atomic<int> global_counter (0);
+
+void increase_global (int n) { for (int i=0; i<n; ++i) ++global_counter; }
+
+void increase_reference (std::atomic<int>& variable, int n) { for (int i=0; i<n; ++i) ++variable; }
+
+struct C : std::atomic<int> {
+  C() : std::atomic<int>(0) {}
+  void increase_member (int n) { for (int i=0; i<n; ++i) fetch_add(1); }
+};
+
+int main ()
+{
+  std::vector<std::thread> threads;
+
+  std::cout << "increase global counter with 10 threads...\n";
+  for (int i=1; i<=10; ++i)
+    threads.push_back(std::thread(increase_global,1000));
+
+  std::cout << "increase counter (foo) with 10 threads using reference...\n";
+  std::atomic<int> foo(0);
+  for (int i=1; i<=10; ++i)
+    threads.push_back(std::thread(increase_reference,std::ref(foo),1000));
+
+  std::cout << "increase counter (bar) with 10 threads using member...\n";
+  C bar;
+  for (int i=1; i<=10; ++i)
+    threads.push_back(std::thread(&C::increase_member,std::ref(bar),1000));
+
+  std::cout << "synchronizing all threads...\n";
+  for (auto& th : threads) th.join();
+
+  std::cout << "global_counter: " << global_counter << '\n';
+  std::cout << "foo: " << foo << '\n';
+  std::cout << "bar: " << bar << '\n';
+
+  return 0;
+}
+/*
+increase global counter using 10 threads...
+increase counter (foo) with 10 threads using reference...
+increase counter (bar) with 10 threads using member...
+synchronizing all threads...
+global_counter: 10000
+foo: 10000
+bar: 10000
+*/
+```
 * [`std::thread::joinable` - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/joinable)
 	* checks whether the thread is joinable, i.e. potentially running in parallel context (public member function)
 	* Checks if the std::thread object identifies an active thread of execution. Specifically, returns true if get_id() != `std::thread::id()`. So a default constructed thread is not joinable.
