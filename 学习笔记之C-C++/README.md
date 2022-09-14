@@ -1735,6 +1735,14 @@ int main() {
 		* Useful when building a memory pool, a garbage collector or simply when performance and exception safety are paramount.
 		* There’s no danger of allocation failure since the memory has already been allocated, and constructing an object on a pre-allocated buffer takes less time.
 		* This feature becomes useful while working in an environment with limited resources.
+* Should I store pointers or objects in containers ?
+	* [dictionary - Map of Pointers versus Map of Structures/Containers (C++) - Stack Overflow](https://stackoverflow.com/questions/12451980/map-of-pointers-versus-map-of-structures-containers-c)
+		* As I see it, there are a number of factors involved in deciding whether to use pointers vs. objects:
+			* 1. Do you or don't you need polymorphism?
+			* 2. The size of the objects you store and their suitability for copy operations
+			* 3. Other operations you perform on the container and its contents
+		* So clearly, it all depends on the type and size of objects you store, and the type and frequency of the operations you carry out. If the objects you are dealing with are various types of windows, buttons and menus of a GUI application, you will most likely want to use pointers and take advantage of polymorphism. If, on the other hand, you are dealing with huge structures of compact elements, all identical in size and shape, and the operations you perform involve frequent iteration or bulk copying, storing objects directly is perferrable. There may also be situations where the decision is hard to make without trying both and deciding based on the results of memory and time benchmarks.
+	* [c++ - Should I store entire objects, or pointers to objects in containers? - Stack Overflow](https://stackoverflow.com/questions/141337/should-i-store-entire-objects-or-pointers-to-objects-in-containers)
 
 ##### [Dynamic memory management](https://en.cppreference.com/w/cpp/memory)
 
