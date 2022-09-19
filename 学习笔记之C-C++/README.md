@@ -4225,6 +4225,45 @@ int main()
         std::cout << std::setw(10) << name << " | " << height << "cm\n";
 }
 ```
+* [std::map<Key,T,Compare,Allocator>::insert_or_assign - cppreference.com](https://en.cppreference.com/w/cpp/container/map/insert_or_assign)
+	* inserts an element or assigns to the current element if the key already exists (public member function)
+	* Notes
+		* insert_or_assign returns more information than operator[] and does not require default-constructibility of the mapped type.
+```c++
+#include <iostream>
+#include <map>
+#include <string>
+ 
+auto print_node = [](const auto &node) {
+    std::cout << "[" << node.first << "] = " << node.second << '\n';
+};
+ 
+auto print_result = [](auto const &pair) {
+    std::cout << (pair.second ? "inserted: " : "assigned: ");
+    print_node(*pair.first);
+};
+ 
+int main()
+{
+    std::map<std::string, std::string> myMap;
+ 
+    print_result( myMap.insert_or_assign("a", "apple"     ) );
+    print_result( myMap.insert_or_assign("b", "banana"    ) );
+    print_result( myMap.insert_or_assign("c", "cherry"    ) );
+    print_result( myMap.insert_or_assign("c", "clementine") );
+ 
+    for (const auto &node : myMap) { print_node(node); }
+}
+/*
+inserted: [a] = apple
+inserted: [b] = banana
+inserted: [c] = cherry
+assigned: [c] = clementine
+[a] = apple
+[b] = banana
+[c] = clementine
+*/
+```
 * [std::map<Key,T,Compare,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/container/map/erase)
 	* Removes specified elements from the container.
 	* 1) Removes the element at pos.
