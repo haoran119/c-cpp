@@ -4804,6 +4804,7 @@ ordinals: 72 69 76 76 79
 ordinals: 144 138 152 152 158
 */
 ```
+* How to transform vector ?
 ```c++
 #include <algorithm>
 #include <iostream>
@@ -4845,6 +4846,77 @@ int main()
 After
 11 12
 13 14
+*/
+```
+* How to transform map v.s. vector ?
+```c++
+#include <iostream>
+#include <algorithm>
+#include <map>
+#include <vector>
+
+
+int main()
+{
+    // transform vector
+    std::vector<double> myVec {1, 2, 3};
+
+    std::transform(myVec.cbegin(),
+                myVec.cend(),
+                myVec.begin(),
+                [](auto x) {    // effect
+                    x = 2 * x;
+                    return x;
+                });
+
+    for (auto it : myVec) {
+        std::cout << it << "\n";
+    }
+    std::cout << "\n";
+
+    // transform map
+    std::map<uint64_t, double> myMap {{1, 1}, {2, 2}, {3, 3}};
+
+    std::transform(myMap.begin(),
+                myMap.end(),
+                std::inserter(myMap, myMap.end()),
+                [](auto x) {    // not effect
+                    x.second = 2 * x.second;
+                    return x;
+                });
+
+    for (auto it : myMap) {
+        std::cout << it.first << " : " << it.second << "\n";
+    }
+    std::cout << "\n";
+
+    std::transform(myMap.begin(),
+                myMap.end(),
+                std::inserter(myMap, myMap.end()),
+                [](auto& x) {   // effect but safe with auto& ???
+                    x.second = 2 * x.second;
+                    return x;
+                });
+
+    for (auto it : myMap) {
+        std::cout << it.first << " : " << it.second << "\n";
+    }
+    std::cout << "\n";
+
+    return 0;
+}
+/*
+2
+4
+6
+
+1 : 1
+2 : 2
+3 : 3
+
+1 : 2
+2 : 4
+3 : 6
 */
 ```
 * [std::remove, std::remove_if - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/remove)
