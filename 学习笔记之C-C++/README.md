@@ -4397,6 +4397,8 @@ if (search != example.end()) {
     std::cout << "Not found\n";
 }
 ```
+* [c++ - Most efficient way to access specific key of a map with an iterator? - Stack Overflow](https://stackoverflow.com/questions/23973879/most-efficient-way-to-access-specific-key-of-a-map-with-an-iterator)
+	* `map<string,int>::iterator it = mymap.find("Node");`
 * [std::map<Key,T,Compare,Allocator>::contains - cppreference.com](https://en.cppreference.com/w/cpp/container/map/contains)
 	* checks if the container contains element with specific key (public member function)
 * [std::map<Key,T,Compare,Allocator>::equal_range - cppreference.com](https://en.cppreference.com/w/cpp/container/map/equal_range)
