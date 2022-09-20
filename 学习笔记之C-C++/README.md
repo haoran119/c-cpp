@@ -4745,8 +4745,17 @@ int main() {
 			* -ForwardIt1, ForwardIt2, ForwardIt3 must meet the requirements of LegacyForwardIterator.
 	* Return value
 		* Output iterator to the element past the last element transformed.
+	* Complexity
+		* 1-2) Exactly std::distance(first1, last1) applications of unary_op
+		* 3-4) Exactly std::distance(first1, last1) applications of binary_op
+	* Exceptions
+		* The overloads with a template parameter named ExecutionPolicy report errors as follows:
+			* If execution of a function invoked as part of the algorithm throws an exception and ExecutionPolicy is one of the standard policies, std::terminate is called. For any other ExecutionPolicy, the behavior is implementation-defined.
+			* If the algorithm fails to allocate memory, std::bad_alloc is thrown.
 	* Notes
 		* std::transform does not guarantee in-order application of unary_op or binary_op. To apply a function to a sequence in-order or to apply a function that modifies the elements of a sequence, use std::for_each.
+	* Example
+		* The following code uses transform to convert a string in place to uppercase using the std::toupper function and then transforms each char to its ordinal value:
 ```c++
 #include <algorithm>
 #include <cctype>
