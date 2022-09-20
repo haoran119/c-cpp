@@ -4130,6 +4130,9 @@ int main()
 	* [map rbegin() function in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/map-rbegin-function-in-c-stl/)
 	* [c++ - Last key in a std::map - Stack Overflow](https://stackoverflow.com/questions/289715/last-key-in-a-stdmap)
 		* `map.rbegin()->first`
+* [std::map<Key,T,Compare,Allocator>::rend, std::map<Key,T,Compare,Allocator>::crend - cppreference.com](https://en.cppreference.com/w/cpp/container/map/rend)
+	* returns a reverse iterator to the end (public member function)
+	* Returns a reverse iterator to the element following the last element of the reversed map. It corresponds to the element preceding the first element of the non-reversed map. This element acts as a placeholder, attempting to access it results in undefined behavior.
 * [std::map<Key,T,Compare,Allocator>::empty - cppreference.com](https://en.cppreference.com/w/cpp/container/map/empty)
 	* checks whether the container is empty (public member function)
 	* Checks if the container has no elements, i.e. whether begin() == end().
