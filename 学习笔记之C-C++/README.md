@@ -4228,6 +4228,48 @@ int main()
         std::cout << std::setw(10) << name << " | " << height << "cm\n";
 }
 ```
+```c++
+#include <iostream>
+#include <map>
+
+
+int main()
+{
+    std::map<uint64_t, double> myMap{ {1, 1}, {2, 2}, {3, 3} };
+
+    for (auto it : myMap) {
+        std::cout << it.first << " : " << it.second << "\n";
+    }
+    std::cout << "\n";
+
+    myMap.insert(std::pair(3, 0));  // not inserted
+    for (auto it : myMap) {
+        std::cout << it.first << " : " << it.second << "\n";
+    }
+    std::cout << "\n";
+
+    myMap.insert_or_assign(3, 0);   // assigned
+    for (auto it : myMap) {
+        std::cout << it.first << " : " << it.second << "\n";
+    }
+    std::cout << "\n";
+
+    return 0;
+}
+/*
+1 : 1
+2 : 2
+3 : 3
+
+1 : 1
+2 : 2
+3 : 3
+
+1 : 1
+2 : 2
+3 : 0
+*/
+```
 * [std::map<Key,T,Compare,Allocator>::insert_or_assign - cppreference.com](https://en.cppreference.com/w/cpp/container/map/insert_or_assign)
 	* inserts an element or assigns to the current element if the key already exists (public member function)
 	* Notes
