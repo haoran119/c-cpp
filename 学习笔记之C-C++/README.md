@@ -4717,6 +4717,32 @@ int main() {
 * [std::transform - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/transform)
 	* applies a function to a range of elements, storing results in a destination range (function template)
 	* std::transform applies the given function to a range and stores the result in another range, keeping the original elements order and beginning at d_first.
+		* 1) The unary operation unary_op is applied to the range defined by \[first1, last1).
+		* 3) The binary operation binary_op is applied to pairs of elements from two ranges: one defined by \[first1, last1) and the other beginning at first2.
+		* 2,4) Same as (1,3), but executed according to policy. These overloads do not participate in overload resolution unless 
+			* std::is_execution_policy_v\<std::decay_t\<ExecutionPolicy>> (until C++20) 
+			* std::is_execution_policy_v\<std::remove_cvref_t\<ExecutionPolicy>> (since C++20) is true.
+	* unary_op and binary_op must not have side effects. (until C++11)
+	* unary_op and binary_op must not invalidate any iterators, including the end iterators, or modify any elements of the ranges involved. (since C++11)
+	* Parameters
+		* first1, last1	-	the first range of elements to transform
+		* first2	-	the beginning of the second range of elements to transform
+		* d_first	-	the beginning of the destination range, may be equal to first1 or first2
+		* policy	-	the execution policy to use. See execution policy for details.
+		* unary_op	-	unary operation function object that will be applied.
+			* The signature of the function should be equivalent to the following:
+			* `Ret fun(const Type &a);`
+			* The signature does not need to have const &.
+			* The type Type must be such that an object of type InputIt can be dereferenced and then implicitly converted to Type. The type Ret must be such that an object of type OutputIt can be dereferenced and assigned a value of type Ret.
+		* binary_op	-	binary operation function object that will be applied.
+			* The signature of the function should be equivalent to the following:
+			* `Ret fun(const Type1 &a, const Type2 &b);`
+			* The signature does not need to have const &.
+			* The types Type1 and Type2 must be such that objects of types InputIt1 and InputIt2 can be dereferenced and then implicitly converted to Type1 and Type2 respectively. The type Ret must be such that an object of type OutputIt can be dereferenced and assigned a value of type Ret.
+		* Type requirements
+			* -InputIt, InputIt1, InputIt2 must meet the requirements of LegacyInputIterator.
+			* -OutputIt must meet the requirements of LegacyOutputIterator.
+			* -ForwardIt1, ForwardIt2, ForwardIt3 must meet the requirements of LegacyForwardIterator.
 	* Return value
 		* Output iterator to the element past the last element transformed.
 	* Notes
