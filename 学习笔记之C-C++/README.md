@@ -6776,6 +6776,9 @@ std::string exec(const char* cmd) {
 * How to fix warning "control reaches end of non-void function -wreturn-type" ?
 	* [c++ - control reaches end of non-void functions -wreturn-type - Stack Overflow](https://stackoverflow.com/questions/60863967/control-reaches-end-of-non-void-functions-wreturn-type)
 	* check the conditions of return statement. Return statement is not executed under all conditions.
+* How to fix compile error "fatal error: google/protobuf/stubs/common.h: No such file or directory" ?
+	* `g++ -I /path_to_protobuf/`
+	* [protocol buffers - protobuf common.h "No such file" - Stack Overflow](https://stackoverflow.com/questions/32039549/protobuf-common-h-no-such-file)
 * How to fix compile error "has initializer but incomplete type" ?
 	* `#include <sstream>`
 	* [compilation - C++ compile error: has initializer but incomplete type - Stack Overflow](https://stackoverflow.com/questions/13428164/c-compile-error-has-initializer-but-incomplete-type)
