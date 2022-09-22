@@ -332,6 +332,12 @@ In programming contests, people do focus more on finding the algorithm to solve 
 		* Compiling a program is not the only thing you might want to write rules for. Makefiles commonly tell how to do a few other things besides compiling a program: for example, how to delete all the object files and executables so that the directory is ‘clean’.
 		* Since clean is not a prerequisite of edit, this rule will not run at all if we give the command ‘make’ with no arguments. In order to make the rule run, we have to type ‘make clean’. See [How to Run make](https://www.gnu.org/software/make/manual/html_node/Running.html#Running).
 * [makefile - How to clean executable using make clean? - Ask Ubuntu](https://askubuntu.com/questions/433943/how-to-clean-executable-using-make-clean)
+* [Makefiles](https://web.eecs.umich.edu/~sugih/pointers/make.html)
+	* In this handout, we will take apart an example makefile and see how the pieces contribute to a working whole.
+	* The Cleanup Rule
+		* clean:
+		*         rm *.o prog3
+	* This is an optional rule. It allows you to type 'make clean' at the command line to get rid of your object and executable files. Sometimes the compiler will link or compile files incorrectly and the only way to get a fresh start is to remove all the object and executable files.
 
 ###### [GDB](https://en.wikipedia.org/wiki/GNU_Debugger)
 
