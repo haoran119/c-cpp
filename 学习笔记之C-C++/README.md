@@ -257,16 +257,81 @@ In programming contests, people do focus more on finding the algorithm to solve 
 ##### [GCC](https://gcc.gnu.org/)
 
 * GCC, the GNU Compiler Collection - GNU Project
-* [Makefile相关资料 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2010/10/08/1846067.html)
 * [[ZZ]C++编译器—gcc的用法 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2010/10/08/1845888.html)
-* [[ZZ]make命令与makefile文件的写法 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2010/10/08/1846070.html)
 * [C++ Standards Support in GCC - GNU Project](https://gcc.gnu.org/projects/cxx-status.html#cxx17)
 	* C++17 Support in GCC
 		* GCC has almost full support for the previous revision of the C++ standard, which was published in 2017. Some library features are missing or incomplete, as described in the library documentation.
 		* C++17 features are available since GCC 5. This mode is the default in GCC 11; it can be explicitly selected with the -std=c++17 command-line flag, or -std=gnu++17 to enable GNU extensions as well.
+* [gcc(1): GNU project C/C++ compiler - Linux man page](https://linux.die.net/man/1/gcc)
+* [Top (Using the GNU Compiler Collection (GCC))](https://gcc.gnu.org/onlinedocs/gcc/index.html#SEC_Contents)
+	* [3.3 Compiling C++ Programs](https://gcc.gnu.org/onlinedocs/gcc/Invoking-G_002b_002b.html#Invoking-G_002b_002b)
+		* C++ source files conventionally use one of the suffixes ‘.C’, ‘.cc’, ‘.cpp’, ‘.CPP’, ‘.c++’, ‘.cp’, or ‘.cxx’; C++ header files often use ‘.hh’, ‘.hpp’, ‘.H’, or (for shared template code) ‘.tcc’; and preprocessed C++ files use the suffix ‘.ii’. GCC recognizes files with these names and compiles them as C++ programs even if you call the compiler the same way as for compiling C programs (usually with the name gcc).
+		* However, the use of gcc does not add the C++ library. g++ is a program that calls GCC and automatically specifies linking against the C++ library. It treats ‘.c’, ‘.h’ and ‘.i’ files as C++ source files instead of C source files unless -x is used. This program is also useful when precompiling a C header file with a ‘.h’ extension for use in C++ compilations. On many systems, g++ is also installed with the name c++.
+		* When you compile C++ programs, you may specify many of the same command-line options that you use for compiling programs in any language; or command-line options meaningful for C and related languages; or options that are meaningful only for C++ programs. See Options Controlling C Dialect, for explanations of options for languages related to C. See [Options Controlling C++ Dialect](https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Dialect-Options.html#C_002b_002b-Dialect-Options), for explanations of options that are meaningful only for C++ programs.
+	* [3.5 Options Controlling C++ Dialect](https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Dialect-Options.html#C_002b_002b-Dialect-Options)
+	* [3.8 Options to Request or Suppress Warnings](https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#Warning-Options)
+		* -Wpedantic
+		* -pedantic
+			* Issue all the warnings demanded by strict ISO C and ISO C++; reject all programs that use forbidden extensions, and some other programs that do not follow ISO C and ISO C++. For ISO C, follows the version of the ISO C standard specified by any -std option used.
+			* Valid ISO C and ISO C++ programs should compile properly with or without this option (though a rare few require -ansi or a -std option specifying the required version of ISO C). However, without this option, certain GNU extensions and traditional C and C++ features are supported as well. With this option, they are rejected.
+			* -Wpedantic does not cause warning messages for use of the alternate keywords whose names begin and end with ‘__’. This alternate format can also be used to disable warnings for non-ISO ‘__intN’ types, i.e. ‘__intN__’. Pedantic warnings are also disabled in the expression that follows __extension__. However, only system header files should use these escape routes; application programs should avoid them. See Alternate Keywords.
+			* Some users try to use -Wpedantic to check programs for strict ISO C conformance. They soon find that it does not do quite what they want: it finds some non-ISO practices, but not all—only those for which ISO C requires a diagnostic, and some others for which diagnostics have been added.
+			* A feature to report any failure to conform to ISO C might be useful in some instances, but would require considerable additional work and would be quite different from -Wpedantic. We don’t have plans to support such a feature in the near future.
+			* Where the standard specified with -std represents a GNU extended dialect of C, such as ‘gnu90’ or ‘gnu99’, there is a corresponding base standard, the version of ISO C on which the GNU extended dialect is based. Warnings from -Wpedantic are given where they are required by the base standard. (It does not make sense for such warnings to be given only for features not in the specified GNU C dialect, since by definition the GNU dialects of C include all features the compiler supports with the given option, and there would be nothing to warn about.)
+		* -Wall
+			* This enables all the warnings about constructions that some users consider questionable, and that are easy to avoid (or modify to prevent the warning), even in conjunction with macros. This also enables some language-specific warnings described in C++ Dialect Options and Objective-C and Objective-C++ Dialect Options.
+		* -Wunused-variable
+			* Warn whenever a local or static variable is unused aside from its declaration. This option implies -Wunused-const-variable=1 for C, but not for C++. This warning is enabled by -Wall.
+			* To suppress this warning use the unused attribute (see Variable Attributes).
+	* [3.11 Options That Control Optimization](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html)
+		* These options control various sorts of optimizations.
+		* Without any optimization option, the compiler’s goal is to reduce the cost of compilation and to make debugging produce the expected results. Statements are independent: if you stop the program with a breakpoint between statements, you can then assign a new value to any variable or change the program counter to any other statement in the function and get exactly the results you expect from the source code.
+		* Turning on optimization flags makes the compiler attempt to improve the performance and/or code size at the expense of compilation time and possibly the ability to debug the program.
+		* The compiler performs optimization based on the knowledge it has of the program. Compiling multiple files at once to a single output file mode allows the compiler to use information gained from all of the files when compiling each of them.
+		* Not all optimizations are controlled directly by a flag. Only optimizations that have a flag are listed in this section.
+		* Most optimizations are completely disabled at -O0 or if an -O level is not set on the command line, even if individual optimization flags are specified. Similarly, -Og suppresses many optimization passes.
+		* Depending on the target and how GCC was configured, a slightly different set of optimizations may be enabled at each -O level than those listed here. You can invoke GCC with -Q --help=optimizers to find out the exact set of optimizations that are enabled at each level. See Overall Options, for examples.
+		* -O
+		* -O1
+			* Optimize. Optimizing compilation takes somewhat more time, and a lot more memory for a large function.
+			* With -O, the compiler tries to reduce code size and execution time, without performing any optimizations that take a great deal of compilation time.
+		* -O2
+			* Optimize even more. GCC performs nearly all supported optimizations that do not involve a space-speed tradeoff. As compared to -O, this option increases both compilation time and the performance of the generated code.
+			* -O2 turns on all optimization flags specified by -O1. It also turns on the following optimization flags
+		* -O3
+			* Optimize yet more. -O3 turns on all optimizations specified by -O2 and also turns on the following optimization flags
+		* -O0
+			* Reduce compilation time and make debugging produce the expected results. This is the default.
+		* -Os
+			* Optimize for size. -Os enables all -O2 optimizations except those that often increase code size
+			* It also enables -finline-functions, causes the compiler to tune for code size rather than execution speed, and performs further optimizations designed to reduce code size.
+		* -Ofast
+			* Disregard strict standards compliance. -Ofast enables all -O3 optimizations. It also enables optimizations that are not valid for all standard-compliant programs. It turns on -ffast-math, -fallow-store-data-races and the Fortran-specific -fstack-arrays, unless -fmax-stack-var-size is specified, and -fno-protect-parens. It turns off -fsemantic-interposition.
+		* -Og
+			* Optimize debugging experience. -Og should be the optimization level of choice for the standard edit-compile-debug cycle, offering a reasonable level of optimization while maintaining fast compilation and a good debugging experience. It is a better choice than -O0 for producing debuggable code because some compiler passes that collect debug information are disabled at -O0.
+			* Like -O0, -Og completely disables a number of optimization passes so that individual options controlling them have no effect. Otherwise -Og enables all -O1 optimization flags except for those that may interfere with debugging
+		* -Oz
+			* Optimize aggressively for size rather than speed. This may increase the number of instructions executed if those instructions require fewer bytes to encode. -Oz behaves similarly to -Os including enabling most -O2 optimizations.
+		* If you use multiple -O options, with or without level numbers, the last such option is the one that is effective.
+	* [6.34 Specifying Attributes of Variables](https://gcc.gnu.org/onlinedocs/gcc/Variable-Attributes.html#Variable-Attributes)
+		* [6.34.1 Common Variable Attributes](https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#Common-Variable-Attributes)
+			* unused
+				* This attribute, attached to a variable or structure field, means that the variable or field is meant to be possibly unused. GCC does not produce a warning for this variable or field.
+* [c - How many GCC optimization levels are there? - Stack Overflow](https://stackoverflow.com/questions/1778538/how-many-gcc-optimization-levels-are-there)
+* [c++ - Is optimisation level -O3 dangerous in g++? - Stack Overflow](https://stackoverflow.com/questions/11546075/is-optimisation-level-o3-dangerous-in-g)
+
+###### make
+
+* [Makefile相关资料 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2010/10/08/1846067.html)
+* [[ZZ]make命令与makefile文件的写法 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2010/10/08/1846070.html)
 * [CMake - Wikipedia](https://en.wikipedia.org/wiki/CMake)
 	* [CMake Tutorial — CMake 3.23.0-rc2 Documentation](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)
 	* [Examples | CMake](https://cmake.org/examples/)
+* [Top (GNU make)](https://www.gnu.org/software/make/manual/html_node/index.html#SEC_Contents)
+	* [Cleanup (GNU make)](https://www.gnu.org/software/make/manual/html_node/Cleanup.html)
+		* Compiling a program is not the only thing you might want to write rules for. Makefiles commonly tell how to do a few other things besides compiling a program: for example, how to delete all the object files and executables so that the directory is ‘clean’.
+		* Since clean is not a prerequisite of edit, this rule will not run at all if we give the command ‘make’ with no arguments. In order to make the rule run, we have to type ‘make clean’. See [How to Run make](https://www.gnu.org/software/make/manual/html_node/Running.html#Running).
+* [makefile - How to clean executable using make clean? - Ask Ubuntu](https://askubuntu.com/questions/433943/how-to-clean-executable-using-make-clean)
 
 ###### [GDB](https://en.wikipedia.org/wiki/GNU_Debugger)
 
