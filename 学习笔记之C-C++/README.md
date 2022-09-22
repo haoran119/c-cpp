@@ -335,8 +335,10 @@ In programming contests, people do focus more on finding the algorithm to solve 
 * [Makefiles](https://web.eecs.umich.edu/~sugih/pointers/make.html)
 	* In this handout, we will take apart an example makefile and see how the pieces contribute to a working whole.
 	* The Cleanup Rule
-		* clean:
-		*         rm *.o prog3
+    ```sh
+    clean:
+        rm *.o prog3
+    ```
 	* This is an optional rule. It allows you to type 'make clean' at the command line to get rid of your object and executable files. Sometimes the compiler will link or compile files incorrectly and the only way to get a fresh start is to remove all the object and executable files.
 
 ###### [GDB](https://en.wikipedia.org/wiki/GNU_Debugger)
