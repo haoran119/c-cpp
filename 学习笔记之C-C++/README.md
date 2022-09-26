@@ -14,6 +14,8 @@
 * [Compiler Explorer](https://godbolt.org/)
 * [Coliru - Compile, link and run](http://coliru.stacked-crooked.com/)
 * [C++ Insights](https://cppinsights.io/)
+* [Quick C++ Benchmarks](https://quick-bench.com/q/c_YexN92u816kGfoAjBp6L4okII)
+* [C++ Build Benchmarks](https://build-bench.com/b/sOF8ezVagBs7xNlWevoBvyOYXwk)
 
 #
 
