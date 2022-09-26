@@ -5496,10 +5496,46 @@ Output:
 #
 Numeric limits 
 * Defined in header \<limits>
-
-| numeric_limits | provides an interface to query properties of all fundamental numeric types. |
-| - | - |
-
+* provides an interface to query properties of all fundamental numeric types. (class template)
+* The numeric_limits class template provides a standardized way to query various properties of arithmetic types (e.g. the largest possible value for type int is std::numeric_limits\<int>::max()).
+```c++
+#include <limits>
+#include <iostream>
+ 
+int main() 
+{
+    std::cout
+        << "type\t│ lowest()\t│ min()\t\t│ max()\n"
+        << "bool\t│ "
+        << std::numeric_limits<bool>::lowest() << "\t\t│ "
+        << std::numeric_limits<bool>::min() << "\t\t│ "
+        << std::numeric_limits<bool>::max() << '\n'
+        << "uchar\t│ "
+        << +std::numeric_limits<unsigned char>::lowest() << "\t\t│ "
+        << +std::numeric_limits<unsigned char>::min() << "\t\t│ "
+        << +std::numeric_limits<unsigned char>::max() << '\n'
+        << "int\t│ "
+        << std::numeric_limits<int>::lowest() << "\t│ "
+        << std::numeric_limits<int>::min() << "\t│ "
+        << std::numeric_limits<int>::max() << '\n'
+        << "float\t│ "
+        << std::numeric_limits<float>::lowest() << "\t│ "
+        << std::numeric_limits<float>::min() << "\t│ "
+        << std::numeric_limits<float>::max() << '\n'
+        << "double\t│ "
+        << std::numeric_limits<double>::lowest() << "\t│ "
+        << std::numeric_limits<double>::min() << "\t│ "
+        << std::numeric_limits<double>::max() << '\n';
+}
+/*
+type	│ lowest()	│ min()		│ max()
+bool	│ 0		│ 0		│ 1
+uchar	│ 0		│ 0		│ 255
+int	│ -2147483648	│ -2147483648	│ 2147483647
+float	│ -3.40282e+38	│ 1.17549e-38	│ 3.40282e+38
+double	│ -1.79769e+308	│ 2.22507e-308	│ 1.79769e+308
+*/
+```
 * [std::numeric_limits\<T>::min - cppreference.com](https://en.cppreference.com/w/cpp/types/numeric_limits/min)
 	* Returns the minimum finite value representable by the numeric type T.
 	* For floating-point types with denormalization, min returns the minimum positive normalized value. Note that this behavior may be unexpected, especially when compared to the behavior of min for integral types. To find the value that has no values less than it, use numeric_limits::lowest.
