@@ -5494,7 +5494,7 @@ Output:
 | - | - |
 
 #
-Numeric limits 
+[Numeric limits](https://en.cppreference.com/w/cpp/types/numeric_limits)
 * Defined in header \<limits>
 * provides an interface to query properties of all fundamental numeric types. (class template)
 * The numeric_limits class template provides a standardized way to query various properties of arithmetic types (e.g. the largest possible value for type int is std::numeric_limits\<int>::max()).
