@@ -1043,6 +1043,11 @@ The value "Hello" already exists in the set.
 			* constexpr 是对象或函数接口的一部分。
 	* 5.补充
 		* 内联变量C++17 引入了内联（inline）变量的概念，允许在头文件中定义内联变量，然后像内联函数一样，只要所有的定义都相同，那变量的定义出现多次也没有关系。对于类的静态数据成员，const 缺省是不内联的，而 constexpr 缺省就是内联的。这种区别在你用 & 去取一个 const int 值的地址、或将其传到一个形参类型为 const int& 的函数去的时候（这在 C++ 文档里的行话叫 ODR-use），就会体现出来。
+		* 程序在链接时就会报错了，说找不到 magic::number。这是因为 ODR(下面的one definition rule)-use 的类静态常量也需要有一个定义，在没有内联变量之前需要在某一个源代码文件（非头文件）中这样写：
+		* `constint magic::number = 42;`
+		* 必须正正好好一个，多了少了都不行，所以叫 one definition rule。
+		* 内联函数，现在又有了内联变量，以及模板，则不受这条规则限制。修正这个问题的简单方法是把 magic 里的 static const 改成 static constexpr 或 static inline const。前者可行的原因是，类的静态 constexpr 成员变量默认就是内联的。const 常量和类外面的 constexpr 变量不默认内联，需要手工加 inline 关键字才会变成内联。
+	* 6.学习资料
 
 #### [Storage Classes](https://www.tutorialspoint.com/cplusplus/cpp_storage_classes.htm)
 
