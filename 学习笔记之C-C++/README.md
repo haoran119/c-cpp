@@ -1019,6 +1019,30 @@ The value "Hello" already exists in the set.
 * [c++ - Is it possible to use std::string in a constexpr? - Stack Overflow](https://stackoverflow.com/questions/27123306/is-it-possible-to-use-stdstring-in-a-constexpr)
 	* No. error: the type ‘const string {aka const std::basic_string}’ of constexpr variable ‘constString’ is not literal... because... ‘std::basic_string’ has a non-trivial destructor
 	* However, as of C++17, you can use string_view or char[]
+* [现代C++之constexpr](https://mp.weixin.qq.com/s/Shg1L_nUfLY18QzgVF_8aA)
+	* constexpr在 C++11 引入、在 C++14 得到大幅改进。
+		* （1）C++11中的constexpr指定的函数返回值和参数必须要保证是字面值，而且必须只有一行return代码，这给函数的设计者带来了更多的限制，比如通常只能通过return 三目运算符+递归来计算返回的字面值。
+		* （2）C++14中只要保证返回值和参数是字面值就行了，函数体中可以加入更多的语句，方便了更灵活的计算。
+	* 它的字面意思是 constant expression，常量表达式。
+	* 1.变量
+		* const与constexpr可以应用到变量和函数。尽管它们彼此相似，但实际上它们是非常不同的概念。
+		* const与constexpr意味着他们的值不能在初始化后改变。
+		* const和constexpr之间的主要区别是初始化值的时间(求值)。尽管const变量的值可以在编译时和运行时，但constexpr始终在编译时进行求值。
+		* 因此，const变量既可以定义编译时常量(比如size1)来指定数组大小，也可以定义运行时常量(比如size2)来定义数组大小。另一方面，constexpr总是定义可以指定数组大小的编译时常量。
+	* 2.函数
+		* const和constexpr也可以应用于函数。const函数必须是成员函数（方法，运算符），其中const关键字的应用意味着该方法无法更改其成员（非静态）字段的值。
+		* constexpr是一个不同的概念。如果将编译时常量作为参数传递，则它将一个函数（成员或非成员）标记为可以在编译时求值的函数。
+		* 顺便说一下，这些constexpr函数是常规C ++函数，即使传递了非常量参数也可以调用它们。但是在这种情况下，您将获得非constexpr值。
+	* 3.类方法
+		* constexpr也可应用于所述成员函数（方法），操作者和甚至构造函数。
+	* 4.建议
+		* Tips from the book Effective Modern C++ by Scott Meyers about constexpr:
+			* constexpr 对象是const，在编译期间使用已知的值初始化;
+			* constexpr 函数当使用在编译期间已知值的参数调用时，constexpr函数产生编译时结果;
+			* 与非constexpr对象和函数相比，constexpr对象和函数可以在更广泛的上下文中使用;
+			* constexpr 是对象或函数接口的一部分。
+	* 5.补充
+		* 内联变量C++17 引入了内联（inline）变量的概念，允许在头文件中定义内联变量，然后像内联函数一样，只要所有的定义都相同，那变量的定义出现多次也没有关系。对于类的静态数据成员，const 缺省是不内联的，而 constexpr 缺省就是内联的。这种区别在你用 & 去取一个 const int 值的地址、或将其传到一个形参类型为 const int& 的函数去的时候（这在 C++ 文档里的行话叫 ODR-use），就会体现出来。
 
 #### [Storage Classes](https://www.tutorialspoint.com/cplusplus/cpp_storage_classes.htm)
 
