@@ -170,11 +170,20 @@
 ### [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)
 
 ### Effective C++
+
 * [学习笔记之Effective C++ 2nd Edition - 浩然119 - 博客园 (cnblogs.com)](https://www.cnblogs.com/pegasus923/archive/2011/04/24/1930631.html)
 * [Effective C++学习笔记](https://mp.weixin.qq.com/s/Sn-AeA41-ZjLzCMtmNnx_A)
 
 ### More Effective C++
+
 * [35 个 More Effective C++ 改善编程与设计的最佳方法 | 原力计划](https://mp.weixin.qq.com/s/PQbkpjUScbYIywo4tsIdqw)
+
+### [C++ Best Practices](https://lefticus.gitbooks.io/cpp-best-practices/content/)
+
+* [cpp-best-practices/cppbestpractices: Collaborative Collection of C++ Best Practices. This online resource is part of Jason Turner's collection of C++ Best Practices resources. See README.md for more information.](https://github.com/cpp-best-practices/cppbestpractices)
+* [C++最佳实践 | 1. 工具](https://mp.weixin.qq.com/s/_ZC1t0wMu8fjTq-1HgKrrA)
+* [C++最佳实践 | 2. 代码风格](https://mp.weixin.qq.com/s/aFY3cBIsucd5J0034pzRAg)
+* [C++最佳实践 | 3. 安全性](https://mp.weixin.qq.com/s/rR8rWYHZ9GFkCvxJe8bb7Q)
 
 ## C
 
