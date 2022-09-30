@@ -6139,6 +6139,17 @@ Function wrappers
 		* 绑定表达式或其他函数对象。
 		* 指向成员函数和指向数据成员的指针。
 	* 当std::function对象没有初始化任何实际的可调用元素，调用std::function对象将抛出std::bad_function_call异常。
+* [为什么C++中有函数指针还需要std::function？](https://mp.weixin.qq.com/s/gl47FGdsBM5lOSSJgcObPQ)
+	* 我们将这个结构体命名为closure，注意看，这个结构中有两部分：
+		* 一个指向代码的指针变量
+		* 一个保存数据的变量
+	* 即，closure既包含了一段代码也包含了这段代码使用的数据，这里的数据也被称为context，即上下文，或者environment，即环境，不管怎么称呼，其实就是函数运行依赖的数据
+	* 而这也正是C++中std::function的目的所在。
+	* 单纯的函数指针并没有捕捉上下文的能力，这里的上下文就是指代码依赖的数据，你不得不自己动手构造出一个结构体用来存储代码依赖的上下文。
+	* 在C++中你没有办法单纯的利用函数指针指向对象的成员函数，就是因为函数指针没有办法捕捉this(指向对象的指针)这个上下文。
+	* std::function的作用本质上和我们刚才定义的结构体区别不大。
+	* 利用std::function你不但可以保存一段代码，同时也可以保存必要的上下文，然后在合适的地方基于上下文调用这段代码。
+	* 同时std::function也更加通用，你可以用其存储任何可以被调用的对象(callable object)，只要有正确的函数签名即可。
 
 #
 Partial function application
