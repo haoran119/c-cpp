@@ -999,6 +999,27 @@ The value "Hello" already exists in the set.
 	* When you apply the const qualifier to a nonstatic member function, it affects the this pointer. For a const-qualified member function of class C, the this pointer is of type C const*, whereas for a member function that is not const-qualified, the this pointer is of type C*.
 	* A static member function does not have a this pointer (such a function is not called on a particular instance of a class), so const qualification of a static member function doesn't make any sense.
 
+##### [constexpr](https://en.cppreference.com/w/cpp/language/constexpr)
+
+* constexpr - specifies that the value of a variable or function can appear in constant expressions
+* [Constant expressions - cppreference.com](https://en.cppreference.com/w/cpp/language/constant_expression)
+	* Defines an expression that can be evaluated at compile time.
+	* Such expressions can be used as non-type template arguments, array sizes, and in other contexts that require constant expressions
+* [constexpr (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/constexpr-cpp?view=msvc-160)
+  * The keyword constexpr was introduced in C++11 and improved in C++14. It means constant expression. Like const, it can be applied to variables: A compiler error is raised when any code attempts to modify the value. Unlike const, constexpr can also be applied to functions and class constructors. constexpr indicates that the value, or return value, is constant and, where possible, is computed at compile time.
+  * A constexpr integral value can be used wherever a const integer is required, such as in template arguments and array declarations. And when a value is computed at compile time instead of run time, it helps your program run faster and use less memory.
+  * To limit the complexity of compile-time constant computations, and their potential impacts on compilation time, the C++14 standard requires the types in constant expressions to be literal types.
+* [Understanding constexpr specifier in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/understanding-constexper-specifier-in-c/)
+	* constexpr is a feature added in C++ 11. The main idea is performance improvement of programs by doing computations at compile time rather than run time. Note that once a program is compiled and finalized by developer, it is run multiple times by users. The idea is to spend time in compilation and save time at run time (similar to template metaprogramming)
+	* constexpr vs inline functions
+	* constexpr with constructors
+	* constexpr vs const
+* [c++ - Difference between constexpr and const - Stack Overflow](https://stackoverflow.com/questions/14116003/difference-between-constexpr-and-const?rq=1)
+* [c++ - constexpr const vs constexpr variables? - Stack Overflow](https://stackoverflow.com/questions/28845058/constexpr-const-vs-constexpr-variables)
+* [c++ - Is it possible to use std::string in a constexpr? - Stack Overflow](https://stackoverflow.com/questions/27123306/is-it-possible-to-use-stdstring-in-a-constexpr)
+	* No. error: the type ‘const string {aka const std::basic_string}’ of constexpr variable ‘constString’ is not literal... because... ‘std::basic_string’ has a non-trivial destructor
+	* However, as of C++17, you can use string_view or char[]
+
 #### [Storage Classes](https://www.tutorialspoint.com/cplusplus/cpp_storage_classes.htm)
 
 * A storage class defines the scope (visibility) and life-time of variables and/or functions within a C++ Program. These specifiers precede the type that they modify. There are following storage classes, which can be used in a C++ Program
@@ -1029,25 +1050,6 @@ The value "Hello" already exists in the set.
 				* An API class and its members can’t live in an unnamed namespace; but any “helper” class or function that is defined in an implementation source file should be at an unnamed namespace scope.
 	* extern
 	* mutable
-* [constexpr (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/constexpr-cpp?view=msvc-160)
-  * The keyword constexpr was introduced in C++11 and improved in C++14. It means constant expression. Like const, it can be applied to variables: A compiler error is raised when any code attempts to modify the value. Unlike const, constexpr can also be applied to functions and class constructors. constexpr indicates that the value, or return value, is constant and, where possible, is computed at compile time.
-  * A constexpr integral value can be used wherever a const integer is required, such as in template arguments and array declarations. And when a value is computed at compile time instead of run time, it helps your program run faster and use less memory.
-  * To limit the complexity of compile-time constant computations, and their potential impacts on compilation time, the C++14 standard requires the types in constant expressions to be literal types.
-  * [constexpr specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/constexpr)
-    * constexpr - specifies that the value of a variable or function can appear in constant expressions
-  * [Constant expressions - cppreference.com](https://en.cppreference.com/w/cpp/language/constant_expression)
-    * Defines an expression that can be evaluated at compile time.
-    * Such expressions can be used as non-type template arguments, array sizes, and in other contexts that require constant expressions
-  * [Understanding constexpr specifier in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/understanding-constexper-specifier-in-c/)
-    * constexpr is a feature added in C++ 11. The main idea is performance improvement of programs by doing computations at compile time rather than run time. Note that once a program is compiled and finalized by developer, it is run multiple times by users. The idea is to spend time in compilation and save time at run time (similar to template metaprogramming)
-    * constexpr vs inline functions
-    * constexpr with constructors
-    * constexpr vs const
-  * [c++ - Difference between constexpr and const - Stack Overflow](https://stackoverflow.com/questions/14116003/difference-between-constexpr-and-const?rq=1)
-  * [c++ - constexpr const vs constexpr variables? - Stack Overflow](https://stackoverflow.com/questions/28845058/constexpr-const-vs-constexpr-variables)
-  * [c++ - Is it possible to use std::string in a constexpr? - Stack Overflow](https://stackoverflow.com/questions/27123306/is-it-possible-to-use-stdstring-in-a-constexpr)
-  	* No. error: the type ‘const string {aka const std::basic_string}’ of constexpr variable ‘constString’ is not literal... because... ‘std::basic_string’ has a non-trivial destructor
-  	* However, as of C++17, you can use string_view or char[]
 * [C++ keywords: mutable - cppreference.com](https://en.cppreference.com/w/cpp/keyword/mutable)
   * [mutable type specifier](https://en.cppreference.com/w/cpp/language/cv)
     * mutable - permits modification of the class member declared mutable even if the containing object is declared const.
