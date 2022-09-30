@@ -1107,12 +1107,26 @@ The value "Hello" already exists in the set.
 * [while(1) 和 for(;;)有什么区别？](https://mp.weixin.qq.com/s/a9g9PAwgc3oXoQXBvT49bA)
 	* 你会发现，除了文件名不同，其余都相同。
 	* 当然，这里额外说一下，不同代码、不同编译器，以及不同优化等级，可能最终结果有所差异。
-* [C++ keywords: for - cppreference.com](https://en.cppreference.com/w/cpp/keyword/for)
-	* [for loop](https://en.cppreference.com/w/cpp/language/for): as the declaration of the loop
-		* Executes init-statement once, then executes statement and iteration-expression repeatedly, until the value of condition becomes false. The test takes place before each iteration.
-	* [range-based for loop](https://en.cppreference.com/w/cpp/language/range-for): as the declaration of the loop (since C++11)
-		* Executes a for loop over a range.
-		* Used as a more readable equivalent to the traditional for loop operating over a range of values, such as all elements in a container.
+
+##### [for loop](https://en.cppreference.com/w/cpp/language/for)
+
+* as the declaration of the loop
+* Executes init-statement once, then executes statement and iteration-expression repeatedly, until the value of condition becomes false. The test takes place before each iteration.
+
+##### [range-based for loop](https://en.cppreference.com/w/cpp/language/range-for)
+
+* as the declaration of the loop (since C++11)
+* Executes a for loop over a range.
+* Used as a more readable equivalent to the traditional for loop operating over a range of values, such as all elements in a container.
+* range-declaration may be a structured binding declaration
+	* `for (auto&& [first,second] : mymap) {}`
+* [Range-based for loop in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/range-based-loop-c/)
+	* C++ 17 or higher: Range-based loops can also be used with maps like this: 
+```c++
+for (auto& [key, value]: myMap) {
+    cout << key << " has value " << value << std::endl;
+}
+```
 * [Will range based for loop in c++ preserve the index order - Stack Overflow](https://stackoverflow.com/questions/19052026/will-range-based-for-loop-in-c-preserve-the-index-order)
 	* Yes the two codes are guaranteed to do the same. Though I don't have a link to the standard you can have a look here. I quote: `You can read that as "for all x in v" going through starting with v.begin() and iterating to v.end()`.
 	* [C++11 FAQ](https://www.stroustrup.com/C++11FAQ.html#for)
@@ -1128,6 +1142,19 @@ The value "Hello" already exists in the set.
 			* You can read that as "for all x in v" going through starting with v.begin() and iterating to v.end(). Another example:
 				* `for (const auto x : { 1,2,3,5,8,13,21,34 }) cout << x << '\n';`
 			* The begin() (and end()) can be a member to be called x.begin() or a free-standing function to be called begin(x). The member version takes precedence.
+* [Reverse For Loops in C++ - Fluent C++](https://www.fluentcpp.com/2020/02/11/reverse-for-loops-in-cpp/)
+	* It would be nice to be able to use C++11 range for loops to iterate backwards. But unfortunately, there is no such reverse range-for: range-for only works forwards.
+	* Let’s see how to traverse a collection backwards by using a range for loop.
+	* In C++20: the reverse range adaptor
+		* C++20 will bring ranges to the language, including a range adaptor called std::ranges::views::reverse, or std::views::reverse.
+		* It allows to traverse a collection in reverse order and can be used this way:
+```c++
+for (auto const& x : range | std::views::reverse)
+{
+    foo(x);
+}
+```
+* [Reversed Range-based for loop in C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/reversed-range-based-for-loop-in-c-with-examples/)
 
 #### [Functions](https://www.tutorialspoint.com/cplusplus/cpp_functions.htm)
 
@@ -5142,7 +5169,6 @@ int main()
 7654
 */
 ```
-* [Reverse For Loops in C++ - Fluent C++](https://www.fluentcpp.com/2020/02/11/reverse-for-loops-in-cpp/)
 
 ##### Partitioning operations
 
