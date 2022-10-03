@@ -331,6 +331,13 @@ In programming contests, people do focus more on finding the algorithm to solve 
 				* This attribute, attached to a variable or structure field, means that the variable or field is meant to be possibly unused. GCC does not produce a warning for this variable or field.
 * [c - How many GCC optimization levels are there? - Stack Overflow](https://stackoverflow.com/questions/1778538/how-many-gcc-optimization-levels-are-there)
 * [c++ - Is optimisation level -O3 dangerous in g++? - Stack Overflow](https://stackoverflow.com/questions/11546075/is-optimisation-level-o3-dangerous-in-g)
+* [Linux 程序编译过程详解](https://mp.weixin.qq.com/s/W4_509c5TXV7XvL9pyqAOw)
+	* https://blog.csdn.net/qq_39221436/article/details/125638972
+	* 本文将介绍如何将高层的C/C++语言编写的程序转换成为处理器能够执行的二进制代码的过程，包括四个步骤：
+		* 预处理（Preprocessing）
+		* 编译（Compilation）
+		* 汇编（Assembly）
+		* 链接（Linking）
 
 ###### make
 
