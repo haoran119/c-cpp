@@ -325,12 +325,26 @@ In programming contests, people do focus more on finding the algorithm to solve 
 		* -Oz
 			* Optimize aggressively for size rather than speed. This may increase the number of instructions executed if those instructions require fewer bytes to encode. -Oz behaves similarly to -Os including enabling most -O2 optimizations.
 		* If you use multiple -O options, with or without level numbers, the last such option is the one that is effective.
+	* [3.13 Options Controlling the Preprocessor](https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html#Preprocessor-Options)
+		* These options control the C preprocessor, which is run on each C source file before actual compilation.
+		* -D name
+			* Predefine name as a macro, with definition 1.
+		* -D name=definition
+			* The contents of definition are tokenized and processed as if they appeared during translation phase three in a ‘#define’ directive. In particular, the definition is truncated by embedded newline characters.
+			* If you are invoking the preprocessor from a shell or shell-like program you may need to use the shell’s quoting syntax to protect characters such as spaces that have a meaning in the shell syntax.
+			* If you wish to define a function-like macro on the command line, write its argument list with surrounding parentheses before the equals sign (if any). Parentheses are meaningful to most shells, so you should quote the option. With sh and csh, -D'name(args…)=definition' works.
+			* -D and -U options are processed in the order they are given on the command line. All -imacros file and -include file options are processed after all -D and -U options.
+		* -U name
+			* Cancel any previous definition of name, either built in or provided with a -D option.
 	* [6.34 Specifying Attributes of Variables](https://gcc.gnu.org/onlinedocs/gcc/Variable-Attributes.html#Variable-Attributes)
 		* [6.34.1 Common Variable Attributes](https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#Common-Variable-Attributes)
 			* unused
 				* This attribute, attached to a variable or structure field, means that the variable or field is meant to be possibly unused. GCC does not produce a warning for this variable or field.
 * [c - How many GCC optimization levels are there? - Stack Overflow](https://stackoverflow.com/questions/1778538/how-many-gcc-optimization-levels-are-there)
 * [c++ - Is optimisation level -O3 dangerous in g++? - Stack Overflow](https://stackoverflow.com/questions/11546075/is-optimisation-level-o3-dangerous-in-g)
+* [gcc - How to pass values during compilation with g++ using -DN flag - Stack Overflow](https://stackoverflow.com/questions/15338289/how-to-pass-values-during-compilation-with-g-using-dn-flag)
+	* -DXXX flag is just like adding #define XXX. So -DN=2 is just like #define N  2.
+	* And you can pass values during compilation using this flag.
 * [Linux 程序编译过程详解](https://mp.weixin.qq.com/s/W4_509c5TXV7XvL9pyqAOw)
 	* https://blog.csdn.net/qq_39221436/article/details/125638972
 	* 本文将介绍如何将高层的C/C++语言编写的程序转换成为处理器能够执行的二进制代码的过程，包括四个步骤：
