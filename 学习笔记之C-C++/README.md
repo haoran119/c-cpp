@@ -184,6 +184,7 @@
 * [C++最佳实践 | 1. 工具](https://mp.weixin.qq.com/s/_ZC1t0wMu8fjTq-1HgKrrA)
 * [C++最佳实践 | 2. 代码风格](https://mp.weixin.qq.com/s/aFY3cBIsucd5J0034pzRAg)
 * [C++最佳实践 | 3. 安全性](https://mp.weixin.qq.com/s/rR8rWYHZ9GFkCvxJe8bb7Q)
+* [C++最佳实践 | 4. 可维护性](https://mp.weixin.qq.com/s/vs3ZbAhgKhV-VSCYUC8W3w)
 
 ## C
 
