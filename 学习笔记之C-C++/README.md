@@ -6075,7 +6075,38 @@ else // ... it's not, hence initialize it
 			* Creates a tuple of lvalue references to its arguments or instances of std::ignore.
 			* Notes
 				* std::tie may be used to unpack a std::pair because std::tuple has a converting assignment from pairs
-	* [Tuples in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/tuples-in-c/)
+	* Helper classes
+		* [std::ignore - cppreference.com](https://en.cppreference.com/w/cpp/utility/tuple/ignore)
+			* placeholder to skip an element when unpacking a tuple using tie (constant)
+			* An object of unspecified type such that any value can be assigned to it with no effect. Intended for use with std::tie when unpacking a std::tuple, as a placeholder for the arguments that are not used.
+			* While the behavior of std::ignore outside of std::tie is not formally specified, some code guides recommend using std::ignore to avoid warnings from unused return values of [[nodiscard]] functions.
+```c++
+#include <iostream>
+#include <string>
+#include <set>
+#include <tuple>
+ 
+[[nodiscard]] int dontIgnoreMe()
+{
+    return 42;
+}
+ 
+int main()
+{
+    std::ignore = dontIgnoreMe();
+ 
+    std::set<std::string> set_of_str;
+    bool inserted = false;
+    std::tie(std::ignore, inserted) = set_of_str.insert("Test");
+    if (inserted) {
+        std::cout << "Value was inserted successfully\n";
+    }
+}
+/*
+Value was inserted successfully
+*/
+```
+* [Tuples in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/tuples-in-c/)
 ```c++
 #include <tuple>
 #include <iostream>
