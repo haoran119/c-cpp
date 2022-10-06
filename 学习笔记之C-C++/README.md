@@ -898,6 +898,16 @@ int main()
         b = 4, d = 3, p = 2, q = 1;
         std::cout << s.b << ' ' << s.d << ' ' << s.p << ' ' << s.q << '\n';
     }
+
+    {
+        BitFields s;
+ 
+        auto [b, d, p, q] = s;
+        std::cout << b << ' ' << d << ' ' << p << ' ' << q << '\n';
+ 
+        b = 4, d = 3, p = 2, q = 1;
+        std::cout << s.b << ' ' << s.d << ' ' << s.p << ' ' << s.q << '\n';
+    }    
 }
 /*
 Insert is successful. The value is "Hello".
@@ -906,6 +916,8 @@ The value "Hello" already exists in the set.
 4 3 2 1
 1 2 3 4
 4 3 2 1
+1 2 3 4
+1 2 3 4
 */
 ```
 * [C++17常用新特性(三)---结构化绑定](https://mp.weixin.qq.com/s?__biz=MjM5ODg5MDIzOQ==&mid=2650491856&idx=1&sn=d676113480a097e2b3fd156c5096e0fd&chksm=becc344089bbbd56b357e949b694534a4a8146c548114c9d20f8612b7fe9b1f4297948018fc7&scene=21#wechat_redirect)
