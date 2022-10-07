@@ -260,7 +260,6 @@
 * [C++ 后端开发路线](https://mp.weixin.qq.com/s/QvFQEjUPEw_2zexaZi6GNQ)
 * [这不就是你要的C++后台开发学习路线吗？](https://mp.weixin.qq.com/s/1FRSTcUnGf6e8HvJ3sdwLg)
 * [45天，入门C++](https://mp.weixin.qq.com/s/GEUChOAu8wKZ-mazyKaMow)
-* [“越来越像新语言的 C++，我与它结缘、痴迷、深耕的 14 年！”](https://mp.weixin.qq.com/s/C3FsZ822oA-CBYSQKn1F8w)
 
 ### Basics
 
@@ -6673,6 +6672,159 @@ int main()
     * 开发工具 – 让编写C++代码更加容易！
     * C++在开发者中的稳定位置
   * 总而言之，我认为在未来的十年，我们可以以一种积极乐观的态度看待C++。虽然我们无法预知更远的将来会发生什么，但是至少在接下来的十年里，我相信C++应该是稳定的。有了所有这些工具的帮助，新的C++标准编写的C++代码会更加容易访问，并且更加不容易出错。在可预见的将来，C++仍然是追求性能的应用程序的无二选择，甚至它会取代C和Fortran。
+* [“越来越像新语言的 C++，我与它结缘、痴迷、深耕的 14 年！”](https://mp.weixin.qq.com/s/C3FsZ822oA-CBYSQKn1F8w)
+* [C/C++ include header file order - Stack Overflow](https://stackoverflow.com/questions/2762568/c-c-include-header-file-order)
+	* My personal preference is to go from local to global, each subsection in alphabetical order, i.e.:
+		* h file corresponding to this cpp file (if applicable)
+		* headers from the same component,
+		* headers from other components,
+		* system headers.
+	* My rationale for 1. is that it should prove that each header (for which there is a cpp) can be #included without prerequisites (terminus technicus: header is "self-contained"). And the rest just seems to flow logically from there.
+
+### Bug
+
+* [C ++ 中不容忽视的 25 个 API 错误设计！](https://mp.weixin.qq.com/s/Yyno5VNHr88BaQvMoZafVA)
+  * https://www.acodersjourney.com/top-25-cplusplus-api-design-mistakes-and-how-to-avoid-them/
+  * 错误＃1：不将你的API放在命名空间中
+  * 错误＃2：在你的公共API头的全局范围中包含“using namespace”
+  * 错误＃3：无视“三法则”
+  * 错误＃4：不将API中的移动构造函数和移动赋值运算符标记为noexcept
+  * 错误＃5：不将不可抛出的API标记为noexcept
+  * 错误＃6：不将单个参数构造函数标记为显式
+  * 错误＃7：不将只读数据/方法标记为const
+  * 错误＃8：通过const引用返回API的内部
+  * 错误＃9：使用隐式模板实例化时，使用模板实现细节来混淆公共头文件
+  * 错误＃10：当用例已知时，不使用显式模板实例化
+  * 错误＃11：在默认函数参数中公开内部值
+  * 错误＃12：将#Defines用于C ++ API
+  * 错误＃13：使用友元类
+  * 错误＃14：不避免不必要的include头文件
+  * 错误＃15：对外来（不是你自己的）对象类型使用前向声明
+  * 错误＃16：不让头文件必须自行编译
+  * 错误＃17：没有为你的API提供版本控制信息
+  * 错误＃18：从一开始就没有决定静态或动态库的实现
+  * 错误＃19：没有认识到ABI的兼容性
+  * 错误＃20：向已发布的类API添加纯虚方法
+  * 错误＃21：不记录API是同步还是异步
+  * 错误＃22：没有使用平台/编译器支持的最低公共特性
+  * 错误＃23：不考虑开源项目的头文件实现
+  * 错误＃24：参数类型不一致
+  * 错误＃25：没有API审核流程！
+* [这 5 个 C/C++ Bug](https://mp.weixin.qq.com/s/w6YRs_3MkJTRz4Yo8aFOAw)
+  * 1. 变量未初始化
+  * 2. 数组越界
+  * 3. 字符串溢出
+  * 4. 内存重复释放
+  * 5. 使用无效的文件指针
+* [代码优化导致的奇葩问题](https://mp.weixin.qq.com/s/p2GRR3n0s338K1qAmZOhMA)
+  * 总结、什么情况会导致这样的问题？
+  * 1、堆栈溢出应该是一个原因，之前我有遇到的情况是栈空间设置太小，然后溢出到堆空间导致问题。
+  * 2、使用某个函数导致溢出，我们使用的函数，比如，内存拷贝函数，如果长度设置不对，也会导致影响到其他的代码。
+  * 3、还有就是上面说的编译器优化导致的问题。
+* [C++编程新手容易犯的 10 种编程错误](https://mp.weixin.qq.com/s/tUT9sDR-d1aTzWof3TCjNg)
+	* 1、有些关键字在 cpp 文件中多写了
+	* 2、函数参数的默认值写到函数实现中了
+	* 3、在编写类的时候，在类的结尾处忘记添加 ";" 分号了
+	* 4、只添加了函数声明，没有函数实现
+	* 5、cpp 文件忘记添加到工程中，导致没有生成供链接使用的 obj 文件
+	* 6、函数中返回了一个局部变量的地址或者引用
+	* 7、忘记将父类中的接口声明 virtual 函数，导致多态没有生效
+	* 8、该使用双指针的地方，却使用了单指针
+	* 9、发布 exe 程序时，忘记将 exe 依赖的 C 运行时库和 MFC 库带上
+	* 10、应该使用深拷贝，却使用了浅拷贝
+* [常见的C++软件异常场景分析与总结](https://mp.weixin.qq.com/s/QkSz04-YGo4PB2EWlJ-wqA)
+	* https://blog.csdn.net/chenlycly/article/details/82734138
+	* 1、野指针问题
+	* 2、空指针问题
+	* 3、堆内存被释放两次
+	* 4、栈内存被当做堆内存来释放
+	* 5、内存访问越界
+	* 6、函数调用约定不一致引起的栈不平衡的问题
+	* 7、调用虚函数时的二次寻址
+	* 8、debug和release库混用的问题
+	* 9、死循环问题
+	* 10、死锁问题排查
+	* 11、数据类型使用违规引起的问题
+	* 12、抛出异常后导致部分代码被跳过的问题
+	* 13、类对象没有初始化就直接访问问题
+
+#### Memory Leak
+
+* [C++ 如何避免内存泄露](https://mp.weixin.qq.com/s/oBTNXxUiU3StexuyCKPI6w)
+  * 内存是如何泄露的
+  * 经验 #1：尽量避免在堆上分配内存
+  * 经验 #2：使用 Arena
+  * 经验 #3：使用 Coroutine
+  * 经验 #4：善用 RAII
+  * 经验 #5：便于 Debug
+* [你踩过几种C++内存泄露的坑？](https://mp.weixin.qq.com/s/8h_ek1NLE9mOKdA2WiOoQw)
+  * 1. 函数内或者类成员内存未释放
+  * 2. delete []
+  * 3. delete (void*)
+  * 4. Virtual destructor
+  * 5. 对象循环引用
+  * 6. 资源泄露
+* [C++常见的三种内存破坏的场景和分析](https://mp.weixin.qq.com/s/uG4R-oSjf2AO-OVm2A1rPw)
+  * 有一定C++开发经验的同学大多数踩过内存破坏的坑,有这么几种现象:
+    * 比如某个变量整形，在程序中只可能初始化或者赋值为1或者2, 但是在使用的时候却发现其为0或者其他的情况。对于其他类型，比如字符串等，可能出现了一种出乎意料的值！
+    * 程序在堆上申请内存或者释放内存的时候，在内存充足的情况下，居然出现了堆错误。
+  * 当出现以上场景的时候，你该思考一下，是不是出现了内存破坏的情况了。而本文主要通过展示和分析常见的三种内存破坏导致覆盖相邻变量的场景，让读者在碰到类似的场景，不至于束手无策。而对于堆上的内存破坏，很常见并且棘手的场景，本人将在后续的文章和大家分享。
+  * 1. 内存破坏之强制类型转换
+  * 2. 字符串拷贝溢出
+  * 3. 随机性的内存被修改
+* [一文搞定 | Linux共享内存原理](https://mp.weixin.qq.com/s/RB6KRXF_uJF7wXjRvDyhmQ)
+  * https://cloud.tencent.com/developer/article/1396351
+  * 在Linux系统中，每个进程都有独立的虚拟内存空间，也就是说不同的进程访问同一段虚拟内存地址所得到的数据是不一样的，这是因为不同进程相同的虚拟内存地址会映射到不同的物理内存地址上。
+  * 但有时候为了让不同进程之间进行通信，需要让不同进程共享相同的物理内存，Linux通过 共享内存 来实现这个功能。下面先来介绍一下Linux系统的共享内存的使用。
+  * 共享内存使用
+  * 共享内存实现原理
+* [C/C++ 动态检测内存错误利器 - ASan](https://mp.weixin.qq.com/s/u6UtoXQkdcomtGZxX9vsvw)
+  * ASan，即Address Sanitizer，是一个适用于c/c++程序的动态内存错误检测器，它由一个编译器检测模块（LLVM pass）和一个替换malloc函数的运行时库组成，在性能及检测内存错误方面都优于Valgrind，你值得拥有。
+
+### GUI
+
+* [List of platform-independent GUI libraries - Wikipedia](https://en.wikipedia.org/wiki/List_of_platform-independent_GUI_libraries)
+
+### Optimisation
+
+* [性能统计类](https://mp.weixin.qq.com/s/6LHThiscLQ1gNCwLlTSHRQ)
+```c++
+#include <iostream>
+#include <chrono>
+using namespace std;
+class PerfSum{
+    public:
+        PerfSum()
+        {
+            _beginTime = std::chrono::high_resolution_clock::now();
+        }
+        ~PerfSum()
+        {
+            auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now()-_beginTime);
+            std::cout<<"统计性能结束，时间过去了"<< ms.count() <<"毫秒"<<std::endl;
+        }
+    private:
+        std::chrono::high_resolution_clock::time_point _beginTime;
+ };
+
+//使用方法：
+void TestStdVec()
+{
+    std::vector<int> vec ;
+    PerfSum t;
+    
+    for(long i=0;i<1000000;i++) {
+        vec.push_back(i);
+    }
+    std::cout<<"End"<<std::endl;
+}
+
+int main() 
+{
+    std::cout<<"标准容器插入1000000次:"<<std::endl;
+    TestStdVec();
+}
+```
 * [提高C++性能的编程技术](https://mp.weixin.qq.com/s/SqN8gphEzRNsQMExrFlZxw)
 	* 最近看了一本书《提高C++性能的编程技术》，这本书内容比较老，有些内容不太适合现在的编译器，但里面很多内容还是值得我们学习的。
 	* 我这里整理出了自认为有用的条目分享给大家，希望对大家有所帮助，想了解具体内容的的朋友可以直接去看书哈。
@@ -6781,155 +6933,6 @@ int main()
 			* 在跳转之间的代码尽量减少数据依赖
 			* 尝试展开循环
 			* 尝试通过计算来消除分支
-* [C/C++ include header file order - Stack Overflow](https://stackoverflow.com/questions/2762568/c-c-include-header-file-order)
-	* My personal preference is to go from local to global, each subsection in alphabetical order, i.e.:
-		* h file corresponding to this cpp file (if applicable)
-		* headers from the same component,
-		* headers from other components,
-		* system headers.
-	* My rationale for 1. is that it should prove that each header (for which there is a cpp) can be #included without prerequisites (terminus technicus: header is "self-contained"). And the rest just seems to flow logically from there.
-* [性能统计类](https://mp.weixin.qq.com/s/6LHThiscLQ1gNCwLlTSHRQ)
-```c++
-#include <iostream>
-#include <chrono>
-using namespace std;
-class PerfSum{
-    public:
-        PerfSum()
-        {
-            _beginTime = std::chrono::high_resolution_clock::now();
-        }
-        ~PerfSum()
-        {
-            auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now()-_beginTime);
-            std::cout<<"统计性能结束，时间过去了"<< ms.count() <<"毫秒"<<std::endl;
-        }
-    private:
-        std::chrono::high_resolution_clock::time_point _beginTime;
- };
-
-//使用方法：
-void TestStdVec()
-{
-    std::vector<int> vec ;
-    PerfSum t;
-    
-    for(long i=0;i<1000000;i++) {
-        vec.push_back(i);
-    }
-    std::cout<<"End"<<std::endl;
-}
-
-int main() 
-{
-    std::cout<<"标准容器插入1000000次:"<<std::endl;
-    TestStdVec();
-}
-```
-
-### Bug
-
-* [C ++ 中不容忽视的 25 个 API 错误设计！](https://mp.weixin.qq.com/s/Yyno5VNHr88BaQvMoZafVA)
-  * https://www.acodersjourney.com/top-25-cplusplus-api-design-mistakes-and-how-to-avoid-them/
-  * 错误＃1：不将你的API放在命名空间中
-  * 错误＃2：在你的公共API头的全局范围中包含“using namespace”
-  * 错误＃3：无视“三法则”
-  * 错误＃4：不将API中的移动构造函数和移动赋值运算符标记为noexcept
-  * 错误＃5：不将不可抛出的API标记为noexcept
-  * 错误＃6：不将单个参数构造函数标记为显式
-  * 错误＃7：不将只读数据/方法标记为const
-  * 错误＃8：通过const引用返回API的内部
-  * 错误＃9：使用隐式模板实例化时，使用模板实现细节来混淆公共头文件
-  * 错误＃10：当用例已知时，不使用显式模板实例化
-  * 错误＃11：在默认函数参数中公开内部值
-  * 错误＃12：将#Defines用于C ++ API
-  * 错误＃13：使用友元类
-  * 错误＃14：不避免不必要的include头文件
-  * 错误＃15：对外来（不是你自己的）对象类型使用前向声明
-  * 错误＃16：不让头文件必须自行编译
-  * 错误＃17：没有为你的API提供版本控制信息
-  * 错误＃18：从一开始就没有决定静态或动态库的实现
-  * 错误＃19：没有认识到ABI的兼容性
-  * 错误＃20：向已发布的类API添加纯虚方法
-  * 错误＃21：不记录API是同步还是异步
-  * 错误＃22：没有使用平台/编译器支持的最低公共特性
-  * 错误＃23：不考虑开源项目的头文件实现
-  * 错误＃24：参数类型不一致
-  * 错误＃25：没有API审核流程！
-* [这 5 个 C/C++ Bug](https://mp.weixin.qq.com/s/w6YRs_3MkJTRz4Yo8aFOAw)
-  * 1. 变量未初始化
-  * 2. 数组越界
-  * 3. 字符串溢出
-  * 4. 内存重复释放
-  * 5. 使用无效的文件指针
-* [代码优化导致的奇葩问题](https://mp.weixin.qq.com/s/p2GRR3n0s338K1qAmZOhMA)
-  * 总结、什么情况会导致这样的问题？
-  * 1、堆栈溢出应该是一个原因，之前我有遇到的情况是栈空间设置太小，然后溢出到堆空间导致问题。
-  * 2、使用某个函数导致溢出，我们使用的函数，比如，内存拷贝函数，如果长度设置不对，也会导致影响到其他的代码。
-  * 3、还有就是上面说的编译器优化导致的问题。
-* [C++编程新手容易犯的 10 种编程错误](https://mp.weixin.qq.com/s/tUT9sDR-d1aTzWof3TCjNg)
-	* 1、有些关键字在 cpp 文件中多写了
-	* 2、函数参数的默认值写到函数实现中了
-	* 3、在编写类的时候，在类的结尾处忘记添加 ";" 分号了
-	* 4、只添加了函数声明，没有函数实现
-	* 5、cpp 文件忘记添加到工程中，导致没有生成供链接使用的 obj 文件
-	* 6、函数中返回了一个局部变量的地址或者引用
-	* 7、忘记将父类中的接口声明 virtual 函数，导致多态没有生效
-	* 8、该使用双指针的地方，却使用了单指针
-	* 9、发布 exe 程序时，忘记将 exe 依赖的 C 运行时库和 MFC 库带上
-	* 10、应该使用深拷贝，却使用了浅拷贝
-* [常见的C++软件异常场景分析与总结](https://mp.weixin.qq.com/s/QkSz04-YGo4PB2EWlJ-wqA)
-	* https://blog.csdn.net/chenlycly/article/details/82734138
-	* 1、野指针问题
-	* 2、空指针问题
-	* 3、堆内存被释放两次
-	* 4、栈内存被当做堆内存来释放
-	* 5、内存访问越界
-	* 6、函数调用约定不一致引起的栈不平衡的问题
-	* 7、调用虚函数时的二次寻址
-	* 8、debug和release库混用的问题
-	* 9、死循环问题
-	* 10、死锁问题排查
-	* 11、数据类型使用违规引起的问题
-	* 12、抛出异常后导致部分代码被跳过的问题
-	* 13、类对象没有初始化就直接访问问题
-
-#### Memory Leak
-
-* [C++ 如何避免内存泄露](https://mp.weixin.qq.com/s/oBTNXxUiU3StexuyCKPI6w)
-  * 内存是如何泄露的
-  * 经验 #1：尽量避免在堆上分配内存
-  * 经验 #2：使用 Arena
-  * 经验 #3：使用 Coroutine
-  * 经验 #4：善用 RAII
-  * 经验 #5：便于 Debug
-* [你踩过几种C++内存泄露的坑？](https://mp.weixin.qq.com/s/8h_ek1NLE9mOKdA2WiOoQw)
-  * 1. 函数内或者类成员内存未释放
-  * 2. delete []
-  * 3. delete (void*)
-  * 4. Virtual destructor
-  * 5. 对象循环引用
-  * 6. 资源泄露
-* [C++常见的三种内存破坏的场景和分析](https://mp.weixin.qq.com/s/uG4R-oSjf2AO-OVm2A1rPw)
-  * 有一定C++开发经验的同学大多数踩过内存破坏的坑,有这么几种现象:
-    * 比如某个变量整形，在程序中只可能初始化或者赋值为1或者2, 但是在使用的时候却发现其为0或者其他的情况。对于其他类型，比如字符串等，可能出现了一种出乎意料的值！
-    * 程序在堆上申请内存或者释放内存的时候，在内存充足的情况下，居然出现了堆错误。
-  * 当出现以上场景的时候，你该思考一下，是不是出现了内存破坏的情况了。而本文主要通过展示和分析常见的三种内存破坏导致覆盖相邻变量的场景，让读者在碰到类似的场景，不至于束手无策。而对于堆上的内存破坏，很常见并且棘手的场景，本人将在后续的文章和大家分享。
-  * 1. 内存破坏之强制类型转换
-  * 2. 字符串拷贝溢出
-  * 3. 随机性的内存被修改
-* [一文搞定 | Linux共享内存原理](https://mp.weixin.qq.com/s/RB6KRXF_uJF7wXjRvDyhmQ)
-  * https://cloud.tencent.com/developer/article/1396351
-  * 在Linux系统中，每个进程都有独立的虚拟内存空间，也就是说不同的进程访问同一段虚拟内存地址所得到的数据是不一样的，这是因为不同进程相同的虚拟内存地址会映射到不同的物理内存地址上。
-  * 但有时候为了让不同进程之间进行通信，需要让不同进程共享相同的物理内存，Linux通过 共享内存 来实现这个功能。下面先来介绍一下Linux系统的共享内存的使用。
-  * 共享内存使用
-  * 共享内存实现原理
-* [C/C++ 动态检测内存错误利器 - ASan](https://mp.weixin.qq.com/s/u6UtoXQkdcomtGZxX9vsvw)
-  * ASan，即Address Sanitizer，是一个适用于c/c++程序的动态内存错误检测器，它由一个编译器检测模块（LLVM pass）和一个替换malloc函数的运行时库组成，在性能及检测内存错误方面都优于Valgrind，你值得拥有。
-
-### GUI
-
-* [List of platform-independent GUI libraries - Wikipedia](https://en.wikipedia.org/wiki/List_of_platform-independent_GUI_libraries)
 
 ### Unit Testing
 
