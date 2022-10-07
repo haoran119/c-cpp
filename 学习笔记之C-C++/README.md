@@ -5605,7 +5605,7 @@ Output:
 
 ##### Language support
 
-###### [Type support (basic types, RTTI, type traits) - cppreference.com](https://en.cppreference.com/w/cpp/types)
+###### [Type support (basic types, RTTI, type traits)](https://en.cppreference.com/w/cpp/types)
 
 #
 Additional basic types and macros
