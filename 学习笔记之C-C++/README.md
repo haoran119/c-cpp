@@ -412,6 +412,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
 #### Data Types
 
 * [Data Type Ranges | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/data-type-ranges?view=msvc-170)
+* [Difference between float and double in C/C++ - GeeksforGeeks](https://www.geeksforgeeks.org/difference-float-double-c-cpp/)
 * [【ZZ】C++11之统一初始化语法 | 桃子的博客志 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/8674208.html)
 * [std::size_t - cppreference.com](https://en.cppreference.com/w/cpp/types/size_t)
 	* std::size_t is the unsigned integer type of the result of the sizeof operator as well as the sizeof... operator and the alignof operator (since C++11).
