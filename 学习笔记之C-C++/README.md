@@ -8,7 +8,14 @@
 * [C++ Tutorial](https://www.tutorialspoint.com/cplusplus/index.htm)
   * [The C++ Standard Library Tutorial](https://www.tutorialspoint.com/cpp_standard_library/index.htm)
 * [C++ Programming Language - GeeksforGeeks](https://www.geeksforgeeks.org/c-plus-plus/?ref=shm)
+* [Standard C++](https://isocpp.org/)
+	* 标准委员会官方站点，近期的会议、行程、活动、计划。
+* [Open Standards](https://www.open-std.org/)
+	* 官方开放文档，各种论文文献。
 * [Bjarne Stroustrup's Homepage](https://www.stroustrup.com/index.html)
+	* C++之父的主页
+* [C++ Team Blog](https://devblogs.microsoft.com/cppblog/)
+	* 微软C++团队的博客
 * [fffaraz/awesome-cpp: A curated list of awesome C++ (or C) frameworks, libraries, resources, and shiny things.](https://github.com/fffaraz/awesome-cpp)
 * [Clean Code - Uncle Bob / Lesson 1 - YouTube](https://www.youtube.com/watch?v=7EmboKQH8lM)
 * [Cᐩᐩ Weekly With Jason Turner - YouTube](https://www.youtube.com/channel/UCxHAlbZQNFU2LgEtiqd2Maw)
