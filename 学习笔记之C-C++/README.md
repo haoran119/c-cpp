@@ -414,9 +414,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
 * [Data Type Ranges | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/data-type-ranges?view=msvc-170)
 * [Difference between float and double in C/C++ - GeeksforGeeks](https://www.geeksforgeeks.org/difference-float-double-c-cpp/)
 * [【ZZ】C++11之统一初始化语法 | 桃子的博客志 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/8674208.html)
-* [std::size_t - cppreference.com](https://en.cppreference.com/w/cpp/types/size_t)
-	* std::size_t is the unsigned integer type of the result of the sizeof operator as well as the sizeof... operator and the alignof operator (since C++11).
-	* The bit width of std::size_t is not less than 16.(since C++11)
 * [Wide character - Wikipedia](https://en.wikipedia.org/wiki/Wide_character)
   * A wide character is a computer character datatype that generally has a size greater than the traditional 8-bit character. The increased datatype size allows for the use of larger coded character sets.
   * Programming specifics
@@ -5609,6 +5606,14 @@ Output:
 ##### Language support
 
 ###### [Type support (basic types, RTTI, type traits) - cppreference.com](https://en.cppreference.com/w/cpp/types)
+
+#
+Additional basic types and macros
+
+* Defined in header \<cstddef>
+* [std::size_t - cppreference.com](https://en.cppreference.com/w/cpp/types/size_t)
+	* std::size_t is the unsigned integer type of the result of the sizeof operator as well as the sizeof... operator and the alignof operator (since C++11).
+	* The bit width of std::size_t is not less than 16.(since C++11)
 
 #
 [Fixed width integer types (since C++11)](https://en.cppreference.com/w/cpp/types/integer)
