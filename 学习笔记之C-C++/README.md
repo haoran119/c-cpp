@@ -258,6 +258,9 @@
     * C++ 中的运算符优先级
 * [C/C++ PK 各大编程语言](https://mp.weixin.qq.com/s/zTuPyQRkjkVWp_KIjMh_Kw)
 * [C++ 后端开发路线](https://mp.weixin.qq.com/s/QvFQEjUPEw_2zexaZi6GNQ)
+* [这不就是你要的C++后台开发学习路线吗？](https://mp.weixin.qq.com/s/1FRSTcUnGf6e8HvJ3sdwLg)
+* [45天，入门C++](https://mp.weixin.qq.com/s/GEUChOAu8wKZ-mazyKaMow)
+* [“越来越像新语言的 C++，我与它结缘、痴迷、深耕的 14 年！”](https://mp.weixin.qq.com/s/C3FsZ822oA-CBYSQKn1F8w)
 
 ### Basics
 
