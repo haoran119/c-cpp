@@ -1090,6 +1090,45 @@ The value "Hello" already exists in the set.
 		* 必须正正好好一个，多了少了都不行，所以叫 one definition rule。
 		* 内联函数，现在又有了内联变量，以及模板，则不受这条规则限制。修正这个问题的简单方法是把 magic 里的 static const 改成 static constexpr 或 static inline const。前者可行的原因是，类的静态 constexpr 成员变量默认就是内联的。const 常量和类外面的 constexpr 变量不默认内联，需要手工加 inline 关键字才会变成内联。
 	* 6.学习资料
+* [现代C++编程实践(六)—一招简化模板编程](https://mp.weixin.qq.com/s/jstBtimXLjxB_1pJyVy2NQ)
+	* 实现一个模板类，实现类中的加法运算，支持泛型。
+	* 从上面的代码可以看出，如果要实现这两个相似的功能需要对add方法进行不同的实现，也就是说：在实现这个功能时需要根据模板特化的类型分别编写出不同的特化代码。问题来了，能不能只提供一个模板函数从而实现上述两种特化的方法呢？
+	* 答案是：有的。一种是使用传统的宏定义的方法，但是同时只能支持一种。另外一种是现代C++提供的constexpr关键字，它应用在if表达式中，使用方法和if-else类似。不同的是它是在编译阶段就确认好的，通过对后面的表达式进行计算，从而判断出使用哪个分支。在本文中，它需要和is_same_v搭配使用，在编译结算就计算出传入参数的类型，从而实现不同传入参数的数据运算。本文中示例的实现代码如下：
+	* 如上代码所示，通过constexpr可以对不同的参数类型进行模板的实例化，在main函数中，同时传入容器和普通数据类型时都能够正确进行计算。
+```c++
+#include <iostream>
+#include <vector>
+using namespace std;
+template<typename T>
+class AddInterface{
+public:
+    AddInterface(T value):value(value){}
+    template<typename U>
+    T add(U x) const{
+        if constexpr (std::is_same_v<T,std::vector<U>>){
+            auto tmp(value);
+            for(auto &ele:tmp){
+                ele+=x;
+            }
+            return tmp;
+        }else{
+            return (value+x);
+        }
+    }
+private:
+    T value;
+};
+int main(){
+    std::vector<int> vRes{1,2,3,4};
+    auto res{AddInterface<std::vector<int>>{vRes}.add(20)};
+    for(auto v:res){
+        std::cout<<v<<",";
+    }
+    cout<<endl;
+    std::cout<<AddInterface<float>{3.5}.add(20)<<std::endl;
+    return 0;
+}
+```
 
 #### [Storage Classes](https://www.tutorialspoint.com/cplusplus/cpp_storage_classes.htm)
 
