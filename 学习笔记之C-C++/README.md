@@ -5401,6 +5401,8 @@ int main() {
 
 * [std::max - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/max)
 	* returns the greater of the given values (function template)
+* [Maximum of three values in C++ - Code Review Stack Exchange](https://codereview.stackexchange.com/questions/26100/maximum-of-three-values-in-c)
+	* `std::max({a, b, c})`
 * [std::max_element - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/max_element)
 	* returns the largest element in a range (function template)
 	* Finds the greatest element in the range \[first, last).
