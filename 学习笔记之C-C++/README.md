@@ -193,6 +193,7 @@
 * [C++最佳实践 | 3. 安全性](https://mp.weixin.qq.com/s/rR8rWYHZ9GFkCvxJe8bb7Q)
 * [C++最佳实践 | 4. 可维护性](https://mp.weixin.qq.com/s/vs3ZbAhgKhV-VSCYUC8W3w)
 * [C++最佳实践 | 5. 可移植性及多线程](https://mp.weixin.qq.com/s/Y5O9__wNp5FjsIuMJ66gZQ)
+* [C++最佳实践 | 6. 性能](https://mp.weixin.qq.com/s/5SnQhjrzJ2ZLoNmyPznoZg)
 
 ## C
 
