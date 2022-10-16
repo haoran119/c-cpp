@@ -194,6 +194,37 @@
 * [C++最佳实践 | 4. 可维护性](https://mp.weixin.qq.com/s/vs3ZbAhgKhV-VSCYUC8W3w)
 * [C++最佳实践 | 5. 可移植性及多线程](https://mp.weixin.qq.com/s/Y5O9__wNp5FjsIuMJ66gZQ)
 * [C++最佳实践 | 6. 性能](https://mp.weixin.qq.com/s/5SnQhjrzJ2ZLoNmyPznoZg)
+	* 性能
+		* 尽量使用前置声明
+		* 避免不必要的模板实例化
+		* 避免递归模板实例化
+		* 分析构建
+		* 隔离频繁更改的头文件
+			* 不要包含不需要的头文件
+			* 减少预处理器的工作
+		* 考虑使用预编译头文件
+		* 考虑使用工具
+		* 将tmp放在Ramdisk上
+		* 使用gold链接器
+	* 运行时
+		* 分析代码
+		* 简化代码
+		* 使用初始化列表
+		* 减少临时对象
+		* 启用移动(move)操作
+		* 避免shared_ptr拷贝
+		* 尽可能减少拷贝和重分配
+		* 避免多余的异常
+		* 抛弃new
+		* 优先选择unique_ptr而不是shared_ptr
+		* 抛弃std::endl
+		* 限制变量作用域
+		* 优先选择double类型而不是float类型，但需要先测试
+		* 优先选择++i而不是i++
+		* char是char, string是string
+		* 永远不要用std::bind
+		* 了解标准库
+		* in_place_t及相关内容
 
 ## C
 
