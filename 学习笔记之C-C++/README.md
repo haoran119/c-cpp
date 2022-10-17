@@ -4079,6 +4079,8 @@ g_i: 2; in main()
 std::async(std::launch::async, []{ f(); }); // temporary's dtor waits for f()
 std::async(std::launch::async, []{ g(); }); // does not start until f() completes
 ```
+* [从无栈协程到 C++异步框架](https://mp.weixin.qq.com/s/QVXE7QbxEchl8ue4SoijiQ)
+	* 本文我们将尝试对整个 C++的协程做深入浅出的剥析, 方便大家的理解. 再结合上层的封装, 最终给出一个 C++异步框架实际业务使用的一种形态, 方便大家更好的在实际项目中应用无栈协程。
 
 #### Parse command line
 
