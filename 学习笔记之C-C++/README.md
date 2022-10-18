@@ -5969,6 +5969,26 @@ int main()
     std::cout << std::ifstream("test.txt").rdbuf();
 }
 ```
+* [std::getenv - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/getenv)
+	* access to the list of environment variables (function)
+	* Defined in header \<cstdlib>
+	* `char* getenv( const char* env_var );`
+	* Searches the environment list provided by the host environment (the OS), for a string that matches the C string pointed to by env_var and returns a pointer to the C string that is associated with the matched environment list member.
+	* This function is thread-safe (calling it from multiple threads does not introduce a data race) as long as no other function modifies the host environment. In particular, the POSIX functions [setenv()](http://pubs.opengroup.org/onlinepubs/9699919799/functions/setenv.html), [unsetenv()](http://pubs.opengroup.org/onlinepubs/9699919799/functions/unsetenv.html), and [putenv()](http://pubs.opengroup.org/onlinepubs/9699919799/functions/putenv.html) would introduce a data race if called without synchronization. (since C++11)
+	* Modifying the string returned by getenv invokes undefined behavior.
+```c++
+#include <iostream>
+#include <cstdlib>
+ 
+int main()
+{
+    if(const char* env_p = std::getenv("PATH"))
+        std::cout << "Your PATH is: " << env_p << '\n';
+}
+/*
+Your PATH is: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
+*/
+```
 
 ###### [Initializer lists](https://en.cppreference.com/w/cpp/utility/initializer_list)
 
