@@ -2093,7 +2093,7 @@ int main() {
 * [C++ Date and Time](https://www.tutorialspoint.com/cplusplus/cpp_date_time.htm)
 * [Chrono in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/chrono-in-c/)
 
-##### [Standard library header \<chrono> - cppreference.com](https://en.cppreference.com/w/cpp/header/chrono)
+##### [\<chrono>](https://en.cppreference.com/w/cpp/header/chrono)
 
 * The chrono library defines three main types as well as utility functions and common typedefs.
 	* clocks
@@ -2127,6 +2127,60 @@ int main()
     
     std::cout << duration_in_seconds.count() << std::endl; // 1.50169e+09
 }
+```
+* How to get certain time in current date ?
+```c++
+#include <iostream>
+#include <iomanip>   // std::put_time
+#include <chrono> 
+
+int main()
+{
+    using namespace std::chrono_literals;
+
+    setenv("TZ", "Asia/Tokyo", 1);
+ 
+    std::tm tm{};  // zero initialise
+    tm.tm_year = 2022-1900; // 2022
+    tm.tm_mon = 10-1; // Oct
+    tm.tm_mday = 18; // 18th
+    tm.tm_hour = 9;
+    tm.tm_min = 0;
+    tm.tm_sec = 0;
+    tm.tm_isdst = 0; // Not daylight saving
+    std::time_t t = std::mktime(&tm); 
+    std::tm local = *std::localtime(&t);
+    std::cout << "local: " << std::put_time(&local, "%c %Z") << '\n';
+
+    auto from = std::chrono::system_clock::from_time_t(t) - 0h;
+    auto time = from.time_since_epoch().count();
+    std::cout << time << '\n';
+
+    auto current_time = std::chrono::system_clock::now();
+    auto current_time_t = std::chrono::system_clock::to_time_t(current_time);
+    auto _local = *std::localtime(&current_time_t);
+    std::cout << "_local: " << std::put_time(&_local, "%c %Z") << '\n';
+
+    _local.tm_hour = 9;
+    _local.tm_min = 0;
+    _local.tm_sec = 0;
+    _local.tm_isdst = 0; // Not daylight saving
+    std::cout << "_local: " << std::put_time(&_local, "%c %Z") << '\n';
+
+    std::time_t _t = std::mktime(&_local); 
+    auto _from = std::chrono::system_clock::from_time_t(_t);
+    auto _time = _from.time_since_epoch().count();
+    std::cout << _time << '\n';
+
+    return 0;
+}
+/*
+local: Tue Oct 18 09:00:00 2022 JST
+1666051200000000000
+_local: Tue Oct 18 10:15:42 2022 JST
+_local: Tue Oct 18 09:00:00 2022 JST
+1666051200000000000
+*/
 ```
 * [Get current timestamp in milliseconds since Epoch in C++ | Techie Delight](https://www.techiedelight.com/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/#:~:text=Since%20C%2B%2B11%2C%20we,of%20time%20elapsed%20since%20Epoch.)
 	* 1. Using std::chrono
