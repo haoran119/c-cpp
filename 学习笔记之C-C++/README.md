@@ -5989,6 +5989,9 @@ int main()
 Your PATH is: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
 */
 ```
+* [command line - How to use setenv() to export a variable in c++? - Stack Overflow](https://stackoverflow.com/questions/17929414/how-to-use-setenv-to-export-a-variable-in-c)
+	* `setenv("ROS_HOSTNAME","xxx",1); // does overwrite`
+	* `setenv("ROS_HOSTNAME","xxx",0); // does not overwrite`
 
 ###### [Initializer lists](https://en.cppreference.com/w/cpp/utility/initializer_list)
 
