@@ -2092,7 +2092,6 @@ int main() {
 	* C-style date and time library (e.g. std::time)
 * [C++ Date and Time](https://www.tutorialspoint.com/cplusplus/cpp_date_time.htm)
 * [Chrono in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/chrono-in-c/)
-* [现代C++编程实践(五)—如何使用时间库](https://mp.weixin.qq.com/s/JrXYKSm7sEHV8X87X-Bgzg)
 
 ##### [Standard library header \<chrono> - cppreference.com](https://en.cppreference.com/w/cpp/header/chrono)
 
@@ -2385,8 +2384,38 @@ sizeof(std::tm) = 56
 	* Arithmetic type capable of representing times.
 	* Although not defined, this is almost always an integral value holding the number of seconds (not counting leap seconds) since 00:00, Jan 1 1970 UTC, corresponding to POSIX time.
 
-##### FAQ
+##### MISC
 
+* [现代C++编程实践(五)—如何使用时间库](https://mp.weixin.qq.com/s/JrXYKSm7sEHV8X87X-Bgzg)
+```c++
+#include <iostream>
+#include <iomanip>
+#include <chrono>
+
+
+std::ostream& operator<<(std::ostream &os,const std::chrono::time_point<std::chrono::system_clock> &t) {
+    const auto ltime(std::chrono::system_clock::to_time_t(t));
+    const auto localTime(std::localtime(&ltime));
+    return os << std::put_time(localTime, "%c %Z");
+}
+
+using hours = std::chrono::duration<std::chrono::hours::rep, 
+                                    std::ratio_multiply<std::chrono::hours::period, std::ratio<1> > >;
+constexpr hours operator ""_hours(unsigned long long h) {
+    return hours {h};
+}
+
+int main()
+{
+    auto now(std::chrono::system_clock::now());
+    std::cout << "当前时间是:" << now << "\n12小时后是:" << (now + 12_hours) << std::endl;
+    return 0;
+}
+/*
+当前时间是:Tue Oct 18 01:02:08 2022 UTC
+12小时后是:Tue Oct 18 13:02:08 2022 UTC
+*/
+```
 * [c++ - How to parse a date string into a c++11 std::chrono time_point or similar? - Stack Overflow](https://stackoverflow.com/questions/21021388/how-to-parse-a-date-string-into-a-c11-stdchrono-time-point-or-similar) 
 	* [std::get_time - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/get_time) 
 		* When used in an expression in >> get_time(tmb, fmt), parses the character input as a date/time value according to format string fmt according to the std::time_get facet of the locale currently imbued in the input stream in. The resultant value is stored in a std::tm object pointed to by tmb.
