@@ -4230,6 +4230,10 @@ Sequence containers implement data structures which can be accessed sequentially
 	* Insertion or removal of elements at the end - amortized constant 𝓞(1)
 	* Insertion or removal of elements - linear in the distance to the end of the vector 𝓞(n)
 * std::vector (for T other than bool) meets the requirements of Container, AllocatorAwareContainer, SequenceContainer , ContiguousContainer (since C++17) and ReversibleContainer.
+* [std::vector<T,Allocator>::at - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/at)
+	* access specified element with bounds checking (public member function)
+	* Returns a reference to the element at specified location pos, with bounds checking.
+	* If pos is not within the range of the container, an exception of type std::out_of_range is thrown.
 * [std::vector<T,Allocator>::operator[] - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/operator_at)
 	* access specified element (public member function)
 	* Returns a reference to the element at specified location pos. No bounds checking is performed.
