@@ -494,6 +494,10 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * [/Zc:wchar_t (wchar_t Is Native Type) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/build/reference/zc-wchar-t-wchar-t-is-native-type?view=msvc-160)
       * Parse wchar_t as a built-in type according to the C++ standard.
 * [谈一谈 C++ 中的值的类型 (qq.com)](https://mp.weixin.qq.com/s/MQNIkeS3eMUmaezyUL8ZkQ)
+* [对 int 变量赋值的操作是原子的吗？为什么？](https://mp.weixin.qq.com/s/l5Ybey63USoM-OZvGsByEg)
+	* https://www.windsings.com/posts/2a85d31f/
+	* 原问题：什么指令集支持原子操作？其原理是什么？ 如果考虑到全部的指令集，问题太大了，这里简化下。以X86和ARM为例。
+	* 原子操作是不可分割的操作，在执行完毕时它不会被任何事件中断。在单处理器系统(UniProcessor，简称 UP)中，能够在单条指令中完成的操作都可以认为是原子操作，因为中断只能发生在指令与指令之间。
 
 ##### [struct](https://en.cppreference.com/w/cpp/keyword/struct)
 
