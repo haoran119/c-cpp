@@ -6746,6 +6746,29 @@ fmod(+5.1, 0) = -nan
 #
 Nearest integer floating point operations
 
+* [std::ceil, std::ceilf, std::ceill - cppreference.com](https://en.cppreference.com/w/cpp/numeric/math/ceil)
+	* nearest integer not less than the given value (function)
+	* Notes
+		* FE_INEXACT may be (but isn't required to be) raised when rounding a non-integer finite value.
+		* The largest representable floating-point values are exact integers in all standard floating-point formats, so this function never overflows on its own; however the result may overflow any integer type (including std::intmax_t), when stored in an integer variable.
+```c++
+#include <cmath>
+#include <iostream>
+int main()
+{
+    std::cout << std::fixed
+              << "ceil(+2.4) = " << std::ceil(+2.4) << '\n'
+              << "ceil(-2.4) = " << std::ceil(-2.4) << '\n'
+              << "ceil(-0.0) = " << std::ceil(-0.0) << '\n'
+              << "ceil(-Inf) = " << std::ceil(-INFINITY) << '\n';
+}
+/*
+ceil(+2.4) = 3.000000
+ceil(-2.4) = -2.000000
+ceil(-0.0) = -0.000000
+ceil(-Inf) = -inf
+*/
+```
 * [std::round, std::roundf, std::roundl, std::lround, std::lroundf, std::lroundl, std::llround, std::llroundf - cppreference.com](https://en.cppreference.com/w/cpp/numeric/math/round)
 	* nearest integer, rounding away from zero in halfway cases (function)
 ```c++
