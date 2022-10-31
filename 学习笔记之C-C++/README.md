@@ -1261,6 +1261,34 @@ int main(){
 	* 你会发现，除了文件名不同，其余都相同。
 	* 当然，这里额外说一下，不同代码、不同编译器，以及不同优化等级，可能最终结果有所差异。
 
+##### [if statement](https://en.cppreference.com/w/cpp/language/if)
+
+* Conditionally executes another statement.
+* Used where code needs to be executed based on a run-time or compile-time (since C++17) condition, or whether the if statement is evaluated in a manifestly constant-evaluated context (since C++23).
+
+###### If statements with initializer
+
+* [C++17 If statement with initializer](https://www.tutorialspoint.com/cplusplus17-if-statement-with-initializer#:~:text=Now%20it%20is%20possible%20to,variable%20leaking%20outside%20the%20scope.)
+	* C++17 has extended existing if statement’s syntax. Now it is possible to provide initial condition within if statement itself. This new syntax is called "if statement with initializer". This enhancement simplifies common code patterns and helps users keep scopes tight. Which in turn avoids variable leaking outside the scope.
+```c++
+std::map<int, std::string> m;
+std::mutex mx;
+extern bool shared_flag; // guarded by mx
+ 
+int demo()
+{
+    if (auto it = m.find(10); it != m.end()) { return it->second.size(); }
+    if (char buf[10]; std::fgets(buf, 10, stdin)) { m[0] += buf; }
+    if (std::lock_guard lock(mx); shared_flag) { unsafe_ping(); shared_flag = false; }
+    if (int s; int count = ReadBytesWithSignal(&s)) { publish(count); raise(s); }
+    if (const auto keywords = {"if", "for", "while"};
+        std::ranges::any_of(keywords, [&tok](const char* kw) { return tok == kw; }))
+    {
+        std::cerr << "Token must not be a keyword\n";
+    }
+}
+```
+
 ##### [for loop](https://en.cppreference.com/w/cpp/language/for)
 
 * as the declaration of the loop
