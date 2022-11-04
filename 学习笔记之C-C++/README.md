@@ -2654,6 +2654,16 @@ Predefined standard stream objects
 * The stream-based I/O library uses I/O manipulators (e.g. std::boolalpha, std::hex, etc.) to control how streams behave.
 * [std::boolalpha, std::noboolalpha - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/boolalpha)
 	* switches between textual and numeric representation of booleans
+* [std::endl - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/endl)
+	* outputs '\n' and flushes the output stream (function template)
+	* Inserts a newline character into the output sequence os and flushes it as if by calling os.put(os.widen('\n')) followed by os.flush().
+	* This is an output-only I/O manipulator, it may be called with an expression such as out << std::endl for any out of type std::basic_ostream.
+	* Notes
+		* This manipulator may be used to produce a line of output immediately, e.g. when displaying output from a long-running process, logging activity of multiple threads or logging activity of a program that may crash unexpectedly. An explicit flush of std::cout is also necessary before a call to std::system, if the spawned process performs any screen I/O. In most other usual interactive I/O scenarios, std::endl is redundant when used with std::cout because any input from std::cin, output to std::cerr, or program termination forces a call to std::cout.flush(). Use of std::endl in place of '\n', encouraged by some sources, may significantly degrade output performance.
+		* In many implementations, standard output is line-buffered, and writing '\n' causes a flush anyway, unless std::ios::sync_with_stdio(false) was executed. In those situations, unnecessary endl only degrades the performance of file output, not standard output.
+		* The code samples on this wiki follow Bjarne Stroustrup and The C++ Core Guidelines in flushing the standard output only where necessary.
+		* When an incomplete line of output needs to be flushed, the std::flush manipulator may be used.
+		* When every character of output needs to be flushed, the std::unitbuf manipulator may be used.
 * [std::quoted - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/quoted)
 	* inserts and extracts quoted strings with embedded spaces
 * [manipulators - C++ Reference](http://www.cplusplus.com/reference/library/manipulators/)
