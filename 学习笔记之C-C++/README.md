@@ -7141,7 +7141,7 @@ int main()
 
 * [List of platform-independent GUI libraries - Wikipedia](https://en.wikipedia.org/wiki/List_of_platform-independent_GUI_libraries)
 
-### Optimisation
+### Performance
 
 * [性能统计类](https://mp.weixin.qq.com/s/6LHThiscLQ1gNCwLlTSHRQ)
 ```c++
@@ -7289,6 +7289,30 @@ int main()
 			* 在跳转之间的代码尽量减少数据依赖
 			* 尝试展开循环
 			* 尝试通过计算来消除分支
+* [每个C++工程师都要了解的十个性能陷阱](https://mp.weixin.qq.com/s/UW2Ual0v21KNQz60MHT1nQ)
+	* 本文介绍的性能陷阱主要分为两大类：“有成本抽象”和“与编译器作对”。前者是指在使用 C++的功能/库时需要注意的隐形成本，后者则是一些 C++新手可能会写出不利于编译器优化的代码。另外本文的顺序是由基础到进阶，读者可以根据目录直接跳到自己想看的部分。
+	* 有成本抽象
+		* （一）虚函数
+		* （二）隐形的拷贝
+			* Member Initialization 构造函数
+			* For 循环
+			* Lambda 捕获
+			* 隐式类型转换
+		* （三）隐形的析构
+			* 复杂类型的析构
+			* 平凡析构类型
+		* （四）滥用 std::shared_ptr
+		* （五）类型擦除：std::function 和 std::any
+		* （六）std::variant 和 std::optional
+		* （七）std::async
+			* 不指定 policy
+			* 不保存返回值
+	* 与编译器作对
+		* （八）返回值优化 NRVO（Named Return Value Optimization)
+			* 滥用 std::move
+			* 工厂返回 std::optional
+		* （九）尾递归优化
+		* （十）自动向量化优化
 
 ### Unit Testing
 
