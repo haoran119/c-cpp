@@ -5598,6 +5598,33 @@ int main() {
 
 ##### Set operations (on sorted ranges)
 
+* [std::set_intersection - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/set_intersection)
+	* computes the intersection of two sets (function template)
+	* Constructs a sorted range beginning at d_first consisting of elements that are found in both sorted ranges [first1, last1) and [first2, last2). If some element is found m times in [first1, last1) and n times in [first2, last2), the first std::min(m, n) elements will be copied from the first range to the destination range. The order of equivalent elements is preserved. The resulting range cannot overlap with either of the input ranges.
+```c++
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <iterator>
+int main()
+{
+    std::vector<int> v1{1,2,3,4,5,6,7,8};
+    std::vector<int> v2{        5,  7,  9,10};
+    std::sort(v1.begin(), v1.end());
+    std::sort(v2.begin(), v2.end());
+ 
+    std::vector<int> v_intersection;
+ 
+    std::set_intersection(v1.begin(), v1.end(),
+                          v2.begin(), v2.end(),
+                          std::back_inserter(v_intersection));
+    for(int n : v_intersection)
+        std::cout << n << ' ';
+}
+```
+* [std::set_intersection in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/std-set_intersection-in-cpp/)
+	* find the common elements in two vectors
+
 ##### Heap operations
 
 ##### Minimum/maximum operations
