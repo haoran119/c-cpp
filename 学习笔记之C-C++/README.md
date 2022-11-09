@@ -6066,6 +6066,55 @@ Type relationships
 	* Several cleanup steps are performed
 	* [Exit codes in C/C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/exit-codes-in-c-c-with-examples/)
 		* The purpose of the exit() function is to terminate the execution of a program. The “return 0”(or EXIT_SUCCESS) implies that the code has executed successfully without any error. Exit codes other than “0”(or EXIT_FAILURE) indicate the presence of an error in the code. Among all the exit codes, the codes 1, 2, 126 – 165 and 255 have special meanings and hence these should be avoided for user-defined exit codes.
+```c++
+#include <iostream>
+#include <cstdlib>
+ 
+struct Static
+{
+    ~Static() 
+    {
+        std::cout << "Static destructor\n";
+    }
+};
+ 
+struct Local
+{
+    ~Local() 
+    {
+        std::cout << "Local destructor\n";
+    }
+};
+ 
+Static static_variable; // destructor of this object *will* be called
+ 
+void atexit_handler()
+{
+    std::cout << "atexit handler\n";
+}
+ 
+int main()
+{
+    Local local_variable; // destructor of this object will *not* be called
+    const int result = std::atexit(atexit_handler); // handler will be called
+ 
+    if (result != 0)
+    {
+        std::cerr << "atexit registration failed\n";
+        return EXIT_FAILURE;
+    }
+ 
+    std::cout << "test\n";
+    std::exit(EXIT_FAILURE);
+ 
+    std::cout << "this line will *not* be executed\n";
+}
+/*
+test
+atexit handler
+Static destructor
+*/
+```
 * [EXIT_SUCCESS, EXIT_FAILURE - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/EXIT_status)
 	* The EXIT_SUCCESS and EXIT_FAILURE macros expand into integral expressions that can be used as arguments to the std::exit function (and, therefore, as the values to return from the main function), and indicate program execution status.
 * [std::system - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/system)
