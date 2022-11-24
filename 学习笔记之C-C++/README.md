@@ -8,6 +8,7 @@
 * [C++ Tutorial](https://www.tutorialspoint.com/cplusplus/index.htm)
   * [The C++ Standard Library Tutorial](https://www.tutorialspoint.com/cpp_standard_library/index.htm)
 * [C++ Programming Language - GeeksforGeeks](https://www.geeksforgeeks.org/c-plus-plus/?ref=shm)
+* [Fluent C++ - Jonathan Boccara's blog](https://www.fluentcpp.com/)
 * [Standard C++](https://isocpp.org/)
 	* 标准委员会官方站点，近期的会议、行程、活动、计划。
 * [Open Standards](https://www.open-std.org/)
