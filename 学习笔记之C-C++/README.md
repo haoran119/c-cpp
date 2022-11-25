@@ -1010,6 +1010,7 @@ The value "Hello" already exists in the set.
 			* 对原生数组使用结构化绑定时需要注意的是只有在数组的长度一定的情况下才能使用结构化绑定，且声明的对象个数要和数组长度保持一致。数组作为按值传入的参数时是不能使用结构化绑定的，这个时候数组会退化为相应的指针。
 		* 3.3 std::pair, std::tuple 和 std::array
 	* 4 总结
+* [C++17结构化绑定](https://mp.weixin.qq.com/s/YCxM0kmCmpkfnOwe7XNvaQ)
 * [Structured binding in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/structured-binding-c/)
 * [Structured binding may be the new hotness, but we'll always have std::tie - The Old New Thing](https://devblogs.microsoft.com/oldnewthing/20200925-00/?p=104297)
 	* C++17 introduced structured binding, which lets you assign an expression to multiple variables.
