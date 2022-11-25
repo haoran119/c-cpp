@@ -7492,6 +7492,12 @@ std::string exec(const char* cmd) {
 		* Note: Specifying the underlying type is necessary in forward declarations of enumerations
 * How to set Product Version of .dll files?
 	* MSVS > Project *** > Resource Files > ***.rc > Version > VS_VERSION_INFO > ProductVersion
+* How to encrypt DLL files ?
+	* [开发笔记：如何对【动态链接库】文件进行加密保护？](https://mp.weixin.qq.com/s/cXDoaiuo5cUpxyNEcpzEGQ)
+		* 1.写一个小工具软件，对 DLL 文件进行加密
+		* 2.修改应用程序，对加密的 DLL 文件进行解密
+		* 3.把加密的 DLL 文件解密到内存缓冲区中
+		* 4. Linux 操作系统怎么办？
 
 ### ERROR FIX
 
