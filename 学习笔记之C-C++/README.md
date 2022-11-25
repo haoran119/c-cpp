@@ -6059,6 +6059,9 @@ Type relationships
 
 ###### [Program support utilities](https://en.cppreference.com/w/cpp/utility/program)
 
+#
+Program termination
+* The following functions manage program termination and resource cleanup.
 * Defined in header \<cstdlib>
 * [std::abort - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/abort)
 	* Causes abnormal program termination unless SIGABRT is being caught by a signal handler passed to std::signal and the handler does not return.
@@ -6117,8 +6120,59 @@ atexit handler
 Static destructor
 */
 ```
+* [std::atexit - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/atexit)
+	* registers a function to be called on std::exit() invocation (function)
+	* Registers the function pointed to by func to be called on normal program termination (via std::exit() or returning from the main function)
+	* The functions will be called during the destruction of the static objects, in reverse order: if A was registered before B, then the call to B is made before the call to A. Same applies to the ordering between static object constructors and the calls to atexit: see std::exit (until C++11)
+	* The functions may be called concurrently with the destruction of the objects with static storage duration and with each other, maintaining the guarantee that if registration of A was sequenced-before the registration of B, then the call to B is sequenced-before the call to A, same applies to the sequencing between static object constructors and calls to atexit: see std::exit (since C++11)
+	* The same function may be registered more than once.
+	* If a function exits via an exception, std::terminate is called.
+	* atexit is thread-safe: calling the function from several threads does not induce a data race.
+	* The implementation is guaranteed to support the registration of at least 32 functions. The exact limit is implementation-defined.
+```c++
+#include <iostream>
+#include <cstdlib>
+ 
+void atexit_handler_1() 
+{
+    std::cout << "at exit #1\n";
+}
+ 
+void atexit_handler_2() 
+{
+    std::cout << "at exit #2\n";
+}
+ 
+int main() 
+{
+    const int result_1 = std::atexit(atexit_handler_1);
+    const int result_2 = std::atexit(atexit_handler_2);
+ 
+    if ((result_1 != 0) || (result_2 != 0)) {
+        std::cerr << "Registration failed\n";
+        return EXIT_FAILURE;
+    }
+ 
+    std::cout << "returning from main\n";
+    return EXIT_SUCCESS;
+}
+/*
+returning from main
+at exit #2
+at exit #1
+*/
+```
 * [EXIT_SUCCESS, EXIT_FAILURE - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/EXIT_status)
 	* The EXIT_SUCCESS and EXIT_FAILURE macros expand into integral expressions that can be used as arguments to the std::exit function (and, therefore, as the values to return from the main function), and indicate program execution status.
+* [Different Ways To Terminate C++ Program - GeeksforGeeks](https://www.geeksforgeeks.org/different-ways-to-terminate-cpp-program/)
+	* The following different methods will be discussed here to terminate a C++ program:
+		* abort() function
+		* terminate() function
+		* exit() function
+
+#
+Communicating with the environment
+* Defined in header \<cstdlib>
 * [std::system - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/system)
 	* Calls the host environment's command processor (e.g. /bin/sh, cmd.exe, command.com) with the parameter command. Returns an implementation-defined value (usually the value that the invoked program returns).
 	* If command is a null pointer, checks if the host environment has a command processor and returns a nonzero value if and only if the command processor exists.
@@ -6156,6 +6210,91 @@ Your PATH is: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/
 * [command line - How to use setenv() to export a variable in c++? - Stack Overflow](https://stackoverflow.com/questions/17929414/how-to-use-setenv-to-export-a-variable-in-c)
 	* `setenv("ROS_HOSTNAME","xxx",1); // does overwrite`
 	* `setenv("ROS_HOSTNAME","xxx",0); // does not overwrite`
+
+#
+Signals
+* Several functions and macro constants for signal management are provided.
+* Defined in header \<csignal>
+* [std::signal - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/signal)
+	* sets a signal handler for particular signal (function)
+	* Sets the handler for signal sig. The signal handler can be set so that default handling will occur, signal is ignored, or a user-defined function is called.
+	* When signal handler is set to a function and a signal occurs, it is implementation defined whether std::signal(sig, SIG_DFL) will be executed immediately before the start of signal handler. Also, the implementation can prevent some implementation-defined set of signals from occurring while the signal handler runs.
+	* For some of the signals, the implementation may call std::signal(sig, SIG_IGN) at the startup of the program. For the rest, the implementation must call std::signal(sig, SIG_DFL).
+	* (Note: POSIX introduced sigaction to standardize these implementation-defined behaviors)
+```c++
+#include <csignal>
+#include <iostream>
+ 
+namespace
+{
+  volatile std::sig_atomic_t gSignalStatus;
+}
+ 
+void signal_handler(int signal)
+{
+  gSignalStatus = signal;
+}
+ 
+int main()
+{
+  // Install a signal handler
+  std::signal(SIGINT, signal_handler);
+ 
+  std::cout << "SignalValue: " << gSignalStatus << '\n';
+  std::cout << "Sending signal: " << SIGINT << '\n';
+  std::raise(SIGINT);
+  std::cout << "SignalValue: " << gSignalStatus << '\n';
+}
+/*
+SignalValue: 0
+Sending signal: 2
+SignalValue: 2
+*/
+```
+* [std::raise - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/raise)
+	* runs the signal handler for particular signal (function)
+	* Sends signal sig to the program. The signal handler (specified using the std::signal() function) is invoked.
+	* If the user-defined signal handling strategy is not set using std::signal() yet, it is implementation-defined whether the signal will be ignored or default handler will be invoked.
+```c++
+#include <csignal>
+#include <iostream>
+ 
+void signal_handler(int signal)
+{
+    std::cout << "Received signal " << signal << '\n';
+}
+ 
+int main()
+{
+    // Install a signal handler
+    std::signal(SIGTERM, signal_handler);
+ 
+    std::cout << "Sending signal " << SIGTERM << '\n';
+    std::raise(SIGTERM);
+}
+/*
+Sending signal 15
+Received signal 15
+*/
+```
+* [SIGTERM, SIGSEGV, SIGINT, SIGILL, SIGABRT, SIGFPE - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/SIG_types)
+	* Each of the above macro constants expands to an integer constant expression with distinct values, which represent different signals sent to the program.
+
+Constant|Explanation
+-|-
+SIGTERM|termination request, sent to the program
+SIGSEGV|invalid memory access (segmentation fault)
+SIGINT|external interrupt, usually initiated by the user
+SIGILL|invalid program image, such as invalid instruction
+SIGABRT|abnormal termination condition, as is e.g. initiated by std::abort()
+SIGFPE|erroneous arithmetic operation such as divide by zero
+
+* [C++ Signal Handling](https://www.tutorialspoint.com/cplusplus/cpp_signal_handling.htm)
+	* Signals are the interrupts delivered to a process by the operating system which can terminate a program prematurely. You can generate interrupts by pressing Ctrl+C on a UNIX, LINUX, Mac OS X or Windows system.
+	* There are signals which can not be caught by the program but there is a following list of signals which you can catch in your program and can take appropriate actions based on the signal. These signals are defined in C++ header file \<csignal>.
+* [Signal Handling in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/signal-handling-in-cpp/)
+* [Shell Scripting - How to send Signal to a Processes - GeeksforGeeks](https://www.geeksforgeeks.org/shell-scripting-how-to-send-signal-to-a-processes/)
+* [UNIX / Linux: 3 Ways to Send Signal to Processes](https://www.thegeekstuff.com/2011/02/send-signal-to-process/)
 
 ###### [Initializer lists](https://en.cppreference.com/w/cpp/utility/initializer_list)
 
