@@ -7397,6 +7397,7 @@ int main()
 			* 工厂返回 std::optional
 		* （九）尾递归优化
 		* （十）自动向量化优化
+* [编译器的优化真是太难了！](https://mp.weixin.qq.com/s/kWW6EeZbZRo6nel8CVy2Qg)
 
 ### Testing
 
