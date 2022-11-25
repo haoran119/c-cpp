@@ -7180,6 +7180,7 @@ int main()
 	* 避坑5  null和nullptr
 		* C++中，新增了关键字nullptr用来标识指针为空，传统是是用NULL判断，但是NULL实际上是一个宏定义，在和整型值进行判定的时候会被当做0值处理。
 		* 实际编程时，在使用现代C++编程时，如果需要判断指针是否为空时建议使用nullptr。
+* [终极 C++避坑指南|6万字长文](https://mp.weixin.qq.com/s/tSEFdJjpQJVrgztIWWwlMw)
 
 #### Memory Leak
 
