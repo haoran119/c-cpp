@@ -6400,6 +6400,11 @@ The contents of the vector are { "Salut", "Salut" }
 			* 一般在模板元编程里面，由于入参的值类型不确定，因此对于forward使用比较多。
 			* 在一般的函数中，如果可以确定传入的一定是右值（临时值），可以直接使用move函数，强调使用场景。
 		* https://github.com/JasonkayZK/cpp-learn/tree/value
+* [Modern C++ 最核心的变化是什么？](https://mp.weixin.qq.com/s/7l6JbX_QMry0DIM9mLUFgw)
+	* https://www.zhihu.com/question/22111546/answer/30801982
+	* 个人觉得最核心的变化是右值引用的引入，右值引用是  C++ 走向现代化的最重要一步。建议每一位 C++ 开发者都应该深入去了解并充分使用它。
+	* 右值引用是 C++11 中最重要的新特性之一，它解决了 C++ 中大量的历史遗留问题，使 C++ 标准库的实现在多种场景下消除了不必要的额外开销（如 std::vector, std::string)，也使得另外一些标准库（如 std::unique_ptr, std::function）成为可能。即使你并不直接使用右值引用，也可以通过标准库，间接从这一新特性中受益。为了更好地理解标准库结合右值引用带来的优化，我们有必要了解一下右值引用的重大意义。
+	* 右值引用的意义通常解释为两大作用：移动语义和完美转发。本文主要讨论移动语义。
 * [F.48: Don’t return std::move(local)](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f48-dont-return-stdmovelocal)
 	* `Reason` With guaranteed copy elision, it is now almost always a pessimization to expressly use std::move in a return statement.
 	* `Example, bad`
