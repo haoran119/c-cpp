@@ -7402,11 +7402,17 @@ int main()
 
 ### Testing
 
-* [c-cpp/学习笔记之Catch2 at main · haoran119/c-cpp](https://github.com/haoran119/c-cpp/tree/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BCatch2)
 * [有哪些好用的代码检查工具](https://mp.weixin.qq.com/s/lcIS5Krv2-Sus9pDYF7DAw)
 	* https://en.wikipedia.org/wiki/List_of_tools_for_static_code_analysis#C,_C++
 	* https://github.com/chengxumiaodaren/cpp-learning
 ![image](https://user-images.githubusercontent.com/34557994/203918278-fe57db3c-5cae-42c3-9e8b-5154c1323d47.png)
+* clangd
+	* [What is clangd?](https://clangd.llvm.org/)
+		* clangd understands your C++ code and adds smart features to your editor: code completion, compile errors, go-to-definition and more.
+		* clangd is a language server that can work with many editors via a plugin. Here’s Visual Studio Code with the clangd plugin, demonstrating code completion:
+		* clangd is based on the Clang C++ compiler, and is part of the LLVM project.
+	* [clangd - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd)
+* [c-cpp/学习笔记之Catch2 at main · haoran119/c-cpp](https://github.com/haoran119/c-cpp/tree/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BCatch2)
 * [C++ 单元测试与代码覆盖率](https://mp.weixin.qq.com/s/QV62sN4ILPGk4Ko-a0ZsfA)
   * 本文以C++语言为基础，讲解如何进行单元测试并生成测试报告。
   * 在工具上，我们会使用下面这些：
