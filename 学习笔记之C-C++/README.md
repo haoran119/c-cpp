@@ -1951,6 +1951,50 @@ int main()
 ##### [std::basic_string_view](https://en.cppreference.com/w/cpp/string/basic_string_view)
 
 * The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
+* [class std::string_view in C++17 - GeeksforGeeks](https://www.geeksforgeeks.org/class-stdstring_view-in-cpp-17/)
+	* Drawback of std::string
+	* Benefits of std::string_view
+	* Parameters In std::string_view
+	* Modification of std::string_view
+	* Non-null Terminated Strings
+	* Conversion Of std::string_view Into std::string
+	* Conversion Of std::string_view To C-style String
+	* Scoping Issues With std::string_view
+	* Execution Of std::string_view with data() Function
+```c++
+// C++ program to implement
+// the above approach
+#include <iostream>
+#include <string>
+#include <string_view>
+using namespace std;
+
+void print(string s)
+{
+    cout << s << '\n';
+}
+
+// Driver code
+int main()
+{
+    string_view str_1{ "Madhav" };
+    str_1.remove_suffix(3);
+
+    // compile error: won't implicitly
+    // convert
+    // print(str_1);
+
+    // explicit conversion
+    string str_2{ str_1 };
+
+    print(str_2);
+
+    // It'll work
+    print(static_cast<string>(str_1));
+
+    return 0;
+}
+```
 * [C++17常用新特性(十五)---std::string_view和std::string差异比较](https://mp.weixin.qq.com/s/NxnPG5cVurxlcpNKdVZ-NQ)
 	* 1 std::string_view和std::string内存分配的不同
 	* 2 std::string_view和std::string的substr()方法性能差异10倍左右
