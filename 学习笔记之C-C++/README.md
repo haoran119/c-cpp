@@ -5318,6 +5318,9 @@ int main() {
 		
 		std::for_each(Map.begin(), Map.end(), CallMyMethod);
 		```
+* [c++ - Raw Loop on an array of bool is 5 times faster than transform or for_each - Stack Overflow](https://stackoverflow.com/questions/56873187/raw-loop-on-an-array-of-bool-is-5-times-faster-than-transform-or-for-each)
+	* In this example, clang vectorizes indexing but (mistakenly) fails to vectorize iterating.
+	* To summarize the results, there is no difference between using a raw loop and using std::transform or std::for_each. There IS, however, a difference between using indexing and using iterating, and for the purposes of this particular problem, clang is better at optimizing indexing than it is at optimizing iterating because indexing gets vectorized. std::transform and std::for_each use iterating, so they end up being slower (when compiled under clang).
 * [std::find, std::find_if, std::find_if_not - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/find)
   * [find_if - C++ Reference](https://www.cplusplus.com/reference/algorithm/find_if/)
     * Find element in range
@@ -5422,6 +5425,7 @@ ordinals: 72 69 76 76 79
 ordinals: 144 138 152 152 158
 */
 ```
+* [std::transform() in C++ STL (Perform an operation on all elements) - GeeksforGeeks](https://www.geeksforgeeks.org/transform-c-stl-perform-operation-elements/)
 * How to transform vector ?
 ```c++
 #include <algorithm>
@@ -5536,6 +5540,21 @@ int main()
 2 : 4
 3 : 6
 */
+```
+* [c++ - What is the difference between std::transform and std::for_each? - Stack Overflow](https://stackoverflow.com/questions/31064749/what-is-the-difference-between-stdtransform-and-stdfor-each#:~:text=std%3A%3Afor_each%20ignores%20the,guarantee%20the%20order%20of%20execution.)
+	* std::transform is the same as map. The idea is to apply a function to each element in between the two iterators and obtain a different container composed of elements resulting from the application of such a function. You may want to use it for, e.g., projecting an object's data member into a new container. In the following, std::transform is used to transform a container of std::strings in a container of std::size_ts.
+	* On the other hand, you execute std::for_each for the sole side effects. In other words, std::for_each closely resembles a plain range-based for loop.
+	* Indeed, starting from C++11 the same can be achieved with a terser notation using range-based for loops
+* [stl - C++ std::transform side effect - Stack Overflow](https://stackoverflow.com/questions/708742/c-stdtransform-side-effect)
+* [How to apply transform to an STL map in C++ - Stack Overflow](https://stackoverflow.com/questions/7879326/how-to-apply-transform-to-an-stl-map-in-c)
+	* You are missing the const in the first type of the pair.
+	* `[](std::pair<const std::string, std::string>& p) {`
+* [c++ - How do I use other values in a vector in a std::transform? - Stack Overflow](https://stackoverflow.com/questions/64191793/how-do-i-use-other-values-in-a-vector-in-a-stdtransform)
+	* You can add lambda capture to store the previous element's value.
+```c++
+std::vector<int> v2(v1.size());
+std::transform(v1.begin(), v1.end(), v2.begin(),
+    [pv = 0](int val) mutable { int nv = pv + val; pv = val; return nv; });
 ```
 * [std::remove, std::remove_if - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/remove)
 	* removes elements satisfying specific criteria (function template)
