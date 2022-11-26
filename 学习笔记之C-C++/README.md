@@ -2467,6 +2467,73 @@ local: Sat Feb 15 10:15:00 2020 PST
 ```
 * [C library function - mktime()](https://www.tutorialspoint.com/c_standard_library/c_function_mktime.htm)
 * [mktime - C++ Reference](https://cplusplus.com/reference/ctime/mktime/)
+* [std::get_time - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/get_time)
+	* parses a date/time value of specified format (function template)
+	* Defined in header \<iomanip>
+	* `template< class CharT > /*unspecified*/ get_time( std::tm* tmb, const CharT* fmt ); (since C++11)`
+	* When used in an expression in >> get_time(tmb, fmt), parses the character input as a date/time value according to format string fmt according to the std::time_get facet of the locale currently imbued in the input stream in. The resultant value is stored in a std::tm object pointed to by tmb.
+```c++
+#include <iostream>
+#include <sstream>
+#include <locale>
+#include <iomanip>
+ 
+int main()
+{
+    std::tm t = {};
+    std::istringstream ss("2011-Februar-18 23:12:34");
+    ss.imbue(std::locale("de_DE.utf-8"));
+    ss >> std::get_time(&t, "%Y-%b-%d %H:%M:%S");
+ 
+    if (ss.fail())
+        std::cout << "Parse failed\n";
+    else
+        std::cout << std::put_time(&t, "%c") << '\n';
+}
+/*
+Sun Feb 18 23:12:34 2011
+*/
+```
+* [std::put_time - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/put_time)
+	* formats and outputs a date/time value according to the specified format (function template)
+	* Defined in header \<iomanip>
+	* `template< class CharT > /*unspecified*/ put_time( const std::tm* tmb, const CharT* fmt ); (since C++11)
+	* When used in an expression out << put_time(tmb, fmt), converts the date and time information from a given calendar time tmb to a character string according to format string fmt, as if by calling std::strftime, std::wcsftime, or analog (depending on CharT), according to the std::time_put facet of the locale currently imbued in the output stream out.
+```c++
+#include <iostream>
+#include <iomanip>
+#include <ctime>
+#include <chrono>
+ 
+int main()
+{
+    std::time_t t = std::time(nullptr);
+    std::tm tm = *std::localtime(&t);
+ 
+    std::cout.imbue(std::locale("ru_RU.utf8"));
+    std::cout << "ru_RU: " << std::put_time(&tm, "%c %Z") << '\n';
+ 
+    std::cout.imbue(std::locale("ja_JP.utf8"));
+    std::cout << "ja_JP: " << std::put_time(&tm, "%c %Z") << '\n';
+
+    auto current_time = std::chrono::system_clock::now();
+    auto current_time_t = std::chrono::system_clock::to_time_t(current_time);
+    std::cout << std::put_time(std::localtime(&current_time_t), "%Y%m%d") << '\n';
+
+    // convert current time to string
+    std::stringstream ss {};
+    ss << std::put_time(std::localtime(&current_time_t), "%Y%m%d");
+    std::cout << ss.str() << '\n';
+    
+    return 0;
+}
+/*
+ru_RU: Сб 26 ноя 2022 07:11:36 CET
+ja_JP: 2022年11月26日 07時11分36秒 CET
+20221126
+20221126
+*/
+```
 
 ###### Constants
 
