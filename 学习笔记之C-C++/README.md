@@ -7113,6 +7113,18 @@ fmod(+5.1, 0) = -nan
     FE_INVALID raised
 */
 ```
+* [std::nan, std::nanf, std::nanl - cppreference.com](https://en.cppreference.com/w/cpp/numeric/math/nan)
+	* not-a-number (NaN) (function)
+	* Defined in header \<cmath>
+	* `float       nanf( const char* arg ); (1)	(since C++11)`
+	* `double      nan( const char* arg ); (2)	(since C++11)`
+	* `long double nanl( const char* arg ); (3)	(since C++11)`
+	* Converts the character string arg into the corresponding quiet NaN value, as if by calling std::strtof, std::strtod, or std::strtold, respectively.
+		* 1) The call std::nanf("n-char-sequence"), where n-char-sequence is a sequence of digits, ASCII letters, and underscores, is equivalent to the call std::strtof("NAN(n-char-sequence)", (char**)nullptr);.
+			* The call std::nanf("") is equivalent to the call std::strtof("NAN()", (char**)nullptr);.
+			* The call std::nanf("string"), where string is neither an n-char-sequence nor an empty string, is equivalent to the call std::strtof("NAN", (char**)nullptr);.
+		* 2) Same as (1), but calls std::strtod instead of std::strtof.
+		* 3) Same as (1), but calls std::strtold instead of std::strtof.
 
 #
 Nearest integer floating point operations
@@ -7196,6 +7208,41 @@ std::lround(LONG_MAX+1.5) = -9223372036854775808
 ```
 * [Round to 2 decimal places in C++ - Java2Blog](https://java2blog.com/round-to-2-decimal-places-cpp/#:~:text=double%20type%20variables.-,Using%20the%20ceil()%20function%20to%20round%20to%202%20decimal,decimal%20places%20in%20C%2B%2B.)
 	* `std::round(x * 100.0) / 100.0`
+
+#
+Classification and comparison
+
+* [std::isnan - cppreference.com](https://en.cppreference.com/w/cpp/numeric/math/isnan)
+	* checks if the given number is NaN (function)
+```c++
+#include <iostream>
+#include <cmath>
+#include <cfloat>
+ 
+int main()
+{
+    std::cout << std::boolalpha
+              << "isnan(NaN) = " << std::isnan(NAN) << '\n'
+              << "isnan(Inf) = " << std::isnan(INFINITY) << '\n'
+              << "isnan(0.0) = " << std::isnan(0.0) << '\n'
+              << "isnan(DBL_MIN/2.0) = " << std::isnan(DBL_MIN/2.0) << '\n'
+              << "isnan(0.0 / 0.0)   = " << std::isnan(0.0/0.0) << '\n'
+              << "isnan(Inf - Inf)   = " << std::isnan(INFINITY - INFINITY) << '\n';
+}
+/*
+isnan(NaN) = true
+isnan(Inf) = false
+isnan(0.0) = false
+isnan(DBL_MIN/2.0) = false
+isnan(0.0 / 0.0)   = true
+isnan(Inf - Inf)   = true
+*/
+```
+* [NaN in C++ - What is it and How to Check For it? - GeeksforGeeks](https://www.geeksforgeeks.org/nan-in-cpp-what-is-it-and-how-to-check-for-it/)
+	* NaN, an acronym for Not a Number is an exception that usually occurs in the cases when an expression results in a number that is undefined or can’t be represented. It is used for floating-point operations. For example:
+		* The square root of negative numbers
+		* Division by zero
+		* Taking the log of zero or a negative number etc.
 
 ###### [Mathematical constants (since C++20)](https://en.cppreference.com/w/cpp/numeric/constants)
 
