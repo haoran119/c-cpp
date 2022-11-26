@@ -5957,6 +5957,15 @@ int main()
 
 ##### Iterator adaptors
 
+* [std::reverse_iterator - cppreference.com](https://en.cppreference.com/w/cpp/iterator/reverse_iterator)
+	* iterator adaptor for reverse-order traversal (class template)
+	* std::reverse_iterator is an iterator adaptor that reverses the direction of a given iterator, which must be at least a LegacyBidirectionalIteratoror model bidirectional_iterator (since C++20). In other words, when provided with a bidirectional iterator, std::reverse_iterator produces a new iterator that moves from the end to the beginning of the sequence defined by the underlying bidirectional iterator.
+	* For a reverse iterator r constructed from an iterator i, the relationship &*r == &*(i-1) is always true (as long as r is dereferenceable); thus a reverse iterator constructed from a one-past-the-end iterator dereferences to the last element in a sequence.
+	* This is the iterator returned by member functions rbegin() and rend() of the standard library containers.
+![image](https://user-images.githubusercontent.com/34557994/204089110-99992bc5-21e4-49a4-a8bd-04a8b1a06bc6.png)
+* [std::make_reverse_iterator - cppreference.com](https://en.cppreference.com/w/cpp/iterator/make_reverse_iterator)
+	* creates a std::reverse_iterator of type inferred from the argument (function template)
+	* make_reverse_iterator is a convenience function template that constructs a std::reverse_iterator for the given iterator i (which must be a LegacyBidirectionalIterator) with the type deduced from the type of the argument.
 * [std::back_inserter - cppreference.com](https://en.cppreference.com/w/cpp/iterator/back_inserter)
 	* creates a std::back_insert_iterator of type inferred from the argument (function template)
 	* back_inserter is a convenient function template that constructs a std::back_insert_iterator for the container c with the type deduced from the type of the argument.
@@ -6036,6 +6045,11 @@ Output:
 			* Advances the iterator it by n element positions.
 			* If it is a random-access iterator, the function uses just once operator+ or operator-. Otherwise, the function uses repeatedly the increase or decrease operator (operator++ or operator--) until n elements have been advanced.
 	* [std::advance in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdadvance-in-cpp/)
+* [std::distance - cppreference.com](https://en.cppreference.com/w/cpp/iterator/distance)
+	* returns the distance between two iterators (function template)
+	* Returns the number of hops from first to last.
+	* The behavior is undefined if last is not reachable from first by (possibly repeatedly) incrementing first. (until C++11)
+	* If InputIt is not LegacyRandomAccessIterator, the behavior is undefined if last is not reachable from first by (possibly repeatedly) incrementing first. If InputIt is LegacyRandomAccessIterator, the behavior is undefined if last is not reachable from first and first is not reachable from last. (since C++11)
 * [std::next - cppreference.com](https://en.cppreference.com/w/cpp/iterator/next)
 	* increment an iterator (function template)
 	* Return the nth successor of iterator it.
