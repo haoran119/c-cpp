@@ -1424,6 +1424,8 @@ for (auto const& x : range | std::views::reverse)
 	* Inline function disadvantages:
 	* Inline function and classes:
 	* What is wrong with macro?
+* [C++ inline 函数简介](https://mp.weixin.qq.com/s/hWIKfl2-aXH0Uamt0LS_RA)
+	* https://dablelv.blog.csdn.net/article/details/52065524
 * [Why are C++ inline functions in the header? - Stack Overflow](https://stackoverflow.com/questions/5057021/why-are-c-inline-functions-in-the-header#:~:text=The%20definition%20of%20an%20inline,definition%20in%20a%20header%20file.)
 	* The definition of an inline function doesn't have to be in a header file but, because of the one definition rule [(ODR)](https://en.cppreference.com/w/cpp/language/definition) for inline functions, an identical definition for the function must exist in every translation unit that uses it.
 	* The easiest way to achieve this is by putting the definition in a header file.
