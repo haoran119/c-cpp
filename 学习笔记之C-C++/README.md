@@ -4450,6 +4450,23 @@ Sequence containers implement data structures which can be accessed sequentially
 	* Insertion or removal of elements at the end - amortized constant 𝓞(1)
 	* Insertion or removal of elements - linear in the distance to the end of the vector 𝓞(n)
 * std::vector (for T other than bool) meets the requirements of Container, AllocatorAwareContainer, SequenceContainer , ContiguousContainer (since C++17) and ReversibleContainer.
+* [std::vector<T,Allocator>::operator= - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/operator%3D)
+	* assigns values to the container (public member function)
+	* Replaces the contents of the container.
+		* 1) Copy assignment operator. Replaces the contents with a copy of the contents of other.
+		* If std::allocator_traits\<allocator_type>::propagate_on_container_copy_assignment::value is true, the allocator of *this is replaced by a copy of that of other. If the allocator of *this after assignment would compare unequal to its old value, the old allocator is used to deallocate the memory, then the new allocator is used to allocate it before copying the elements. Otherwise, the memory owned by *this may be reused when possible. In any case, the elements originally belonging to *this may be either destroyed or replaced by element-wise copy-assignment. (since C++11)
+		* 2) Move assignment operator. Replaces the contents with those of other using move semantics (i.e. the data in other is moved from other into this container). other is in a valid but unspecified state afterwards.
+		* If std::allocator_traits<allocator_type>::propagate_on_container_move_assignment::value is true, the allocator of *this is replaced by a copy of that of other. If it is false and the allocators of *this and other do not compare equal, *this cannot take ownership of the memory owned by other and must move-assign each element individually, allocating additional memory using its own allocator as needed. In any case, all elements originally belonging to *this are either destroyed or replaced by element-wise move-assignment.
+		* 3) Replaces the contents with those identified by initializer list ilist.
+* [std::vector<T,Allocator>::assign - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/assign)
+	* assigns values to the container (public member function)
+	* Replaces the contents of the container.
+		* 1) Replaces the contents with count copies of value value
+		* 2) Replaces the contents with copies of those in the range \[first, last). The behavior is undefined if either argument is an iterator into *this.
+		* This overload has the same effect as overload (1) if InputIt is an integral type. (until C++11)
+		* This overload participates in overload resolution only if InputIt satisfies LegacyInputIterator. (since C++11)
+		* 3) Replaces the contents with the elements from the initializer list ilist.
+	* All iterators, pointers and references to the elements of the container are invalidated. The past-the-end iterator is also invalidated.
 * [std::vector<T,Allocator>::at - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/at)
 	* access specified element with bounds checking (public member function)
 	* Returns a reference to the element at specified location pos, with bounds checking.
@@ -4463,6 +4480,16 @@ Sequence containers implement data structures which can be accessed sequentially
 	* Returns a reverse iterator to the first element of the reversed vector. It corresponds to the last element of the non-reversed vector. If the vector is empty, the returned iterator is equal to rend().
 * [std::vector<T,Allocator>::empty - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/empty)
 	* Checks if the container has no elements, i.e. whether begin() == end().
+* [std::vector<T,Allocator>::reserve - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/reserve)
+	* reserves storage (public member function)
+	* Increase the capacity of the vector (the total number of elements that the vector can hold without requiring reallocation) to a value that's greater or equal to new_cap. If new_cap is greater than the current capacity(), new storage is allocated, otherwise the function does nothing.
+	* reserve() does not change the size of the vector.
+	* If new_cap is greater than capacity(), all iterators, including the past-the-end iterator, and all references to the elements are invalidated. Otherwise, no iterators or references are invalidated.
+* [std::vector<T,Allocator>::shrink_to_fit - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/shrink_to_fit)
+	* reduces memory usage by freeing unused memory (public member function)
+	* Requests the removal of unused capacity.
+	* It is a non-binding request to reduce capacity() to size(). It depends on the implementation whether the request is fulfilled.
+	* If reallocation occurs, all iterators, including the past the end iterator, and all references to the elements are invalidated. If no reallocation takes place, no iterators or references are invalidated.
 * [std::vector<T,Allocator>::clear - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/clear)
 	* Erases all elements from the container. After this call, size() returns zero.
 	* Invalidates any references, pointers, or iterators referring to contained elements. Any past-the-end iterators are also invalidated.  
@@ -4510,6 +4537,13 @@ c.erase(std::remove_if(c.begin(), c.end(), [x](int n) { return n < x; }), c.end(
 		* Note: reserve() is used instead of using “vector\<Point> vertices(3)”, as the below syntax sometimes doesn’t work because there is no default constructor defined in the class.
 	* emplace_back():
 		* This method is used instead of creating the object using parameterized constructor and allocating it into a different memory, then passing it to the copy constructor, which will insert it into the vector. This function can directly insert the object without calling the copy constructor.
+* [std::vector<T,Allocator>::resize - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/resize)
+	* changes the number of elements stored (public member function)
+	* Resizes the container to contain count elements.
+	* If the current size is greater than count, the container is reduced to its first count elements.
+	* If the current size is less than count,
+		* 1) additional default-inserted elements are appended
+		* 2) additional copies of value are appended.
 * [2D Vector In C++ With User Defined Size - GeeksforGeeks](https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/)
 * [vector初始化与否导致的巨大性能差异](https://mp.weixin.qq.com/s/HISHvxxd1LVBwouAE-uZHg)
 	* 最近在优化引擎代码，在优化的过程中发现一个很奇怪的问题，一个简单的对象，存放在std::vector<> v中，如果v定义的时候为每个元素指定初值，那么后面对v中每个元素的写就飞快；相反的，如果v定义的时候，不指定初始值，那么后面对v中元素写操作的时候，就花费大约前一种2-3倍的时间。
