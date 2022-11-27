@@ -3848,10 +3848,9 @@ int main(){
   * Renames the namespace that contains the contents of the type library.
   * #import type-library rename_namespace( "NewName" )
 
-#### Multithreading
+#### [Concurrency support library - cppreference.com](https://en.cppreference.com/w/cpp/thread)
 
-* [Concurrency support library - cppreference.com](https://en.cppreference.com/w/cpp/thread)
-	* C++ includes built-in support for threads, atomic operations, mutual exclusion, condition variables, and futures.
+* C++ includes built-in support for threads, atomic operations, mutual exclusion, condition variables, and futures.
 * [Multithreading in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/multithreading-in-cpp/)
 ```c++
 // CPP program to demonstrate multithreading
