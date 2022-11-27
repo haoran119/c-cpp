@@ -2134,6 +2134,12 @@ int main() {
 			* 3. Other operations you perform on the container and its contents
 		* So clearly, it all depends on the type and size of objects you store, and the type and frequency of the operations you carry out. If the objects you are dealing with are various types of windows, buttons and menus of a GUI application, you will most likely want to use pointers and take advantage of polymorphism. If, on the other hand, you are dealing with huge structures of compact elements, all identical in size and shape, and the operations you perform involve frequent iteration or bulk copying, storing objects directly is perferrable. There may also be situations where the decision is hard to make without trying both and deciding based on the results of memory and time benchmarks.
 	* [c++ - Should I store entire objects, or pointers to objects in containers? - Stack Overflow](https://stackoverflow.com/questions/141337/should-i-store-entire-objects-or-pointers-to-objects-in-containers)
+* [c++ - When should I use raw pointers over smart pointers? - Stack Overflow](https://stackoverflow.com/questions/6675651/when-should-i-use-raw-pointers-over-smart-pointers)
+* [F.7: For general use, take T* or T& arguments rather than smart pointers](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f7-for-general-use-take-t-or-t-arguments-rather-than-smart-pointers)
+* [I.11: Never transfer ownership by a raw pointer (T*) or reference (T&)](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i11-never-transfer-ownership-by-a-raw-pointer-t-or-reference-t)
+* [I.12: Declare a pointer that must not be null as not_null](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i12-declare-a-pointer-that-must-not-be-null-as-not_null)
+* [I.13: Do not pass an array as a single pointer](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i13-do-not-pass-an-array-as-a-single-pointer)
+* [I.27: For stable library ABI, consider the Pimpl idiom](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i27-for-stable-library-abi-consider-the-pimpl-idiom)
 
 ##### [Dynamic memory management](https://en.cppreference.com/w/cpp/memory)
 
@@ -2168,6 +2174,7 @@ int main() {
 	* A shared_ptr may also own no objects, in which case it is called empty (an empty shared_ptr may have a non-null stored pointer if the aliasing constructor was used to create it).
 	* All specializations of shared_ptr meet the requirements of CopyConstructible, CopyAssignable, and LessThanComparable and are contextually convertible to bool.
 	* All member functions (including copy constructor and copy assignment) can be called by multiple threads on different instances of shared_ptr without additional synchronization even if these instances are copies and share ownership of the same object. If multiple threads of execution access the same instance of shared_ptr without synchronization and any of those accesses uses a non-const member function of shared_ptr then a data race will occur; the shared_ptr overloads of atomic functions can be used to prevent the data race.
+* [Smart pointer rule summary - C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-summary-smartptrs)
 * [一文掌握 C++ 智能指针的使用](https://mp.weixin.qq.com/s/bn7BAzBSxgbrkgRMnuy8-A)
   * RAII 与引用计数
   * std::shared_ptr
