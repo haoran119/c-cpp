@@ -1668,6 +1668,15 @@ void S2::f(int i)
 	* [c++ - Capturing a static variable by reference in a C++11 lambda - Stack Overflow](https://stackoverflow.com/questions/13827855/capturing-a-static-variable-by-reference-in-a-c11-lambda)
 		* Why are you even trying to capture bar? It's static. You don't need to capture it at all. Only automatic variables need capturing. Clang throws a hard error on your code, not just a warning. And if you simply remove the &bar from your lambda capture, then the code works perfectly.
 
+##### Callback
+
+* [Callbacks in C - GeeksforGeeks](https://www.geeksforgeeks.org/callbacks-in-c/)
+* [Callback functions in C++ - Stack Overflow](https://stackoverflow.com/questions/2298242/callback-functions-in-c)
+* [众说纷纭的 C 语言回调函数到底是什么鬼？这里有最好的解答！](https://mp.weixin.qq.com/s/GYnKGqdS0Jj4Seh0HlB9Ug)
+* [回调函数 callback 的实现原理是什么？](https://mp.weixin.qq.com/s?__biz=Mzg4OTYzODM4Mw==&mid=2247486528&idx=1&sn=8fdb163df962fb69b9efa72d69a7ca65&chksm=cfe990c0f89e19d67c31bc2a049189d0d6835dd26daa129b7dd22fdaf15a481289fcd0dc2422&scene=21#wechat_redirect)
+	* [10张图让你彻底理解回调函数](https://mp.weixin.qq.com/s?__biz=Mzg4OTYzODM4Mw==&mid=2247485712&idx=1&sn=3d2750dfb693f41b2483b51b60a4f44c&chksm=cfe99590f89e1c860277fe1b22c3731ec4e3b61dbb5cd2a6d9548efbc709104a38d6da812517&scene=21#wechat_redirect)
+	* [高并发高性能服务器是如何实现的](https://mp.weixin.qq.com/s?__biz=Mzg4OTYzODM4Mw==&mid=2247485713&idx=1&sn=369203957fb922371535df891920dbc1&chksm=cfe99591f89e1c87c68a4e931492d86c1d31e9d83a9b500893106c1d0d5959a56d59f11de7d2&scene=21#wechat_redirect)
+
 #### [Strings](https://en.cppreference.com/w/cpp/string)
 
 * The C++ strings library includes support for three general types of strings:
