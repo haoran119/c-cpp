@@ -442,6 +442,11 @@ In programming contests, people do focus more on finding the algorithm to solve 
 	* [C++ Tutorial - Debugging: Core/Memory Dump - 2020](https://www.bogotobogo.com/cplusplus/debugging_core_memory_dump_segmentation_fault_gdb.php)
 		* We can use backtrace to list the call stacks that had been made when the program crashed:
 			* `(gdb) backtrace`
+* How to debug inline functions ?
+	* [c++ - Possible to call inline functions in gdb and/or emit them using GCC? - Stack Overflow](https://stackoverflow.com/questions/22029834/possible-to-call-inline-functions-in-gdb-and-or-emit-them-using-gcc)
+	* [c++ - Cannot evaluate function -- may be inlined - Stack Overflow](https://stackoverflow.com/questions/22163730/cannot-evaluate-function-may-be-inlined)
+	* [Inline Functions - Debugging with GDB](https://www.zeuthen.desy.de/dv/documentation/unixguide/infohtml/gdb/Inline-Functions.html#:~:text=gdb%20displays%20inlined%20functions%20just,using%20the%20info%20frame%20command.)
+	* [Debugging with GDB](https://docs.adacore.com/gdb-docs/html/gdb.html#Commands)
 
 #### Data Types
 
