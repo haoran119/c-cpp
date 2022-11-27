@@ -3848,74 +3848,10 @@ int main(){
   * Renames the namespace that contains the contents of the type library.
   * #import type-library rename_namespace( "NewName" )
 
-#### [Concurrency support library - cppreference.com](https://en.cppreference.com/w/cpp/thread)
+#### [Concurrency support library](https://en.cppreference.com/w/cpp/thread)
 
 * C++ includes built-in support for threads, atomic operations, mutual exclusion, condition variables, and futures.
-* [Multithreading in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/multithreading-in-cpp/)
-```c++
-// CPP program to demonstrate multithreading
-// using three different callables.
-#include <iostream>
-#include <thread>
-using namespace std;
-
-// A dummy function
-void foo(int Z)
-{
-    for (int i = 0; i < Z; i++) {
-        cout << "Thread using function"
-            " pointer as callable\n";
-    }
-}
-
-// A callable object
-class thread_obj {
-public:
-    void operator()(int x)
-    {
-        for (int i = 0; i < x; i++)
-            cout << "Thread using function"
-                " object as callable\n";
-    }
-};
-
-int main()
-{
-    cout << "Threads 1 and 2 and 3 "
-        "operating independently" << endl;
-
-    // This thread is launched by using
-    // function pointer as callable
-    thread th1(foo, 3);
-
-    // This thread is launched by using
-    // function object as callable
-    thread th2(thread_obj(), 3);
-
-    // Define a Lambda Expression
-    auto f = [](int x) {
-        for (int i = 0; i < x; i++)
-            cout << "Thread using lambda"
-            " expression as callable\n";
-    };
-
-    // This thread is launched by using
-    // lamda expression as callable
-    thread th3(f, 3);
-
-    // Wait for the threads to finish
-    // Wait for thread t1 to finish
-    th1.join();
-
-    // Wait for thread t2 to finish
-    th2.join();
-
-    // Wait for thread t3 to finish
-    th3.join();
-
-    return 0;
-}
-```
+* [CP: Concurrency and parallelism - C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-concurrency)
 * [现代 C++ 并发编程基础](https://mp.weixin.qq.com/s/GGIczr97q-RxAfAnQKeDRg)
   * https://changkun.de/modern-cpp/zh-cn/07-thread/index.html
   * 并行基础
@@ -3944,6 +3880,7 @@ int main()
 	* 多线程与CPU
 	* 多线程与IO
 	* 多线程与内存
+* [Advanced Parallel Programming in C++ – Patrick Diehl](https://www.diehlpk.de/blog/modern-cpp/)
 * [thread、future、promise、packaged_task、async之间有什么关系？](https://mp.weixin.qq.com/s/fUD4HxtUNhnpVlqGNAbc6Q)
 	* 并发编程一般指多线程编程，C++11之后关于多线程编程有几个高级API：
 		* std::thread 
@@ -4099,6 +4036,71 @@ bar: 10000
 		* resource_deadlock_would_occur if this->get_id() == std::this_thread::get_id() (deadlock detected)
 		* no_such_process if the thread is not valid
 		* invalid_argument if joinable() is false
+* [Multithreading in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/multithreading-in-cpp/)
+```c++
+// CPP program to demonstrate multithreading
+// using three different callables.
+#include <iostream>
+#include <thread>
+using namespace std;
+
+// A dummy function
+void foo(int Z)
+{
+    for (int i = 0; i < Z; i++) {
+        cout << "Thread using function"
+            " pointer as callable\n";
+    }
+}
+
+// A callable object
+class thread_obj {
+public:
+    void operator()(int x)
+    {
+        for (int i = 0; i < x; i++)
+            cout << "Thread using function"
+                " object as callable\n";
+    }
+};
+
+int main()
+{
+    cout << "Threads 1 and 2 and 3 "
+        "operating independently" << endl;
+
+    // This thread is launched by using
+    // function pointer as callable
+    thread th1(foo, 3);
+
+    // This thread is launched by using
+    // function object as callable
+    thread th2(thread_obj(), 3);
+
+    // Define a Lambda Expression
+    auto f = [](int x) {
+        for (int i = 0; i < x; i++)
+            cout << "Thread using lambda"
+            " expression as callable\n";
+    };
+
+    // This thread is launched by using
+    // lamda expression as callable
+    thread th3(f, 3);
+
+    // Wait for the threads to finish
+    // Wait for thread t1 to finish
+    th1.join();
+
+    // Wait for thread t2 to finish
+    th2.join();
+
+    // Wait for thread t3 to finish
+    th3.join();
+
+    return 0;
+}
+```
 * [用三个线程按顺序循环打印ABC三个字母 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/8575543.html)
 * [C++ 线程的使用](https://mp.weixin.qq.com/s/tMWxvw4Kmga5ayUfXHaaIw)
   * C++11 之前，C++ 语言没有对并发编程提供语言级别的支持，这使得我们在编写可移植的并发程序时，存在诸多的不便。现在 C++11 中增加了线程以及线程相关的类，很方便地支持了并发编程，使得编写的多线程程序的可移植性得到了很大的提高。
@@ -4113,6 +4115,89 @@ bar: 10000
   * 3. 静态函数
   * 4. C 线程库
     * [C语言线程库的使用](https://mp.weixin.qq.com/s?__biz=MzI3ODQ3OTczMw==&mid=2247491745&idx=1&sn=d995e1617ed6ad3d56de28b5be127e73&scene=21#wechat_redirect)
+* How to insert into vector with thread safe ?
+	* [multithreading - C++ STL Concurrent update to values in fixed size map - Is it safe? - Stack Overflow](https://stackoverflow.com/questions/47309237/c-stl-concurrent-update-to-values-in-fixed-size-map-is-it-safe)
+	* [c++ - Can a std::map rebalance during the invocation of a const function? - Stack Overflow](https://stackoverflow.com/questions/26867435/can-a-stdmap-rebalance-during-the-invocation-of-a-const-function/26867506#26867506)
+	* [c++ - Can different threads insert into a map if they always use different keys? - Stack Overflow](https://stackoverflow.com/questions/27829806/can-different-threads-insert-into-a-map-if-they-always-use-different-keys)
+	* [c++ - Populating a vector in parallel, order not important - Stack Overflow](https://stackoverflow.com/questions/41191945/populating-a-vector-in-parallel-order-not-important)
+	* [c++ - Why does vector "emplace_back" behave much slower in multiple threads than single threads - Stack Overflow](https://stackoverflow.com/questions/57343773/why-does-vector-emplace-back-behave-much-slower-in-multiple-threads-than-singl)
+	* [c++ - Are std::vector emplace_back and push_back thread-safe - Stack Overflow](https://stackoverflow.com/questions/66471521/are-stdvector-emplace-back-and-push-back-thread-safe)
+	* [c++ - Are concurrent calls to emplace_back() and operator[]() from std::deque thread safe? - Stack Overflow](https://stackoverflow.com/questions/41001062/are-concurrent-calls-to-emplace-back-and-operator-from-stddeque-thread-s)
+	* [c++ - Fill a container from several threads - Code Review Stack Exchange](https://codereview.stackexchange.com/questions/104975/fill-a-container-from-several-threads)
+	* [(2) How do I know if a thread has finished its operation in C++? - Quora](https://www.quora.com/How-do-I-know-if-a-thread-has-finished-its-operation-in-C++)
+	* [(2) How can I know when a thread has finished? I want to check if a thread has finished and update some data structure. - Quora](https://www.quora.com/How-can-I-know-when-a-thread-has-finished-I-want-to-check-if-a-thread-has-finished-and-update-some-data-structure)
+	* [a simple thread example to show thread-safe vector operation](https://gist.github.com/phg1024/8447146)
+```c++
+#include <iostream>
+#include <mutex>
+#include <string>
+#include <thread>
+#include <vector>
+using namespace std;
+
+int main()
+{
+    std::vector<std::string>    v_values{"test1", "test2", "test3", "test4"};
+    std::vector<std::string>    v_results;
+    v_results.reserve(v_values.size());
+
+    std::cout << "std::thread::hardware_concurrency() : " << std::thread::hardware_concurrency() << "\n";
+    auto max_n_threads = std::thread::hardware_concurrency();
+    const auto n_threads = (v_values.size() >= max_n_threads) ? max_n_threads : v_values.size();
+    std::cout << "n_threads : " << n_threads << "\n";
+
+    std::vector<std::thread> v_threads;
+    v_threads.reserve(n_threads);
+
+    std::mutex  mtx_results;
+    auto cmd = [&v_values, &n_threads, &mtx_results, &v_results](auto id) {
+        std::cout << "id : " << id << "\n";
+        auto s = ""s;
+
+        for (auto i = id; i < v_values.size(); i += n_threads) {
+            s = v_values.at(i);
+            auto new_s = s.append("_result");
+            const std::lock_guard<std::mutex> guard(mtx_results);   // lock required
+            v_results.emplace_back(new_s);
+        }
+    };
+
+    for (auto i = 0u; i < n_threads; ++ i) {
+        v_threads.emplace_back(std::thread{cmd, i});
+    }
+
+    auto thread_count = 0;
+    for (auto& it : v_threads) {
+        std::cout << "Joining  : " << thread_count << " : " << it.get_id() << "\n";
+
+        if (it.joinable()) {
+            std::cout << "Joined  : " << thread_count << " : " << it.get_id() << "\n";
+            it.join();
+        }
+
+        ++ thread_count;
+    }
+
+    std::cout << "v_results.size() : " << v_results.size() << "\n";
+    for (auto s : v_results) {
+        std::cout << s << " ";
+    }
+
+    return 0;
+}
+/*
+std::thread::hardware_concurrency() : 2
+n_threads : 2
+Joining  : 0 : 140660807714560
+Joined  : 0 : 140660807714560
+id : 0
+Joining  : 1 : 140660799321856
+Joined  : 1 : 140660799321856
+id : 1
+v_results.size() : 4
+test1_result test3_result test2_result test4_result 
+*/
+```
 
 ###### Functions managing the current thread
 
