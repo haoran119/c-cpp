@@ -4555,6 +4555,37 @@ Sequence containers implement data structures which can be accessed sequentially
 	* Insertion or removal of elements at the end - amortized constant 𝓞(1)
 	* Insertion or removal of elements - linear in the distance to the end of the vector 𝓞(n)
 * std::vector (for T other than bool) meets the requirements of Container, AllocatorAwareContainer, SequenceContainer , ContiguousContainer (since C++17) and ReversibleContainer.
+* [std::vector<T,Allocator>::vector - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/vector)
+	* constructs the vector (public member function)
+	* Constructs a new container from a variety of data sources, optionally using a user supplied allocator alloc.
+* [Initialize a vector in C++ (7 different ways) - GeeksforGeeks](https://www.geeksforgeeks.org/initialize-a-vector-in-cpp-different-ways/)
+	* 1. Initializing by pushing values one by one 
+	* 2. Specifying size and initializing all values 
+	* 3. Initializing like arrays 
+	* 4. Initializing from an array 
+	* 5. Initializing from another vector 
+	* 6. Initializing all elements with a particular value 
+	* 7. Initialize an array with consecutive numbers using std::iota 
+```c++
+// CPP program to initialize a vector from
+// an array.
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main()
+{
+	int arr[] = { 10, 20, 30 };
+	int n = sizeof(arr) / sizeof(arr[0]);
+
+	vector<int> vect(arr, arr + n);
+
+	for (int x : vect)
+		cout << x << " ";
+
+	return 0;
+}
+```
 * [std::vector<T,Allocator>::operator= - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/operator%3D)
 	* assigns values to the container (public member function)
 	* Replaces the contents of the container.
@@ -4572,6 +4603,9 @@ Sequence containers implement data structures which can be accessed sequentially
 		* This overload participates in overload resolution only if InputIt satisfies LegacyInputIterator. (since C++11)
 		* 3) Replaces the contents with the elements from the initializer list ilist.
 	* All iterators, pointers and references to the elements of the container are invalidated. The past-the-end iterator is also invalidated.
+* [c++ - How to initialize std::vector from C-style array? - Stack Overflow](https://stackoverflow.com/questions/2434196/how-to-initialize-stdvector-from-c-style-array)
+	* Don't forget that you can treat pointers as iterators:
+	* `w_.assign(w, w + len);`
 * [std::vector<T,Allocator>::at - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/at)
 	* access specified element with bounds checking (public member function)
 	* Returns a reference to the element at specified location pos, with bounds checking.
