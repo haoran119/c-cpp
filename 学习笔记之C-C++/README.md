@@ -1348,6 +1348,13 @@ for (auto const& x : range | std::views::reverse)
 
 * [Functions - cppreference.com](https://en.cppreference.com/w/cpp/language/functions)
 * [Functions - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/functions/)
+* [Function Signature](https://redirect.cs.umbc.edu/~chang/cs202/Lectures/modules/m04-overload/slides.php?print#:~:text=Function%20Signature,part%20of%20a%20function%27s%20signature.)
+	* A function's signature includes the function's name and the number, order and type of its formal parameters.
+	* Two overloaded functions must not have the same signature.
+	* The return value is not part of a function's signature.
+	* These two functions have the same signature:
+		* `int Divide (int n, int m) ; `
+		* `double Divide (int n, int m) ;`
 * [进入编译器后，一个函数经历了什么？](https://mp.weixin.qq.com/s/kYilpl4K_XpVDF3gaKoRAQ)
 * [C/C++ 中的 argc，argv 到底是什么？](https://mp.weixin.qq.com/s/Mik2n9oLP-PuFNU3lP48Zw)
 * [exit(0) vs exit(1) in C/C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/exit0-vs-exit1-in-c-c-with-examples/)
