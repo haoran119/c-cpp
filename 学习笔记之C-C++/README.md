@@ -5915,9 +5915,11 @@ int main()
 
 ##### Binary search operations (on sorted ranges)
 
-* [lower_bound - C++ Reference](http://www.cplusplus.com/reference/algorithm/lower_bound/)
-  * Returns an iterator pointing to the first element in the range \[first,last) which does not compare less than val.
-  * [upper_bound - C++ Reference](http://www.cplusplus.com/reference/algorithm/upper_bound/)
+* [std::lower_bound - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/lower_bound)
+  * returns an iterator to the first element not less than the given value (function template)
+  * Returns an iterator pointing to the first element in the range \[first, last) that does not satisfy element < value (or comp(element, value)), (i.e. greater or equal to), or last if no such element is found.
+  * The range \[first, last) must be partitioned with respect to the expression element < value (or comp(element, value)), i.e., all elements for which the expression is true must precede all elements for which the expression is false. A fully-sorted range meets this criterion.
+  * The first version uses operator< to compare the elements, the second version uses the given comparison function comp.
   * [Lower Bound-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-lower-bound/problem)
 ```c++
 #include <cmath>
@@ -5955,6 +5957,11 @@ int main() {
     return 0;
 }
 ```
+* [std::upper_bound - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/upper_bound)
+	* returns an iterator to the first element greater than a certain value (function template)
+	* Returns an iterator pointing to the first element in the range \[first, last) such that value < element (or comp(value, element)) is true (i.e. strictly greater), or last if no such element is found.
+	* The range \[first, last) must be partitioned with respect to the expression !(value < element) or !comp(value, element), i.e., all elements for which the expression is true must precede all elements for which the expression is false. A fully-sorted range meets this criterion.
+	* The first version uses operator< to compare the elements, the second version uses the given comparison function comp.
 
 ##### Other operations on sorted ranges
 
