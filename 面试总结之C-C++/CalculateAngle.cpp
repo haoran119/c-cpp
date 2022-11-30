@@ -19,7 +19,7 @@ double CalculateAngle(int h, int m)
     auto hourAngle{ 0.5 * (h * 60 + m) };
     // minute hand moves 6 degree per minute
     auto minuteAngle{ 6.0 * m };
-    auto angle{ abs(hourAngle - minuteAngle) };
+    auto angle{ std::abs(hourAngle - minuteAngle) };
     angle = std::min(angle, 360 - angle);
 
     return angle;
