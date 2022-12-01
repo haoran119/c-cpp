@@ -5831,6 +5831,47 @@ int main()
 ```
 * [std::swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/swap)
   * [swap() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/swap-in-cpp/)
+* [std::iter_swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/iter_swap)
+	* swaps the elements pointed to by two iterators (function template)
+	* Swaps the values of the elements the given iterators are pointing to.
+```c++
+#include <random>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <functional>
+ 
+template<class ForwardIt>
+void selection_sort(ForwardIt begin, ForwardIt end)
+{
+    for (ForwardIt i = begin; i != end; ++i)
+        std::iter_swap(i, std::min_element(i, end));
+}
+ 
+int main()
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist(-9, +9);
+    std::vector<int> v;
+    std::generate_n(back_inserter(v), 20, bind(dist, gen));
+ 
+    std::cout << "Before sort: " << std::showpos;
+    for (auto e : v)
+        std::cout << e << ' ';
+ 
+    selection_sort(v.begin(), v.end());
+ 
+    std::cout << "\nAfter sort : ";
+    for (auto e : v)
+        std::cout << e << ' ';
+    std::cout << '\n';
+}
+/*
+Before sort: -9 -3 +2 -8 +0 -1 +8 -4 -5 +1 -4 -5 +4 -9 -8 -6 -6 +8 -4 -6 
+After sort : -9 -9 -8 -8 -6 -6 -6 -5 -5 -4 -4 -4 -3 -1 +0 +1 +2 +4 +8 +8
+*/
+```
 * [std::reverse - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/reverse)
 	* reverses the order of elements in a range (function template)
 	* Parameters
