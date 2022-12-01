@@ -3,6 +3,8 @@ Reverse words in a given string - GeeksforGeeks
     https://www.geeksforgeeks.org/reverse-words-in-a-given-string/
 Reverse string without using any temporary variable - GeeksforGeeks
     https://www.geeksforgeeks.org/reverse-string-without-using-any-temporary-variable/
+https://www.geeksforgeeks.org/swap-two-numbers-without-using-temporary-variable/   
+https://practice.geeksforgeeks.org/problems/reverse-words-in-a-given-string5459/1?utm_source=gfg&utm_medium=article&utm_campaign=bottom_sticky_on_article
 */
 
 #include <iostream>
