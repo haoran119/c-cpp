@@ -6266,6 +6266,27 @@ Output:
 			* Advances the iterator it by n element positions.
 			* If it is a random-access iterator, the function uses just once operator+ or operator-. Otherwise, the function uses repeatedly the increase or decrease operator (operator++ or operator--) until n elements have been advanced.
 	* [std::advance in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdadvance-in-cpp/)
+```c++
+#include <iostream>
+#include <iterator>
+#include <vector>
+ 
+int main() 
+{
+    std::vector<int> v{ 3, 1, 4 };
+ 
+    auto vi = v.begin();
+    std::advance(vi, 2);
+    std::cout << *vi << ' ';
+ 
+    vi = v.end();
+    std::advance(vi, -2);
+    std::cout << *vi << '\n';
+}
+/*
+4 1
+*/
+```
 * [std::distance - cppreference.com](https://en.cppreference.com/w/cpp/iterator/distance)
 	* returns the distance between two iterators (function template)
 	* Returns the number of hops from first to last.
@@ -6276,6 +6297,28 @@ Output:
 	* Return the nth successor of iterator it.
 	* Notes
 		* Although the expression ++c.begin() often compiles, it is not guaranteed to do so: c.begin() is an rvalue expression, and there is no LegacyInputIterator requirement that specifies that increment of an rvalue is guaranteed to work. In particular, when iterators are implemented as pointers or its operator++ is lvalue-ref-qualified, ++c.begin() does not compile, while std::next(c.begin()) does.
+```c++
+#include <iostream>
+#include <iterator>
+#include <vector>
+ 
+int main()
+{
+    std::vector<int> v{ 4, 5, 6 };
+ 
+    auto it = v.begin();
+    auto nx = std::next(it, 2);
+    std::cout << *it << ' ' << *nx << '\n';
+ 
+    it = v.end();
+    nx = std::next(it, -2);
+    std::cout << ' ' << *nx << '\n';
+}
+/*
+4 6
+ 5
+*/
+```
 * [std::prev - cppreference.com](https://en.cppreference.com/w/cpp/iterator/prev)
 	* decrement an iterator (function template)
 	* Return the nth predecessor of iterator it.
