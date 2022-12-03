@@ -5648,6 +5648,45 @@ int main() {
 * The class template acts as a wrapper to the underlying container - only a specific set of functions is provided. The stack pushes and pops the element from the back of the underlying container, known as the top of the stack.
 * [std::stack<T,Container>::top - cppreference.com](https://en.cppreference.com/w/cpp/container/stack/top)
 	* Returns reference to the top element in the stack. This is the most recently pushed element. This element will be removed on a call to pop(). Effectively calls c.back().
+```c++
+#include <stack>
+#include <iostream>
+ 
+void reportStackSize(const std::stack<int>& s)
+{
+    std::cout << s.size() << " elements on stack\n";
+}
+ 
+void reportStackTop(const std::stack<int>& s)
+{
+    // Leaves element on stack
+    std::cout << "Top element: " << s.top() << '\n';
+}
+ 
+int main()
+{
+    std::stack<int> s;
+    s.push(2);
+    s.push(6);
+    s.push(51);
+ 
+    reportStackSize(s);
+    reportStackTop(s);
+ 
+    reportStackSize(s);
+    s.pop();
+ 
+    reportStackSize(s);
+    reportStackTop(s);
+}
+/*
+3 elements on stack
+Top element: 51
+3 elements on stack
+2 elements on stack
+Top element: 6
+*/
+```
 
 ###### [std::queue](https://en.cppreference.com/w/cpp/container/queue)
 
