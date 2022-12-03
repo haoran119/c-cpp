@@ -1,5 +1,20 @@
 /*
 https://www.geeksforgeeks.org/tracking-current-maximum-element-in-a-stack/
+
+Given a Stack, keep track of the maximum value in it. The maximum value may be the top element of the stack, but once a new element is pushed or an 
+element is popped from the stack, the maximum element will be now from the rest of the elements.
+
+Examples: 
+
+Input : 4 19 7 14 20
+Output : Max Values in stack are 
+
+         4 19 19 19 20
+
+Input : 40 19 7 14 20 5
+Output :  Max Values in stack are 
+
+         40 40 40 40 40 40
 */
 
 #include <iostream>
