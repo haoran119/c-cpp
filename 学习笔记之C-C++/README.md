@@ -1740,15 +1740,48 @@ void S2::f(int i)
     ```c++
     s.erase(s.find_last_not_of(" \n\r\t")+1);
     ```
-* [string::find - C++ Reference](https://www.cplusplus.com/reference/string/string/find/)
-	* Find content in string
-		* Searches the string for the first occurrence of the sequence specified by its arguments.
-		* When pos is specified, the search only includes characters at or after position pos, ignoring any possible occurrences that include characters before pos.
-		* Notice that unlike member find_first_of, whenever more than one character is being searched for, it is not enough that just one of these characters match, but the entire sequence must match.
-	* [std::basic_string<CharT,Traits,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find)
-		* Return value
-			* Position of the first character of the found substring or [npos](https://en.cppreference.com/w/cpp/string/basic_string/npos) if no such substring is found.
+* [std::basic_string<CharT,Traits,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find)
+	* Return value
+		* Position of the first character of the found substring or [npos](https://en.cppreference.com/w/cpp/string/basic_string/npos) if no such substring is found.
+	* [string::find - C++ Reference](https://www.cplusplus.com/reference/string/string/find/)
+		* Find content in string
+			* Searches the string for the first occurrence of the sequence specified by its arguments.
+			* When pos is specified, the search only includes characters at or after position pos, ignoring any possible occurrences that include characters before pos.
+			* Notice that unlike member find_first_of, whenever more than one character is being searched for, it is not enough that just one of these characters match, but the entire sequence must match.
+* [std::basic_string<CharT,Traits,Allocator>::find_first_not_of - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find_first_not_of)
+	* find first absence of characters (public member function)
+	* Finds the first character equal to none of the characters in the given character sequence. The search considers only the interval \[pos, size()). If the character is not present in the interval, npos will be returned.
+```c++
+#include <string>
+#include <iostream>
+ 
+int main() {
+    std::string to_search = "Some data with %MACROS to substitute";
+ 
+    std::cout << "Before: " << to_search << '\n';
+ 
+    auto pos = std::string::npos;
+    while ((pos = to_search.find('%')) != std::string::npos) {
+        // Permit uppercase letters, lowercase letters and numbers in macro names
+        const auto after = to_search.find_first_not_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                                       "abcdefghijklmnopqrstuvwxyz"
+                                                       "0123456789", pos + 1);
+ 
+        // Now to_search[pos] == '%' and to_search[after] == ' ' (after the 'S')
+ 
+        if(after != std::string::npos)
+            to_search.replace(pos, after - pos, "some very nice macros");
+    }
+ 
+    std::cout << "After: " << to_search << '\n';
+}
+/*
+Before: Some data with %MACROS to substitute
+After: Some data with some very nice macros to substitute
+*/
+```
 * [std::basic_string<CharT,Traits,Allocator>::find_last_not_of - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find_last_not_of)
+	* find last absence of characters (public member function)
 	* Finds the last character equal to none of the characters in the given character sequence. The search considers only the interval [0, pos]. If the character is not present in the interval, npos will be returned.
 	* 1) Finds the last character equal to none of characters in str.
 	* 2) Finds the last character equal to none of characters in the range \[s, s+count). This range can include null characters.
