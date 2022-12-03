@@ -1711,6 +1711,10 @@ void S2::f(int i)
 	* Constructs new string from a variety of data sources and optionally using user supplied allocator alloc.
 * [c++ - Converting int to String of its ASCII - Stack Overflow](https://stackoverflow.com/questions/34462964/converting-int-to-string-of-its-ascii)
 	* `std::string(1, char(97))	// 'a'`
+
+#
+Element access
+
 * [std::basic_string<CharT,Traits,Allocator>::at - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/at)
 	* accesses the specified character with bounds checking (public member function)
 	* Returns a reference to the character at specified location pos. Bounds checking is performed, exception of type std::out_of_range will be thrown on invalid access.
@@ -1720,26 +1724,153 @@ void S2::f(int i)
 		* Throws std::out_of_range if pos >= size().
 	* Complexity
 		* Constant.
-* [string::append - C++ Reference](https://www.cplusplus.com/reference/string/string/append/)
-	* Append to string
-		* Extends the string by appending additional characters at the end of its current value:
-	* Complexity
-		* Unspecified, but generally up to linear in the new string length.
-* [string::c_str - C++ Reference](https://www.cplusplus.com/reference/string/string/c_str/)
-* [string::compare - C++ Reference](https://www.cplusplus.com/reference/string/string/compare/)
-	* Compare strings
-		* Compares the value of the string object (or a substring) to the sequence of characters specified by its arguments.
-		* The compared string is the value of the string object or -if the signature used has a pos and a len parameters- the substring that begins at its character in position pos and spans len characters.
-		* This string is compared to a comparing string, which is determined by the other arguments passed to the function.
+* [std::basic_string<CharT,Traits,Allocator>::c_str - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/c_str)
+	* returns a non-modifiable standard C character array version of the string (public member function)
+	* Returns a pointer to a null-terminated character array with data equivalent to those stored in the string.
+	* The pointer is such that the range \[c_str(); c_str() + size()] is valid and the values in it correspond to the values stored in the string with an additional null character after the last position.
+	* The pointer obtained from c_str() may be invalidated by:
+		* Passing a non-const reference to the string to any standard library function, or
+		* Calling non-const member functions on the string, excluding operator[], at(), front(), back(), begin(), rbegin(), end() and rend() (since C++11).
+	* Writing to the character array accessed through c_str() is undefined behavior.
+	* c_str() and data() perform the same function. (since C++11)
+
+#
+Operations
+
 * [std::basic_string<CharT,Traits,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/erase)
 	* Removes specified characters from the string.
 		1) Removes min(count, size() - index) characters starting at index.
 		2) Removes the character at position.
 		3) Removes the characters in the range \[first, last).
-	* [c++ - How to trim a std::string? - Stack Overflow](https://stackoverflow.com/questions/216823/how-to-trim-a-stdstring)
-    ```c++
-    s.erase(s.find_last_not_of(" \n\r\t")+1);
-    ```
+* [c++ - How to trim a std::string? - Stack Overflow](https://stackoverflow.com/questions/216823/how-to-trim-a-stdstring)
+```c++
+s.erase(s.find_last_not_of(" \n\r\t")+1);
+```
+* [string::append - C++ Reference](https://www.cplusplus.com/reference/string/string/append/)
+	* Append to string
+		* Extends the string by appending additional characters at the end of its current value:
+	* Complexity
+		* Unspecified, but generally up to linear in the new string length.
+* [string::compare - C++ Reference](https://www.cplusplus.com/reference/string/string/compare/)
+	* Compare strings
+		* Compares the value of the string object (or a substring) to the sequence of characters specified by its arguments.
+		* The compared string is the value of the string object or -if the signature used has a pos and a len parameters- the substring that begins at its character in position pos and spans len characters.
+		* This string is compared to a comparing string, which is determined by the other arguments passed to the function.
+* [std::basic_string<CharT,Traits,Allocator>::replace - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/replace)
+	* replaces specified portion of a string (public member function)
+	* Replaces the part of the string indicated by either \[pos, pos + count) or \[first, last) with a new string.
+```c++
+#include <cassert>
+#include <cstddef>
+#include <iostream>
+#include <string>
+#include <string_view>
+ 
+std::size_t replace_all(std::string& inout, std::string_view what, std::string_view with);
+std::size_t remove_all(std::string& inout, std::string_view what);
+void test_replace_remove_all();
+ 
+int main()
+{
+    std::string str{"The quick brown fox jumps over the lazy dog."};
+ 
+    str.replace(10, 5, "red"); // (5)
+ 
+    str.replace(str.begin(), str.begin() + 3, 1, 'A'); // (6)
+ 
+    std::cout << str << "\n\n";
+ 
+    test_replace_remove_all();
+}
+ 
+ 
+std::size_t replace_all(std::string& inout, std::string_view what, std::string_view with)
+{
+    std::size_t count{};
+    for (std::string::size_type pos{};
+         inout.npos != (pos = inout.find(what.data(), pos, what.length()));
+         pos += with.length(), ++count) {
+        inout.replace(pos, what.length(), with.data(), with.length());
+    }
+    return count;
+}
+ 
+std::size_t remove_all(std::string& inout, std::string_view what) {
+    return replace_all(inout, what, "");
+}
+ 
+void test_replace_remove_all()
+{
+    std::string str2{"ftp: ftpftp: ftp:"};
+    std::cout << "#1 " << str2 << '\n';
+ 
+    auto count = replace_all(str2, "ftp", "http");
+    assert(count == 4);
+    std::cout << "#2 " << str2 << '\n';
+ 
+    count = replace_all(str2, "ftp", "http");
+    assert(count == 0);
+    std::cout << "#3 " << str2 << '\n';
+ 
+    count = remove_all(str2, "http");
+    assert(count == 4);
+    std::cout << "#4 " << str2 << '\n';
+}
+/*
+A quick red fox jumps over the lazy dog.
+ 
+#1 ftp: ftpftp: ftp:
+#2 http: httphttp: http:
+#3 http: httphttp: http:
+#4 : : :
+*/
+```
+* [std::basic_string<CharT,Traits,Allocator>::substr - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/substr)
+	* returns a substring (public member function)
+	* Returns a substring \[pos, pos+count). If the requested substring extends past the end of the string, i.e. the count is greater than size() - pos (e.g. if count == npos), the returned substring is \[pos, size()).
+```c++
+#include <string>
+#include <iostream>
+ 
+int main()
+{
+    std::string a = "0123456789abcdefghij";
+ 
+    // count is npos, returns [pos, size())
+    std::string sub1 = a.substr(10);
+    std::cout << sub1 << '\n';
+ 
+    // both pos and pos+count are within bounds, returns [pos, pos+count)
+    std::string sub2 = a.substr(5, 3);
+    std::cout << sub2 << '\n';
+ 
+    // pos is within bounds, pos+count is not, returns [pos, size()) 
+    std::string sub4 = a.substr(a.size()-3, 50);
+    // this is effectively equivalent to
+    // std::string sub4 = a.substr(17, 3);
+    // since a.size() == 20, pos == a.size()-3 == 17, and a.size()-pos == 3
+ 
+    std::cout << sub4 << '\n';
+ 
+    try {
+        // pos is out of bounds, throws
+        std::string sub5 = a.substr(a.size()+3, 50);
+        std::cout << sub5 << '\n';
+    } catch(const std::out_of_range& e) {
+        std::cout << "pos exceeds string size\n";
+    }
+}
+/*
+abcdefghij
+567
+hij
+pos exceeds string size
+*/
+```
+
+#
+Search
+
 * [std::basic_string<CharT,Traits,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find)
 	* Return value
 		* Position of the first character of the found substring or [npos](https://en.cppreference.com/w/cpp/string/basic_string/npos) if no such substring is found.
