@@ -51,7 +51,7 @@ public:
         m_max_stack.pop();
     }
 
-    int getMax() const
+    int get_max() const
     {
         if (m_max_stack.empty()) {
             return std::numeric_limits<int>::min();
@@ -81,16 +81,16 @@ int main()
     auto mySolution = Solution();
 
     std::cout << mySolution.top() << "\n";
-    std::cout << mySolution.getMax() << "\n";
+    std::cout << mySolution.get_max() << "\n";
     mySolution.push(20);
     std::cout << mySolution.top() << "\n";
-    std::cout << mySolution.getMax() << "\n";
+    std::cout << mySolution.get_max() << "\n";
     mySolution.push(10);
     std::cout << mySolution.top() << "\n";
-    std::cout << mySolution.getMax() << "\n";
+    std::cout << mySolution.get_max() << "\n";
     mySolution.push(50);
     std::cout << mySolution.top() << "\n";
-    std::cout << mySolution.getMax() << "\n";
+    std::cout << mySolution.get_max() << "\n";
 
     return 0;
 }
