@@ -24,7 +24,7 @@ Output :  Max Values in stack are
 class Solution
 {
 public:
-    Solution() : m_stack{}, m_maxStack{} {}
+    Solution() : m_stack{}, m_max_stack{} {}
     ~Solution() = default;
 
     // use another stack to store the current maximum element
@@ -32,32 +32,33 @@ public:
     {
         m_stack.push(x);
 
-        if (m_maxStack.empty()) {
-            m_maxStack.push(x);
+        if (m_max_stack.empty()) {
+            m_max_stack.push(x);
             return;
         }
 
-        if (x > m_maxStack.top()) {
-            m_maxStack.push(x);
+        if (x > m_max_stack.top()) {
+            m_max_stack.push(x);
         }
         else {
-            m_maxStack.push(m_maxStack.top());
+            m_max_stack.push(m_max_stack.top());
         }
     }
 
     void pop()
     {
-        m_maxStack.pop();
         m_stack.pop();
+        m_max_stack.pop();
     }
 
     int getMax() const
     {
-        if (m_maxStack.empty()) {
+        if (m_max_stack.empty()) {
             return std::numeric_limits<int>::min();
         }
-
-        return m_maxStack.top();
+        else {
+            return m_max_stack.top();
+        }
     }
 
     int top() const
@@ -65,13 +66,14 @@ public:
         if (m_stack.empty()) {
             return std::numeric_limits<int>::min();
         }
-
-        return m_stack.top();
+        else {
+            return m_stack.top();
+        }
     }
 
 private:
     std::stack<int>     m_stack;
-    std::stack<int>     m_maxStack;
+    std::stack<int>     m_max_stack;
 };
 
 int main()
@@ -92,3 +94,13 @@ int main()
 
     return 0;
 }
+/*
+-2147483648
+-2147483648
+20
+20
+10
+20
+50
+50
+*/
