@@ -1932,6 +1932,47 @@ Search
 			* Searches the string for the first occurrence of the sequence specified by its arguments.
 			* When pos is specified, the search only includes characters at or after position pos, ignoring any possible occurrences that include characters before pos.
 			* Notice that unlike member find_first_of, whenever more than one character is being searched for, it is not enough that just one of these characters match, but the entire sequence must match.
+```c++
+#include <string>
+#include <iostream>
+ 
+void print(std::string::size_type n, std::string const &s)
+{
+    if (n == std::string::npos) {
+        std::cout << "not found\n";
+    } else {
+        std::cout << "found: " << s.substr(n) << '\n';
+    }
+}
+ 
+int main()
+{
+    std::string::size_type n;
+    std::string const s = "This is a string";
+ 
+    // search from beginning of string
+    n = s.find("is");
+    print(n, s);
+ 
+    // search from position 5
+    n = s.find("is", 5);
+    print(n, s);
+ 
+    // find a single character
+    n = s.find('a');
+    print(n, s);
+ 
+    // find a single character
+    n = s.find('q');
+    print(n, s);
+}
+/*
+found: is is a string
+found: is a string
+found: a string
+not found
+*/
+```
 * [std::basic_string<CharT,Traits,Allocator>::find_first_not_of - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find_first_not_of)
 	* find first absence of characters (public member function)
 	* Finds the first character equal to none of the characters in the given character sequence. The search considers only the interval \[pos, size()). If the character is not present in the interval, npos will be returned.
