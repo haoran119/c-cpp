@@ -2069,7 +2069,7 @@ int main()
 ###### MISC
 
 * [How to split a string in C/C++, Python and Java? - GeeksforGeeks](https://www.geeksforgeeks.org/how-to-split-a-string-in-cc-python-and-java/)
-	* Extend the method 1 with delimiter
+    * Extend the method 1 with delimiter
     ```c++
     #include <iostream>
     #include <sstream>
@@ -2093,7 +2093,7 @@ int main()
         std::string a = "How,do,you,do";
 
         auto v_result = get_split_string(a, ',');
-        for (const auto it : v_result) {
+        for (const auto& it : v_result) {
             std::cout << it << '\n';
         }
 
