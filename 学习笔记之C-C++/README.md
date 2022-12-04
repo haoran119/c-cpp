@@ -6143,7 +6143,7 @@ int main() {
 }
 ```
 
-###### [std::multiset - cppreference.com](https://en.cppreference.com/w/cpp/container/multiset)
+###### [std::multiset](https://en.cppreference.com/w/cpp/container/multiset)
 
 * collection of keys, sorted by keys (class template)
 * std::multiset is an associative container that contains a sorted set of objects of type Key. Unlike set, multiple keys with equivalent values are allowed. Sorting is done using the key comparison function Compare. Search, insertion, and removal operations have logarithmic complexity.
@@ -6151,7 +6151,7 @@ int main() {
 * The order of the elements that compare equivalent is the order of insertion and does not change. (since C++11)
 * std::multiset meets the requirements of Container, AllocatorAwareContainer, AssociativeContainer and ReversibleContainer.
 
-###### [std::multimap - cppreference.com](https://en.cppreference.com/w/cpp/container/multimap)
+###### [std::multimap](https://en.cppreference.com/w/cpp/container/multimap)
 
 * collection of key-value pairs, sorted by keys (class template)
 * Multimap is an associative container that contains a sorted list of key-value pairs, while permitting multiple entries with the same key. Sorting is done according to the comparison function Compare, applied to the keys. Search, insertion, and removal operations have logarithmic complexity.
