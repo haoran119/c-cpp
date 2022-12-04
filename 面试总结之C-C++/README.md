@@ -784,10 +784,11 @@ int main()
 * 要在C++防止对象被复制，有什么方法
   * [Explicitly Defaulted and Deleted Functions | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/explicitly-defaulted-and-deleted-functions?view=msvc-160)
   * Pre-C++11 定义一个基类，将其中的拷贝构造函数和赋值构造函数声明为私有private
-  * C++11则可以对拷贝构造函数和赋值构造函数声明为delete
+  * C++11则可以对拷贝构造函数和赋值构造函数声明为`delete`
   * 派生类以私有private的方式继承基类
 * 什么是深浅拷贝?
-  * 浅拷贝是创建了一个对象用一个现成的对象初始化它的时候只是复制了成员(简单赋值)而没有拷贝分配给成员的资源(如给其指针变量成员分配了动态内存); 深拷贝是当一个对象创建时，如果分配了资源，就需要定义自己的拷贝构造函数，使之不但拷贝成员也拷贝分配给它的资源
+  * `浅拷贝`是创建了一个对象用一个现成的对象初始化它的时候只是复制了成员(简单赋值)而没有拷贝分配给成员的资源(如给其指针变量成员分配了动态内存)
+  * `深拷贝`是当一个对象创建时，如果分配了资源，就需要定义自己的拷贝构造函数，使之不但拷贝成员也拷贝分配给它的资源
 
 ## 语言特性相关
 * [namespace in C++ | Set 2 (Extending namespace and Unnamed namespace) - GeeksforGeeks](https://www.geeksforgeeks.org/namespace-in-c-set-2-extending-namespace-and-unnamed-namespace/)
