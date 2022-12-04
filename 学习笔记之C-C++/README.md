@@ -4391,9 +4391,8 @@ int main()
 	* type-parameter-key	-	either `typename` or `class`. There is no difference between these keywords in a type template parameter declaration
 	* type-constraint	-	either the name of a concept or the name of a concept followed by a list of template arguments (in angle brackets). Either way, the concept name may be optionally qualified
 
-##### Class Template
+##### [Class template](https://en.cppreference.com/w/cpp/language/class_template)
 
-* [Class template - cppreference.com](https://en.cppreference.com/w/cpp/language/class_template)
 * [C++ Class Template Specialization | HackerRank](https://www.hackerrank.com/challenges/cpp-class-template-specialization/problem) 
 ```c++
 #include <iostream>
@@ -4471,13 +4470,10 @@ D2::impl()
 	* The curiously recurring template pattern (CRTP) is an idiom in C++ in which a class X derives from a class template instantiation using X itself as a template argument.[1] More generally it is known as F-bound polymorphism, and it is a form of F-bounded quantification.
 * [Curiously recurring template pattern (CRTP) - GeeksforGeeks](https://www.geeksforgeeks.org/curiously-recurring-template-pattern-crtp-2/)
 
-##### Function Template
+##### [Function template](https://en.cppreference.com/w/cpp/language/function_template)
 
-* [Function template - cppreference.com](https://en.cppreference.com/w/cpp/language/function_template)
+##### [Parameter pack](https://en.cppreference.com/w/cpp/language/parameter_pack)
 
-##### Parameter pack
-
-* [Parameter pack(since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/parameter_pack)
 * [C++ Variadics | HackerRank](https://www.hackerrank.com/challenges/cpp-variadics/problem)
 ```c++
 #include <iostream>
