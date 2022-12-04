@@ -2419,6 +2419,7 @@ int main() {
 * Smart pointers enable automatic, exception-safe, object lifetime management.
 * Defined in header \<memory>
 * [std::unique_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr)
+	* smart pointer with unique object ownership semantics (class template)
 	* std::unique_ptr is a smart pointer that owns and manages another object through a pointer and disposes of that object when the unique_ptr goes out of scope.
 	* [std::unique_ptr<T,Deleter>::unique_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/unique_ptr)
 		* (constructor)
@@ -2592,6 +2593,7 @@ D::~D
 */
 ```
 * [std::shared_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/shared_ptr)
+	* smart pointer with shared object ownership semantics (class template)
 	* std::shared_ptr is a smart pointer that retains shared ownership of an object through a pointer. Several shared_ptr objects may own the same object. The object is destroyed and its memory deallocated when either of the following happens:
 		* the last remaining shared_ptr owning the object is destroyed;
 		* the last remaining shared_ptr owning the object is assigned another pointer via operator= or reset().
@@ -2742,6 +2744,67 @@ Resetting cont
 myobj1.use_count() = 1
 cont.use_count() = 0
 MyObj destructed
+*/
+```
+* [std::weak_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/weak_ptr)
+	* weak reference to an object managed by std::shared_ptr (class template)
+	* std::weak_ptr is a smart pointer that holds a non-owning ("weak") reference to an object that is managed by std::shared_ptr. It must be converted to std::shared_ptr in order to access the referenced object.
+	* std::weak_ptr models temporary ownership: when an object needs to be accessed only if it exists, and it may be deleted at any time by someone else, std::weak_ptr is used to track the object, and it is converted to std::shared_ptr to assume temporary ownership. If the original std::shared_ptr is destroyed at this time, the object's lifetime is extended until the temporary std::shared_ptr is destroyed as well.
+	* Another use for std::weak_ptr is to break reference cycles formed by objects managed by std::shared_ptr. If such cycle is orphaned (i.e., there are no outside shared pointers into the cycle), the shared_ptr reference counts cannot reach zero and the memory is leaked. To prevent this, one of the pointers in the cycle can be made weak.
+* [std::weak_ptr\<T>::~weak_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/weak_ptr/~weak_ptr#Example)
+	* Destroys the weak_ptr object. Results in no effect to the managed object.
+	* Example
+		* The program shows the effect of "non-breaking" the cycle of std::shared_ptrs.	
+```c++
+#include <iostream>
+#include <memory>
+#include <variant>
+ 
+class Node {
+    char id;
+    std::variant<std::weak_ptr<Node>, std::shared_ptr<Node>> ptr;
+  public:
+    Node(char id) : id{id} {}
+    ~Node() { std::cout << "  '" << id << "' reclaimed\n"; }
+    /*...*/
+    void assign(std::weak_ptr<Node> p) { ptr = p; }
+    void assign(std::shared_ptr<Node> p) { ptr = p; }
+};
+ 
+enum class shared { all, some };
+ 
+void test_cyclic_graph(const shared x) {
+ 
+    auto A = std::make_shared<Node>('A');
+    auto B = std::make_shared<Node>('B');
+    auto C = std::make_shared<Node>('C');
+ 
+    A->assign(B);
+    B->assign(C);
+ 
+    if (shared::all == x) {
+        C->assign(A);
+        std::cout << "All links are shared pointers";
+    } else {
+        C->assign(std::weak_ptr<Node>(A));
+        std::cout << "One link is a weak_ptr";
+    }
+    /*...*/
+    std::cout << "\nLeaving...\n";
+}
+ 
+int main() {
+    test_cyclic_graph(shared::some);
+    test_cyclic_graph(shared::all); // produces a memory leak
+}
+/*
+One link is a weak_ptr
+Leaving...
+  'A' reclaimed
+  'B' reclaimed
+  'C' reclaimed
+All links are shared pointers
+Leaving...
 */
 ```
 * [Smart pointer rule summary - C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-summary-smartptrs)
