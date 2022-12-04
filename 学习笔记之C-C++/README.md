@@ -2820,6 +2820,40 @@ MyObj destructed
 	* std::weak_ptr is a smart pointer that holds a non-owning ("weak") reference to an object that is managed by std::shared_ptr. It must be converted to std::shared_ptr in order to access the referenced object.
 	* std::weak_ptr models temporary ownership: when an object needs to be accessed only if it exists, and it may be deleted at any time by someone else, std::weak_ptr is used to track the object, and it is converted to std::shared_ptr to assume temporary ownership. If the original std::shared_ptr is destroyed at this time, the object's lifetime is extended until the temporary std::shared_ptr is destroyed as well.
 	* Another use for std::weak_ptr is to break reference cycles formed by objects managed by std::shared_ptr. If such cycle is orphaned (i.e., there are no outside shared pointers into the cycle), the shared_ptr reference counts cannot reach zero and the memory is leaked. To prevent this, one of the pointers in the cycle can be made weak.
+```c++
+#include <iostream>
+#include <memory>
+ 
+std::weak_ptr<int> gw;
+ 
+void observe()
+{
+    std::cout << "gw.use_count() == " << gw.use_count() << "; ";
+    // we have to make a copy of shared pointer before usage:
+    if (std::shared_ptr<int> spt = gw.lock()) {
+        std::cout << "*spt == " << *spt << '\n';
+    }
+    else {
+        std::cout << "gw is expired\n";
+    }
+}
+ 
+int main()
+{
+    {
+        auto sp = std::make_shared<int>(42);
+        gw = sp;
+ 
+        observe();
+    }
+ 
+    observe();
+}
+/*
+gw.use_count() == 1; *spt == 42
+gw.use_count() == 0; gw is expired
+*/
+```
 * [std::weak_ptr\<T>::~weak_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/weak_ptr/~weak_ptr#Example)
 	* Destroys the weak_ptr object. Results in no effect to the managed object.
 	* Example
