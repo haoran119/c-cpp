@@ -348,81 +348,80 @@ Required size of memory|calculated manually|caculated by compiler|caculated by c
 ### 虚继承
 
 * [虚继承 - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/%E8%99%9A%E7%BB%A7%E6%89%BF)
-	* 虚继承 是面向对象编程中的一种技术，是指一个指定的基类，在继承体系结构中，将其成员数据实例共享给也从这个基类型直接或间接派生的其它类。
+	* `虚继承` 是面向对象编程中的一种技术，是指一个指定的基类，在继承体系结构中，将其成员数据实例共享给也从这个基类型直接或间接派生的其它类。
 	* 举例来说：假如类A和类B各自从类X派生（非虚继承且假设类X包含一些数据成员），且类C同时多继承自类A和B，那么C的对象就会拥有两套X的实例数据（可分别独立访问，一般要用适当的消歧义限定符）。但是如果类A与B各自虚继承了类X，那么C的对象就只包含一套类X的实例数据。对于这一概念典型实现的编程语言是C++。
 	* 这一特性在多重继承应用中非常有用，可以使得虚基类对于由它直接或间接派生的类来说，拥有一个共同的基类对象实例。避免由于带有歧义的组合而产生的问题（如“菱形继承问题”）。其原理是，间接派生类（C）穿透了其父类（上面例子中的A与B），实质上直接继承了虚基类X。
-	* 这一概念一般用于“继承”在表现为一个整体，而非几个部分的组合时。在C++中，基类可以通过使用关键字virtual来声明虚继承关系。
-	* 虚基类的初始化
+	* 这一概念一般用于“继承”在表现为一个整体，而非几个部分的组合时。在C++中，基类可以通过使用关键字`virtual`来声明虚继承关系。
+	* `虚基类的初始化`
 		* 由于虚基类是多个派生类共享的基类，因此由谁来初始化虚基类必须明确。C++标准规定，由最派生类直接初始化虚基类。因此，对间接继承了虚基类的类，也必须能直接访问其虚继承来的祖先类，也即应知道其虚继承来的祖先类的地址偏移值。
 		* 例如，常见的“菱形”虚继承例子中，两个派生类、一个最派生类的构造函数的初始化列表中都可以给出虚基类的初始化；但只由最派生类的构造函数实际执行虚基类的初始化。
 	* 虚继承的应用：不可派生的finally类
 		* 一个类如果不希望被继承，类似于Java中的具有finally性质的类，这在C++中可以用虚继承来实现：
-		```c++
-		template<typename T> class MakeFinally{
-			 private:
-					 MakeFinally(){};//只有MakeFinally的友类才可以构造MakeFinally
-					 ~MakeFinally(){};
-			 friend T;
-		};
+    ```c++
+    template<typename T> class MakeFinally{
+        private:
+            MakeFinally(){};//只有MakeFinally的友类才可以构造MakeFinally
+            ~MakeFinally(){};
+        friend T;
+    };
 
-		class MyClass:public virtual  MakeFinally<MyClass>{};//MyClass是不可派生类
+    class MyClass:public virtual  MakeFinally<MyClass>{};//MyClass是不可派生类
 
-		//由于虚继承，所以D要直接负责构造MakeFinally类，从而导致编译报错，所以D作为派生类是不合法的。
-		class D: public MyClass{};
-		//另外，如果D类没有实例化对象，即没有被使用，实际上D类是被编译器忽略掉而不报错
+    //由于虚继承，所以D要直接负责构造MakeFinally类，从而导致编译报错，所以D作为派生类是不合法的。
+    class D: public MyClass{};
+    //另外，如果D类没有实例化对象，即没有被使用，实际上D类是被编译器忽略掉而不报错
 
-
-		int main()
-		{
-		MyClass var1;
-		// D var2;  //这一行编译将导致错误，因为D类的默认构造函数不合法
-		}
-		```
+    int main()
+    {
+        MyClass var1;
+        // D var2;  //这一行编译将导致错误，因为D类的默认构造函数不合法
+    }
+    ```
 * [Virtual inheritance - Wikipedia](https://en.wikipedia.org/wiki/Virtual_inheritance)
 	* This example to illustrates a case where base class A has a constructor variable msg and an additional ancestor E is derived from grandchild class D.
 	* Here, A must be constructed in both D and E. Further, inspection of the variable msg illustrates the how class A becomes a direct base class of its deriving class, as opposed to a base class of any intermediate deriving classed between A and the final deriving class.
-	```c++
-	#include <string>
-	#include <iostream>
+    ```c++
+    #include <string>
+    #include <iostream>
 
-	class A {
-			private:
-					std::string _msg;
-			public:
-					A(std::string x): _msg(x) {}
-					void test(){ std::cout<<"hello from A: "<<_msg <<"\n"; }
-	};
+    class A {
+        private:
+            std::string _msg;
+        public:
+            A(std::string x): _msg(x) {}
+            void test(){ std::cout<<"hello from A: "<<_msg <<"\n"; }
+    };
 
-	// B,C inherit A virtually
-	class B: virtual public A   { public: B(std::string x):A("b"){}  };
-	class C: virtual public A   { public: C(std::string x):A("c"){}  };
+    // B,C inherit A virtually
+    class B: virtual public A   { public: B(std::string x):A("b"){}  };
+    class C: virtual public A   { public: C(std::string x):A("c"){}  };
 
-	// since B,C inherit A virtually, A must be constructed in each child
-	class D: public         B,C { public: D(std::string x):A("d_a"),B("d_b"),C("d_c"){}  };
-	class E: public         D   { public: E(std::string x):A("e_a"),D("e_d"){}  };
+    // since B,C inherit A virtually, A must be constructed in each child
+    class D: public         B,C { public: D(std::string x):A("d_a"),B("d_b"),C("d_c"){}  };
+    class E: public         D   { public: E(std::string x):A("e_a"),D("e_d"){}  };
 
-	// breaks without constructing A
-	// class D: public         B,C { public: D(std::string x):B(x),C(x){}  };
+    // breaks without constructing A
+    // class D: public         B,C { public: D(std::string x):B(x),C(x){}  };
 
-	// breaks without constructing A
-	//class E: public         D   { public: E(std::string x):D(x){}  };
+    // breaks without constructing A
+    //class E: public         D   { public: E(std::string x):D(x){}  };
 
+    int main(int argc, char ** argv)
+    {
+        D d("d");
+        d.test(); // hello from A: d_a
 
-	int main(int argc, char ** argv){
-			D d("d");
-			d.test(); // hello from A: d_a
-
-			E e("e");
-			e.test(); // hello from A: e_a
-	}    
-	```
-* 虚继承用于解决多继承条件下的菱形继承问题（浪费存储空间、存在二义性）。
-* 底层实现原理与编译器相关，一般通过虚基类指针和虚基类表实现，每个虚继承的子类都有一个虚基类指针（占用一个指针的存储空间，4字节）和虚基类表（不占用类对象的存储空间）（需要强调的是，虚基类依旧会在子类里面存在拷贝，只是仅仅最多存在一份而已，并不是不在子类里面了）；当虚继承的子类被当做父类继承时，虚基类指针也会被继承。
-* 实际上，vbptr 指的是虚基类表指针（virtual base table pointer），该指针指向了一个虚基类表（virtual table），虚表中记录了虚基类与本类的偏移地址；通过偏移地址，这样就找到了虚基类成员，而虚继承也不用像普通多继承那样维持着公共基类（虚基类）的两份同样的拷贝，节省了存储空间。
+        E e("e");
+        e.test(); // hello from A: e_a
+    }    
+    ```
+* `虚继承`用于解决`多继承`条件下的`菱形继承`问题（浪费存储空间、存在二义性）。
+* 底层实现原理与编译器相关，一般通过`虚基类指针`和`虚基类表`实现，每个虚继承的子类都有一个虚基类指针（占用一个指针的存储空间，4字节）和虚基类表（不占用类对象的存储空间）（需要强调的是，虚基类依旧会在子类里面存在拷贝，只是仅仅最多存在一份而已，并不是不在子类里面了）；当虚继承的子类被当做父类继承时，虚基类指针也会被继承。
+* 实际上，vbptr 指的是`虚基类表指针（virtual base table pointer）`，该指针指向了一个`虚基类表（virtual table）`，虚表中记录了虚基类与本类的偏移地址；通过偏移地址，这样就找到了虚基类成员，而虚继承也不用像普通多继承那样维持着公共基类（虚基类）的两份同样的拷贝，节省了存储空间。
 
 ### 菱形继承
 
-* The "diamond problem" (sometimes referred to as the "Deadly Diamond of Death") is an ambiguity that arises when two classes B and C inherit from A, and class D inherits from both B and C. If there is a method in A that B and C have overridden, and D does not override it, then which version of the method does D inherit: that of B, or that of C?
+* The `diamond problem` (sometimes referred to as the "Deadly Diamond of Death") is an ambiguity that arises when two classes B and C inherit from A, and class D inherits from both B and C. If there is a method in A that B and C have overridden, and D does not override it, then which version of the method does D inherit: that of B, or that of C?
 * [关于C++中菱形继承的解释和处理](https://mp.weixin.qq.com/s/OBSTK3kvjvqEpbmj8vXzpQ)
 	* 派生类继承父类，同时也会继承父类中的所有成员副本，但如果在继承时一个基类同时被两个子类继承，然后一个新类又分别由上面的两个子类派生出来。这样从某种程度来说就形成了C++中的菱形继承，也可以叫做钻石继承
 ```c++
