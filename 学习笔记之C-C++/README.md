@@ -2436,6 +2436,161 @@ int main() {
 		* provides indexed access to the managed array
 	* [std::make_unique, std::make_unique_for_overwrite - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique)
 		* Constructs an object of type T and wraps it in a std::unique_ptr.
+```c++
+#include <cassert>
+#include <cstdio>
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+ 
+// helper class for runtime polymorphism demo below
+struct B
+{
+    virtual ~B() = default;
+ 
+    virtual void bar() { std::cout << "B::bar\n"; }
+};
+ 
+struct D : B
+{
+    D() { std::cout << "D::D\n"; }
+    ~D() { std::cout << "D::~D\n"; }
+ 
+    void bar() override { std::cout << "D::bar\n"; }
+};
+ 
+// a function consuming a unique_ptr can take it by value or by rvalue reference
+std::unique_ptr<D> pass_through(std::unique_ptr<D> p)
+{
+    p->bar();
+    return p;
+}
+ 
+// helper function for the custom deleter demo below
+void close_file(std::FILE* fp)
+{
+    std::fclose(fp);
+}
+ 
+// unique_ptr-based linked list demo
+struct List
+{
+    struct Node
+    {
+        int data;
+        std::unique_ptr<Node> next;
+    };
+ 
+    std::unique_ptr<Node> head;
+ 
+    ~List()
+    {
+        // destroy list nodes sequentially in a loop, the default destructor
+        // would have invoked its `next`'s destructor recursively, which would
+        // cause stack overflow for sufficiently large lists.
+        while (head)
+            head = std::move(head->next);
+    }
+ 
+    void push(int data)
+    {
+        head = std::unique_ptr<Node>(new Node{data, std::move(head)});
+    }
+};
+ 
+int main()
+{
+    std::cout << "1) Unique ownership semantics demo\n";
+    {
+        // Create a (uniquely owned) resource
+        std::unique_ptr<D> p = std::make_unique<D>();
+ 
+        // Transfer ownership to `pass_through`,
+        // which in turn transfers ownership back through the return value
+        std::unique_ptr<D> q = pass_through(std::move(p));
+ 
+        // `p` is now in a moved-from 'empty' state, equal to `nullptr`
+        assert(!p);
+    }
+ 
+    std::cout << "\n" "2) Runtime polymorphism demo\n";
+    {
+        // Create a derived resource and point to it via base type
+        std::unique_ptr<B> p = std::make_unique<D>();
+ 
+        // Dynamic dispatch works as expected
+        p->bar();
+    }
+ 
+    std::cout << "\n" "3) Custom deleter demo\n";
+    std::ofstream("demo.txt") << 'x'; // prepare the file to read
+    {
+        using unique_file_t = std::unique_ptr<std::FILE, decltype(&close_file)>;
+        unique_file_t fp(std::fopen("demo.txt", "r"), &close_file);
+        if (fp)
+            std::cout << char(std::fgetc(fp.get())) << '\n';
+    } // `close_file()` called here (if `fp` is not null)
+ 
+    std::cout << "\n" "4) Custom lambda-expression deleter and exception safety demo\n";
+    try
+    {
+        std::unique_ptr<D, void(*)(D*)> p(new D, [](D* ptr)
+        {
+            std::cout << "destroying from a custom deleter...\n";
+            delete ptr;
+        });
+ 
+        throw std::runtime_error(""); // `p` would leak here if it were instead a plain pointer
+    }
+    catch (const std::exception&) { std::cout << "Caught exception\n"; }
+ 
+    std::cout << "\n" "5) Array form of unique_ptr demo\n";
+    {
+        std::unique_ptr<D[]> p(new D[3]);
+    } // `D::~D()` is called 3 times
+ 
+    std::cout << "\n" "6) Linked list demo\n";
+    {
+        List wall;
+        for (int beer = 0; beer != 1'000'000; ++beer)
+            wall.push(beer);
+ 
+        std::cout << "1'000'000 bottles of beer on the wall...\n";
+    } // destroys all the beers
+}
+/*
+1) Unique ownership semantics demo
+D::D
+D::bar
+D::~D
+ 
+2) Runtime polymorphism demo
+D::D
+D::bar
+D::~D
+ 
+3) Custom deleter demo
+x
+ 
+4) Custom lambda-expression deleter and exception safety demo
+D::D
+destroying from a custom deleter...
+D::~D
+Caught exception
+ 
+5) Array form of unique_ptr demo
+D::D
+D::D
+D::D
+D::~D
+D::~D
+D::~D
+ 
+6) Linked list demo
+1'000'000 bottles of beer on the wall...
+*/
+```
 * [std::shared_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/shared_ptr)
 	* std::shared_ptr is a smart pointer that retains shared ownership of an object through a pointer. Several shared_ptr objects may own the same object. The object is destroyed and its memory deallocated when either of the following happens:
 		* the last remaining shared_ptr owning the object is destroyed;
@@ -2445,6 +2600,150 @@ int main() {
 	* A shared_ptr may also own no objects, in which case it is called empty (an empty shared_ptr may have a non-null stored pointer if the aliasing constructor was used to create it).
 	* All specializations of shared_ptr meet the requirements of CopyConstructible, CopyAssignable, and LessThanComparable and are contextually convertible to bool.
 	* All member functions (including copy constructor and copy assignment) can be called by multiple threads on different instances of shared_ptr without additional synchronization even if these instances are copies and share ownership of the same object. If multiple threads of execution access the same instance of shared_ptr without synchronization and any of those accesses uses a non-const member function of shared_ptr then a data race will occur; the shared_ptr overloads of atomic functions can be used to prevent the data race.
+```c++
+#include <memory>
+#include <iostream>
+ 
+struct MyObj
+{
+    MyObj()
+    {
+        std::cout<<"MyObj construced" <<std::endl;
+    }
+ 
+    ~MyObj()
+    {
+        std::cout<<"MyObj destructed" <<std::endl;
+    }
+};
+ 
+struct Container : std::enable_shared_from_this<Container> // note: public inheritance
+{
+    void CreateMember()
+    {
+        memberObj = std::make_shared<MyObj>();
+    }
+    std::shared_ptr<MyObj> memberObj;
+ 
+    std::shared_ptr<MyObj> GetAsMyObj()
+    {
+        // Use an alias shared ptr for member
+        return std::shared_ptr<MyObj>(shared_from_this(), memberObj.get());
+    }
+};
+ 
+ 
+void test()
+{
+ 
+    std::shared_ptr<Container> cont = std::make_shared<Container>();
+    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
+    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
+ 
+    std::cout << "Creating member\n\n";
+    cont->CreateMember();
+    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
+    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
+ 
+    std::cout << "Creating another shared container\n\n";
+    std::shared_ptr<Container> cont2 = cont;
+    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
+    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
+    std::cout << "cont2.use_count() = " << cont2.use_count() << '\n';
+    std::cout << "cont2.memberObj.use_count() = " << cont2->memberObj.use_count() << '\n';
+ 
+    std::cout << "GetAsMyObj\n\n";
+    std::shared_ptr<MyObj> myobj1 = cont->GetAsMyObj();
+    std::cout << "myobj1.use_count() = " << myobj1.use_count() << '\n';
+    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
+    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
+    std::cout << "cont2.use_count() = " << cont2.use_count() << '\n';
+    std::cout << "cont2.memberObj.use_count() = " << cont2->memberObj.use_count() << '\n';
+ 
+    std::cout << "copying alias obj\n\n";
+    std::shared_ptr<MyObj> myobj2 = myobj1;
+    std::cout << "myobj1.use_count() = " << myobj1.use_count() << '\n';
+    std::cout << "myobj2.use_count() = " << myobj2.use_count() << '\n';
+ 
+    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
+    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
+    std::cout << "cont2.use_count() = " << cont2.use_count() << '\n';
+    std::cout << "cont2.memberObj.use_count() = " << cont2->memberObj.use_count() << '\n';
+ 
+    std::cout << "Resetting cont2\n\n";
+    cont2.reset();
+    std::cout << "myobj1.use_count() = " << myobj1.use_count() << '\n';
+    std::cout << "myobj2.use_count() = " << myobj2.use_count() << '\n';
+ 
+    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
+    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
+ 
+    std::cout << "Resetting myobj2\n\n";
+    myobj2.reset();
+    std::cout << "myobj1.use_count() = " << myobj1.use_count() << '\n';
+    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
+    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
+ 
+    std::cout << "Resetting cont\n\n";
+    cont.reset();
+    std::cout << "myobj1.use_count() = " << myobj1.use_count() << '\n';
+ 
+    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
+ 
+}
+ 
+ 
+int main()
+{
+    test();
+}
+/*
+cont.use_count() = 1
+cont.memberObj.use_count() = 0
+Creating member
+ 
+MyObj construced
+cont.use_count() = 1
+cont.memberObj.use_count() = 1
+Creating another shared container
+ 
+cont.use_count() = 2
+cont.memberObj.use_count() = 1
+cont2.use_count() = 2
+cont2.memberObj.use_count() = 1
+GetAsMyObj
+ 
+myobj1.use_count() = 3
+cont.use_count() = 3
+cont.memberObj.use_count() = 1
+cont2.use_count() = 3
+cont2.memberObj.use_count() = 1
+copying alias obj
+ 
+myobj1.use_count() = 4
+myobj2.use_count() = 4
+cont.use_count() = 4
+cont.memberObj.use_count() = 1
+cont2.use_count() = 4
+cont2.memberObj.use_count() = 1
+Resetting cont2
+ 
+myobj1.use_count() = 3
+myobj2.use_count() = 3
+cont.use_count() = 3
+cont.memberObj.use_count() = 1
+Resetting myobj2
+ 
+myobj1.use_count() = 2
+cont.use_count() = 2
+cont.memberObj.use_count() = 1
+Resetting cont
+ 
+myobj1.use_count() = 1
+cont.use_count() = 0
+MyObj destructed
+*/
+```
 * [Smart pointer rule summary - C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-summary-smartptrs)
 * [一文掌握 C++ 智能指针的使用](https://mp.weixin.qq.com/s/bn7BAzBSxgbrkgRMnuy8-A)
   * RAII 与引用计数
