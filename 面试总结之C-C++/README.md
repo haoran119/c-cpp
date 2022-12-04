@@ -297,7 +297,7 @@ Required size of memory|calculated manually|caculated by compiler|caculated by c
 |Default access is public|	Default access is private|	Default access is public
 |No usage constraints|	No usage constraints|	Use only one member at a time
 |Default inheritance is public	|Default inheritance is private	|-
-|Could not use Template	|Could use Template	|-
+|[not type-parameter-key in Template](https://stackoverflow.com/questions/2520130/why-are-structs-not-allowed-in-template-definitions)	|type-parameter-key in Template	|-
 
 * volatile
   * [volatile_百度百科](http://baike.baidu.com/link?url=gPm-SmXKapujjcPjO3COGYDPSvH4VPOMabuV61XG7kM1kMhwX1AnNxF5_VZDiq7fizEaEfpYKLRBVgRt99BxOK)
