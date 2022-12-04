@@ -1037,6 +1037,8 @@ The value "Hello" already exists in the set.
 		* const volatile object - an object whose type is const-volatile-qualified, a non-mutable subobject of a const volatile object, a const subobject of a volatile object, or a non-mutable volatile subobject of a const object. Behaves as both a const object and as a volatile object.
 	* mutable specifier
 		* mutable - permits modification of the class member declared mutable even if the containing object is declared const.
+		* May appear in the declaration of a non-static class members of non-reference non-const type
+		* Mutable is used to specify that the member does not affect the externally visible state of the class (as often used for mutexes, memo caches, lazy evaluation, and access instrumentation).
 * [P.3: Express intent](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#p3-express-intent)
 	* `Reason` Unless the intent of some code is stated (e.g., in names or comments), it is impossible to tell whether the code does what it is supposed to do.
 	* `Example`
