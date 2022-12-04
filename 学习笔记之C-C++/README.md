@@ -2069,7 +2069,38 @@ int main()
 ###### MISC
 
 * [How to split a string in C/C++, Python and Java? - GeeksforGeeks](https://www.geeksforgeeks.org/how-to-split-a-string-in-cc-python-and-java/)
-	* Method 1: Using stringstream API of C++
+	* Extend the method 1 with delimiter
+    ```c++
+    #include <iostream>
+    #include <sstream>
+    #include <vector>
+
+    std::vector<std::string> get_split_string(const std::string& s, const char delimiter)
+    {
+        std::stringstream ss {s};
+        std::string value {};
+        std::vector<std::string> v_value {};
+
+        while (std::getline(ss, value, delimiter)) {
+            v_value.emplace_back(value);
+        }
+
+        return v_value;
+    };
+
+    int main(int argc, char const* argv[])
+    {
+        std::string a = "How,do,you,do";
+
+        auto v_result = get_split_string(a, ',');
+        for (const auto it : v_result) {
+            std::cout << it << '\n';
+        }
+
+        return 0;
+    }
+    ```
+    * Method 1: Using stringstream API of C++
 		* Stringstream object can be initialized using a string object, it automatically tokenizes strings on space char. Just like “cin” stream stringstream allows you to read a string as a stream of words.
     ```c++
     #include <bits/stdc++.h>
