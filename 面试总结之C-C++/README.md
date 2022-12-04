@@ -1164,7 +1164,7 @@ lexicographical_compare(beg1, end1, beg2, end2, comp);
 
 ## Idioms
 
-* [Curiously Recurring Template Pattern](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#curiously-recurring-template-pattern---cppreferencecom)
+* [Curiously Recurring Template Pattern](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#curiously-recurring-template-pattern-crtp)
 	* The Curiously Recurring Template Pattern is an idiom in which a class X derives from a class template Y, taking a template parameter Z, where Y is instantiated with Z=X.
 	* CRTP may be used to implement "compile-time polymorphism", when a base class exposes an interface, and derived classes implement such interface.
 * [DRY - Don't repeat yourself - Wikipedia](https://en.wikipedia.org/wiki/Don't_repeat_yourself)
