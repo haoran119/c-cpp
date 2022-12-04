@@ -1,5 +1,6 @@
 /*
-C++ Program to remove duplicates from a sorted linked list
+Remove duplicate element from sorted Linked List
+https://practice.geeksforgeeks.org/problems/remove-duplicate-element-from-sorted-linked-list/1?utm_source=gfg&utm_medium=article&utm_campaign=bottom_sticky_on_article
 https://www.geeksforgeeks.org/remove-duplicates-from-a-sorted-linked-list/
 
 Write a function that takes a list sorted in non-decreasing order and deletes any duplicate nodes from the list.
@@ -9,6 +10,102 @@ For example if the linked list is 11->11->11->21->43->43->60
 then removeDuplicates() should convert the list to 11->21->43->60.
 */
 
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node {
+  int data;
+  struct Node *next;
+  Node(int x) {
+    data = x;
+    next = NULL;
+  }
+};
+
+
+void print(Node *root)
+{
+    Node *temp = root;
+    while(temp!=NULL)
+    {
+    cout<<temp->data<<" ";
+    temp=temp->next;
+    }
+}
+Node* removeDuplicates(Node *root);
+int main() {
+	// your code goes here
+	int T;
+	cin>>T;
+
+	while(T--)
+	{
+		int K;
+		cin>>K;
+		Node *head = NULL;
+        Node *temp = head;
+
+		for(int i=0;i<K;i++){
+		int data;
+		cin>>data;
+			if(head==NULL)
+			head=temp=new Node(data);
+			else
+			{
+				temp->next = new Node(data);
+				temp=temp->next;
+			}
+		}
+		
+		Node *result  = removeDuplicates(head);
+		print(result);
+		cout<<endl;
+	}
+	return 0;
+}
+// } Driver Code Ends
+
+
+/*
+struct Node {
+  int data;
+  struct Node *next;
+  Node(int x) {
+    data = x;
+    next = NULL;
+  }
+};*/
+
+//Function to remove duplicates from sorted linked list.
+Node *removeDuplicates(Node *head)
+{
+    // your code goes here
+    if (!head) {
+     return head;
+    }
+    
+    auto p_head{head};
+    
+    while (head->next) {
+        if (head->data == head->next->data) {
+            auto p_temp{head->next}; 
+            head->next = head->next->next;
+
+            delete p_temp;
+            p_temp = nullptr;
+        }
+        // This is tricky: only advance if no deletion
+        else {
+            head = head->next;
+        }
+    }
+    
+    return p_head;
+}
+
+
+/*
 #include <iostream>
 
 // Linked list node
@@ -125,3 +222,4 @@ int main()
 
     return 0;
 }
+*/
