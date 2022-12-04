@@ -3786,7 +3786,7 @@ struct A
  
     A(const A& o) : s(o.s) { std::cout << "move failed!\n"; }
  
-    A(A&& o) : s(std::move(o.s)) {}
+    A(A&& o) noexcept : s(std::move(o.s)) {}
  
     A& operator=(const A& other)
     {
@@ -3795,7 +3795,7 @@ struct A
          return *this;
     }
  
-    A& operator=(A&& other)
+    A& operator=(A&& other) noexcept
     {
          s = std::move(other.s);
          std::cout << "move assigned\n";
