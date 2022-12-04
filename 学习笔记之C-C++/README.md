@@ -6143,6 +6143,22 @@ int main() {
 }
 ```
 
+###### [std::multiset - cppreference.com](https://en.cppreference.com/w/cpp/container/multiset)
+
+* collection of keys, sorted by keys (class template)
+* std::multiset is an associative container that contains a sorted set of objects of type Key. Unlike set, multiple keys with equivalent values are allowed. Sorting is done using the key comparison function Compare. Search, insertion, and removal operations have logarithmic complexity.
+* Everywhere the standard library uses the Compare requirements, equivalence is determined by using the equivalence relation as described on Compare. In imprecise terms, two objects a and b are considered equivalent if neither compares less than the other: !comp(a, b) && !comp(b, a).
+* The order of the elements that compare equivalent is the order of insertion and does not change. (since C++11)
+* std::multiset meets the requirements of Container, AllocatorAwareContainer, AssociativeContainer and ReversibleContainer.
+
+###### [std::multimap - cppreference.com](https://en.cppreference.com/w/cpp/container/multimap)
+
+* collection of key-value pairs, sorted by keys (class template)
+* Multimap is an associative container that contains a sorted list of key-value pairs, while permitting multiple entries with the same key. Sorting is done according to the comparison function Compare, applied to the keys. Search, insertion, and removal operations have logarithmic complexity.
+* The order of the key-value pairs whose keys compare equivalent is the order of insertion and does not change. (since C++11)
+* Everywhere the standard library uses the Compare requirements, equivalence is determined by using the equivalence relation as described on Compare. In imprecise terms, two objects a and b are considered equivalent if neither compares less than the other: !comp(a, b) && !comp(b, a).
+* std::multimap meets the requirements of Container, AllocatorAwareContainer, AssociativeContainer and ReversibleContainer.
+
 ##### Unordered associative
 
 * Unordered associative containers implement unsorted (hashed) data structures that can be quickly searched (O(1) amortized, O(n) worst-case complexity).
