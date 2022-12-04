@@ -22,7 +22,6 @@ Output: 2
 // #include <bits/stdc++.h>
 #include <iostream>
 #include <vector>
-using namespace std;
 
 /*
 DP
@@ -31,34 +30,35 @@ sum of integers lying in the range [1, K], then the transition of states
 can be defined as:
     For i in the range [1, K] and for every j in the range [1, N]
     The value of f[j] is equal to (f[j]+ f[j – i]), for all j ≥ i.
+    f[0] = 1.
 E.g. N = 8, K = 2. f[8] = f[7] + f[6].
     If we add 1 to each way of representing 7, then it could represent 8.
     If we add 2 to each way of representing 6, then it could represent 8.
 Time Complexity: O(N * K)
 */
 int ways(int total, int k) {
-    vector<int> f(total + 1, 0);
+    std::vector<int>    f(total + 1, 0);
 
-    auto mod = 1000000000;
-    f[0] = 1;
+    constexpr auto mod = 1'000'000'000;
+    f.at(0) = 1;
 
     // Need to iterate k in the outer loop and N in the inner loop
     // the order could not be changed.
-    for (auto i = 1; i < k + 1; ++ i) {
-        for (auto j = 1; j < total + 1; ++ j) {
+    for (auto i = 1; i <= k; ++ i) {
+        for (auto j = 1; j <= total; ++ j) {
             if (j >= i) {
-                f[j] = (f[j] + f[j - i]) % mod;
+                f.at(j) = (f.at(j) + f.at(j - i)) % mod;
             }
         }
     }
 
-    for (auto i : f) {
-        cout << i << " ";
+    // 1 1 2 2 3 3 4 4 5
+    for (const auto i : f) {
+        std::cout << i << " ";
     }
-    cout << endl;
+    std::cout << '\n';
 
-
-    return f[total];
+    return f.at(total);
 }
 
 int main()
@@ -67,8 +67,7 @@ int main()
     int k = 2;
 
     int result = ways(total, k);
-
-    cout << result << endl; // 5
+    std::cout << result << std::endl; // 5
 
     return 0;
 }
