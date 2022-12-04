@@ -4433,7 +4433,7 @@ int main()
 }
 ```
 
-###### [Curiously Recurring Template Pattern(CRTP)](https://en.cppreference.com/w/cpp/language/crtp)
+###### [Curiously Recurring Template Pattern (CRTP)](https://en.cppreference.com/w/cpp/language/crtp)
 
 * The Curiously Recurring Template Pattern is an idiom in which a class X derives from a class template Y, taking a template parameter Z, where Y is instantiated with Z=X.
 ```c++
