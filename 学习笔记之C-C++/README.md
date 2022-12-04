@@ -1272,6 +1272,48 @@ int main(){
 
 * Conditionally executes another statement.
 * Used where code needs to be executed based on a run-time or compile-time (since C++17) condition, or whether the if statement is evaluated in a manifestly constant-evaluated context (since C++23).
+* [ES.87: Don’t add redundant == or != to conditions](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#es87-dont-add-redundant--or--to-conditions)
+	* `Reason` Doing so avoids verbosity and eliminates some opportunities for mistakes. Helps make style consistent and conventional.
+	* `Example` By definition, a condition in an if-statement, while-statement, or a for-statement selects between true and false. A numeric value is compared to 0 and a pointer value to nullptr.
+    ```c++
+    // These all mean "if p is not nullptr"
+    if (p) { ... }            // good
+    if (p != 0) { ... }       // redundant !=0, bad: don't use 0 for pointers
+    if (p != nullptr) { ... } // redundant !=nullptr, not recommended
+    ```
+    * Often, if (p) is read as “if p is valid” which is a direct expression of the programmers intent, whereas if (p != nullptr) would be a long-winded workaround.
+    * `Example` This rule is especially useful when a declaration is used as a condition
+    ```c++
+    if (auto pc = dynamic_cast<Circle>(ps)) { ... } // execute if ps points to a kind of Circle, good
+    if (auto pc = dynamic_cast<Circle>(ps); pc != nullptr) { ... } // not recommended
+    ```
+    * `Example` Note that implicit conversions to bool are applied in conditions. For example:
+    * `for (string s; cin >> s; ) v.push_back(s);`
+    * This invokes istream’s operator bool().
+    * `Note` Explicit comparison of an integer to 0 is in general not redundant. The reason is that (as opposed to pointers and Booleans) an integer often has more than two reasonable values. Furthermore 0 (zero) is often used to indicate success. Consequently, it is best to be specific about the comparison.
+    ```c++
+    void f(int i)
+    {
+        if (i)            // suspect
+        // ...
+        if (i == success) // possibly better
+        // ...
+    }
+    ```
+    * Always remember that an integer can have more than two values.
+    * `Example, bad` It has been noted that
+    * `if(strcmp(p1, p2)) { ... }   // are the two C-style strings equal? (mistake!)`
+    * is a common beginners error. If you use C-style strings, you must know the \<cstring> functions well. Being verbose and writing
+    * `if(strcmp(p1, p2) != 0) { ... }   // are the two C-style strings equal? (mistake!)`
+    * would not in itself save you.
+    * `Note` The opposite condition is most easily expressed using a negation:
+    ```c++
+    // These all mean "if p is nullptr"
+    if (!p) { ... }           // good
+    if (p == 0) { ... }       // redundant == 0, bad: don't use 0 for pointers
+    if (p == nullptr) { ... } // redundant == nullptr, not recommended
+    ```
+    * Enforcement Easy, just check for redundant use of != and == in conditions.
 
 ###### If statements with initializer
 
