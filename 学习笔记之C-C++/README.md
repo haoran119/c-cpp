@@ -2354,21 +2354,41 @@ int main() {
 
 * implements high-level string stream output operations (class template)
 * [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
-  * Output stream class to operate on strings.
-  * Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
-  * Characters can be inserted into the stream with any operation allowed on output streams.
-  * [ostringstream::str - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/str/)
-    * string str() const;
-    * void str (const string& s);
-    * Get/set content
-      * The first form (1) returns a string object with a copy of the current contents of the stream.
-      * The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
-      * Internally, the function calls the str member of its internal string buffer object.
+	* Output stream class to operate on strings.
+	* Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
+	* Characters can be inserted into the stream with any operation allowed on output streams.
+	* [ostringstream::str - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/str/)
+	* string str() const;
+	* void str (const string& s);
+	* Get/set content
+		* The first form (1) returns a string object with a copy of the current contents of the stream.
+		* The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
+		* Internally, the function calls the str member of its internal string buffer object.
 
 #### Pointers
 
 * [new expression - cppreference.com](https://en.cppreference.com/w/cpp/language/new)
 	* Creates and initializes objects with dynamic storage duration, that is, objects whose lifetime is not necessarily limited by the scope in which they were created.
+	* Placement new
+    	* If placement-params are provided, they are passed to the allocation function as additional arguments. Such allocation functions are known as "placement new", after the standard allocation function void* operator new(std::size_t, void*), which simply returns its second argument unchanged. This is used to construct objects in allocated storage:
+        ```c++
+        // within any block scope...
+        {
+            // Statically allocate the storage with automatic storage duration
+            // which is large enough for any object of type `T`.
+            alignas(T) unsigned char buf[sizeof(T)];
+
+            T* tptr = new(buf) T; // Construct a `T` object, placing it directly into your 
+                                  // pre-allocated storage at memory address `buf`.
+
+            tptr->~T();           // You must **manually** call the object's destructor
+                                  // if its side effects is depended by the program.
+        }                         // Leaving this block scope automatically deallocates `buf`.
+        ```
+        * Note: this functionality is encapsulated by the member functions of the Allocator classes.
+    * Memory leaks
+        * The objects created by new-expressions (objects with dynamic storage duration) persist until the pointer returned by the new-expression is used in a matching delete-expression. If the original value of pointer is lost, the object becomes unreachable and cannot be deallocated: a memory leak occurs.
+        * To simplify management of dynamically-allocated objects, the result of a new-expression is often stored in a smart pointer: std::auto_ptr (until C++17)std::unique_ptr, or std::shared_ptr (since C++11). These pointers guarantee that the delete expression is executed in the situations shown above.
 * [Placement new operator in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/placement-new-operator-cpp/)
 	* Advantages of placement new operator over new operator
 		* The address of memory allocation is known before hand.
