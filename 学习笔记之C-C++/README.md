@@ -4355,6 +4355,33 @@ int main()
 	* super_lib.h (the only file your clients need to #include)
 	* super_lib_implementation.hpp (your clients do not #include this directly)
 
+##### [Template parameters and template arguments](https://en.cppreference.com/w/cpp/language/template_parameters)
+
+* Every template is parameterized by one or more template parameters, indicated in the parameter-list of the template declaration syntax:
+	* `template < parameter-list > declaration		`
+	* Each parameter in parameter-list may be:
+		* a non-type template parameter;
+		* a type template parameter;
+		* a template template parameter.
+* Non-type template parameter
+	* `type name(optional)	(1)	`
+	* `type name(optional) = default	(2)	`
+	* `type ... name(optional)	(3)	(since C++11)`
+	* `placeholder name	(4)	(since C++17)`
+	* 1) A non-type template parameter with an optional name.
+	* 2) A non-type template parameter with an optional name and a default value.
+	* 3) A non-type template parameter pack with an optional name.
+	* 4) A non-type template parameter with a placeholder type. placeholder may be any type that includes the placeholder auto (such as plain auto, auto ** or auto &), a placeholder for a deduced class type (since C++20), or decltype(auto).
+* Type template parameter
+	* `type-parameter-key name(optional)	(1)	`
+	* `type-parameter-key name(optional) = default	(2)	`
+	* `type-parameter-key ... name(optional)	(3)	(since C++11)`
+	* `type-constraint name(optional)	(4)	(since C++20)`
+	* `type-constraint name(optional) = default	(5)	(since C++20)`
+	* `type-constraint ... name(optional)	(6)	(since C++20)`
+	* type-parameter-key	-	either `typename` or `class`. There is no difference between these keywords in a type template parameter declaration
+	* type-constraint	-	either the name of a concept or the name of a concept followed by a list of template arguments (in angle brackets). Either way, the concept name may be optionally qualified
+
 ##### Class Template
 
 * [Class template - cppreference.com](https://en.cppreference.com/w/cpp/language/class_template)
