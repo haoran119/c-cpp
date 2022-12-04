@@ -7,7 +7,13 @@
 * [[ZZ]软件工程师 C/C++笔试题 - 浩然119 - 博客园 (cnblogs.com)](https://www.cnblogs.com/pegasus923/archive/2010/10/05/1842918.html)
 
 ## RESOURCES
+
 * [Solve C++ | HackerRank](https://www.hackerrank.com/domains/cpp)
+* [C++ Programming Language - GeeksforGeeks](https://www.geeksforgeeks.org/c-plus-plus/?ref=shm#C++inCompetitiveProgramming)
+	* [C++ Interview Questions For Freshers & Experienced - GeeksforGeeks](https://www.geeksforgeeks.org/cpp-interview-questions/)
+	* [Commonly Asked C++ Interview Questions | Set 1 - GeeksforGeeks](https://www.geeksforgeeks.org/commonly-asked-c-interview-questions-set-1/)
+	* [Commonly Asked C++ Interview Questions | Set 2 - GeeksforGeeks](https://www.geeksforgeeks.org/commonly-asked-c-interview-questions-set-2/?ref=lbp)
+	* [C/C++ Programs - GeeksforGeeks](https://www.geeksforgeeks.org/cc-programs/)	
 * [STL Containers - C++ Reference](http://www.cplusplus.com/reference/stl/)
 * [C++ Data Structures and Algorithms Cheat Sheet](https://github.com/gibsjose/cpp-cheat-sheet/blob/master/Data%20Structures%20and%20Algorithms.md)
 * [C 语言与 C++ 面试知识总结 (qq.com)](https://mp.weixin.qq.com/s/x6DMkh54NQBOlDMqNxvf7w)
