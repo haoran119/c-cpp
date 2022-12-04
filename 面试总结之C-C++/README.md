@@ -299,9 +299,12 @@ Required size of memory|calculated manually|caculated by compiler|caculated by c
 |Default inheritance is public	|Default inheritance is private	|-
 |[not type-parameter-key in Template](https://stackoverflow.com/questions/2520130/why-are-structs-not-allowed-in-template-definitions)	|type-parameter-key in Template	|-
 
-* volatile
+* [volatile](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#const-type-qualifier)
   * [volatile_百度百科](http://baike.baidu.com/link?url=gPm-SmXKapujjcPjO3COGYDPSvH4VPOMabuV61XG7kM1kMhwX1AnNxF5_VZDiq7fizEaEfpYKLRBVgRt99BxOK)
-  * [volatile (C++)](https://msdn.microsoft.com/zh-cn/library/12a04hfd.aspx)
+  	* volatile是一个特征修饰符（type specifier）.volatile的作用是作为指令关键字，确保本条指令不会因编译器的优化而省略，且要求每次直接读值。
+  	* volatile的变量是说这变量可能会被意想不到地改变，这样，编译器就不会去假设这个变量的值了。
+  	* 简单地说就是防止编译器对代码进行优化。
+  	* 精确地说就是，编译器在用到这个变量时必须每次都小心地重新读取这个变量的值，而不是使用保存在寄存器里的备份。
 
 ## 面向对象
 
