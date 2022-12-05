@@ -1575,6 +1575,57 @@ int main()
     return 0;
 }   // ~B() ~A()
 ```
+```c++
+#include <iostream>
+#include <memory>
+
+class Base
+{
+public:
+    virtual void print() = 0;
+    // virtual ~Base() = default; // to fix it, uncomment this and get "~Derived() : 1"
+};
+
+class Derived : public Base
+{
+public:
+    Derived(int value) 
+    {
+        m_data = new int;
+        *m_data = value;
+        std::cout << "Derived(" << value << ")" << '\n';
+    }
+
+    ~Derived() 
+    { 
+        std::cout << "~Derived() : " << *m_data << '\n'; 
+    }
+
+    void print() override
+    {
+        std::cout << "print() : " << *m_data << '\n';
+    }
+
+private:
+    int* m_data = nullptr;
+};
+
+int main()
+{
+    {
+        Base* p = new Derived(1); // Derived(1)
+        p->print(); // print() : 1
+        delete p;
+    }
+
+    {
+        std::shared_ptr<Base> p_s = std::make_shared<Derived>(2); // Derived(2)
+        p_s->print();   // Derived(2)
+    }   // ~Derived() : 2
+
+    return 0;
+}
+```
 
 #### STL
 
