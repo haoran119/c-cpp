@@ -5551,6 +5551,39 @@ c.erase(std::remove_if(c.begin(), c.end(), [x](int n) { return n < x; }), c.end(
 	* If the current size is less than count,
 		* 1) additional default-inserted elements are appended
 		* 2) additional copies of value are appended.
+```c++
+#include <iostream>
+#include <vector>
+ 
+int main()
+{
+    std::vector<int> c = {1, 2, 3};
+    std::cout << "The vector holds: ";
+    for (const auto& el: c) std::cout << el << ' ';
+    std::cout << '\n';
+ 
+    c.resize(5);
+    std::cout << "After resize up to 5: ";
+    for (const auto& el: c) std::cout << el << ' ';
+    std::cout << '\n';
+ 
+    c.resize(2);
+    std::cout << "After resize down to 2: ";
+    for (const auto& el: c) std::cout << el << ' ';
+    std::cout << '\n';
+ 
+    c.resize(6, 4);
+    std::cout << "After resize up to 6 (initializer = 4): ";
+    for (const auto& el: c) std::cout << el << ' ';
+    std::cout << '\n';
+}
+/*
+The vector holds: 1 2 3
+After resize up to 5: 1 2 3 0 0
+After resize down to 2: 1 2
+After resize up to 6 (initializer = 4): 1 2 4 4 4 4
+*/
+```
 * [2D Vector In C++ With User Defined Size - GeeksforGeeks](https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/)
 ```c++
 // CPP program
