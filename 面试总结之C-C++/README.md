@@ -805,7 +805,7 @@ int main()
     * The unnamed namespaces you have created will only be accessible within the file you created it in.
     * Unnamed namespaces are the replacement for the static declaration of variables.
   * [Namespaces - cppreference.com](https://en.cppreference.com/w/cpp/language/namespace)
-* 左值和右值的区别？左值引用和右值引用的区别，如何将左值转换成右值？
+* [左值和右值的区别？左值引用和右值引用的区别，如何将左值转换成右值？](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#value-categories)
   * 左值：指表达式结束后依然存在的持久对象。
   * 右值：表达式结束就不再存在的临时对象。
   * 左值和右值的区别：左值持久，右值短暂
