@@ -1021,6 +1021,30 @@ The value "Hello" already exists in the set.
 	* C++17 introduced structured binding, which lets you assign an expression to multiple variables.
 	* However, this is for creating new variables to hold the result. If you want to assign the result to existing variables, then you can use the old standby std::tie.
 
+##### [Value categories - cppreference.com](https://en.cppreference.com/w/cpp/language/value_category)
+
+* Each C++ expression (an operator with its operands, a literal, a variable name, etc.) is characterized by two independent properties: `a type and a value category`. Each expression has some non-reference type, and each expression belongs to exactly one of the `three primary value categories: prvalue, xvalue, and lvalue`.
+* a glvalue (“generalized” lvalue) is an expression whose evaluation determines the identity of an object or function;
+* a prvalue (“pure” rvalue) is an expression whose evaluation
+    * computes the value of an operand of a built-in operator (such prvalue has no result object), or
+    * initializes an object (such prvalue is said to have a result object).
+    * The result object may be a variable, an object created by new-expression, a temporary created by temporary materialization, or a member thereof. Note that non-void discarded expressions have a result object (the materialized temporary). Also, every class and array prvalue has a result object except when it is the operand of decltype;
+* an xvalue (an “eXpiring” value) is a glvalue that denotes an object whose resources can be reused;
+* an lvalue (so-called, historically, because lvalues could appear on the left-hand side of an assignment expression) is a glvalue that is not an xvalue;
+* an rvalue (so-called, historically, because rvalues could appear on the right-hand side of an assignment expression) is a prvalue or an xvalue.
+* [Value Categories: Lvalues and Rvalues (C++) | Microsoft Learn](https://learn.microsoft.com/en-us/cpp/cpp/lvalues-and-rvalues-visual-cpp?view=msvc-170)
+    * The C++17 standard defines expression value categories as follows:
+        * A glvalue is an expression whose evaluation determines the identity of an object, bit-field, or function.
+        * A prvalue is an expression whose evaluation initializes an object or a bit-field, or computes the value of the operand of an operator, as specified by the context in which it appears.
+        * An xvalue is a glvalue that denotes an object or bit-field whose resources can be reused (usually because it is near the end of its lifetime). Example: Certain kinds of expressions involving rvalue references (8.3.2) yield xvalues, such as a call to a function whose return type is an rvalue reference or a cast to an rvalue reference type.
+        * An lvalue is a glvalue that is not an xvalue.
+        * An rvalue is a prvalue or an xvalue.
+    * The following diagram illustrates the relationships between the categories:
+    * ![image](https://user-images.githubusercontent.com/34557994/205634478-11d7da0d-53b8-46d9-8b62-4b97c0fa3e30.png)
+    * `An lvalue has an address that your program can access.` Examples of lvalue expressions include variable names, including const variables, array elements, function calls that return an lvalue reference, bit-fields, unions, and class members.
+    * `A prvalue expression has no address that is accessible by your program.` Examples of prvalue expressions include literals, function calls that return a non-reference type, and temporary objects that are created during expression evaluation but accessible only by the compiler.
+    * `An xvalue expression has an address that no longer accessible by your program but can be used to initialize an rvalue reference, which provides access to the expression.` Examples include function calls that return an rvalue reference, and the array subscript, member and pointer to member expressions where the array or object is an rvalue reference.
+
 #### [Constants/Literals](https://www.tutorialspoint.com/cplusplus/cpp_constants_literals.htm)
 
 #### [Modifier Types](https://www.tutorialspoint.com/cplusplus/cpp_modifier_types.htm)
