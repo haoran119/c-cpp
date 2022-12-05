@@ -1620,7 +1620,7 @@ int main()
 
     {
         std::shared_ptr<Base> p_s = std::make_shared<Derived>(2); // Derived(2)
-        p_s->print();   // Derived(2)
+        p_s->print();   // print() : 2
     }   // ~Derived() : 2
 
     return 0;
