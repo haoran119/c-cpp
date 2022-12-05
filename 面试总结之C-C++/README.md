@@ -14,6 +14,14 @@
 	* [Commonly Asked C++ Interview Questions | Set 1 - GeeksforGeeks](https://www.geeksforgeeks.org/commonly-asked-c-interview-questions-set-1/)
 	* [Commonly Asked C++ Interview Questions | Set 2 - GeeksforGeeks](https://www.geeksforgeeks.org/commonly-asked-c-interview-questions-set-2/?ref=lbp)
 	* [C/C++ Programs - GeeksforGeeks](https://www.geeksforgeeks.org/cc-programs/)	
+* [Containers library - cppreference.com](https://en.cppreference.com/w/cpp/container)
+    * The Containers library is a generic collection of class templates and algorithms that allow programmers to easily implement common data structures like queues, lists and stacks. There are two (until C++11)three (since C++11) classes of containers:
+        * sequence containers,
+        * associative containers, and
+        * unordered associative containers, (since C++11)
+    * each of which is designed to support a different set of operations.
+    * The container manages the storage space that is allocated for its elements and provides member functions to access them, either directly or through iterators (objects with properties similar to pointers).
+    * Most containers have at least several member functions in common, and share functionalities. Which container is the best for the particular application depends not only on the offered functionality, but also on its efficiency for different workloads.
 * [STL Containers - C++ Reference](http://www.cplusplus.com/reference/stl/)
 * [C++ Data Structures and Algorithms Cheat Sheet](https://github.com/gibsjose/cpp-cheat-sheet/blob/master/Data%20Structures%20and%20Algorithms.md)
 * [C 语言与 C++ 面试知识总结 (qq.com)](https://mp.weixin.qq.com/s/x6DMkh54NQBOlDMqNxvf7w)
