@@ -1021,7 +1021,7 @@ The value "Hello" already exists in the set.
 	* C++17 introduced structured binding, which lets you assign an expression to multiple variables.
 	* However, this is for creating new variables to hold the result. If you want to assign the result to existing variables, then you can use the old standby std::tie.
 
-##### [Value categories - cppreference.com](https://en.cppreference.com/w/cpp/language/value_category)
+##### [Value categories](https://en.cppreference.com/w/cpp/language/value_category)
 
 * Each C++ expression (an operator with its operands, a literal, a variable name, etc.) is characterized by two independent properties: `a type and a value category`. Each expression has some non-reference type, and each expression belongs to exactly one of the `three primary value categories: prvalue, xvalue, and lvalue`.
 * a glvalue (“generalized” lvalue) is an expression whose evaluation determines the identity of an object or function;
