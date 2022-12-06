@@ -3235,6 +3235,105 @@ cont.use_count() = 0
 MyObj destructed
 */
 ```
+* [std::shared_ptr\<T>::use_count - cppreference.com](https://en.cppreference.com/w/cpp/memory/shared_ptr/use_count)
+    * returns the number of shared_ptr objects referring to the same managed object (public member function)
+    * Returns the number of different shared_ptr instances (`this` included) managing the current object. If there is no managed object, `0` is returned.
+    * In multithreaded environment, the value returned by use_count is approximate (typical implementations use a memory_order_relaxed load)
+```c++
+#include <memory>
+#include <iostream>
+ 
+void fun(std::shared_ptr<int> sp)
+{
+    std::cout << "in fun(): sp.use_count() == " << sp.use_count()
+              << " (object @ " << sp << ")\n";
+}
+ 
+int main()
+{
+    auto sp1 = std::make_shared<int>(5);
+    std::cout << "in main(): sp1.use_count() == " << sp1.use_count()
+              << " (object @ " << sp1 << ")\n";
+ 
+    fun(sp1);
+}
+/*
+in main(): sp1.use_count() == 1 (object @ 0x20eec30)
+in fun(): sp.use_count() == 2 (object @ 0x20eec30)
+*/
+```
+* [std::make_shared, std::make_shared_for_overwrite - cppreference.com](https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared)
+    * creates a shared pointer that manages a new object (function template)
+        * 1) Constructs an object of type T and wraps it in a std::shared_ptr using args as the parameter list for the constructor of T. The object is constructed as if by the expression ::new (pv) T(std::forward\<Args>(args)...), where pv is an internal void* pointer to storage suitable to hold an object of type T. The storage is typically larger than sizeof(T) in order to use one allocation for both the control block of the shared pointer and the T object. The std::shared_ptr constructor called by this function enables shared_from_this with a pointer to the newly constructed object of type T.
+            * This overload participates in overload resolution only if T is not an array type (since C++20)
+        * 2,3) Same as (1), but the object constructed is a possibly-multidimensional array whose non-array elements of type std::remove_all_extents_t\<T> are value-initialized as if by placement-new expression ::new(pv) std::remove_all_extents_t\<T>(). The overload (2) creates an array of size N along the first dimension. The array elements are initialized in ascending order of their addresses, and when their lifetime ends are destroyed in the reverse order of their original construction.
+        * 4,5) Same as (2,3), but every element is initialized from the default value u. If U is not an array type, then this is performed as if by the same placement-new expression as in (1); otherwise, this is performed as if by initializing every non-array element of the (possibly multidimensional) array with the corresponding element from u with the same placement-new expression as in (1). The overload (4) creates an array of size N along the first dimension. The array elements are initialized in ascending order of their addresses, and when their lifetime ends are destroyed in the reverse order of their original construction.
+        * 6) Same as (1) if T is not an array type and (3) if T is U[N], except that the created object is default-initialized.
+        * 7) Same as (2), except that the individual array elements are default-initialized.
+    * In each case, the object (or individual elements if T is an array type) (since C++20) will be destroyed by p->~X(), where p is a pointer to the object and X is its type.
+```c++
+#include <memory>
+#include <vector>
+#include <iostream>
+#include <type_traits>
+ 
+struct C
+{
+    // constructors needed (until C++20)
+    C(int i) : i(i) {}
+    C(int i, float f) : i(i), f(f) {}
+    int i;
+    float f{};
+};
+ 
+int main()
+{
+    // using `auto` for the type of `sp1`
+    auto sp1 = std::make_shared<C>(1); // overload (1)
+    static_assert(std::is_same_v<decltype(sp1), std::shared_ptr<C>>);
+    std::cout << "sp1->{ i:" << sp1->i << ", f:" << sp1->f << " }\n";
+ 
+    // being explicit with the type of `sp2`
+    std::shared_ptr<C> sp2 = std::make_shared<C>(2, 3.0f); // overload (1)
+    static_assert(std::is_same_v<decltype(sp2), std::shared_ptr<C>>);
+    static_assert(std::is_same_v<decltype(sp1), decltype(sp2)>);
+    std::cout << "sp2->{ i:" << sp2->i << ", f:" << sp2->f << " }\n";
+ 
+    // shared_ptr to a value-initialized float[64]; overload (2):
+    std::shared_ptr<float[]> sp3 = std::make_shared<float[]>(64);
+ 
+    // shared_ptr to a value-initialized long[5][3][4]; overload (2):
+    std::shared_ptr<long[][3][4]> sp4 = std::make_shared<long[][3][4]>(5);
+ 
+    // shared_ptr to a value-initialized short[128]; overload (3):
+    std::shared_ptr<short[128]> sp5 = std::make_shared<short[128]>();
+ 
+    // shared_ptr to a value-initialized int[7][6][5]; overload (3):
+    std::shared_ptr<int[7][6][5]> sp6 = std::make_shared<int[7][6][5]>();
+ 
+    // shared_ptr to a double[256], where each element is 2.0; overload (4):
+    std::shared_ptr<double[]> sp7 = std::make_shared<double[]>(256, 2.0);
+ 
+    // shared_ptr to a double[7][2], where each double[2] element is {3.0, 4.0}; overload (4):
+    std::shared_ptr<double[][2]> sp8 = std::make_shared<double[][2]>(7, {3.0, 4.0});
+ 
+    // shared_ptr to a vector<int>[4], where each vector has contents {5, 6}; overload (4):
+    std::shared_ptr<std::vector<int>[]> sp9 = std::make_shared<std::vector<int>[]>(4, {5, 6});
+ 
+    // shared_ptr to a float[512], where each element is 1.0; overload (5):
+    std::shared_ptr<float[512]> spA = std::make_shared<float[512]>(1.0);
+ 
+    // shared_ptr to a double[6][2], where each double[2] element is {1.0, 2.0}; overload (5):
+    std::shared_ptr<double[6][2]> spB = std::make_shared<double[6][2]>({1.0, 2.0});
+ 
+    // shared_ptr to a vector<int>[4], where each vector has contents {5, 6}; overload (5):
+    std::shared_ptr<std::vector<int>[4]> spC = std::make_shared<std::vector<int>[4]>({5, 6});
+}
+/*
+sp1->{ i:1, f:0 }
+sp2->{ i:2, f:3 }
+*/
+```
 
 #
 [std::weak_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/weak_ptr)
