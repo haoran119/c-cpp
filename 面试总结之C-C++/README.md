@@ -1098,6 +1098,11 @@ lexicographical_compare(beg1, end1, beg2, end2, comp);
 | Random access of elements is possible. | Random access of elements is not possible. | 
 | Iterators become invalid if elements are added to or removed from the vector. | Iterators are valid if elements are added to or removed from the list. | 
 
+* [map vs unordered_map in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/map-vs-unordered_map-c/)
+    * [How to use unordered_map efficiently in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/how-to-use-unordered_map-efficiently-in-c/)
+* BST v.s. Hash Table
+    * [Advantages of BST over Hash Table - GeeksforGeeks](https://www.geeksforgeeks.org/advantages-of-bst-over-hash-table/)
+    * [What are Hash Functions and How to choose a good Hash Function? - GeeksforGeeks](https://www.geeksforgeeks.org/what-are-hash-functions-and-how-to-choose-a-good-hash-function/)
 * class std::string
   * [string - C++ Reference](https://www.cplusplus.com/reference/string/string/)
   * [C++之旅-string](https://mp.weixin.qq.com/s/P2nd-9fmhpn20bB45hBioQ)
