@@ -1099,10 +1099,210 @@ lexicographical_compare(beg1, end1, beg2, end2, comp);
 | Iterators become invalid if elements are added to or removed from the vector. | Iterators are valid if elements are added to or removed from the list. | 
 
 * [map vs unordered_map in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/map-vs-unordered_map-c/)
-    * [How to use unordered_map efficiently in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/how-to-use-unordered_map-efficiently-in-c/)
+    * Use std::map when
+        * You need ordered data.
+        * You would have to print/access the data (in sorted order).
+        * You need predecessor/successor of elements.
+        * See advantages of BST over Hash Table for more cases.
+    * Use std::unordered_map when
+        * You need to keep count of some data (Example – strings) and no ordering is required.
+        * You need single element access i.e. no traversal.
+
+| - | map | unordered_map |
+| - | - | - |
+Ordering        | increasing order (by default)  | no ordering
+Implementation  | Self balancing BST like Red-Black Tree | Hash Table
+search time     | log(n)              | O(1) -> Average / O(n) -> Worst Case
+Insertion time  | log(n) + Rebalance  | Same as search
+Deletion time   | log(n) + Rebalance  | Same as search
+
+* [How to use unordered_map efficiently in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/how-to-use-unordered_map-efficiently-in-c/)
+    * C++ provides std::unordered_set and std::unordered_map to be used as a hash set and hash map respectively. They perform insertion/deletion/access in constant average time. 
+    * However, the worst-case complexity is O(n2).
+    * The reason is that the unordered_map store’s key-value pair by taking the modulo of input value by a prime number and then stores it in a hash table.
+    * When the input data is big and input values are multiples of this prime number a lot of collisions take place and may cause the complexity of O(n2).
+    * Depending on the compiler the prime number maybe 107897 or 126271.
+    * Example 1: If we insert multiples of the above two prime numbers and compute execution time. One of the prime numbers takes a much longer time than the other.
+        * The standard inbuilt hash function on which unordered_map works is similar to this:
+        ```c++
+        struct hash {
+            size_t operator()(uint64_t x)
+                const { return x; }
+        };
+        ```
+        * The above function can produce numerous collisions. The keys inserted in HashMap are not evenly distributed, and after inserting numerous prime multiples, further insertion causes the hash function to reallocate all previous keys to new slots hence making it slow. So, the idea is that we have to randomize the hash function.
+        * The idea is to use a method so that the keys in our hashmap are evenly distributed. This will prevent collisions to take place. For this, we use Fibonacci numbers. The golden ratio related to the Fibonacci sequence (Phi = 1.618) has a property that it can subdivide any range evenly without looping back to the starting position.
+        * We can create our own simple hash function. Below is the hash function: 
+        * Basically, the above hashing function generates random hash values to store keys. To know more about this please refer to this article Fibonacci hashing.
+    * Example 2: Using the above hashing function, the program runs very quickly.
+    ```c++
+    // C++ program to determine worst case
+    // time complexity of an unordered_map
+    // using modified hash function
+
+    #include <bits/stdc++.h>
+    using namespace std;
+    using namespace std::chrono;
+
+    struct modified_hash {
+
+        static uint64_t splitmix64(uint64_t x)
+        {
+            x += 0x9e3779b97f4a7c15;
+            x = (x ^ (x >> 30))
+                * 0xbf58476d1ce4e5b9;
+            x = (x ^ (x >> 27))
+                * 0x94d049bb133111eb;
+            return x ^ (x >> 31);
+        }
+
+        int operator()(uint64_t x) const
+        {
+            static const uint64_t random
+                = steady_clock::now()
+                    .time_since_epoch()
+                    .count();
+            return splitmix64(x + random);
+        }
+    };
+
+    int N = 55000;
+    int prime1 = 107897;
+    int prime2 = 126271;
+
+    // Function to insert in the hashMap
+    void insert(int prime)
+    {
+        auto start = high_resolution_clock::now();
+
+        // Third argument in initialisation
+        // of unordered_map ensures that
+        // the map uses the hash function
+        unordered_map<int, int, modified_hash>
+            umap;
+
+        // Inserting multiples of prime
+        // number as key in the map
+        for (int i = 1; i <= N; i++)
+            umap[i * prime] = i;
+
+        auto stop
+            = high_resolution_clock::now();
+
+        auto duration
+            = duration_cast<milliseconds>(
+                stop - start);
+
+        cout << "for " << prime << " : "
+            << duration.count() / 1000.0
+            << " seconds "
+            << endl;
+    }
+
+    // Driver Code
+    int main()
+    {
+        // Function call for prime 1
+        insert(prime1);
+
+        // Function call for prime 2
+        insert(prime2);
+    }
+    /*
+    for 107897 : 0.025 seconds 
+    for 126271 : 0.024 seconds
+    */
+    ```
+    * Reserving space before hand 
+        * By default, the capacity of unordered_map is 16 and a hash table is created for this. But every time, when threshold is reached, the capacity of the unordered_map is doubled and all the values are rehashed according to new hash table.
+        * So, we can reserve the capacity beforehand according to our input size by using .reserve() method.
+    * Setting max_load_factor
+        * max_load_factor of unordered_map determines the probability of collision. Default value is set to 1.
+        * By setting it to a lower value like 0.25 can decrease the probability of collisions by great extent.
+    * Example : Using above two method can make umap faster : 
+    ```c++
+    #include <bits/stdc++.h>
+    using namespace std;
+    using namespace std::chrono;
+    int N = 55000;
+    int prime1 = 107897;
+    int prime2 = 126271;
+
+    void insert(int prime)
+    {
+
+        // Starting the clock
+        auto start
+            = high_resolution_clock::now();
+
+        unordered_map<int, int> umap;
+        umap.reserve(1024); // RESERVING SPACE BEFOREHAND
+        umap.max_load_factor(0.25); // DECREASING MAX_LOAD_FACTOR
+        // Inserting multiples of prime
+        // number as key in the map
+        for (int i = 1; i <= N; i++)
+            umap[i * prime] = i;
+
+        // Stopping the clock
+        auto stop
+            = high_resolution_clock::now();
+
+        // Typecasting the time to
+        // milliseconds
+        auto duration
+            = duration_cast<milliseconds>(
+                stop - start);
+
+        // Time in seconds
+        cout << "for " << prime << " : "
+            << duration.count() / 1000.0
+            << " seconds "
+            << endl;
+    }
+
+    // Driver code
+    int main()
+    {
+        // Function call for prime 1
+        insert(prime1);
+
+        // Function call for prime 2
+        insert(prime2);
+    }
+    /*
+    for 107897 : 0.029 seconds
+    for 126271 : 0.026 seconds
+    */
+    ```
 * BST v.s. Hash Table
     * [Advantages of BST over Hash Table - GeeksforGeeks](https://www.geeksforgeeks.org/advantages-of-bst-over-hash-table/)
+        * Following are some important points in favor of BSTs.
+            * We can get all keys in sorted order by just doing Inorder Traversal of BST. This is not a natural operation in Hash Tables and requires extra efforts.
+            * Doing order statistics, finding closest lower and greater elements, doing range queries are easy to do with BSTs. Like sorting, these operations are not a natural operation with Hash Tables.
+            * BSTs are easy to implement compared to hashing, we can easily implement our own customized BST. To implement Hashing, we generally rely on libraries provided by programming languages.
+            * With Self-Balancing BSTs, all operations are guaranteed to work in O(Logn) time. But with Hashing, Θ(1) is average time and some particular operations may be costly i.e, O(n2 ), especially when table resizing happens.
+            * In BST we can do range searches efficiently but in Hash Table we cannot do range search efficienly.
+            * BST are memory efficient but Hash table is not.
     * [What are Hash Functions and How to choose a good Hash Function? - GeeksforGeeks](https://www.geeksforgeeks.org/what-are-hash-functions-and-how-to-choose-a-good-hash-function/)
+        * What is a Hash Function?
+            * A function that converts a given big phone number to a small practical integer value. The mapped integer value is used as an index in the hash table. In simple terms, a hash function maps a big number or string to a small integer that can be used as the index in the hash table. 
+        * What is meant by Good Hash Function? 
+            * A good hash function should have the following properties: 
+                * Efficiently computable.
+                * Should uniformly distribute the keys (Each table position equally likely for each key)
+        * In practice, we can often employ heuristic techniques to create a hash function that performs well. 
+        * The two heuristic methods are hashing by division and hashing by multiplication which are as follows: 
+            * The mod method: 
+                * In this method for creating hash functions, we map a key into one of the slots of table by taking the remainder of key divided by table_size.
+                * That is, the hash function is
+                    * `h(key) = key mod table_size`
+                    * `i.e. key % table_size`
+                * Hence it can be seen that by this hash function, many keys can have the same hash. This is called Collision.
+            * The multiplication method: 
+                * In multiplication method, we multiply the key k by a constant real number c in the range 0 < c < 1 and extract the fractional part of k * c.
+                * Then we multiply this value by table_size m and take the floor of the result. It can be represented as
+                    * `h(k) = floor (m * (k * c mod 1))`
+                    * or `h(k) = floor (m * frac (k * c))`
 * class std::string
   * [string - C++ Reference](https://www.cplusplus.com/reference/string/string/)
   * [C++之旅-string](https://mp.weixin.qq.com/s/P2nd-9fmhpn20bB45hBioQ)
