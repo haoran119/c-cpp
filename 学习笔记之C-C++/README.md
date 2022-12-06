@@ -2627,7 +2627,45 @@ About to leave program...
 */
 ```
 * [std::unique_ptr<T,Deleter>::get - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/get)
+    * returns a pointer to the managed object (public member function)
     * Returns a pointer to the managed object or nullptr if no object is owned.
+```c++
+#include <iomanip>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <utility>
+ 
+class Res {
+    std::string s;
+ 
+public:
+    Res(std::string arg) : s{ std::move(arg) } {
+        std::cout << "Res::Res(" << std::quoted(s) << ");\n";
+    }
+ 
+    ~Res() {
+        std::cout << "Res::~Res();\n";
+    }
+ 
+private:
+    friend std::ostream& operator<< (std::ostream& os, Res const& r) {
+        return os << "Res { s = " << std::quoted(r.s) << "; }";
+    }
+};
+ 
+int main()
+{
+    std::unique_ptr<Res> up(new Res{"Hello, world!"});
+    Res *res = up.get();
+    std::cout << *res << '\n';
+}
+/*
+Res::Res("Hello, world!");
+Res { s = "Hello, world!"; }
+Res::~Res();
+*/
+```
 * [std::unique_ptr<T,Deleter>::release - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/release)
     * returns a pointer to the managed object and releases the ownership (public member function)
     * Releases the ownership of the managed object, if any.
@@ -2957,6 +2995,33 @@ D::~D
 * A shared_ptr may also own no objects, in which case it is called empty (an empty shared_ptr may have a non-null stored pointer if the aliasing constructor was used to create it).
 * All specializations of shared_ptr meet the requirements of CopyConstructible, CopyAssignable, and LessThanComparable and are contextually convertible to bool.
 * All member functions (including copy constructor and copy assignment) can be called by multiple threads on different instances of shared_ptr without additional synchronization even if these instances are copies and share ownership of the same object. If multiple threads of execution access the same instance of shared_ptr without synchronization and any of those accesses uses a non-const member function of shared_ptr then a data race will occur; the shared_ptr overloads of atomic functions can be used to prevent the data race.
+* Notes
+    * The ownership of an object can only be shared with another shared_ptr by copy constructing or copy assigning its value to another shared_ptr. Constructing a new shared_ptr using the raw underlying pointer owned by another shared_ptr leads to undefined behavior.
+    * std::shared_ptr may be used with an incomplete type T. However, the constructor from a raw pointer (template\<class Y> shared_ptr(Y*)) and the template\<class Y> void reset(Y*) member function may only be called with a pointer to a complete type (note that std::unique_ptr may be constructed from a raw pointer to an incomplete type).
+    * The T in std::shared_ptr\<T> may be a function type: in this case it manages a pointer to function, rather than an object pointer. This is sometimes used to keep a dynamic library or a plugin loaded as long as any of its functions are referenced:
+```c++
+void del(void(*)()) {}
+void fun() {}
+int main(){
+  std::shared_ptr<void()> ee(fun, del);
+  (*ee)();
+}
+```
+* Implementation notes
+    * In a typical implementation, shared_ptr holds only two pointers:
+        * the stored pointer (one returned by get());
+        * a pointer to control block.
+    * The control block is a dynamically-allocated object that holds:
+        * either a pointer to the managed object or the managed object itself;
+        * the deleter (type-erased);
+        * the allocator (type-erased);
+        * the number of shared_ptrs that own the managed object;
+        * the number of weak_ptrs that refer to the managed object.
+    * When shared_ptr is created by calling std::make_shared or std::allocate_shared, the memory for both the control block and the managed object is created with a single allocation. The managed object is constructed in-place in a data member of the control block. When shared_ptr is created via one of the shared_ptr constructors, the managed object and the control block must be allocated separately. In this case, the control block stores a pointer to the managed object.
+    * The pointer held by the shared_ptr directly is the one returned by get(), while the pointer/object held by the control block is the one that will be deleted when the number of shared owners reaches zero. These pointers are not necessarily equal.
+    * The destructor of shared_ptr decrements the number of shared owners of the control block. If that counter reaches zero, the control block calls the destructor of the managed object. The control block does not deallocate itself until the std::weak_ptr counter reaches zero as well.
+    * In existing implementations, the number of weak pointers is incremented ([1], [2]) if there is a shared pointer to the same control block.
+    * To satisfy thread safety requirements, the reference counters are typically incremented using an equivalent of std::atomic::fetch_add with std::memory_order_relaxed (decrementing requires stronger ordering to safely destroy the control block).
 ```c++
 #include <iostream>
 #include <memory>
