@@ -788,6 +788,197 @@ int main()
 * 什么是深浅拷贝?
   * `浅拷贝`是创建了一个对象用一个现成的对象初始化它的时候只是复制了成员(简单赋值)而没有拷贝分配给成员的资源(如给其指针变量成员分配了动态内存)
   * `深拷贝`是当一个对象创建时，如果分配了资源，就需要定义自己的拷贝构造函数，使之不但拷贝成员也拷贝分配给它的资源
+* [Polymorphic clones in modern C++ - Fluent C++](https://www.fluentcpp.com/2017/09/08/make-polymorphic-copy-modern-cpp/)
+    * How to copy an object that is accessible only by an interface that it implements?
+    * The classical problem
+        * Let’s take the example of the following interface:
+        * With one the classes implementing this interface:
+        * How to make a copy of the Implementation object?
+        ```c++
+        class Interface
+        {
+        public:
+            virtual void doSomething() const = 0;
+            virtual ~Interface() = default;
+        };
+
+        class Implementation : public Interface
+        {
+        public:
+            virtual void doSomething() const override
+            {
+                /* ... */
+            }
+        };
+        ```
+    * The classical solution
+        * The classical solution is to “virtualize” the constructor, as Scott Meyers puts it. That is to say add a clone method in the interface, that delegates the object construction to the implementation itself.
+        ```c++
+        #include <iostream>
+
+        class Interface
+        {
+        public:
+            virtual ~Interface() = default;
+            virtual Interface* clone() const = 0;
+            virtual void doSomething() const = 0;
+        };
+
+        class Implementation : public Interface
+        {
+        public:
+            virtual Implementation* clone() const override
+            {
+                return new Implementation(*this);
+            }
+
+            virtual void doSomething() const override
+            {
+                std::cout << "Implementation::doSomething()" << '\n';
+            }
+        };
+
+        int main()
+        {
+            Interface* x = new Implementation();
+            Interface* y = x->clone();
+
+            return 0;
+        }
+        ```
+        * Notice that the return type of the clone method differ between the interface in the implementation. It is because C++ allows overriding a virtual method with one that has a different return type, provided this return type is a pointer (resp. reference) to a class convertible to the one pointed to (resp. referenced by) the return type of the base class. This is called covariance.
+        * This technique allows the desired copy, but exhibits another classical problem: the call site receives the responsibility to delete the cloned object, but nothing ensures that it will do it. Particularly if there is an early return or an exception thrown further down the code, the object has a risk to leak.
+    * A modern solution
+        * The tool cut out for solving this problem are smart pointers, and in particular std::unique_ptr.
+        * The idea is to make the clone function return a unique_ptr, that will take care about deleting the new object in all situations. Here is how to adapt the code with this:
+        ```c++
+        #include <iostream>
+        #include <memory>
+
+        class Interface
+        {
+        public:
+            virtual std::unique_ptr<Interface> clone() const = 0;
+
+            virtual void doSomething() const = 0;
+            virtual ~Interface() = default;
+        };
+
+        class Implementation : public Interface
+        {
+        public:
+            virtual std::unique_ptr<Interface> clone() const override
+            {
+                return std::make_unique<Implementation>(*this);
+            }
+
+            virtual void doSomething() const override
+            {
+                /* ... */
+            }
+        };
+
+        int main()
+        {
+            std::unique_ptr<Interface> z = std::make_unique<Implementation>();
+            Interface* x = z.get();
+            std::unique_ptr<Interface> y = x->clone();
+
+            return 0;
+        }
+        ```
+        * Let’s look at this solution more closely.
+            * First, your compiler may not have std::make_unique since it arrived in C++14 while std::unique_ptr only came in C++11 (I believe this was just an oversight). If so, you can use this implementation proposed by cppreference.com:
+            ```c++
+            // note: this implementation does not disable this overload for array types
+            template<typename T, typename... Args>
+            std::unique_ptr<T> make_unique(Args&&... args)
+            {
+                return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+            }
+            ```
+            * Second, and much more annoyingly, the covariance doesn’t hold any more, because the clone method is no longer returning pointers. It now has to return an std::unique_ptr\<Interface> in the interface AND in the implementation.
+        * In the above case it doesn’t cause any practical problem, given that Implementation already depends on Interface anyway. But let’s consider the case where an implementation inherits from several interfaces. The solution without smart pointers scales effortlessly because the clone method is independent from the interface:
+        ```c++
+        class Interface1
+        {
+        public:
+            virtual Interface1* clone() const = 0;
+            virtual void doSomething() const = 0;
+            virtual ~Interface1() = default;
+        };
+
+        class Interface2
+        {
+        public:
+            virtual Interface2* clone() const = 0;
+            virtual void doSomethingElse() const = 0;
+            virtual ~Interface2() = default;
+        };
+
+        class Implementation : public Interface1, public Interface2
+        {
+        public:
+            virtual Implementation* clone() const override
+            {
+                return new Implementation(*this);
+            }
+            virtual void doSomething() const override
+            {
+                /* ... */
+            }
+            virtual void doSomethingElse() const override
+            {
+                /* ... */
+            }
+        };
+        ```
+        * But with smart pointers, the situation is different: the clone method, bound to Interface1, cannot be used for Interface2! And since the clone method doesn’t take any argument, there is no way to add a new overload returning a unique_ptr to Interface2.
+        * One solution that comes to mind is to use template methods. But there is no such such thing as a template virtual method so this solution is off the table.
+        * Another idea would be to isolate the clone method in a clonable interface. But this would force the call site to dynamic_cast back and forth from the real interface to the clonable interface. Not good either.
+    * Clearing the ambiguity
+        * The alternative I would suggest is to use different names for the clone methods in the interfaces.
+        ```c++
+        class Interface1
+        {
+        public:
+            virtual std::unique_ptr<Interface1> cloneInterface1() const = 0;
+            virtual void doSomething() const = 0;
+            virtual ~Interface1() = default;
+        };
+
+        class Interface2
+        {
+        public:
+            virtual std::unique_ptr<Interface2> cloneInterface2() const = 0;
+            virtual void doSomethingElse() const = 0;
+            virtual ~Interface2() = default;
+        };
+
+        class Implementation : public Interface1, public Interface2
+        {
+        public:
+            virtual std::unique_ptr<Interface1> cloneInterface1() const override
+            {
+                return make_unique<Implementation>(*this);
+            }
+            virtual std::unique_ptr<Interface2> cloneInterface2() const override
+            {
+                return make_unique<Implementation>(*this);
+            }
+            virtual void doSomething() const override
+            {
+
+            }
+            virtual void doSomethingElse() const override
+            {
+
+            }
+        };
+        ```
+        * But to be viable, this solution has to rely on a guideline for interface designers: if you choose to implement a clone method that returns a smart pointer, then don’t call it just clone.
+        * Rather, use a specific name, like cloneInterfaceX, that won’t conflict with the copy functions coming from the other interfaces.
+        * This way, you allow implementers to use your interface even if they already use others.
 
 ## 语言特性相关
 * [namespace in C++ | Set 2 (Extending namespace and Unnamed namespace) - GeeksforGeeks](https://www.geeksforgeeks.org/namespace-in-c-set-2-extending-namespace-and-unnamed-namespace/)
