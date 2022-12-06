@@ -24,146 +24,153 @@
     * Most containers have at least several member functions in common, and share functionalities. Which container is the best for the particular application depends not only on the offered functionality, but also on its efficiency for different workloads.
 * [STL Containers - C++ Reference](http://www.cplusplus.com/reference/stl/)
 * [C++ Data Structures and Algorithms Cheat Sheet](https://github.com/gibsjose/cpp-cheat-sheet/blob/master/Data%20Structures%20and%20Algorithms.md)
+
+### [huihut/interview: 📚 C/C++ 技术面试基础知识总结](https://github.com/huihut/interview)
+
 * [C 语言与 C++ 面试知识总结 (qq.com)](https://mp.weixin.qq.com/s/x6DMkh54NQBOlDMqNxvf7w)
-  * [huihut/interview: 📚 C/C++ 技术面试基础知识总结](https://github.com/huihut/interview)
-    * [STL](https://github.com/huihut/interview#-stl)
-    * [Effective C++](https://github.com/huihut/interview#effective-c)
-    	* 为多态基类声明 virtual 析构函数（如果 class 带有任何 virtual 函数，它就应该拥有一个 virtual 析构函数）
-    	* 别让异常逃离析构函数（析构函数应该吞下不传播异常，或者结束程序，而不是吐出异常；如果要处理异常应该在非析构的普通函数处理）
-    	* 绝不在构造和析构过程中调用 virtual 函数（因为这类调用从不下降至 derived class）
-    	* 令 operator= 返回一个 reference to *this （用于连锁赋值）
-    	* 在 operator= 中处理 “自我赋值”
-    	* 赋值对象时应确保复制 “对象内的所有成员变量” 及 “所有 base class 成分”（调用基类复制构造函数）
-    	* 在资源管理类中小心 copying 行为（普遍的 RAII class copying 行为是：抑制 copying、引用计数、深度拷贝、转移底部资源拥有权（类似 auto_ptr））
-    	* 以独立语句将 newed 对象存储于（置入）智能指针（如果不这样做，可能会因为编译器优化，导致难以察觉的资源泄漏）
-    	* 宁以 pass-by-reference-to-const 替换 pass-by-value （前者通常更高效、避免切割问题（slicing problem），但不适用于内置类型、STL迭代器、函数对象）
-    	* 必须返回对象时，别妄想返回其 reference（绝不返回 pointer 或 reference 指向一个 local stack 对象，或返回 reference 指向一个 heap-allocated 对象，或返回 pointer 或 reference 指向一个 local static 对象而有可能同时需要多个这样的对象。）
-    	* 避免使用 handles（包括 引用、指针、迭代器）指向对象内部（以增加封装性、使 const 成员函数的行为更像 const、降低 “虚吊号码牌”（dangling handles，如悬空指针等）的可能性）
-    	* 将文件间的编译依存关系降至最低（如果使用 object references 或 object pointers 可以完成任务，就不要使用 objects；如果能够，尽量以 class 声明式替换 class 定义式；为声明式和定义式提供不同的头文件）
-    	* 绝不重新定义继承而来的 non-virtual 函数
-    	* 绝不重新定义继承而来的缺省参数值，因为缺省参数值是静态绑定（statically bound），而 virtual 函数却是动态绑定（dynamically bound）
-    	* 明智而审慎地使用多重继承（多继承比单一继承复杂，可能导致新的歧义性，以及对 virtual 继承的需要，但确有正当用途，如 “public 继承某个 interface class” 和 “private 继承某个协助实现的 class”；virtual 继承可解决多继承下菱形继承的二义性问题，但会增加大小、速度、初始化及赋值的复杂度等等成本）
-    	* 了解隐式接口和编译期多态（class 和 templates 都支持接口（interfaces）和多态（polymorphism）；class 的接口是以签名为中心的显式的（explicit），多态则是通过 virtual 函数发生于运行期；template 的接口是奠基于有效表达式的隐式的（implicit），多态则是通过 template 具现化和函数重载解析（function overloading resolution）发生于编译期）
-    * [More Effective c++](https://github.com/huihut/interview#more-effective-c)
-    	* 仔细区别 pointers 和 references（当你知道你需要指向某个东西，而且绝不会改变指向其他东西，或是当你实现一个操作符而其语法需求无法由 pointers 达成，你就应该选择 references；任何其他时候，请采用 pointers）
-    	* 区别 increment/decrement 操作符的前置（prefix）和后置（postfix）形式（前置式累加后取出，返回一个 reference；后置式取出后累加，返回一个 const 对象；处理用户定制类型时，应该尽可能使用前置式 increment；后置式的实现应以其前置式兄弟为基础）
-    	* 千万不要重载 &&，|| 和 , 操作符（&& 与 || 的重载会用 “函数调用语义” 取代 “骤死式语义”；, 的重载导致不能保证左侧表达式一定比右侧表达式更早被评估）
-    	* 在 constructors 内阻止资源泄漏（由于 C++ 只会析构已构造完成的对象，因此在构造函数可以使用 try...catch 或者 auto_ptr（以及与之相似的 classes） 处理异常时资源泄露问题）
-    	* 禁止异常流出 destructors 之外（原因：一、避免 terminate 函数在 exception 传播过程的栈展开（stack-unwinding）机制种被调用；二、协助确保 destructors 完成其应该完成的所有事情）
-    	* 了解 “抛出一个 exception” 与 “传递一个参数” 或 “调用一个虚函数” 之间的差异（第一，exception objects 总是会被复制（by pointer 除外），如果以 by value 方式捕捉甚至被复制两次，而传递给函数参数的对象则不一定得复制；第二，“被抛出成为 exceptions” 的对象，其被允许的类型转换动作比 “被传递到函数去” 的对象少；第三，catch 子句以其 “出现于源代码的顺序” 被编译器检验对比，其中第一个匹配成功者便执行，而调用一个虚函数，被选中执行的是那个 “与对象类型最佳吻合” 的函数）
-    	* 以 by reference 方式捕获 exceptions（可避免对象删除问题、exception objects 的切割问题，可保留捕捉标准 exceptions 的能力，可约束 exception object 需要复制的次数）
-    	* 了解异常处理的成本（粗略估计，如果使用 try 语句块，代码大约整体膨胀 5%-10%，执行速度亦大约下降这个数；因此请将你对 try 语句块和 exception specifications 的使用限制于非用不可的地点，并且在真正异常的情况下才抛出 exceptions）
-    * 英文：[Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)
-    * 中文：[C++ 风格指南](https://zh-google-styleguide.readthedocs.io/en/latest/google-cpp-styleguide/contents/)
-    * [Bjarne Stroustrup 的常见问题](http://www.stroustrup.com/bs_faq.html)
-    * [Bjarne Stroustrup 的 C++ 风格和技巧常见问题](http://www.stroustrup.com/bs_faq2.html)
-* [C++ 面试突击 - LeetBook - 力扣（LeetCode）全球极客挚爱的技术成长平台](https://leetcode-cn.com/leetbook/detail/cpp-interview-highlights/)
-  * [2021 秋招 100 道 C++ 面试高频题汇总](https://mp.weixin.qq.com/s/wPq-fJFua0xt5zfJf0fLJA)
-  * 编译内存相关
-    1. C++ 程序编译过程
-    2. C++ 内存管理
-    3. 栈和堆的区别
-    4. 变量的区别
-    5. 全局变量定义在头文件中有什么问题？
-    6. 对象创建限制在堆或栈
-    7. 内存对齐
-    8. 类的大小
-    9. 什么是内存泄露
-    10. 怎么防止内存泄漏？内存泄漏检测工具的原理？
-    11. 智能指针有哪几种？智能指针的实现原理？
-    12. 一个 unique_ptr 怎么赋值给另一个 unique_ptr 对象？
-    13. 使用智能指针会出现什么问题？怎么解决？
-  * 语言对比
-    1. C++ 11 新特性
-    2. C 和 C++ 的区别
-    3. Java 和 C++ 的区别
-    4. Python 和 C++ 的区别
-  * 面向对象
-    1. 什么是面向对象？面向对象的三大特性
-    2. 重载、重写、隐藏的区别
-    3. 如何理解 C++ 是面向对象编程
-    4. 什么是多态？多态如何实现？
-  * 关键字库函数
-    1. sizeof 和 strlen 的区别
-    2. lambda 表达式（匿名函数）的具体应用和使用场景
-    3. explicit 的作用（如何避免编译器进行隐式类型转换）
-    4. C 和 C++ static 的区别
-    5. static 的作用
-    6. static 在类中使用的注意事项（定义、初始化和使用）
-    7. static 全局变量和普通全局变量的异同
-    8. const 作用及用法
-    9. define 和 const 的区别
-    10. define 和 typedef 的区别
-    11. 用宏实现比较大小，以及两个数中的最小值
-    12. inline 作用及使用方法
-    13. inline 函数工作原理
-    14. 宏定义（define）和内联函数（inline）的区别
-    15. new 的作用？
-    16. new 和 malloc 如何判断是否申请到内存？
-    17. delete 实现原理？delete 和 delete[] 的区别？
-    18. new 和 malloc 的区别，delete 和 free 的区别
-    19. malloc 的原理？malloc 的底层实现？
-    20. C 和 C++ struct 的区别？
-    21. 为什么有了 class 还保留 struct？
-    22. struct 和 union 的区别
-    23. class 和 struct 的异同
-    24. volatile 的作用？是否具有原子性，对编译器有什么影响？
-    25. 什么情况下一定要用 volatile， 能否和 const 一起使用？
-    26. 返回函数中静态变量的地址会发生什么？
-    27. extern C 的作用？
-    28. sizeof(1==1) 在 C 和 C++ 中分别是什么结果？
-    29. memcpy 函数的底层原理？
-    30. strcpy 函数有什么缺陷？
-    31. auto 类型推导的原理
-  * 类相关
-    1. 什么是虚函数？什么是纯虚函数？
-    2. 虚函数和纯虚函数的区别？
-    3. 虚函数的实现机制
-    4. 单继承和多继承的虚函数表结构
-    5. 如何禁止构造函数的使用？
-    6. 什么是类的默认构造函数？
-    7. 构造函数、析构函数是否需要定义成虚函数？为什么？
-    8. 如何避免拷贝？
-    9. 如何减少构造函数开销？
-    10. 多重继承时会出现什么状况？如何解决？
-    11. 空类占多少字节？C++ 编译器会给一个空类自动生成哪些函数？
-    12. 为什么拷贝构造函数必须为引用？
-    13. C++ 类对象的初始化顺序
-    14. 如何禁止一个类被实例化？
-    15. 为什么用成员初始化列表会快一些？
-    16. 实例化一个对象需要哪几个阶段
-    17. 友元函数的作用及使用场景
-    18. 静态绑定和动态绑定是怎么实现的？
-    19. 深拷贝和浅拷贝的区别
-    20. 编译时多态和运行时多态的区别
-    21. 实现一个类成员函数，要求不允许修改类的成员变量？
-    22. 如何让类不能被继承？
-  * 语言特性相关
-    1. 左值和右值的区别？左值引用和右值引用的区别，如何将左值转换成右值？
-    2. std::move() 函数的实现原理
-    3. 什么是指针？指针的大小及用法？
-    4. 什么是野指针和悬空指针？
-    5. C++ 11 nullptr 比 NULL 优势
-    6. 指针和引用的区别？
-    7. 常量指针和指针常量的区别
-    8. 函数指针和指针函数的区别
-    9. 强制类型转换有哪几种？
-    10. 如何判断结构体是否相等？能否用 memcmp 函数判断结构体相等？
-    11. 参数传递时，值传递、引用传递、指针传递的区别？
-    12. 什么是模板？如何实现？
-    13. 函数模板和类模板的区别？
-    14. 什么是可变参数模板？
-    15. 什么是模板特化？为什么特化？
-    16. include " " 和 <> 的区别
-    17. switch 的 case 里为何不能定义变量
-    18. 迭代器的作用？
-    19. 泛型编程如何实现？
-    20. 什么是类型萃取？
-  * 设计模式
-    1. 了解哪些设计模式？
-    2. 什么是单例模式？如何实现？应用场景？
-    3. 什么是工厂模式？如何实现？应用场景？
-    4. 什么是观察者模式？如何实现？应用场景？
+* [STL](https://github.com/huihut/interview#-stl)
+* [Effective C++](https://github.com/huihut/interview#effective-c)
+    * 为多态基类声明 virtual 析构函数（如果 class 带有任何 virtual 函数，它就应该拥有一个 virtual 析构函数）
+    * 别让异常逃离析构函数（析构函数应该吞下不传播异常，或者结束程序，而不是吐出异常；如果要处理异常应该在非析构的普通函数处理）
+    * 绝不在构造和析构过程中调用 virtual 函数（因为这类调用从不下降至 derived class）
+    * 令 operator= 返回一个 reference to *this （用于连锁赋值）
+    * 在 operator= 中处理 “自我赋值”
+    * 赋值对象时应确保复制 “对象内的所有成员变量” 及 “所有 base class 成分”（调用基类复制构造函数）
+    * 在资源管理类中小心 copying 行为（普遍的 RAII class copying 行为是：抑制 copying、引用计数、深度拷贝、转移底部资源拥有权（类似 auto_ptr））
+    * 以独立语句将 newed 对象存储于（置入）智能指针（如果不这样做，可能会因为编译器优化，导致难以察觉的资源泄漏）
+    * 宁以 pass-by-reference-to-const 替换 pass-by-value （前者通常更高效、避免切割问题（slicing problem），但不适用于内置类型、STL迭代器、函数对象）
+    * 必须返回对象时，别妄想返回其 reference（绝不返回 pointer 或 reference 指向一个 local stack 对象，或返回 reference 指向一个 heap-allocated 对象，或返回 pointer 或 reference 指向一个 local static 对象而有可能同时需要多个这样的对象。）
+    * 避免使用 handles（包括 引用、指针、迭代器）指向对象内部（以增加封装性、使 const 成员函数的行为更像 const、降低 “虚吊号码牌”（dangling handles，如悬空指针等）的可能性）
+    * 将文件间的编译依存关系降至最低（如果使用 object references 或 object pointers 可以完成任务，就不要使用 objects；如果能够，尽量以 class 声明式替换 class 定义式；为声明式和定义式提供不同的头文件）
+    * 绝不重新定义继承而来的 non-virtual 函数
+    * 绝不重新定义继承而来的缺省参数值，因为缺省参数值是静态绑定（statically bound），而 virtual 函数却是动态绑定（dynamically bound）
+    * 明智而审慎地使用多重继承（多继承比单一继承复杂，可能导致新的歧义性，以及对 virtual 继承的需要，但确有正当用途，如 “public 继承某个 interface class” 和 “private 继承某个协助实现的 class”；virtual 继承可解决多继承下菱形继承的二义性问题，但会增加大小、速度、初始化及赋值的复杂度等等成本）
+    * 了解隐式接口和编译期多态（class 和 templates 都支持接口（interfaces）和多态（polymorphism）；class 的接口是以签名为中心的显式的（explicit），多态则是通过 virtual 函数发生于运行期；template 的接口是奠基于有效表达式的隐式的（implicit），多态则是通过 template 具现化和函数重载解析（function overloading resolution）发生于编译期）
+* [More Effective c++](https://github.com/huihut/interview#more-effective-c)
+    * 仔细区别 pointers 和 references（当你知道你需要指向某个东西，而且绝不会改变指向其他东西，或是当你实现一个操作符而其语法需求无法由 pointers 达成，你就应该选择 references；任何其他时候，请采用 pointers）
+    * 区别 increment/decrement 操作符的前置（prefix）和后置（postfix）形式（前置式累加后取出，返回一个 reference；后置式取出后累加，返回一个 const 对象；处理用户定制类型时，应该尽可能使用前置式 increment；后置式的实现应以其前置式兄弟为基础）
+    * 千万不要重载 &&，|| 和 , 操作符（&& 与 || 的重载会用 “函数调用语义” 取代 “骤死式语义”；, 的重载导致不能保证左侧表达式一定比右侧表达式更早被评估）
+    * 在 constructors 内阻止资源泄漏（由于 C++ 只会析构已构造完成的对象，因此在构造函数可以使用 try...catch 或者 auto_ptr（以及与之相似的 classes） 处理异常时资源泄露问题）
+    * 禁止异常流出 destructors 之外（原因：一、避免 terminate 函数在 exception 传播过程的栈展开（stack-unwinding）机制种被调用；二、协助确保 destructors 完成其应该完成的所有事情）
+    * 了解 “抛出一个 exception” 与 “传递一个参数” 或 “调用一个虚函数” 之间的差异（第一，exception objects 总是会被复制（by pointer 除外），如果以 by value 方式捕捉甚至被复制两次，而传递给函数参数的对象则不一定得复制；第二，“被抛出成为 exceptions” 的对象，其被允许的类型转换动作比 “被传递到函数去” 的对象少；第三，catch 子句以其 “出现于源代码的顺序” 被编译器检验对比，其中第一个匹配成功者便执行，而调用一个虚函数，被选中执行的是那个 “与对象类型最佳吻合” 的函数）
+    * 以 by reference 方式捕获 exceptions（可避免对象删除问题、exception objects 的切割问题，可保留捕捉标准 exceptions 的能力，可约束 exception object 需要复制的次数）
+    * 了解异常处理的成本（粗略估计，如果使用 try 语句块，代码大约整体膨胀 5%-10%，执行速度亦大约下降这个数；因此请将你对 try 语句块和 exception specifications 的使用限制于非用不可的地点，并且在真正异常的情况下才抛出 exceptions）
+* 英文：[Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)
+* 中文：[C++ 风格指南](https://zh-google-styleguide.readthedocs.io/en/latest/google-cpp-styleguide/contents/)
+* [Bjarne Stroustrup 的常见问题](http://www.stroustrup.com/bs_faq.html)
+* [Bjarne Stroustrup 的 C++ 风格和技巧常见问题](http://www.stroustrup.com/bs_faq2.html)
+
+### [C++ 面试突击 - LeetBook - 力扣（LeetCode）全球极客挚爱的技术成长平台](https://leetcode-cn.com/leetbook/detail/cpp-interview-highlights/)
+
+* [2021 秋招 100 道 C++ 面试高频题汇总](https://mp.weixin.qq.com/s/wPq-fJFua0xt5zfJf0fLJA)
+* 编译内存相关
+1. C++ 程序编译过程
+2. C++ 内存管理
+3. 栈和堆的区别
+4. 变量的区别
+5. 全局变量定义在头文件中有什么问题？
+6. 对象创建限制在堆或栈
+7. 内存对齐
+8. 类的大小
+9. 什么是内存泄露
+10. 怎么防止内存泄漏？内存泄漏检测工具的原理？
+11. 智能指针有哪几种？智能指针的实现原理？
+12. 一个 unique_ptr 怎么赋值给另一个 unique_ptr 对象？
+13. 使用智能指针会出现什么问题？怎么解决？
+* 语言对比
+1. C++ 11 新特性
+2. C 和 C++ 的区别
+3. Java 和 C++ 的区别
+4. Python 和 C++ 的区别
+* 面向对象
+1. 什么是面向对象？面向对象的三大特性
+2. 重载、重写、隐藏的区别
+3. 如何理解 C++ 是面向对象编程
+4. 什么是多态？多态如何实现？
+* 关键字库函数
+1. sizeof 和 strlen 的区别
+2. lambda 表达式（匿名函数）的具体应用和使用场景
+3. explicit 的作用（如何避免编译器进行隐式类型转换）
+4. C 和 C++ static 的区别
+5. static 的作用
+6. static 在类中使用的注意事项（定义、初始化和使用）
+7. static 全局变量和普通全局变量的异同
+8. const 作用及用法
+9. define 和 const 的区别
+10. define 和 typedef 的区别
+11. 用宏实现比较大小，以及两个数中的最小值
+12. inline 作用及使用方法
+13. inline 函数工作原理
+14. 宏定义（define）和内联函数（inline）的区别
+15. new 的作用？
+16. new 和 malloc 如何判断是否申请到内存？
+17. delete 实现原理？delete 和 delete[] 的区别？
+18. new 和 malloc 的区别，delete 和 free 的区别
+19. malloc 的原理？malloc 的底层实现？
+20. C 和 C++ struct 的区别？
+21. 为什么有了 class 还保留 struct？
+22. struct 和 union 的区别
+23. class 和 struct 的异同
+24. volatile 的作用？是否具有原子性，对编译器有什么影响？
+25. 什么情况下一定要用 volatile， 能否和 const 一起使用？
+26. 返回函数中静态变量的地址会发生什么？
+27. extern C 的作用？
+28. sizeof(1==1) 在 C 和 C++ 中分别是什么结果？
+29. memcpy 函数的底层原理？
+30. strcpy 函数有什么缺陷？
+31. auto 类型推导的原理
+* 类相关
+1. 什么是虚函数？什么是纯虚函数？
+2. 虚函数和纯虚函数的区别？
+3. 虚函数的实现机制
+4. 单继承和多继承的虚函数表结构
+5. 如何禁止构造函数的使用？
+6. 什么是类的默认构造函数？
+7. 构造函数、析构函数是否需要定义成虚函数？为什么？
+8. 如何避免拷贝？
+9. 如何减少构造函数开销？
+10. 多重继承时会出现什么状况？如何解决？
+11. 空类占多少字节？C++ 编译器会给一个空类自动生成哪些函数？
+12. 为什么拷贝构造函数必须为引用？
+13. C++ 类对象的初始化顺序
+14. 如何禁止一个类被实例化？
+15. 为什么用成员初始化列表会快一些？
+16. 实例化一个对象需要哪几个阶段
+17. 友元函数的作用及使用场景
+18. 静态绑定和动态绑定是怎么实现的？
+19. 深拷贝和浅拷贝的区别
+20. 编译时多态和运行时多态的区别
+21. 实现一个类成员函数，要求不允许修改类的成员变量？
+22. 如何让类不能被继承？
+* 语言特性相关
+1. 左值和右值的区别？左值引用和右值引用的区别，如何将左值转换成右值？
+2. std::move() 函数的实现原理
+3. 什么是指针？指针的大小及用法？
+4. 什么是野指针和悬空指针？
+5. C++ 11 nullptr 比 NULL 优势
+6. 指针和引用的区别？
+7. 常量指针和指针常量的区别
+8. 函数指针和指针函数的区别
+9. 强制类型转换有哪几种？
+10. 如何判断结构体是否相等？能否用 memcmp 函数判断结构体相等？
+11. 参数传递时，值传递、引用传递、指针传递的区别？
+12. 什么是模板？如何实现？
+13. 函数模板和类模板的区别？
+14. 什么是可变参数模板？
+15. 什么是模板特化？为什么特化？
+16. include " " 和 <> 的区别
+17. switch 的 case 里为何不能定义变量
+18. 迭代器的作用？
+19. 泛型编程如何实现？
+20. 什么是类型萃取？
+* 设计模式
+1. 了解哪些设计模式？
+2. 什么是单例模式？如何实现？应用场景？
+3. 什么是工厂模式？如何实现？应用场景？
+4. 什么是观察者模式？如何实现？应用场景？
+
+### MISC
+
 * [这些C++工程师面试题你都会了吗？](https://mp.weixin.qq.com/s/JA3ZrRwS_KllNdJxVMQRdA)
   * [你们要的C++面试题答案来了--基础篇](https://mp.weixin.qq.com/s/YRo5Lm9pbbZnjY1DQfW6yw)
 * [2021 年 C++ 岗就业如何？附学习路线图 (qq.com)](https://mp.weixin.qq.com/s/g6dHxYN7jhw_bLXqnFdEyA)
