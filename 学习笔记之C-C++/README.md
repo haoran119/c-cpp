@@ -757,7 +757,7 @@ Implicit conversions with classes
 * but each one with its own special characteristics
 
 #
-[const_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/const_cast)
+[const_cast conversion](https://en.cppreference.com/w/cpp/language/const_cast)
 
 * `adds or removes cv-qualifiers`
 * Converts between types with different cv-qualification.
@@ -868,19 +868,19 @@ type::i = 4
     ```
 
 # 
-[static_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/static_cast)
+[static_cast conversion](https://en.cppreference.com/w/cpp/language/static_cast)
 
 * converts one type to another related type
 * Converts between types using a combination of implicit and user-defined conversions.
 
 #
-[reinterpret_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/reinterpret_cast)
+[reinterpret_cast conversion](https://en.cppreference.com/w/cpp/language/reinterpret_cast)
 
 * converts type to unrelated type
 * Converts between types by reinterpreting the underlying bit pattern.
 
 #
-[dynamic_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/dynamic_cast)
+[dynamic_cast conversion](https://en.cppreference.com/w/cpp/language/dynamic_cast)
 
 * converts within inheritance hierarchies
 * Safely converts pointers and references to classes up, down, and sideways along the inheritance hierarchy.
@@ -1023,6 +1023,83 @@ int main() {
     }
     return 0;
 }
+```
+* [C++ equivalent of instanceof](https://www.tutorialspoint.com/cplusplus-equivalent-of-instanceof)
+    * C++ has no direct method to check one object is an instance of some class type or not. In Java, we can get this kind of facility.
+    * In C++11, we can find one item called `is_base_of<Base, T>`. This will check if the given class is a base of the given object or not. But, this does not verify whether the given class instance uses that function. 
+    * The nearest possible functionality similar to "instanceof" can be achieved using `dynamic_cast <new-type>(expression)`. This tries to covert the given value into the specified type and returns the result. if the cast is unsuccessful this returns a null pointer. This works only for polymorphic pointers and when compiler RTTI is enabled.
+```c++
+#include <iostream>
+using namespace std;
+
+template<typename Base, typename T>
+inline bool instanceof(const T *ptr) 
+{
+   return dynamic_cast<const Base*>(ptr) != nullptr;
+}
+
+class Parent 
+{
+public:
+   virtual ~Parent() {}
+   virtual void foo () { std::cout << "Parent"; }
+};
+
+class Child : public Parent 
+{
+public:
+   virtual void foo() { std::cout << "Child"; }
+};
+
+class AnotherClass{};
+
+int main() 
+{
+   Parent p;
+   Child c;
+   AnotherClass a;
+
+   Parent *ptr1 = &p;
+   Child *ptr2 = &c;
+   AnotherClass *ptr3 = &a;
+
+   if(instanceof<Parent>(ptr1)) {
+      cout << "p is an instance of the class Parent" << endl;
+   } else {
+      cout << "p is not an instance of the class Parent" << endl;
+   }
+
+   if(instanceof<Parent>(ptr2)) {
+      cout << "c is an instance of the class Parent" << endl;
+   } else {
+      cout << "c is not an instance of the class Parent" << endl;
+   }
+
+   if(instanceof<Child>(ptr2)) {
+      cout << "c is an instance of the class Child" << endl;
+   } else {
+      cout << "c is not an instance of the class Child" << endl;
+   }
+
+   if(instanceof<Child>(ptr1)) {
+      cout << "p is an instance of the class Child" << endl;
+   } else {
+      cout << "p is not an instance of the class Child" << endl;
+   }
+
+   if(instanceof<AnotherClass>(ptr2)) {
+      cout << "c is an instance of AnotherClass class" << endl;
+   } else {
+      cout << "c is not an instance of AnotherClass class" << endl;
+   }
+}
+/*
+p is an instance of the class Parent
+c is an instance of the class Parent
+c is an instance of the class Child
+p is not an instance of the class Child
+c is not an instance of AnotherClass class
+*/
 ```
 
 #
