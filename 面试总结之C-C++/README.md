@@ -1172,6 +1172,7 @@ int main()
         * This way, you allow implementers to use your interface even if they already use others.
 
 ## 语言特性相关
+
 * [namespace in C++ | Set 2 (Extending namespace and Unnamed namespace) - GeeksforGeeks](https://www.geeksforgeeks.org/namespace-in-c-set-2-extending-namespace-and-unnamed-namespace/)
   * Unnamed Namespaces
     * They are directly usable in the same program and are used for declaring unique identifiers.
@@ -1264,6 +1265,9 @@ int main()
   * [CALLBACK_百度百科](https://baike.baidu.com/item/CALLBACK/813549?fr=aladdin)
 * 函数对象功能
   * 可以用作类似C里的回调函数，也可以用作函数功能的组合
+  
+### [Type casting](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#type-casting)
+
 * [强制类型转换运算符](https://github.com/huihut/interview#%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E8%BF%90%E7%AE%97%E7%AC%A6)
 	* static_cast
 		* 用于非多态类型的转换
@@ -1288,8 +1292,10 @@ int main()
 		* reinterpret_cast 的一个实际用途是在哈希函数中，即，通过让两个不同的值几乎不以相同的索引结尾的方式将值映射到索引。
 	* bad_cast
 		* 由于强制转换为引用类型失败，dynamic_cast 运算符引发 bad_cast 异常。
-* C++模板
-  * 简化对类似函数的设计，比如要设计两个函数 abs(int a), abs(float a),就可以用模板去设计一个函数就可以了
+
+### [C++ Templates](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#templates)
+
+* 简化对类似函数的设计，比如要设计两个函数 abs(int a), abs(float a),就可以用模板去设计一个函数就可以了
 
 ### [STL](https://github.com/huihut/interview#-stl)
 
