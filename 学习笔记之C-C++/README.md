@@ -721,13 +721,17 @@ blue
 
 ##### [Type conversions](https://www.cplusplus.com/doc/tutorial/typecasting/)
  
-* Implicit conversion
-	* [C.164: Avoid implicit conversion operators](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c164-avoid-implicit-conversion-operators)
-		* Reason 
-			* Implicit conversions can be essential (e.g., double to int) but often cause surprises (e.g., String to C-style string).
-		* Note 
-			* Prefer explicitly named conversions until a serious need is demonstrated. By “serious need” we mean a reason that is fundamental in the application domain (such as an integer to complex number conversion) and frequently needed. Do not introduce implicit conversions (through conversion operators or non-explicit constructors) just to gain a minor convenience.
-* Implicit conversions with classes
+###### [Implicit conversion](https://en.cppreference.com/w/cpp/language/implicit_conversion)
+
+* [C.164: Avoid implicit conversion operators](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c164-avoid-implicit-conversion-operators)
+    * Reason 
+        * Implicit conversions can be essential (e.g., double to int) but often cause surprises (e.g., String to C-style string).
+    * Note 
+        * Prefer explicitly named conversions until a serious need is demonstrated. By “serious need” we mean a reason that is fundamental in the application domain (such as an integer to complex number conversion) and frequently needed. Do not introduce implicit conversions (through conversion operators or non-explicit constructors) just to gain a minor convenience.
+
+#
+Implicit conversions with classes
+
 * Keyword explicit
 	* [explicit specifier - cppreference.com](https://en.cppreference.com/w/cpp/language/explicit)
 		* expression	-	contextually converted constant expression of type bool
@@ -738,20 +742,149 @@ blue
 	* 为了避免这种情况的发生，C++提供了explicit关键字，通过在构造函数前加上该关键字可以避免隐式类型转换。当然，explicit也有其自身的生效范围。如：
 	* explicit只能对具有一个参数的构造函数有效。如果有多个可能不生效
 	* 如果构造函数存在多个参数，那么需要将其余的参数以默认值参数的方式使用。这样explicit关键字将继续生效。
-* Type casting
-	* Unrestricted explicit type-casting allows to convert any pointer into any other pointer type, independently of the types they point to. The subsequent call to member result will produce either a run-time error or some other unexpected results.
-	* In order to control these types of conversions between classes, we have four specific casting operators: dynamic_cast, reinterpret_cast, static_cast and const_cast. Their format is to follow the new type enclosed between angle-brackets (<>) and immediately after, the expression to be converted between parentheses.
-		* dynamic_cast <new_type> (expression)
-		* reinterpret_cast <new_type> (expression)
-		* static_cast <new_type> (expression)
-		* const_cast <new_type> (expression)
-	* The traditional type-casting equivalents to these expressions would be:
-		* (new_type) expression
-		* new_type (expression)
-	* but each one with its own special characteristics
-* [dynamic_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/dynamic_cast)
-	* Safely converts pointers and references to classes up, down, and sideways along the inheritance hierarchy.
-	* If the cast is successful, dynamic_cast returns a value of type new-type. If the cast fails and new-type is a pointer type, it returns a null pointer of that type. If the cast fails and new-type is a reference type, it throws an exception that matches a handler of type std::bad_cast.
+
+###### Type casting
+
+* Unrestricted explicit type-casting allows to convert any pointer into any other pointer type, independently of the types they point to. The subsequent call to member result will produce either a run-time error or some other unexpected results.
+* In order to control these types of conversions between classes, we have four specific casting operators: dynamic_cast, reinterpret_cast, static_cast and const_cast. Their format is to follow the new type enclosed between angle-brackets (<>) and immediately after, the expression to be converted between parentheses.
+    * dynamic_cast <new_type> (expression)
+    * reinterpret_cast <new_type> (expression)
+    * static_cast <new_type> (expression)
+    * const_cast <new_type> (expression)
+* The traditional type-casting equivalents to these expressions would be:
+    * (new_type) expression
+    * new_type (expression)
+* but each one with its own special characteristics
+
+#
+[const_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/const_cast)
+
+* `adds or removes cv-qualifiers`
+* Converts between types with different cv-qualification.
+* Syntax
+    * `const_cast < new_type > ( expression )`
+* Returns a value of type new_type.
+* Explanation
+    * Only the following conversions can be done with const_cast. In particular, only const_cast may be used to cast away (remove) constness or volatility.
+        1) Two possibly multilevel pointers to the same type may be converted between each other, regardless of cv-qualifiers at each level.
+        2) lvalue of any type T may be converted to a lvalue or rvalue reference to the same type T, more or less cv-qualified. Likewise, a prvalue of class type or an xvalue of any type may be converted to a more or less cv-qualified rvalue reference. The result of a reference const_cast refers to the original object if expression is a glvalue and to the materialized temporary otherwise (since C++17).
+        3) Same rules apply to possibly multilevel pointers to data members and possibly multilevel pointers to arrays of known and unknown bound (arrays to cv-qualified elements are considered to be cv-qualified themselves) (since C++17)
+        4) null pointer value may be converted to the null pointer value of new_type
+    * As with all cast expressions, the result is:
+        * an lvalue if new_type is an lvalue reference type or an rvalue reference to function type;
+        * an xvalue if new_type is an rvalue reference to 
+        type;
+        * a prvalue otherwise.
+```c++
+#include <iostream>
+ 
+struct type
+{
+    int i;
+ 
+    type(): i(3) {}
+ 
+    void f(int v) const
+    {
+        // this->i = v;                 // compile error: this is a pointer to const
+        const_cast<type*>(this)->i = v; // OK as long as the type object isn't const
+    }
+};
+ 
+int main() 
+{
+    int i = 3;                 // i is not declared const
+    const int& rci = i; 
+    const_cast<int&>(rci) = 4; // OK: modifies i
+    std::cout << "i = " << i << '\n';
+ 
+    type t; // if this was const type t, then t.f(4) would be undefined behavior
+    t.f(4);
+    std::cout << "type::i = " << t.i << '\n';
+ 
+    const int j = 3; // j is declared const
+    [[maybe_unused]]
+    int* pj = const_cast<int*>(&j);
+    // *pj = 4;      // undefined behavior
+ 
+    [[maybe_unused]]
+    void (type::* pmf)(int) const = &type::f; // pointer to member function
+    // const_cast<void(type::*)(int)>(pmf);   // compile error: const_cast does
+                                              // not work on function pointers
+}
+/*
+i = 4
+type::i = 4
+*/
+```
+* [const_cast examples](https://www.geeksforgeeks.org/const_cast-in-c-type-casting-operators/)
+    * C++ supports following 4 types of casting operators:
+        1. const_cast
+        2. static_cast
+        3. dynamic_cast
+        4. reinterpret_cast
+* [c++ - Is const_cast<const Type*> ever useful? - Stack Overflow](https://stackoverflow.com/questions/5324256/is-const-castconst-type-ever-useful)
+    * const_cast, despite its name, is not specific to const; it works with cv-qualifiers which effectively comprises both const and volatile.
+    * While adding such a qualifier is allowed transparently, removing any requires a const_cast.
+    * Therefore, in the example you give:
+    ```c++
+    char* p = /**/;
+    char const* q = const_cast<char const*>(p);
+    ```
+    * the presence of the const_cast is spurious (I personally think it obscures the syntax).
+    * But you can wish to remove volatile, in which case you'll need it:
+    ```c++
+    char const volatile* p = /**/;
+    char const* q = const_cast<char const*>(p);
+    ```
+    * This could appear, for example, in driver code.
+* [types - casting non const to const in c++ - Stack Overflow](https://stackoverflow.com/questions/5853833/casting-non-const-to-const-in-c)
+    * const_cast can be used in order remove or add constness to an object. This can be useful when you want to call a specific overload.
+    ```c++
+    #include <iostream>
+
+    class foo {
+        int i;
+    public:
+        foo(int i) : i(i) { }
+
+        int bar() const {
+            return i;    
+        }
+
+        int bar() { // not const
+            i++;
+            return const_cast<const foo*>(this)->bar(); 
+        }
+    };
+
+    int main() 
+    {
+        foo my_foo(10);
+
+        std::cout << my_foo.bar() << '\n';  // 11
+        std::cout << my_foo.bar() << '\n';  // 12
+    }
+    ```
+
+# 
+[static_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/static_cast)
+
+* converts one type to another related type
+* Converts between types using a combination of implicit and user-defined conversions.
+
+#
+[reinterpret_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/reinterpret_cast)
+
+* converts type to unrelated type
+* Converts between types by reinterpreting the underlying bit pattern.
+
+#
+[dynamic_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/dynamic_cast)
+
+* converts within inheritance hierarchies
+* Safely converts pointers and references to classes up, down, and sideways along the inheritance hierarchy.
+* If the cast is successful, dynamic_cast returns a value of type new-type. If the cast fails and new-type is a pointer type, it returns a null pointer of that type. If the cast fails and new-type is a reference type, it throws an exception that matches a handler of type std::bad_cast.
 ```c++
 #include <iostream>
 #include <vector>
@@ -891,36 +1024,10 @@ int main() {
     return 0;
 }
 ```
-* [static_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/static_cast)
-	* Converts between types using a combination of implicit and user-defined conversions.
-* [reinterpret_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/reinterpret_cast)
-	* Converts between types by reinterpreting the underlying bit pattern.
-* [const_cast conversion - cppreference.com](https://en.cppreference.com/w/cpp/language/const_cast)
-	* Converts between types with different cv-qualification.
-	* Syntax
-		* const_cast < new_type > ( expression )		
-	* Returns a value of type new_type.
-	* Explanation
-		* Only the following conversions can be done with const_cast. In particular, only const_cast may be used to cast away (remove) constness or volatility.
-			1) Two possibly multilevel pointers to the same type may be converted between each other, regardless of cv-qualifiers at each level.
-			2) lvalue of any type T may be converted to a lvalue or rvalue reference to the same type T, more or less cv-qualified. Likewise, a prvalue of class type or an xvalue of any type may be converted to a more or less cv-qualified rvalue reference. The result of a reference const_cast refers to the original object if expression is a glvalue and to the materialized temporary otherwise (since C++17).
-			3) Same rules apply to possibly multilevel pointers to data members and possibly multilevel pointers to arrays of known and unknown bound (arrays to cv-qualified elements are considered to be cv-qualified themselves) (since C++17)
-			4) null pointer value may be converted to the null pointer value of new_type
-		* As with all cast expressions, the result is:
-			* an lvalue if new_type is an lvalue reference type or an rvalue reference to function type;
-			* an xvalue if new_type is an rvalue reference to 
-			type;
-			* a prvalue otherwise.
-	* [const_cast Operator | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/const-cast-operator?view=msvc-160)
-		* Removes the const, volatile, and __unaligned attribute(s) from a class.
-		* Syntax
-			* const_cast \<type-id> (expression)
-	* [const_cast examples](https://www.geeksforgeeks.org/const_cast-in-c-type-casting-operators/)
-		* C++ supports following 4 types of casting operators:
-			1. const_cast
-			2. static_cast
-			3. dynamic_cast
-			4. reinterpret_cast
+
+#
+MISC
+
 * [typeid operator - cppreference.com](https://en.cppreference.com/w/cpp/language/typeid)
 	* Queries information of a type.
 	* Used where the dynamic type of a polymorphic object must be known and for static type identification.
