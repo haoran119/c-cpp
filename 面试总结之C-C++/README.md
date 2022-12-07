@@ -807,9 +807,9 @@ int main()
         ```
     * Depending upon the resources like `dynamic memory` held by the object, either we need to perform `Shallow Copy` or `Deep Copy` in order to create a replica of the object. In general, if the variables of an object have been dynamically allocated, then it is required to do a `Deep Copy` in order to create a copy of the object.
     * Shallow Copy
-        * In shallow copy, an object is created by simply copying the data of all variables of the original object. This works well if none of the variables of the object are defined in the [heap section of memory](https://www.geeksforgeeks.org/shallow-copy-and-deep-copy-in-c/#:~:text=heap%20section%20of%20memory). If some variables are dynamically allocated memory from heap section, then the copied object variable will also reference the same memory location.
+        * In shallow copy, an object is created by simply copying the data of all variables of the original object. This works well if none of the variables of the object are defined in the [heap section of memory](https://www.geeksforgeeks.org/stack-vs-heap-memory-allocation/). If some variables are dynamically allocated memory from heap section, then the copied object variable will also reference the same memory location.
         * This will create `ambiguity and run-time errors, dangling pointer`. Since both objects will reference to the same memory location, then change made by one will reflect those change in another object as well. Since we wanted to create a replica of the object, this purpose will not be filled by Shallow copy. 
-        * Note: `C++ compiler implicitly creates a [copy constructor](https://www.geeksforgeeks.org/copy-constructor-in-cpp/) and [overloads assignment operator](https://www.geeksforgeeks.org/assignment-operator-overloading-in-c/) in order to perform shallow copy at compile time`.
+        * Note: C++ compiler `implicitly` creates a [copy constructor](https://www.geeksforgeeks.org/copy-constructor-in-cpp/) and [overloads assignment operator](https://www.geeksforgeeks.org/assignment-operator-overloading-in-c/) in order to `perform shallow copy at compile time`.
         ```c++
         // C++ program for the above approach
         #include <iostream>
