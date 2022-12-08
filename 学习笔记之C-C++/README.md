@@ -805,8 +805,31 @@ int main(){
 			* 4 % -2 = 0
 			* -3 % -4 = -3
 
+##### [typeid operator - cppreference.com](https://en.cppreference.com/w/cpp/language/typeid)
+	* Queries information of a type.
+	* Used where the dynamic type of a polymorphic object must be known and for static type identification.
+	* There is no guarantee that the same std::type_info instance will be referred to by all evaluations of the typeid expression on the same type, although they would compare equal, std::type_info::hash_code of those type_info objects would be identical, as would be their std::type_index.
+
 #### [Conversions](https://en.cppreference.com/w/cpp/language/expressions#Conversions)
- 
+
+* Type casting
+    * Unrestricted explicit type-casting allows to convert any pointer into any other pointer type, independently of the types they point to. The subsequent call to member result will produce either a run-time error or some other unexpected results.
+    * In order to control these types of conversions between classes, we have four specific casting operators: dynamic_cast, reinterpret_cast, static_cast and const_cast. Their format is to follow the new type enclosed between angle-brackets (<>) and immediately after, the expression to be converted between parentheses.
+        * dynamic_cast <new_type> (expression)
+        * reinterpret_cast <new_type> (expression)
+        * static_cast <new_type> (expression)
+        * const_cast <new_type> (expression)
+    * The traditional type-casting equivalents to these expressions would be:
+        * (new_type) expression
+        * new_type (expression)
+* but each one with its own special characteristics
+* [如何攻克 C++ 中复杂的类型转换？](https://mp.weixin.qq.com/s/lJiva3BUJXUV0cpX1dOe2Q)
+    * https://github.com/yingyulou
+* [详解 C++ 的隐式类型转换与函数重载！](https://mp.weixin.qq.com/s/S_1KPn_GWJ7hmLH19Dajfg)
+    * https://github.com/yingyulou
+* [谁说 C++ 的强制类型转换很难懂？](https://mp.weixin.qq.com/s/q3iwtvqMSp6lNC_ZR_SP6A)
+    * https://github.com/yingyulou
+
 ##### [Implicit conversion](https://en.cppreference.com/w/cpp/language/implicit_conversion)
 
 * [C.164: Avoid implicit conversion operators](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c164-avoid-implicit-conversion-operators)
@@ -814,33 +837,6 @@ int main(){
         * Implicit conversions can be essential (e.g., double to int) but often cause surprises (e.g., String to C-style string).
     * Note 
         * Prefer explicitly named conversions until a serious need is demonstrated. By “serious need” we mean a reason that is fundamental in the application domain (such as an integer to complex number conversion) and frequently needed. Do not introduce implicit conversions (through conversion operators or non-explicit constructors) just to gain a minor convenience.
-
-#
-Implicit conversions with classes
-
-* Keyword explicit
-	* [explicit specifier - cppreference.com](https://en.cppreference.com/w/cpp/language/explicit)
-		* expression	-	contextually converted constant expression of type bool
-			1) Specifies that a constructor or conversion function (since C++11) or deduction guide (since C++17) is explicit, that is, it cannot be used for implicit conversions and copy-initialization.
-			2) The explicit specifier may be used with a constant expression. The function is explicit if and only if that constant expression evaluates to true. (since C++20)
-		* The explicit specifier may only appear within the decl-specifier-seq of the declaration of a constructor or conversion function (since C++11) within its class definition.
-* [如何避免类构造函数中的隐式转换](https://mp.weixin.qq.com/s/VrMHxOwDkzTIfPFXVuaOJw)
-	* 为了避免这种情况的发生，C++提供了explicit关键字，通过在构造函数前加上该关键字可以避免隐式类型转换。当然，explicit也有其自身的生效范围。如：
-	* explicit只能对具有一个参数的构造函数有效。如果有多个可能不生效
-	* 如果构造函数存在多个参数，那么需要将其余的参数以默认值参数的方式使用。这样explicit关键字将继续生效。
-
-##### Type casting
-
-* Unrestricted explicit type-casting allows to convert any pointer into any other pointer type, independently of the types they point to. The subsequent call to member result will produce either a run-time error or some other unexpected results.
-* In order to control these types of conversions between classes, we have four specific casting operators: dynamic_cast, reinterpret_cast, static_cast and const_cast. Their format is to follow the new type enclosed between angle-brackets (<>) and immediately after, the expression to be converted between parentheses.
-    * dynamic_cast <new_type> (expression)
-    * reinterpret_cast <new_type> (expression)
-    * static_cast <new_type> (expression)
-    * const_cast <new_type> (expression)
-* The traditional type-casting equivalents to these expressions would be:
-    * (new_type) expression
-    * new_type (expression)
-* but each one with its own special characteristics
 
 ##### [const_cast conversion](https://en.cppreference.com/w/cpp/language/const_cast)
 
@@ -1183,20 +1179,6 @@ p is not an instance of the class Child
 c is not an instance of AnotherClass class
 */
 ```
-
-#
-MISC
-
-* [typeid operator - cppreference.com](https://en.cppreference.com/w/cpp/language/typeid)
-	* Queries information of a type.
-	* Used where the dynamic type of a polymorphic object must be known and for static type identification.
-	* There is no guarantee that the same std::type_info instance will be referred to by all evaluations of the typeid expression on the same type, although they would compare equal, std::type_info::hash_code of those type_info objects would be identical, as would be their std::type_index.
-* [如何攻克 C++ 中复杂的类型转换？](https://mp.weixin.qq.com/s/lJiva3BUJXUV0cpX1dOe2Q)
-  * https://github.com/yingyulou
-* [详解 C++ 的隐式类型转换与函数重载！](https://mp.weixin.qq.com/s/S_1KPn_GWJ7hmLH19Dajfg)
-  * https://github.com/yingyulou
-* [谁说 C++ 的强制类型转换很难懂？](https://mp.weixin.qq.com/s/q3iwtvqMSp6lNC_ZR_SP6A)
-  * https://github.com/yingyulou
 
 ### [Declarations](https://en.cppreference.com/w/cpp/language/declarations)
 
@@ -1597,6 +1579,16 @@ blue
 ### [Statements](https://en.cppreference.com/w/cpp/language/statements)
 
 ### Classes
+
+* [explicit specifier - cppreference.com](https://en.cppreference.com/w/cpp/language/explicit)
+    * expression	-	contextually converted constant expression of type bool
+        1) Specifies that a constructor or conversion function (since C++11) or deduction guide (since C++17) is explicit, that is, it cannot be used for implicit conversions and copy-initialization.
+        2) The explicit specifier may be used with a constant expression. The function is explicit if and only if that constant expression evaluates to true. (since C++20)
+    * The explicit specifier may only appear within the decl-specifier-seq of the declaration of a constructor or conversion function (since C++11) within its class definition.
+* [如何避免类构造函数中的隐式转换](https://mp.weixin.qq.com/s/VrMHxOwDkzTIfPFXVuaOJw)
+	* 为了避免这种情况的发生，C++提供了explicit关键字，通过在构造函数前加上该关键字可以避免隐式类型转换。当然，explicit也有其自身的生效范围。如：
+	* explicit只能对具有一个参数的构造函数有效。如果有多个可能不生效
+	* 如果构造函数存在多个参数，那么需要将其余的参数以默认值参数的方式使用。这样explicit关键字将继续生效。
 
 ### Templates
 
