@@ -805,10 +805,11 @@ int main(){
 			* 4 % -2 = 0
 			* -3 % -4 = -3
 
-##### [typeid operator - cppreference.com](https://en.cppreference.com/w/cpp/language/typeid)
-	* Queries information of a type.
-	* Used where the dynamic type of a polymorphic object must be known and for static type identification.
-	* There is no guarantee that the same std::type_info instance will be referred to by all evaluations of the typeid expression on the same type, although they would compare equal, std::type_info::hash_code of those type_info objects would be identical, as would be their std::type_index.
+##### [typeid operator](https://en.cppreference.com/w/cpp/language/typeid)
+
+* Queries information of a type.
+* Used where the dynamic type of a polymorphic object must be known and for static type identification.
+* There is no guarantee that the same std::type_info instance will be referred to by all evaluations of the typeid expression on the same type, although they would compare equal, std::type_info::hash_code of those type_info objects would be identical, as would be their std::type_index.
 
 #### [Conversions](https://en.cppreference.com/w/cpp/language/expressions#Conversions)
 
