@@ -1575,6 +1575,75 @@ blue
 
 ### [Initialization](https://en.cppreference.com/w/cpp/language/initialization)
 
+* Initialization of a variable provides its initial value at the time of construction.
+* The initial value may be provided in the initializer section of a declarator or a new expression. It also takes place during function calls: function parameters and the function return values are also initialized.
+* For each declarator, the initializer may be one of the following:
+    * ( expression-list )	(1)	
+    * = expression	(2)	
+    * { initializer-list }	(3)	
+    * 1) comma-separated list of arbitrary expressions and braced-init-lists in parentheses
+    * 2) the equals sign followed by an expression
+    * 3) braced-init-list: possibly empty, comma-separated list of expressions and other braced-init-lists
+* Depending on context, the initializer may invoke:
+    * Value initialization, e.g. std::string s{};
+    * Direct initialization, e.g. std::string s("hello");
+    * Copy initialization, e.g. std::string s = "hello";
+    * List initialization, e.g. std::string s{'a', 'b', 'c'};
+    * Aggregate initialization, e.g. char a[3] = {'a', 'b'};
+    * Reference initialization, e.g. char& c = a[0];
+* If no initializer is provided, the rules of default initialization apply.
+* Initialization includes the evaluation of all subexpressions within the initializer and the creation of any temporary objects for function arguments or return values.
+
+#### [Initializer](https://en.cppreference.com/w/cpp/language/initialization)
+
+##### [Copy elision](https://en.cppreference.com/w/cpp/language/copy_elision)
+
+* Omits copy and move (since C++11) constructors, resulting in zero-copy pass-by-value semantics.
+```c++
+#include <iostream>
+ 
+struct Noisy
+{
+    Noisy() { std::cout << "constructed at " << this << '\n'; }
+    Noisy(const Noisy&) { std::cout << "copy-constructed\n"; }
+    Noisy(Noisy&&) { std::cout << "move-constructed\n"; }
+    ~Noisy() { std::cout << "destructed at " << this << '\n'; }
+};
+ 
+Noisy f()
+{
+    Noisy v = Noisy(); // copy elision when initializing v
+                       // from a temporary (until C++17) / prvalue (since C++17)
+    return v; // NRVO from v to the result object (not guaranteed, even in C++17)
+}             // if optimization is disabled, the move constructor is called
+ 
+void g(Noisy arg)
+{
+    std::cout << "&arg = " << &arg << '\n';
+}
+ 
+int main()
+{
+    Noisy v = f(); // copy elision in initialization of v
+                   // from the temporary returned by f() (until C++17)
+                   // from the prvalue f() (since C++17)
+ 
+    std::cout << "&v = " << &v << '\n';
+ 
+    g(f()); // copy elision in initialization of the parameter of g()
+            // from the temporary returned by f() (until C++17)
+            // from the prvalue f() (since C++17)
+}
+/*
+constructed at 0x7fffd635fd4e
+&v = 0x7fffd635fd4e
+constructed at 0x7fffd635fd4f
+&arg = 0x7fffd635fd4f
+destructed at 0x7fffd635fd4f
+destructed at 0x7fffd635fd4e
+*/
+```
+
 ### [Functions](https://en.cppreference.com/w/cpp/language/functions)
 
 ### [Statements](https://en.cppreference.com/w/cpp/language/statements)
