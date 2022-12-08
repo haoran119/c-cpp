@@ -4432,12 +4432,12 @@ int main(int argc, char *argv[]) {
 
 ##### Members
 
-###### [static members - cppreference.com](https://en.cppreference.com/w/cpp/language/static)
+###### [static members](https://en.cppreference.com/w/cpp/language/static)
 
 * Inside a class definition, the keyword static declares members that are not bound to class instances.
 * Outside a class definition, it has a different meaning: see storage duration.
 
-###### [Friend declaration - cppreference.com](https://en.cppreference.com/w/cpp/language/friend)
+###### [Friend declaration](https://en.cppreference.com/w/cpp/language/friend)
 
 * The friend declaration appears in a class body and grants a function or another class access to private and protected members of the class where the friend declaration appears.
 * Description
