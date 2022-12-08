@@ -262,6 +262,28 @@
 * [这不就是你要的C++后台开发学习路线吗？](https://mp.weixin.qq.com/s/1FRSTcUnGf6e8HvJ3sdwLg)
 * [45天，入门C++](https://mp.weixin.qq.com/s/GEUChOAu8wKZ-mazyKaMow)
 
+### [Basic concepts](https://en.cppreference.com/w/cpp/language/basic_concepts)
+
+### [Keywords](https://en.cppreference.com/w/cpp/keyword)
+
+### [Preprocessor](https://en.cppreference.com/w/cpp/preprocessor)
+
+### [Expressions](https://en.cppreference.com/w/cpp/language/expressions)
+
+### [Declarations](https://en.cppreference.com/w/cpp/language/declarations)
+
+### [Initialization](https://en.cppreference.com/w/cpp/language/initialization)
+
+### [Functions](https://en.cppreference.com/w/cpp/language/functions)
+
+### [Statements](https://en.cppreference.com/w/cpp/language/statements)
+
+### Classes
+
+### Templates
+
+### Exceptions
+
 ## [C++ Standard Library](https://en.cppreference.com/w/cpp/standard_library)
 
 * [C++ Standard Library](https://www.tutorialspoint.com/cplusplus/cpp_standard_library.htm)
