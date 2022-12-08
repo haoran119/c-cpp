@@ -2770,6 +2770,8 @@ Operator function objects
 * [std::greater - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/greater)
 	* function object implementing x > y (class template)
 
+# ----
+
 #### Decision Making
 
 * [if-else和switch-case哪个效率更高？看这四张图。](https://mp.weixin.qq.com/s/zZ2O1tamQ6NDMneu9kKZRQ)
