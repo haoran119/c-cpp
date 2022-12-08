@@ -268,6 +268,96 @@
 
 ### [Preprocessor](https://en.cppreference.com/w/cpp/preprocessor)
 
+* The preprocessor is executed at [translation phase 4](https://en.cppreference.com/w/cpp/language/translation_phases#Phase_4), before the compilation. The result of preprocessing is a single file which is then passed to the actual compiler.
+* [Preprocessor directives - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/preprocessor/)
+* [Preprocessor Solution | HackerRank](https://www.hackerrank.com/challenges/preprocessor-solution/problem)
+```c++
+#define toStr(args) #args
+#define foreach(v, i) for (auto i = 0; i < v.size(); ++ i)
+#define io(v) cin >> v
+#define FUNCTION(func, op) inline void func(int& left, int right) { left = (left op right) ? left : right; }
+#define INF (int)((1 << 31) - 1)
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+#if !defined toStr || !defined io || !defined FUNCTION || !defined INF
+#error Missing preprocessor definitions
+#endif
+
+FUNCTION(minimum, <)
+FUNCTION(maximum, >)
+
+int main(){
+    int n; cin >> n;
+    vector<int> v(n);
+    foreach(v, i) {
+        io(v)[i];
+    }
+    int mn = INF;
+    int mx = -INF;
+    foreach(v, i) {
+        minimum(mn, v[i]);
+        maximum(mx, v[i]);
+    }
+    int ans = mx - mn;
+    cout << toStr(Result =) << ' '<< ans;
+
+ return 0;
+}
+```
+
+#### macro definitions (#define, #undef)
+
+* [#undef directive (C/C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/hash-undef-directive-c-cpp?view=msvc-160)
+  * Removes (undefines) a name previously created with #define.
+  * #undef identifier
+
+#### [Conditional inclusions (#ifdef, #ifndef, #if, #endif, #else and #elif)](https://en.cppreference.com/w/cpp/preprocessor/conditional)
+
+#### Line control (#line)
+
+#### Error directive (#error)
+
+#### Source file inclusion (#include)
+
+#### Pragma directive (#pragma)
+
+* [once pragma | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/once?view=msvc-160)
+  * Specifies that the compiler includes the header file only once, when compiling a source code file.
+  * Syntax
+    * #pragma once
+  * Remarks
+    * The use of #pragma once can reduce build times, as the compiler won't open and read the file again after the first #include of the file in the translation unit. It's called the multiple-include optimization. It has an effect similar to the include guard idiom, which uses preprocessor macro definitions to prevent multiple inclusions of the contents of the file. It also helps to prevent violations of the one definition rule: the requirement that all templates, types, functions, and objects have no more than one definition in your code.
+    * We recommend the include guard idiom when code must be portable to compilers that don't implement the #pragma once directive, to maintain consistency with existing code, or when the multiple-include optimization is impossible. It can occur in complex projects when file system aliasing or aliased include paths prevent the compiler from identifying identical include files by canonical path.
+  * [Header files (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/header-files-cpp?view=msvc-160#include-guards)
+    * Typically, header files have an include guard or a #pragma once directive to ensure that they are not inserted multiple times into a single .cpp file.
+  * [pragma once - Wikipedia](https://en.wikipedia.org/wiki/Pragma_once)
+    * In the C and C++ programming languages, pragma once is a non-standard but widely supported preprocessor directive designed to cause the current source file to be included only once in a single compilation.[1] Thus, #pragma once serves the same purpose as include guards, but with several advantages, including: less code, avoidance of name clashes, and sometimes improvement in compilation speed.[2] On the other hand, #pragma once is not necessarily available in all compilers and its implementation is tricky and might not always be reliable.
+  * [include guard - Wikipedia](https://en.wikipedia.org/wiki/Include_guard)
+    * In the C and C++ programming languages, an #include guard, sometimes called a macro guard, header guard or file guard, is a particular construct used to avoid the problem of double inclusion when dealing with the include directive.
+    * The C preprocessor processes directives of the form #include \<file> in a source file by locating the associated file on disk and transcluding ("including") its contents into a copy of the source file known as the translation unit, replacing the include directive in the process. The files included in this regard are generally header files, which typically contain declarations of functions and classes or structs. If certain C or C++ language constructs are defined twice, the resulting translation unit is invalid. #include guards prevent this erroneous construct from arising by the double inclusion mechanism.
+    * The addition of #include guards to a header file is one way to make that file idempotent. Another construct to combat double inclusion is #pragma once, which is non-standard but nearly universally supported among C and C++ compilers.
+  * [c++ - Is #pragma once a safe include guard? - Stack Overflow](https://stackoverflow.com/questions/787533/is-pragma-once-a-safe-include-guard)
+
+#### Predefined macro names
+
+* [Predefined macros | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160)
+* [SUCCEEDED macro (winerror.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/winerror/nf-winerror-succeeded)
+  * Provides a generic test for success on any status value.
+  * void SUCCEEDED(hr);
+  * #define SUCCEEDED(hr) (((HRESULT)(hr)) &gt;= 0)
+* [inject_statement import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/inject-statement?view=msvc-160)
+  * Inserts its argument as source text into the type-library header.
+  * #import type-library inject_statement( "source-text" )
+* [named_guids import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/named-guids?view=msvc-160)
+  * Tells the compiler to define and initialize GUID variables in the old style, of the form LIBID_MyLib, CLSID_MyCoClass, IID_MyInterface, and DIID_MyDispInterface.
+  * #import type-library named_guids
+* [rename_namespace import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/rename-namespace?view=msvc-160)
+  * Renames the namespace that contains the contents of the type library.
+  * #import type-library rename_namespace( "NewName" )
+
 ### [Expressions](https://en.cppreference.com/w/cpp/language/expressions)
 
 ### [Declarations](https://en.cppreference.com/w/cpp/language/declarations)
@@ -5435,7 +5525,7 @@ int main()
 }
 ```
 
-#### [Metaprogramming library (since C++11)](https://en.cppreference.com/w/cpp/meta)
+## [Metaprogramming library](https://en.cppreference.com/w/cpp/meta)
 
 * C++ provides metaprogramming facilities, such as type traits, compile-time rational arithmetic, and compile-time integer sequences.
 * [C++ 高阶操作：模板元编程](https://mp.weixin.qq.com/s/Ypit8BrJSvpx6B3Yf5GRuA)
@@ -5449,99 +5539,7 @@ int main()
     * （3）对于C++来说，由于各编译器的差异，大量依赖模板元编程（特别是最新形式的）的代码可能会有移植性的问题。
     * 所以，对于模板元编程，我们需要扬其长避其短，合理使用模板元编程。
 
-#### [Preprocessor](https://en.cppreference.com/w/cpp/preprocessor)
-
-* The preprocessor is executed at [translation phase 4](https://en.cppreference.com/w/cpp/language/translation_phases#Phase_4), before the compilation. The result of preprocessing is a single file which is then passed to the actual compiler.
-* [Preprocessor directives - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/preprocessor/)
-* [Preprocessor Solution | HackerRank](https://www.hackerrank.com/challenges/preprocessor-solution/problem)
-```c++
-#define toStr(args) #args
-#define foreach(v, i) for (auto i = 0; i < v.size(); ++ i)
-#define io(v) cin >> v
-#define FUNCTION(func, op) inline void func(int& left, int right) { left = (left op right) ? left : right; }
-#define INF (int)((1 << 31) - 1)
-
-#include <iostream>
-#include <vector>
-using namespace std;
-
-#if !defined toStr || !defined io || !defined FUNCTION || !defined INF
-#error Missing preprocessor definitions
-#endif
-
-FUNCTION(minimum, <)
-FUNCTION(maximum, >)
-
-int main(){
-    int n; cin >> n;
-    vector<int> v(n);
-    foreach(v, i) {
-        io(v)[i];
-    }
-    int mn = INF;
-    int mx = -INF;
-    foreach(v, i) {
-        minimum(mn, v[i]);
-        maximum(mx, v[i]);
-    }
-    int ans = mx - mn;
-    cout << toStr(Result =) << ' '<< ans;
-
- return 0;
-}
-```
-
-##### macro definitions (#define, #undef)
-
-* [#undef directive (C/C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/hash-undef-directive-c-cpp?view=msvc-160)
-  * Removes (undefines) a name previously created with #define.
-  * #undef identifier
-
-##### [Conditional inclusions (#ifdef, #ifndef, #if, #endif, #else and #elif)](https://en.cppreference.com/w/cpp/preprocessor/conditional)
-
-##### Line control (#line)
-
-##### Error directive (#error)
-
-##### Source file inclusion (#include)
-
-##### Pragma directive (#pragma)
-
-* [once pragma | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/once?view=msvc-160)
-  * Specifies that the compiler includes the header file only once, when compiling a source code file.
-  * Syntax
-    * #pragma once
-  * Remarks
-    * The use of #pragma once can reduce build times, as the compiler won't open and read the file again after the first #include of the file in the translation unit. It's called the multiple-include optimization. It has an effect similar to the include guard idiom, which uses preprocessor macro definitions to prevent multiple inclusions of the contents of the file. It also helps to prevent violations of the one definition rule: the requirement that all templates, types, functions, and objects have no more than one definition in your code.
-    * We recommend the include guard idiom when code must be portable to compilers that don't implement the #pragma once directive, to maintain consistency with existing code, or when the multiple-include optimization is impossible. It can occur in complex projects when file system aliasing or aliased include paths prevent the compiler from identifying identical include files by canonical path.
-  * [Header files (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/header-files-cpp?view=msvc-160#include-guards)
-    * Typically, header files have an include guard or a #pragma once directive to ensure that they are not inserted multiple times into a single .cpp file.
-  * [pragma once - Wikipedia](https://en.wikipedia.org/wiki/Pragma_once)
-    * In the C and C++ programming languages, pragma once is a non-standard but widely supported preprocessor directive designed to cause the current source file to be included only once in a single compilation.[1] Thus, #pragma once serves the same purpose as include guards, but with several advantages, including: less code, avoidance of name clashes, and sometimes improvement in compilation speed.[2] On the other hand, #pragma once is not necessarily available in all compilers and its implementation is tricky and might not always be reliable.
-  * [include guard - Wikipedia](https://en.wikipedia.org/wiki/Include_guard)
-    * In the C and C++ programming languages, an #include guard, sometimes called a macro guard, header guard or file guard, is a particular construct used to avoid the problem of double inclusion when dealing with the include directive.
-    * The C preprocessor processes directives of the form #include \<file> in a source file by locating the associated file on disk and transcluding ("including") its contents into a copy of the source file known as the translation unit, replacing the include directive in the process. The files included in this regard are generally header files, which typically contain declarations of functions and classes or structs. If certain C or C++ language constructs are defined twice, the resulting translation unit is invalid. #include guards prevent this erroneous construct from arising by the double inclusion mechanism.
-    * The addition of #include guards to a header file is one way to make that file idempotent. Another construct to combat double inclusion is #pragma once, which is non-standard but nearly universally supported among C and C++ compilers.
-  * [c++ - Is #pragma once a safe include guard? - Stack Overflow](https://stackoverflow.com/questions/787533/is-pragma-once-a-safe-include-guard)
-
-##### Predefined macro names
-
-* [Predefined macros | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160)
-* [SUCCEEDED macro (winerror.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/winerror/nf-winerror-succeeded)
-  * Provides a generic test for success on any status value.
-  * void SUCCEEDED(hr);
-  * #define SUCCEEDED(hr) (((HRESULT)(hr)) &gt;= 0)
-* [inject_statement import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/inject-statement?view=msvc-160)
-  * Inserts its argument as source text into the type-library header.
-  * #import type-library inject_statement( "source-text" )
-* [named_guids import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/named-guids?view=msvc-160)
-  * Tells the compiler to define and initialize GUID variables in the old style, of the form LIBID_MyLib, CLSID_MyCoClass, IID_MyInterface, and DIID_MyDispInterface.
-  * #import type-library named_guids
-* [rename_namespace import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/rename-namespace?view=msvc-160)
-  * Renames the namespace that contains the contents of the type library.
-  * #import type-library rename_namespace( "NewName" )
-
-#### [Concurrency support library](https://en.cppreference.com/w/cpp/thread)
+## [Concurrency support library](https://en.cppreference.com/w/cpp/thread)
 
 * C++ includes built-in support for threads, atomic operations, mutual exclusion, condition variables, and futures.
 * [CP: Concurrency and parallelism - C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-concurrency)
