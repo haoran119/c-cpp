@@ -1,7 +1,7 @@
 # 学习笔记之C / C++
 
 * [C++ Language Reference | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/cpp-language-reference?view=msvc-160)
-  * [Welcome back to C++ - Modern C++ | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/welcome-back-to-cpp-modern-cpp?view=msvc-160)
+    * [Welcome back to C++ - Modern C++ | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/welcome-back-to-cpp-modern-cpp?view=msvc-160)
 * [cppreference.com](https://en.cppreference.com/w/)
 * [cplusplus.com - The C++ Resources Network](http://www.cplusplus.com/)
 * [Learn C++ – Skill up with our free tutorials](https://www.learncpp.com/)
@@ -10,13 +10,13 @@
 * [C++ Programming Language - GeeksforGeeks](https://www.geeksforgeeks.org/c-plus-plus/?ref=shm)
 * [Fluent C++ - Jonathan Boccara's blog](https://www.fluentcpp.com/)
 * [Standard C++](https://isocpp.org/)
-	* 标准委员会官方站点，近期的会议、行程、活动、计划。
+    * 标准委员会官方站点，近期的会议、行程、活动、计划。
 * [Open Standards](https://www.open-std.org/)
-	* 官方开放文档，各种论文文献。
+    * 官方开放文档，各种论文文献。
 * [Bjarne Stroustrup's Homepage](https://www.stroustrup.com/index.html)
-	* C++之父的主页
+    * C++之父的主页
 * [C++ Team Blog](https://devblogs.microsoft.com/cppblog/)
-	* 微软C++团队的博客
+    * 微软C++团队的博客
 * [fffaraz/awesome-cpp: A curated list of awesome C++ (or C) frameworks, libraries, resources, and shiny things.](https://github.com/fffaraz/awesome-cpp)
 * [Clean Code - Uncle Bob / Lesson 1 - YouTube](https://www.youtube.com/watch?v=7EmboKQH8lM)
 * [Cᐩᐩ Weekly With Jason Turner - YouTube](https://www.youtube.com/channel/UCxHAlbZQNFU2LgEtiqd2Maw)
@@ -243,196 +243,7 @@
     * https://blog.csdn.net/daheiantian/article/details/6095507
     * "??/"会被编译器当作 /，变成C语言的换行符（多行代码连接符）。于是这段代码等同于// 注释语句 a = b+c ;就会被注释掉。
 
-## [C++ language](https://en.cppreference.com/w/cpp/language)
-
-* This is a reference of the core C++ language constructs.
-* [最好的 5 个 C++ 网站](https://mp.weixin.qq.com/s/v3PoPBYI3uJAsQeqQQQlfA)
-    * [cppreference](https://en.cppreference.com/w/)
-        * cppreference 即 C++ 参考手册，这个网站始终是我的首选，因为它非常简洁，可读性也很强，不但更新及时（已经到 C++20 了），还提供了很好的示例。
-    * [LearnCpp](http://www.learncpp.com/)
-        * 这可以说是最好的 C++ 教程网站了，组织结构非常好，而且内容丰富、易于理解（涵盖面很广，讲解也很细致），会进行定期更新，并增加一些新的主题。毫不夸张的说，它就像一本 C++ 在线书籍。
-    * [Cplusplus](http://www.cplusplus.com/)
-        * 这也是一个学习 C++ 的优秀网站，除了提供相应的教程之外，还有一个很棒的论坛。和其它网站相比，它的价值更多体现在参考上，因为里面解释了许多编程概念，如果对某个特定的东西感到困惑，那么这些概念将会很有帮助。（吐槽一下，更新不及时！）
-    * [TutorialsPoint](https://www.tutorialspoint.com/cplusplus/index.htm)
-        * Tutorialspoint 是一个顶级网站，之所以这么说，是因为你想学的任何技术（包括 C++），它几乎都提供了详细的教程。保存好就对了，超级有用。（顺便再介绍一个 GeeksForGeeks）
-    * [Awesome C++](https://github.com/fffaraz/awesome-cpp)
-        * 想必很多人都知道 GitHub 上的 Awesome-XXX 系列的资源整理，awesome-cpp 就是 fffaraz 发起维护的 C++ 资源列表，内容包括：标准库、Web 应用框架、人工智能、数据库、图片处理、机器学习、日志、代码分析等。这个嘛，可以用到老 O(∩_∩)O哈哈~！
-* [C/C++ PK 各大编程语言](https://mp.weixin.qq.com/s/zTuPyQRkjkVWp_KIjMh_Kw)
-* [C++ 后端开发路线](https://mp.weixin.qq.com/s/QvFQEjUPEw_2zexaZi6GNQ)
-* [这不就是你要的C++后台开发学习路线吗？](https://mp.weixin.qq.com/s/1FRSTcUnGf6e8HvJ3sdwLg)
-* [45天，入门C++](https://mp.weixin.qq.com/s/GEUChOAu8wKZ-mazyKaMow)
-
-### [Basic concepts](https://en.cppreference.com/w/cpp/language/basic_concepts)
-
-### [Keywords](https://en.cppreference.com/w/cpp/keyword)
-
-### [Preprocessor](https://en.cppreference.com/w/cpp/preprocessor)
-
-* The preprocessor is executed at [translation phase 4](https://en.cppreference.com/w/cpp/language/translation_phases#Phase_4), before the compilation. The result of preprocessing is a single file which is then passed to the actual compiler.
-* [Preprocessor directives - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/preprocessor/)
-* [Preprocessor Solution | HackerRank](https://www.hackerrank.com/challenges/preprocessor-solution/problem)
-```c++
-#define toStr(args) #args
-#define foreach(v, i) for (auto i = 0; i < v.size(); ++ i)
-#define io(v) cin >> v
-#define FUNCTION(func, op) inline void func(int& left, int right) { left = (left op right) ? left : right; }
-#define INF (int)((1 << 31) - 1)
-
-#include <iostream>
-#include <vector>
-using namespace std;
-
-#if !defined toStr || !defined io || !defined FUNCTION || !defined INF
-#error Missing preprocessor definitions
-#endif
-
-FUNCTION(minimum, <)
-FUNCTION(maximum, >)
-
-int main(){
-    int n; cin >> n;
-    vector<int> v(n);
-    foreach(v, i) {
-        io(v)[i];
-    }
-    int mn = INF;
-    int mx = -INF;
-    foreach(v, i) {
-        minimum(mn, v[i]);
-        maximum(mx, v[i]);
-    }
-    int ans = mx - mn;
-    cout << toStr(Result =) << ' '<< ans;
-
- return 0;
-}
-```
-
-#### macro definitions (#define, #undef)
-
-* [#undef directive (C/C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/hash-undef-directive-c-cpp?view=msvc-160)
-  * Removes (undefines) a name previously created with #define.
-  * #undef identifier
-
-#### [Conditional inclusions (#ifdef, #ifndef, #if, #endif, #else and #elif)](https://en.cppreference.com/w/cpp/preprocessor/conditional)
-
-#### Line control (#line)
-
-#### Error directive (#error)
-
-#### Source file inclusion (#include)
-
-#### Pragma directive (#pragma)
-
-* [once pragma | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/once?view=msvc-160)
-  * Specifies that the compiler includes the header file only once, when compiling a source code file.
-  * Syntax
-    * #pragma once
-  * Remarks
-    * The use of #pragma once can reduce build times, as the compiler won't open and read the file again after the first #include of the file in the translation unit. It's called the multiple-include optimization. It has an effect similar to the include guard idiom, which uses preprocessor macro definitions to prevent multiple inclusions of the contents of the file. It also helps to prevent violations of the one definition rule: the requirement that all templates, types, functions, and objects have no more than one definition in your code.
-    * We recommend the include guard idiom when code must be portable to compilers that don't implement the #pragma once directive, to maintain consistency with existing code, or when the multiple-include optimization is impossible. It can occur in complex projects when file system aliasing or aliased include paths prevent the compiler from identifying identical include files by canonical path.
-  * [Header files (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/header-files-cpp?view=msvc-160#include-guards)
-    * Typically, header files have an include guard or a #pragma once directive to ensure that they are not inserted multiple times into a single .cpp file.
-  * [pragma once - Wikipedia](https://en.wikipedia.org/wiki/Pragma_once)
-    * In the C and C++ programming languages, pragma once is a non-standard but widely supported preprocessor directive designed to cause the current source file to be included only once in a single compilation.[1] Thus, #pragma once serves the same purpose as include guards, but with several advantages, including: less code, avoidance of name clashes, and sometimes improvement in compilation speed.[2] On the other hand, #pragma once is not necessarily available in all compilers and its implementation is tricky and might not always be reliable.
-  * [include guard - Wikipedia](https://en.wikipedia.org/wiki/Include_guard)
-    * In the C and C++ programming languages, an #include guard, sometimes called a macro guard, header guard or file guard, is a particular construct used to avoid the problem of double inclusion when dealing with the include directive.
-    * The C preprocessor processes directives of the form #include \<file> in a source file by locating the associated file on disk and transcluding ("including") its contents into a copy of the source file known as the translation unit, replacing the include directive in the process. The files included in this regard are generally header files, which typically contain declarations of functions and classes or structs. If certain C or C++ language constructs are defined twice, the resulting translation unit is invalid. #include guards prevent this erroneous construct from arising by the double inclusion mechanism.
-    * The addition of #include guards to a header file is one way to make that file idempotent. Another construct to combat double inclusion is #pragma once, which is non-standard but nearly universally supported among C and C++ compilers.
-  * [c++ - Is #pragma once a safe include guard? - Stack Overflow](https://stackoverflow.com/questions/787533/is-pragma-once-a-safe-include-guard)
-
-#### Predefined macro names
-
-* [Predefined macros | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160)
-* [SUCCEEDED macro (winerror.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/winerror/nf-winerror-succeeded)
-  * Provides a generic test for success on any status value.
-  * void SUCCEEDED(hr);
-  * #define SUCCEEDED(hr) (((HRESULT)(hr)) &gt;= 0)
-* [inject_statement import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/inject-statement?view=msvc-160)
-  * Inserts its argument as source text into the type-library header.
-  * #import type-library inject_statement( "source-text" )
-* [named_guids import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/named-guids?view=msvc-160)
-  * Tells the compiler to define and initialize GUID variables in the old style, of the form LIBID_MyLib, CLSID_MyCoClass, IID_MyInterface, and DIID_MyDispInterface.
-  * #import type-library named_guids
-* [rename_namespace import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/rename-namespace?view=msvc-160)
-  * Renames the namespace that contains the contents of the type library.
-  * #import type-library rename_namespace( "NewName" )
-
-### [Expressions](https://en.cppreference.com/w/cpp/language/expressions)
-
-### [Declarations](https://en.cppreference.com/w/cpp/language/declarations)
-
-### [Initialization](https://en.cppreference.com/w/cpp/language/initialization)
-
-### [Functions](https://en.cppreference.com/w/cpp/language/functions)
-
-### [Statements](https://en.cppreference.com/w/cpp/language/statements)
-
-### Classes
-
-### Templates
-
-### Exceptions
-
-## [C++ Standard Library](https://en.cppreference.com/w/cpp/standard_library)
-
-* [C++ Standard Library](https://www.tutorialspoint.com/cplusplus/cpp_standard_library.htm)
-* [什么是 C 和 C++ 标准库？](https://mp.weixin.qq.com/s/wErRQ3AzgJ9lzQKsNG9SzA)
-  * https://www.oschina.net/translate/c-c-standard-library
-  * C 和 C++ 是如何制订的
-  * C 标准库
-  * C++ 标准库
-  * 实现 C/C++ 标准库
-  * GNU/Linux 版实现
-  * Mac 和 iOS 版实现
-  * Windows 版实现
-  * Android 版实现
-  * 我能使用不同版本的实现代码来替代默认实现吗？
-  * 如果我们脱离了标准库怎么办？
-
-### Basics
-
-* [<bits/stdc++.h> in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/bitsstdc-h-c/)
-  * It is basically a header file that includes every standard library. In programming contests, using this file is a good idea, when you want to reduce the time wasted in doing chores; especially when your rank is time sensitive.
-In programming contests, people do focus more on finding the algorithm to solve a problem than on software engineering. From, software engineering perspective, it is a good idea to minimize the include. If you use it actually includes a lot of files, which your program may not need, thus increases both compile time and program size unnecessarily.
-* [一个合格的ACMer的代码当中，都藏着哪些秘密？ (qq.com)](https://mp.weixin.qq.com/s/0_qWix8jARKulLFKUR5UNg)
-* [万字长文解析C++ 基础知识！初学者必看的一篇 (qq.com)](https://mp.weixin.qq.com/s/w7sKDO-YkfR2ZRwKyam4Pw)
-  * C++ 注释
-  * C++ 数据类型
-    * 基本的内置类型
-    * typedef 声明
-    * 枚举类型
-  * C++ 变量作用域
-    * 局部变量
-    * 全局变量
-    * 初始化局部变量和全局变量
-  * C++ 常量
-    * 整数常量
-    * 浮点常量
-    * 布尔常量
-    * 字符常量
-    * 字符串常量
-    * 定义常量
-      * #define 预处理器
-      * const 关键字
-  * C++ 修饰符类型
-  * C++ 中的类型限定符
-  * C++ 存储类
-    * auto 存储类
-    * register 存储类
-    * static 存储类
-    * extern 存储类
-    * mutable 存储类
-  * C++ 运算符
-    * 算术运算符
-    * 关系运算符
-    * 逻辑运算符
-    * 位运算符
-    * 赋值运算符
-    * 杂项运算符
-    * C++ 中的运算符优先级
-
-#### Compiler
+## C++ Compiler
 
 * [C++17 - Wikipedia](https://en.wikipedia.org/wiki/C%2B%2B17)
 	* Compiler support
@@ -440,7 +251,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
 		* Clang 5 and later supports all C++17 language features.[49]
 		* Visual Studio 2017 15.8 (MSVC 19.15) and later supports all C++17 language features.[50][51]
 
-##### [GCC](https://gcc.gnu.org/)
+### [GCC](https://gcc.gnu.org/)
 
 * GCC, the GNU Compiler Collection - GNU Project
 * [[ZZ]C++编译器—gcc的用法 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2010/10/08/1845888.html)
@@ -527,7 +338,7 @@ In programming contests, people do focus more on finding the algorithm to solve 
 		* 汇编（Assembly）
 		* 链接（Linking）
 
-###### make
+#### make
 
 * [Makefile相关资料 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2010/10/08/1846067.html)
 * [[ZZ]make命令与makefile文件的写法 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2010/10/08/1846070.html)
@@ -578,8 +389,70 @@ In programming contests, people do focus more on finding the algorithm to solve 
 	* [Inline Functions - Debugging with GDB](https://www.zeuthen.desy.de/dv/documentation/unixguide/infohtml/gdb/Inline-Functions.html#:~:text=gdb%20displays%20inlined%20functions%20just,using%20the%20info%20frame%20command.)
 	* [Debugging with GDB](https://docs.adacore.com/gdb-docs/html/gdb.html#Commands)
 
-#### Data Types
+## [C++ language](https://en.cppreference.com/w/cpp/language)
 
+* This is a reference of the core C++ language constructs.
+* [最好的 5 个 C++ 网站](https://mp.weixin.qq.com/s/v3PoPBYI3uJAsQeqQQQlfA)
+    * [cppreference](https://en.cppreference.com/w/)
+        * cppreference 即 C++ 参考手册，这个网站始终是我的首选，因为它非常简洁，可读性也很强，不但更新及时（已经到 C++20 了），还提供了很好的示例。
+    * [LearnCpp](http://www.learncpp.com/)
+        * 这可以说是最好的 C++ 教程网站了，组织结构非常好，而且内容丰富、易于理解（涵盖面很广，讲解也很细致），会进行定期更新，并增加一些新的主题。毫不夸张的说，它就像一本 C++ 在线书籍。
+    * [Cplusplus](http://www.cplusplus.com/)
+        * 这也是一个学习 C++ 的优秀网站，除了提供相应的教程之外，还有一个很棒的论坛。和其它网站相比，它的价值更多体现在参考上，因为里面解释了许多编程概念，如果对某个特定的东西感到困惑，那么这些概念将会很有帮助。（吐槽一下，更新不及时！）
+    * [TutorialsPoint](https://www.tutorialspoint.com/cplusplus/index.htm)
+        * Tutorialspoint 是一个顶级网站，之所以这么说，是因为你想学的任何技术（包括 C++），它几乎都提供了详细的教程。保存好就对了，超级有用。（顺便再介绍一个 GeeksForGeeks）
+    * [Awesome C++](https://github.com/fffaraz/awesome-cpp)
+        * 想必很多人都知道 GitHub 上的 Awesome-XXX 系列的资源整理，awesome-cpp 就是 fffaraz 发起维护的 C++ 资源列表，内容包括：标准库、Web 应用框架、人工智能、数据库、图片处理、机器学习、日志、代码分析等。这个嘛，可以用到老 O(∩_∩)O哈哈~！
+* [C/C++ PK 各大编程语言](https://mp.weixin.qq.com/s/zTuPyQRkjkVWp_KIjMh_Kw)
+* [C++ 后端开发路线](https://mp.weixin.qq.com/s/QvFQEjUPEw_2zexaZi6GNQ)
+* [这不就是你要的C++后台开发学习路线吗？](https://mp.weixin.qq.com/s/1FRSTcUnGf6e8HvJ3sdwLg)
+* [45天，入门C++](https://mp.weixin.qq.com/s/GEUChOAu8wKZ-mazyKaMow)
+
+### [Basic concepts](https://en.cppreference.com/w/cpp/language/basic_concepts)
+
+* [<bits/stdc++.h> in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/bitsstdc-h-c/)
+  * It is basically a header file that includes every standard library. In programming contests, using this file is a good idea, when you want to reduce the time wasted in doing chores; especially when your rank is time sensitive.
+In programming contests, people do focus more on finding the algorithm to solve a problem than on software engineering. From, software engineering perspective, it is a good idea to minimize the include. If you use it actually includes a lot of files, which your program may not need, thus increases both compile time and program size unnecessarily.
+* [一个合格的ACMer的代码当中，都藏着哪些秘密？ (qq.com)](https://mp.weixin.qq.com/s/0_qWix8jARKulLFKUR5UNg)
+* [万字长文解析C++ 基础知识！初学者必看的一篇 (qq.com)](https://mp.weixin.qq.com/s/w7sKDO-YkfR2ZRwKyam4Pw)
+  * C++ 注释
+  * C++ 数据类型
+    * 基本的内置类型
+    * typedef 声明
+    * 枚举类型
+  * C++ 变量作用域
+    * 局部变量
+    * 全局变量
+    * 初始化局部变量和全局变量
+  * C++ 常量
+    * 整数常量
+    * 浮点常量
+    * 布尔常量
+    * 字符常量
+    * 字符串常量
+    * 定义常量
+      * #define 预处理器
+      * const 关键字
+  * C++ 修饰符类型
+  * C++ 中的类型限定符
+  * C++ 存储类
+    * auto 存储类
+    * register 存储类
+    * static 存储类
+    * extern 存储类
+    * mutable 存储类
+  * C++ 运算符
+    * 算术运算符
+    * 关系运算符
+    * 逻辑运算符
+    * 位运算符
+    * 赋值运算符
+    * 杂项运算符
+    * C++ 中的运算符优先级
+
+#### [Types](https://en.cppreference.com/w/cpp/language/type) – [Fundamental types](https://en.cppreference.com/w/cpp/language/types)
+
+* Objects, references, functions including function template specializations, and expressions have a property called type, which both restricts the operations that are permitted for those entities and provides semantic meaning to the otherwise generic sequences of bits.
 * [Data Type Ranges | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/data-type-ranges?view=msvc-170)
 * [Difference between float and double in C/C++ - GeeksforGeeks](https://www.geeksforgeeks.org/difference-float-double-c-cpp/)
 * [【ZZ】C++11之统一初始化语法 | 桃子的博客志 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/8674208.html)
@@ -1360,6 +1233,135 @@ The value "Hello" already exists in the set.
     * `An xvalue expression has an address that no longer accessible by your program but can be used to initialize an rvalue reference, which provides access to the expression.` Examples include function calls that return an rvalue reference, and the array subscript, member and pointer to member expressions where the array or object is an rvalue reference.
 
 #### [Constants/Literals](https://www.tutorialspoint.com/cplusplus/cpp_constants_literals.htm)
+
+### [Keywords](https://en.cppreference.com/w/cpp/keyword)
+
+### [Preprocessor](https://en.cppreference.com/w/cpp/preprocessor)
+
+* The preprocessor is executed at [translation phase 4](https://en.cppreference.com/w/cpp/language/translation_phases#Phase_4), before the compilation. The result of preprocessing is a single file which is then passed to the actual compiler.
+* [Preprocessor directives - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/preprocessor/)
+* [Preprocessor Solution | HackerRank](https://www.hackerrank.com/challenges/preprocessor-solution/problem)
+```c++
+#define toStr(args) #args
+#define foreach(v, i) for (auto i = 0; i < v.size(); ++ i)
+#define io(v) cin >> v
+#define FUNCTION(func, op) inline void func(int& left, int right) { left = (left op right) ? left : right; }
+#define INF (int)((1 << 31) - 1)
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+#if !defined toStr || !defined io || !defined FUNCTION || !defined INF
+#error Missing preprocessor definitions
+#endif
+
+FUNCTION(minimum, <)
+FUNCTION(maximum, >)
+
+int main(){
+    int n; cin >> n;
+    vector<int> v(n);
+    foreach(v, i) {
+        io(v)[i];
+    }
+    int mn = INF;
+    int mx = -INF;
+    foreach(v, i) {
+        minimum(mn, v[i]);
+        maximum(mx, v[i]);
+    }
+    int ans = mx - mn;
+    cout << toStr(Result =) << ' '<< ans;
+
+ return 0;
+}
+```
+
+#### macro definitions (#define, #undef)
+
+* [#undef directive (C/C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/hash-undef-directive-c-cpp?view=msvc-160)
+    * Removes (undefines) a name previously created with #define.
+    * #undef identifier
+
+#### [Conditional inclusions (#ifdef, #ifndef, #if, #endif, #else and #elif)](https://en.cppreference.com/w/cpp/preprocessor/conditional)
+
+#### Line control (#line)
+
+#### Error directive (#error)
+
+#### Source file inclusion (#include)
+
+#### Pragma directive (#pragma)
+
+* [once pragma | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/once?view=msvc-160)
+    * Specifies that the compiler includes the header file only once, when compiling a source code file.
+    * Syntax
+        * #pragma once
+    * Remarks
+        * The use of #pragma once can reduce build times, as the compiler won't open and read the file again after the first #include of the file in the translation unit. It's called the multiple-include optimization. It has an effect similar to the include guard idiom, which uses preprocessor macro definitions to prevent multiple inclusions of the contents of the file. It also helps to prevent violations of the one definition rule: the requirement that all templates, types, functions, and objects have no more than one definition in your code.
+        * We recommend the include guard idiom when code must be portable to compilers that don't implement the #pragma once directive, to maintain consistency with existing code, or when the multiple-include optimization is impossible. It can occur in complex projects when file system aliasing or aliased include paths prevent the compiler from identifying identical include files by canonical path.
+    * [Header files (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/header-files-cpp?view=msvc-160#include-guards)
+        * Typically, header files have an include guard or a #pragma once directive to ensure that they are not inserted multiple times into a single .cpp file.
+    * [pragma once - Wikipedia](https://en.wikipedia.org/wiki/Pragma_once)
+        * In the C and C++ programming languages, pragma once is a non-standard but widely supported preprocessor directive designed to cause the current source file to be included only once in a single compilation.[1] Thus, #pragma once serves the same purpose as include guards, but with several advantages, including: less code, avoidance of name clashes, and sometimes improvement in compilation speed.[2] On the other hand, #pragma once is not necessarily available in all compilers and its implementation is tricky and might not always be reliable.
+    * [include guard - Wikipedia](https://en.wikipedia.org/wiki/Include_guard)
+        * In the C and C++ programming languages, an #include guard, sometimes called a macro guard, header guard or file guard, is a particular construct used to avoid the problem of double inclusion when dealing with the include directive.
+        * The C preprocessor processes directives of the form #include \<file> in a source file by locating the associated file on disk and transcluding ("including") its contents into a copy of the source file known as the translation unit, replacing the include directive in the process. The files included in this regard are generally header files, which typically contain declarations of functions and classes or structs. If certain C or C++ language constructs are defined twice, the resulting translation unit is invalid. #include guards prevent this erroneous construct from arising by the double inclusion mechanism.
+        * The addition of #include guards to a header file is one way to make that file idempotent. Another construct to combat double inclusion is #pragma once, which is non-standard but nearly universally supported among C and C++ compilers.
+    * [c++ - Is #pragma once a safe include guard? - Stack Overflow](https://stackoverflow.com/questions/787533/is-pragma-once-a-safe-include-guard)
+
+#### Predefined macro names
+
+* [Predefined macros | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160)
+* [SUCCEEDED macro (winerror.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/winerror/nf-winerror-succeeded)
+    * Provides a generic test for success on any status value.
+    * void SUCCEEDED(hr);
+    * #define SUCCEEDED(hr) (((HRESULT)(hr)) &gt;= 0)
+* [inject_statement import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/inject-statement?view=msvc-160)
+    * Inserts its argument as source text into the type-library header.
+    * #import type-library inject_statement( "source-text" )
+* [named_guids import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/named-guids?view=msvc-160)
+    * Tells the compiler to define and initialize GUID variables in the old style, of the form LIBID_MyLib, CLSID_MyCoClass, IID_MyInterface, and DIID_MyDispInterface.
+    * #import type-library named_guids
+* [rename_namespace import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/rename-namespace?view=msvc-160)
+    * Renames the namespace that contains the contents of the type library.
+    * #import type-library rename_namespace( "NewName" )
+
+### [Expressions](https://en.cppreference.com/w/cpp/language/expressions)
+
+### [Declarations](https://en.cppreference.com/w/cpp/language/declarations)
+
+### [Initialization](https://en.cppreference.com/w/cpp/language/initialization)
+
+### [Functions](https://en.cppreference.com/w/cpp/language/functions)
+
+### [Statements](https://en.cppreference.com/w/cpp/language/statements)
+
+### Classes
+
+### Templates
+
+### Exceptions
+
+## [C++ Standard Library](https://en.cppreference.com/w/cpp/standard_library)
+
+* [C++ Standard Library](https://www.tutorialspoint.com/cplusplus/cpp_standard_library.htm)
+* [什么是 C 和 C++ 标准库？](https://mp.weixin.qq.com/s/wErRQ3AzgJ9lzQKsNG9SzA)
+  * https://www.oschina.net/translate/c-c-standard-library
+  * C 和 C++ 是如何制订的
+  * C 标准库
+  * C++ 标准库
+  * 实现 C/C++ 标准库
+  * GNU/Linux 版实现
+  * Mac 和 iOS 版实现
+  * Windows 版实现
+  * Android 版实现
+  * 我能使用不同版本的实现代码来替代默认实现吗？
+  * 如果我们脱离了标准库怎么办？
+
+### Basics
+
 
 #### [Modifier Types](https://www.tutorialspoint.com/cplusplus/cpp_modifier_types.htm)
 
