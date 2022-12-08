@@ -4417,7 +4417,6 @@ int main(int argc, char *argv[]) {
 #### [Classes](https://en.cppreference.com/w/cpp/language/classes)
 
 * class v.s. struct
-	* [Structure vs class in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/structure-vs-class-in-cpp/)
 	* [C.1: Organize related data into structures (structs or classes)](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c1-organize-related-data-into-structures-structs-or-classes)
 		* Reason Ease of comprehension. If data is related (for fundamental reasons), that fact should be reflected in code.
 		* Example
