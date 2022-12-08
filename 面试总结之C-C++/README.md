@@ -254,22 +254,34 @@
 ## 关键字库函数
 
 * [size_t_百度百科](http://baike.baidu.com/link?url=sh8RRfasW1QG-PhcWPZhfcZ75Uw-KYLKh443jzpNg36hVk1Fu7WeTh4lEPLCuBx_iT0wglX5MRQUqXJMWV-oUK)
+
+### static
+
 * static关键字至少有下列n个作用：
   * 函数体内static变量的作用范围为该函数体，不同于auto变量，该变量的内存只被分配一次，因此其值在下次调用时仍维持上次的值；
   * 在模块内的static全局变量可以被模块内所用函数访问，但不能被模块外其它函数访问；
   * 在模块内的static函数只可被这一模块内的其它函数调用，这个函数的使用范围被限制在声明它的模块内；
   * 在类中的static成员变量属于整个类所拥有，对类的所有对象只有一份拷贝；
   * 在类中的static成员函数属于整个类所拥有，这个函数不接收this指针，因而只能访问类的static成员变量。
+
+### const
+
 * const关键字至少有下列n个作用：
   * 欲阻止一个变量被改变，可以使用const关键字。在定义该const变量时，通常需要对它进行初始化，因为以后就没有机会再去改变它了；
   * 对指针来说，可以指定指针本身为const，也可以指定指针所指的数据为const，或二者同时指定为const；
   * 在一个函数声明中，const可以修饰形参，表明它是一个输入参数，在函数内部不能改变其值；
   * 对于类的成员函数，若指定其为const类型，则表明其是一个常函数，不能修改类的成员变量；
   * 对于类的成员函数，有时候必须指定其返回值为const类型，以使得其返回值不为“左值”。
+
+### inline
+
 * 短小而被频繁调用的程序如何处理？
   * C语言用宏代替。
   * C++用inline，内联函数机制。
   * 内联函数可以得到宏的替换功能，所有可预见的状态和常规函数的类型检查。
+
+### new
+
 * malloc / new operator / operator new的区别？
 	* [malloc() vs new - GeeksforGeeks](https://www.geeksforgeeks.org/malloc-vs-new/)
 	* [new vs operator new in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/new-vs-operator-new-in-cpp/)
@@ -283,12 +295,15 @@ Return type|void*|exact data type|exact data type
 Exception handling on failure|return NULL|throws bad_alloc exception|throws bad_alloc exception
 Required size of memory|calculated manually|caculated by compiler|caculated by compiler
 
-* [struct和union的区别](http://blog.csdn.net/firefly_2002/article/details/7954458)
-  * 在存储多个成员信息时，编译器会自动给struct第个成员分配存储空间，struct可以存储多个成员信息，而union每个成员会用同一个存储空间，只能存储最后一个成员的信息。
-  * 都是由多个不同的数据类型成员组成，但在任何同一时刻，Union只存放了一个被先选中的成员，而结构体的所有成员都存在。
-  * 对于Union的不同成员赋值，将会对其他成员重写，原来成员的值就不存在了，而对于struct的不同成员赋值是互不影响的。
-* struct和class的区别
-  * [Access Control and Constraints of Structures, Classes and Unions](https://msdn.microsoft.com/en-us/library/4a1hcx0y.aspx)
+### struct
+
+* [struct v.s. union](http://blog.csdn.net/firefly_2002/article/details/7954458)
+    * 在存储多个成员信息时，编译器会自动给struct第个成员分配存储空间，struct可以存储多个成员信息，而union每个成员会用同一个存储空间，只能存储最后一个成员的信息。
+    * 都是由多个不同的数据类型成员组成，但在任何同一时刻，Union只存放了一个被先选中的成员，而结构体的所有成员都存在。
+    * 对于Union的不同成员赋值，将会对其他成员重写，原来成员的值就不存在了，而对于struct的不同成员赋值是互不影响的。
+* [struct v.s. class](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#classes)
+    * [Structure vs class in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/structure-vs-class-in-cpp/)
+    * [Access Control and Constraints of Structures, Classes and Unions](https://msdn.microsoft.com/en-us/library/4a1hcx0y.aspx)
 
 |Structures|Classes|Unions|
 | - | - | - |
@@ -298,12 +313,13 @@ Required size of memory|calculated manually|caculated by compiler|caculated by c
 |Default inheritance is public	|Default inheritance is private	|-
 |[not type-parameter-key in Template](https://stackoverflow.com/questions/2520130/why-are-structs-not-allowed-in-template-definitions)	|type-parameter-key in Template	|-
 
-* [volatile](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#const-type-qualifier)
-  * [volatile_百度百科](http://baike.baidu.com/link?url=gPm-SmXKapujjcPjO3COGYDPSvH4VPOMabuV61XG7kM1kMhwX1AnNxF5_VZDiq7fizEaEfpYKLRBVgRt99BxOK)
-  	* volatile是一个特征修饰符（type specifier）.volatile的作用是作为指令关键字，确保本条指令不会因编译器的优化而省略，且要求每次直接读值。
-  	* volatile的变量是说这变量可能会被意想不到地改变，这样，编译器就不会去假设这个变量的值了。
-  	* 简单地说就是防止编译器对代码进行优化。
-  	* 精确地说就是，编译器在用到这个变量时必须每次都小心地重新读取这个变量的值，而不是使用保存在寄存器里的备份。
+### [volatile](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#const-type-qualifier)
+
+* [volatile_百度百科](http://baike.baidu.com/link?url=gPm-SmXKapujjcPjO3COGYDPSvH4VPOMabuV61XG7kM1kMhwX1AnNxF5_VZDiq7fizEaEfpYKLRBVgRt99BxOK)
+    * volatile是一个特征修饰符（type specifier）.volatile的作用是作为指令关键字，确保本条指令不会因编译器的优化而省略，且要求每次直接读值。
+    * volatile的变量是说这变量可能会被意想不到地改变，这样，编译器就不会去假设这个变量的值了。
+    * 简单地说就是防止编译器对代码进行优化。
+    * 精确地说就是，编译器在用到这个变量时必须每次都小心地重新读取这个变量的值，而不是使用保存在寄存器里的备份。
 
 ## 面向对象
 
