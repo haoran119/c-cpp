@@ -575,9 +575,239 @@ In programming contests, people do focus more on finding the algorithm to solve 
 		* `Reason` Doing so takes away an #includer’s ability to effectively disambiguate and to use alternatives. It also makes #included headers order-dependent as they might have different meaning when included in different orders.
 		* `Note` An exception is using namespace std::literals;. This is necessary to use string literals in header files and given the rules - users are required to name their own UDLs operator""_x - they will not collide with the standard library.
 
-##### [Type conversions](https://www.cplusplus.com/doc/tutorial/typecasting/)
+#### [Constants/Literals](https://www.tutorialspoint.com/cplusplus/cpp_constants_literals.htm)
+
+### [Keywords](https://en.cppreference.com/w/cpp/keyword)
+
+#### [C++ keywords: auto](https://en.cppreference.com/w/cpp/keyword/auto)
+
+* [automatic storage duration specifier (until C++11)](https://en.cppreference.com/w/cpp/language/storage_duration)
+* [auto placeholder type specifier (since C++11)](https://en.cppreference.com/w/cpp/language/auto)
+* [function declaration with trailing return type (since C++11)](https://en.cppreference.com/w/cpp/language/function)
+* [structured binding declaration (since C++17)](https://en.cppreference.com/w/cpp/language/structured_binding)
+* [现代C++编程实践(七)—auto的前世今生](https://mp.weixin.qq.com/s/MMynpJruZ11JykWYY0UoOg)
+	* 1 C++98 auto出现
+		* 在c++98中，auto仅仅是作为一个关键字用来修饰变量，表示一个自动变量，它在作用域内生效，就像定义在栈上的变量一样，一旦超出其作用域，该变量会被自动释放回收。像极了变量。因此在随后的C++版本中，auto被赋予了新的含义，老的含义自然也被弃用，但是无论如何作为C++发展的一个过程，很多C++开发人员也对它非常推崇，
+	* 2 C++11 全新的auto
+		* C++11后，auto被赋予了新的含义，可以自动推导出变量的类型，在编译阶段就可以计算出变量的类型。主要用法如下：
+			* 用来定义一个变量
+			* 减少代码复杂度
+				* 在STL编程时，经常会使用大迭代器，使用后会导致代码类型较长，使用auto后会对变量自动进行推导。
+			* 模板函数返回值
+				* 在C++11中，auto还不能够直接当作函数返回值返回，需要和decltyp搭配使用
+		* 当然，在C++11中，开发带来便利的同时也需要遵循一定的约束，如：
+			* auto变量不能有二义性
+			* 不能将auto直接作为函数的参数
+				* 在后面我们会介绍，这种用法在C++14中是支持的，C++11中还没有支持。
+			* auto声明变量后需要立即进行初始化
+			* auto变量赋值为数组，这个时候推导出来的类型为指针，如果想要推导出来的类型为数组，需要在前面加上&符号。
+	* 3 C++14 一点点地改进
+		* 2014年C++14版本发布，相对C++11来说，C++14对auto特性也进行了提升，比如说前面的auto不能作为函数返回值，在这个版本中明确已经支持了。
+		* 需要明确的是在使用auto作为函数返回类型的时候依旧需要遵守避免函数返回结果的二义性
+		* 除此之后，C++14版本还可以使用decltype(auto)作为类型占位符。推导出的类型为推导出的类型是 decltype(expr)。其中expr为初始化器。
+		* decltype(auto)还可以被用于函数或者模板返回参数
+		* 当然，除了上面的使用场景外，auto还可用在lambda表达式中，关于这一点后面会进行介绍，本文不再赘述。
+	* 4 C++17 又一个大版本
+		* C++14版本发布三年后，C++17版本横空出世，在这个版本中又新增了许多新的特性，auto也不例外，这一次它又一次对模板进行了革命，令人惊奇的是这一次它是作为非类型模板形参进入的，也就是说C++17后可以根据实参自动推导出形参的类型。
+	* 5 关于C++20和C++23版本
+		* C++20和C++23版本，本文不做详细的说明，因为后续会有专门的推文进行介绍，如果大家想要继续了解，欢迎关注收藏。现在对这两个版本关于auto的改动做一个预告。C++20和C++23版本中，auto的改动主要如下：
+			* 类型约束(C++20版本): 这个和C++20中的概念一起了解比较合适。主要是限定入参类型，这样就可以针对传入参数的不同类型给出不同的反馈。关于C++20可以关注此专集详细了解：C++20新特新
+			* 简写函数模板（C++20版本):这样就可以像写普通函数一样编写模板函数了。
+			* 通过表达式推导类型(C++23版本):auto 说明符也可以在显式类型转换的简单类型说明符中出现：auto(expr) 与 auto{expr} 。从表达式推导它的类型。
+
+#### [C++ keywords: struct](https://en.cppreference.com/w/cpp/keyword/struct)
+
+* [declaration of a compound type](https://en.cppreference.com/w/cpp/language/class)
+* [declaration of a scoped enumeration type (since C++11)](https://en.cppreference.com/w/cpp/language/enum)
+* If a function or a variable exists in scope with the name identical to the name of a non-union class type, struct can be prepended to the name for disambiguation, resulting in an [elaborated type specifier](https://en.cppreference.com/w/cpp/language/elaborated_type_specifier)
+* [Struct declaration - cppreference.com](https://en.cppreference.com/w/c/language/struct)
+	* A struct is a type consisting of a sequence of members whose storage is allocated in an ordered sequence (as opposed to union, which is a type consisting of a sequence of members whose storage overlaps).
+* [Struct and union initialization - cppreference.com](https://en.cppreference.com/w/c/language/struct_initialization)
+```c++
+#include <stdio.h>
+#include <time.h>
  
-###### [Implicit conversion](https://en.cppreference.com/w/cpp/language/implicit_conversion)
+int main(void)
+{
+    char buff[70];
+    // designated initializers simplify the use of structs whose
+    // order of members is unspecified
+    struct tm my_time = { .tm_year=2012-1900, .tm_mon=9, .tm_mday=9,
+                          .tm_hour=8, .tm_min=10, .tm_sec=20 };
+    strftime(buff, sizeof buff, "%A %c", &my_time);
+    puts(buff);
+}
+```
+* [C/C++ 结构体就这样被攻克了！](https://mp.weixin.qq.com/s/-RoBZ9Gge-6HtYH8tUS8xw)
+  * 结构体的声明与定义
+    * 声明
+    * 定义
+    * 访问结构体成员
+    * 初始化结构体
+    * 对齐
+  * 结构体嵌套
+  * 结构体数组
+  * 结构体指针
+  * 传递结构体信息
+    * 传递结构体变量
+    * 传递指向结构体变量的指针
+  * 动态申请结构体
+  * 实战：建立一个图书馆数据库
+  * 单链表
+    * 在单链表中插入元素
+    * 搜索单链表
+    * 插入结点到指定位置
+    * 删除结点
+  * 内存池
+  * typedef
+    * 给数据类型起别名
+    * 结构体的搭档
+    * 进阶
+  * 共用体
+    * 声明
+    * 初始化
+  * 枚举
+  * 位域
+
+### [Preprocessor](https://en.cppreference.com/w/cpp/preprocessor)
+
+* The preprocessor is executed at [translation phase 4](https://en.cppreference.com/w/cpp/language/translation_phases#Phase_4), before the compilation. The result of preprocessing is a single file which is then passed to the actual compiler.
+* [Preprocessor directives - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/preprocessor/)
+* [Preprocessor Solution | HackerRank](https://www.hackerrank.com/challenges/preprocessor-solution/problem)
+```c++
+#define toStr(args) #args
+#define foreach(v, i) for (auto i = 0; i < v.size(); ++ i)
+#define io(v) cin >> v
+#define FUNCTION(func, op) inline void func(int& left, int right) { left = (left op right) ? left : right; }
+#define INF (int)((1 << 31) - 1)
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+#if !defined toStr || !defined io || !defined FUNCTION || !defined INF
+#error Missing preprocessor definitions
+#endif
+
+FUNCTION(minimum, <)
+FUNCTION(maximum, >)
+
+int main(){
+    int n; cin >> n;
+    vector<int> v(n);
+    foreach(v, i) {
+        io(v)[i];
+    }
+    int mn = INF;
+    int mx = -INF;
+    foreach(v, i) {
+        minimum(mn, v[i]);
+        maximum(mx, v[i]);
+    }
+    int ans = mx - mn;
+    cout << toStr(Result =) << ' '<< ans;
+
+ return 0;
+}
+```
+
+#### macro definitions (#define, #undef)
+
+* [#undef directive (C/C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/hash-undef-directive-c-cpp?view=msvc-160)
+    * Removes (undefines) a name previously created with #define.
+    * #undef identifier
+
+#### [Conditional inclusions (#ifdef, #ifndef, #if, #endif, #else and #elif)](https://en.cppreference.com/w/cpp/preprocessor/conditional)
+
+#### Line control (#line)
+
+#### Error directive (#error)
+
+#### Source file inclusion (#include)
+
+#### Pragma directive (#pragma)
+
+* [once pragma | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/once?view=msvc-160)
+    * Specifies that the compiler includes the header file only once, when compiling a source code file.
+    * Syntax
+        * #pragma once
+    * Remarks
+        * The use of #pragma once can reduce build times, as the compiler won't open and read the file again after the first #include of the file in the translation unit. It's called the multiple-include optimization. It has an effect similar to the include guard idiom, which uses preprocessor macro definitions to prevent multiple inclusions of the contents of the file. It also helps to prevent violations of the one definition rule: the requirement that all templates, types, functions, and objects have no more than one definition in your code.
+        * We recommend the include guard idiom when code must be portable to compilers that don't implement the #pragma once directive, to maintain consistency with existing code, or when the multiple-include optimization is impossible. It can occur in complex projects when file system aliasing or aliased include paths prevent the compiler from identifying identical include files by canonical path.
+    * [Header files (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/header-files-cpp?view=msvc-160#include-guards)
+        * Typically, header files have an include guard or a #pragma once directive to ensure that they are not inserted multiple times into a single .cpp file.
+    * [pragma once - Wikipedia](https://en.wikipedia.org/wiki/Pragma_once)
+        * In the C and C++ programming languages, pragma once is a non-standard but widely supported preprocessor directive designed to cause the current source file to be included only once in a single compilation.[1] Thus, #pragma once serves the same purpose as include guards, but with several advantages, including: less code, avoidance of name clashes, and sometimes improvement in compilation speed.[2] On the other hand, #pragma once is not necessarily available in all compilers and its implementation is tricky and might not always be reliable.
+    * [include guard - Wikipedia](https://en.wikipedia.org/wiki/Include_guard)
+        * In the C and C++ programming languages, an #include guard, sometimes called a macro guard, header guard or file guard, is a particular construct used to avoid the problem of double inclusion when dealing with the include directive.
+        * The C preprocessor processes directives of the form #include \<file> in a source file by locating the associated file on disk and transcluding ("including") its contents into a copy of the source file known as the translation unit, replacing the include directive in the process. The files included in this regard are generally header files, which typically contain declarations of functions and classes or structs. If certain C or C++ language constructs are defined twice, the resulting translation unit is invalid. #include guards prevent this erroneous construct from arising by the double inclusion mechanism.
+        * The addition of #include guards to a header file is one way to make that file idempotent. Another construct to combat double inclusion is #pragma once, which is non-standard but nearly universally supported among C and C++ compilers.
+    * [c++ - Is #pragma once a safe include guard? - Stack Overflow](https://stackoverflow.com/questions/787533/is-pragma-once-a-safe-include-guard)
+
+#### Predefined macro names
+
+* [Predefined macros | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160)
+* [SUCCEEDED macro (winerror.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/winerror/nf-winerror-succeeded)
+    * Provides a generic test for success on any status value.
+    * void SUCCEEDED(hr);
+    * #define SUCCEEDED(hr) (((HRESULT)(hr)) &gt;= 0)
+* [inject_statement import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/inject-statement?view=msvc-160)
+    * Inserts its argument as source text into the type-library header.
+    * #import type-library inject_statement( "source-text" )
+* [named_guids import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/named-guids?view=msvc-160)
+    * Tells the compiler to define and initialize GUID variables in the old style, of the form LIBID_MyLib, CLSID_MyCoClass, IID_MyInterface, and DIID_MyDispInterface.
+    * #import type-library named_guids
+* [rename_namespace import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/rename-namespace?view=msvc-160)
+    * Renames the namespace that contains the contents of the type library.
+    * #import type-library rename_namespace( "NewName" )
+
+### [Expressions](https://en.cppreference.com/w/cpp/language/expressions)
+
+* An expression is a sequence of operators and their operands, that specifies a computation.
+* Expression evaluation may produce a result (e.g., evaluation of 2 + 2 produces the result 4) and may generate side-effects (e.g. evaluation of std::printf("%d",4) prints the character '4' on the standard output).
+* Each C++ expression is characterized by two independent properties: A type and a value category.
+
+#### General
+
+##### [Value categories (lvalue, rvalue, xvalue)](https://en.cppreference.com/w/cpp/language/value_category)
+
+* Each C++ expression (an operator with its operands, a literal, a variable name, etc.) is characterized by two independent properties: `a type and a value category`. Each expression has some non-reference type, and each expression belongs to exactly one of the `three primary value categories: prvalue, xvalue, and lvalue`.
+* a glvalue (“generalized” lvalue) is an expression whose evaluation determines the identity of an object or function;
+* a prvalue (“pure” rvalue) is an expression whose evaluation
+    * computes the value of an operand of a built-in operator (such prvalue has no result object), or
+    * initializes an object (such prvalue is said to have a result object).
+    * The result object may be a variable, an object created by new-expression, a temporary created by temporary materialization, or a member thereof. Note that non-void discarded expressions have a result object (the materialized temporary). Also, every class and array prvalue has a result object except when it is the operand of decltype;
+* an xvalue (an “eXpiring” value) is a glvalue that denotes an object whose resources can be reused;
+* an lvalue (so-called, historically, because lvalues could appear on the left-hand side of an assignment expression) is a glvalue that is not an xvalue;
+* an rvalue (so-called, historically, because rvalues could appear on the right-hand side of an assignment expression) is a prvalue or an xvalue.
+* [Value Categories: Lvalues and Rvalues (C++) | Microsoft Learn](https://learn.microsoft.com/en-us/cpp/cpp/lvalues-and-rvalues-visual-cpp?view=msvc-170)
+    * The C++17 standard defines expression value categories as follows:
+        * A glvalue is an expression whose evaluation determines the identity of an object, bit-field, or function.
+        * A prvalue is an expression whose evaluation initializes an object or a bit-field, or computes the value of the operand of an operator, as specified by the context in which it appears.
+        * An xvalue is a glvalue that denotes an object or bit-field whose resources can be reused (usually because it is near the end of its lifetime). Example: Certain kinds of expressions involving rvalue references (8.3.2) yield xvalues, such as a call to a function whose return type is an rvalue reference or a cast to an rvalue reference type.
+        * An lvalue is a glvalue that is not an xvalue.
+        * An rvalue is a prvalue or an xvalue.
+    * The following diagram illustrates the relationships between the categories:
+    * ![image](https://user-images.githubusercontent.com/34557994/205634478-11d7da0d-53b8-46d9-8b62-4b97c0fa3e30.png)
+    * `An lvalue has an address that your program can access.` Examples of lvalue expressions include variable names, including const variables, array elements, function calls that return an lvalue reference, bit-fields, unions, and class members.
+    * `A prvalue expression has no address that is accessible by your program.` Examples of prvalue expressions include literals, function calls that return a non-reference type, and temporary objects that are created during expression evaluation but accessible only by the compiler.
+    * `An xvalue expression has an address that no longer accessible by your program but can be used to initialize an rvalue reference, which provides access to the expression.` Examples include function calls that return an rvalue reference, and the array subscript, member and pointer to member expressions where the array or object is an rvalue reference.
+
+#### [Operators](https://en.cppreference.com/w/cpp/language/expressions#Operators)
+
+* [五分钟小知识：为什么说 ++i 的效率比 i++ 高？](https://mp.weixin.qq.com/s/___R-0mc7zezAEVG-1-b5w)
+  * 对于内置类型，前置和后置自增或者自减在编译器优化的情况下，两者并无多大差别，而对于自定义类型，如无特别需要，人们似乎更加偏爱前置自增或自减，因为后置自增常常会产生临时对象。
+* [Modulo Operator (%) in C/C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/modulo-operator-in-c-cpp-with-examples/)
+	* Restrictions of the modulo operator: 
+		* 1. The % operator cannot be applied to floating-point numbers i.e float or double. If you try to use the modulo operator with floating-point constants or variables, the compiler will produce a error
+		* 2. The sign of the result for modulo operator is machine-dependent for negative operands, as the action takes as a result of underflow or overflow. 
+			* -3 % 4 = -3
+			* 4 % -2 = 0
+			* -3 % -4 = -3
+
+#### [Conversions](https://en.cppreference.com/w/cpp/language/expressions#Conversions)
+ 
+##### [Implicit conversion](https://en.cppreference.com/w/cpp/language/implicit_conversion)
 
 * [C.164: Avoid implicit conversion operators](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c164-avoid-implicit-conversion-operators)
     * Reason 
@@ -599,7 +829,7 @@ Implicit conversions with classes
 	* explicit只能对具有一个参数的构造函数有效。如果有多个可能不生效
 	* 如果构造函数存在多个参数，那么需要将其余的参数以默认值参数的方式使用。这样explicit关键字将继续生效。
 
-###### Type casting
+##### Type casting
 
 * Unrestricted explicit type-casting allows to convert any pointer into any other pointer type, independently of the types they point to. The subsequent call to member result will produce either a run-time error or some other unexpected results.
 * In order to control these types of conversions between classes, we have four specific casting operators: dynamic_cast, reinterpret_cast, static_cast and const_cast. Their format is to follow the new type enclosed between angle-brackets (<>) and immediately after, the expression to be converted between parentheses.
@@ -612,8 +842,7 @@ Implicit conversions with classes
     * new_type (expression)
 * but each one with its own special characteristics
 
-#
-[const_cast conversion](https://en.cppreference.com/w/cpp/language/const_cast)
+##### [const_cast conversion](https://en.cppreference.com/w/cpp/language/const_cast)
 
 * `adds or removes cv-qualifiers`
 * Converts between types with different cv-qualification.
@@ -723,20 +952,17 @@ type::i = 4
     }
     ```
 
-# 
-[static_cast conversion](https://en.cppreference.com/w/cpp/language/static_cast)
+##### [static_cast conversion](https://en.cppreference.com/w/cpp/language/static_cast)
 
 * converts one type to another related type
 * Converts between types using a combination of implicit and user-defined conversions.
 
-#
-[reinterpret_cast conversion](https://en.cppreference.com/w/cpp/language/reinterpret_cast)
+##### [reinterpret_cast conversion](https://en.cppreference.com/w/cpp/language/reinterpret_cast)
 
 * converts type to unrelated type
 * Converts between types by reinterpreting the underlying bit pattern.
 
-#
-[dynamic_cast conversion](https://en.cppreference.com/w/cpp/language/dynamic_cast)
+##### [dynamic_cast conversion](https://en.cppreference.com/w/cpp/language/dynamic_cast)
 
 * converts within inheritance hierarchies
 * Safely converts pointers and references to classes up, down, and sideways along the inheritance hierarchy.
@@ -971,218 +1197,6 @@ MISC
   * https://github.com/yingyulou
 * [谁说 C++ 的强制类型转换很难懂？](https://mp.weixin.qq.com/s/q3iwtvqMSp6lNC_ZR_SP6A)
   * https://github.com/yingyulou
-
-#### [Constants/Literals](https://www.tutorialspoint.com/cplusplus/cpp_constants_literals.htm)
-
-### [Keywords](https://en.cppreference.com/w/cpp/keyword)
-
-#### [C++ keywords: auto](https://en.cppreference.com/w/cpp/keyword/auto)
-
-* [automatic storage duration specifier (until C++11)](https://en.cppreference.com/w/cpp/language/storage_duration)
-* [auto placeholder type specifier (since C++11)](https://en.cppreference.com/w/cpp/language/auto)
-* [function declaration with trailing return type (since C++11)](https://en.cppreference.com/w/cpp/language/function)
-* [structured binding declaration (since C++17)](https://en.cppreference.com/w/cpp/language/structured_binding)
-* [现代C++编程实践(七)—auto的前世今生](https://mp.weixin.qq.com/s/MMynpJruZ11JykWYY0UoOg)
-	* 1 C++98 auto出现
-		* 在c++98中，auto仅仅是作为一个关键字用来修饰变量，表示一个自动变量，它在作用域内生效，就像定义在栈上的变量一样，一旦超出其作用域，该变量会被自动释放回收。像极了变量。因此在随后的C++版本中，auto被赋予了新的含义，老的含义自然也被弃用，但是无论如何作为C++发展的一个过程，很多C++开发人员也对它非常推崇，
-	* 2 C++11 全新的auto
-		* C++11后，auto被赋予了新的含义，可以自动推导出变量的类型，在编译阶段就可以计算出变量的类型。主要用法如下：
-			* 用来定义一个变量
-			* 减少代码复杂度
-				* 在STL编程时，经常会使用大迭代器，使用后会导致代码类型较长，使用auto后会对变量自动进行推导。
-			* 模板函数返回值
-				* 在C++11中，auto还不能够直接当作函数返回值返回，需要和decltyp搭配使用
-		* 当然，在C++11中，开发带来便利的同时也需要遵循一定的约束，如：
-			* auto变量不能有二义性
-			* 不能将auto直接作为函数的参数
-				* 在后面我们会介绍，这种用法在C++14中是支持的，C++11中还没有支持。
-			* auto声明变量后需要立即进行初始化
-			* auto变量赋值为数组，这个时候推导出来的类型为指针，如果想要推导出来的类型为数组，需要在前面加上&符号。
-	* 3 C++14 一点点地改进
-		* 2014年C++14版本发布，相对C++11来说，C++14对auto特性也进行了提升，比如说前面的auto不能作为函数返回值，在这个版本中明确已经支持了。
-		* 需要明确的是在使用auto作为函数返回类型的时候依旧需要遵守避免函数返回结果的二义性
-		* 除此之后，C++14版本还可以使用decltype(auto)作为类型占位符。推导出的类型为推导出的类型是 decltype(expr)。其中expr为初始化器。
-		* decltype(auto)还可以被用于函数或者模板返回参数
-		* 当然，除了上面的使用场景外，auto还可用在lambda表达式中，关于这一点后面会进行介绍，本文不再赘述。
-	* 4 C++17 又一个大版本
-		* C++14版本发布三年后，C++17版本横空出世，在这个版本中又新增了许多新的特性，auto也不例外，这一次它又一次对模板进行了革命，令人惊奇的是这一次它是作为非类型模板形参进入的，也就是说C++17后可以根据实参自动推导出形参的类型。
-	* 5 关于C++20和C++23版本
-		* C++20和C++23版本，本文不做详细的说明，因为后续会有专门的推文进行介绍，如果大家想要继续了解，欢迎关注收藏。现在对这两个版本关于auto的改动做一个预告。C++20和C++23版本中，auto的改动主要如下：
-			* 类型约束(C++20版本): 这个和C++20中的概念一起了解比较合适。主要是限定入参类型，这样就可以针对传入参数的不同类型给出不同的反馈。关于C++20可以关注此专集详细了解：C++20新特新
-			* 简写函数模板（C++20版本):这样就可以像写普通函数一样编写模板函数了。
-			* 通过表达式推导类型(C++23版本):auto 说明符也可以在显式类型转换的简单类型说明符中出现：auto(expr) 与 auto{expr} 。从表达式推导它的类型。
-
-#### [C++ keywords: struct](https://en.cppreference.com/w/cpp/keyword/struct)
-
-* [declaration of a compound type](https://en.cppreference.com/w/cpp/language/class)
-* [declaration of a scoped enumeration type (since C++11)](https://en.cppreference.com/w/cpp/language/enum)
-* If a function or a variable exists in scope with the name identical to the name of a non-union class type, struct can be prepended to the name for disambiguation, resulting in an [elaborated type specifier](https://en.cppreference.com/w/cpp/language/elaborated_type_specifier)
-* [Struct declaration - cppreference.com](https://en.cppreference.com/w/c/language/struct)
-	* A struct is a type consisting of a sequence of members whose storage is allocated in an ordered sequence (as opposed to union, which is a type consisting of a sequence of members whose storage overlaps).
-* [Struct and union initialization - cppreference.com](https://en.cppreference.com/w/c/language/struct_initialization)
-```c++
-#include <stdio.h>
-#include <time.h>
- 
-int main(void)
-{
-    char buff[70];
-    // designated initializers simplify the use of structs whose
-    // order of members is unspecified
-    struct tm my_time = { .tm_year=2012-1900, .tm_mon=9, .tm_mday=9,
-                          .tm_hour=8, .tm_min=10, .tm_sec=20 };
-    strftime(buff, sizeof buff, "%A %c", &my_time);
-    puts(buff);
-}
-```
-* [C/C++ 结构体就这样被攻克了！](https://mp.weixin.qq.com/s/-RoBZ9Gge-6HtYH8tUS8xw)
-  * 结构体的声明与定义
-    * 声明
-    * 定义
-    * 访问结构体成员
-    * 初始化结构体
-    * 对齐
-  * 结构体嵌套
-  * 结构体数组
-  * 结构体指针
-  * 传递结构体信息
-    * 传递结构体变量
-    * 传递指向结构体变量的指针
-  * 动态申请结构体
-  * 实战：建立一个图书馆数据库
-  * 单链表
-    * 在单链表中插入元素
-    * 搜索单链表
-    * 插入结点到指定位置
-    * 删除结点
-  * 内存池
-  * typedef
-    * 给数据类型起别名
-    * 结构体的搭档
-    * 进阶
-  * 共用体
-    * 声明
-    * 初始化
-  * 枚举
-  * 位域
-
-### [Preprocessor](https://en.cppreference.com/w/cpp/preprocessor)
-
-* The preprocessor is executed at [translation phase 4](https://en.cppreference.com/w/cpp/language/translation_phases#Phase_4), before the compilation. The result of preprocessing is a single file which is then passed to the actual compiler.
-* [Preprocessor directives - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/preprocessor/)
-* [Preprocessor Solution | HackerRank](https://www.hackerrank.com/challenges/preprocessor-solution/problem)
-```c++
-#define toStr(args) #args
-#define foreach(v, i) for (auto i = 0; i < v.size(); ++ i)
-#define io(v) cin >> v
-#define FUNCTION(func, op) inline void func(int& left, int right) { left = (left op right) ? left : right; }
-#define INF (int)((1 << 31) - 1)
-
-#include <iostream>
-#include <vector>
-using namespace std;
-
-#if !defined toStr || !defined io || !defined FUNCTION || !defined INF
-#error Missing preprocessor definitions
-#endif
-
-FUNCTION(minimum, <)
-FUNCTION(maximum, >)
-
-int main(){
-    int n; cin >> n;
-    vector<int> v(n);
-    foreach(v, i) {
-        io(v)[i];
-    }
-    int mn = INF;
-    int mx = -INF;
-    foreach(v, i) {
-        minimum(mn, v[i]);
-        maximum(mx, v[i]);
-    }
-    int ans = mx - mn;
-    cout << toStr(Result =) << ' '<< ans;
-
- return 0;
-}
-```
-
-#### macro definitions (#define, #undef)
-
-* [#undef directive (C/C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/hash-undef-directive-c-cpp?view=msvc-160)
-    * Removes (undefines) a name previously created with #define.
-    * #undef identifier
-
-#### [Conditional inclusions (#ifdef, #ifndef, #if, #endif, #else and #elif)](https://en.cppreference.com/w/cpp/preprocessor/conditional)
-
-#### Line control (#line)
-
-#### Error directive (#error)
-
-#### Source file inclusion (#include)
-
-#### Pragma directive (#pragma)
-
-* [once pragma | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/once?view=msvc-160)
-    * Specifies that the compiler includes the header file only once, when compiling a source code file.
-    * Syntax
-        * #pragma once
-    * Remarks
-        * The use of #pragma once can reduce build times, as the compiler won't open and read the file again after the first #include of the file in the translation unit. It's called the multiple-include optimization. It has an effect similar to the include guard idiom, which uses preprocessor macro definitions to prevent multiple inclusions of the contents of the file. It also helps to prevent violations of the one definition rule: the requirement that all templates, types, functions, and objects have no more than one definition in your code.
-        * We recommend the include guard idiom when code must be portable to compilers that don't implement the #pragma once directive, to maintain consistency with existing code, or when the multiple-include optimization is impossible. It can occur in complex projects when file system aliasing or aliased include paths prevent the compiler from identifying identical include files by canonical path.
-    * [Header files (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/header-files-cpp?view=msvc-160#include-guards)
-        * Typically, header files have an include guard or a #pragma once directive to ensure that they are not inserted multiple times into a single .cpp file.
-    * [pragma once - Wikipedia](https://en.wikipedia.org/wiki/Pragma_once)
-        * In the C and C++ programming languages, pragma once is a non-standard but widely supported preprocessor directive designed to cause the current source file to be included only once in a single compilation.[1] Thus, #pragma once serves the same purpose as include guards, but with several advantages, including: less code, avoidance of name clashes, and sometimes improvement in compilation speed.[2] On the other hand, #pragma once is not necessarily available in all compilers and its implementation is tricky and might not always be reliable.
-    * [include guard - Wikipedia](https://en.wikipedia.org/wiki/Include_guard)
-        * In the C and C++ programming languages, an #include guard, sometimes called a macro guard, header guard or file guard, is a particular construct used to avoid the problem of double inclusion when dealing with the include directive.
-        * The C preprocessor processes directives of the form #include \<file> in a source file by locating the associated file on disk and transcluding ("including") its contents into a copy of the source file known as the translation unit, replacing the include directive in the process. The files included in this regard are generally header files, which typically contain declarations of functions and classes or structs. If certain C or C++ language constructs are defined twice, the resulting translation unit is invalid. #include guards prevent this erroneous construct from arising by the double inclusion mechanism.
-        * The addition of #include guards to a header file is one way to make that file idempotent. Another construct to combat double inclusion is #pragma once, which is non-standard but nearly universally supported among C and C++ compilers.
-    * [c++ - Is #pragma once a safe include guard? - Stack Overflow](https://stackoverflow.com/questions/787533/is-pragma-once-a-safe-include-guard)
-
-#### Predefined macro names
-
-* [Predefined macros | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160)
-* [SUCCEEDED macro (winerror.h) - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/api/winerror/nf-winerror-succeeded)
-    * Provides a generic test for success on any status value.
-    * void SUCCEEDED(hr);
-    * #define SUCCEEDED(hr) (((HRESULT)(hr)) &gt;= 0)
-* [inject_statement import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/inject-statement?view=msvc-160)
-    * Inserts its argument as source text into the type-library header.
-    * #import type-library inject_statement( "source-text" )
-* [named_guids import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/named-guids?view=msvc-160)
-    * Tells the compiler to define and initialize GUID variables in the old style, of the form LIBID_MyLib, CLSID_MyCoClass, IID_MyInterface, and DIID_MyDispInterface.
-    * #import type-library named_guids
-* [rename_namespace import attribute | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/rename-namespace?view=msvc-160)
-    * Renames the namespace that contains the contents of the type library.
-    * #import type-library rename_namespace( "NewName" )
-
-### [Expressions](https://en.cppreference.com/w/cpp/language/expressions)
-
-##### [Value categories](https://en.cppreference.com/w/cpp/language/value_category)
-
-* Each C++ expression (an operator with its operands, a literal, a variable name, etc.) is characterized by two independent properties: `a type and a value category`. Each expression has some non-reference type, and each expression belongs to exactly one of the `three primary value categories: prvalue, xvalue, and lvalue`.
-* a glvalue (“generalized” lvalue) is an expression whose evaluation determines the identity of an object or function;
-* a prvalue (“pure” rvalue) is an expression whose evaluation
-    * computes the value of an operand of a built-in operator (such prvalue has no result object), or
-    * initializes an object (such prvalue is said to have a result object).
-    * The result object may be a variable, an object created by new-expression, a temporary created by temporary materialization, or a member thereof. Note that non-void discarded expressions have a result object (the materialized temporary). Also, every class and array prvalue has a result object except when it is the operand of decltype;
-* an xvalue (an “eXpiring” value) is a glvalue that denotes an object whose resources can be reused;
-* an lvalue (so-called, historically, because lvalues could appear on the left-hand side of an assignment expression) is a glvalue that is not an xvalue;
-* an rvalue (so-called, historically, because rvalues could appear on the right-hand side of an assignment expression) is a prvalue or an xvalue.
-* [Value Categories: Lvalues and Rvalues (C++) | Microsoft Learn](https://learn.microsoft.com/en-us/cpp/cpp/lvalues-and-rvalues-visual-cpp?view=msvc-170)
-    * The C++17 standard defines expression value categories as follows:
-        * A glvalue is an expression whose evaluation determines the identity of an object, bit-field, or function.
-        * A prvalue is an expression whose evaluation initializes an object or a bit-field, or computes the value of the operand of an operator, as specified by the context in which it appears.
-        * An xvalue is a glvalue that denotes an object or bit-field whose resources can be reused (usually because it is near the end of its lifetime). Example: Certain kinds of expressions involving rvalue references (8.3.2) yield xvalues, such as a call to a function whose return type is an rvalue reference or a cast to an rvalue reference type.
-        * An lvalue is a glvalue that is not an xvalue.
-        * An rvalue is a prvalue or an xvalue.
-    * The following diagram illustrates the relationships between the categories:
-    * ![image](https://user-images.githubusercontent.com/34557994/205634478-11d7da0d-53b8-46d9-8b62-4b97c0fa3e30.png)
-    * `An lvalue has an address that your program can access.` Examples of lvalue expressions include variable names, including const variables, array elements, function calls that return an lvalue reference, bit-fields, unions, and class members.
-    * `A prvalue expression has no address that is accessible by your program.` Examples of prvalue expressions include literals, function calls that return a non-reference type, and temporary objects that are created during expression evaluation but accessible only by the compiler.
-    * `An xvalue expression has an address that no longer accessible by your program but can be used to initialize an rvalue reference, which provides access to the expression.` Examples include function calls that return an rvalue reference, and the array subscript, member and pointer to member expressions where the array or object is an rvalue reference.
 
 ### [Declarations](https://en.cppreference.com/w/cpp/language/declarations)
 
@@ -2693,18 +2707,6 @@ Operator function objects
 	* Function object for computing remainders of divisions. Implements operator% for type T.
 * [std::greater - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/greater)
 	* function object implementing x > y (class template)
-
-#### Operators
-
-* [五分钟小知识：为什么说 ++i 的效率比 i++ 高？](https://mp.weixin.qq.com/s/___R-0mc7zezAEVG-1-b5w)
-  * 对于内置类型，前置和后置自增或者自减在编译器优化的情况下，两者并无多大差别，而对于自定义类型，如无特别需要，人们似乎更加偏爱前置自增或自减，因为后置自增常常会产生临时对象。
-* [Modulo Operator (%) in C/C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/modulo-operator-in-c-cpp-with-examples/)
-	* Restrictions of the modulo operator: 
-		* 1. The % operator cannot be applied to floating-point numbers i.e float or double. If you try to use the modulo operator with floating-point constants or variables, the compiler will produce a error
-		* 2. The sign of the result for modulo operator is machine-dependent for negative operands, as the action takes as a result of underflow or overflow. 
-			* -3 % 4 = -3
-			* 4 % -2 = 0
-			* -3 % -4 = -3
 
 #### Decision Making
 
