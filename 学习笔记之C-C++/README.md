@@ -8790,6 +8790,36 @@ int main()
     return 0;
 }
 ```
+* [std::as_const - cppreference.com](https://en.cppreference.com/w/cpp/utility/as_const)
+    * obtains a reference to const to its argument (function template)
+    * 1) Forms lvalue reference to const type of t.
+    * 2) const rvalue reference overload is deleted to disallow rvalue arguments.
+```c++
+#include <string>
+#include <cassert>
+#include <utility>
+#include <type_traits>
+ 
+int main()
+{
+    std::string mutableString = "Hello World!";
+    auto&& constRef = std::as_const(mutableString);
+ 
+//  mutableString.clear(); // OK
+//  constRef.clear(); // error: 'constRef' is 'const' qualified,
+                      //        but 'clear' is not marked const
+ 
+    assert( &constRef == &mutableString );
+    assert( &std::as_const( mutableString ) == &mutableString );
+ 
+    using ExprType = std::remove_reference_t<decltype(std::as_const(mutableString))>;
+ 
+    static_assert(std::is_same_v<std::remove_const_t<ExprType>, std::string>,
+            "ExprType should be some kind of string." );
+    static_assert(!std::is_same_v<ExprType, std::string>,
+            "ExprType shouldn't be a mutable string." );
+}
+```
 
 ###### Pairs and tuples
 
