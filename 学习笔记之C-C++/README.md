@@ -508,61 +508,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
 	* 原问题：什么指令集支持原子操作？其原理是什么？ 如果考虑到全部的指令集，问题太大了，这里简化下。以X86和ARM为例。
 	* 原子操作是不可分割的操作，在执行完毕时它不会被任何事件中断。在单处理器系统(UniProcessor，简称 UP)中，能够在单条指令中完成的操作都可以认为是原子操作，因为中断只能发生在指令与指令之间。
 
-##### [struct](https://en.cppreference.com/w/cpp/keyword/struct)
-
-* C++ keywords: struct
-	* [declaration of a compound type](https://en.cppreference.com/w/cpp/language/class)
-	* [declaration of a scoped enumeration type (since C++11)](https://en.cppreference.com/w/cpp/language/enum)
-	* If a function or a variable exists in scope with the name identical to the name of a non-union class type, struct can be prepended to the name for disambiguation, resulting in an [elaborated type specifier](https://en.cppreference.com/w/cpp/language/elaborated_type_specifier)
-* [Struct declaration - cppreference.com](https://en.cppreference.com/w/c/language/struct)
-	* A struct is a type consisting of a sequence of members whose storage is allocated in an ordered sequence (as opposed to union, which is a type consisting of a sequence of members whose storage overlaps).
-* [Struct and union initialization - cppreference.com](https://en.cppreference.com/w/c/language/struct_initialization)
-```c++
-#include <stdio.h>
-#include <time.h>
- 
-int main(void)
-{
-    char buff[70];
-    // designated initializers simplify the use of structs whose
-    // order of members is unspecified
-    struct tm my_time = { .tm_year=2012-1900, .tm_mon=9, .tm_mday=9,
-                          .tm_hour=8, .tm_min=10, .tm_sec=20 };
-    strftime(buff, sizeof buff, "%A %c", &my_time);
-    puts(buff);
-}
-```
-* [C/C++ 结构体就这样被攻克了！](https://mp.weixin.qq.com/s/-RoBZ9Gge-6HtYH8tUS8xw)
-  * 结构体的声明与定义
-    * 声明
-    * 定义
-    * 访问结构体成员
-    * 初始化结构体
-    * 对齐
-  * 结构体嵌套
-  * 结构体数组
-  * 结构体指针
-  * 传递结构体信息
-    * 传递结构体变量
-    * 传递指向结构体变量的指针
-  * 动态申请结构体
-  * 实战：建立一个图书馆数据库
-  * 单链表
-    * 在单链表中插入元素
-    * 搜索单链表
-    * 插入结点到指定位置
-    * 删除结点
-  * 内存池
-  * typedef
-    * 给数据类型起别名
-    * 结构体的搭档
-    * 进阶
-  * 共用体
-    * 声明
-    * 初始化
-  * 枚举
-  * 位域
-
 ##### Literals
 
 * Literals are the tokens of a C++ program that represent constant values embedded in the source code.
@@ -1118,6 +1063,60 @@ The value "Hello" already exists in the set.
 #### [Constants/Literals](https://www.tutorialspoint.com/cplusplus/cpp_constants_literals.htm)
 
 ### [Keywords](https://en.cppreference.com/w/cpp/keyword)
+
+#### [C++ keywords: struct](https://en.cppreference.com/w/cpp/keyword/struct)
+
+* [declaration of a compound type](https://en.cppreference.com/w/cpp/language/class)
+* [declaration of a scoped enumeration type (since C++11)](https://en.cppreference.com/w/cpp/language/enum)
+* If a function or a variable exists in scope with the name identical to the name of a non-union class type, struct can be prepended to the name for disambiguation, resulting in an [elaborated type specifier](https://en.cppreference.com/w/cpp/language/elaborated_type_specifier)
+* [Struct declaration - cppreference.com](https://en.cppreference.com/w/c/language/struct)
+	* A struct is a type consisting of a sequence of members whose storage is allocated in an ordered sequence (as opposed to union, which is a type consisting of a sequence of members whose storage overlaps).
+* [Struct and union initialization - cppreference.com](https://en.cppreference.com/w/c/language/struct_initialization)
+```c++
+#include <stdio.h>
+#include <time.h>
+ 
+int main(void)
+{
+    char buff[70];
+    // designated initializers simplify the use of structs whose
+    // order of members is unspecified
+    struct tm my_time = { .tm_year=2012-1900, .tm_mon=9, .tm_mday=9,
+                          .tm_hour=8, .tm_min=10, .tm_sec=20 };
+    strftime(buff, sizeof buff, "%A %c", &my_time);
+    puts(buff);
+}
+```
+* [C/C++ 结构体就这样被攻克了！](https://mp.weixin.qq.com/s/-RoBZ9Gge-6HtYH8tUS8xw)
+  * 结构体的声明与定义
+    * 声明
+    * 定义
+    * 访问结构体成员
+    * 初始化结构体
+    * 对齐
+  * 结构体嵌套
+  * 结构体数组
+  * 结构体指针
+  * 传递结构体信息
+    * 传递结构体变量
+    * 传递指向结构体变量的指针
+  * 动态申请结构体
+  * 实战：建立一个图书馆数据库
+  * 单链表
+    * 在单链表中插入元素
+    * 搜索单链表
+    * 插入结点到指定位置
+    * 删除结点
+  * 内存池
+  * typedef
+    * 给数据类型起别名
+    * 结构体的搭档
+    * 进阶
+  * 共用体
+    * 声明
+    * 初始化
+  * 枚举
+  * 位域
 
 ### [Preprocessor](https://en.cppreference.com/w/cpp/preprocessor)
 
