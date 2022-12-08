@@ -1208,30 +1208,6 @@ The value "Hello" already exists in the set.
 	* C++17 introduced structured binding, which lets you assign an expression to multiple variables.
 	* However, this is for creating new variables to hold the result. If you want to assign the result to existing variables, then you can use the old standby std::tie.
 
-##### [Value categories](https://en.cppreference.com/w/cpp/language/value_category)
-
-* Each C++ expression (an operator with its operands, a literal, a variable name, etc.) is characterized by two independent properties: `a type and a value category`. Each expression has some non-reference type, and each expression belongs to exactly one of the `three primary value categories: prvalue, xvalue, and lvalue`.
-* a glvalue (“generalized” lvalue) is an expression whose evaluation determines the identity of an object or function;
-* a prvalue (“pure” rvalue) is an expression whose evaluation
-    * computes the value of an operand of a built-in operator (such prvalue has no result object), or
-    * initializes an object (such prvalue is said to have a result object).
-    * The result object may be a variable, an object created by new-expression, a temporary created by temporary materialization, or a member thereof. Note that non-void discarded expressions have a result object (the materialized temporary). Also, every class and array prvalue has a result object except when it is the operand of decltype;
-* an xvalue (an “eXpiring” value) is a glvalue that denotes an object whose resources can be reused;
-* an lvalue (so-called, historically, because lvalues could appear on the left-hand side of an assignment expression) is a glvalue that is not an xvalue;
-* an rvalue (so-called, historically, because rvalues could appear on the right-hand side of an assignment expression) is a prvalue or an xvalue.
-* [Value Categories: Lvalues and Rvalues (C++) | Microsoft Learn](https://learn.microsoft.com/en-us/cpp/cpp/lvalues-and-rvalues-visual-cpp?view=msvc-170)
-    * The C++17 standard defines expression value categories as follows:
-        * A glvalue is an expression whose evaluation determines the identity of an object, bit-field, or function.
-        * A prvalue is an expression whose evaluation initializes an object or a bit-field, or computes the value of the operand of an operator, as specified by the context in which it appears.
-        * An xvalue is a glvalue that denotes an object or bit-field whose resources can be reused (usually because it is near the end of its lifetime). Example: Certain kinds of expressions involving rvalue references (8.3.2) yield xvalues, such as a call to a function whose return type is an rvalue reference or a cast to an rvalue reference type.
-        * An lvalue is a glvalue that is not an xvalue.
-        * An rvalue is a prvalue or an xvalue.
-    * The following diagram illustrates the relationships between the categories:
-    * ![image](https://user-images.githubusercontent.com/34557994/205634478-11d7da0d-53b8-46d9-8b62-4b97c0fa3e30.png)
-    * `An lvalue has an address that your program can access.` Examples of lvalue expressions include variable names, including const variables, array elements, function calls that return an lvalue reference, bit-fields, unions, and class members.
-    * `A prvalue expression has no address that is accessible by your program.` Examples of prvalue expressions include literals, function calls that return a non-reference type, and temporary objects that are created during expression evaluation but accessible only by the compiler.
-    * `An xvalue expression has an address that no longer accessible by your program but can be used to initialize an rvalue reference, which provides access to the expression.` Examples include function calls that return an rvalue reference, and the array subscript, member and pointer to member expressions where the array or object is an rvalue reference.
-
 #### [Constants/Literals](https://www.tutorialspoint.com/cplusplus/cpp_constants_literals.htm)
 
 ### [Keywords](https://en.cppreference.com/w/cpp/keyword)
@@ -1330,55 +1306,140 @@ int main(){
 
 ### [Expressions](https://en.cppreference.com/w/cpp/language/expressions)
 
+##### [Value categories](https://en.cppreference.com/w/cpp/language/value_category)
+
+* Each C++ expression (an operator with its operands, a literal, a variable name, etc.) is characterized by two independent properties: `a type and a value category`. Each expression has some non-reference type, and each expression belongs to exactly one of the `three primary value categories: prvalue, xvalue, and lvalue`.
+* a glvalue (“generalized” lvalue) is an expression whose evaluation determines the identity of an object or function;
+* a prvalue (“pure” rvalue) is an expression whose evaluation
+    * computes the value of an operand of a built-in operator (such prvalue has no result object), or
+    * initializes an object (such prvalue is said to have a result object).
+    * The result object may be a variable, an object created by new-expression, a temporary created by temporary materialization, or a member thereof. Note that non-void discarded expressions have a result object (the materialized temporary). Also, every class and array prvalue has a result object except when it is the operand of decltype;
+* an xvalue (an “eXpiring” value) is a glvalue that denotes an object whose resources can be reused;
+* an lvalue (so-called, historically, because lvalues could appear on the left-hand side of an assignment expression) is a glvalue that is not an xvalue;
+* an rvalue (so-called, historically, because rvalues could appear on the right-hand side of an assignment expression) is a prvalue or an xvalue.
+* [Value Categories: Lvalues and Rvalues (C++) | Microsoft Learn](https://learn.microsoft.com/en-us/cpp/cpp/lvalues-and-rvalues-visual-cpp?view=msvc-170)
+    * The C++17 standard defines expression value categories as follows:
+        * A glvalue is an expression whose evaluation determines the identity of an object, bit-field, or function.
+        * A prvalue is an expression whose evaluation initializes an object or a bit-field, or computes the value of the operand of an operator, as specified by the context in which it appears.
+        * An xvalue is a glvalue that denotes an object or bit-field whose resources can be reused (usually because it is near the end of its lifetime). Example: Certain kinds of expressions involving rvalue references (8.3.2) yield xvalues, such as a call to a function whose return type is an rvalue reference or a cast to an rvalue reference type.
+        * An lvalue is a glvalue that is not an xvalue.
+        * An rvalue is a prvalue or an xvalue.
+    * The following diagram illustrates the relationships between the categories:
+    * ![image](https://user-images.githubusercontent.com/34557994/205634478-11d7da0d-53b8-46d9-8b62-4b97c0fa3e30.png)
+    * `An lvalue has an address that your program can access.` Examples of lvalue expressions include variable names, including const variables, array elements, function calls that return an lvalue reference, bit-fields, unions, and class members.
+    * `A prvalue expression has no address that is accessible by your program.` Examples of prvalue expressions include literals, function calls that return a non-reference type, and temporary objects that are created during expression evaluation but accessible only by the compiler.
+    * `An xvalue expression has an address that no longer accessible by your program but can be used to initialize an rvalue reference, which provides access to the expression.` Examples include function calls that return an rvalue reference, and the array subscript, member and pointer to member expressions where the array or object is an rvalue reference.
+
 ### [Declarations](https://en.cppreference.com/w/cpp/language/declarations)
 
-### [Initialization](https://en.cppreference.com/w/cpp/language/initialization)
-
-### [Functions](https://en.cppreference.com/w/cpp/language/functions)
-
-### [Statements](https://en.cppreference.com/w/cpp/language/statements)
-
-### Classes
-
-### Templates
-
-### Exceptions
-
-## [C++ Standard Library](https://en.cppreference.com/w/cpp/standard_library)
-
-* [C++ Standard Library](https://www.tutorialspoint.com/cplusplus/cpp_standard_library.htm)
-* [什么是 C 和 C++ 标准库？](https://mp.weixin.qq.com/s/wErRQ3AzgJ9lzQKsNG9SzA)
-  * https://www.oschina.net/translate/c-c-standard-library
-  * C 和 C++ 是如何制订的
-  * C 标准库
-  * C++ 标准库
-  * 实现 C/C++ 标准库
-  * GNU/Linux 版实现
-  * Mac 和 iOS 版实现
-  * Windows 版实现
-  * Android 版实现
-  * 我能使用不同版本的实现代码来替代默认实现吗？
-  * 如果我们脱离了标准库怎么办？
-
-### Basics
-
+* Declarations are how names are introduced (or re-introduced) into the C++ program. Not all declarations actually declare anything, and each kind of entity is declared differently. Definitions are declarations that are sufficient to use the entity identified by the name.
 
 #### [Modifier Types](https://www.tutorialspoint.com/cplusplus/cpp_modifier_types.htm)
 
-##### const type qualifier
+#### Specifiers
 
-* [cv (const and volatile) type qualifiers - cppreference.com](https://en.cppreference.com/w/cpp/language/cv)
-	* Appear in any type specifier, including decl-specifier-seq of declaration grammar, to specify constness or volatility of the object being declared or of the type being named.
-		* const - defines that the type is constant.
-		* volatile - defines that the type is volatile.
-	* Explanation
-		* const object - an object whose type is const-qualified, or a non-mutable subobject of a const object. Such object cannot be modified: attempt to do so directly is a compile-time error, and attempt to do so indirectly (e.g., by modifying the const object through a reference or pointer to non-const type) results in undefined behavior.
-		* volatile object - an object whose type is volatile-qualified, or a subobject of a volatile object, or a mutable subobject of a const-volatile object. Every access (read or write operation, member function call, etc.) made through a glvalue expression of volatile-qualified type is treated as a visible side-effect for the purposes of optimization (that is, within a single thread of execution, volatile accesses cannot be optimized out or reordered with another visible side effect that is sequenced-before or sequenced-after the volatile access. This makes volatile objects suitable for communication with a signal handler, but not with another thread of execution, see std::memory_order). Any attempt to access a volatile object through a glvalue of non-volatile type (e.g. through a reference or pointer to non-volatile type) results in undefined behavior.
-		* const volatile object - an object whose type is const-volatile-qualified, a non-mutable subobject of a const volatile object, a const subobject of a volatile object, or a non-mutable volatile subobject of a const object. Behaves as both a const object and as a volatile object.
-	* mutable specifier
-		* mutable - permits modification of the class member declared mutable even if the containing object is declared const.
-		* May appear in the declaration of a non-static class members of non-reference non-const type
-		* Mutable is used to specify that the member does not affect the externally visible state of the class (as often used for mutexes, memo caches, lazy evaluation, and access instrumentation).
+##### [constexpr specifier](https://en.cppreference.com/w/cpp/language/constexpr)
+
+* constexpr - specifies that the value of a variable or function can appear in constant expressions
+* [Constant expressions - cppreference.com](https://en.cppreference.com/w/cpp/language/constant_expression)
+	* Defines an expression that can be evaluated at compile time.
+	* Such expressions can be used as non-type template arguments, array sizes, and in other contexts that require constant expressions
+* [constexpr (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/constexpr-cpp?view=msvc-160)
+  * The keyword constexpr was introduced in C++11 and improved in C++14. It means constant expression. Like const, it can be applied to variables: A compiler error is raised when any code attempts to modify the value. Unlike const, constexpr can also be applied to functions and class constructors. constexpr indicates that the value, or return value, is constant and, where possible, is computed at compile time.
+  * A constexpr integral value can be used wherever a const integer is required, such as in template arguments and array declarations. And when a value is computed at compile time instead of run time, it helps your program run faster and use less memory.
+  * To limit the complexity of compile-time constant computations, and their potential impacts on compilation time, the C++14 standard requires the types in constant expressions to be literal types.
+* [Understanding constexpr specifier in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/understanding-constexper-specifier-in-c/)
+	* constexpr is a feature added in C++ 11. The main idea is performance improvement of programs by doing computations at compile time rather than run time. Note that once a program is compiled and finalized by developer, it is run multiple times by users. The idea is to spend time in compilation and save time at run time (similar to template metaprogramming)
+	* constexpr vs inline functions
+	* constexpr with constructors
+	* constexpr vs const
+* [c++ - Difference between constexpr and const - Stack Overflow](https://stackoverflow.com/questions/14116003/difference-between-constexpr-and-const?rq=1)
+* [c++ - constexpr const vs constexpr variables? - Stack Overflow](https://stackoverflow.com/questions/28845058/constexpr-const-vs-constexpr-variables)
+* [c++ - Is it possible to use std::string in a constexpr? - Stack Overflow](https://stackoverflow.com/questions/27123306/is-it-possible-to-use-stdstring-in-a-constexpr)
+	* No. error: the type ‘const string {aka const std::basic_string}’ of constexpr variable ‘constString’ is not literal... because... ‘std::basic_string’ has a non-trivial destructor
+	* However, as of C++17, you can use string_view or char[]
+* [现代C++之constexpr](https://mp.weixin.qq.com/s/Shg1L_nUfLY18QzgVF_8aA)
+	* constexpr在 C++11 引入、在 C++14 得到大幅改进。
+		* （1）C++11中的constexpr指定的函数返回值和参数必须要保证是字面值，而且必须只有一行return代码，这给函数的设计者带来了更多的限制，比如通常只能通过return 三目运算符+递归来计算返回的字面值。
+		* （2）C++14中只要保证返回值和参数是字面值就行了，函数体中可以加入更多的语句，方便了更灵活的计算。
+	* 它的字面意思是 constant expression，常量表达式。
+	* 1.变量
+		* const与constexpr可以应用到变量和函数。尽管它们彼此相似，但实际上它们是非常不同的概念。
+		* const与constexpr意味着他们的值不能在初始化后改变。
+		* const和constexpr之间的主要区别是初始化值的时间(求值)。尽管const变量的值可以在编译时和运行时，但constexpr始终在编译时进行求值。
+		* 因此，const变量既可以定义编译时常量(比如size1)来指定数组大小，也可以定义运行时常量(比如size2)来定义数组大小。另一方面，constexpr总是定义可以指定数组大小的编译时常量。
+	* 2.函数
+		* const和constexpr也可以应用于函数。const函数必须是成员函数（方法，运算符），其中const关键字的应用意味着该方法无法更改其成员（非静态）字段的值。
+		* constexpr是一个不同的概念。如果将编译时常量作为参数传递，则它将一个函数（成员或非成员）标记为可以在编译时求值的函数。
+		* 顺便说一下，这些constexpr函数是常规C ++函数，即使传递了非常量参数也可以调用它们。但是在这种情况下，您将获得非constexpr值。
+	* 3.类方法
+		* constexpr也可应用于所述成员函数（方法），操作者和甚至构造函数。
+	* 4.建议
+		* Tips from the book Effective Modern C++ by Scott Meyers about constexpr:
+			* constexpr 对象是const，在编译期间使用已知的值初始化;
+			* constexpr 函数当使用在编译期间已知值的参数调用时，constexpr函数产生编译时结果;
+			* 与非constexpr对象和函数相比，constexpr对象和函数可以在更广泛的上下文中使用;
+			* constexpr 是对象或函数接口的一部分。
+	* 5.补充
+		* 内联变量C++17 引入了内联（inline）变量的概念，允许在头文件中定义内联变量，然后像内联函数一样，只要所有的定义都相同，那变量的定义出现多次也没有关系。对于类的静态数据成员，const 缺省是不内联的，而 constexpr 缺省就是内联的。这种区别在你用 & 去取一个 const int 值的地址、或将其传到一个形参类型为 const int& 的函数去的时候（这在 C++ 文档里的行话叫 ODR-use），就会体现出来。
+		* 程序在链接时就会报错了，说找不到 magic::number。这是因为 ODR(下面的one definition rule)-use 的类静态常量也需要有一个定义，在没有内联变量之前需要在某一个源代码文件（非头文件）中这样写：
+		* `constint magic::number = 42;`
+		* 必须正正好好一个，多了少了都不行，所以叫 one definition rule。
+		* 内联函数，现在又有了内联变量，以及模板，则不受这条规则限制。修正这个问题的简单方法是把 magic 里的 static const 改成 static constexpr 或 static inline const。前者可行的原因是，类的静态 constexpr 成员变量默认就是内联的。const 常量和类外面的 constexpr 变量不默认内联，需要手工加 inline 关键字才会变成内联。
+	* 6.学习资料
+* [现代C++编程实践(六)—一招简化模板编程](https://mp.weixin.qq.com/s/jstBtimXLjxB_1pJyVy2NQ)
+	* 实现一个模板类，实现类中的加法运算，支持泛型。
+	* 从上面的代码可以看出，如果要实现这两个相似的功能需要对add方法进行不同的实现，也就是说：在实现这个功能时需要根据模板特化的类型分别编写出不同的特化代码。问题来了，能不能只提供一个模板函数从而实现上述两种特化的方法呢？
+	* 答案是：有的。一种是使用传统的宏定义的方法，但是同时只能支持一种。另外一种是现代C++提供的constexpr关键字，它应用在if表达式中，使用方法和if-else类似。不同的是它是在编译阶段就确认好的，通过对后面的表达式进行计算，从而判断出使用哪个分支。在本文中，它需要和is_same_v搭配使用，在编译结算就计算出传入参数的类型，从而实现不同传入参数的数据运算。本文中示例的实现代码如下：
+	* 如上代码所示，通过constexpr可以对不同的参数类型进行模板的实例化，在main函数中，同时传入容器和普通数据类型时都能够正确进行计算。
+```c++
+#include <iostream>
+#include <vector>
+using namespace std;
+template<typename T>
+class AddInterface{
+public:
+    AddInterface(T value):value(value){}
+    template<typename U>
+    T add(U x) const{
+        if constexpr (std::is_same_v<T,std::vector<U>>){
+            auto tmp(value);
+            for(auto &ele:tmp){
+                ele+=x;
+            }
+            return tmp;
+        }else{
+            return (value+x);
+        }
+    }
+private:
+    T value;
+};
+int main(){
+    std::vector<int> vRes{1,2,3,4};
+    auto res{AddInterface<std::vector<int>>{vRes}.add(20)};
+    for(auto v:res){
+        std::cout<<v<<",";
+    }
+    cout<<endl;
+    std::cout<<AddInterface<float>{3.5}.add(20)<<std::endl;
+    return 0;
+}
+```
+
+##### [cv (const and volatile) type qualifiers](https://en.cppreference.com/w/cpp/language/cv)
+
+* Appear in any type specifier, including decl-specifier-seq of declaration grammar, to specify constness or volatility of the object being declared or of the type being named.
+    * const - defines that the type is constant.
+    * volatile - defines that the type is volatile.
+* Explanation
+    * const object - an object whose type is const-qualified, or a non-mutable subobject of a const object. Such object cannot be modified: attempt to do so directly is a compile-time error, and attempt to do so indirectly (e.g., by modifying the const object through a reference or pointer to non-const type) results in undefined behavior.
+    * volatile object - an object whose type is volatile-qualified, or a subobject of a volatile object, or a mutable subobject of a const-volatile object. Every access (read or write operation, member function call, etc.) made through a glvalue expression of volatile-qualified type is treated as a visible side-effect for the purposes of optimization (that is, within a single thread of execution, volatile accesses cannot be optimized out or reordered with another visible side effect that is sequenced-before or sequenced-after the volatile access. This makes volatile objects suitable for communication with a signal handler, but not with another thread of execution, see std::memory_order). Any attempt to access a volatile object through a glvalue of non-volatile type (e.g. through a reference or pointer to non-volatile type) results in undefined behavior.
+    * const volatile object - an object whose type is const-volatile-qualified, a non-mutable subobject of a const volatile object, a const subobject of a volatile object, or a non-mutable volatile subobject of a const object. Behaves as both a const object and as a volatile object.
+* mutable specifier
+    * mutable - permits modification of the class member declared mutable even if the containing object is declared const.
+    * May appear in the declaration of a non-static class members of non-reference non-const type
+    * Mutable is used to specify that the member does not affect the externally visible state of the class (as often used for mutexes, memo caches, lazy evaluation, and access instrumentation).
 * [P.3: Express intent](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#p3-express-intent)
 	* `Reason` Unless the intent of some code is stated (e.g., in names or comments), it is impossible to tell whether the code does what it is supposed to do.
 	* `Example`
@@ -1471,94 +1532,35 @@ int main(){
 	* When you apply the const qualifier to a nonstatic member function, it affects the this pointer. For a const-qualified member function of class C, the this pointer is of type C const*, whereas for a member function that is not const-qualified, the this pointer is of type C*.
 	* A static member function does not have a this pointer (such a function is not called on a particular instance of a class), so const qualification of a static member function doesn't make any sense.
 
-##### [constexpr](https://en.cppreference.com/w/cpp/language/constexpr)
+### [Initialization](https://en.cppreference.com/w/cpp/language/initialization)
 
-* constexpr - specifies that the value of a variable or function can appear in constant expressions
-* [Constant expressions - cppreference.com](https://en.cppreference.com/w/cpp/language/constant_expression)
-	* Defines an expression that can be evaluated at compile time.
-	* Such expressions can be used as non-type template arguments, array sizes, and in other contexts that require constant expressions
-* [constexpr (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/constexpr-cpp?view=msvc-160)
-  * The keyword constexpr was introduced in C++11 and improved in C++14. It means constant expression. Like const, it can be applied to variables: A compiler error is raised when any code attempts to modify the value. Unlike const, constexpr can also be applied to functions and class constructors. constexpr indicates that the value, or return value, is constant and, where possible, is computed at compile time.
-  * A constexpr integral value can be used wherever a const integer is required, such as in template arguments and array declarations. And when a value is computed at compile time instead of run time, it helps your program run faster and use less memory.
-  * To limit the complexity of compile-time constant computations, and their potential impacts on compilation time, the C++14 standard requires the types in constant expressions to be literal types.
-* [Understanding constexpr specifier in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/understanding-constexper-specifier-in-c/)
-	* constexpr is a feature added in C++ 11. The main idea is performance improvement of programs by doing computations at compile time rather than run time. Note that once a program is compiled and finalized by developer, it is run multiple times by users. The idea is to spend time in compilation and save time at run time (similar to template metaprogramming)
-	* constexpr vs inline functions
-	* constexpr with constructors
-	* constexpr vs const
-* [c++ - Difference between constexpr and const - Stack Overflow](https://stackoverflow.com/questions/14116003/difference-between-constexpr-and-const?rq=1)
-* [c++ - constexpr const vs constexpr variables? - Stack Overflow](https://stackoverflow.com/questions/28845058/constexpr-const-vs-constexpr-variables)
-* [c++ - Is it possible to use std::string in a constexpr? - Stack Overflow](https://stackoverflow.com/questions/27123306/is-it-possible-to-use-stdstring-in-a-constexpr)
-	* No. error: the type ‘const string {aka const std::basic_string}’ of constexpr variable ‘constString’ is not literal... because... ‘std::basic_string’ has a non-trivial destructor
-	* However, as of C++17, you can use string_view or char[]
-* [现代C++之constexpr](https://mp.weixin.qq.com/s/Shg1L_nUfLY18QzgVF_8aA)
-	* constexpr在 C++11 引入、在 C++14 得到大幅改进。
-		* （1）C++11中的constexpr指定的函数返回值和参数必须要保证是字面值，而且必须只有一行return代码，这给函数的设计者带来了更多的限制，比如通常只能通过return 三目运算符+递归来计算返回的字面值。
-		* （2）C++14中只要保证返回值和参数是字面值就行了，函数体中可以加入更多的语句，方便了更灵活的计算。
-	* 它的字面意思是 constant expression，常量表达式。
-	* 1.变量
-		* const与constexpr可以应用到变量和函数。尽管它们彼此相似，但实际上它们是非常不同的概念。
-		* const与constexpr意味着他们的值不能在初始化后改变。
-		* const和constexpr之间的主要区别是初始化值的时间(求值)。尽管const变量的值可以在编译时和运行时，但constexpr始终在编译时进行求值。
-		* 因此，const变量既可以定义编译时常量(比如size1)来指定数组大小，也可以定义运行时常量(比如size2)来定义数组大小。另一方面，constexpr总是定义可以指定数组大小的编译时常量。
-	* 2.函数
-		* const和constexpr也可以应用于函数。const函数必须是成员函数（方法，运算符），其中const关键字的应用意味着该方法无法更改其成员（非静态）字段的值。
-		* constexpr是一个不同的概念。如果将编译时常量作为参数传递，则它将一个函数（成员或非成员）标记为可以在编译时求值的函数。
-		* 顺便说一下，这些constexpr函数是常规C ++函数，即使传递了非常量参数也可以调用它们。但是在这种情况下，您将获得非constexpr值。
-	* 3.类方法
-		* constexpr也可应用于所述成员函数（方法），操作者和甚至构造函数。
-	* 4.建议
-		* Tips from the book Effective Modern C++ by Scott Meyers about constexpr:
-			* constexpr 对象是const，在编译期间使用已知的值初始化;
-			* constexpr 函数当使用在编译期间已知值的参数调用时，constexpr函数产生编译时结果;
-			* 与非constexpr对象和函数相比，constexpr对象和函数可以在更广泛的上下文中使用;
-			* constexpr 是对象或函数接口的一部分。
-	* 5.补充
-		* 内联变量C++17 引入了内联（inline）变量的概念，允许在头文件中定义内联变量，然后像内联函数一样，只要所有的定义都相同，那变量的定义出现多次也没有关系。对于类的静态数据成员，const 缺省是不内联的，而 constexpr 缺省就是内联的。这种区别在你用 & 去取一个 const int 值的地址、或将其传到一个形参类型为 const int& 的函数去的时候（这在 C++ 文档里的行话叫 ODR-use），就会体现出来。
-		* 程序在链接时就会报错了，说找不到 magic::number。这是因为 ODR(下面的one definition rule)-use 的类静态常量也需要有一个定义，在没有内联变量之前需要在某一个源代码文件（非头文件）中这样写：
-		* `constint magic::number = 42;`
-		* 必须正正好好一个，多了少了都不行，所以叫 one definition rule。
-		* 内联函数，现在又有了内联变量，以及模板，则不受这条规则限制。修正这个问题的简单方法是把 magic 里的 static const 改成 static constexpr 或 static inline const。前者可行的原因是，类的静态 constexpr 成员变量默认就是内联的。const 常量和类外面的 constexpr 变量不默认内联，需要手工加 inline 关键字才会变成内联。
-	* 6.学习资料
-* [现代C++编程实践(六)—一招简化模板编程](https://mp.weixin.qq.com/s/jstBtimXLjxB_1pJyVy2NQ)
-	* 实现一个模板类，实现类中的加法运算，支持泛型。
-	* 从上面的代码可以看出，如果要实现这两个相似的功能需要对add方法进行不同的实现，也就是说：在实现这个功能时需要根据模板特化的类型分别编写出不同的特化代码。问题来了，能不能只提供一个模板函数从而实现上述两种特化的方法呢？
-	* 答案是：有的。一种是使用传统的宏定义的方法，但是同时只能支持一种。另外一种是现代C++提供的constexpr关键字，它应用在if表达式中，使用方法和if-else类似。不同的是它是在编译阶段就确认好的，通过对后面的表达式进行计算，从而判断出使用哪个分支。在本文中，它需要和is_same_v搭配使用，在编译结算就计算出传入参数的类型，从而实现不同传入参数的数据运算。本文中示例的实现代码如下：
-	* 如上代码所示，通过constexpr可以对不同的参数类型进行模板的实例化，在main函数中，同时传入容器和普通数据类型时都能够正确进行计算。
-```c++
-#include <iostream>
-#include <vector>
-using namespace std;
-template<typename T>
-class AddInterface{
-public:
-    AddInterface(T value):value(value){}
-    template<typename U>
-    T add(U x) const{
-        if constexpr (std::is_same_v<T,std::vector<U>>){
-            auto tmp(value);
-            for(auto &ele:tmp){
-                ele+=x;
-            }
-            return tmp;
-        }else{
-            return (value+x);
-        }
-    }
-private:
-    T value;
-};
-int main(){
-    std::vector<int> vRes{1,2,3,4};
-    auto res{AddInterface<std::vector<int>>{vRes}.add(20)};
-    for(auto v:res){
-        std::cout<<v<<",";
-    }
-    cout<<endl;
-    std::cout<<AddInterface<float>{3.5}.add(20)<<std::endl;
-    return 0;
-}
-```
+### [Functions](https://en.cppreference.com/w/cpp/language/functions)
+
+### [Statements](https://en.cppreference.com/w/cpp/language/statements)
+
+### Classes
+
+### Templates
+
+### Exceptions
+
+## [C++ Standard Library](https://en.cppreference.com/w/cpp/standard_library)
+
+* [C++ Standard Library](https://www.tutorialspoint.com/cplusplus/cpp_standard_library.htm)
+* [什么是 C 和 C++ 标准库？](https://mp.weixin.qq.com/s/wErRQ3AzgJ9lzQKsNG9SzA)
+  * https://www.oschina.net/translate/c-c-standard-library
+  * C 和 C++ 是如何制订的
+  * C 标准库
+  * C++ 标准库
+  * 实现 C/C++ 标准库
+  * GNU/Linux 版实现
+  * Mac 和 iOS 版实现
+  * Windows 版实现
+  * Android 版实现
+  * 我能使用不同版本的实现代码来替代默认实现吗？
+  * 如果我们脱离了标准库怎么办？
+
+### Basics
 
 #### [Storage Classes](https://www.tutorialspoint.com/cplusplus/cpp_storage_classes.htm)
 
