@@ -563,99 +563,6 @@ int main(void)
   * 枚举
   * 位域
 
-##### [Enumeration](https://en.cppreference.com/w/cpp/language/enum)
-
-* An enumeration is a distinct type whose value is restricted to a range of values (see below for details), which may include several explicitly named constants ("enumerators"). The values of the constants are values of an integral type known as the underlying type of the enumeration.
-* Unscoped enumerations
-	* `enum Color { red, green, blue };`
-* Scoped enumerations
-	* `enum class Color { red, green = 20, blue };`
-* How to iterate over enum ?
-	* [C++ Tutorial => Iteration over an enum](https://riptutorial.com/cplusplus/example/13085/iteration-over-an-enum)
-	* [c++ - How can I iterate over an enum? - Stack Overflow](https://stackoverflow.com/questions/261963/how-can-i-iterate-over-an-enum)
-	* [c - Number of elements in an enum - Stack Overflow](https://stackoverflow.com/questions/712463/number-of-elements-in-an-enum)
-```c++
-#include <iostream>
-
-enum color
-{
-    red,
-    yellow,
-    green,
-    blue,
-    ColorCount
-};
-
-std::ostream& operator<<(std::ostream& os, color c)
-{
-    switch(c) {
-        case red   : os << "red";    break;
-        case yellow: os << "yellow"; break;
-        case green : os << "green";  break;
-        case blue  : os << "blue";   break;
-        default    : os.setstate(std::ios_base::failbit);
-    }
-    
-    return os;
-}
-int main()
-{
-    for (auto i = 0; i < color::ColorCount; ++ i)
-        std::cout << static_cast<color>(i) << "\n";
-
-    return 0;
-}
-/*
-red
-yellow
-green
-blue
-*/
-```
-
-##### [decltype](https://en.cppreference.com/w/cpp/language/decltype)
-
-* Inspects the declared type of an entity or the type and value category of an expression.
-* Keywords decltype
-	* [decltype specifier](https://en.cppreference.com/w/cpp/language/decltype) (since C++11)
-	* [decltype(auto)](https://en.cppreference.com/w/cpp/language/auto) (since C++14)
-
-##### [auto](https://en.cppreference.com/w/cpp/keyword/auto)
-
-* [automatic storage duration specifier (until C++11)](https://en.cppreference.com/w/cpp/language/storage_duration)
-* [auto placeholder type specifier (since C++11)](https://en.cppreference.com/w/cpp/language/auto)
-* [function declaration with trailing return type (since C++11)](https://en.cppreference.com/w/cpp/language/function)
-* [structured binding declaration (since C++17)](https://en.cppreference.com/w/cpp/language/structured_binding)
-* [现代C++编程实践(七)—auto的前世今生](https://mp.weixin.qq.com/s/MMynpJruZ11JykWYY0UoOg)
-	* 1 C++98 auto出现
-		* 在c++98中，auto仅仅是作为一个关键字用来修饰变量，表示一个自动变量，它在作用域内生效，就像定义在栈上的变量一样，一旦超出其作用域，该变量会被自动释放回收。像极了变量。因此在随后的C++版本中，auto被赋予了新的含义，老的含义自然也被弃用，但是无论如何作为C++发展的一个过程，很多C++开发人员也对它非常推崇，
-	* 2 C++11 全新的auto
-		* C++11后，auto被赋予了新的含义，可以自动推导出变量的类型，在编译阶段就可以计算出变量的类型。主要用法如下：
-			* 用来定义一个变量
-			* 减少代码复杂度
-				* 在STL编程时，经常会使用大迭代器，使用后会导致代码类型较长，使用auto后会对变量自动进行推导。
-			* 模板函数返回值
-				* 在C++11中，auto还不能够直接当作函数返回值返回，需要和decltyp搭配使用
-		* 当然，在C++11中，开发带来便利的同时也需要遵循一定的约束，如：
-			* auto变量不能有二义性
-			* 不能将auto直接作为函数的参数
-				* 在后面我们会介绍，这种用法在C++14中是支持的，C++11中还没有支持。
-			* auto声明变量后需要立即进行初始化
-			* auto变量赋值为数组，这个时候推导出来的类型为指针，如果想要推导出来的类型为数组，需要在前面加上&符号。
-	* 3 C++14 一点点地改进
-		* 2014年C++14版本发布，相对C++11来说，C++14对auto特性也进行了提升，比如说前面的auto不能作为函数返回值，在这个版本中明确已经支持了。
-		* 需要明确的是在使用auto作为函数返回类型的时候依旧需要遵守避免函数返回结果的二义性
-		* 除此之后，C++14版本还可以使用decltype(auto)作为类型占位符。推导出的类型为推导出的类型是 decltype(expr)。其中expr为初始化器。
-		* decltype(auto)还可以被用于函数或者模板返回参数
-		* 当然，除了上面的使用场景外，auto还可用在lambda表达式中，关于这一点后面会进行介绍，本文不再赘述。
-	* 4 C++17 又一个大版本
-		* C++14版本发布三年后，C++17版本横空出世，在这个版本中又新增了许多新的特性，auto也不例外，这一次它又一次对模板进行了革命，令人惊奇的是这一次它是作为非类型模板形参进入的，也就是说C++17后可以根据实参自动推导出形参的类型。
-	* 5 关于C++20和C++23版本
-		* C++20和C++23版本，本文不做详细的说明，因为后续会有专门的推文进行介绍，如果大家想要继续了解，欢迎关注收藏。现在对这两个版本关于auto的改动做一个预告。C++20和C++23版本中，auto的改动主要如下：
-			* 类型约束(C++20版本): 这个和C++20中的概念一起了解比较合适。主要是限定入参类型，这样就可以针对传入参数的不同类型给出不同的反馈。关于C++20可以关注此专集详细了解：C++20新特新
-			* 简写函数模板（C++20版本):这样就可以像写普通函数一样编写模板函数了。
-			* 通过表达式推导类型(C++23版本):auto 说明符也可以在显式类型转换的简单类型说明符中出现：auto(expr) 与 auto{expr} 。从表达式推导它的类型。
-
 ##### Literals
 
 * Literals are the tokens of a C++ program that represent constant values embedded in the source code.
@@ -1427,6 +1334,137 @@ int main(){
 }
 ```
 
+##### [Storage class specifiers](https://en.cppreference.com/w/cpp/language/storage_duration)
+
+* [Storage Classes](https://www.tutorialspoint.com/cplusplus/cpp_storage_classes.htm)
+* A storage class defines the scope (visibility) and life-time of variables and/or functions within a C++ Program. These specifiers precede the type that they modify. There are following storage classes, which can be used in a C++ Program
+	* auto
+	* register
+	* static
+		* avoid static class members variables (race conditions, almost-global variables)
+		* [SF.22: Use an unnamed (anonymous) namespace for all internal/non-exported entities](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#sf22-use-an-unnamed-anonymous-namespace-for-all-internalnon-exported-entities)
+			* Reason 
+				* Nothing external can depend on an entity in a nested unnamed namespace. Consider putting every definition in an implementation source file in an unnamed namespace unless that is defining an “external/exported” entity.
+			* Example; bad
+			```c++
+			static int f();
+			int g();
+			static bool h();
+			int k();
+			```
+			* Example; good
+			```c++
+			namespace {
+				int f();
+				bool h();
+			}
+			int g();
+			int k();
+			```
+			* Example 
+				* An API class and its members can’t live in an unnamed namespace; but any “helper” class or function that is defined in an implementation source file should be at an unnamed namespace scope.
+	* extern
+	* mutable
+* [C++ keywords: mutable - cppreference.com](https://en.cppreference.com/w/cpp/keyword/mutable)
+  * [mutable type specifier](https://en.cppreference.com/w/cpp/language/cv)
+    * mutable - permits modification of the class member declared mutable even if the containing object is declared const.
+  * [lambda-declarator](https://en.cppreference.com/w/cpp/language/lambda) that removes const qualification from parameters captured by copy (since C++11)
+    * mutable: allows body to modify the objects captured by copy, and to call their non-const member functions
+  * [C++ mutable keyword - GeeksforGeeks](https://www.geeksforgeeks.org/c-mutable-keyword/)
+
+##### [Enumeration declaration](https://en.cppreference.com/w/cpp/language/enum)
+
+* An enumeration is a distinct type whose value is restricted to a range of values (see below for details), which may include several explicitly named constants ("enumerators"). The values of the constants are values of an integral type known as the underlying type of the enumeration.
+* Unscoped enumerations
+	* `enum Color { red, green, blue };`
+* Scoped enumerations
+	* `enum class Color { red, green = 20, blue };`
+* How to iterate over enum ?
+	* [C++ Tutorial => Iteration over an enum](https://riptutorial.com/cplusplus/example/13085/iteration-over-an-enum)
+	* [c++ - How can I iterate over an enum? - Stack Overflow](https://stackoverflow.com/questions/261963/how-can-i-iterate-over-an-enum)
+	* [c - Number of elements in an enum - Stack Overflow](https://stackoverflow.com/questions/712463/number-of-elements-in-an-enum)
+```c++
+#include <iostream>
+
+enum color
+{
+    red,
+    yellow,
+    green,
+    blue,
+    ColorCount
+};
+
+std::ostream& operator<<(std::ostream& os, color c)
+{
+    switch(c) {
+        case red   : os << "red";    break;
+        case yellow: os << "yellow"; break;
+        case green : os << "green";  break;
+        case blue  : os << "blue";   break;
+        default    : os.setstate(std::ios_base::failbit);
+    }
+    
+    return os;
+}
+int main()
+{
+    for (auto i = 0; i < color::ColorCount; ++ i)
+        std::cout << static_cast<color>(i) << "\n";
+
+    return 0;
+}
+/*
+red
+yellow
+green
+blue
+*/
+```
+
+##### [decltype](https://en.cppreference.com/w/cpp/language/decltype)
+
+* Inspects the declared type of an entity or the type and value category of an expression.
+* Keywords decltype
+	* [decltype specifier](https://en.cppreference.com/w/cpp/language/decltype) (since C++11)
+	* [decltype(auto)](https://en.cppreference.com/w/cpp/language/auto) (since C++14)
+
+##### [auto](https://en.cppreference.com/w/cpp/keyword/auto)
+
+* [automatic storage duration specifier (until C++11)](https://en.cppreference.com/w/cpp/language/storage_duration)
+* [auto placeholder type specifier (since C++11)](https://en.cppreference.com/w/cpp/language/auto)
+* [function declaration with trailing return type (since C++11)](https://en.cppreference.com/w/cpp/language/function)
+* [structured binding declaration (since C++17)](https://en.cppreference.com/w/cpp/language/structured_binding)
+* [现代C++编程实践(七)—auto的前世今生](https://mp.weixin.qq.com/s/MMynpJruZ11JykWYY0UoOg)
+	* 1 C++98 auto出现
+		* 在c++98中，auto仅仅是作为一个关键字用来修饰变量，表示一个自动变量，它在作用域内生效，就像定义在栈上的变量一样，一旦超出其作用域，该变量会被自动释放回收。像极了变量。因此在随后的C++版本中，auto被赋予了新的含义，老的含义自然也被弃用，但是无论如何作为C++发展的一个过程，很多C++开发人员也对它非常推崇，
+	* 2 C++11 全新的auto
+		* C++11后，auto被赋予了新的含义，可以自动推导出变量的类型，在编译阶段就可以计算出变量的类型。主要用法如下：
+			* 用来定义一个变量
+			* 减少代码复杂度
+				* 在STL编程时，经常会使用大迭代器，使用后会导致代码类型较长，使用auto后会对变量自动进行推导。
+			* 模板函数返回值
+				* 在C++11中，auto还不能够直接当作函数返回值返回，需要和decltyp搭配使用
+		* 当然，在C++11中，开发带来便利的同时也需要遵循一定的约束，如：
+			* auto变量不能有二义性
+			* 不能将auto直接作为函数的参数
+				* 在后面我们会介绍，这种用法在C++14中是支持的，C++11中还没有支持。
+			* auto声明变量后需要立即进行初始化
+			* auto变量赋值为数组，这个时候推导出来的类型为指针，如果想要推导出来的类型为数组，需要在前面加上&符号。
+	* 3 C++14 一点点地改进
+		* 2014年C++14版本发布，相对C++11来说，C++14对auto特性也进行了提升，比如说前面的auto不能作为函数返回值，在这个版本中明确已经支持了。
+		* 需要明确的是在使用auto作为函数返回类型的时候依旧需要遵守避免函数返回结果的二义性
+		* 除此之后，C++14版本还可以使用decltype(auto)作为类型占位符。推导出的类型为推导出的类型是 decltype(expr)。其中expr为初始化器。
+		* decltype(auto)还可以被用于函数或者模板返回参数
+		* 当然，除了上面的使用场景外，auto还可用在lambda表达式中，关于这一点后面会进行介绍，本文不再赘述。
+	* 4 C++17 又一个大版本
+		* C++14版本发布三年后，C++17版本横空出世，在这个版本中又新增了许多新的特性，auto也不例外，这一次它又一次对模板进行了革命，令人惊奇的是这一次它是作为非类型模板形参进入的，也就是说C++17后可以根据实参自动推导出形参的类型。
+	* 5 关于C++20和C++23版本
+		* C++20和C++23版本，本文不做详细的说明，因为后续会有专门的推文进行介绍，如果大家想要继续了解，欢迎关注收藏。现在对这两个版本关于auto的改动做一个预告。C++20和C++23版本中，auto的改动主要如下：
+			* 类型约束(C++20版本): 这个和C++20中的概念一起了解比较合适。主要是限定入参类型，这样就可以针对传入参数的不同类型给出不同的反馈。关于C++20可以关注此专集详细了解：C++20新特新
+			* 简写函数模板（C++20版本):这样就可以像写普通函数一样编写模板函数了。
+			* 通过表达式推导类型(C++23版本):auto 说明符也可以在显式类型转换的简单类型说明符中出现：auto(expr) 与 auto{expr} 。从表达式推导它的类型。
+
 ##### [cv (const and volatile) type qualifiers](https://en.cppreference.com/w/cpp/language/cv)
 
 * Appear in any type specifier, including decl-specifier-seq of declaration grammar, to specify constness or volatility of the object being declared or of the type being named.
@@ -1562,42 +1600,6 @@ int main(){
 
 ### Basics
 
-#### [Storage Classes](https://www.tutorialspoint.com/cplusplus/cpp_storage_classes.htm)
-
-* A storage class defines the scope (visibility) and life-time of variables and/or functions within a C++ Program. These specifiers precede the type that they modify. There are following storage classes, which can be used in a C++ Program
-	* auto
-	* register
-	* static
-		* avoid static class members variables (race conditions, almost-global variables)
-		* [SF.22: Use an unnamed (anonymous) namespace for all internal/non-exported entities](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#sf22-use-an-unnamed-anonymous-namespace-for-all-internalnon-exported-entities)
-			* Reason 
-				* Nothing external can depend on an entity in a nested unnamed namespace. Consider putting every definition in an implementation source file in an unnamed namespace unless that is defining an “external/exported” entity.
-			* Example; bad
-			```c++
-			static int f();
-			int g();
-			static bool h();
-			int k();
-			```
-			* Example; good
-			```c++
-			namespace {
-				int f();
-				bool h();
-			}
-			int g();
-			int k();
-			```
-			* Example 
-				* An API class and its members can’t live in an unnamed namespace; but any “helper” class or function that is defined in an implementation source file should be at an unnamed namespace scope.
-	* extern
-	* mutable
-* [C++ keywords: mutable - cppreference.com](https://en.cppreference.com/w/cpp/keyword/mutable)
-  * [mutable type specifier](https://en.cppreference.com/w/cpp/language/cv)
-    * mutable - permits modification of the class member declared mutable even if the containing object is declared const.
-  * [lambda-declarator](https://en.cppreference.com/w/cpp/language/lambda) that removes const qualification from parameters captured by copy (since C++11)
-    * mutable: allows body to modify the objects captured by copy, and to call their non-const member functions
-  * [C++ mutable keyword - GeeksforGeeks](https://www.geeksforgeeks.org/c-mutable-keyword/)
 
 #### Operators
 
