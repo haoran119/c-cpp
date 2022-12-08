@@ -41,6 +41,7 @@
 ## Resources
 
 ### C++ Core Guidelines
+
 * [PPP Style Guide](https://www.stroustrup.com/Programming/PPP-style.pdf)
 * [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)
   * This document is a set of guidelines for using C++ well. The aim of this document is to help people to use modern C++ effectively. By “modern C++” we mean effective use of the ISO C++ standard (currently C++17, but almost all of our recommendations also apply to C++14 and C++11).
@@ -227,38 +228,55 @@
 		* 了解标准库
 		* in_place_t及相关内容
 
-## C
+## [C reference](https://en.cppreference.com/w/c)
 
 * [在C语言中如何高效地复制和连接字符串？](https://mp.weixin.qq.com/s/qhbIb_Th1RyOyYBDfef1BQ)
-  * https://developers.redhat.com/blog/2019/08/12/efficient-string-copying-and-concatenation-in-c/
+    * https://developers.redhat.com/blog/2019/08/12/efficient-string-copying-and-concatenation-in-c/
 * [const 并不能加快 C 代码的运行速度？](https://mp.weixin.qq.com/s/coeuXmY81c4WH_cJ3nsxCg)
-  * https://theartofmachinery.com/2019/08/12/c_const_isnt_for_performance.html
+    * https://theartofmachinery.com/2019/08/12/c_const_isnt_for_performance.html
 * [C 语言结构体成员赋值的深拷贝和浅拷贝 (qq.com)](https://mp.weixin.qq.com/s/ItjirJ4SrMX2H22ig_laaQ)
 * [C 语言未初始化的局部变量是多少？ (qq.com)](https://mp.weixin.qq.com/s/_JljAFBK_1UlnPgIGkKsjg)
 * [C 语言发展史的点点滴滴 (qq.com)](https://mp.weixin.qq.com/s/NInTU_CagWlCEfhWhgYeOA)
 * [这几道 C/C++ 题涉及你的知识盲区？](https://mp.weixin.qq.com/s/0lWx9M8J5Xa2Mo9jLRdG-g)
-  * 8个C语言面试题，涉及指针、运算、函数、内存，看看你能做出几个
+    * 8个C语言面试题，涉及指针、运算、函数、内存，看看你能做出几个
 * [C语言中的“三字母词”坑了工程师](https://mp.weixin.qq.com/s/dsV2rYG6cEJI7IlLNSwwcg)
-  * https://blog.csdn.net/daheiantian/article/details/6095507
-  * "??/"会被编译器当作 /，变成C语言的换行符（多行代码连接符）。于是这段代码等同于// 注释语句 a = b+c ;就会被注释掉。
+    * https://blog.csdn.net/daheiantian/article/details/6095507
+    * "??/"会被编译器当作 /，变成C语言的换行符（多行代码连接符）。于是这段代码等同于// 注释语句 a = b+c ;就会被注释掉。
 
-## C++
+## [C++ language](https://en.cppreference.com/w/cpp/language)
 
+* This is a reference of the core C++ language constructs.
 * [最好的 5 个 C++ 网站](https://mp.weixin.qq.com/s/v3PoPBYI3uJAsQeqQQQlfA)
-  * [cppreference](https://en.cppreference.com/w/)
-    * cppreference 即 C++ 参考手册，这个网站始终是我的首选，因为它非常简洁，可读性也很强，不但更新及时（已经到 C++20 了），还提供了很好的示例。
-  * [LearnCpp](http://www.learncpp.com/)
-    * 这可以说是最好的 C++ 教程网站了，组织结构非常好，而且内容丰富、易于理解（涵盖面很广，讲解也很细致），会进行定期更新，并增加一些新的主题。毫不夸张的说，它就像一本 C++ 在线书籍。
-  * [Cplusplus](http://www.cplusplus.com/)
-    * 这也是一个学习 C++ 的优秀网站，除了提供相应的教程之外，还有一个很棒的论坛。和其它网站相比，它的价值更多体现在参考上，因为里面解释了许多编程概念，如果对某个特定的东西感到困惑，那么这些概念将会很有帮助。（吐槽一下，更新不及时！）
-  * [TutorialsPoint](https://www.tutorialspoint.com/cplusplus/index.htm)
-    * Tutorialspoint 是一个顶级网站，之所以这么说，是因为你想学的任何技术（包括 C++），它几乎都提供了详细的教程。保存好就对了，超级有用。（顺便再介绍一个 GeeksForGeeks）
-  * [Awesome C++](https://github.com/fffaraz/awesome-cpp)
-    * 想必很多人都知道 GitHub 上的 Awesome-XXX 系列的资源整理，awesome-cpp 就是 fffaraz 发起维护的 C++ 资源列表，内容包括：标准库、Web 应用框架、人工智能、数据库、图片处理、机器学习、日志、代码分析等。这个嘛，可以用到老 O(∩_∩)O哈哈~！
+    * [cppreference](https://en.cppreference.com/w/)
+        * cppreference 即 C++ 参考手册，这个网站始终是我的首选，因为它非常简洁，可读性也很强，不但更新及时（已经到 C++20 了），还提供了很好的示例。
+    * [LearnCpp](http://www.learncpp.com/)
+        * 这可以说是最好的 C++ 教程网站了，组织结构非常好，而且内容丰富、易于理解（涵盖面很广，讲解也很细致），会进行定期更新，并增加一些新的主题。毫不夸张的说，它就像一本 C++ 在线书籍。
+    * [Cplusplus](http://www.cplusplus.com/)
+        * 这也是一个学习 C++ 的优秀网站，除了提供相应的教程之外，还有一个很棒的论坛。和其它网站相比，它的价值更多体现在参考上，因为里面解释了许多编程概念，如果对某个特定的东西感到困惑，那么这些概念将会很有帮助。（吐槽一下，更新不及时！）
+    * [TutorialsPoint](https://www.tutorialspoint.com/cplusplus/index.htm)
+        * Tutorialspoint 是一个顶级网站，之所以这么说，是因为你想学的任何技术（包括 C++），它几乎都提供了详细的教程。保存好就对了，超级有用。（顺便再介绍一个 GeeksForGeeks）
+    * [Awesome C++](https://github.com/fffaraz/awesome-cpp)
+        * 想必很多人都知道 GitHub 上的 Awesome-XXX 系列的资源整理，awesome-cpp 就是 fffaraz 发起维护的 C++ 资源列表，内容包括：标准库、Web 应用框架、人工智能、数据库、图片处理、机器学习、日志、代码分析等。这个嘛，可以用到老 O(∩_∩)O哈哈~！
 * [C/C++ PK 各大编程语言](https://mp.weixin.qq.com/s/zTuPyQRkjkVWp_KIjMh_Kw)
 * [C++ 后端开发路线](https://mp.weixin.qq.com/s/QvFQEjUPEw_2zexaZi6GNQ)
 * [这不就是你要的C++后台开发学习路线吗？](https://mp.weixin.qq.com/s/1FRSTcUnGf6e8HvJ3sdwLg)
 * [45天，入门C++](https://mp.weixin.qq.com/s/GEUChOAu8wKZ-mazyKaMow)
+
+## [C++ Standard Library](https://en.cppreference.com/w/cpp/standard_library)
+
+* [C++ Standard Library](https://www.tutorialspoint.com/cplusplus/cpp_standard_library.htm)
+* [什么是 C 和 C++ 标准库？](https://mp.weixin.qq.com/s/wErRQ3AzgJ9lzQKsNG9SzA)
+  * https://www.oschina.net/translate/c-c-standard-library
+  * C 和 C++ 是如何制订的
+  * C 标准库
+  * C++ 标准库
+  * 实现 C/C++ 标准库
+  * GNU/Linux 版实现
+  * Mac 和 iOS 版实现
+  * Windows 版实现
+  * Android 版实现
+  * 我能使用不同版本的实现代码来替代默认实现吗？
+  * 如果我们脱离了标准库怎么办？
 
 ### Basics
 
@@ -6145,11 +6163,11 @@ std::async(std::launch::async, []{ g(); }); // does not start until f() complete
 
 * [一文详解 C++ 日志框架](https://mp.weixin.qq.com/s/0heKciXbMl95WMTXLfr8UA)
 
-### [Standard Template Library (STL)](https://www.tutorialspoint.com/cplusplus/cpp_stl_tutorial.htm)
+## [Standard Template Library (STL)](https://www.tutorialspoint.com/cplusplus/cpp_stl_tutorial.htm)
 
 * [STL - c-cpp/面试总结之C-C++ at main · haoran119/c-cpp](https://github.com/haoran119/c-cpp/tree/main/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93%E4%B9%8BC-C%2B%2B#stl)
 
-#### [Containers library](https://en.cppreference.com/w/cpp/container)
+## [Containers library](https://en.cppreference.com/w/cpp/container)
 
 * The Containers library is a generic collection of class templates and algorithms that allow programmers to easily implement common data structures like queues, lists and stacks. There are three classes of containers -- sequence containers, associative containers, and unordered associative containers -- each of which is designed to support a different set of operations.
 * The container manages the storage space that is allocated for its elements and provides member functions to access them, either directly or through iterators (objects with properties similar to pointers).
@@ -6164,7 +6182,7 @@ std::async(std::launch::async, []{ g(); }); // does not start until f() complete
 	* Elements of the same container can be modified concurrently with those member functions that are not specified to access these elements. More generally, the C++ standard library functions do not read objects indirectly accessible through their arguments (including other elements of a container) except when required by its specification.
 	* In any case, container operations (as well as algorithms, or any other C++ standard library functions) may be parallelized internally as long as this does not change the user-visible results (e.g. std::transform may be parallelized, but not std::for_each which is specified to visit each element of a sequence in order)
 
-##### Sequence
+### Sequence
 
 Sequence containers implement data structures which can be accessed sequentially.
 
@@ -6175,7 +6193,7 @@ Sequence containers implement data structures which can be accessed sequentially
 | forward_list | singly-linked list| 
 | list | doubly-linked list| 
 
-###### [std::array](https://en.cppreference.com/w/cpp/container/array)
+#### [std::array](https://en.cppreference.com/w/cpp/container/array)
 
 * std::array is a container that encapsulates fixed size arrays.
 * This container is an aggregate type with the same semantics as a struct holding a C-style array T[N] as its only non-static data member. Unlike a C-style array, it doesn't decay to T* automatically. As an aggregate type, it can be initialized with aggregate-initialization given at most N initializers that are convertible to T: std::array\<int, 3> a = {1,2,3};.
@@ -6184,7 +6202,7 @@ Sequence containers implement data structures which can be accessed sequentially
 * There is a special case for a zero-length array (N == 0). In that case, array.begin() == array.end(), which is some unique value. The effect of calling front() or back() on a zero-sized array is undefined.
 * An array can also be used as a tuple of N elements of the same type.
 
-###### [std::vector](https://en.cppreference.com/w/cpp/container/vector)
+#### [std::vector](https://en.cppreference.com/w/cpp/container/vector)
 
 * 1) std::vector is a sequence container that encapsulates dynamic size arrays.
 * 2) std::pmr::vector is an alias template that uses a polymorphic allocator.
@@ -6393,7 +6411,7 @@ int main()
 * [vector初始化与否导致的巨大性能差异](https://mp.weixin.qq.com/s/HISHvxxd1LVBwouAE-uZHg)
 	* 最近在优化引擎代码，在优化的过程中发现一个很奇怪的问题，一个简单的对象，存放在std::vector<> v中，如果v定义的时候为每个元素指定初值，那么后面对v中每个元素的写就飞快；相反的，如果v定义的时候，不指定初始值，那么后面对v中元素写操作的时候，就花费大约前一种2-3倍的时间。
 
-###### [std::deque](https://en.cppreference.com/w/cpp/container/deque)
+#### [std::deque](https://en.cppreference.com/w/cpp/container/deque)
 
 * std::deque (double-ended queue) is an indexed sequence container that allows fast insertion and deletion at both its beginning and its end. In addition, insertion and deletion at either end of a deque never invalidates pointers or references to the rest of the elements.
 * As opposed to std::vector, the elements of a deque are not stored contiguously: typical implementations use a sequence of individually allocated fixed-size arrays, with additional bookkeeping, which means indexed access to deque must perform two pointer dereferences, compared to vector's indexed access which performs only one.
@@ -6464,7 +6482,7 @@ int main(){
 }
 ```
 
-###### [std::forward_list](https://en.cppreference.com/w/cpp/container/forward_list)
+#### [std::forward_list](https://en.cppreference.com/w/cpp/container/forward_list)
 
 * std::forward_list is a container that supports fast insertion and removal of elements from anywhere in the container. Fast random access is not supported. It is implemented as a singly-linked list. Compared to std::list this container provides more space efficient storage when bidirectional iteration is not needed.
 * Adding, removing and moving the elements within the list, or across several lists, does not invalidate the iterators currently referring to other elements in the list. However, an iterator or reference referring to an element is invalidated when the corresponding element is removed (via erase_after) from the list.
@@ -6507,13 +6525,13 @@ int main()
 }
 ```
 
-###### [std::list](https://en.cppreference.com/w/cpp/container/list)
+#### [std::list](https://en.cppreference.com/w/cpp/container/list)
 
 * std::list is a container that supports constant time insertion and removal of elements from anywhere in the container. Fast random access is not supported. It is usually implemented as a doubly-linked list. Compared to std::forward_list this container provides bidirectional iteration capability while being less space efficient.
 * Adding, removing and moving the elements within the list or across several lists does not invalidate the iterators or references. An iterator is invalidated only when the corresponding element is deleted.
 * std::list meets the requirements of Container, AllocatorAwareContainer, SequenceContainer and ReversibleContainer.
 
-##### Associative
+### Associative
 
 * Associative containers implement sorted data structures that can be quickly searched (O(log n) complexity).
 
@@ -6523,7 +6541,7 @@ int main()
 | multiset | collection of keys, sorted by keys | 
 | multimap | collection of key-value pairs, sorted by keys
 
-###### [std::set](https://en.cppreference.com/w/cpp/container/set)
+#### [std::set](https://en.cppreference.com/w/cpp/container/set)
 
 * std::set is an associative container that contains a sorted set of unique objects of type Key. Sorting is done using the key comparison function Compare. Search, removal, and insertion operations have logarithmic complexity. Sets are usually implemented as red-black trees.
 * Everywhere the standard library uses the Compare requirements, uniqueness is determined by using the equivalence relation. In imprecise terms, two objects a and b are considered equivalent if neither compares less than the other: !comp(a, b) && !comp(b, a).
@@ -6589,7 +6607,7 @@ int main()
 * [std::set<Key,Compare,Allocator>::insert - cppreference.com](https://en.cppreference.com/w/cpp/container/set/insert)
 	* Inserts element(s) into the container, if the container doesn't already contain an element with an equivalent key.
 
-###### [std::map](https://en.cppreference.com/w/cpp/container/map)
+#### [std::map](https://en.cppreference.com/w/cpp/container/map)
 
 * std::map is a sorted associative container that contains key-value pairs with unique keys. Keys are sorted by using the comparison function Compare. Search, removal, and insertion operations have logarithmic complexity. Maps are usually implemented as red-black trees.
 * Everywhere the standard library uses the Compare requirements, uniqueness is determined by using the equivalence relation. In imprecise terms, two objects a and b are considered equivalent (not unique) if neither compares less than the other: !comp(a, b) && !comp(b, a).
@@ -7050,7 +7068,7 @@ int main() {
 }
 ```
 
-###### [std::multiset](https://en.cppreference.com/w/cpp/container/multiset)
+#### [std::multiset](https://en.cppreference.com/w/cpp/container/multiset)
 
 * collection of keys, sorted by keys (class template)
 * std::multiset is an associative container that contains a sorted set of objects of type Key. Unlike set, multiple keys with equivalent values are allowed. Sorting is done using the key comparison function Compare. Search, insertion, and removal operations have logarithmic complexity.
@@ -7058,7 +7076,7 @@ int main() {
 * The order of the elements that compare equivalent is the order of insertion and does not change. (since C++11)
 * std::multiset meets the requirements of Container, AllocatorAwareContainer, AssociativeContainer and ReversibleContainer.
 
-###### [std::multimap](https://en.cppreference.com/w/cpp/container/multimap)
+#### [std::multimap](https://en.cppreference.com/w/cpp/container/multimap)
 
 * collection of key-value pairs, sorted by keys (class template)
 * Multimap is an associative container that contains a sorted list of key-value pairs, while permitting multiple entries with the same key. Sorting is done according to the comparison function Compare, applied to the keys. Search, insertion, and removal operations have logarithmic complexity.
@@ -7066,7 +7084,7 @@ int main() {
 * Everywhere the standard library uses the Compare requirements, equivalence is determined by using the equivalence relation as described on Compare. In imprecise terms, two objects a and b are considered equivalent if neither compares less than the other: !comp(a, b) && !comp(b, a).
 * std::multimap meets the requirements of Container, AllocatorAwareContainer, AssociativeContainer and ReversibleContainer.
 
-##### Unordered associative
+### Unordered associative
 
 * Unordered associative containers implement unsorted (hashed) data structures that can be quickly searched (O(1) amortized, O(n) worst-case complexity).
 
@@ -7076,7 +7094,7 @@ int main() {
 | unordered_multiset | collection of keys, hashed by keys | 
 | unordered_multimap | collection of key-value pairs, hashed by keys | 
 
-###### [std::unordered_set](https://en.cppreference.com/w/cpp/container/unordered_set)
+#### [std::unordered_set](https://en.cppreference.com/w/cpp/container/unordered_set)
 
 * Unordered set is an associative container that contains a set of unique objects of type Key. Search, insertion, and removal have average constant-time complexity.
 * Internally, the elements are not sorted in any particular order, but organized into buckets. Which bucket an element is placed into depends entirely on the hash of its value. This allows fast access to individual elements, since once a hash is computed, it refers to the exact bucket the element is placed into.
@@ -7084,7 +7102,7 @@ int main() {
 * std::unordered_set meets the requirements of Container, AllocatorAwareContainer, UnorderedAssociativeContainer.
 * [std::unordered_set<Key,Hash,KeyEqual,Allocator>::count - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_set/count)
 
-###### [std::unordered_map](https://en.cppreference.com/w/cpp/container/unordered_map)
+#### [std::unordered_map](https://en.cppreference.com/w/cpp/container/unordered_map)
 
 * Unordered map is an associative container that contains key-value pairs with unique keys. Search, insertion, and removal of elements have average constant-time complexity.
 * Internally, the elements are not sorted in any particular order, but organized into buckets. Which bucket an element is placed into depends entirely on the hash of its key. Keys with the same hash code appear in the same bucket. This allows fast access to individual elements, since once the hash is computed, it refers to the exact bucket the element is placed into.
@@ -7121,7 +7139,7 @@ int main() {
 	* Iterators in the container are at least forward iterators.
 	* [Static const map inside class/struct - C++ Forum](http://www.cplusplus.com/forum/general/266519/)
 
-##### Adaptors
+### Adaptors
 
 * Container adaptors provide a different interface for sequential containers.
 
@@ -7130,7 +7148,7 @@ int main() {
 | queue | adapts a container to provide queue (FIFO data structure) | 
 | priority_queue | adapts a container to provide priority queue | 
 
-###### [std::stack](https://en.cppreference.com/w/cpp/container/stack)
+#### [std::stack](https://en.cppreference.com/w/cpp/container/stack)
 
 * The std::stack class is a container adaptor that gives the programmer the functionality of a stack - specifically, a LIFO (last-in, first-out) data structure.
 * The class template acts as a wrapper to the underlying container - only a specific set of functions is provided. The stack pushes and pops the element from the back of the underlying container, known as the top of the stack.
@@ -7176,24 +7194,24 @@ Top element: 6
 */
 ```
 
-###### [std::queue](https://en.cppreference.com/w/cpp/container/queue)
+#### [std::queue](https://en.cppreference.com/w/cpp/container/queue)
 
 * The std::queue class is a container adaptor that gives the programmer the functionality of a queue - specifically, a FIFO (first-in, first-out) data structure.
 * The class template acts as a wrapper to the underlying container - only a specific set of functions is provided. The queue pushes the elements on the back of the underlying container and pops them from the front.
 
-###### [std::priority_queue](https://en.cppreference.com/w/cpp/container/priority_queue)
+#### [std::priority_queue](https://en.cppreference.com/w/cpp/container/priority_queue)
 
 * A priority queue is a container adaptor that provides constant time lookup of the largest (by default) element, at the expense of logarithmic insertion and extraction.
 * A user-provided Compare can be supplied to change the ordering, e.g. using std::greater\<T> would cause the smallest element to appear as the top().
 * Working with a priority_queue is similar to managing a heap in some random access container, with the benefit of not being able to accidentally invalidate the heap.
 
-##### Views
+### Views
 
-#### [Algorithm library](https://en.cppreference.com/w/cpp/algorithm)
+## [Algorithm library](https://en.cppreference.com/w/cpp/algorithm)
 
 * The algorithms library defines functions for a variety of purposes (e.g. searching, sorting, counting, manipulating) that operate on ranges of elements. Note that a range is defined as \[first, last) where last refers to the element past the last element to inspect or modify.
 
-##### Execution policies
+### Execution policies
 
 * Most algorithms have overloads that accept execution policies. The standard library algorithms support several execution policies, and the library provides corresponding execution policy types and objects. Users may select an execution policy statically by invoking a parallel algorithm with an execution policy object of the corresponding type.
 * Standard library implementations (but not the users) may define additional execution policies as an extension. The semantics of parallel algorithms invoked with an execution policy object of implementation-defined type is implementation-defined.
@@ -7211,7 +7229,7 @@ Top element: 6
 * [c++ - Difference between execution policies and when to use them - Stack Overflow](https://stackoverflow.com/questions/39954678/difference-between-execution-policies-and-when-to-use-them)
 * [c++ - std::for_each with std::execution::par_unseq not working on GCC but working with MSVC - Stack Overflow](https://stackoverflow.com/questions/65496175/stdfor-each-with-stdexecutionpar-unseq-not-working-on-gcc-but-working-with)
 
-##### Non-modifying sequence operations
+### Non-modifying sequence operations
 
 * [std::all_of, std::any_of, std::none_of - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/all_any_none_of)
 	* checks if a predicate is true for all, any or none of the elements in a range (function template)
@@ -7269,7 +7287,7 @@ Top element: 6
   * [c++ - How to find out if an item is present in a std::vector? - Stack Overflow](https://stackoverflow.com/questions/571394/how-to-find-out-if-an-item-is-present-in-a-stdvector)
   	* `std::find(vec.begin(), vec.end(), item) != vec.end()`
 
-##### Modifying sequence operations
+### Modifying sequence operations
 
 * [std::copy, std::copy_if - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/copy)
 	* copies a range of elements to a new location (function template)
@@ -7632,9 +7650,9 @@ int main()
 */
 ```
 
-##### Partitioning operations
+### Partitioning operations
 
-##### Sorting operations
+### Sorting operations
 
 * [std::sort - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/sort)
 	* Sorts the elements in the range \[first, last) in non-descending order. The order of equal elements is not guaranteed to be preserved.
@@ -7683,7 +7701,7 @@ int main()
 */
 ```
 
-##### Binary search operations (on sorted ranges)
+### Binary search operations (on sorted ranges)
 
 * [std::lower_bound - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/lower_bound)
   * returns an iterator to the first element not less than the given value (function template)
@@ -7733,9 +7751,9 @@ int main() {
 	* The range \[first, last) must be partitioned with respect to the expression !(value < element) or !comp(value, element), i.e., all elements for which the expression is true must precede all elements for which the expression is false. A fully-sorted range meets this criterion.
 	* The first version uses operator< to compare the elements, the second version uses the given comparison function comp.
 
-##### Other operations on sorted ranges
+### Other operations on sorted ranges
 
-##### Set operations (on sorted ranges)
+### Set operations (on sorted ranges)
 
 * [std::set_intersection - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/set_intersection)
 	* computes the intersection of two sets (function template)
@@ -7764,9 +7782,9 @@ int main()
 * [std::set_intersection in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/std-set_intersection-in-cpp/)
 	* find the common elements in two vectors
 
-##### Heap operations
+### Heap operations
 
-##### Minimum/maximum operations
+### Minimum/maximum operations
 
 * [std::max - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/max)
 	* returns the greater of the given values (function template)
@@ -7846,11 +7864,11 @@ int main()
 	* Return value
 		* Iterator to the smallest element in the range \[first, last). If several elements in the range are equivalent to the smallest element, returns the iterator to the first such element. Returns last if the range is empty.
 
-##### Comparison operations
+### Comparison operations
 
-##### Permutation operations
+### Permutation operations
 
-##### Numeric operations
+### Numeric operations
 
 * Defined in header \<numeric>
 * [std::accumulate - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/accumulate)
@@ -7933,13 +7951,13 @@ int main()
 	* Return value
 		* Iterator to the element past the last element written.
 
-##### Operations on uninitialized memory
+### Operations on uninitialized memory
 
-##### C library
+### C library
 
-#### [Iterator library](https://en.cppreference.com/w/cpp/iterator)
+## [Iterator library](https://en.cppreference.com/w/cpp/iterator)
 
-##### Iterator adaptors
+### Iterator adaptors
 
 * [std::reverse_iterator - cppreference.com](https://en.cppreference.com/w/cpp/iterator/reverse_iterator)
 	* iterator adaptor for reverse-order traversal (class template)
@@ -8018,7 +8036,7 @@ Output:
 */
 ```
 
-##### Iterator operations
+### Iterator operations
 
 * Defined in header \<iterator>
 * [std::advance - cppreference.com](https://en.cppreference.com/w/cpp/iterator/advance)
@@ -8088,7 +8106,7 @@ int main()
 	* Notes
 		* Although the expression --c.end() often compiles, it is not guaranteed to do so: c.end() is an rvalue expression, and there is no iterator requirement that specifies that decrement of an rvalue is guaranteed to work. In particular, when iterators are implemented as pointers or its operator-- is lvalue-ref-qualified, --c.end() does not compile, while std::prev(c.end()) does.
 
-##### Range access
+### Range access
 
 * These non-member functions provide a generic interface for containers, plain arrays, and [std::initializer_list](https://en.cppreference.com/w/cpp/utility/initializer_list).
 * [std::begin, std::cbegin - cppreference.com](https://en.cppreference.com/w/cpp/iterator/begin)
@@ -8096,30 +8114,15 @@ int main()
 * [std::end, std::cend - cppreference.com](https://en.cppreference.com/w/cpp/iterator/end)
 	* returns an iterator to the end of a container or array(function template)
 
-### [C++ Standard Library](https://www.tutorialspoint.com/cplusplus/cpp_standard_library.htm)
-
-* [什么是 C 和 C++ 标准库？](https://mp.weixin.qq.com/s/wErRQ3AzgJ9lzQKsNG9SzA)
-  * https://www.oschina.net/translate/c-c-standard-library
-  * C 和 C++ 是如何制订的
-  * C 标准库
-  * C++ 标准库
-  * 实现 C/C++ 标准库
-  * GNU/Linux 版实现
-  * Mac 和 iOS 版实现
-  * Windows 版实现
-  * Android 版实现
-  * 我能使用不同版本的实现代码来替代默认实现吗？
-  * 如果我们脱离了标准库怎么办？
-
-#### [Utility library](https://en.cppreference.com/w/cpp/utility)
+## [Utility library](https://en.cppreference.com/w/cpp/utility)
 
 * C++ includes a variety of utility libraries that provide functionality ranging from bit-counting to partial function application. These libraries can be broadly divided into two groups:
 	* language support libraries, and
 	* general-purpose libraries.
 
-##### Language support
+### Language support
 
-###### [Type support (basic types, RTTI, type traits)](https://en.cppreference.com/w/cpp/types)
+#### [Type support (basic types, RTTI, type traits)](https://en.cppreference.com/w/cpp/types)
 
 #
 Additional basic types and macros
@@ -8251,7 +8254,7 @@ Type relationships
 		* Commutativity is satisfied, i.e. for any two types T and U, is_same\<T, U>::value == true if and only if is_same\<U, T>::value == true.
 		* The behavior of a program that adds specializations for is_same or is_same_v (since C++17) is undefined.
 
-###### [Program support utilities](https://en.cppreference.com/w/cpp/utility/program)
+#### [Program support utilities](https://en.cppreference.com/w/cpp/utility/program)
 
 #
 Program termination
@@ -8490,7 +8493,7 @@ SIGFPE|erroneous arithmetic operation such as divide by zero
 * [Shell Scripting - How to send Signal to a Processes - GeeksforGeeks](https://www.geeksforgeeks.org/shell-scripting-how-to-send-signal-to-a-processes/)
 * [UNIX / Linux: 3 Ways to Send Signal to Processes](https://www.thegeekstuff.com/2011/02/send-signal-to-process/)
 
-###### [Initializer lists](https://en.cppreference.com/w/cpp/utility/initializer_list)
+#### [Initializer lists](https://en.cppreference.com/w/cpp/utility/initializer_list)
 
 * Defined in header \<initializer_list>
 * [std::initializer_list - cppreference.com](https://en.cppreference.com/w/cpp/utility/initializer_list)(C++11)
@@ -8607,9 +8610,9 @@ Use = only when you are sure that there can be no narrowing conversions. For bui
 	* Note ={} gives copy initialization whereas {} gives direct initialization. Like the distinction between copy-initialization and direct-initialization itself, this can lead to surprises. {} accepts explicit constructors; ={} does not.
 	* Use plain {}-initialization unless you specifically want to disable explicit constructors.	
 
-##### General-purpose utilities
+### General-purpose utilities
 
-###### Swap and type operations
+#### Swap and type operations
 
 * Defined in header \<utility>
 * [std::forward - cppreference.com](https://en.cppreference.com/w/cpp/utility/forward)
@@ -8821,7 +8824,7 @@ int main()
 }
 ```
 
-###### Pairs and tuples
+#### Pairs and tuples
 
 * Defined in header \<utility>
 
@@ -8936,7 +8939,7 @@ int main()
 * [【C++11】让程序更简洁—tuple元组](https://mp.weixin.qq.com/s/TiU3L9vkyD-gSr5UD3jAGw)
 	* tuple元组是一个泛化的std::pair，可以在一个数据结构中保存不同类型的变量，这一点和C#里面的tupe类似，由此可见，C++也在逐渐吸收其他编程语言的优良特性，加入到自己的势力范围里面来。
 
-###### Sum types and type erased wrappers
+#### Sum types and type erased wrappers
 
 * [std::optional - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional)
 	* Defined in header \<optional>
@@ -9029,7 +9032,7 @@ int main()
 	* Implementations are encouraged to avoid dynamic allocations for small objects, but such an optimization may only be applied to types for which std::is_nothrow_move_constructible returns true.
 * [C++17常用新特性(十三)---std::any](https://mp.weixin.qq.com/s/qzm_hYj7JEr0AOpxQkDm4g)
 
-###### [Function objects](https://en.cppreference.com/w/cpp/utility/functional)
+#### [Function objects](https://en.cppreference.com/w/cpp/utility/functional)
 
 * A function object is any object for which the function call operator is defined. C++ provides many built-in function objects as well as support for creation and manipulation of new function objects.
 
@@ -9201,18 +9204,18 @@ Operator function objects
 * [std::greater - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/greater)
 	* function object implementing x > y (class template)
 
-#### [Ranges library](https://en.cppreference.com/w/cpp/ranges)
+## [Ranges library](https://en.cppreference.com/w/cpp/ranges)
 
 * [起底 C++ Range 令人惊讶的局限性！](https://mp.weixin.qq.com/s/iB70FXO-D7C-72N4l9KnzA)
   * https://www.fluentcpp.com/2019/09/13/the-surprising-limitations-of-c-ranges-beyond-trivial-use-cases/
 
-#### [Numerics library](https://en.cppreference.com/w/cpp/numeric)
+## [Numerics library](https://en.cppreference.com/w/cpp/numeric)
 
 * The C++ numerics library includes common mathematical functions and types, as well as optimized numeric arrays and support for random number generation.
 
-##### Mathematical functions and types
+### Mathematical functions and types
 
-###### [Common mathematical functions]()
+#### [Common mathematical functions]()
 
 * The header \<cmath> provides standard C library mathematical functions such as std::fabs, std::sqrt, and std::sin.
 * [std::div, std::ldiv, std::lldiv - cppreference.com](https://en.cppreference.com/w/cpp/numeric/math/div)
@@ -9401,15 +9404,15 @@ isnan(Inf - Inf)   = true
 		* Division by zero
 		* Taking the log of zero or a negative number etc.
 
-###### [Mathematical constants (since C++20)](https://en.cppreference.com/w/cpp/numeric/constants)
+#### [Mathematical constants (since C++20)](https://en.cppreference.com/w/cpp/numeric/constants)
 
 * The header \<numbers> provides several mathematical constants, such as std::numbers::pi or std::numbers::sqrt2
 * [How to use the PI constant in C++?](https://www.tutorialspoint.com/how-to-use-the-pi-constant-in-cplusplus)
 	* The PI constant is present in the cmath header file. The name of the constant is M_PI. 
 
-##### Miscellanous
+### Miscellanous
 
-###### [Pseudo-random number generation](https://en.cppreference.com/w/cpp/numeric/random)
+#### [Pseudo-random number generation](https://en.cppreference.com/w/cpp/numeric/random)
 
 * The header \<random> defines pseudo-random number generators and numerical distributions. The header \<cstdlib> also includes C-style random number generation via std::srand and std::rand.
 * [std::uniform_int_distribution - cppreference.com](https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution)
