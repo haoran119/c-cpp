@@ -1648,6 +1648,132 @@ destructed at 0x7fffd635fd4e
 
 ### [Statements](https://en.cppreference.com/w/cpp/language/statements)
 
+* [if-else和switch-case哪个效率更高？看这四张图。](https://mp.weixin.qq.com/s/zZ2O1tamQ6NDMneu9kKZRQ)
+  * 只有在case中的条件是连续数字或相隔不大时，编译器会使用表结构做优化，性能优于if-else。
+  * 其他情况下，switch-case其实就是逐个分支判断，性能与if-else无异。
+  * switch-case中的case只能是常量，而if-else用途更广一些，本文仅讨论分支是常量的情况。
+* [while(1) 和 for(;;)有什么区别？](https://mp.weixin.qq.com/s/a9g9PAwgc3oXoQXBvT49bA)
+	* 你会发现，除了文件名不同，其余都相同。
+	* 当然，这里额外说一下，不同代码、不同编译器，以及不同优化等级，可能最终结果有所差异。
+
+#### [if statement](https://en.cppreference.com/w/cpp/language/if)
+
+* Conditionally executes another statement.
+* Used where code needs to be executed based on a run-time or compile-time (since C++17) condition, or whether the if statement is evaluated in a manifestly constant-evaluated context (since C++23).
+* [ES.87: Don’t add redundant == or != to conditions](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#es87-dont-add-redundant--or--to-conditions)
+	* `Reason` Doing so avoids verbosity and eliminates some opportunities for mistakes. Helps make style consistent and conventional.
+	* `Example` By definition, a condition in an if-statement, while-statement, or a for-statement selects between true and false. A numeric value is compared to 0 and a pointer value to nullptr.
+    ```c++
+    // These all mean "if p is not nullptr"
+    if (p) { ... }            // good
+    if (p != 0) { ... }       // redundant !=0, bad: don't use 0 for pointers
+    if (p != nullptr) { ... } // redundant !=nullptr, not recommended
+    ```
+    * Often, if (p) is read as “if p is valid” which is a direct expression of the programmers intent, whereas if (p != nullptr) would be a long-winded workaround.
+    * `Example` This rule is especially useful when a declaration is used as a condition
+    ```c++
+    if (auto pc = dynamic_cast<Circle>(ps)) { ... } // execute if ps points to a kind of Circle, good
+    if (auto pc = dynamic_cast<Circle>(ps); pc != nullptr) { ... } // not recommended
+    ```
+    * `Example` Note that implicit conversions to bool are applied in conditions. For example:
+    * `for (string s; cin >> s; ) v.push_back(s);`
+    * This invokes istream’s operator bool().
+    * `Note` Explicit comparison of an integer to 0 is in general not redundant. The reason is that (as opposed to pointers and Booleans) an integer often has more than two reasonable values. Furthermore 0 (zero) is often used to indicate success. Consequently, it is best to be specific about the comparison.
+    ```c++
+    void f(int i)
+    {
+        if (i)            // suspect
+        // ...
+        if (i == success) // possibly better
+        // ...
+    }
+    ```
+    * Always remember that an integer can have more than two values.
+    * `Example, bad` It has been noted that
+    * `if(strcmp(p1, p2)) { ... }   // are the two C-style strings equal? (mistake!)`
+    * is a common beginners error. If you use C-style strings, you must know the \<cstring> functions well. Being verbose and writing
+    * `if(strcmp(p1, p2) != 0) { ... }   // are the two C-style strings equal? (mistake!)`
+    * would not in itself save you.
+    * `Note` The opposite condition is most easily expressed using a negation:
+    ```c++
+    // These all mean "if p is nullptr"
+    if (!p) { ... }           // good
+    if (p == 0) { ... }       // redundant == 0, bad: don't use 0 for pointers
+    if (p == nullptr) { ... } // redundant == nullptr, not recommended
+    ```
+    * Enforcement Easy, just check for redundant use of != and == in conditions.
+
+##### If statements with initializer
+
+* [C++17 If statement with initializer](https://www.tutorialspoint.com/cplusplus17-if-statement-with-initializer#:~:text=Now%20it%20is%20possible%20to,variable%20leaking%20outside%20the%20scope.)
+	* C++17 has extended existing if statement’s syntax. Now it is possible to provide initial condition within if statement itself. This new syntax is called "if statement with initializer". This enhancement simplifies common code patterns and helps users keep scopes tight. Which in turn avoids variable leaking outside the scope.
+```c++
+std::map<int, std::string> m;
+std::mutex mx;
+extern bool shared_flag; // guarded by mx
+ 
+int demo()
+{
+    if (auto it = m.find(10); it != m.end()) { return it->second.size(); }
+    if (char buf[10]; std::fgets(buf, 10, stdin)) { m[0] += buf; }
+    if (std::lock_guard lock(mx); shared_flag) { unsafe_ping(); shared_flag = false; }
+    if (int s; int count = ReadBytesWithSignal(&s)) { publish(count); raise(s); }
+    if (const auto keywords = {"if", "for", "while"};
+        std::ranges::any_of(keywords, [&tok](const char* kw) { return tok == kw; }))
+    {
+        std::cerr << "Token must not be a keyword\n";
+    }
+}
+```
+
+#### [for loop](https://en.cppreference.com/w/cpp/language/for)
+
+* as the declaration of the loop
+* Executes init-statement once, then executes statement and iteration-expression repeatedly, until the value of condition becomes false. The test takes place before each iteration.
+
+#### [range-based for loop](https://en.cppreference.com/w/cpp/language/range-for)
+
+* as the declaration of the loop (since C++11)
+* Executes a for loop over a range.
+* Used as a more readable equivalent to the traditional for loop operating over a range of values, such as all elements in a container.
+* range-declaration may be a structured binding declaration
+	* `for (auto&& [first,second] : mymap) {}`
+* [Range-based for loop in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/range-based-loop-c/)
+	* C++ 17 or higher: Range-based loops can also be used with maps like this: 
+```c++
+for (auto& [key, value]: myMap) {
+    cout << key << " has value " << value << std::endl;
+}
+```
+* [Will range based for loop in c++ preserve the index order - Stack Overflow](https://stackoverflow.com/questions/19052026/will-range-based-for-loop-in-c-preserve-the-index-order)
+	* Yes the two codes are guaranteed to do the same. Though I don't have a link to the standard you can have a look here. I quote: `You can read that as "for all x in v" going through starting with v.begin() and iterating to v.end()`.
+	* [C++11 FAQ](https://www.stroustrup.com/C++11FAQ.html#for)
+		* Range-for statement
+			* A range for statement allows you to iterate through a "range", which is anything you can iterate through like an STL-sequence defined by a begin() and end(). All standard containers can be used as a range, as can a std::string, an initializer list, an array, and anything for which you define begin() and end(), e.g. an istream. For example:
+            ```c++
+            void f(vector<double>& v)
+            {
+                for (auto x : v) cout << x << '\n';
+                for (auto& x : v) ++x;  // using a reference to allow us to change the value
+            }
+            ```
+			* You can read that as "for all x in v" going through starting with v.begin() and iterating to v.end(). Another example:
+				* `for (const auto x : { 1,2,3,5,8,13,21,34 }) cout << x << '\n';`
+			* The begin() (and end()) can be a member to be called x.begin() or a free-standing function to be called begin(x). The member version takes precedence.
+* [Reverse For Loops in C++ - Fluent C++](https://www.fluentcpp.com/2020/02/11/reverse-for-loops-in-cpp/)
+	* It would be nice to be able to use C++11 range for loops to iterate backwards. But unfortunately, there is no such reverse range-for: range-for only works forwards.
+	* Let’s see how to traverse a collection backwards by using a range for loop.
+	* In C++20: the reverse range adaptor
+		* C++20 will bring ranges to the language, including a range adaptor called std::ranges::views::reverse, or std::views::reverse.
+		* It allows to traverse a collection in reverse order and can be used this way:
+```c++
+for (auto const& x : range | std::views::reverse)
+{
+    foo(x);
+}
+```
+* [Reversed Range-based for loop in C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/reversed-range-based-for-loop-in-c-with-examples/)
+
 ### Classes
 
 * [explicit specifier - cppreference.com](https://en.cppreference.com/w/cpp/language/explicit)
@@ -2772,133 +2898,6 @@ Operator function objects
 
 # ----
 
-#### Decision Making
-
-* [if-else和switch-case哪个效率更高？看这四张图。](https://mp.weixin.qq.com/s/zZ2O1tamQ6NDMneu9kKZRQ)
-  * 只有在case中的条件是连续数字或相隔不大时，编译器会使用表结构做优化，性能优于if-else。
-  * 其他情况下，switch-case其实就是逐个分支判断，性能与if-else无异。
-  * switch-case中的case只能是常量，而if-else用途更广一些，本文仅讨论分支是常量的情况。
-* [while(1) 和 for(;;)有什么区别？](https://mp.weixin.qq.com/s/a9g9PAwgc3oXoQXBvT49bA)
-	* 你会发现，除了文件名不同，其余都相同。
-	* 当然，这里额外说一下，不同代码、不同编译器，以及不同优化等级，可能最终结果有所差异。
-
-##### [if statement](https://en.cppreference.com/w/cpp/language/if)
-
-* Conditionally executes another statement.
-* Used where code needs to be executed based on a run-time or compile-time (since C++17) condition, or whether the if statement is evaluated in a manifestly constant-evaluated context (since C++23).
-* [ES.87: Don’t add redundant == or != to conditions](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#es87-dont-add-redundant--or--to-conditions)
-	* `Reason` Doing so avoids verbosity and eliminates some opportunities for mistakes. Helps make style consistent and conventional.
-	* `Example` By definition, a condition in an if-statement, while-statement, or a for-statement selects between true and false. A numeric value is compared to 0 and a pointer value to nullptr.
-    ```c++
-    // These all mean "if p is not nullptr"
-    if (p) { ... }            // good
-    if (p != 0) { ... }       // redundant !=0, bad: don't use 0 for pointers
-    if (p != nullptr) { ... } // redundant !=nullptr, not recommended
-    ```
-    * Often, if (p) is read as “if p is valid” which is a direct expression of the programmers intent, whereas if (p != nullptr) would be a long-winded workaround.
-    * `Example` This rule is especially useful when a declaration is used as a condition
-    ```c++
-    if (auto pc = dynamic_cast<Circle>(ps)) { ... } // execute if ps points to a kind of Circle, good
-    if (auto pc = dynamic_cast<Circle>(ps); pc != nullptr) { ... } // not recommended
-    ```
-    * `Example` Note that implicit conversions to bool are applied in conditions. For example:
-    * `for (string s; cin >> s; ) v.push_back(s);`
-    * This invokes istream’s operator bool().
-    * `Note` Explicit comparison of an integer to 0 is in general not redundant. The reason is that (as opposed to pointers and Booleans) an integer often has more than two reasonable values. Furthermore 0 (zero) is often used to indicate success. Consequently, it is best to be specific about the comparison.
-    ```c++
-    void f(int i)
-    {
-        if (i)            // suspect
-        // ...
-        if (i == success) // possibly better
-        // ...
-    }
-    ```
-    * Always remember that an integer can have more than two values.
-    * `Example, bad` It has been noted that
-    * `if(strcmp(p1, p2)) { ... }   // are the two C-style strings equal? (mistake!)`
-    * is a common beginners error. If you use C-style strings, you must know the \<cstring> functions well. Being verbose and writing
-    * `if(strcmp(p1, p2) != 0) { ... }   // are the two C-style strings equal? (mistake!)`
-    * would not in itself save you.
-    * `Note` The opposite condition is most easily expressed using a negation:
-    ```c++
-    // These all mean "if p is nullptr"
-    if (!p) { ... }           // good
-    if (p == 0) { ... }       // redundant == 0, bad: don't use 0 for pointers
-    if (p == nullptr) { ... } // redundant == nullptr, not recommended
-    ```
-    * Enforcement Easy, just check for redundant use of != and == in conditions.
-
-###### If statements with initializer
-
-* [C++17 If statement with initializer](https://www.tutorialspoint.com/cplusplus17-if-statement-with-initializer#:~:text=Now%20it%20is%20possible%20to,variable%20leaking%20outside%20the%20scope.)
-	* C++17 has extended existing if statement’s syntax. Now it is possible to provide initial condition within if statement itself. This new syntax is called "if statement with initializer". This enhancement simplifies common code patterns and helps users keep scopes tight. Which in turn avoids variable leaking outside the scope.
-```c++
-std::map<int, std::string> m;
-std::mutex mx;
-extern bool shared_flag; // guarded by mx
- 
-int demo()
-{
-    if (auto it = m.find(10); it != m.end()) { return it->second.size(); }
-    if (char buf[10]; std::fgets(buf, 10, stdin)) { m[0] += buf; }
-    if (std::lock_guard lock(mx); shared_flag) { unsafe_ping(); shared_flag = false; }
-    if (int s; int count = ReadBytesWithSignal(&s)) { publish(count); raise(s); }
-    if (const auto keywords = {"if", "for", "while"};
-        std::ranges::any_of(keywords, [&tok](const char* kw) { return tok == kw; }))
-    {
-        std::cerr << "Token must not be a keyword\n";
-    }
-}
-```
-
-##### [for loop](https://en.cppreference.com/w/cpp/language/for)
-
-* as the declaration of the loop
-* Executes init-statement once, then executes statement and iteration-expression repeatedly, until the value of condition becomes false. The test takes place before each iteration.
-
-##### [range-based for loop](https://en.cppreference.com/w/cpp/language/range-for)
-
-* as the declaration of the loop (since C++11)
-* Executes a for loop over a range.
-* Used as a more readable equivalent to the traditional for loop operating over a range of values, such as all elements in a container.
-* range-declaration may be a structured binding declaration
-	* `for (auto&& [first,second] : mymap) {}`
-* [Range-based for loop in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/range-based-loop-c/)
-	* C++ 17 or higher: Range-based loops can also be used with maps like this: 
-```c++
-for (auto& [key, value]: myMap) {
-    cout << key << " has value " << value << std::endl;
-}
-```
-* [Will range based for loop in c++ preserve the index order - Stack Overflow](https://stackoverflow.com/questions/19052026/will-range-based-for-loop-in-c-preserve-the-index-order)
-	* Yes the two codes are guaranteed to do the same. Though I don't have a link to the standard you can have a look here. I quote: `You can read that as "for all x in v" going through starting with v.begin() and iterating to v.end()`.
-	* [C++11 FAQ](https://www.stroustrup.com/C++11FAQ.html#for)
-		* Range-for statement
-			* A range for statement allows you to iterate through a "range", which is anything you can iterate through like an STL-sequence defined by a begin() and end(). All standard containers can be used as a range, as can a std::string, an initializer list, an array, and anything for which you define begin() and end(), e.g. an istream. For example:
-            ```c++
-            void f(vector<double>& v)
-            {
-                for (auto x : v) cout << x << '\n';
-                for (auto& x : v) ++x;  // using a reference to allow us to change the value
-            }
-            ```
-			* You can read that as "for all x in v" going through starting with v.begin() and iterating to v.end(). Another example:
-				* `for (const auto x : { 1,2,3,5,8,13,21,34 }) cout << x << '\n';`
-			* The begin() (and end()) can be a member to be called x.begin() or a free-standing function to be called begin(x). The member version takes precedence.
-* [Reverse For Loops in C++ - Fluent C++](https://www.fluentcpp.com/2020/02/11/reverse-for-loops-in-cpp/)
-	* It would be nice to be able to use C++11 range for loops to iterate backwards. But unfortunately, there is no such reverse range-for: range-for only works forwards.
-	* Let’s see how to traverse a collection backwards by using a range for loop.
-	* In C++20: the reverse range adaptor
-		* C++20 will bring ranges to the language, including a range adaptor called std::ranges::views::reverse, or std::views::reverse.
-		* It allows to traverse a collection in reverse order and can be used this way:
-```c++
-for (auto const& x : range | std::views::reverse)
-{
-    foo(x);
-}
-```
-* [Reversed Range-based for loop in C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/reversed-range-based-for-loop-in-c-with-examples/)
 
 #### [Functions](https://www.tutorialspoint.com/cplusplus/cpp_functions.htm)
 
