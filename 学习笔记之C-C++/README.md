@@ -971,98 +971,45 @@ MISC
 * [谁说 C++ 的强制类型转换很难懂？](https://mp.weixin.qq.com/s/q3iwtvqMSp6lNC_ZR_SP6A)
   * https://github.com/yingyulou
 
-##### [Structured binding declaration](https://en.cppreference.com/w/cpp/language/structured_binding)
-
-* Binds the specified names to subobjects or elements of the initializer.
-* Like a reference, a structured binding is an alias to an existing object. Unlike a reference, a structured binding does not have to be of a reference type.
-* Case 1: binding an array
-* Case 2: binding a tuple-like type
-* Case 3: binding to data members
-```c++
-#include <set>
-#include <string>
-#include <iomanip>
-#include <iostream>
- 
-int main()
-{
-    std::set<std::string> myset{"hello"};
- 
-    for (int i{2}; i; --i)
-    {
-        if (auto [iter, success] = myset.insert("Hello"); success) 
-            std::cout << "Insert is successful. The value is "
-                      << std::quoted(*iter) << ".\n";
-        else
-            std::cout << "The value " << std::quoted(*iter)
-                      << " already exists in the set.\n";
-    }
- 
-    struct BitFields
-    {
-        // C++20: default member initializer for bit-fields
-        int b : 4 {1}, d : 4 {2}, p : 4 {3}, q : 4 {4};
-    };
- 
-    {
-        const auto [b, d, p, q] = BitFields{};
-        std::cout << b << ' ' << d << ' ' << p << ' ' << q << '\n';
-    }
- 
-    {
-        const auto [b, d, p, q] = []{ return BitFields{4, 3, 2, 1}; }();
-        std::cout << b << ' ' << d << ' ' << p << ' ' << q << '\n';
-    }
- 
-    {
-        BitFields s;
- 
-        auto& [b, d, p, q] = s;
-        std::cout << b << ' ' << d << ' ' << p << ' ' << q << '\n';
- 
-        b = 4, d = 3, p = 2, q = 1;
-        std::cout << s.b << ' ' << s.d << ' ' << s.p << ' ' << s.q << '\n';
-    }
-
-    {
-        BitFields s;
- 
-        auto [b, d, p, q] = s;
-        std::cout << b << ' ' << d << ' ' << p << ' ' << q << '\n';
- 
-        b = 4, d = 3, p = 2, q = 1;
-        std::cout << s.b << ' ' << s.d << ' ' << s.p << ' ' << s.q << '\n';
-    }    
-}
-/*
-Insert is successful. The value is "Hello".
-The value "Hello" already exists in the set.
-1 2 3 4
-4 3 2 1
-1 2 3 4
-4 3 2 1
-1 2 3 4
-1 2 3 4
-*/
-```
-* [C++17常用新特性(三)---结构化绑定](https://mp.weixin.qq.com/s?__biz=MjM5ODg5MDIzOQ==&mid=2650491856&idx=1&sn=d676113480a097e2b3fd156c5096e0fd&chksm=becc344089bbbd56b357e949b694534a4a8146c548114c9d20f8612b7fe9b1f4297948018fc7&scene=21#wechat_redirect)
-	* 1 结构化绑定概述
-	* 2 细品结构化绑定
-	* 3 哪些场景可以使用结构体绑定
-		* 3.1 结构体和类
-		* 3.2 原生数组
-			* 对原生数组使用结构化绑定时需要注意的是只有在数组的长度一定的情况下才能使用结构化绑定，且声明的对象个数要和数组长度保持一致。数组作为按值传入的参数时是不能使用结构化绑定的，这个时候数组会退化为相应的指针。
-		* 3.3 std::pair, std::tuple 和 std::array
-	* 4 总结
-* [C++17结构化绑定](https://mp.weixin.qq.com/s/YCxM0kmCmpkfnOwe7XNvaQ)
-* [Structured binding in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/structured-binding-c/)
-* [Structured binding may be the new hotness, but we'll always have std::tie - The Old New Thing](https://devblogs.microsoft.com/oldnewthing/20200925-00/?p=104297)
-	* C++17 introduced structured binding, which lets you assign an expression to multiple variables.
-	* However, this is for creating new variables to hold the result. If you want to assign the result to existing variables, then you can use the old standby std::tie.
-
 #### [Constants/Literals](https://www.tutorialspoint.com/cplusplus/cpp_constants_literals.htm)
 
 ### [Keywords](https://en.cppreference.com/w/cpp/keyword)
+
+#### [C++ keywords: auto](https://en.cppreference.com/w/cpp/keyword/auto)
+
+* [automatic storage duration specifier (until C++11)](https://en.cppreference.com/w/cpp/language/storage_duration)
+* [auto placeholder type specifier (since C++11)](https://en.cppreference.com/w/cpp/language/auto)
+* [function declaration with trailing return type (since C++11)](https://en.cppreference.com/w/cpp/language/function)
+* [structured binding declaration (since C++17)](https://en.cppreference.com/w/cpp/language/structured_binding)
+* [现代C++编程实践(七)—auto的前世今生](https://mp.weixin.qq.com/s/MMynpJruZ11JykWYY0UoOg)
+	* 1 C++98 auto出现
+		* 在c++98中，auto仅仅是作为一个关键字用来修饰变量，表示一个自动变量，它在作用域内生效，就像定义在栈上的变量一样，一旦超出其作用域，该变量会被自动释放回收。像极了变量。因此在随后的C++版本中，auto被赋予了新的含义，老的含义自然也被弃用，但是无论如何作为C++发展的一个过程，很多C++开发人员也对它非常推崇，
+	* 2 C++11 全新的auto
+		* C++11后，auto被赋予了新的含义，可以自动推导出变量的类型，在编译阶段就可以计算出变量的类型。主要用法如下：
+			* 用来定义一个变量
+			* 减少代码复杂度
+				* 在STL编程时，经常会使用大迭代器，使用后会导致代码类型较长，使用auto后会对变量自动进行推导。
+			* 模板函数返回值
+				* 在C++11中，auto还不能够直接当作函数返回值返回，需要和decltyp搭配使用
+		* 当然，在C++11中，开发带来便利的同时也需要遵循一定的约束，如：
+			* auto变量不能有二义性
+			* 不能将auto直接作为函数的参数
+				* 在后面我们会介绍，这种用法在C++14中是支持的，C++11中还没有支持。
+			* auto声明变量后需要立即进行初始化
+			* auto变量赋值为数组，这个时候推导出来的类型为指针，如果想要推导出来的类型为数组，需要在前面加上&符号。
+	* 3 C++14 一点点地改进
+		* 2014年C++14版本发布，相对C++11来说，C++14对auto特性也进行了提升，比如说前面的auto不能作为函数返回值，在这个版本中明确已经支持了。
+		* 需要明确的是在使用auto作为函数返回类型的时候依旧需要遵守避免函数返回结果的二义性
+		* 除此之后，C++14版本还可以使用decltype(auto)作为类型占位符。推导出的类型为推导出的类型是 decltype(expr)。其中expr为初始化器。
+		* decltype(auto)还可以被用于函数或者模板返回参数
+		* 当然，除了上面的使用场景外，auto还可用在lambda表达式中，关于这一点后面会进行介绍，本文不再赘述。
+	* 4 C++17 又一个大版本
+		* C++14版本发布三年后，C++17版本横空出世，在这个版本中又新增了许多新的特性，auto也不例外，这一次它又一次对模板进行了革命，令人惊奇的是这一次它是作为非类型模板形参进入的，也就是说C++17后可以根据实参自动推导出形参的类型。
+	* 5 关于C++20和C++23版本
+		* C++20和C++23版本，本文不做详细的说明，因为后续会有专门的推文进行介绍，如果大家想要继续了解，欢迎关注收藏。现在对这两个版本关于auto的改动做一个预告。C++20和C++23版本中，auto的改动主要如下：
+			* 类型约束(C++20版本): 这个和C++20中的概念一起了解比较合适。主要是限定入参类型，这样就可以针对传入参数的不同类型给出不同的反馈。关于C++20可以关注此专集详细了解：C++20新特新
+			* 简写函数模板（C++20版本):这样就可以像写普通函数一样编写模板函数了。
+			* 通过表达式推导类型(C++23版本):auto 说明符也可以在显式类型转换的简单类型说明符中出现：auto(expr) 与 auto{expr} 。从表达式推导它的类型。
 
 #### [C++ keywords: struct](https://en.cppreference.com/w/cpp/keyword/struct)
 
@@ -1421,48 +1368,18 @@ blue
 */
 ```
 
-##### [decltype](https://en.cppreference.com/w/cpp/language/decltype)
+##### [decltype specifier](https://en.cppreference.com/w/cpp/language/decltype)
 
 * Inspects the declared type of an entity or the type and value category of an expression.
 * Keywords decltype
 	* [decltype specifier](https://en.cppreference.com/w/cpp/language/decltype) (since C++11)
 	* [decltype(auto)](https://en.cppreference.com/w/cpp/language/auto) (since C++14)
 
-##### [auto](https://en.cppreference.com/w/cpp/keyword/auto)
+##### [auto placeholder type specifier (since C++11)](https://en.cppreference.com/w/cpp/language/auto)
 
-* [automatic storage duration specifier (until C++11)](https://en.cppreference.com/w/cpp/language/storage_duration)
-* [auto placeholder type specifier (since C++11)](https://en.cppreference.com/w/cpp/language/auto)
-* [function declaration with trailing return type (since C++11)](https://en.cppreference.com/w/cpp/language/function)
-* [structured binding declaration (since C++17)](https://en.cppreference.com/w/cpp/language/structured_binding)
-* [现代C++编程实践(七)—auto的前世今生](https://mp.weixin.qq.com/s/MMynpJruZ11JykWYY0UoOg)
-	* 1 C++98 auto出现
-		* 在c++98中，auto仅仅是作为一个关键字用来修饰变量，表示一个自动变量，它在作用域内生效，就像定义在栈上的变量一样，一旦超出其作用域，该变量会被自动释放回收。像极了变量。因此在随后的C++版本中，auto被赋予了新的含义，老的含义自然也被弃用，但是无论如何作为C++发展的一个过程，很多C++开发人员也对它非常推崇，
-	* 2 C++11 全新的auto
-		* C++11后，auto被赋予了新的含义，可以自动推导出变量的类型，在编译阶段就可以计算出变量的类型。主要用法如下：
-			* 用来定义一个变量
-			* 减少代码复杂度
-				* 在STL编程时，经常会使用大迭代器，使用后会导致代码类型较长，使用auto后会对变量自动进行推导。
-			* 模板函数返回值
-				* 在C++11中，auto还不能够直接当作函数返回值返回，需要和decltyp搭配使用
-		* 当然，在C++11中，开发带来便利的同时也需要遵循一定的约束，如：
-			* auto变量不能有二义性
-			* 不能将auto直接作为函数的参数
-				* 在后面我们会介绍，这种用法在C++14中是支持的，C++11中还没有支持。
-			* auto声明变量后需要立即进行初始化
-			* auto变量赋值为数组，这个时候推导出来的类型为指针，如果想要推导出来的类型为数组，需要在前面加上&符号。
-	* 3 C++14 一点点地改进
-		* 2014年C++14版本发布，相对C++11来说，C++14对auto特性也进行了提升，比如说前面的auto不能作为函数返回值，在这个版本中明确已经支持了。
-		* 需要明确的是在使用auto作为函数返回类型的时候依旧需要遵守避免函数返回结果的二义性
-		* 除此之后，C++14版本还可以使用decltype(auto)作为类型占位符。推导出的类型为推导出的类型是 decltype(expr)。其中expr为初始化器。
-		* decltype(auto)还可以被用于函数或者模板返回参数
-		* 当然，除了上面的使用场景外，auto还可用在lambda表达式中，关于这一点后面会进行介绍，本文不再赘述。
-	* 4 C++17 又一个大版本
-		* C++14版本发布三年后，C++17版本横空出世，在这个版本中又新增了许多新的特性，auto也不例外，这一次它又一次对模板进行了革命，令人惊奇的是这一次它是作为非类型模板形参进入的，也就是说C++17后可以根据实参自动推导出形参的类型。
-	* 5 关于C++20和C++23版本
-		* C++20和C++23版本，本文不做详细的说明，因为后续会有专门的推文进行介绍，如果大家想要继续了解，欢迎关注收藏。现在对这两个版本关于auto的改动做一个预告。C++20和C++23版本中，auto的改动主要如下：
-			* 类型约束(C++20版本): 这个和C++20中的概念一起了解比较合适。主要是限定入参类型，这样就可以针对传入参数的不同类型给出不同的反馈。关于C++20可以关注此专集详细了解：C++20新特新
-			* 简写函数模板（C++20版本):这样就可以像写普通函数一样编写模板函数了。
-			* 通过表达式推导类型(C++23版本):auto 说明符也可以在显式类型转换的简单类型说明符中出现：auto(expr) 与 auto{expr} 。从表达式推导它的类型。
+* For variables, specifies that the type of the variable that is being declared will be automatically deduced from its initializer.
+* For functions, specifies that the return type will be deduced from its return statements. (since C++14)
+* For non-type template parameters, specifies that the type will be deduced from the argument. (since C++17)
 
 ##### [cv (const and volatile) type qualifiers](https://en.cppreference.com/w/cpp/language/cv)
 
@@ -1568,6 +1485,95 @@ blue
 * [C++ - Why static member function can't be created with 'const' qualifier - Stack Overflow](https://stackoverflow.com/questions/7035356/c-why-static-member-function-cant-be-created-with-const-qualifier)
 	* When you apply the const qualifier to a nonstatic member function, it affects the this pointer. For a const-qualified member function of class C, the this pointer is of type C const*, whereas for a member function that is not const-qualified, the this pointer is of type C*.
 	* A static member function does not have a this pointer (such a function is not called on a particular instance of a class), so const qualification of a static member function doesn't make any sense.
+
+##### [Structured binding declaration](https://en.cppreference.com/w/cpp/language/structured_binding)
+
+* Binds the specified names to subobjects or elements of the initializer.
+* Like a reference, a structured binding is an alias to an existing object. Unlike a reference, a structured binding does not have to be of a reference type.
+* Case 1: binding an array
+* Case 2: binding a tuple-like type
+* Case 3: binding to data members
+```c++
+#include <set>
+#include <string>
+#include <iomanip>
+#include <iostream>
+ 
+int main()
+{
+    std::set<std::string> myset{"hello"};
+ 
+    for (int i{2}; i; --i)
+    {
+        if (auto [iter, success] = myset.insert("Hello"); success) 
+            std::cout << "Insert is successful. The value is "
+                      << std::quoted(*iter) << ".\n";
+        else
+            std::cout << "The value " << std::quoted(*iter)
+                      << " already exists in the set.\n";
+    }
+ 
+    struct BitFields
+    {
+        // C++20: default member initializer for bit-fields
+        int b : 4 {1}, d : 4 {2}, p : 4 {3}, q : 4 {4};
+    };
+ 
+    {
+        const auto [b, d, p, q] = BitFields{};
+        std::cout << b << ' ' << d << ' ' << p << ' ' << q << '\n';
+    }
+ 
+    {
+        const auto [b, d, p, q] = []{ return BitFields{4, 3, 2, 1}; }();
+        std::cout << b << ' ' << d << ' ' << p << ' ' << q << '\n';
+    }
+ 
+    {
+        BitFields s;
+ 
+        auto& [b, d, p, q] = s;
+        std::cout << b << ' ' << d << ' ' << p << ' ' << q << '\n';
+ 
+        b = 4, d = 3, p = 2, q = 1;
+        std::cout << s.b << ' ' << s.d << ' ' << s.p << ' ' << s.q << '\n';
+    }
+
+    {
+        BitFields s;
+ 
+        auto [b, d, p, q] = s;
+        std::cout << b << ' ' << d << ' ' << p << ' ' << q << '\n';
+ 
+        b = 4, d = 3, p = 2, q = 1;
+        std::cout << s.b << ' ' << s.d << ' ' << s.p << ' ' << s.q << '\n';
+    }    
+}
+/*
+Insert is successful. The value is "Hello".
+The value "Hello" already exists in the set.
+1 2 3 4
+4 3 2 1
+1 2 3 4
+4 3 2 1
+1 2 3 4
+1 2 3 4
+*/
+```
+* [C++17常用新特性(三)---结构化绑定](https://mp.weixin.qq.com/s?__biz=MjM5ODg5MDIzOQ==&mid=2650491856&idx=1&sn=d676113480a097e2b3fd156c5096e0fd&chksm=becc344089bbbd56b357e949b694534a4a8146c548114c9d20f8612b7fe9b1f4297948018fc7&scene=21#wechat_redirect)
+	* 1 结构化绑定概述
+	* 2 细品结构化绑定
+	* 3 哪些场景可以使用结构体绑定
+		* 3.1 结构体和类
+		* 3.2 原生数组
+			* 对原生数组使用结构化绑定时需要注意的是只有在数组的长度一定的情况下才能使用结构化绑定，且声明的对象个数要和数组长度保持一致。数组作为按值传入的参数时是不能使用结构化绑定的，这个时候数组会退化为相应的指针。
+		* 3.3 std::pair, std::tuple 和 std::array
+	* 4 总结
+* [C++17结构化绑定](https://mp.weixin.qq.com/s/YCxM0kmCmpkfnOwe7XNvaQ)
+* [Structured binding in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/structured-binding-c/)
+* [Structured binding may be the new hotness, but we'll always have std::tie - The Old New Thing](https://devblogs.microsoft.com/oldnewthing/20200925-00/?p=104297)
+	* C++17 introduced structured binding, which lets you assign an expression to multiple variables.
+	* However, this is for creating new variables to hold the result. If you want to assign the result to existing variables, then you can use the old standby std::tie.
 
 ### [Initialization](https://en.cppreference.com/w/cpp/language/initialization)
 
