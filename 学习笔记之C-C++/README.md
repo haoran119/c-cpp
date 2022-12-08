@@ -4429,9 +4429,153 @@ int main(int argc, char *argv[]) {
 		* Note From a language perspective class and struct differ only in the default visibility of their members.
 		* Enforcement Probably impossible. Maybe a heuristic looking for data items used together is possible.
 	* [C.8: Use class rather than struct if any member is non-public](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c8-use-class-rather-than-struct-if-any-member-is-non-public)
-* [static members - cppreference.com](https://en.cppreference.com/w/cpp/language/static)
-	* Inside a class definition, the keyword static declares members that are not bound to class instances.
-	* Outside a class definition, it has a different meaning: see storage duration.
+
+##### Members
+
+###### [static members - cppreference.com](https://en.cppreference.com/w/cpp/language/static)
+
+* Inside a class definition, the keyword static declares members that are not bound to class instances.
+* Outside a class definition, it has a different meaning: see storage duration.
+
+###### [Friend declaration - cppreference.com](https://en.cppreference.com/w/cpp/language/friend)
+
+* The friend declaration appears in a class body and grants a function or another class access to private and protected members of the class where the friend declaration appears.
+* Description
+    * 1) Designates a function or several functions as friends of this class:
+    ```c++
+    class Y
+    {
+        int data; // private member
+
+        // the non-member function operator<< will have access to Y's private members
+        friend std::ostream& operator<<(std::ostream& out, const Y& o);
+        friend char* X::foo(int); // members of other classes can be friends too
+        friend X::X(char), X::~X(); // constructors and destructors can be friends
+    };
+
+    // friend declaration does not declare a member function
+    // this operator<< still needs to be defined, as a non-member
+    std::ostream& operator<<(std::ostream& out, const Y& y)
+    {
+        return out << y.data; // can access private member Y::data
+    }
+    ```
+    * 2) (only allowed in non-local class definitions) Defines a non-member function, and makes it a friend of this class at the same time. Such non-member function is always inline, unless it is attached to a named module (since C++20).
+    ```c++
+    class X
+    {
+        int a;
+
+        friend void friend_set(X& p, int i)
+        {
+            p.a = i; // this is a non-member function
+        }
+    public:
+        void member_set(int i)
+        {
+            a = i; // this is a member function
+        }
+    };
+    ```
+    * 3) Designates the class, struct, or union named by the elaborated-class-specifier (see elaborated type specifier) as a friend of this class. This means that the friend's member declarations and definitions can access private and protected members of this class and also that the friend can inherit from private and protected members of this class. The name of the class that is used in this friend declaration does not need to be previously declared.
+    * 4) Designates the type named by the simple-type-specifier or typename-specifier as a friend of this class if that type is a (possibly cv-qualified) class, struct, or union; otherwise the friend declaration is ignored. This declaration will not forward declare a new type.
+    ```c++
+    class Y {};
+
+    class A
+    {
+        int data; // private data member
+
+        class B {}; // private nested type
+
+        enum { a = 100 }; // private enumerator
+
+        friend class X; // friend class forward declaration (elaborated class specifier)
+        friend Y; // friend class declaration (simple type specifier) (since c++11)
+    };
+
+    class X : A::B // OK: A::B accessible to friend
+    {
+        A::B mx; // OK: A::B accessible to member of friend
+
+        class Y
+        {
+            A::B my; // OK: A::B accessible to nested member of friend
+        };
+
+        int v[A::a]; // OK: A::a accessible to member of friend
+    };
+    ```
+* Notes
+    * Friendship is not transitive (a friend of your friend is not your friend).
+    * Friendship is not inherited (your friend's children are not your friends).
+    * Storage class specifiers are not allowed in friend function declarations. A function that is defined in the friend declaration has external linkage, a function that was previously defined, keeps the linkage it was defined with.
+    * Access specifiers have no effect on the meaning of friend declarations (they can appear in private: or in public: sections, with no difference).
+    * A friend class declaration cannot define a new class (friend class X {}; is an error).
+    * When a local class declares an unqualified function or class as a friend, only functions and classes in the innermost non-class scope are looked up, not the global functions
+* Template friends
+    * Both function template and class template declarations may appear with the friend specifier in any non-local class or class template (although only function templates may be defined within the class or class template that is granting friendship). In this case, every specialization of the template becomes a friend, whether it is implicitly instantiated, partially specialized, or explicitly specialized.
+* Template friend operators
+    * A common use case for template friends is declaration of a non-member operator overload that acts on a class template, e.g. operator<<(std::ostream&, const Foo\<T>&) for some user-defined Foo\<T>.
+    * Such operator can be defined in the class body, which has the effect of generating a separate non-template operator<< for each T and makes that non-template operator<< a friend of its Foo\<T>
+    * or the function template has to be declared as a template before the class body, in which case the friend declaration within Foo\<T> can refer to the full specialization of operator<< for its T:
+```c++
+#include <iostream>
+#include <sstream>
+ 
+class MyClass
+{
+    int i;                   // friends have access to non-public, non-static
+    static inline int id{6}; // and static (possibly inline) members
+ 
+    friend std::ostream& operator<<(std::ostream& out, const MyClass&);
+    friend std::istream& operator>>(std::istream& in, MyClass&);
+    friend void change_id(int);
+public:
+    MyClass(int i = 0) : i(i) {}
+};
+ 
+std::ostream& operator<<(std::ostream& out, const MyClass& mc)
+{
+    return out << "MyClass::id = " << MyClass::id << "; i = " << mc.i;
+}
+ 
+std::istream& operator>>(std::istream& in, MyClass& mc)
+{
+    return in >> mc.i;
+}
+ 
+void change_id(int id) { MyClass::id = id; }
+ 
+int main()
+{
+    MyClass mc(7);
+    std::cout << mc << '\n';
+//  mc.i = 333*2;  // error: i is a private member
+    std::istringstream("100") >> mc;
+    std::cout << mc << '\n';
+//  MyClass::id = 222*3;  // error: id is a private member
+    change_id(9);
+    std::cout << mc << '\n';
+}
+Output:
+
+MyClass::id = 6; i = 7
+MyClass::id = 6; i = 100
+MyClass::id = 9; i = 100
+```
+* [C++ Friend Functions](https://www.tutorialspoint.com/cplusplus/cpp_friend_functions.htm)
+    * A friend function of a class is defined outside that class' scope but it has the right to access all private and protected members of the class. Even though the prototypes for friend functions appear in the class definition, friends are not member functions.
+    * A friend can be a function, function template, or member function, or a class or class template, in which case the entire class and all of its members are friends.
+* [Friend class and function in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/friend-class-function-cpp/)
+    * Merits:
+        * A friend function is able to access members without the need of inheriting the class.
+        * Friend function acts as a bridge between two classes by accessing their private data.
+        * It can be used to increase the versatility of overloaded operator.
+        * It can be declared either in the public or private or protected part of class.
+    * Demerits:
+        * Friend functions have access to private members of a class from outside the class which violates the law of the data hiding.
+        * Friend functions cannot do any run time polymorphism in its members.
 
 ##### Special member functions
 
