@@ -10,10 +10,10 @@
 
 * [Solve C++ | HackerRank](https://www.hackerrank.com/domains/cpp)
 * [C++ Programming Language - GeeksforGeeks](https://www.geeksforgeeks.org/c-plus-plus/?ref=shm#C++inCompetitiveProgramming)
-	* [C++ Interview Questions For Freshers & Experienced - GeeksforGeeks](https://www.geeksforgeeks.org/cpp-interview-questions/)
-	* [Commonly Asked C++ Interview Questions | Set 1 - GeeksforGeeks](https://www.geeksforgeeks.org/commonly-asked-c-interview-questions-set-1/)
-	* [Commonly Asked C++ Interview Questions | Set 2 - GeeksforGeeks](https://www.geeksforgeeks.org/commonly-asked-c-interview-questions-set-2/?ref=lbp)
-	* [C/C++ Programs - GeeksforGeeks](https://www.geeksforgeeks.org/cc-programs/)	
+    * [C++ Interview Questions For Freshers & Experienced - GeeksforGeeks](https://www.geeksforgeeks.org/cpp-interview-questions/)
+    * [Commonly Asked C++ Interview Questions | Set 1 - GeeksforGeeks](https://www.geeksforgeeks.org/commonly-asked-c-interview-questions-set-1/)
+    * [Commonly Asked C++ Interview Questions | Set 2 - GeeksforGeeks](https://www.geeksforgeeks.org/commonly-asked-c-interview-questions-set-2/?ref=lbp)
+    * [C/C++ Programs - GeeksforGeeks](https://www.geeksforgeeks.org/cc-programs/)	
 * [Containers library - cppreference.com](https://en.cppreference.com/w/cpp/container)
     * The Containers library is a generic collection of class templates and algorithms that allow programmers to easily implement common data structures like queues, lists and stacks. There are two (until C++11)three (since C++11) classes of containers:
         * sequence containers,
@@ -1250,6 +1250,9 @@ int main()
     * The unnamed namespaces you have created will only be accessible within the file you created it in.
     * Unnamed namespaces are the replacement for the static declaration of variables.
   * [Namespaces - cppreference.com](https://en.cppreference.com/w/cpp/language/namespace)
+
+### [prvalue v.s. xvalue v.s. lvalue](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#value-categories)
+
 * [左值和右值的区别？左值引用和右值引用的区别，如何将左值转换成右值？](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#value-categories)
   * 左值：指表达式结束后依然存在的持久对象。
   * 右值：表达式结束就不再存在的临时对象。
@@ -1258,31 +1261,32 @@ int main()
   * 左值引用不能绑定到要转换的表达式、字面常量或返回右值的表达式。右值引用恰好相反，可以绑定到这类表达式，但不能绑定到一个左值上。
   * 右值引用必须绑定到右值的引用，通过 && 获得。右值引用只能绑定到一个将要销毁的对象上，因此可以自由地移动其资源。
   * std::move 可以将一个左值强制转化为右值，继而可以通过右值引用使用该值，以用于移动语义。
-* std::move()
-  * [move - C++ Reference](https://www.cplusplus.com/reference/algorithm/move/)
-  * [std::move - cppreference.com](https://en.cppreference.com/w/cpp/utility/move)
-    * std::move is used to indicate that an object t may be "moved from", i.e. allowing the efficient transfer of resources from t to another object.
-    * In particular, std::move produces an xvalue expression that identifies its argument t. It is exactly equivalent to a static_cast to an rvalue reference type.
-  * [c++ - What is std::move(), and when should it be used? - Stack Overflow](https://stackoverflow.com/questions/3413470/what-is-stdmove-and-when-should-it-be-used)
+* [Rvalue Reference Quick Look](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2027.html#Move_Semantics)
+    * Rvalue references is a small technical extension to the C++ language. Rvalue references allow programmers to avoid logically unnecessary copying and to provide perfect forwarding functions. They are primarily meant to aid in the design of higer performance and more robust libraries.
+    * The rvalue reference      
+        * An rvalue reference is a compound type very similar to C++'s traditional reference. To better distinguish these two types, we refer to a traditional C++ reference as an lvalue reference. When the term reference is used, it refers to both kinds of reference: lvalue reference and rvalue reference.
+        * It turns out that the combination of rvalue references and lvalue references is just what is needed to easily code move semantics. The rvalue reference can also be used to achieve perfect forwarding, a heretofore unsolved problem in C++. From a casual programmer's perspective, what we get from rvalue references is more general and better performing libraries.
+    * Move Semantics
+        * Eliminating spurious copies
+            * Copying can be expensive. 
+            * The first task of rvalue references is to allow us to implement move() without verbosity, or rutime overhead.
+            * move
+                * The move function really does very little work. All move does is accept either an lvalue or rvalue argument, and return it as an rvalue without triggering a copy construction:
+                               
+### [std::move()](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#swap-and-type-operations)
+
+* [c++ - What is std::move(), and when should it be used? - Stack Overflow](https://stackoverflow.com/questions/3413470/what-is-stdmove-and-when-should-it-be-used)
     * In C++11, in addition to copy constructors, objects can have move constructors.(And in addition to copy assignment operators, they have move assignment operators.)
     * The move constructor is used instead of the copy constructor, if the object has type "rvalue-reference" (Type &&).
     * std::move() is a cast that produces an rvalue-reference to an object, to enable moving from it.
     * It's a new C++ way to avoid copies. For example, using a move constructor, a std::vector could just copy its internal pointer to data to the new object, leaving the moved object in an moved from state, therefore not copying all the data.  
-    * [Rvalue Reference Quick Look](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2027.html#Move_Semantics)
-      * Rvalue references is a small technical extension to the C++ language. Rvalue references allow programmers to avoid logically unnecessary copying and to provide perfect forwarding functions. They are primarily meant to aid in the design of higer performance and more robust libraries.
-      * The rvalue reference      
-        * An rvalue reference is a compound type very similar to C++'s traditional reference. To better distinguish these two types, we refer to a traditional C++ reference as an lvalue reference. When the term reference is used, it refers to both kinds of reference: lvalue reference and rvalue reference.
-        * It turns out that the combination of rvalue references and lvalue references is just what is needed to easily code move semantics. The rvalue reference can also be used to achieve perfect forwarding, a heretofore unsolved problem in C++. From a casual programmer's perspective, what we get from rvalue references is more general and better performing libraries.
-      * Move Semantics
-        * Eliminating spurious copies
-          * Copying can be expensive. 
-          * The first task of rvalue references is to allow us to implement move() without verbosity, or rutime overhead.
-          * move
-            * The move function really does very little work. All move does is accept either an lvalue or rvalue argument, and return it as an rvalue without triggering a copy construction:
-  * std::move() 实现原理：
+* std::move() 实现原理：
     * 利用引用折叠原理将右值经过 T&& 传递类型保持不变还是右值，而左值经过 T&& 变为普通的左值引用，以保证模板可以传递任意实参，且保持类型不变；
     * 然后通过 remove_refrence 移除引用，得到具体的类型 T；
-    * 最后通过 static_cast<> 进行强制类型转换，返回 T&& 右值引用。
+    * 最后通过 static_cast\<> 进行强制类型转换，返回 T&& 右值引用。
+    
+### Pointer v.s. Reference
+
 * [Pointers vs References in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/pointers-vs-references-cpp/)
 	* [Pointers](https://www.geeksforgeeks.org/pointers-in-c-and-c-set-1-introduction-arithmetic-and-array/)
 		* A pointer is a variable that holds memory address of another variable. A pointer needs to be dereferenced with * operator to access the memory location it points to. 
@@ -1325,6 +1329,9 @@ int main()
 	* Which is preferred in Passing by Pointer Vs Passing by Reference in C++? 
 		* References are usually preferred over pointers whenever we don’t need “reseating”.
 		* Overall, Use references when you can, and pointers when you have to. But if we want to write C code that compiles with both C and a C++ compiler, you’ll have to restrict yourself to using pointers.	
+
+### Function pointer
+
 * 函数指针,什么是函数指针，有什么用处
   * 函数指针是指向函数的指针，最大的用处是做回调函数，可以做接口函数，就像系统中断中的中断处理函数
 * 设计一个函数，函数中有一段功能是对相关数据的结理，但具体的处理方式是不定的。
