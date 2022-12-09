@@ -886,7 +886,7 @@ int main(){
 			* 4 % -2 = 0
 			* -3 % -4 = -3
 
-##### [new expression - cppreference.com](https://en.cppreference.com/w/cpp/language/new)
+##### [new expression](https://en.cppreference.com/w/cpp/language/new)
 
 * Creates and initializes objects with dynamic storage duration, that is, objects whose lifetime is not necessarily limited by the scope in which they were created.
 * Placement new
