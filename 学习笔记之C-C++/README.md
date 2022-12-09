@@ -1278,6 +1278,86 @@ The value "Hello" already exists in the set.
 
 #### Specifiers
 
+##### [inline specifier](https://en.cppreference.com/w/cpp/language/inline)
+
+* The inline specifier, when used in a function's decl-specifier-seq, declares the function to be an inline function.
+* A function defined entirely inside a class/struct/union definition, whether it's a member function or a non-member friend function, is implicitly an inline function if it is attached to the global module (since C++20).
+* A function declared constexpr is implicitly an inline function.
+* A deleted function is implicitly an inline function: its (deleted) definition can appear in more than one translation unit.(since C++11)
+* The inline specifier, when used in a decl-specifier-seq of a variable with static storage duration (static class member or namespace-scope variable), declares the variable to be an inline variable.
+* A static member variable (but not a namespace-scope variable) declared constexpr is implicitly an inline variable.(since C++17)
+* [F.5: If a function is very small and time-critical, declare it inline](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f5-if-a-function-is-very-small-and-time-critical-declare-it-inline)
+	* `Reason` Some optimizers are good at inlining without hints from the programmer, but don’t rely on it. Measure! Over the last 40 years or so, we have been promised compilers that can inline better than humans without hints from humans. We are still waiting. Specifying inline (explicitly, or implicitly when writing member functions inside a class definition) encourages the compiler to do a better job.
+	* `Example`
+		* `inline string cat(const string& s, const string& s2) { return s + s2; }`
+	* `Exception` Do not put an inline function in what is meant to be a stable interface unless you are certain that it will not change. An inline function is part of the ABI.
+	* `Note` constexpr implies inline.
+	* `Note` Member functions defined in-class are inline by default.
+	* `Exception` Function templates (including member functions of class templates A\<T>::function() and member function templates A::function\<T>()) are normally defined in headers and therefore inline.
+* [SF.2: A .h file must not contain object definitions or non-inline function definitions](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#sf2-a-h-file-must-not-contain-object-definitions-or-non-inline-function-definitions)
+	* Reason: Including entities subject to the one-definition rule leads to linkage errors.
+	* Example
+		* Linking file1.cpp and file2.cpp will give two linker errors.
+    ```c++
+    // file.h:
+    namespace Foo {
+        int x = 7;
+        int xx() { return x+x; }
+    }
+
+    // file1.cpp:
+    #include <file.h>
+    // ... more ...
+
+     // file2.cpp:
+    #include <file.h>
+    // ... more ...
+    ```
+	* Alternative formulation: A .h file must contain only:
+		* #includes of other .h files (possibly with include guards)
+		* templates
+		* class definitions
+		* function declarations
+		* extern declarations
+		* inline function definitions
+		* constexpr definitions
+		* const definitions
+		* using alias definitions
+* [Inline Functions - Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#Inline_Functions)
+	* Define functions inline only when they are small, say, 10 lines or fewer.
+	* Definition
+		* You can declare functions in a way that allows the compiler to expand them inline rather than calling them through the usual function call mechanism.
+	* Pros
+		* Inlining a function can generate more efficient object code, as long as the inlined function is small. Feel free to inline accessors and mutators, and other short, performance-critical functions.
+	* Cons
+		* Overuse of inlining can actually make programs slower. Depending on a function's size, inlining it can cause the code size to increase or decrease. Inlining a very small accessor function will usually decrease code size while inlining a very large function can dramatically increase code size. On modern processors smaller code usually runs faster due to better use of the instruction cache.
+	* Decision
+		* A decent rule of thumb is to not inline a function if it is more than 10 lines long. Beware of destructors, which are often longer than they appear because of implicit member- and base-destructor calls!
+		* Another useful rule of thumb: it's typically not cost effective to inline functions with loops or switch statements (unless, in the common case, the loop or switch statement is never executed).
+		* It is important to know that functions are not always inlined even if they are declared as such; for example, virtual and recursive functions are not normally inlined. Usually recursive functions should not be inline. The main reason for making a virtual function inline is to place its definition in the class, either for convenience or to document its behavior, e.g., for accessors and mutators.
+* [Self-contained Headers - Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#Self_contained_Headers)
+	* When a header declares inline functions or templates that clients of the header will instantiate, `the inline functions and templates must also have definitions in the header, either directly or in files it includes`. Do not move these definitions to separately included header (-inl.h) files; this practice was common in the past, but is no longer allowed. When all instantiations of a template occur in one .cc file, either because they're explicit or because the definition is accessible to only the .cc file, the template definition can be kept in that file.
+* [Inline Functions in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/inline-functions-cpp/)
+	* Compiler may not perform inlining in such circumstances like:
+		* 1) If a function contains a loop. (for, while, do-while)
+		* 2) If a function contains static variables.
+		* 3) If a function is recursive.
+		* 4) If a function return type is other than void, and the return statement doesn’t exist in function body.
+		* 5) If a function contains switch or goto statement.
+	* Inline functions provide following advantages:
+	* Inline function disadvantages:
+	* Inline function and classes:
+	* What is wrong with macro?
+* [C++ inline 函数简介](https://mp.weixin.qq.com/s/hWIKfl2-aXH0Uamt0LS_RA)
+	* https://dablelv.blog.csdn.net/article/details/52065524
+* [Why are C++ inline functions in the header? - Stack Overflow](https://stackoverflow.com/questions/5057021/why-are-c-inline-functions-in-the-header#:~:text=The%20definition%20of%20an%20inline,definition%20in%20a%20header%20file.)
+	* The definition of an inline function doesn't have to be in a header file but, because of the one definition rule [(ODR)](https://en.cppreference.com/w/cpp/language/definition) for inline functions, an identical definition for the function must exist in every translation unit that uses it.
+	* The easiest way to achieve this is by putting the definition in a header file.
+* How to fix compile error "multiple definition of 'utils::var' ... first defined here" ?
+	* declare var as `inline var` in namespace utils
+	* [c - "Multiple definition", "first defined here" errors - Stack Overflow](https://stackoverflow.com/questions/30821356/multiple-definition-first-defined-here-errors)
+	* [c++ - How do inline variables work? - Stack Overflow](https://stackoverflow.com/questions/38043442/how-do-inline-variables-work)
+
 ##### [constexpr specifier](https://en.cppreference.com/w/cpp/language/constexpr)
 
 * constexpr - specifies that the value of a variable or function can appear in constant expressions
@@ -1645,6 +1725,268 @@ destructed at 0x7fffd635fd4e
 ```
 
 ### [Functions](https://en.cppreference.com/w/cpp/language/functions)
+
+* [Functions](https://www.tutorialspoint.com/cplusplus/cpp_functions.htm)
+* [Functions - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/functions/)
+* [Function Signature](https://redirect.cs.umbc.edu/~chang/cs202/Lectures/modules/m04-overload/slides.php?print#:~:text=Function%20Signature,part%20of%20a%20function%27s%20signature.)
+	* A function's signature includes the function's name and the number, order and type of its formal parameters.
+	* Two overloaded functions must not have the same signature.
+	* The return value is not part of a function's signature.
+	* These two functions have the same signature:
+		* `int Divide (int n, int m) ; `
+		* `double Divide (int n, int m) ;`
+* [进入编译器后，一个函数经历了什么？](https://mp.weixin.qq.com/s/kYilpl4K_XpVDF3gaKoRAQ)
+* [C/C++ 中的 argc，argv 到底是什么？](https://mp.weixin.qq.com/s/Mik2n9oLP-PuFNU3lP48Zw)
+* [exit(0) vs exit(1) in C/C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/exit0-vs-exit1-in-c-c-with-examples/)
+	* Exit Success: Exit Success is indicated by exit(0) statement which means successful termination of the program, i.e. program has been executed without any error or interrupt.
+	* Exit Failure: Exit Failure is indicated by exit(1) which means the abnormal termination of the program, i.e. some error or interrupt has occurred. We can use different integer other than 1 to indicate different types of errors.
+* [现代C++编程实践(二)—函数返回值的处理](https://mp.weixin.qq.com/s/DJB9Axdh9toIBQIUZsujcA)
+	* 先说一种类C的方式，可以通过使用函数出参的方式获取所求复数的实部和虚部。
+	* 除此之外使用C++的方式可以通过std::pair<double,double>这种数据结构结果保存结果值。
+	* std::tie的实现方式相对于std::tuple来讲可读性变强了，返回值可以直接通过std::tie中的定义获取。除此之外，还有一个优势就是，可以忽略不想要的值，这个在std::tuple中是不可能做到的。
+	* C++17版本中提供了结构化绑定
+
+#### [Lambda expressions](https://en.cppreference.com/w/cpp/language/lambda)
+
+* Constructs a [closure](https://en.wikipedia.org/wiki/Closure_(computer_programming)): an unnamed function object capable of capturing variables in scope.
+* If auto is used as a type of a parameter or an explicit template parameter list is provided (since C++20), the lambda is a generic lambda. (since C++14)
+```c++
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <functional>
+ 
+int main()
+{
+    std::vector<int> c = {1, 2, 3, 4, 5, 6, 7};
+    int x = 5;
+    c.erase(std::remove_if(c.begin(), c.end(), [x](int n) { return n < x; }), c.end());
+ 
+    std::cout << "c: ";
+    std::for_each(c.begin(), c.end(), [](int i){ std::cout << i << ' '; });
+    std::cout << '\n';
+ 
+    // the type of a closure cannot be named, but can be inferred with auto
+    // since C++14, lambda could own default arguments
+    auto func1 = [](int i = 6) { return i + 4; };
+    std::cout << "func1: " << func1() << '\n';
+ 
+    // like all callable objects, closures can be captured in std::function
+    // (this may incur unnecessary overhead)
+    std::function<int(int)> func2 = [](int i) { return i + 4; };
+    std::cout << "func2: " << func2(6) << '\n';
+ 
+    constexpr int fib_max {8};
+    std::cout << "Emulate `recursive lambda` calls:\nFibonacci numbers: ";
+    auto nth_fibonacci = [](int n)
+    {
+        std::function<int(int, int, int)> fib = [&](int n, int a, int b)
+        {
+            return n ? fib(n - 1, a + b, a) : b;
+        };
+        return fib(n, 0, 1);
+    };
+ 
+    for (int i{1}; i <= fib_max; ++i)
+    {
+        std::cout << nth_fibonacci(i) << (i < fib_max ? ", " : "\n");
+    }
+ 
+    std::cout << "Alternative approach to lambda recursion:\nFibonacci numbers: ";
+    auto nth_fibonacci2 = [](auto self, int n, int a = 0, int b = 1) -> int
+    {
+        return n ? self(self, n - 1, a + b, a) : b;
+    };
+ 
+    for (int i{1}; i <= fib_max; ++i)
+    {
+        std::cout << nth_fibonacci2(nth_fibonacci2, i) << (i < fib_max ? ", " : "\n");
+    }
+ 
+#ifdef __cpp_explicit_this_parameter
+    std::cout << "C++23 approach to lambda recursion:\n";
+    auto nth_fibonacci3 = [](this auto self, int n, int a = 0, int b = 1)
+    {
+         return n ? self(n - 1, a + b, a) : b;
+    };
+ 
+    for (int i{1}; i <= fib_max; ++i)
+    {
+        std::cout << nth_fibonacci3(i) << (i < fib_max ? ", " : "\n");
+    }
+#endif
+}
+```
+* [Lambda expressions in C++ | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/lambda-expressions-in-cpp?view=msvc-160)
+    * In C++11 and later, a lambda expression—often called a lambda—is a convenient way of defining an anonymous function object (a closure) right at the location where it's invoked or passed as an argument to a function. Typically lambdas are used to encapsulate a few lines of code that are passed to algorithms or asynchronous functions. This article defines what lambdas are, and compares them to other programming techniques. It describes their advantages, and provides some basic examples.
+* [Lambda expression in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/lambda-expression-in-c/)
+* [贯穿 C++ 11 与 C++ 17 的 Lambda 到底是个什么？](https://mp.weixin.qq.com/s/ok5xND2q4kPqBguhcvU42g)
+    * https://hackernoon.com/all-about-Lambda-functions-in-cfrom-c11-to-c17-2t1j32qw
+* [【C++11】让程序更简洁—lambda表达式](https://mp.weixin.qq.com/s/56cH0IK1DbnZX6ZZKVJRwQ)
+	* C++11中，Lambda表达式是最常用的特性之一，有过java、python以及C#开发经验的人对lambda功能都不会陌生。lambda表达式来源于函数式编程，具备以下优点：
+		* 代码简洁、避免代码膨胀和功能分散，也利于功能维护
+		* 功能就近实现，程序更加灵活
+		* 函数式编程，可读性强
+	* lambda表达式概念和语法
+	* 如何修改按值捕获的变量？
+	* lambda表达式和std::function配合使用
+* [C++11 Lambda : How to capture local variables inside Lambda ? – thisPointer](https://thispointer.com/c11-lambda-how-to-capture-local-variables-inside-lambda/)
+    * Capturing Local Variables by value inside Lambda Function
+    * Capturing Local Variables by Reference inside Lambda
+    * Capture All Local Variables from outer scope by Value
+    * Capture all local variables from outer scope by Reference
+    * Mixing capturing by value and Reference
+    * Be-aware of capturing local variables by Reference in Lambda
+* [c++ - an enclosing-function local variable cannot be referenced in a lambda body unless if it is in capture list - Stack Overflow](https://stackoverflow.com/questions/26903602/an-enclosing-function-local-variable-cannot-be-referenced-in-a-lambda-body-unles)
+* [C++ Tutorial => Generic lambdas](https://riptutorial.com/cplusplus/example/1969/generic-lambdas)
+	* [c++ - How to use lambda auto parameters in C++11 - Stack Overflow](https://stackoverflow.com/questions/30071453/how-to-use-lambda-auto-parameters-in-c11)
+	* [c++ - How does generic lambda work in C++14? - Stack Overflow](https://stackoverflow.com/questions/17233547/how-does-generic-lambda-work-in-c14)
+* [Lambda Expressions - Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#Formatting_Lambda_Expressions)
+	* Short lambdas may be written inline as function arguments.
+```c++
+std::set<int> to_remove = {7, 8, 9};
+std::vector<int> digits = {3, 9, 1, 8, 4, 7, 1};
+digits.erase(std::remove_if(digits.begin(), digits.end(), [&to_remove](int i) {
+               return to_remove.find(i) != to_remove.end();
+             }),
+             digits.end());
+```
+
+##### Lambda capture
+
+* The captures is a comma-separated list of zero or more captures, optionally beginning with the capture-default. The capture list defines the outside variables that are accessible from within the lambda function body. The only capture defaults are
+	* & (implicitly capture the used automatic variables by reference) and
+	* = (implicitly capture the used automatic variables by copy).
+* The syntax of an individual capture in captures is
+
+| identifier | (1) |
+| - | - |
+| identifier ...	| (2)	 |
+| identifier initializer	| (3)	(since C++14) |
+| & identifier	| (4)	 |
+| & identifier ...	| (5) |	
+| & identifier initializer	| (6)	(since C++14) |
+| this	| (7)	 |
+| * this	| (8)	(since C++17) |
+| ... identifier initializer	| (9)	(since C++20) |
+| & ... identifier initializer	| (10)	(since C++20) |
+
+* 1) simple by-copy capture
+* 2) simple by-copy capture that is a pack expansion
+* 3) by-copy capture with an initializer
+* 4) simple by-reference capture
+* 5) simple by-reference capture that is a pack expansion
+* 6) by-reference capture with an initializer
+* 7) simple by-reference capture of the current object
+* 8) simple by-copy capture of the current object
+* 9) by-copy capture with an initializer that is a pack expansion
+* 10) by-reference capture with an initializer that is a pack expansion
+
+* If the capture-default is &, subsequent simple captures must not begin with &.
+```c++
+struct S2 { void f(int i); };
+void S2::f(int i)
+{
+    [&]{};          // OK: by-reference capture default
+    [&, i]{};       // OK: by-reference capture, except i is captured by copy
+    [&, &i] {};     // Error: by-reference capture when by-reference is the default
+    [&, this] {};   // OK, equivalent to [&]
+    [&, this, i]{}; // OK, equivalent to [&, i]
+}
+```
+* If the capture-default is =, subsequent simple captures must begin with & or be *this (since C++17) or this (since C++20).
+```c++
+struct S2 { void f(int i); };
+void S2::f(int i)
+{
+    [=]{};        // OK: by-copy capture default
+    [=, &i]{};    // OK: by-copy capture, except i is captured by reference
+    [=, *this]{}; // until C++17: Error: invalid syntax
+                  // since C++17: OK: captures the enclosing S2 by copy
+    [=, this] {}; // until C++20: Error: this when = is the default
+                  // since C++20: OK, same as [=]
+}
+```
+* Any capture may appear only once, and its name must be different from any parameter name:
+```c++
+struct S2 { void f(int i); };
+void S2::f(int i)
+{
+    [i, i] {};        // Error: i repeated
+    [this, *this] {}; // Error: "this" repeated (C++17)
+ 
+    [i] (int i) {};   // Error: parameter and capture have the same name
+}
+```
+* [F.50: Use a lambda when a function won’t do (to capture local variables, or to write a local function)](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f50-use-a-lambda-when-a-function-wont-do-to-capture-local-variables-or-to-write-a-local-function)
+	* `Reason` Functions can’t capture local variables or be defined at local scope; if you need those things, prefer a lambda where possible, and a handwritten function object where not. On the other hand, lambdas and function objects don’t overload; if you need to overload, prefer a function (the workarounds to make lambdas overload are ornate). If either will work, prefer writing a function; use the simplest tool necessary.
+	* `Exception` Generic lambdas offer a concise way to write function templates and so can be useful even when a normal function template would do equally well with a little more syntax. This advantage will probably disappear in the future once all functions gain the ability to have Concept parameters.
+	* `Enforcement` Warn on use of a named non-generic lambda (e.g., auto x = [](int i) { /*...*/; };) that captures nothing and appears at global scope. Write an ordinary function instead.
+* [F.52: Prefer capturing by reference in lambdas that will be used locally, including passed to algorithms](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f52-prefer-capturing-by-reference-in-lambdas-that-will-be-used-locally-including-passed-to-algorithms)
+	* Reason 
+		* For efficiency and correctness, you nearly always want to capture by reference when using the lambda locally. This includes when writing or calling parallel algorithms that are local because they join before returning.
+	* Discussion 
+		* The efficiency consideration is that most types are cheaper to pass by reference than by value.
+		* The correctness consideration is that many calls want to perform side effects on the original object at the call site (see example below). Passing by value prevents this.
+	* Note 
+		* Unfortunately, there is no simple way to capture by reference to const to get the efficiency for a local call but also prevent side effects.
+	* Example 
+		* Here, a large object (a network message) is passed to an iterative algorithm, and it is not efficient or correct to copy the message (which might not be copyable):
+    ```c++
+    std::for_each(begin(sockets), end(sockets), [&message](auto& socket)
+    {
+        socket.send(message);
+    });
+    ```
+	* Example 
+		* This is a simple three-stage parallel pipeline. Each stage object encapsulates a worker thread and a queue, has a process function to enqueue work, and in its destructor automatically blocks waiting for the queue to empty before ending the thread.
+    ```c++
+    void send_packets(buffers& bufs)
+    {
+        stage encryptor([](buffer& b) { encrypt(b); });
+        stage compressor([&](buffer& b) { compress(b); encryptor.process(b); });
+        stage decorator([&](buffer& b) { decorate(b); compressor.process(b); });
+        for (auto& b : bufs) { decorator.process(b); }
+    }  // automatically blocks waiting for pipeline to finish
+    ```
+	* Enforcement 
+		* Flag a lambda that captures by reference, but is used other than locally within the function scope or passed to a function by reference. (Note: This rule is an approximation, but does flag passing by pointer as those are more likely to be stored by the callee, writing to a heap location accessed via a parameter, returning the lambda, etc. The Lifetime rules will also provide general rules that flag escaping pointers and references including via lambdas.)
+* [F.53: Avoid capturing by reference in lambdas that will be used non-locally, including returned, stored on the heap, or passed to another thread](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f53-avoid-capturing-by-reference-in-lambdas-that-will-be-used-non-locally-including-returned-stored-on-the-heap-or-passed-to-another-thread)
+	* Reason 
+		* Pointers and references to locals shouldn’t outlive their scope. Lambdas that capture by reference are just another place to store a reference to a local object, and shouldn’t do so if they (or a copy) outlive the scope.
+	* Example, bad
+    ```c++
+    int local = 42;
+
+    // Want a reference to local.
+    // Note, that after program exits this scope,
+    // local no longer exists, therefore
+    // process() call will have undefined behavior!
+    thread_pool.queue_work([&] { process(local); });
+    ```
+	* Example, good
+    ```c++
+    int local = 42;
+    // Want a copy of local.
+    // Since a copy of local is made, it will
+    // always be available for the call.
+    thread_pool.queue_work([=] { process(local); });
+    ```
+	* Enforcement
+		* (Simple) Warn when capture-list contains a reference to a locally declared variable
+		* (Complex) Flag when capture-list contains a reference to a locally declared variable and the lambda is passed to a non-const and non-local context
+* How to fix compile error `capture of variable with non-automatic storage duration` ?
+	* [c++ - Capturing a static variable by reference in a C++11 lambda - Stack Overflow](https://stackoverflow.com/questions/13827855/capturing-a-static-variable-by-reference-in-a-c11-lambda)
+		* Why are you even trying to capture bar? It's static. You don't need to capture it at all. Only automatic variables need capturing. Clang throws a hard error on your code, not just a warning. And if you simply remove the &bar from your lambda capture, then the code works perfectly.
+
+#### Callback
+
+* [Callbacks in C - GeeksforGeeks](https://www.geeksforgeeks.org/callbacks-in-c/)
+* [Callback functions in C++ - Stack Overflow](https://stackoverflow.com/questions/2298242/callback-functions-in-c)
+* [众说纷纭的 C 语言回调函数到底是什么鬼？这里有最好的解答！](https://mp.weixin.qq.com/s/GYnKGqdS0Jj4Seh0HlB9Ug)
+* [回调函数 callback 的实现原理是什么？](https://mp.weixin.qq.com/s?__biz=Mzg4OTYzODM4Mw==&mid=2247486528&idx=1&sn=8fdb163df962fb69b9efa72d69a7ca65&chksm=cfe990c0f89e19d67c31bc2a049189d0d6835dd26daa129b7dd22fdaf15a481289fcd0dc2422&scene=21#wechat_redirect)
+	* [10张图让你彻底理解回调函数](https://mp.weixin.qq.com/s?__biz=Mzg4OTYzODM4Mw==&mid=2247485712&idx=1&sn=3d2750dfb693f41b2483b51b60a4f44c&chksm=cfe99590f89e1c860277fe1b22c3731ec4e3b61dbb5cd2a6d9548efbc709104a38d6da812517&scene=21#wechat_redirect)
+	* [高并发高性能服务器是如何实现的](https://mp.weixin.qq.com/s?__biz=Mzg4OTYzODM4Mw==&mid=2247485713&idx=1&sn=369203957fb922371535df891920dbc1&chksm=cfe99591f89e1c87c68a4e931492d86c1d31e9d83a9b500893106c1d0d5959a56d59f11de7d2&scene=21#wechat_redirect)
 
 ### [Statements](https://en.cppreference.com/w/cpp/language/statements)
 
@@ -2899,350 +3241,6 @@ Operator function objects
 # ----
 
 
-#### [Functions](https://www.tutorialspoint.com/cplusplus/cpp_functions.htm)
-
-* [Functions - cppreference.com](https://en.cppreference.com/w/cpp/language/functions)
-* [Functions - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/functions/)
-* [Function Signature](https://redirect.cs.umbc.edu/~chang/cs202/Lectures/modules/m04-overload/slides.php?print#:~:text=Function%20Signature,part%20of%20a%20function%27s%20signature.)
-	* A function's signature includes the function's name and the number, order and type of its formal parameters.
-	* Two overloaded functions must not have the same signature.
-	* The return value is not part of a function's signature.
-	* These two functions have the same signature:
-		* `int Divide (int n, int m) ; `
-		* `double Divide (int n, int m) ;`
-* [进入编译器后，一个函数经历了什么？](https://mp.weixin.qq.com/s/kYilpl4K_XpVDF3gaKoRAQ)
-* [C/C++ 中的 argc，argv 到底是什么？](https://mp.weixin.qq.com/s/Mik2n9oLP-PuFNU3lP48Zw)
-* [exit(0) vs exit(1) in C/C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/exit0-vs-exit1-in-c-c-with-examples/)
-	* Exit Success: Exit Success is indicated by exit(0) statement which means successful termination of the program, i.e. program has been executed without any error or interrupt.
-	* Exit Failure: Exit Failure is indicated by exit(1) which means the abnormal termination of the program, i.e. some error or interrupt has occurred. We can use different integer other than 1 to indicate different types of errors.
-* [现代C++编程实践(二)—函数返回值的处理](https://mp.weixin.qq.com/s/DJB9Axdh9toIBQIUZsujcA)
-	* 先说一种类C的方式，可以通过使用函数出参的方式获取所求复数的实部和虚部。
-	* 除此之外使用C++的方式可以通过std::pair<double,double>这种数据结构结果保存结果值。
-	* std::tie的实现方式相对于std::tuple来讲可读性变强了，返回值可以直接通过std::tie中的定义获取。除此之外，还有一个优势就是，可以忽略不想要的值，这个在std::tuple中是不可能做到的。
-	* C++17版本中提供了结构化绑定
-
-##### [inline specifier](https://en.cppreference.com/w/cpp/language/inline)
-
-* The inline specifier, when used in a function's decl-specifier-seq, declares the function to be an inline function.
-* A function defined entirely inside a class/struct/union definition, whether it's a member function or a non-member friend function, is implicitly an inline function if it is attached to the global module (since C++20).
-* A function declared constexpr is implicitly an inline function.
-* A deleted function is implicitly an inline function: its (deleted) definition can appear in more than one translation unit.(since C++11)
-* The inline specifier, when used in a decl-specifier-seq of a variable with static storage duration (static class member or namespace-scope variable), declares the variable to be an inline variable.
-* A static member variable (but not a namespace-scope variable) declared constexpr is implicitly an inline variable.(since C++17)
-* [F.5: If a function is very small and time-critical, declare it inline](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f5-if-a-function-is-very-small-and-time-critical-declare-it-inline)
-	* `Reason` Some optimizers are good at inlining without hints from the programmer, but don’t rely on it. Measure! Over the last 40 years or so, we have been promised compilers that can inline better than humans without hints from humans. We are still waiting. Specifying inline (explicitly, or implicitly when writing member functions inside a class definition) encourages the compiler to do a better job.
-	* `Example`
-		* `inline string cat(const string& s, const string& s2) { return s + s2; }`
-	* `Exception` Do not put an inline function in what is meant to be a stable interface unless you are certain that it will not change. An inline function is part of the ABI.
-	* `Note` constexpr implies inline.
-	* `Note` Member functions defined in-class are inline by default.
-	* `Exception` Function templates (including member functions of class templates A\<T>::function() and member function templates A::function\<T>()) are normally defined in headers and therefore inline.
-* [SF.2: A .h file must not contain object definitions or non-inline function definitions](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#sf2-a-h-file-must-not-contain-object-definitions-or-non-inline-function-definitions)
-	* Reason: Including entities subject to the one-definition rule leads to linkage errors.
-	* Example
-		* Linking file1.cpp and file2.cpp will give two linker errors.
-    ```c++
-    // file.h:
-    namespace Foo {
-        int x = 7;
-        int xx() { return x+x; }
-    }
-
-    // file1.cpp:
-    #include <file.h>
-    // ... more ...
-
-     // file2.cpp:
-    #include <file.h>
-    // ... more ...
-    ```
-	* Alternative formulation: A .h file must contain only:
-		* #includes of other .h files (possibly with include guards)
-		* templates
-		* class definitions
-		* function declarations
-		* extern declarations
-		* inline function definitions
-		* constexpr definitions
-		* const definitions
-		* using alias definitions
-* [Inline Functions - Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#Inline_Functions)
-	* Define functions inline only when they are small, say, 10 lines or fewer.
-	* Definition
-		* You can declare functions in a way that allows the compiler to expand them inline rather than calling them through the usual function call mechanism.
-	* Pros
-		* Inlining a function can generate more efficient object code, as long as the inlined function is small. Feel free to inline accessors and mutators, and other short, performance-critical functions.
-	* Cons
-		* Overuse of inlining can actually make programs slower. Depending on a function's size, inlining it can cause the code size to increase or decrease. Inlining a very small accessor function will usually decrease code size while inlining a very large function can dramatically increase code size. On modern processors smaller code usually runs faster due to better use of the instruction cache.
-	* Decision
-		* A decent rule of thumb is to not inline a function if it is more than 10 lines long. Beware of destructors, which are often longer than they appear because of implicit member- and base-destructor calls!
-		* Another useful rule of thumb: it's typically not cost effective to inline functions with loops or switch statements (unless, in the common case, the loop or switch statement is never executed).
-		* It is important to know that functions are not always inlined even if they are declared as such; for example, virtual and recursive functions are not normally inlined. Usually recursive functions should not be inline. The main reason for making a virtual function inline is to place its definition in the class, either for convenience or to document its behavior, e.g., for accessors and mutators.
-* [Self-contained Headers - Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#Self_contained_Headers)
-	* When a header declares inline functions or templates that clients of the header will instantiate, `the inline functions and templates must also have definitions in the header, either directly or in files it includes`. Do not move these definitions to separately included header (-inl.h) files; this practice was common in the past, but is no longer allowed. When all instantiations of a template occur in one .cc file, either because they're explicit or because the definition is accessible to only the .cc file, the template definition can be kept in that file.
-* [Inline Functions in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/inline-functions-cpp/)
-	* Compiler may not perform inlining in such circumstances like:
-		* 1) If a function contains a loop. (for, while, do-while)
-		* 2) If a function contains static variables.
-		* 3) If a function is recursive.
-		* 4) If a function return type is other than void, and the return statement doesn’t exist in function body.
-		* 5) If a function contains switch or goto statement.
-	* Inline functions provide following advantages:
-	* Inline function disadvantages:
-	* Inline function and classes:
-	* What is wrong with macro?
-* [C++ inline 函数简介](https://mp.weixin.qq.com/s/hWIKfl2-aXH0Uamt0LS_RA)
-	* https://dablelv.blog.csdn.net/article/details/52065524
-* [Why are C++ inline functions in the header? - Stack Overflow](https://stackoverflow.com/questions/5057021/why-are-c-inline-functions-in-the-header#:~:text=The%20definition%20of%20an%20inline,definition%20in%20a%20header%20file.)
-	* The definition of an inline function doesn't have to be in a header file but, because of the one definition rule [(ODR)](https://en.cppreference.com/w/cpp/language/definition) for inline functions, an identical definition for the function must exist in every translation unit that uses it.
-	* The easiest way to achieve this is by putting the definition in a header file.
-* How to fix compile error "multiple definition of 'utils::var' ... first defined here" ?
-	* declare var as `inline var` in namespace utils
-	* [c - "Multiple definition", "first defined here" errors - Stack Overflow](https://stackoverflow.com/questions/30821356/multiple-definition-first-defined-here-errors)
-	* [c++ - How do inline variables work? - Stack Overflow](https://stackoverflow.com/questions/38043442/how-do-inline-variables-work)
-
-##### [Lambda expressions](https://en.cppreference.com/w/cpp/language/lambda)
-
-* Constructs a [closure](https://en.wikipedia.org/wiki/Closure_(computer_programming)): an unnamed function object capable of capturing variables in scope.
-* [Lambda expressions (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/lambda)
-	* If auto is used as a type of a parameter or an explicit template parameter list is provided (since C++20), the lambda is a generic lambda. (since C++14)
-```c++
-#include <vector>
-#include <iostream>
-#include <algorithm>
-#include <functional>
- 
-int main()
-{
-    std::vector<int> c = {1, 2, 3, 4, 5, 6, 7};
-    int x = 5;
-    c.erase(std::remove_if(c.begin(), c.end(), [x](int n) { return n < x; }), c.end());
- 
-    std::cout << "c: ";
-    std::for_each(c.begin(), c.end(), [](int i){ std::cout << i << ' '; });
-    std::cout << '\n';
- 
-    // the type of a closure cannot be named, but can be inferred with auto
-    // since C++14, lambda could own default arguments
-    auto func1 = [](int i = 6) { return i + 4; };
-    std::cout << "func1: " << func1() << '\n';
- 
-    // like all callable objects, closures can be captured in std::function
-    // (this may incur unnecessary overhead)
-    std::function<int(int)> func2 = [](int i) { return i + 4; };
-    std::cout << "func2: " << func2(6) << '\n';
- 
-    constexpr int fib_max {8};
-    std::cout << "Emulate `recursive lambda` calls:\nFibonacci numbers: ";
-    auto nth_fibonacci = [](int n)
-    {
-        std::function<int(int, int, int)> fib = [&](int n, int a, int b)
-        {
-            return n ? fib(n - 1, a + b, a) : b;
-        };
-        return fib(n, 0, 1);
-    };
- 
-    for (int i{1}; i <= fib_max; ++i)
-    {
-        std::cout << nth_fibonacci(i) << (i < fib_max ? ", " : "\n");
-    }
- 
-    std::cout << "Alternative approach to lambda recursion:\nFibonacci numbers: ";
-    auto nth_fibonacci2 = [](auto self, int n, int a = 0, int b = 1) -> int
-    {
-        return n ? self(self, n - 1, a + b, a) : b;
-    };
- 
-    for (int i{1}; i <= fib_max; ++i)
-    {
-        std::cout << nth_fibonacci2(nth_fibonacci2, i) << (i < fib_max ? ", " : "\n");
-    }
- 
-#ifdef __cpp_explicit_this_parameter
-    std::cout << "C++23 approach to lambda recursion:\n";
-    auto nth_fibonacci3 = [](this auto self, int n, int a = 0, int b = 1)
-    {
-         return n ? self(n - 1, a + b, a) : b;
-    };
- 
-    for (int i{1}; i <= fib_max; ++i)
-    {
-        std::cout << nth_fibonacci3(i) << (i < fib_max ? ", " : "\n");
-    }
-#endif
-}
-```
-* [Lambda expressions in C++ | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/lambda-expressions-in-cpp?view=msvc-160)
-  * In C++11 and later, a lambda expression—often called a lambda—is a convenient way of defining an anonymous function object (a closure) right at the location where it's invoked or passed as an argument to a function. Typically lambdas are used to encapsulate a few lines of code that are passed to algorithms or asynchronous functions. This article defines what lambdas are, and compares them to other programming techniques. It describes their advantages, and provides some basic examples.
-* [Lambda expression in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/lambda-expression-in-c/)
-* [贯穿 C++ 11 与 C++ 17 的 Lambda 到底是个什么？](https://mp.weixin.qq.com/s/ok5xND2q4kPqBguhcvU42g)
-  * https://hackernoon.com/all-about-Lambda-functions-in-cfrom-c11-to-c17-2t1j32qw
-* [【C++11】让程序更简洁—lambda表达式](https://mp.weixin.qq.com/s/56cH0IK1DbnZX6ZZKVJRwQ)
-	* C++11中，Lambda表达式是最常用的特性之一，有过java、python以及C#开发经验的人对lambda功能都不会陌生。lambda表达式来源于函数式编程，具备以下优点：
-		* 代码简洁、避免代码膨胀和功能分散，也利于功能维护
-		* 功能就近实现，程序更加灵活
-		* 函数式编程，可读性强
-	* lambda表达式概念和语法
-	* 如何修改按值捕获的变量？
-	* lambda表达式和std::function配合使用
-* [C++11 Lambda : How to capture local variables inside Lambda ? – thisPointer](https://thispointer.com/c11-lambda-how-to-capture-local-variables-inside-lambda/)
-  * Capturing Local Variables by value inside Lambda Function
-  * Capturing Local Variables by Reference inside Lambda
-  * Capture All Local Variables from outer scope by Value
-  * Capture all local variables from outer scope by Reference
-  * Mixing capturing by value and Reference
-  * Be-aware of capturing local variables by Reference in Lambda
-* [c++ - an enclosing-function local variable cannot be referenced in a lambda body unless if it is in capture list - Stack Overflow](https://stackoverflow.com/questions/26903602/an-enclosing-function-local-variable-cannot-be-referenced-in-a-lambda-body-unles)
-* [C++ Tutorial => Generic lambdas](https://riptutorial.com/cplusplus/example/1969/generic-lambdas)
-	* [c++ - How to use lambda auto parameters in C++11 - Stack Overflow](https://stackoverflow.com/questions/30071453/how-to-use-lambda-auto-parameters-in-c11)
-	* [c++ - How does generic lambda work in C++14? - Stack Overflow](https://stackoverflow.com/questions/17233547/how-does-generic-lambda-work-in-c14)
-* [Lambda Expressions - Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#Formatting_Lambda_Expressions)
-	* Short lambdas may be written inline as function arguments.
-```c++
-std::set<int> to_remove = {7, 8, 9};
-std::vector<int> digits = {3, 9, 1, 8, 4, 7, 1};
-digits.erase(std::remove_if(digits.begin(), digits.end(), [&to_remove](int i) {
-               return to_remove.find(i) != to_remove.end();
-             }),
-             digits.end());
-```
-
-###### Lambda capture
-
-* The captures is a comma-separated list of zero or more captures, optionally beginning with the capture-default. The capture list defines the outside variables that are accessible from within the lambda function body. The only capture defaults are
-	* & (implicitly capture the used automatic variables by reference) and
-	* = (implicitly capture the used automatic variables by copy).
-* The syntax of an individual capture in captures is
-
-| identifier | (1) |
-| - | - |
-| identifier ...	| (2)	 |
-| identifier initializer	| (3)	(since C++14) |
-| & identifier	| (4)	 |
-| & identifier ...	| (5) |	
-| & identifier initializer	| (6)	(since C++14) |
-| this	| (7)	 |
-| * this	| (8)	(since C++17) |
-| ... identifier initializer	| (9)	(since C++20) |
-| & ... identifier initializer	| (10)	(since C++20) |
-
-* 1) simple by-copy capture
-* 2) simple by-copy capture that is a pack expansion
-* 3) by-copy capture with an initializer
-* 4) simple by-reference capture
-* 5) simple by-reference capture that is a pack expansion
-* 6) by-reference capture with an initializer
-* 7) simple by-reference capture of the current object
-* 8) simple by-copy capture of the current object
-* 9) by-copy capture with an initializer that is a pack expansion
-* 10) by-reference capture with an initializer that is a pack expansion
-
-* If the capture-default is &, subsequent simple captures must not begin with &.
-```c++
-struct S2 { void f(int i); };
-void S2::f(int i)
-{
-    [&]{};          // OK: by-reference capture default
-    [&, i]{};       // OK: by-reference capture, except i is captured by copy
-    [&, &i] {};     // Error: by-reference capture when by-reference is the default
-    [&, this] {};   // OK, equivalent to [&]
-    [&, this, i]{}; // OK, equivalent to [&, i]
-}
-```
-* If the capture-default is =, subsequent simple captures must begin with & or be *this (since C++17) or this (since C++20).
-```c++
-struct S2 { void f(int i); };
-void S2::f(int i)
-{
-    [=]{};        // OK: by-copy capture default
-    [=, &i]{};    // OK: by-copy capture, except i is captured by reference
-    [=, *this]{}; // until C++17: Error: invalid syntax
-                  // since C++17: OK: captures the enclosing S2 by copy
-    [=, this] {}; // until C++20: Error: this when = is the default
-                  // since C++20: OK, same as [=]
-}
-```
-* Any capture may appear only once, and its name must be different from any parameter name:
-```c++
-struct S2 { void f(int i); };
-void S2::f(int i)
-{
-    [i, i] {};        // Error: i repeated
-    [this, *this] {}; // Error: "this" repeated (C++17)
- 
-    [i] (int i) {};   // Error: parameter and capture have the same name
-}
-```
-* [F.50: Use a lambda when a function won’t do (to capture local variables, or to write a local function)](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f50-use-a-lambda-when-a-function-wont-do-to-capture-local-variables-or-to-write-a-local-function)
-	* `Reason` Functions can’t capture local variables or be defined at local scope; if you need those things, prefer a lambda where possible, and a handwritten function object where not. On the other hand, lambdas and function objects don’t overload; if you need to overload, prefer a function (the workarounds to make lambdas overload are ornate). If either will work, prefer writing a function; use the simplest tool necessary.
-	* `Exception` Generic lambdas offer a concise way to write function templates and so can be useful even when a normal function template would do equally well with a little more syntax. This advantage will probably disappear in the future once all functions gain the ability to have Concept parameters.
-	* `Enforcement` Warn on use of a named non-generic lambda (e.g., auto x = [](int i) { /*...*/; };) that captures nothing and appears at global scope. Write an ordinary function instead.
-* [F.52: Prefer capturing by reference in lambdas that will be used locally, including passed to algorithms](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f52-prefer-capturing-by-reference-in-lambdas-that-will-be-used-locally-including-passed-to-algorithms)
-	* Reason 
-		* For efficiency and correctness, you nearly always want to capture by reference when using the lambda locally. This includes when writing or calling parallel algorithms that are local because they join before returning.
-	* Discussion 
-		* The efficiency consideration is that most types are cheaper to pass by reference than by value.
-		* The correctness consideration is that many calls want to perform side effects on the original object at the call site (see example below). Passing by value prevents this.
-	* Note 
-		* Unfortunately, there is no simple way to capture by reference to const to get the efficiency for a local call but also prevent side effects.
-	* Example 
-		* Here, a large object (a network message) is passed to an iterative algorithm, and it is not efficient or correct to copy the message (which might not be copyable):
-    ```c++
-    std::for_each(begin(sockets), end(sockets), [&message](auto& socket)
-    {
-        socket.send(message);
-    });
-    ```
-	* Example 
-		* This is a simple three-stage parallel pipeline. Each stage object encapsulates a worker thread and a queue, has a process function to enqueue work, and in its destructor automatically blocks waiting for the queue to empty before ending the thread.
-    ```c++
-    void send_packets(buffers& bufs)
-    {
-        stage encryptor([](buffer& b) { encrypt(b); });
-        stage compressor([&](buffer& b) { compress(b); encryptor.process(b); });
-        stage decorator([&](buffer& b) { decorate(b); compressor.process(b); });
-        for (auto& b : bufs) { decorator.process(b); }
-    }  // automatically blocks waiting for pipeline to finish
-    ```
-	* Enforcement 
-		* Flag a lambda that captures by reference, but is used other than locally within the function scope or passed to a function by reference. (Note: This rule is an approximation, but does flag passing by pointer as those are more likely to be stored by the callee, writing to a heap location accessed via a parameter, returning the lambda, etc. The Lifetime rules will also provide general rules that flag escaping pointers and references including via lambdas.)
-* [F.53: Avoid capturing by reference in lambdas that will be used non-locally, including returned, stored on the heap, or passed to another thread](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f53-avoid-capturing-by-reference-in-lambdas-that-will-be-used-non-locally-including-returned-stored-on-the-heap-or-passed-to-another-thread)
-	* Reason 
-		* Pointers and references to locals shouldn’t outlive their scope. Lambdas that capture by reference are just another place to store a reference to a local object, and shouldn’t do so if they (or a copy) outlive the scope.
-	* Example, bad
-    ```c++
-    int local = 42;
-
-    // Want a reference to local.
-    // Note, that after program exits this scope,
-    // local no longer exists, therefore
-    // process() call will have undefined behavior!
-    thread_pool.queue_work([&] { process(local); });
-    ```
-	* Example, good
-    ```c++
-    int local = 42;
-    // Want a copy of local.
-    // Since a copy of local is made, it will
-    // always be available for the call.
-    thread_pool.queue_work([=] { process(local); });
-    ```
-	* Enforcement
-		* (Simple) Warn when capture-list contains a reference to a locally declared variable
-		* (Complex) Flag when capture-list contains a reference to a locally declared variable and the lambda is passed to a non-const and non-local context
-* How to fix compile error `capture of variable with non-automatic storage duration` ?
-	* [c++ - Capturing a static variable by reference in a C++11 lambda - Stack Overflow](https://stackoverflow.com/questions/13827855/capturing-a-static-variable-by-reference-in-a-c11-lambda)
-		* Why are you even trying to capture bar? It's static. You don't need to capture it at all. Only automatic variables need capturing. Clang throws a hard error on your code, not just a warning. And if you simply remove the &bar from your lambda capture, then the code works perfectly.
-
-##### Callback
-
-* [Callbacks in C - GeeksforGeeks](https://www.geeksforgeeks.org/callbacks-in-c/)
-* [Callback functions in C++ - Stack Overflow](https://stackoverflow.com/questions/2298242/callback-functions-in-c)
-* [众说纷纭的 C 语言回调函数到底是什么鬼？这里有最好的解答！](https://mp.weixin.qq.com/s/GYnKGqdS0Jj4Seh0HlB9Ug)
-* [回调函数 callback 的实现原理是什么？](https://mp.weixin.qq.com/s?__biz=Mzg4OTYzODM4Mw==&mid=2247486528&idx=1&sn=8fdb163df962fb69b9efa72d69a7ca65&chksm=cfe990c0f89e19d67c31bc2a049189d0d6835dd26daa129b7dd22fdaf15a481289fcd0dc2422&scene=21#wechat_redirect)
-	* [10张图让你彻底理解回调函数](https://mp.weixin.qq.com/s?__biz=Mzg4OTYzODM4Mw==&mid=2247485712&idx=1&sn=3d2750dfb693f41b2483b51b60a4f44c&chksm=cfe99590f89e1c860277fe1b22c3731ec4e3b61dbb5cd2a6d9548efbc709104a38d6da812517&scene=21#wechat_redirect)
-	* [高并发高性能服务器是如何实现的](https://mp.weixin.qq.com/s?__biz=Mzg4OTYzODM4Mw==&mid=2247485713&idx=1&sn=369203957fb922371535df891920dbc1&chksm=cfe99591f89e1c87c68a4e931492d86c1d31e9d83a9b500893106c1d0d5959a56d59f11de7d2&scene=21#wechat_redirect)
 
 #### [Strings](https://en.cppreference.com/w/cpp/string)
 
