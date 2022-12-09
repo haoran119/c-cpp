@@ -6960,6 +6960,170 @@ Top element: 6
 
 ### Views
 
+## [Iterator library](https://en.cppreference.com/w/cpp/iterator)
+
+### Iterator adaptors
+
+* [std::reverse_iterator - cppreference.com](https://en.cppreference.com/w/cpp/iterator/reverse_iterator)
+	* iterator adaptor for reverse-order traversal (class template)
+	* std::reverse_iterator is an iterator adaptor that reverses the direction of a given iterator, which must be at least a LegacyBidirectionalIteratoror model bidirectional_iterator (since C++20). In other words, when provided with a bidirectional iterator, std::reverse_iterator produces a new iterator that moves from the end to the beginning of the sequence defined by the underlying bidirectional iterator.
+	* For a reverse iterator r constructed from an iterator i, the relationship &*r == &*(i-1) is always true (as long as r is dereferenceable); thus a reverse iterator constructed from a one-past-the-end iterator dereferences to the last element in a sequence.
+	* This is the iterator returned by member functions rbegin() and rend() of the standard library containers.
+![image](https://user-images.githubusercontent.com/34557994/204089110-99992bc5-21e4-49a4-a8bd-04a8b1a06bc6.png)
+* [std::make_reverse_iterator - cppreference.com](https://en.cppreference.com/w/cpp/iterator/make_reverse_iterator)
+	* creates a std::reverse_iterator of type inferred from the argument (function template)
+	* make_reverse_iterator is a convenience function template that constructs a std::reverse_iterator for the given iterator i (which must be a LegacyBidirectionalIterator) with the type deduced from the type of the argument.
+* [std::back_inserter - cppreference.com](https://en.cppreference.com/w/cpp/iterator/back_inserter)
+	* creates a std::back_insert_iterator of type inferred from the argument (function template)
+	* back_inserter is a convenient function template that constructs a std::back_insert_iterator for the container c with the type deduced from the type of the argument.
+	* Parameters
+		* c	-	container that supports a push_back operation
+	* Return value
+		* A std::back_insert_iterator which can be used to add elements to the end of the container c
+```c++
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <iterator>
+ 
+int main()
+{
+    std::vector<int> v{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    std::fill_n(std::back_inserter(v), 3, -1);
+    for (int n : v)
+        std::cout << n << ' ';
+}
+// 1 2 3 4 5 6 7 8 9 10 -1 -1 -1
+```
+* [std::inserter - cppreference.com](https://en.cppreference.com/w/cpp/iterator/inserter)
+	* creates a std::insert_iterator of type inferred from the argument (function template)
+	* inserter is a convenience function template that constructs a std::insert_iterator for the container c and its iterator i with the type deduced from the type of the argument.
+	* Parameters
+		* c	-	container that supports an insert operation
+		* i	-	iterator in c indicating the insertion position
+	* Return value
+		* A std::insert_iterator which can be used to insert elements into the container c at the position indicated by i.
+```c++
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+#include <vector>
+#include <set>
+ 
+int main()
+{
+    std::multiset<int> s {1, 2, 3};
+ 
+    // std::inserter is commonly used with multi-sets
+    std::fill_n(std::inserter(s, s.end()), 5, 2);
+ 
+    for (int n : s)
+        std::cout << n << ' ';
+    std::cout << '\n';
+ 
+    std::vector<int> d {100, 200, 300};
+    std::vector<int> v {1, 2, 3, 4, 5};
+ 
+    // when inserting in a sequence container, insertion point advances
+    // because each std::insert_iterator::operator= updates the target iterator
+    std::copy(d.begin(), d.end(), std::inserter(v, std::next(v.begin())));
+ 
+    for (int n : v)
+        std::cout << n << ' ';
+    std::cout << '\n';
+}
+
+/*
+Output:
+
+1 2 2 2 2 2 2 3 
+1 100 200 300 2 3 4 5
+*/
+```
+
+### Iterator operations
+
+* Defined in header \<iterator>
+* [std::advance - cppreference.com](https://en.cppreference.com/w/cpp/iterator/advance)
+	* Increments given iterator it by n elements.
+	* If n is negative, the iterator is decremented. In this case, InputIt must meet the requirements of LegacyBidirectionalIterator, otherwise the behavior is undefined.
+	* [advance - C++ Reference](https://www.cplusplus.com/reference/iterator/advance/)
+		* Advance iterator
+			* Advances the iterator it by n element positions.
+			* If it is a random-access iterator, the function uses just once operator+ or operator-. Otherwise, the function uses repeatedly the increase or decrease operator (operator++ or operator--) until n elements have been advanced.
+	* [std::advance in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdadvance-in-cpp/)
+```c++
+#include <iostream>
+#include <iterator>
+#include <vector>
+ 
+int main() 
+{
+    std::vector<int> v{ 3, 1, 4 };
+ 
+    auto vi = v.begin();
+    std::advance(vi, 2);
+    std::cout << *vi << ' ';
+ 
+    vi = v.end();
+    std::advance(vi, -2);
+    std::cout << *vi << '\n';
+}
+/*
+4 1
+*/
+```
+* [std::distance - cppreference.com](https://en.cppreference.com/w/cpp/iterator/distance)
+	* returns the distance between two iterators (function template)
+	* Returns the number of hops from first to last.
+	* The behavior is undefined if last is not reachable from first by (possibly repeatedly) incrementing first. (until C++11)
+	* If InputIt is not LegacyRandomAccessIterator, the behavior is undefined if last is not reachable from first by (possibly repeatedly) incrementing first. If InputIt is LegacyRandomAccessIterator, the behavior is undefined if last is not reachable from first and first is not reachable from last. (since C++11)
+* [std::next - cppreference.com](https://en.cppreference.com/w/cpp/iterator/next)
+	* increment an iterator (function template)
+	* Return the nth successor of iterator it.
+	* Notes
+		* Although the expression ++c.begin() often compiles, it is not guaranteed to do so: c.begin() is an rvalue expression, and there is no LegacyInputIterator requirement that specifies that increment of an rvalue is guaranteed to work. In particular, when iterators are implemented as pointers or its operator++ is lvalue-ref-qualified, ++c.begin() does not compile, while std::next(c.begin()) does.
+```c++
+#include <iostream>
+#include <iterator>
+#include <vector>
+ 
+int main()
+{
+    std::vector<int> v{ 4, 5, 6 };
+ 
+    auto it = v.begin();
+    auto nx = std::next(it, 2);
+    std::cout << *it << ' ' << *nx << '\n';
+ 
+    it = v.end();
+    nx = std::next(it, -2);
+    std::cout << ' ' << *nx << '\n';
+}
+/*
+4 6
+ 5
+*/
+```
+* [std::prev - cppreference.com](https://en.cppreference.com/w/cpp/iterator/prev)
+	* decrement an iterator (function template)
+	* Return the nth predecessor of iterator it.
+	* Notes
+		* Although the expression --c.end() often compiles, it is not guaranteed to do so: c.end() is an rvalue expression, and there is no iterator requirement that specifies that decrement of an rvalue is guaranteed to work. In particular, when iterators are implemented as pointers or its operator-- is lvalue-ref-qualified, --c.end() does not compile, while std::prev(c.end()) does.
+
+### Range access
+
+* These non-member functions provide a generic interface for containers, plain arrays, and [std::initializer_list](https://en.cppreference.com/w/cpp/utility/initializer_list).
+* [std::begin, std::cbegin - cppreference.com](https://en.cppreference.com/w/cpp/iterator/begin)
+	* returns an iterator to the beginning of a container or array(function template)
+* [std::end, std::cend - cppreference.com](https://en.cppreference.com/w/cpp/iterator/end)
+	* returns an iterator to the end of a container or array(function template)
+
+## [Ranges library](https://en.cppreference.com/w/cpp/ranges)
+
+* [起底 C++ Range 令人惊讶的局限性！](https://mp.weixin.qq.com/s/iB70FXO-D7C-72N4l9KnzA)
+  * https://www.fluentcpp.com/2019/09/13/the-surprising-limitations-of-c-ranges-beyond-trivial-use-cases/
+
 ## [Algorithm library](https://en.cppreference.com/w/cpp/algorithm)
 
 * The algorithms library defines functions for a variety of purposes (e.g. searching, sorting, counting, manipulating) that operate on ranges of elements. Note that a range is defined as \[first, last) where last refers to the element past the last element to inspect or modify.
@@ -7707,170 +7871,6 @@ int main()
 ### Operations on uninitialized memory
 
 ### C library
-
-## [Iterator library](https://en.cppreference.com/w/cpp/iterator)
-
-### Iterator adaptors
-
-* [std::reverse_iterator - cppreference.com](https://en.cppreference.com/w/cpp/iterator/reverse_iterator)
-	* iterator adaptor for reverse-order traversal (class template)
-	* std::reverse_iterator is an iterator adaptor that reverses the direction of a given iterator, which must be at least a LegacyBidirectionalIteratoror model bidirectional_iterator (since C++20). In other words, when provided with a bidirectional iterator, std::reverse_iterator produces a new iterator that moves from the end to the beginning of the sequence defined by the underlying bidirectional iterator.
-	* For a reverse iterator r constructed from an iterator i, the relationship &*r == &*(i-1) is always true (as long as r is dereferenceable); thus a reverse iterator constructed from a one-past-the-end iterator dereferences to the last element in a sequence.
-	* This is the iterator returned by member functions rbegin() and rend() of the standard library containers.
-![image](https://user-images.githubusercontent.com/34557994/204089110-99992bc5-21e4-49a4-a8bd-04a8b1a06bc6.png)
-* [std::make_reverse_iterator - cppreference.com](https://en.cppreference.com/w/cpp/iterator/make_reverse_iterator)
-	* creates a std::reverse_iterator of type inferred from the argument (function template)
-	* make_reverse_iterator is a convenience function template that constructs a std::reverse_iterator for the given iterator i (which must be a LegacyBidirectionalIterator) with the type deduced from the type of the argument.
-* [std::back_inserter - cppreference.com](https://en.cppreference.com/w/cpp/iterator/back_inserter)
-	* creates a std::back_insert_iterator of type inferred from the argument (function template)
-	* back_inserter is a convenient function template that constructs a std::back_insert_iterator for the container c with the type deduced from the type of the argument.
-	* Parameters
-		* c	-	container that supports a push_back operation
-	* Return value
-		* A std::back_insert_iterator which can be used to add elements to the end of the container c
-```c++
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <iterator>
- 
-int main()
-{
-    std::vector<int> v{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    std::fill_n(std::back_inserter(v), 3, -1);
-    for (int n : v)
-        std::cout << n << ' ';
-}
-// 1 2 3 4 5 6 7 8 9 10 -1 -1 -1
-```
-* [std::inserter - cppreference.com](https://en.cppreference.com/w/cpp/iterator/inserter)
-	* creates a std::insert_iterator of type inferred from the argument (function template)
-	* inserter is a convenience function template that constructs a std::insert_iterator for the container c and its iterator i with the type deduced from the type of the argument.
-	* Parameters
-		* c	-	container that supports an insert operation
-		* i	-	iterator in c indicating the insertion position
-	* Return value
-		* A std::insert_iterator which can be used to insert elements into the container c at the position indicated by i.
-```c++
-#include <algorithm>
-#include <iostream>
-#include <iterator>
-#include <vector>
-#include <set>
- 
-int main()
-{
-    std::multiset<int> s {1, 2, 3};
- 
-    // std::inserter is commonly used with multi-sets
-    std::fill_n(std::inserter(s, s.end()), 5, 2);
- 
-    for (int n : s)
-        std::cout << n << ' ';
-    std::cout << '\n';
- 
-    std::vector<int> d {100, 200, 300};
-    std::vector<int> v {1, 2, 3, 4, 5};
- 
-    // when inserting in a sequence container, insertion point advances
-    // because each std::insert_iterator::operator= updates the target iterator
-    std::copy(d.begin(), d.end(), std::inserter(v, std::next(v.begin())));
- 
-    for (int n : v)
-        std::cout << n << ' ';
-    std::cout << '\n';
-}
-
-/*
-Output:
-
-1 2 2 2 2 2 2 3 
-1 100 200 300 2 3 4 5
-*/
-```
-
-### Iterator operations
-
-* Defined in header \<iterator>
-* [std::advance - cppreference.com](https://en.cppreference.com/w/cpp/iterator/advance)
-	* Increments given iterator it by n elements.
-	* If n is negative, the iterator is decremented. In this case, InputIt must meet the requirements of LegacyBidirectionalIterator, otherwise the behavior is undefined.
-	* [advance - C++ Reference](https://www.cplusplus.com/reference/iterator/advance/)
-		* Advance iterator
-			* Advances the iterator it by n element positions.
-			* If it is a random-access iterator, the function uses just once operator+ or operator-. Otherwise, the function uses repeatedly the increase or decrease operator (operator++ or operator--) until n elements have been advanced.
-	* [std::advance in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdadvance-in-cpp/)
-```c++
-#include <iostream>
-#include <iterator>
-#include <vector>
- 
-int main() 
-{
-    std::vector<int> v{ 3, 1, 4 };
- 
-    auto vi = v.begin();
-    std::advance(vi, 2);
-    std::cout << *vi << ' ';
- 
-    vi = v.end();
-    std::advance(vi, -2);
-    std::cout << *vi << '\n';
-}
-/*
-4 1
-*/
-```
-* [std::distance - cppreference.com](https://en.cppreference.com/w/cpp/iterator/distance)
-	* returns the distance between two iterators (function template)
-	* Returns the number of hops from first to last.
-	* The behavior is undefined if last is not reachable from first by (possibly repeatedly) incrementing first. (until C++11)
-	* If InputIt is not LegacyRandomAccessIterator, the behavior is undefined if last is not reachable from first by (possibly repeatedly) incrementing first. If InputIt is LegacyRandomAccessIterator, the behavior is undefined if last is not reachable from first and first is not reachable from last. (since C++11)
-* [std::next - cppreference.com](https://en.cppreference.com/w/cpp/iterator/next)
-	* increment an iterator (function template)
-	* Return the nth successor of iterator it.
-	* Notes
-		* Although the expression ++c.begin() often compiles, it is not guaranteed to do so: c.begin() is an rvalue expression, and there is no LegacyInputIterator requirement that specifies that increment of an rvalue is guaranteed to work. In particular, when iterators are implemented as pointers or its operator++ is lvalue-ref-qualified, ++c.begin() does not compile, while std::next(c.begin()) does.
-```c++
-#include <iostream>
-#include <iterator>
-#include <vector>
- 
-int main()
-{
-    std::vector<int> v{ 4, 5, 6 };
- 
-    auto it = v.begin();
-    auto nx = std::next(it, 2);
-    std::cout << *it << ' ' << *nx << '\n';
- 
-    it = v.end();
-    nx = std::next(it, -2);
-    std::cout << ' ' << *nx << '\n';
-}
-/*
-4 6
- 5
-*/
-```
-* [std::prev - cppreference.com](https://en.cppreference.com/w/cpp/iterator/prev)
-	* decrement an iterator (function template)
-	* Return the nth predecessor of iterator it.
-	* Notes
-		* Although the expression --c.end() often compiles, it is not guaranteed to do so: c.end() is an rvalue expression, and there is no iterator requirement that specifies that decrement of an rvalue is guaranteed to work. In particular, when iterators are implemented as pointers or its operator-- is lvalue-ref-qualified, --c.end() does not compile, while std::prev(c.end()) does.
-
-### Range access
-
-* These non-member functions provide a generic interface for containers, plain arrays, and [std::initializer_list](https://en.cppreference.com/w/cpp/utility/initializer_list).
-* [std::begin, std::cbegin - cppreference.com](https://en.cppreference.com/w/cpp/iterator/begin)
-	* returns an iterator to the beginning of a container or array(function template)
-* [std::end, std::cend - cppreference.com](https://en.cppreference.com/w/cpp/iterator/end)
-	* returns an iterator to the end of a container or array(function template)
-
-## [Ranges library](https://en.cppreference.com/w/cpp/ranges)
-
-* [起底 C++ Range 令人惊讶的局限性！](https://mp.weixin.qq.com/s/iB70FXO-D7C-72N4l9KnzA)
-  * https://www.fluentcpp.com/2019/09/13/the-surprising-limitations-of-c-ranges-beyond-trivial-use-cases/
 
 ## [Numerics library](https://en.cppreference.com/w/cpp/numeric)
 
