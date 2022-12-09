@@ -2249,17 +2249,508 @@ for (auto const& x : range | std::views::reverse)
 ```
 * [Reversed Range-based for loop in C++ with Examples - GeeksforGeeks](https://www.geeksforgeeks.org/reversed-range-based-for-loop-in-c-with-examples/)
 
-### Classes
+### [Classes](https://en.cppreference.com/w/cpp/language/classes)
 
-* [explicit specifier - cppreference.com](https://en.cppreference.com/w/cpp/language/explicit)
-    * expression	-	contextually converted constant expression of type bool
-        1) Specifies that a constructor or conversion function (since C++11) or deduction guide (since C++17) is explicit, that is, it cannot be used for implicit conversions and copy-initialization.
-        2) The explicit specifier may be used with a constant expression. The function is explicit if and only if that constant expression evaluates to true. (since C++20)
-    * The explicit specifier may only appear within the decl-specifier-seq of the declaration of a constructor or conversion function (since C++11) within its class definition.
+* class v.s. struct
+	* [C.1: Organize related data into structures (structs or classes)](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c1-organize-related-data-into-structures-structs-or-classes)
+		* Reason Ease of comprehension. If data is related (for fundamental reasons), that fact should be reflected in code.
+		* Example
+		```c++
+		void draw(int x, int y, int x2, int y2);  // BAD: unnecessary implicit relationships
+		void draw(Point from, Point to);          // better
+		```
+		* Note A simple class without virtual functions implies no space or time overhead.
+		* Note From a language perspective class and struct differ only in the default visibility of their members.
+		* Enforcement Probably impossible. Maybe a heuristic looking for data items used together is possible.
+	* [C.8: Use class rather than struct if any member is non-public](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c8-use-class-rather-than-struct-if-any-member-is-non-public)
+
+#### Members
+
+##### [static members](https://en.cppreference.com/w/cpp/language/static)
+
+* Inside a class definition, the keyword static declares members that are not bound to class instances.
+* Outside a class definition, it has a different meaning: see storage duration.
+
+##### [Friend declaration](https://en.cppreference.com/w/cpp/language/friend)
+
+* The friend declaration appears in a class body and grants a function or another class access to private and protected members of the class where the friend declaration appears.
+* Description
+    * 1) Designates a function or several functions as friends of this class:
+    ```c++
+    class Y
+    {
+        int data; // private member
+
+        // the non-member function operator<< will have access to Y's private members
+        friend std::ostream& operator<<(std::ostream& out, const Y& o);
+        friend char* X::foo(int); // members of other classes can be friends too
+        friend X::X(char), X::~X(); // constructors and destructors can be friends
+    };
+
+    // friend declaration does not declare a member function
+    // this operator<< still needs to be defined, as a non-member
+    std::ostream& operator<<(std::ostream& out, const Y& y)
+    {
+        return out << y.data; // can access private member Y::data
+    }
+    ```
+    * 2) (only allowed in non-local class definitions) Defines a non-member function, and makes it a friend of this class at the same time. Such non-member function is always inline, unless it is attached to a named module (since C++20).
+    ```c++
+    class X
+    {
+        int a;
+
+        friend void friend_set(X& p, int i)
+        {
+            p.a = i; // this is a non-member function
+        }
+    public:
+        void member_set(int i)
+        {
+            a = i; // this is a member function
+        }
+    };
+    ```
+    * 3) Designates the class, struct, or union named by the elaborated-class-specifier (see elaborated type specifier) as a friend of this class. This means that the friend's member declarations and definitions can access private and protected members of this class and also that the friend can inherit from private and protected members of this class. The name of the class that is used in this friend declaration does not need to be previously declared.
+    * 4) Designates the type named by the simple-type-specifier or typename-specifier as a friend of this class if that type is a (possibly cv-qualified) class, struct, or union; otherwise the friend declaration is ignored. This declaration will not forward declare a new type.
+    ```c++
+    class Y {};
+
+    class A
+    {
+        int data; // private data member
+
+        class B {}; // private nested type
+
+        enum { a = 100 }; // private enumerator
+
+        friend class X; // friend class forward declaration (elaborated class specifier)
+        friend Y; // friend class declaration (simple type specifier) (since c++11)
+    };
+
+    class X : A::B // OK: A::B accessible to friend
+    {
+        A::B mx; // OK: A::B accessible to member of friend
+
+        class Y
+        {
+            A::B my; // OK: A::B accessible to nested member of friend
+        };
+
+        int v[A::a]; // OK: A::a accessible to member of friend
+    };
+    ```
+* Notes
+    * Friendship is not transitive (a friend of your friend is not your friend).
+    * Friendship is not inherited (your friend's children are not your friends).
+    * Storage class specifiers are not allowed in friend function declarations. A function that is defined in the friend declaration has external linkage, a function that was previously defined, keeps the linkage it was defined with.
+    * Access specifiers have no effect on the meaning of friend declarations (they can appear in private: or in public: sections, with no difference).
+    * A friend class declaration cannot define a new class (friend class X {}; is an error).
+    * When a local class declares an unqualified function or class as a friend, only functions and classes in the innermost non-class scope are looked up, not the global functions
+* Template friends
+    * Both function template and class template declarations may appear with the friend specifier in any non-local class or class template (although only function templates may be defined within the class or class template that is granting friendship). In this case, every specialization of the template becomes a friend, whether it is implicitly instantiated, partially specialized, or explicitly specialized.
+* Template friend operators
+    * A common use case for template friends is declaration of a non-member operator overload that acts on a class template, e.g. operator<<(std::ostream&, const Foo\<T>&) for some user-defined Foo\<T>.
+    * Such operator can be defined in the class body, which has the effect of generating a separate non-template operator<< for each T and makes that non-template operator<< a friend of its Foo\<T>
+    * or the function template has to be declared as a template before the class body, in which case the friend declaration within Foo\<T> can refer to the full specialization of operator<< for its T:
+```c++
+#include <iostream>
+#include <sstream>
+ 
+class MyClass
+{
+    int i;                   // friends have access to non-public, non-static
+    static inline int id{6}; // and static (possibly inline) members
+ 
+    friend std::ostream& operator<<(std::ostream& out, const MyClass&);
+    friend std::istream& operator>>(std::istream& in, MyClass&);
+    friend void change_id(int);
+public:
+    MyClass(int i = 0) : i(i) {}
+};
+ 
+std::ostream& operator<<(std::ostream& out, const MyClass& mc)
+{
+    return out << "MyClass::id = " << MyClass::id << "; i = " << mc.i;
+}
+ 
+std::istream& operator>>(std::istream& in, MyClass& mc)
+{
+    return in >> mc.i;
+}
+ 
+void change_id(int id) { MyClass::id = id; }
+ 
+int main()
+{
+    MyClass mc(7);
+    std::cout << mc << '\n';
+//  mc.i = 333*2;  // error: i is a private member
+    std::istringstream("100") >> mc;
+    std::cout << mc << '\n';
+//  MyClass::id = 222*3;  // error: id is a private member
+    change_id(9);
+    std::cout << mc << '\n';
+}
+Output:
+
+MyClass::id = 6; i = 7
+MyClass::id = 6; i = 100
+MyClass::id = 9; i = 100
+```
+* [C++ Friend Functions](https://www.tutorialspoint.com/cplusplus/cpp_friend_functions.htm)
+    * A friend function of a class is defined outside that class' scope but it has the right to access all private and protected members of the class. Even though the prototypes for friend functions appear in the class definition, friends are not member functions.
+    * A friend can be a function, function template, or member function, or a class or class template, in which case the entire class and all of its members are friends.
+* [Friend class and function in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/friend-class-function-cpp/)
+    * Merits:
+        * A friend function is able to access members without the need of inheriting the class.
+        * Friend function acts as a bridge between two classes by accessing their private data.
+        * It can be used to increase the versatility of overloaded operator.
+        * It can be declared either in the public or private or protected part of class.
+    * Demerits:
+        * Friend functions have access to private members of a class from outside the class which violates the law of the data hiding.
+        * Friend functions cannot do any run time polymorphism in its members.
+
+##### [explicit specifier](https://en.cppreference.com/w/cpp/language/explicit)
+
+* expression	-	contextually converted constant expression of type bool
+    1) Specifies that a constructor or conversion function (since C++11) or deduction guide (since C++17) is explicit, that is, it cannot be used for implicit conversions and copy-initialization.
+    2) The explicit specifier may be used with a constant expression. The function is explicit if and only if that constant expression evaluates to true. (since C++20)
+* The explicit specifier may only appear within the decl-specifier-seq of the declaration of a constructor or conversion function (since C++11) within its class definition.
 * [如何避免类构造函数中的隐式转换](https://mp.weixin.qq.com/s/VrMHxOwDkzTIfPFXVuaOJw)
 	* 为了避免这种情况的发生，C++提供了explicit关键字，通过在构造函数前加上该关键字可以避免隐式类型转换。当然，explicit也有其自身的生效范围。如：
 	* explicit只能对具有一个参数的构造函数有效。如果有多个可能不生效
 	* 如果构造函数存在多个参数，那么需要将其余的参数以默认值参数的方式使用。这样explicit关键字将继续生效。
+
+#### Special member functions
+
+* [Default constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/default_constructor)
+	* A default constructor is a constructor which can be called with no arguments (either defined with an empty parameter list, or with default arguments provided for every parameter). A type with a public default constructor is DefaultConstructible.
+	* Explanation
+		1) Declaration of a default constructor inside of class definition.
+		2) Definition of the constructor outside of class definition (the class must contain a declaration (1)). See constructors and member initializer lists for details on the constructor body.
+		3) Deleted default constructor: if it is selected by overload resolution, the program fails to compile.
+		4) Defaulted default constructor: the compiler will define the implicit default constructor even if other constructors are present.
+		5) Defaulted default constructor outside of class definition (the class must contain a declaration (1)). Such constructor is treated as user-provided (see below and value initialization).
+	* Default constructors are called during default initializations and value initializations.
+* [C.49: Prefer initialization to assignment in constructors](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c49-prefer-initialization-to-assignment-in-constructors)
+	* `Reason` An initialization explicitly states that initialization, rather than assignment, is done and can be more elegant and efficient. Prevents “use before set” errors.
+    ```c++
+    class D {   // Good
+        string s1;
+    public:
+        D(string_view v) : s1{v} { }    // GOOD: directly construct
+        // ...
+    };
+    ```
+* [Copy constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/copy_constructor)
+	* A copy constructor of class T is a non-template constructor whose first parameter is T&‍, const T&‍, volatile T&‍, or const volatile T&‍, and either there are no other parameters, or the rest of the parameters all have default values.
+* [Move constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/move_constructor)
+	* A move constructor of class T is a non-template constructor whose first parameter is T&&, const T&&, volatile T&&, or const volatile T&&, and either there are no other parameters, or the rest of the parameters all have default values.
+	* [std::exchange - cppreference.com](https://en.cppreference.com/w/cpp/utility/exchange)
+		* Replaces the value of obj with new_value and returns the old value of obj.
+* [operator overloading - cppreference.com](https://en.cppreference.com/w/cpp/language/operators#Assignment_operator)
+* [Copy assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/copy_assignment)
+	* A copy assignment operator of class T is a non-template non-static member function with the name operator= that takes exactly one parameter of type T, T&, const T&, volatile T&, or const volatile T&. For a type to be CopyAssignable, it must have a public copy assignment operator.
+* [Move assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/move_assignment)
+	* A move assignment operator of class T is a non-template non-static member function with the name operator= that takes exactly one parameter of type T&&, const T&&, volatile T&&, or const volatile T&&.
+	* Syntax
+		* class-name & class-name :: operator= ( class-name && )	(1)	(since C++11)
+		* class-name & class-name :: operator= ( class-name && ) = default;	(2)	(since C++11)
+		* class-name & class-name :: operator= ( class-name && ) = delete;	(3)	(since C++11)
+	* Explanation
+		* 1) Typical declaration of a move assignment operator.
+		* 2) Forcing a move assignment operator to be generated by the compiler.
+		* 3) Avoiding implicit move assignment.
+		* The move assignment operator is called whenever it is selected by overload resolution, e.g. when an object appears on the left-hand side of an assignment expression, where the right-hand side is an rvalue of the same or implicitly convertible type.
+		* Move assignment operators typically "steal" the resources held by the argument (e.g. pointers to dynamically-allocated objects, file descriptors, TCP sockets, I/O streams, running threads, etc.), rather than make copies of them, and leave the argument in some valid but otherwise indeterminate state. For example, move-assigning from a std::string or from a std::vector may result in the argument being left empty. This is not, however, a guarantee. A move assignment is less, not more restrictively defined than ordinary assignment; where ordinary assignment must leave two copies of data at completion, move assignment is required to leave only one.
+```c++
+#include <string>
+#include <iostream>
+#include <utility>
+ 
+struct A
+{
+    std::string s;
+ 
+    A() : s("test") {}
+ 
+    A(const A& o) : s(o.s) { std::cout << "move failed!\n"; }
+ 
+    A(A&& o) noexcept : s(std::move(o.s)) {}
+ 
+    A& operator=(const A& other)
+    {
+         s = other.s;
+         std::cout << "copy assigned\n";
+         return *this;
+    }
+ 
+    A& operator=(A&& other) noexcept
+    {
+         s = std::move(other.s);
+         std::cout << "move assigned\n";
+         return *this;
+    }
+};
+ 
+A f(A a) { return a; }
+ 
+struct B : A
+{
+    std::string s2; 
+    int n;
+    // implicit move assignment operator B& B::operator=(B&&)
+    // calls A's move assignment operator
+    // calls s2's move assignment operator
+    // and makes a bitwise copy of n
+};
+ 
+struct C : B
+{
+    ~C() {} // destructor prevents implicit move assignment
+};
+ 
+struct D : B
+{
+    D() {}
+    ~D() {} // destructor would prevent implicit move assignment
+    D& operator=(D&&) = default; // force a move assignment anyway 
+};
+ 
+int main()
+{
+    A a1, a2;
+    std::cout << "Trying to move-assign A from rvalue temporary\n";
+    a1 = f(A()); // move-assignment from rvalue temporary
+    std::cout << "Trying to move-assign A from xvalue\n";
+    a2 = std::move(a1); // move-assignment from xvalue
+ 
+    std::cout << "Trying to move-assign B\n";
+    B b1, b2;
+    std::cout << "Before move, b1.s = \"" << b1.s << "\"\n";
+    b2 = std::move(b1); // calls implicit move assignment
+    std::cout << "After move, b1.s = \"" << b1.s << "\"\n";
+ 
+    std::cout << "Trying to move-assign C\n";
+    C c1, c2;
+    c2 = std::move(c1); // calls the copy assignment operator
+ 
+    std::cout << "Trying to move-assign D\n";
+    D d1, d2;
+    d2 = std::move(d1);
+}
+
+/*
+Output:
+
+Trying to move-assign A from rvalue temporary
+move assigned
+Trying to move-assign A from xvalue
+move assigned
+Trying to move-assign B
+Before move, b1.s = "test"
+move assigned
+After move, b1.s = "" 
+Trying to move-assign C
+copy assigned
+Trying to move-assign D
+move assigned
+*/
+```
+* [C++中 =defaule 和 =delete 使用](https://mp.weixin.qq.com/s/XRuLVEF1Yhsmm52t-l010w)
+	* C++的类有四类特殊成员函数，它们分别是：默认构造函数、析构函数、拷贝构造函数、拷贝赋值运算符。如果实际编码时没有显示定义，那么编译器将会默认生成这四类成员函数。使用=default和=delete可以控制编译器默认函数体的使用。
+	* 1 =default
+		* C++11新增了=default标识，编译器看到后，会生成默认的执行效率更高的函数定义体，同时会减轻编码时的工作量。当然，这里会引入一个问题，既然编译器会默认生成构造函数，那么=default的优势在哪里呢？
+		* =default就给我们提供了这样一个功能，加上之后，编译器就会给我们默认生成函数体，减轻工作量。上面的类就这可以这些写：
+        ```c++
+        class Test{
+        public:
+            Test(int a):x(a){};
+            Test()=default;
+        private:
+            int x;
+        };
+        ```
+		* 当然，=default不但可以在类成员内部添加也可以在类之外添加，但是使用=default时，必须遵守一个准则：default 函数特性只能用于类的特殊成员函数或者函数没有默认参数。=default写在类之外的方式如下：
+        ```c++
+        class Test{
+        public:
+            Test(int a):x(a){};
+            Test()=default;
+            Test(const Test& ts);
+            Test& operator = (const Test& ts);
+        private:
+            int x;
+        };
+        Test::Test(const Test& ts) =default;
+        Test& Test::operator = (const Test& ts) =default;
+        ```
+		* 上面的代码中演示了=default在类成员外部使用的场景。但是类中确没有析构函数，编码时，如果涉及到类的继承和派生，尤其是通过基类指针指向了派生类对象，当调用delete删除派生对象时，如果基类没有显示定义析构函数，编译器会为基类默认生成析构函数，基类对象会被正常释放，但是也会产生一个问题，派生类没有正确释放，可能会产生内存泄露等问题。正确解决这种问题的做法是在基类中显示定义一个虚析构函数。这种方法在C++11之前是我们解决这种问题经常使用的，但是C++11之后，可以使用=default，从而减轻我们的编码量，且编译器生成的代码效率更高。
+        ```c++
+        class Base{
+        public:
+            virtual ~Base()=default;
+        private:
+            int x;
+        };
+        class A : public Base{
+        private:
+            int y;
+        };
+        int main ()
+        {
+          Base *pBase = new A;
+          delete pBase;
+          return 0;
+        }
+        ```
+	* 2 =delete
+		* C++11之前，delete是和new配对使用的，释放程序在堆上开辟得空间，将资源返还给操作系统，C++11之后，delete又多了一个含义既：禁用成员函数的使用。使用方法为：在函数名称后面加上=delete。
+		* 如果不想在传入非整型的数据时编译通过，就可以使用=delete来抑制这种问题的产生。如使用=delete解决上面的问题
+        ```c++
+        class Test { 
+        public: 
+            Test(int a):x(a) {std::cout<<x<<std::endl;} 
+            Test(double)=delete;
+        private:
+            int x;
+        }; 
+        int main() { 
+            Test test1(1); 
+            Test test2(1.1);  
+            return 0;
+        ```
+		* 如上可知，使用=delete后，可以使我们禁用一些不需要编译器生成的默认函数，还可以避免因为数据类型原因导致的错误的函数调用。
+
+#### Inheritance
+
+* [override specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/override)
+	* Specifies that a virtual function overrides another virtual function.
+* [final specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/final)
+	* Specifies that a virtual function cannot be overridden in a derived class or that a class cannot be derived from.
+* [C.128: Virtual functions should specify exactly one of virtual, override, or final](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-override)
+	* Reason
+		* Readability. Detection of mistakes. Writing explicit virtual, override, or final is self-documenting and enables the compiler to catch mismatch of types and/or names between base and derived classes. However, writing more than one of these three is both redundant and a potential source of errors.
+		* It’s simple and clear:
+			* virtual means exactly and only “this is a new virtual function.”
+			* override means exactly and only “this is a non-final overrider.”
+			* final means exactly and only “this is a final overrider.”
+	* Discussion
+		* We want to eliminate two particular classes of errors:
+			* implicit virtual: the programmer intended the function to be implicitly virtual and it is (but readers of the code can’t tell); or the programmer intended the function to be implicitly virtual but it isn’t (e.g., because of a subtle parameter list mismatch); or the programmer did not intend the function to be virtual but it is (because it happens to have the same signature as a virtual in the base class)
+			* implicit override: the programmer intended the function to be implicitly an overrider and it is (but readers of the code can’t tell); or the programmer intended the function to be implicitly an overrider but it isn’t (e.g., because of a subtle parameter list mismatch); or the programmer did not intend the function to be an overrider but it is (because it happens to have the same signature as a virtual in the base class – note this problem arises whether or not the function is explicitly declared virtual, because the programmer might have intended to create either a new virtual function or a new non-virtual function)
+		* Note: On a class defined as final, it doesn’t matter whether you put override or final on an individual virtual function.
+		* Note: Use final on functions sparingly. It does not necessarily lead to optimization, and it precludes further overriding.
+	* Enforcement
+		* Compare virtual function names in base and derived classes and flag uses of the same name that does not override.
+		* Flag overrides with neither override nor final.
+		* Flag function declarations that use more than one of virtual, override, and final.
+* [C.140: Do not provide different default arguments for a virtual function and an overrider](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-virtual-default-arg)
+	* Reason
+		* That can cause confusion: An overrider does not inherit default arguments.
+	* Enforcement
+		* Flag default arguments on virtual functions if they differ between base and derived declarations.
+* [Abstract Classes - Polymorphism | HackerRank](https://www.hackerrank.com/challenges/abstract-classes-polymorphism/problem)
+  * [LRU Cache Implementation - GeeksforGeeks](https://www.geeksforgeeks.org/lru-cache-implementation/)
+  * [list - C++ Reference](http://www.cplusplus.com/reference/list/list/?kw=list)
+  * [pair - C++ Reference](http://www.cplusplus.com/reference/utility/pair/?kw=pair)
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node {
+    Node* next;
+    Node* prev;
+    int value;
+    int key;
+    Node(Node* p, Node* n, int k, int val):prev(p),next(n),key(k),value(val){};
+    Node(int k, int val):prev(NULL),next(NULL),key(k),value(val){};
+};
+
+class Cache {
+protected:
+    map<int,Node*> mp; //map the key to the node in the linked list
+    int cp;  //capacity
+    Node* tail; // double linked list tail pointer
+    Node* head; // double linked list head pointer
+    virtual void set(int, int) = 0; //set function
+    virtual int get(int) = 0; //get function
+};
+
+// Sometimes timeout
+class LRUCache : public Cache {
+    private:
+        list< pair<int, int> >   lru;
+        unordered_map<int, list< pair<int, int> >::iterator> mp;
+
+    public:
+        LRUCache(int);
+        ~LRUCache(){};
+        void set(int, int);
+        int get(int);
+};
+
+LRUCache::LRUCache(int capacity)
+{
+    // note that member initializer does not name a non-static data member or base class
+    cp = capacity;
+}
+
+void LRUCache::set(int key, int value)
+{
+    // not present in cache
+    if (mp.find(key) == mp.end()) {
+        // cache is full
+        if (lru.size() == cp) {
+            // delete least recently used item
+            mp.erase(lru.back().first);
+            lru.pop_back();
+        }
+    } else {
+        lru.erase(mp[key]);
+    }
+
+    // update reference
+    lru.push_front({key, value});
+    mp[key] = lru.begin();
+}
+
+int LRUCache::get(int key)
+{
+    if (mp.find(key) == mp.end()) {
+        return -1;
+    } else {
+        lru.push_front(*mp[key]);
+        lru.erase(mp[key]);
+        mp[key] = lru.begin();
+        return mp[key]->second;
+    }
+}
+
+int main() {
+    int n, capacity,i;
+    cin >> n >> capacity;
+    LRUCache l(capacity);
+    for(i=0;i<n;i++) {
+        string command;
+        cin >> command;
+        if(command == "get") {
+            int key;
+            cin >> key;
+            cout << l.get(key) << endl;
+        }
+        else if(command == "set") {
+            int key, value;
+            cin >> key >> value;
+            l.set(key,value);
+        }
+    }
+
+    return 0;
+}
+```
+* [C++虚函数表原理浅析 (qq.com)](https://mp.weixin.qq.com/s/lKfOZUM1txbUncD6ZBSO4w)
 
 ### Templates
 
@@ -5818,498 +6309,6 @@ int main() {
 
 # ------
 
-#### [Classes](https://en.cppreference.com/w/cpp/language/classes)
-
-* class v.s. struct
-	* [C.1: Organize related data into structures (structs or classes)](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c1-organize-related-data-into-structures-structs-or-classes)
-		* Reason Ease of comprehension. If data is related (for fundamental reasons), that fact should be reflected in code.
-		* Example
-		```c++
-		void draw(int x, int y, int x2, int y2);  // BAD: unnecessary implicit relationships
-		void draw(Point from, Point to);          // better
-		```
-		* Note A simple class without virtual functions implies no space or time overhead.
-		* Note From a language perspective class and struct differ only in the default visibility of their members.
-		* Enforcement Probably impossible. Maybe a heuristic looking for data items used together is possible.
-	* [C.8: Use class rather than struct if any member is non-public](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c8-use-class-rather-than-struct-if-any-member-is-non-public)
-
-##### Members
-
-###### [static members](https://en.cppreference.com/w/cpp/language/static)
-
-* Inside a class definition, the keyword static declares members that are not bound to class instances.
-* Outside a class definition, it has a different meaning: see storage duration.
-
-###### [Friend declaration](https://en.cppreference.com/w/cpp/language/friend)
-
-* The friend declaration appears in a class body and grants a function or another class access to private and protected members of the class where the friend declaration appears.
-* Description
-    * 1) Designates a function or several functions as friends of this class:
-    ```c++
-    class Y
-    {
-        int data; // private member
-
-        // the non-member function operator<< will have access to Y's private members
-        friend std::ostream& operator<<(std::ostream& out, const Y& o);
-        friend char* X::foo(int); // members of other classes can be friends too
-        friend X::X(char), X::~X(); // constructors and destructors can be friends
-    };
-
-    // friend declaration does not declare a member function
-    // this operator<< still needs to be defined, as a non-member
-    std::ostream& operator<<(std::ostream& out, const Y& y)
-    {
-        return out << y.data; // can access private member Y::data
-    }
-    ```
-    * 2) (only allowed in non-local class definitions) Defines a non-member function, and makes it a friend of this class at the same time. Such non-member function is always inline, unless it is attached to a named module (since C++20).
-    ```c++
-    class X
-    {
-        int a;
-
-        friend void friend_set(X& p, int i)
-        {
-            p.a = i; // this is a non-member function
-        }
-    public:
-        void member_set(int i)
-        {
-            a = i; // this is a member function
-        }
-    };
-    ```
-    * 3) Designates the class, struct, or union named by the elaborated-class-specifier (see elaborated type specifier) as a friend of this class. This means that the friend's member declarations and definitions can access private and protected members of this class and also that the friend can inherit from private and protected members of this class. The name of the class that is used in this friend declaration does not need to be previously declared.
-    * 4) Designates the type named by the simple-type-specifier or typename-specifier as a friend of this class if that type is a (possibly cv-qualified) class, struct, or union; otherwise the friend declaration is ignored. This declaration will not forward declare a new type.
-    ```c++
-    class Y {};
-
-    class A
-    {
-        int data; // private data member
-
-        class B {}; // private nested type
-
-        enum { a = 100 }; // private enumerator
-
-        friend class X; // friend class forward declaration (elaborated class specifier)
-        friend Y; // friend class declaration (simple type specifier) (since c++11)
-    };
-
-    class X : A::B // OK: A::B accessible to friend
-    {
-        A::B mx; // OK: A::B accessible to member of friend
-
-        class Y
-        {
-            A::B my; // OK: A::B accessible to nested member of friend
-        };
-
-        int v[A::a]; // OK: A::a accessible to member of friend
-    };
-    ```
-* Notes
-    * Friendship is not transitive (a friend of your friend is not your friend).
-    * Friendship is not inherited (your friend's children are not your friends).
-    * Storage class specifiers are not allowed in friend function declarations. A function that is defined in the friend declaration has external linkage, a function that was previously defined, keeps the linkage it was defined with.
-    * Access specifiers have no effect on the meaning of friend declarations (they can appear in private: or in public: sections, with no difference).
-    * A friend class declaration cannot define a new class (friend class X {}; is an error).
-    * When a local class declares an unqualified function or class as a friend, only functions and classes in the innermost non-class scope are looked up, not the global functions
-* Template friends
-    * Both function template and class template declarations may appear with the friend specifier in any non-local class or class template (although only function templates may be defined within the class or class template that is granting friendship). In this case, every specialization of the template becomes a friend, whether it is implicitly instantiated, partially specialized, or explicitly specialized.
-* Template friend operators
-    * A common use case for template friends is declaration of a non-member operator overload that acts on a class template, e.g. operator<<(std::ostream&, const Foo\<T>&) for some user-defined Foo\<T>.
-    * Such operator can be defined in the class body, which has the effect of generating a separate non-template operator<< for each T and makes that non-template operator<< a friend of its Foo\<T>
-    * or the function template has to be declared as a template before the class body, in which case the friend declaration within Foo\<T> can refer to the full specialization of operator<< for its T:
-```c++
-#include <iostream>
-#include <sstream>
- 
-class MyClass
-{
-    int i;                   // friends have access to non-public, non-static
-    static inline int id{6}; // and static (possibly inline) members
- 
-    friend std::ostream& operator<<(std::ostream& out, const MyClass&);
-    friend std::istream& operator>>(std::istream& in, MyClass&);
-    friend void change_id(int);
-public:
-    MyClass(int i = 0) : i(i) {}
-};
- 
-std::ostream& operator<<(std::ostream& out, const MyClass& mc)
-{
-    return out << "MyClass::id = " << MyClass::id << "; i = " << mc.i;
-}
- 
-std::istream& operator>>(std::istream& in, MyClass& mc)
-{
-    return in >> mc.i;
-}
- 
-void change_id(int id) { MyClass::id = id; }
- 
-int main()
-{
-    MyClass mc(7);
-    std::cout << mc << '\n';
-//  mc.i = 333*2;  // error: i is a private member
-    std::istringstream("100") >> mc;
-    std::cout << mc << '\n';
-//  MyClass::id = 222*3;  // error: id is a private member
-    change_id(9);
-    std::cout << mc << '\n';
-}
-Output:
-
-MyClass::id = 6; i = 7
-MyClass::id = 6; i = 100
-MyClass::id = 9; i = 100
-```
-* [C++ Friend Functions](https://www.tutorialspoint.com/cplusplus/cpp_friend_functions.htm)
-    * A friend function of a class is defined outside that class' scope but it has the right to access all private and protected members of the class. Even though the prototypes for friend functions appear in the class definition, friends are not member functions.
-    * A friend can be a function, function template, or member function, or a class or class template, in which case the entire class and all of its members are friends.
-* [Friend class and function in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/friend-class-function-cpp/)
-    * Merits:
-        * A friend function is able to access members without the need of inheriting the class.
-        * Friend function acts as a bridge between two classes by accessing their private data.
-        * It can be used to increase the versatility of overloaded operator.
-        * It can be declared either in the public or private or protected part of class.
-    * Demerits:
-        * Friend functions have access to private members of a class from outside the class which violates the law of the data hiding.
-        * Friend functions cannot do any run time polymorphism in its members.
-
-##### Special member functions
-
-* [Default constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/default_constructor)
-	* A default constructor is a constructor which can be called with no arguments (either defined with an empty parameter list, or with default arguments provided for every parameter). A type with a public default constructor is DefaultConstructible.
-	* Explanation
-		1) Declaration of a default constructor inside of class definition.
-		2) Definition of the constructor outside of class definition (the class must contain a declaration (1)). See constructors and member initializer lists for details on the constructor body.
-		3) Deleted default constructor: if it is selected by overload resolution, the program fails to compile.
-		4) Defaulted default constructor: the compiler will define the implicit default constructor even if other constructors are present.
-		5) Defaulted default constructor outside of class definition (the class must contain a declaration (1)). Such constructor is treated as user-provided (see below and value initialization).
-	* Default constructors are called during default initializations and value initializations.
-* [C.49: Prefer initialization to assignment in constructors](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c49-prefer-initialization-to-assignment-in-constructors)
-	* `Reason` An initialization explicitly states that initialization, rather than assignment, is done and can be more elegant and efficient. Prevents “use before set” errors.
-    ```c++
-    class D {   // Good
-        string s1;
-    public:
-        D(string_view v) : s1{v} { }    // GOOD: directly construct
-        // ...
-    };
-    ```
-* [Copy constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/copy_constructor)
-	* A copy constructor of class T is a non-template constructor whose first parameter is T&‍, const T&‍, volatile T&‍, or const volatile T&‍, and either there are no other parameters, or the rest of the parameters all have default values.
-* [Move constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/move_constructor)
-	* A move constructor of class T is a non-template constructor whose first parameter is T&&, const T&&, volatile T&&, or const volatile T&&, and either there are no other parameters, or the rest of the parameters all have default values.
-	* [std::exchange - cppreference.com](https://en.cppreference.com/w/cpp/utility/exchange)
-		* Replaces the value of obj with new_value and returns the old value of obj.
-* [operator overloading - cppreference.com](https://en.cppreference.com/w/cpp/language/operators#Assignment_operator)
-* [Copy assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/copy_assignment)
-	* A copy assignment operator of class T is a non-template non-static member function with the name operator= that takes exactly one parameter of type T, T&, const T&, volatile T&, or const volatile T&. For a type to be CopyAssignable, it must have a public copy assignment operator.
-* [Move assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/move_assignment)
-	* A move assignment operator of class T is a non-template non-static member function with the name operator= that takes exactly one parameter of type T&&, const T&&, volatile T&&, or const volatile T&&.
-	* Syntax
-		* class-name & class-name :: operator= ( class-name && )	(1)	(since C++11)
-		* class-name & class-name :: operator= ( class-name && ) = default;	(2)	(since C++11)
-		* class-name & class-name :: operator= ( class-name && ) = delete;	(3)	(since C++11)
-	* Explanation
-		* 1) Typical declaration of a move assignment operator.
-		* 2) Forcing a move assignment operator to be generated by the compiler.
-		* 3) Avoiding implicit move assignment.
-		* The move assignment operator is called whenever it is selected by overload resolution, e.g. when an object appears on the left-hand side of an assignment expression, where the right-hand side is an rvalue of the same or implicitly convertible type.
-		* Move assignment operators typically "steal" the resources held by the argument (e.g. pointers to dynamically-allocated objects, file descriptors, TCP sockets, I/O streams, running threads, etc.), rather than make copies of them, and leave the argument in some valid but otherwise indeterminate state. For example, move-assigning from a std::string or from a std::vector may result in the argument being left empty. This is not, however, a guarantee. A move assignment is less, not more restrictively defined than ordinary assignment; where ordinary assignment must leave two copies of data at completion, move assignment is required to leave only one.
-```c++
-#include <string>
-#include <iostream>
-#include <utility>
- 
-struct A
-{
-    std::string s;
- 
-    A() : s("test") {}
- 
-    A(const A& o) : s(o.s) { std::cout << "move failed!\n"; }
- 
-    A(A&& o) noexcept : s(std::move(o.s)) {}
- 
-    A& operator=(const A& other)
-    {
-         s = other.s;
-         std::cout << "copy assigned\n";
-         return *this;
-    }
- 
-    A& operator=(A&& other) noexcept
-    {
-         s = std::move(other.s);
-         std::cout << "move assigned\n";
-         return *this;
-    }
-};
- 
-A f(A a) { return a; }
- 
-struct B : A
-{
-    std::string s2; 
-    int n;
-    // implicit move assignment operator B& B::operator=(B&&)
-    // calls A's move assignment operator
-    // calls s2's move assignment operator
-    // and makes a bitwise copy of n
-};
- 
-struct C : B
-{
-    ~C() {} // destructor prevents implicit move assignment
-};
- 
-struct D : B
-{
-    D() {}
-    ~D() {} // destructor would prevent implicit move assignment
-    D& operator=(D&&) = default; // force a move assignment anyway 
-};
- 
-int main()
-{
-    A a1, a2;
-    std::cout << "Trying to move-assign A from rvalue temporary\n";
-    a1 = f(A()); // move-assignment from rvalue temporary
-    std::cout << "Trying to move-assign A from xvalue\n";
-    a2 = std::move(a1); // move-assignment from xvalue
- 
-    std::cout << "Trying to move-assign B\n";
-    B b1, b2;
-    std::cout << "Before move, b1.s = \"" << b1.s << "\"\n";
-    b2 = std::move(b1); // calls implicit move assignment
-    std::cout << "After move, b1.s = \"" << b1.s << "\"\n";
- 
-    std::cout << "Trying to move-assign C\n";
-    C c1, c2;
-    c2 = std::move(c1); // calls the copy assignment operator
- 
-    std::cout << "Trying to move-assign D\n";
-    D d1, d2;
-    d2 = std::move(d1);
-}
-
-/*
-Output:
-
-Trying to move-assign A from rvalue temporary
-move assigned
-Trying to move-assign A from xvalue
-move assigned
-Trying to move-assign B
-Before move, b1.s = "test"
-move assigned
-After move, b1.s = "" 
-Trying to move-assign C
-copy assigned
-Trying to move-assign D
-move assigned
-*/
-```
-* [C++中 =defaule 和 =delete 使用](https://mp.weixin.qq.com/s/XRuLVEF1Yhsmm52t-l010w)
-	* C++的类有四类特殊成员函数，它们分别是：默认构造函数、析构函数、拷贝构造函数、拷贝赋值运算符。如果实际编码时没有显示定义，那么编译器将会默认生成这四类成员函数。使用=default和=delete可以控制编译器默认函数体的使用。
-	* 1 =default
-		* C++11新增了=default标识，编译器看到后，会生成默认的执行效率更高的函数定义体，同时会减轻编码时的工作量。当然，这里会引入一个问题，既然编译器会默认生成构造函数，那么=default的优势在哪里呢？
-		* =default就给我们提供了这样一个功能，加上之后，编译器就会给我们默认生成函数体，减轻工作量。上面的类就这可以这些写：
-        ```c++
-        class Test{
-        public:
-            Test(int a):x(a){};
-            Test()=default;
-        private:
-            int x;
-        };
-        ```
-		* 当然，=default不但可以在类成员内部添加也可以在类之外添加，但是使用=default时，必须遵守一个准则：default 函数特性只能用于类的特殊成员函数或者函数没有默认参数。=default写在类之外的方式如下：
-        ```c++
-        class Test{
-        public:
-            Test(int a):x(a){};
-            Test()=default;
-            Test(const Test& ts);
-            Test& operator = (const Test& ts);
-        private:
-            int x;
-        };
-        Test::Test(const Test& ts) =default;
-        Test& Test::operator = (const Test& ts) =default;
-        ```
-		* 上面的代码中演示了=default在类成员外部使用的场景。但是类中确没有析构函数，编码时，如果涉及到类的继承和派生，尤其是通过基类指针指向了派生类对象，当调用delete删除派生对象时，如果基类没有显示定义析构函数，编译器会为基类默认生成析构函数，基类对象会被正常释放，但是也会产生一个问题，派生类没有正确释放，可能会产生内存泄露等问题。正确解决这种问题的做法是在基类中显示定义一个虚析构函数。这种方法在C++11之前是我们解决这种问题经常使用的，但是C++11之后，可以使用=default，从而减轻我们的编码量，且编译器生成的代码效率更高。
-        ```c++
-        class Base{
-        public:
-            virtual ~Base()=default;
-        private:
-            int x;
-        };
-        class A : public Base{
-        private:
-            int y;
-        };
-        int main ()
-        {
-          Base *pBase = new A;
-          delete pBase;
-          return 0;
-        }
-        ```
-	* 2 =delete
-		* C++11之前，delete是和new配对使用的，释放程序在堆上开辟得空间，将资源返还给操作系统，C++11之后，delete又多了一个含义既：禁用成员函数的使用。使用方法为：在函数名称后面加上=delete。
-		* 如果不想在传入非整型的数据时编译通过，就可以使用=delete来抑制这种问题的产生。如使用=delete解决上面的问题
-        ```c++
-        class Test { 
-        public: 
-            Test(int a):x(a) {std::cout<<x<<std::endl;} 
-            Test(double)=delete;
-        private:
-            int x;
-        }; 
-        int main() { 
-            Test test1(1); 
-            Test test2(1.1);  
-            return 0;
-        ```
-		* 如上可知，使用=delete后，可以使我们禁用一些不需要编译器生成的默认函数，还可以避免因为数据类型原因导致的错误的函数调用。
-
-##### Inheritance
-
-* [override specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/override)
-	* Specifies that a virtual function overrides another virtual function.
-* [final specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/final)
-	* Specifies that a virtual function cannot be overridden in a derived class or that a class cannot be derived from.
-* [C.128: Virtual functions should specify exactly one of virtual, override, or final](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-override)
-	* Reason
-		* Readability. Detection of mistakes. Writing explicit virtual, override, or final is self-documenting and enables the compiler to catch mismatch of types and/or names between base and derived classes. However, writing more than one of these three is both redundant and a potential source of errors.
-		* It’s simple and clear:
-			* virtual means exactly and only “this is a new virtual function.”
-			* override means exactly and only “this is a non-final overrider.”
-			* final means exactly and only “this is a final overrider.”
-	* Discussion
-		* We want to eliminate two particular classes of errors:
-			* implicit virtual: the programmer intended the function to be implicitly virtual and it is (but readers of the code can’t tell); or the programmer intended the function to be implicitly virtual but it isn’t (e.g., because of a subtle parameter list mismatch); or the programmer did not intend the function to be virtual but it is (because it happens to have the same signature as a virtual in the base class)
-			* implicit override: the programmer intended the function to be implicitly an overrider and it is (but readers of the code can’t tell); or the programmer intended the function to be implicitly an overrider but it isn’t (e.g., because of a subtle parameter list mismatch); or the programmer did not intend the function to be an overrider but it is (because it happens to have the same signature as a virtual in the base class – note this problem arises whether or not the function is explicitly declared virtual, because the programmer might have intended to create either a new virtual function or a new non-virtual function)
-		* Note: On a class defined as final, it doesn’t matter whether you put override or final on an individual virtual function.
-		* Note: Use final on functions sparingly. It does not necessarily lead to optimization, and it precludes further overriding.
-	* Enforcement
-		* Compare virtual function names in base and derived classes and flag uses of the same name that does not override.
-		* Flag overrides with neither override nor final.
-		* Flag function declarations that use more than one of virtual, override, and final.
-* [C.140: Do not provide different default arguments for a virtual function and an overrider](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-virtual-default-arg)
-	* Reason
-		* That can cause confusion: An overrider does not inherit default arguments.
-	* Enforcement
-		* Flag default arguments on virtual functions if they differ between base and derived declarations.
-* [Abstract Classes - Polymorphism | HackerRank](https://www.hackerrank.com/challenges/abstract-classes-polymorphism/problem)
-  * [LRU Cache Implementation - GeeksforGeeks](https://www.geeksforgeeks.org/lru-cache-implementation/)
-  * [list - C++ Reference](http://www.cplusplus.com/reference/list/list/?kw=list)
-  * [pair - C++ Reference](http://www.cplusplus.com/reference/utility/pair/?kw=pair)
-```c++
-#include <bits/stdc++.h>
-using namespace std;
-
-struct Node {
-    Node* next;
-    Node* prev;
-    int value;
-    int key;
-    Node(Node* p, Node* n, int k, int val):prev(p),next(n),key(k),value(val){};
-    Node(int k, int val):prev(NULL),next(NULL),key(k),value(val){};
-};
-
-class Cache {
-protected:
-    map<int,Node*> mp; //map the key to the node in the linked list
-    int cp;  //capacity
-    Node* tail; // double linked list tail pointer
-    Node* head; // double linked list head pointer
-    virtual void set(int, int) = 0; //set function
-    virtual int get(int) = 0; //get function
-};
-
-// Sometimes timeout
-class LRUCache : public Cache {
-    private:
-        list< pair<int, int> >   lru;
-        unordered_map<int, list< pair<int, int> >::iterator> mp;
-
-    public:
-        LRUCache(int);
-        ~LRUCache(){};
-        void set(int, int);
-        int get(int);
-};
-
-LRUCache::LRUCache(int capacity)
-{
-    // note that member initializer does not name a non-static data member or base class
-    cp = capacity;
-}
-
-void LRUCache::set(int key, int value)
-{
-    // not present in cache
-    if (mp.find(key) == mp.end()) {
-        // cache is full
-        if (lru.size() == cp) {
-            // delete least recently used item
-            mp.erase(lru.back().first);
-            lru.pop_back();
-        }
-    } else {
-        lru.erase(mp[key]);
-    }
-
-    // update reference
-    lru.push_front({key, value});
-    mp[key] = lru.begin();
-}
-
-int LRUCache::get(int key)
-{
-    if (mp.find(key) == mp.end()) {
-        return -1;
-    } else {
-        lru.push_front(*mp[key]);
-        lru.erase(mp[key]);
-        mp[key] = lru.begin();
-        return mp[key]->second;
-    }
-}
-
-
-int main() {
-    int n, capacity,i;
-    cin >> n >> capacity;
-    LRUCache l(capacity);
-    for(i=0;i<n;i++) {
-        string command;
-        cin >> command;
-        if(command == "get") {
-            int key;
-            cin >> key;
-            cout << l.get(key) << endl;
-        }
-        else if(command == "set") {
-            int key, value;
-            cin >> key >> value;
-            l.set(key,value);
-        }
-    }
-
-    return 0;
-}
-```
-* [C++虚函数表原理浅析 (qq.com)](https://mp.weixin.qq.com/s/lKfOZUM1txbUncD6ZBSO4w)
 
 ### C++ Advanced
 
