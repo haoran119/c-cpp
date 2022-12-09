@@ -5816,11 +5816,7 @@ int main() {
 	* To use the {fmt} library, add fmt/core.h, fmt/format.h, fmt/format-inl.h, src/format.cc and optionally other headers from a release archive or the Git repository to your project. Alternatively, you can build the library with CMake.
 * [Format String Syntax — fmt 8.1.1 documentation](https://fmt.dev/latest/syntax.html)
 
-# ----
-
-### Object Oriented Programming
-
-* [Initialization - cppreference.com](https://en.cppreference.com/w/cpp/language/initialization)
+# ------
 
 #### [Classes](https://en.cppreference.com/w/cpp/language/classes)
 
