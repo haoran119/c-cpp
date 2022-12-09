@@ -2251,6 +2251,60 @@ for (auto const& x : range | std::views::reverse)
 
 ### [Classes](https://en.cppreference.com/w/cpp/language/classes)
 
+* A class is a user-defined type.
+* A class type is defined by class-specifier, which appears in decl-specifier-seq of the declaration syntax. See class declaration for the syntax of the class specifier.
+* A class can have the following kinds of members:
+    * 1) data members:
+        * a) non-static data members, including bit-fields.
+        * b) static data members
+    * 2) member functions:
+        * a) non-static member functions
+        * b) static member functions
+    * 3) nested types:
+        * a) nested classes and enumerations defined within the class definition
+        * b) aliases of existing types, defined with typedef or type alias (since C++11)declarations
+        * c) the name of the class within its own definition acts as a public member type alias of itself for the purpose of lookup (except when used to name a constructor): this is known as injected-class-name
+    * 4) enumerators from all unscoped enumerations defined within the class, or introduced by using-declarations or using-enum-declarations (since C++20)
+    * 5) member templates (variable templates, (since C++14)class templates or function templates) may appear in the body of any non-local class/struct/union.
+* All members are defined at once in the class definition, they cannot be added to an already-defined class (unlike the members of namespaces)
+* A member of a class T cannot use T as its name if the member is
+    * a static data member,
+    * a member function,
+    * a member type,
+    * a member template,
+    * an enumerator of an enumeration (unless the enumeration is scoped) (since C++11), or
+    * a member of a member anonymous union.
+* However, a non-static data member may use the name T as long as there are no user-declared constructors.
+* A class with at least one declared or inherited virtual member function is polymorphic. Objects of this type are polymorphic objects and have runtime type information stored as part of the object representation, which may be queried with dynamic_cast and typeid. Virtual member functions participate in dynamic binding.
+* A class with at least one declared or inherited pure virtual member function is an abstract class. Objects of this type cannot be created.
+* A class with a constexpr constructor is a LiteralType: objects of this type can be manipulated by constexpr functions at compile time. (since C++11)
+* Properties of classes
+    * Trivially copyable class
+        * A trivially copyable class is a class that
+            * has at least one eligible copy constructor, move constructor, copy assignment operator, or move assignment operator,
+            * each eligible copy constructor is trivial
+            * each eligible move constructor is trivial
+            * each eligible copy assignment operator is trivial
+            * each eligible move assignment operator is trivial, and
+            * has a non-deleted trivial destructor.
+    * Trivial class
+        * A trivial class is a class that
+            * is trivially copyable, and
+            * has one or more eligible default constructors such that each is trivial.
+    * Standard-layout class
+        * A standard-layout class is a class that
+            * has no non-static data members of type non-standard-layout class (or array of such types) or reference,
+            * has no virtual functions and no virtual base classes,
+            * has the same access control for all non-static data members,
+            * has no non-standard-layout base classes,
+            * only one class in the hierarchy has non-static data members, and
+            * Informally, none of the base classes has the same type as the first non-static data member. Or, formally: given the class as S, has no element of the set M(S) of types as a base class, where M(X) for a type X is defined as:
+                * If X is a non-union class type with no (possibly inherited) non-static data members, the set M(X) is empty.
+                * If X is a non-union class type whose first non-static data member has type X0 (where said member may be an anonymous union), the set M(X) consists of X0 and the elements of M(X0).
+                * If X is a union type, the set M(X) is the union of all M(Ui) and the set containing all Ui, where each Ui is the type of the ith non-static data member of X.
+                * If X is an array type with element type Xe, the set M(X) consists of Xe and the elements of M(Xe).
+                * If X is a non-class, non-array type, the set M(X) is empty.
+        * A standard-layout struct is a standard-layout class defined with the class keyword struct or the class keyword class. A standard-layout union is a standard-layout class defined with the class keyword union.
 * class v.s. struct
 	* [C.1: Organize related data into structures (structs or classes)](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c1-organize-related-data-into-structures-structs-or-classes)
 		* Reason Ease of comprehension. If data is related (for fundamental reasons), that fact should be reflected in code.
