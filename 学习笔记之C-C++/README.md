@@ -456,7 +456,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
 * [Data Type Ranges | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/data-type-ranges?view=msvc-170)
 * [Modifier Types](https://www.tutorialspoint.com/cplusplus/cpp_modifier_types.htm)
 * [Difference between float and double in C/C++ - GeeksforGeeks](https://www.geeksforgeeks.org/difference-float-double-c-cpp/)
-* [【ZZ】C++11之统一初始化语法 | 桃子的博客志 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/8674208.html)
 * [Wide character - Wikipedia](https://en.wikipedia.org/wiki/Wide_character)
   * A wide character is a computer character datatype that generally has a size greater than the traditional 8-bit character. The increased datatype size allows for the use of larger coded character sets.
   * Programming specifics
@@ -1805,6 +1804,7 @@ blue
     * Reference initialization, e.g. char& c = a[0];
 * If no initializer is provided, the rules of default initialization apply.
 * Initialization includes the evaluation of all subexpressions within the initializer and the creation of any temporary objects for function arguments or return values.
+* [【ZZ】C++11之统一初始化语法 | 桃子的博客志 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/8674208.html)
 
 #### [Initializer](https://en.cppreference.com/w/cpp/language/initialization)
 
