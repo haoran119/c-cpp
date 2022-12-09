@@ -3848,7 +3848,7 @@ D::~D
 */
 ```
 
-#### [std::shared_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/shared_ptr)
+#### [std::shared_ptr](https://en.cppreference.com/w/cpp/memory/shared_ptr)
 
 * smart pointer with shared object ownership semantics (class template)
 * std::shared_ptr is a smart pointer that retains shared ownership of an object through a pointer. Several shared_ptr objects may own the same object. The object is destroyed and its memory deallocated when either of the following happens:
@@ -4199,7 +4199,7 @@ sp2->{ i:2, f:3 }
 */
 ```
 
-#### [std::weak_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/weak_ptr)
+#### [std::weak_ptr](https://en.cppreference.com/w/cpp/memory/weak_ptr)
 
 * weak reference to an object managed by std::shared_ptr (class template)
 * std::weak_ptr is a smart pointer that holds a non-owning ("weak") reference to an object that is managed by std::shared_ptr. It must be converted to std::shared_ptr in order to access the referenced object.
