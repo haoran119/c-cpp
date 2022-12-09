@@ -5918,1620 +5918,10 @@ int main()
 	* Converts the given character to uppercase according to the character conversion rules defined by the currently installed C locale.
 	* In the default "C" locale, the following lowercase letters abcdefghijklmnopqrstuvwxyz are replaced with respective uppercase letters ABCDEFGHIJKLMNOPQRSTUVWXYZ.
 
-## [Date and time utilities](https://en.cppreference.com/w/cpp/chrono)
-
-* C++ includes support for two types of time manipulation:
-	* The chrono library, a flexible collection of types that track time with varying degrees of precision (e.g. std::chrono::time_point).
-	* C-style date and time library (e.g. std::time)
-* [C++ Date and Time](https://www.tutorialspoint.com/cplusplus/cpp_date_time.htm)
-* [Chrono in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/chrono-in-c/)
-
-### [\<chrono>](https://en.cppreference.com/w/cpp/header/chrono)
-
-* The chrono library defines three main types as well as utility functions and common typedefs.
-	* clocks
-	* time points
-	* durations
-
-#### Clocks
-
-* A clock consists of a starting point (or epoch) and a tick rate. For example, a clock may have an epoch of January 1, 1970 and tick every second. C++ defines several clock types:
-* [The Three Clocks - ModernesCpp.com](https://www.modernescpp.com/index.php/the-three-clocks)
-
-##### [std::chrono::system_clock](https://en.cppreference.com/w/cpp/chrono/system_clock) 
-
-* Class std::chrono::system_clock represents the system-wide real time wall clock.
-* It may not be monotonic: on most systems, the system time can be adjusted at any moment. It is the only C++ clock that has the ability to map its time points to C-style time.
-* std::chrono::system_clock meets the requirements of TrivialClock.
-* [std::chrono::system_clock::now - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/now)
-	* Returns a time point representing the current point in time.
-* [How to get current time and date in C++? - Stack Overflow](https://stackoverflow.com/questions/997946/how-to-get-current-time-and-date-in-c) 
-	* In C++ 11 you can use std::chrono::system_clock::now()
-* [c++11 - how to convert "std::chrono::system_clock::now()" to double - Stack Overflow](https://stackoverflow.com/questions/45464711/how-to-convert-stdchronosystem-clocknow-to-double)
-	* https://wandbox.org/permlink/qe1MNGQAR5X3zJl8
-```c++
-#include <chrono>
-#include <iostream>
-int main()
-{
-    auto current_time = std::chrono::system_clock::now();
-    auto duration_in_seconds = std::chrono::duration<double>(current_time.time_since_epoch());
-    
-    std::cout << duration_in_seconds.count() << std::endl; // 1.50169e+09
-}
-```
-* How to get certain time in current date ?
-```c++
-#include <iostream>
-#include <iomanip>   // std::put_time
-#include <chrono> 
-
-int main()
-{
-    using namespace std::chrono_literals;
-
-    setenv("TZ", "Asia/Tokyo", 1);
- 
-    std::tm tm{};  // zero initialise
-    tm.tm_year = 2022-1900; // 2022
-    tm.tm_mon = 10-1; // Oct
-    tm.tm_mday = 18; // 18th
-    tm.tm_hour = 9;
-    tm.tm_min = 0;
-    tm.tm_sec = 0;
-    tm.tm_isdst = 0; // Not daylight saving
-    std::time_t t = std::mktime(&tm); 
-    std::tm local = *std::localtime(&t);
-    std::cout << "local: " << std::put_time(&local, "%c %Z") << '\n';
-    // std::cout << "local: " << std::put_time(std::localtime(&t), "%c %Z") << '\n';
-
-    auto from = std::chrono::system_clock::from_time_t(t) - 0h;
-    auto time = from.time_since_epoch().count();
-    std::cout << time << '\n';
-
-    auto current_time = std::chrono::system_clock::now();
-    auto current_time_t = std::chrono::system_clock::to_time_t(current_time);
-    auto _local = *std::localtime(&current_time_t);
-    std::cout << "_local: " << std::put_time(&_local, "%c %Z") << '\n';
-
-    _local.tm_hour = 9;
-    _local.tm_min = 0;
-    _local.tm_sec = 0;
-    _local.tm_isdst = 0; // Not daylight saving
-    std::cout << "_local: " << std::put_time(&_local, "%c %Z") << '\n';
-
-    std::time_t _t = std::mktime(&_local); 
-    auto _from = std::chrono::system_clock::from_time_t(_t);
-    auto _time = _from.time_since_epoch().count();
-    std::cout << _time << '\n';
-
-    return 0;
-}
-/*
-local: Tue Oct 18 09:00:00 2022 JST
-1666051200000000000
-_local: Tue Oct 18 10:15:42 2022 JST
-_local: Tue Oct 18 09:00:00 2022 JST
-1666051200000000000
-*/
-```
-* [Get current timestamp in milliseconds since Epoch in C++ | Techie Delight](https://www.techiedelight.com/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/#:~:text=Since%20C%2B%2B11%2C%20we,of%20time%20elapsed%20since%20Epoch.)
-	* 1. Using std::chrono
-	* 2. Using std::time
-```c++
-#include <iostream>
-#include <chrono>
-
-int main()
-{
-	using namespace std::chrono;
-
-	uint64_t ns = (system_clock::now().time_since_epoch()).count();
-	std::cout << ns << " nanoseconds since the Epoch\n";
-
-	uint64_t us = duration_cast<microseconds>(system_clock::now().time_since_epoch()).count();
-	std::cout << us << " microseconds since the Epoch\n";
-
-	uint64_t ms = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-	std::cout << ms << " milliseconds since the Epoch\n";
-
-	uint64_t sec = duration_cast<seconds>(system_clock::now().time_since_epoch()).count();
-	std::cout << sec << " seconds since the Epoch\n";
-
-	return 0;
-}
-/*
-1661387354156146179 nanoseconds since the Epoch
-1661387354156241 microseconds since the Epoch
-1661387354156 milliseconds since the Epoch
-1661387354 seconds since the Epoch
-*/
-```
-* [std::chrono::system_clock::to_time_t - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/to_time_t)
-	* Converts t to a std::time_t type.
-	* If std::time_t has lower precision, it is implementation-defined whether the value is rounded or truncated.
-* [std::chrono::system_clock::from_time_t - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/from_time_t) 
-	* Converts t to a time point type, using the coarser precision of the two types.
-	* If time_point has lower precision, it is implementation defined whether the value is rounded or truncated.
-
-##### [std::chrono::steady_clock](https://en.cppreference.com/w/cpp/chrono/steady_clock) 
-
-* Class std::chrono::steady_clock represents a monotonic clock. The time points of this clock cannot decrease as physical time moves forward and the time between ticks of this clock is constant. This clock is not related to wall clock time (for example, it can be time since last reboot), and is most suitable for measuring intervals.
-* std::chrono::steady_clock meets the requirements of TrivialClock.		
-
-##### [std::chrono::high_resolution_clock](https://en.cppreference.com/w/cpp/chrono/high_resolution_clock) 
-
-* Class std::chrono::high_resolution_clock represents the clock with the smallest tick period provided by the implementation. It may be an alias of std::chrono::system_clock or std::chrono::steady_clock, or a third, independent clock.
-* std::chrono::high_resolution_clock meets the requirements of TrivialClock.		
-
-#### Time point
-
-* A time point is a duration of time that has passed since the epoch of a specific clock.
-* [std::chrono::time_point - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point)
-	* a point in time (class template)
-	* Class template std::chrono::time_point represents a point in time. It is implemented as if it stores a value of type Duration indicating the time interval from the start of the Clock's epoch.
-	* [std::chrono::time_point<Clock,Duration>::time_since_epoch - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point/time_since_epoch)
-		* `constexpr duration time_since_epoch() const;`
-		* returns the time point as duration since the start of its clock (public member function)
-		* Returns a duration representing the amount of time between *this and the clock's epoch.
-	* [operator==,!=,<,<=,>,>=,<=>(std::chrono::time_point) - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point/operator_cmp)
-		* Compares two time points. The comparison is done by comparing the results time_since_epoch() for the time points.
-```c++
-#include <iostream>
-#include <chrono>
-#include <ctime>
- 
-int main()
-{
-    const auto p0 = std::chrono::time_point<std::chrono::system_clock>{};
-    const auto p1 = std::chrono::system_clock::now();
-    const auto p2 = p1 - std::chrono::hours(24);
- 
-    std::time_t epoch_time = std::chrono::system_clock::to_time_t(p0);
-    std::cout << "epoch: " << std::ctime(&epoch_time);
-    std::time_t today_time = std::chrono::system_clock::to_time_t(p1);
-    std::cout << "today: " << std::ctime(&today_time);
- 
-    std::cout << "hours since epoch: "
-              << std::chrono::duration_cast<std::chrono::hours>(
-                   p1.time_since_epoch()).count() 
-              << '\n';
-    std::cout << "yesterday, hours since epoch: "
-              << std::chrono::duration_cast<std::chrono::hours>(
-                   p2.time_since_epoch()).count() 
-              << '\n';
-}
-/*
-epoch: Thu Jan  1 00:00:00 1970
-today: Fri Jun 30 10:44:11 2017
-hours since epoch: 416338
-yesterday, hours since epoch: 416314
-*/
-```
-
-#### Duration
-
-* A duration consists of a span of time, defined as some number of ticks of some time unit. For example, "42 seconds" could be represented by a duration consisting of 42 ticks of a 1-second time unit.
-* [std::chrono::duration - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration)
-	* a time interval (class template)
-	* Class template std::chrono::duration represents a time interval.
-	* It consists of a count of ticks of type Rep and a tick period, where the tick period is a compile-time rational fraction representing the time in seconds from one tick to the next.
-	* The only data stored in a duration is a tick count of type Rep. If Rep is floating point, then the duration can represent fractions of ticks. Period is included as part of the duration's type, and is only used when converting between different durations.
-	* [std::chrono::duration<Rep,Period>::count - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration/count)
-		* Returns the number of ticks for this duration.
-	* [std::chrono::duration_cast - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration/duration_cast)
-		* Converts a std::chrono::duration to a duration of different type ToDuration.
-
-##### Helper types
-
-| std::chrono::nanoseconds(C++11)  | duration type with Period std::nano |
-|- | - |
-| std::chrono::microseconds(C++11) | duration type with Period std::micro |
-| std::chrono::milliseconds(C++11) | duration type with Period std::milli |
-| std::chrono::seconds(C++11)      | duration type with Period std::ratio<1> |
-| std::chrono::minutes(C++11)      | duration type with Period std::ratio<60> |
-| std::chrono::hours(C++11)        | duration type with Period std::ratio<3600> |
-| std::chrono::days(C++20)         | duration type with Period std::ratio<86400> |
-| std::chrono::weeks(C++20)        | duration type with Period std::ratio<604800> |
-| std::chrono::months(C++20)       | duration type with Period std::ratio<2629746> |
-| std::chrono::years(C++20)        | duration type with Period std::ratio<31556952> |
-
-##### Literals
-
-* Defined in inline namespace std::literals::chrono_literals
-
-|[operator""h](https://en.cppreference.com/w/cpp/chrono/operator%22%22h) (C++14)|A std::chrono::duration literal representing hours (function)|
-|-|-|
-|[operator""min](https://en.cppreference.com/w/cpp/chrono/operator%22%22min) (C++14)|A std::chrono::duration literal representing minutes (function)|
-|[operator""s](https://en.cppreference.com/w/cpp/chrono/operator%22%22s) (C++14)|A std::chrono::duration literal representing seconds (function)|
-|[operator""ms](https://en.cppreference.com/w/cpp/chrono/operator%22%22ms) (C++14)|A std::chrono::duration literal representing milliseconds (function)|
-|[operator""us](https://en.cppreference.com/w/cpp/chrono/operator%22%22us) (C++14)|A std::chrono::duration literal representing microseconds (function)|
-|[operator""ns](https://en.cppreference.com/w/cpp/chrono/operator%22%22ns) (C++14)|A std::chrono::duration literal representing nanoseconds (function)|
-|[operator""d](https://en.cppreference.com/w/cpp/chrono/operator%22%22d) (C++20)|A std::chrono::day literal representing a day of a month (function)|
-|[operator""y](https://en.cppreference.com/w/cpp/chrono/operator%22%22y) (C++20)|A std::chrono::year literal representing a particular year (function)|
-
-### [C-style date and time library](https://en.cppreference.com/w/cpp/chrono/c)
-
-* Also provided are the C-style date and time functions, such as std::time_t, std::difftime, and CLOCKS_PER_SEC.
-* Defined in header \<ctime>
-
-#### Functions
-
-* [std::time - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/time)
-	* `std::time_t time( std::time_t* arg );`
-	* returns the current time of the system as time since epoch (function)
-	* Returns the current calendar time encoded as a std::time_t object, and also stores it in the object pointed to by arg, unless arg is a null pointer.
-	* Parameters
-		* arg	-	pointer to a std::time_t object to store the time, or a null pointer
-	* Return value
-		* Current calendar time encoded as std::time_t object on success, (std::time_t)(-1) on error. If arg is not null, the return value is also stored in the object pointed to by arg.
-	* Notes
-		* The encoding of calendar time in std::time_t is unspecified, but most systems conform to the POSIX specification and return a value of integral type holding 86400 times the number of calendar days since the Epoch plus the number of seconds that have passed since the last midnight UTC. Most notably, POSIX time does not (and can not) take leap seconds into account, so that this integral value is not equal to the number of S.I. seconds that have passed since the epoch, but rather is reduced with the number of leap seconds that have occurred since the epoch. Implementations in which std::time_t is a 32-bit signed integer (many historical implementations) fail in the year 2038.
-```c++
-#include <ctime>
-#include <iostream>
- 
-int main()
-{
-    std::time_t result = std::time(nullptr);
-    std::cout << std::asctime(std::localtime(&result))
-              << result << " seconds since the Epoch\n";
-}
-/*
-Wed Sep 21 10:27:52 2011
-1316615272 seconds since the Epoch
-*/
-```
-* [std::localtime - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/localtime)
-	* `std::tm* localtime( const std::time_t *time );`
-	* converts time since epoch to calendar time expressed as local time (function)
-	* Converts given time since epoch as std::time_t value into calendar time, expressed in local time.
-	* Parameters
-		* time	-	pointer to a std::time_t object to convert
-	* Return value
-		* pointer to a static internal std::tm object on success, or null pointer otherwise. The structure may be shared between std::gmtime, std::localtime, and std::ctime, and may be overwritten on each invocation.
-	* Notes
-		* This function may not be thread-safe.
-		* POSIX requires that this function sets errno to EOVERFLOW if it fails because the argument is too large.
-		* POSIX specifies that the timezone information is determined by this function as if by calling tzset, which reads the environment variable TZ.
-```c++
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <ctime>
- 
-int main()
-{
-    setenv("TZ", "/usr/share/zoneinfo/America/Los_Angeles", 1); // POSIX-specific
- 
-    std::tm tm{};  // zero initialise
-    tm.tm_year = 2020-1900; // 2020
-    tm.tm_mon = 2-1; // February
-    tm.tm_mday = 15; // 15th
-    tm.tm_hour = 10;
-    tm.tm_min = 15;
-    tm.tm_isdst = 0; // Not daylight saving
-    std::time_t t = std::mktime(&tm); 
- 
-    std::cout << "UTC:   " << std::put_time(std::gmtime(&t), "%c %Z") << '\n';
-    std::cout << "local: " << std::put_time(std::localtime(&t), "%c %Z") << '\n';
-}
-/*
-UTC:   Sat Feb 15 18:15:00 2020 GMT
-local: Sat Feb 15 10:15:00 2020 PST
-*/
-```
-* [std::mktime - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/mktime)
-	* `std::time_t mktime( std::tm* time );`
-	* converts calendar time to time since epoch (function)
-	* Converts local calendar time to a time since epoch as a time_t object. time->tm_wday and time->tm_yday are ignored. The values in time are permitted to be outside their normal ranges.
-	* A negative value of time->tm_isdst causes mktime to attempt to determine if Daylight Saving Time was in effect.
-	* If the conversion is successful, the time object is modified. All fields of time are updated to fit their proper ranges. time->tm_wday and time->tm_yday are recalculated using information available in other fields.
-	* Parameters
-		* time	-	pointer to a std::tm object specifying local calendar time to convert
-	* Return value
-		* Time since epoch as a std::time_t object on success or -1 if time cannot be represented as a std::time_t object.
-	* Notes
-		* If the std::tm object was obtained from std::get_time or the POSIX strptime, the value of tm_isdst is indeterminate, and needs to be set explicitly before calling mktime.
-```c++
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <ctime>
- 
-int main()
-{
-    setenv("TZ", "/usr/share/zoneinfo/America/Los_Angeles", 1); // POSIX-specific
- 
-    std::tm tm{};  // zero initialise
-    tm.tm_year = 2020-1900; // 2020
-    tm.tm_mon = 2-1; // February
-    tm.tm_mday = 15; // 15th
-    tm.tm_hour = 10;
-    tm.tm_min = 15;
-    tm.tm_isdst = 0; // Not daylight saving
-    std::time_t t = std::mktime(&tm); 
-    std::tm local = *std::localtime(&t);
- 
-    std::cout << "local: " << std::put_time(&local, "%c %Z") << '\n';
-}
-/*
-local: Sat Feb 15 10:15:00 2020 PST
-*/
-```
-* [C library function - mktime()](https://www.tutorialspoint.com/c_standard_library/c_function_mktime.htm)
-* [mktime - C++ Reference](https://cplusplus.com/reference/ctime/mktime/)
-* [std::get_time - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/get_time)
-	* parses a date/time value of specified format (function template)
-	* Defined in header \<iomanip>
-	* `template< class CharT > /*unspecified*/ get_time( std::tm* tmb, const CharT* fmt ); (since C++11)`
-	* When used in an expression in >> get_time(tmb, fmt), parses the character input as a date/time value according to format string fmt according to the std::time_get facet of the locale currently imbued in the input stream in. The resultant value is stored in a std::tm object pointed to by tmb.
-```c++
-#include <iostream>
-#include <sstream>
-#include <locale>
-#include <iomanip>
- 
-int main()
-{
-    std::tm t = {};
-    std::istringstream ss("2011-Februar-18 23:12:34");
-    ss.imbue(std::locale("de_DE.utf-8"));
-    ss >> std::get_time(&t, "%Y-%b-%d %H:%M:%S");
- 
-    if (ss.fail())
-        std::cout << "Parse failed\n";
-    else
-        std::cout << std::put_time(&t, "%c") << '\n';
-}
-/*
-Sun Feb 18 23:12:34 2011
-*/
-```
-* [std::put_time - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/put_time)
-	* formats and outputs a date/time value according to the specified format (function template)
-	* Defined in header \<iomanip>
-	* `template< class CharT > /*unspecified*/ put_time( const std::tm* tmb, const CharT* fmt ); (since C++11)
-	* When used in an expression out << put_time(tmb, fmt), converts the date and time information from a given calendar time tmb to a character string according to format string fmt, as if by calling std::strftime, std::wcsftime, or analog (depending on CharT), according to the std::time_put facet of the locale currently imbued in the output stream out.
-```c++
-#include <iostream>
-#include <iomanip>
-#include <ctime>
-#include <chrono>
- 
-int main()
-{
-    std::time_t t = std::time(nullptr);
-    std::tm tm = *std::localtime(&t);
- 
-    std::cout.imbue(std::locale("ru_RU.utf8"));
-    std::cout << "ru_RU: " << std::put_time(&tm, "%c %Z") << '\n';
- 
-    std::cout.imbue(std::locale("ja_JP.utf8"));
-    std::cout << "ja_JP: " << std::put_time(&tm, "%c %Z") << '\n';
-
-    auto current_time = std::chrono::system_clock::now();
-    auto current_time_t = std::chrono::system_clock::to_time_t(current_time);
-    std::cout << std::put_time(std::localtime(&current_time_t), "%Y%m%d") << '\n';
-
-    // convert current time to string
-    std::stringstream ss {};
-    ss << std::put_time(std::localtime(&current_time_t), "%Y%m%d");
-    std::cout << ss.str() << '\n';
-    
-    return 0;
-}
-/*
-ru_RU: Сб 26 ноя 2022 07:11:36 CET
-ja_JP: 2022年11月26日 07時11分36秒 CET
-20221126
-20221126
-*/
-```
-
-#### Constants
-
-#### Types
-
-* [std::tm - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/tm)
-	* calendar time type (class)
-	* Structure holding a calendar date and time broken down into its components.
-	* Member objects
-
-|int tm_sec | seconds after the minute – [0, 60] (since C++11) (public member object)|
-|-|-|
-|int tm_min|minutes after the hour – [0, 59] (public member object)|
-|int tm_hour|hours since midnight – [0, 23] (public member object)|
-|int tm_mday|day of the month – [1, 31] (public member object)|
-|int tm_mon|months since January – [0, 11] (public member object)|
-|int tm_year|years since 1900 (public member object)|
-|int tm_wday|days since Sunday – [0, 6] (public member object)|
-|int tm_yday|days since January 1 – [0, 365] (public member object)|
-|int tm_isdst|Daylight Saving Time flag. The value is positive if DST is in effect, zero if not and negative if no information is available (public member object)|
-
-```c++
-#include <ctime>
-#include <iostream>
- 
-int main()
-{
-    std::tm start{};
-    start.tm_mday = 1;
- 
-    std::mktime(&start);
-    std::cout << std::asctime(&start)
-              << "sizeof(std::tm) = "
-              << sizeof(std::tm) << '\n';
-}
-/*
-Mon Jan  1 00:00:00 1900
-sizeof(std::tm) = 56
-*/
-```
-* [std::time_t - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/time_t)
-	* time since epoch type (typedef)
-	* Arithmetic type capable of representing times.
-	* Although not defined, this is almost always an integral value holding the number of seconds (not counting leap seconds) since 00:00, Jan 1 1970 UTC, corresponding to POSIX time.
-
-### MISC
-
-* [现代C++编程实践(五)—如何使用时间库](https://mp.weixin.qq.com/s/JrXYKSm7sEHV8X87X-Bgzg)
-```c++
-#include <iostream>
-#include <iomanip>
-#include <chrono>
-
-
-std::ostream& operator<<(std::ostream &os,const std::chrono::time_point<std::chrono::system_clock> &t) {
-    const auto ltime(std::chrono::system_clock::to_time_t(t));
-    const auto localTime(std::localtime(&ltime));
-    return os << std::put_time(localTime, "%c %Z");
-}
-
-using hours = std::chrono::duration<std::chrono::hours::rep, 
-                                    std::ratio_multiply<std::chrono::hours::period, std::ratio<1> > >;
-constexpr hours operator ""_hours(unsigned long long h) {
-    return hours {h};
-}
-
-int main()
-{
-    auto now(std::chrono::system_clock::now());
-    std::cout << "当前时间是:" << now << "\n12小时后是:" << (now + 12_hours) << std::endl;
-    return 0;
-}
-/*
-当前时间是:Tue Oct 18 01:02:08 2022 UTC
-12小时后是:Tue Oct 18 13:02:08 2022 UTC
-*/
-```
-* [c++ - How to parse a date string into a c++11 std::chrono time_point or similar? - Stack Overflow](https://stackoverflow.com/questions/21021388/how-to-parse-a-date-string-into-a-c11-stdchrono-time-point-or-similar) 
-	* [std::get_time - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/get_time) 
-		* When used in an expression in >> get_time(tmb, fmt), parses the character input as a date/time value according to format string fmt according to the std::time_get facet of the locale currently imbued in the input stream in. The resultant value is stored in a std::tm object pointed to by tmb.
-	* [mktime - cppreference.com](https://en.cppreference.com/w/c/chrono/mktime)
-		* Renormalizes local calendar time expressed as a struct tm object and also converts it to time since epoch as a time_t object. time->tm_wday and time->tm_yday are ignored. The values in time are not checked for being out of range.
-		* A negative value of time->tm_isdst causes mktime to attempt to determine if Daylight Saving Time was in effect in the specified time.
-		* If the conversion to time_t is successful, the time object is modified. All fields of time are updated to fit their proper ranges. time->tm_wday and time->tm_yday are recalculated using information available in other fields. 
-* [Print System Time in C++ | Delft Stack](https://www.delftstack.com/howto/cpp/system-time-in-cpp/) 
-	* [std::strftime - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/strftime)
-		* Converts the date and time information from a given calendar time time to a null-terminated multibyte character string str according to format string format. Up to count bytes are written.
-* [Outputting Date and Time in C++ using std::chrono - Stack Overflow](https://stackoverflow.com/questions/17223096/outputting-date-and-time-in-c-using-stdchrono)
-* [c++ - C++11 get current date and time as string - Stack Overflow](https://stackoverflow.com/questions/34963738/c11-get-current-date-and-time-as-string)
-* [c++ - Format no such file or directory - Stack Overflow](https://stackoverflow.com/questions/65083544/format-no-such-file-or-directory)
-  * According to this: https://en.cppreference.com/w/cpp/compiler_support there are currently no compilers that support "Text formatting" (P0645R10, std::format). (As of December 2020)
-* [c++ - can't include std::format - Stack Overflow](https://stackoverflow.com/questions/63017719/cant-include-stdformat)
-  * As of July 2020 none of the standard library implementations provide std::format. Until they do you can use the {fmt} library std::format is based on:
-* [c++ - How to use the \<format> header - Stack Overflow](https://stackoverflow.com/questions/61441494/how-to-use-the-format-header)
-  * Use libfmt. The \<format> header is essentially a standardized libfmt (with a few small features removed, if I remember correctly).
-
-## [Input/output library](https://en.cppreference.com/w/cpp/io)
-
-* C++ includes two input/output libraries: an OOP-style stream-based I/O library and the standard set of C-style I/O functions.
-
-### Stream-based I/O
-
-* The stream-based input/output library is organized around abstract input/output devices. These abstract devices allow the same code to handle input/output to files, memory streams, or custom adaptor devices that perform arbitrary operations (e.g. compression) on the fly.
-* Most of the classes are templated, so they can be adapted to any basic character type. Separate typedefs are provided for the most common basic character types (char and wchar_t). The classes are organized into the following hierarchy:
-![image](https://user-images.githubusercontent.com/34557994/166664893-b2b25c27-7205-42f2-8836-cc67245bd81b.png)
-* [【ZZ】cin、cin.get()、cin.getline()、getline()、gets()等函数的用法 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2011/04/21/2024345.html)
-
-#### File I/O
-
-##### [std::basic_ifstream](https://en.cppreference.com/w/cpp/io/basic_ifstream)
-
-* implements high-level file stream input operations (class template)
-* [ifstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/)
-  * Input file stream class
-    * Input stream class to operate on files.
-    * Objects of this class maintain a filebuf object as their internal stream buffer, which performs input/output operations on the file they are associated with (if any).
-    * File streams are associated with files either on construction, or by calling member open.
-    * Apart from the internal file stream buffer, objects of this class keep a set of internal fields inherited from ios_base, ios and istream
-  * [ifstream::is_open - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/is_open/)
-  * [ifstream::close - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/close/)
-  * [Read file line by line using C++](https://www.tutorialspoint.com/read-file-line-by-line-using-cplusplus)
-  * [reading and using data in a .csv file - C++ Forum](http://www.cplusplus.com/forum/beginner/157129/)
-  * [getline (string) - C++ Reference](https://www.cplusplus.com/reference/string/string/getline/)
-  * [C++检测一个文件是否存在 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/5640920.html)
-
-##### [std::basic_ofstream](https://en.cppreference.com/w/cpp/io/basic_ofstream)
-
-* implements high-level file stream output operations (class template)
-* [ofstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/)
-  * Output file stream
-    * Output stream class to operate on files.
-    * Objects of this class maintain a filebuf object as their internal stream buffer, which performs input/output operations on the file they are associated with (if any).
-    * File streams are associated with files either on construction, or by calling member open.
-    * Apart from the internal file stream buffer, objects of this class keep a set of internal fields inherited from ios_base, ios and istream
-  * [ofstream::close - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/close/)
-    * Close file
-      * Closes the file currently associated with the object, disassociating it from the stream.
-      * Any pending output sequence is written to the file.
-      * If the stream is currently not associated with any file (i.e., no file has successfully been open with it), calling this function fails.
-      * The file association of a stream is kept by its internal stream buffer:
-      * Internally, the function calls rdbuf()->close(), and sets failbit in case of failure.
-      * Note that any open file is automatically closed when the ofstream object is destroyed.
-  * [ofstream::is_open - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/is_open/)
-    * Check if file is open
-      * Returns whether the stream is currently associated to a file.
-      * Streams can be associated to files by a successful call to member open or directly on construction, and disassociated by calling close or on destruction.
-      * The file association of a stream is kept by its internal stream buffer:
-        * Internally, the function calls rdbuf()->is_open()
-  * [ofstream::ofstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/ofstream/)
-    * Construct object
-      * Constructs an ofstream object
-  * [replace line in a file C++](https://www.py4u.net/discuss/81342)
-
-#### String I/O
-
-* Defined in header \<sstream>
-	
-##### [std::basic_stringstream](https://en.cppreference.com/w/cpp/io/basic_stringstream)
-
-* implements high-level string stream input/output operations (class template)
-* Inherited from [std::basic_istream](https://en.cppreference.com/w/cpp/io/basic_istream)
-	* [operator>>](https://en.cppreference.com/w/cpp/io/basic_istream/operator_gtgt)
-		* extracts formatted data (public member function of std::basic_istream\<CharT,Traits>)
-* Inherited from [std::basic_ostream](https://en.cppreference.com/w/cpp/io/basic_ostream)
-	* [operator<<](https://en.cppreference.com/w/cpp/io/basic_ostream/operator_ltlt)
-		* inserts formatted data (public member function of std::basic_ostream\<CharT,Traits>)
-* [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
-* [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
-	* A stringstream associates a string object with a stream allowing you to read from the string as if it were a stream (like cin).
-	* Basic methods are –
-		* clear() — to clear the stream
-		* str() — to get and set string object whose content is present in stream.
-		* operator << — add a string to the stringstream object.
-		* operator >> — read something from the stringstream object,
-* [StringStream | HackerRank](https://www.hackerrank.com/challenges/c-tutorial-stringstream/problem)
-```c++
-#include <cmath>
-#include <cstdio>
-#include <vector>
-#include <iostream>
-#include <algorithm>
-#include <sstream>  // std::stringstream
-using namespace std;
-
-
-vector<int> parseInts(const string &str)
-{
-    stringstream ss(str);
-    char ch;
-    int temp;
-    vector<int> result;
-    
-    while (ss) {
-        ss >> temp >> ch;
-        result.push_back(temp);
-    }
-    
-    return result;    
-}
-
-
-int main() {
-    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
-    string s;
-    cin >> s;
-    
-    vector<int> vResult;
-    vResult = parseInts(s);
-    
-    for (const int &i : vResult)
-        cout << i << endl;
-    
-    return 0;
-}
-```
-
-##### [std::basic_ostringstream](https://en.cppreference.com/w/cpp/io/basic_ostringstream)
-
-* implements high-level string stream output operations (class template)
-* [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
-	* Output stream class to operate on strings.
-	* Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
-	* Characters can be inserted into the stream with any operation allowed on output streams.
-	* [ostringstream::str - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/str/)
-	* string str() const;
-	* void str (const string& s);
-	* Get/set content
-		* The first form (1) returns a string object with a copy of the current contents of the stream.
-		* The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
-		* Internally, the function calls the str member of its internal string buffer object.
-
-#### Synchronized output
-
-* Defined in header \<syncstream>
-
-| [basic_syncbuf (C++20)](https://en.cppreference.com/w/cpp/io/basic_syncbuf) | synchronized output device wrapper (class template) |
-| - | - |
-| [basic_osyncstream (C++20)](https://en.cppreference.com/w/cpp/io/basic_osyncstream) | synchronized output stream wrapper (class template) |
-
-* [Synchronized Output Streams with C++20 - ModernesCpp.com](https://www.modernescpp.com/index.php/synchronized-outputstreams#:~:text=std%3A%3Acout%20is%20thread,Each%20character%20is%20written%20atomically.)
-	* With C++20, writing synchronized to std::cout is a piece of cake. std::basic_syncbuf is a wrapper for a std::basic_streambuf. It accumulates output in its buffer. The wrapper sets its content to the wrapped buffer when it is destructed. Consequently, the content appears as a contiguous sequence of characters, and no interleaving of characters can happen.
-	* Thanks to std::basic_osyncstream, you can directly write synchronously to std::cout by using a named synchronized output stream.
-	* Here is how the previous program coutUnsynchronized.cpp is refactored to write synchronized to std::cout. So far, only GCC 11 supports synchronized output streams.
-
-### Predefined standard stream objects
-
-* Defined in header \<iostream>
-
-| cin / wcin | reads from the standard C input stream stdin (global object) |
-| - | - |
-| cout / wcout | writes to the standard C output stream stdout (global object) | 
-| [cerr / wcerr](https://en.cppreference.com/w/cpp/io/cerr) | writes to the standard C error stream stderr, unbuffered (global object) | 
-| clog / wclog | writes to the standard C error stream stderr (global object) | 
-
-* [std::cin, std::wcin - cppreference.com](https://en.cppreference.com/w/cpp/io/cin)
-	* reads from the standard C input stream stdin (global object)
-	* The global objects std::cin and std::wcin control input from a stream buffer of implementation-defined type (derived from std::streambuf), associated with the standard C input stream stdin.
-	* These objects are guaranteed to be initialized during or before the first time an object of type std::ios_base::Init is constructed and are available for use in the constructors and destructors of static objects with ordered initialization (as long as \<iostream> is included before the object is defined).
-	* `Unless sync_with_stdio(false) has been issued, it is safe to concurrently access these objects from multiple threads for both formatted and unformatted input.`
-	* Once std::cin is constructed, std::cin.tie() returns &std::cout, and likewise, std::wcin.tie() returns &std::wcout. This means that any formatted input operation on std::cin forces a call to std::cout.flush() if any characters are pending for output.
-	* Notes
-		* The 'c' in the name refers to "character" (stroustrup.com FAQ); cin means "character input" and wcin means "wide character input"
-	* [C++ cin 的详细用法](https://mp.weixin.qq.com/s/BP3gfSd7Ya_9MLE_ArM9LA)
-		* https://dablelv.blog.csdn.net/article/details/48213811
-		* 1. cin 简介
-		* 2. cin 的常用读取方法
-			* 2.1 cin>> 的用法
-			* 2.2 cin.get() 的用法
-				* 2.2.1 cin.get() 读取一个字符
-				* 2.2.2 cin.get() 读取一行
-			* 2.3 cin.getline() 读取一行
-		* 3. cin 的条件状态
-		* 4. cin 清空输入缓冲区
-		* 5. 从标准输入读取一行字符串的其它方法
-			* 5.1 getline() 读取一行
-			* 5.2 gets() 读取一行
-* [std::cout, std::wcout - cppreference.com](https://en.cppreference.com/w/cpp/io/cout)
-	* writes to the standard C output stream stdout (global object)
-	* The global objects std::cout and std::wcout control output to a stream buffer of implementation-defined type (derived from std::streambuf), associated with the standard C output stream stdout.
-	* These objects are guaranteed to be initialized during or before the first time an object of type std::ios_base::Init is constructed and are available for use in the constructors and destructors of static objects with ordered initialization (as long as \<iostream> is included before the object is defined).
-	* Unless std::ios_base::sync_with_stdio(false) has been issued, it is safe to concurrently access these objects from multiple threads for both formatted and unformatted output.
-	* By specification of std::cin, std::cin.tie() returns &std::cout. This means that any input operation on std::cin executes std::cout.flush() (via std::basic_istream::sentry's constructor). Similarly, std::wcin.tie() returns &std::wcout.
-	* By specification of std::cerr, std::cerr.tie() returns &std::cout. This means that any output operation on std::cerr executes std::cout.flush() (via std::basic_ostream::sentry's constructor). Similarly, std::wcerr.tie() returns &std::wcout. (since C++11)
-	* Notes
-		* The 'c' in the name refers to "character" (stroustrup.com FAQ); cout means "character output" and wcout means "wide character output".
-		* Because dynamic initialization of templated variables are unordered, it is not guaranteed that std::cout has been initialized to a usable state before the initialization of such variables begins, unless an object of type std::ios_base::Init has been constructed.
-* [Fast I/O for Competitive Programming - GeeksforGeeks](https://www.geeksforgeeks.org/fast-io-for-competitive-programming/)
-    ```c++
-    #include <bits/stdc++.h>
-    using namespace std;
-
-    #define endl '\n'
-
-    int main()
-    {
-      ios_base::sync_with_stdio(false);
-      cin.tie(NULL);
-      return 0;
-    }
-    ```
-    * [c++ - Significance of ios_base::sync_with_stdio(false); cin.tie(NULL); - Stack Overflow](https://stackoverflow.com/questions/31162367/significance-of-ios-basesync-with-stdiofalse-cin-tienull/31165481#31165481)
-    * [std::ios_base::sync_with_stdio - cppreference.com](https://en.cppreference.com/w/cpp/io/ios_base/sync_with_stdio)
-    * [ios::tie - C++ Reference](https://www.cplusplus.com/reference/ios/ios/tie/)
-
-### [Input/output manipulators](https://en.cppreference.com/w/cpp/io/manip)
-
-* The stream-based I/O library uses I/O manipulators (e.g. std::boolalpha, std::hex, etc.) to control how streams behave.
-* [std::boolalpha, std::noboolalpha - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/boolalpha)
-	* switches between textual and numeric representation of booleans
-* [std::endl - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/endl)
-	* outputs '\n' and flushes the output stream (function template)
-	* Inserts a newline character into the output sequence os and flushes it as if by calling os.put(os.widen('\n')) followed by os.flush().
-	* This is an output-only I/O manipulator, it may be called with an expression such as out << std::endl for any out of type std::basic_ostream.
-	* Notes
-		* This manipulator may be used to produce a line of output immediately, e.g. when displaying output from a long-running process, logging activity of multiple threads or logging activity of a program that may crash unexpectedly. An explicit flush of std::cout is also necessary before a call to std::system, if the spawned process performs any screen I/O. In most other usual interactive I/O scenarios, std::endl is redundant when used with std::cout because any input from std::cin, output to std::cerr, or program termination forces a call to std::cout.flush(). Use of std::endl in place of '\n', encouraged by some sources, may significantly degrade output performance.
-		* In many implementations, standard output is line-buffered, and writing '\n' causes a flush anyway, unless std::ios::sync_with_stdio(false) was executed. In those situations, unnecessary endl only degrades the performance of file output, not standard output.
-		* The code samples on this wiki follow Bjarne Stroustrup and The C++ Core Guidelines in flushing the standard output only where necessary.
-		* When an incomplete line of output needs to be flushed, the std::flush manipulator may be used.
-		* When every character of output needs to be flushed, the std::unitbuf manipulator may be used.
-* [std::quoted - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/quoted)
-	* inserts and extracts quoted strings with embedded spaces
-* [manipulators - C++ Reference](http://www.cplusplus.com/reference/library/manipulators/)
-    * Basic format flags
-        * These manipulators are usable on both input and output streams, although many only have an effect when applied to either output or input streams.
-        * Independent flags (switch on):
-            * [showbase - C++ Reference](http://www.cplusplus.com/reference/ios/showbase/)
-            * [showpos - C++ Reference](http://www.cplusplus.com/reference/ios/showpos/)
-            * [uppercase - C++ Reference](http://www.cplusplus.com/reference/ios/uppercase/)
-        * Independent flags (switch off):
-            * [noshowpos - C++ Reference](http://www.cplusplus.com/reference/ios/noshowpos/)
-            * [nouppercase - C++ Reference](http://www.cplusplus.com/reference/ios/nouppercase/)
-        * Numerical base format flags ("basefield" flags):
-            * [dec - C++ Reference](http://www.cplusplus.com/reference/ios/dec/)
-            * [hex - C++ Reference](http://www.cplusplus.com/reference/ios/hex/?kw=hex)
-        * Floating-point format flags ("floatfield" flags):
-            * [fixed - C++ Reference](http://www.cplusplus.com/reference/ios/fixed/)
-            * [scientific - C++ Reference](http://www.cplusplus.com/reference/ios/scientific/)
-        * Adustment format flags ("adjustfield" flags):
-            * [left - C++ Reference](http://www.cplusplus.com/reference/ios/left/)
-            * [right - C++ Reference](http://www.cplusplus.com/reference/ios/right/)
-    * Parameterized manipulators
-        * These functions take parameters when used as manipulators. They require the explicit inclusion of the header file \<iomanip\>.
-        * [setfill - C++ Reference](http://www.cplusplus.com/reference/iomanip/setfill/)
-        * [setprecision - C++ Reference](http://www.cplusplus.com/reference/iomanip/setprecision/)
-        * [setw - C++ Reference](http://www.cplusplus.com/reference/iomanip/setw/)
-* [Print Pretty | HackerRank](https://www.hackerrank.com/challenges/prettyprint/problem)
-```c++
-#include <iostream>
-#include <iomanip> 
-using namespace std;
-
-int main() {
-  int T; cin >> T;
-  cout << setiosflags(ios::uppercase);
-  cout << setw(0xf) << internal;
-  while(T--) {
-      double A; cin >> A;
-      double B; cin >> B;
-      double C; cin >> C;
-
-      // LINE 1 
-      cout << hex << left << showbase << nouppercase; // formatting
-      cout << (long long) A << endl; // output
-
-      // LINE 2
-      cout << dec << right << setw(15) << setfill('_') << showpos << fixed << setprecision(2); // formatting
-      cout << B << endl; // output
-
-      // LINE 3
-      cout << scientific << uppercase << noshowpos << setprecision(9); // formatting
-      cout << C << endl; // output
-  }
-
-  return 0;
-}
-```
-* How to set precision of float / double in output ?
-    * [std::setprecision - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/setprecision)
-        * /*unspecified*/ setprecision( int n );
-        * When used in an expression out << setprecision(n) or in >> setprecision(n), sets the precision parameter of the stream out or in to exactly n.
-    * [std::fixed, std::scientific, std::hexfloat, std::defaultfloat - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/fixed)
-        * This is an I/O manipulator, it may be called with an expression such as out << std::fixed for any out of type std::basic_ostream or with an expression such as in >> std::scientific for any in of type std::basic_istream.
-        * `cout << fixed << setprecision(9) << e << endl; // 14049.304930000`
-
-### [C-style file input/output](https://en.cppreference.com/w/cpp/io/c)
-
-* The C I/O subset of the C++ standard library implements C-style stream input/output operations. The \<cstdio> header provides generic file operation support and supplies functions with narrow and multibyte character input/output capabilities, and the \<cwchar> header provides functions with wide character input/output capabilities.
-* C streams are denoted by objects of type std::FILE that can only be accessed and manipulated through pointers of type std::FILE*. Each C stream is associated with an external physical device (file, standard input stream, printer, serial port, etc).
-* [c++ - Where is `%p` useful with printf? - Stack Overflow](https://stackoverflow.com/questions/2369541/where-is-p-useful-with-printf)
-	* Always use %p for pointers.
-
-### [{fmt}](https://fmt.dev/latest/index.html)
-
-* {fmt} is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
-* [Usage — fmt 8.1.1 documentation](https://fmt.dev/latest/usage.html)
-	* To use the {fmt} library, add fmt/core.h, fmt/format.h, fmt/format-inl.h, src/format.cc and optionally other headers from a release archive or the Git repository to your project. Alternatively, you can build the library with CMake.
-* [Format String Syntax — fmt 8.1.1 documentation](https://fmt.dev/latest/syntax.html)
-
-## [Filesystem library (since C++17)](https://en.cppreference.com/w/cpp/filesystem)
-
-* The Filesystem library provides facilities for performing operations on file systems and their components, such as paths, regular files, and directories.
-* The filesystem library was originally developed as boost.filesystem, was published as the technical specification ISO/IEC TS 18822:2015, and finally merged to ISO C++ as of C++17. The boost implementation is currently available on more compilers and platforms than the C++17 library.
-* The filesystem library facilities may be unavailable if a hierarchical file system is not accessible to the implementation, or if it does not provide the necessary capabilities. Some features may not be available if they are not supported by the underlying file system (e.g. the FAT filesystem lacks symbolic links and forbids multiple hardlinks). In those cases, errors must be reported.
-* The behavior is undefined if the calls to functions in this library introduce a file system race, that is, when multiple threads, processes, or computers interleave access and modification to the same object in a file system.
-* [C如何获取文件夹下所有文件 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/3873279.html)
-* [C++如何用system命令获取文件夹下所有文件名 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/3873250.html)
-* [C++实现获取当前执行文件全路径 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2010/11/02/1867584.html)
-* [freopen - C/C++文件输入输出利器 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2011/04/22/2024418.html)
-* How to read csv files with BOM ?
-	* read as UTF-8 file or
-	* skip BOM in ifstream or
-	* remove BOM in input files
-	* [Byte order mark - Wikipedia](https://en.wikipedia.org/wiki/Byte_order_mark#Representations_of_byte_order_marks_by_encoding)
-		* The byte order mark (BOM) is a particular usage of the special Unicode character, U+FEFF BYTE ORDER MARK, whose appearance as a magic number at the start of a text stream can signal several things to a program reading the text
-	* [Byte Order Mark - Globalization | Microsoft Docs](https://docs.microsoft.com/en-us/globalization/encoding/byte-order-mark)
-	* [c++ - Why am i getting these invalid characters before my file data? - Stack Overflow](https://stackoverflow.com/questions/30720619/why-am-i-getting-these-invalid-characters-before-my-file-data)
-	* [c++ - Characters not recognized while reading from file - Stack Overflow](https://stackoverflow.com/questions/48985128/characters-not-recognized-while-reading-from-file)
-		* [C++ read and write UTF-8 file using standard libarary | sockbandit](https://sockbandit.wordpress.com/2012/05/31/c-read-and-write-utf-8-file-using-standard-libarary/)
-	* [byte - How do I remove the character "ï»¿" from the beginning of a text file in C++? - Stack Overflow](https://stackoverflow.com/questions/20778921/how-do-i-remove-the-character-%C3%AF-from-the-beginning-of-a-text-file-in-c/20778970)
-	* [C++ reading from file puts three weird characters - Stack Overflow](https://stackoverflow.com/questions/10417613/c-reading-from-file-puts-three-weird-characters)
-	* [r - Weird characters added to first column name after reading a toad-exported csv file - Stack Overflow](https://stackoverflow.com/questions/22974765/weird-characters-added-to-first-column-name-after-reading-a-toad-exported-csv-fi)
-	* [How to remove BOM from any text/XML file](https://www.ibm.com/support/pages/how-remove-bom-any-textxml-file)
-```c++
-std::unordered_map<std::string, std::vector<std::string> > ReadCSV(const std::string& filename)
-{
-    std::ifstream ifs(filename, std::ifstream::in);
-    std::unordered_map<std::string, std::vector<std::string> > mData{};
-
-    if (ifs.is_open()) {
-        std::string line{};
-        auto checkedBOM = false;
-        const std::unordered_set<std::string> setBOM{ "\xef\xbb\xbf" };
-
-        while (std::getline(ifs, line)) {
-            if (!checkedBOM) {
-                if (setBOM.count(line.substr(0, 3)) > 0) {
-                    line = line.substr(3);
-                }
-                checkedBOM = true;
-            }
-
-            std::stringstream ss{ line };
-            std::string value{};
-            std::vector<std::string> vValue{};
-
-            while (std::getline(ss, value, ',')) {
-                vValue.push_back(value);
-            }
-
-            mData[vValue[0]] = vValue;
-        }
-
-        ifs.close();
-    }
-    else {
-        std::cerr << "Error opening file [" << filename << "]!";
-    }
-
-    return mData;
-}
-```
-
-### Classes
-
-* Defined in header \<filesystem>
-* Defined in namespace std::filesystem 
-* [\<filesystem> | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/filesystem?view=msvc-160)
-  * Include the header \<filesystem> for access to classes and functions that manipulate and retrieve information about paths, files, and directories.
-
-* [std::filesystem::path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path)
-  * [std::filesystem::path::concat, std::filesystem::path::operator+= - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/concat)
-    * Concatenates the current path and the argument
-  * [std::filesystem::path::extension - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/extension)
-  * [std::filesystem::path::filename - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/filename)
-  * [std::filesystem::operator/(std::filesystem::path) - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/operator_slash)
-    * Concatenates two path components using the preferred directory separator if appropriate (see operator/= for details).
-    * Effectively returns path(lhs) /= rhs.
-  * [std::filesystem::path::parent_path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/parent_path)
-  * [std::filesystem::path::replace_filename - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/replace_filename)
-  * [std::filesystem::path::replace_extension - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/replace_extension)
-  * [std::filesystem::path::stem - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/stem)
-    * Returns the filename identified by the generic-format path stripped of its extension.
-    * Returns the substring from the beginning of filename() up to and not including the last period (.) character, with the following exceptions:
-      * If the first character in the filename is a period, that period is ignored (a filename like ".profile" is not treated as an extension)
-      * If the filename is one of the special filesystem components dot or dot-dot, or if it has no periods, the function returns the entire filename().
-  * [std::filesystem::operator/(std::filesystem::path) - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/operator_slash)
-* [std::filesystem::filesystem_error - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/filesystem_error)
-* [std::filesystem::directory_entry - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/directory_entry)
-  * Represents a directory entry. The object stores a path as a member and may also store additional file attributes (hard link count, status, symlink status file size, and last write time) during directory iteration.
-  * [std::filesystem::directory_entry::path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/directory_entry/path)
-  	* Returns the full path the directory entry refers to.
-  * [How can I get the list of files in a directory using C or C++? - Stack Overflow](https://stackoverflow.com/questions/612097/how-can-i-get-the-list-of-files-in-a-directory-using-c-or-c)
-```c++
-#include <string>
-#include <iostream>
-#include <filesystem>
-namespace fs = std::filesystem;
-
-int main()
-{
-    std::string path = "/path/to/directory";
-    for (const auto & entry : fs::directory_iterator(path))
-        std::cout << entry.path() << std::endl;
-}
-```
-* [std::filesystem::directory_iterator - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/directory_iterator)
-  * directory_iterator is a LegacyInputIterator that iterates over the directory_entry elements of a directory (but does not visit the subdirectories). The iteration order is unspecified, except that each directory entry is visited only once. The special pathnames dot and dot-dot are skipped.
-  * If the directory_iterator reports an error or is advanced past the last directory entry, it becomes equal to the default-constructed iterator, also known as the end iterator. Two end iterators are always equal, dereferencing or incrementing the end iterator is undefined behavior.
-  * If a file or a directory is deleted or added to the directory tree after the directory iterator has been created, it is unspecified whether the change would be observed through the iterator.
-  * [c++ - Get an ordered list of files in a folder - Stack Overflow](https://stackoverflow.com/questions/30983154/get-an-ordered-list-of-files-in-a-folder)
-    ```c++
-    std::vector<std::filesystem::path> files_in_directory;
-    std::copy(std::filesystem::directory_iterator(myFolder), std::filesystem::directory_iterator(), std::back_inserter(files_in_directory));
-    std::sort(files_in_directory.begin(), files_in_directory.end());
-
-    for (const std::string & filename : files_in_directory) {
-        std::cout << path.string() << std::endl; // printed in alphabetical order
-    }
-    ```
-* [std::filesystem::copy_options - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy_options)
-  * [c++ - How to copy a file from a folder to another folder - Stack Overflow](https://stackoverflow.com/questions/9125122/how-to-copy-a-file-from-a-folder-to-another-folder)
-* [std::filesystem::copy - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy)
-    * Defined in header \<filesystem> since C++ 17
-* [std::filesystem::create_directory, std::filesystem::create_directories - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/create_directory)
-* [std::filesystem::current_path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/current_path)
-* [std::filesystem::exists - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/exists)
-* [std::filesystem::file_size - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/file_size)
-* [std::filesystem::remove, std::filesystem::remove_all - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/remove)
-* [std::filesystem::rename - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/rename)
-* [std::filesystem::temp_directory_path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/temp_directory_path)
-* [boost Filesystem Reference - Class path](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#class-path)
-  * [Chapter 35. Boost.Filesystem - Files and Directories](https://theboostcpplibraries.com/boost.filesystem-files-and-directories)
-  * [Filesystem Reference - copy_file()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#copy_file)
-  * [Filesystem Reference - create_directories()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#create_directories)
-  * [Filesystem Reference - exists()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#exists)
-  * [Filesystem Reference - filename()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#path-filename)
-  * [Filesystem Reference - path extension()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#path-extension)
-  * [Filesystem Reference - remove()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#remove)
-  * [Filesystem Reference - remove_all()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#remove_all)
-  * [Filesystem Reference - string()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#string)
-  * [c++ - How to use copy_file in boost::filesystem? - Stack Overflow](https://stackoverflow.com/questions/4785491/how-to-use-copy-file-in-boostfilesystem)
-  * [string - How can I extract the file name and extension from a path in C++ - Stack Overflow](https://stackoverflow.com/questions/4430780/how-can-i-extract-the-file-name-and-extension-from-a-path-in-c)
-
-### Non-member functions
-
-## [Concurrency support library](https://en.cppreference.com/w/cpp/thread)
-
-* C++ includes built-in support for threads, atomic operations, mutual exclusion, condition variables, and futures.
-* [CP: Concurrency and parallelism - C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-concurrency)
-* [现代 C++ 并发编程基础](https://mp.weixin.qq.com/s/GGIczr97q-RxAfAnQKeDRg)
-  * https://changkun.de/modern-cpp/zh-cn/07-thread/index.html
-  * 并行基础
-  * 互斥量与临界区
-  * 期物
-  * 条件变量
-* [C++并发编程（C++11到C++17）](https://mp.weixin.qq.com/s/sLaJQl4cj_c-M2qy7iX__A)
-  * 为什么要并发编程
-  * 并发与并行
-    * 并发（Concurrent）与并行（Parallel）都是很常见的术语。
-  * 进程与线程
-  * 并发系统的性能
-  * C++与并发编程
-  * 编译器与C++标准
-  * 测试环境
-  * 线程
-  * 管理当前线程
-  * 一次调用
-  * 并发任务
-  * 竞争条件与临界区
-  * 互斥体与锁
-  * 通用锁定算法
-  * 通用互斥管理
-  * 并行算法
-* [多线程一定能优化程序性能吗？](https://mp.weixin.qq.com/s/tZn8Og6p_1nPc3vqeK_BZw)
-	* 多线程与CPU
-	* 多线程与IO
-	* 多线程与内存
-* [Advanced Parallel Programming in C++ – Patrick Diehl](https://www.diehlpk.de/blog/modern-cpp/)
-* [thread、future、promise、packaged_task、async之间有什么关系？](https://mp.weixin.qq.com/s/fUD4HxtUNhnpVlqGNAbc6Q)
-	* 并发编程一般指多线程编程，C++11之后关于多线程编程有几个高级API：
-		* std::thread 
-		* std::future
-		* std::shared_future
-		* std::promise
-		* std::packaged_task
-		* std::async
-* [打开线程 | 进程 | 协程的大门](https://mp.weixin.qq.com/s/2rVYPeKBnTrFoSxmUEM08g)
-	* 进程和线程是什么
-	* 进程和线程有什么区别
-	* 为什么有了进程又出现线程
-	* 内核态和用户态有啥不同
-	* 协程有什么特点
-* [协程到底有什么用？6种I/O模式告诉你！](https://mp.weixin.qq.com/s/xSf3eHG4CX3rJkzuU8p5IQ)
-	* 为了高效进行IO操作，我们采用的技术是这样演进的：
-		* 单线程串行 + 阻塞式IO(同步)
-		* 多线程并行 + 阻塞式IO(并行)
-		* 单线程 + 非阻塞式IO(异步) + event loop
-		* 单线程 + 非阻塞式IO(异步) + event loop + 回调
-		* Reactor模式(更好的单线程 + 非阻塞式IO+ event loop + 回调)
-		* 单线程 + 非阻塞式IO(异步) + event loop + 协程
-	* 最终我们采用协程技术获取到了异步编程的高效以及同步编程的简单理解，这也是当今高性能服务器常用的一种技术组合。
-* [深入理解协程](https://mp.weixin.qq.com/s/r8KjFEojQaRIqBC2TfByWg)
-	* C++ 在互联网服务端开发方向依然占据着相当大的份额；百度，腾讯，甚至以java为主流开发语言的阿里都在大规模使用C++做互联网服务端开发，今天以C++为例子，分析一下要支持协程，需要考虑哪些问题，如何权衡利弊，反过来也可以了解到协程适合哪些场景。
-* [异步编程到底在说啥？](https://mp.weixin.qq.com/s/aaCVgXekO6unpFDfKchVlA)
-	* 同步就好比你排队去自助售票机取电影票，你必须排队等待前一个人取完电影票才能到你，你不能在前一个取票的过程中取自己的票，这时我们说取电影票时你和前一个人是同步的。
-	* 而异步就好比去吃大餐，你在座位上看菜单点菜，其它人也可以点菜，你不需要等待其它人吃完饭才能下单，这时我们说你点菜和其它人吃饭是异步的。
-* [C++异步从理论到实践总览篇](https://mp.weixin.qq.com/s/tnADuXt4FXIx46JuhgnrPw)
-* [async的两个坑](https://mp.weixin.qq.com/s/gmF5WXHsuFwblYDu_jDeTA)
-	* 一般人可能都知道C++异步操作有async这个东西。但不知道大家是否注意过，其实它有两个坑：
-		* 它不一定真的会异步执行
-		* 它有可能会阻塞
-
-### Threads
-
-* Threads enable programs to execute across several processor cores.
-* Defined in header [\<thread>](https://en.cppreference.com/w/cpp/header/thread)
-
-#### [std::thread](https://en.cppreference.com/w/cpp/thread/thread)
-
-* manages a separate thread (class)
-* Threads enable programs to execute across several processor cores.
-* The class thread represents [a single thread of execution](https://en.wikipedia.org/wiki/Thread_(computing)). Threads allow multiple functions to execute concurrently.
-* Threads begin execution immediately upon construction of the associated thread object (pending any OS scheduling delays), starting at the top-level function provided as a constructor argument. The return value of the top-level function is ignored and if it terminates by throwing an exception, std::terminate is called. The top-level function may communicate its return value or an exception to the caller via std::promise or by modifying shared variables (which may require synchronization, see std::mutex and std::atomic)
-* std::thread objects may also be in the state that does not represent any thread (after default construction, move from, detach, or join), and a thread of execution may not be associated with any thread objects (after detach).
-* No two std::thread objects may represent the same thread of execution; std::thread is not CopyConstructible or CopyAssignable, although it is MoveConstructible and MoveAssignable.
-* [(constructor)](https://en.cppreference.com/w/cpp/thread/thread/thread)
-	* constructs new thread object (public member function)
-	* 1) Creates new thread object which does not represent a thread.
-	* 2) Move constructor. Constructs the thread object to represent the thread of execution that was represented by other. After this call other no longer represents a thread of execution.
-	* 3) Creates new std::thread object and associates it with a thread of execution. The new thread of execution starts executing /*INVOKE*/(std::move(f_copy), std::move(args_copy)...), where
-		* /*INVOKE*/ performs the INVOKE operation specified in Callable, which can be performed by std::invoke (since C++17), and
-		* f_copy is an object of type std::decay\<Function>::type and constructed from std::forward\<Function>(f), and
-		* args_copy... are objects of types std::decay\<Args>::type... and constructed from std::forward\<Args>(args)....
-	* Constructions of these objects are executed in the context of the caller, so that any exceptions thrown during evaluation and copying/moving of the arguments are thrown in the current thread, without starting the new thread. The program is ill-formed if any construction or the INVOKE operation is invalid.
-	* This constructor does not participate in overload resolution if std::decay\<Function>::type is the same type as thread.
-	* The completion of the invocation of the constructor synchronizes-with (as defined in std::memory_order) the beginning of the invocation of the copy of f on the new thread of execution.
-	* 4) The copy constructor is deleted; threads are not copyable. No two std::thread objects may represent the same thread of execution.
-	* Parameters
-		* other	-	another thread object to construct this thread object with
-		* f	-	Callable object to execute in the new thread
-		* args...	-	arguments to pass to the new function
-	* Postconditions
-		* 1) get_id() equal to `std::thread::id()` (i.e. joinable is false)
-		* 2) other.get_id() equal to `std::thread::id()` and get_id() returns the value of other.get_id() prior to the start of construction
-		* 3) get_id() not equal to `std::thread::id()` (i.e. joinable is true)
-	* Exceptions
-		* 3) std::system_error if the thread could not be started. The exception may represent the error condition std::errc::resource_unavailable_try_again or another implementation-specific error condition.
-	* Notes
-		* The arguments to the thread function are moved or copied by value. If a reference argument needs to be passed to the thread function, it has to be wrapped (e.g., with std::ref or std::cref).
-		* Any return value from the function is ignored. If the function throws an exception, std::terminate is called. In order to pass return values or exceptions back to the calling thread, std::promise or std::async may be used.
-* [thread::thread - C++ Reference](https://cplusplus.com/reference/thread/thread/thread/)
-	* Data races
-		* The move constructor (4) modifies x.
-```c++
-// constructing threads
-#include <iostream>       // std::cout
-#include <atomic>         // std::atomic
-#include <thread>         // std::thread
-#include <vector>         // std::vector
-
-std::atomic<int> global_counter (0);
-
-void increase_global (int n) { for (int i=0; i<n; ++i) ++global_counter; }
-
-void increase_reference (std::atomic<int>& variable, int n) { for (int i=0; i<n; ++i) ++variable; }
-
-struct C : std::atomic<int> {
-  C() : std::atomic<int>(0) {}
-  void increase_member (int n) { for (int i=0; i<n; ++i) fetch_add(1); }
-};
-
-int main ()
-{
-  std::vector<std::thread> threads;
-
-  std::cout << "increase global counter with 10 threads...\n";
-  for (int i=1; i<=10; ++i)
-    threads.push_back(std::thread(increase_global,1000));
-
-  std::cout << "increase counter (foo) with 10 threads using reference...\n";
-  std::atomic<int> foo(0);
-  for (int i=1; i<=10; ++i)
-    threads.push_back(std::thread(increase_reference,std::ref(foo),1000));
-
-  std::cout << "increase counter (bar) with 10 threads using member...\n";
-  C bar;
-  for (int i=1; i<=10; ++i)
-    threads.push_back(std::thread(&C::increase_member,std::ref(bar),1000));
-
-  std::cout << "synchronizing all threads...\n";
-  for (auto& th : threads) th.join();
-
-  std::cout << "global_counter: " << global_counter << '\n';
-  std::cout << "foo: " << foo << '\n';
-  std::cout << "bar: " << bar << '\n';
-
-  return 0;
-}
-/*
-increase global counter using 10 threads...
-increase counter (foo) with 10 threads using reference...
-increase counter (bar) with 10 threads using member...
-synchronizing all threads...
-global_counter: 10000
-foo: 10000
-bar: 10000
-*/
-```
-* [`std::thread::joinable` - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/joinable)
-	* checks whether the thread is joinable, i.e. potentially running in parallel context (public member function)
-	* Checks if the std::thread object identifies an active thread of execution. Specifically, returns true if get_id() != `std::thread::id()`. So a default constructed thread is not joinable.
-	* A thread that has finished executing code, but has not yet been joined is still considered an active thread of execution and is therefore joinable.
-	* Return value
-		* true if the thread object identifies an active thread of execution, false otherwise
-* [`std::thread::get_id` - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/get_id)
-	* Returns a value of `std::thread::id` identifying the thread associated with *this.
-	* Return value
-		* A value of type `std::thread::id` identifying the thread associated with *this. If there is no thread associated, default constructed `std::thread::id` is returned.
-* [`std::thread::hardware_concurrency` - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency)
-	* returns the number of concurrent threads supported by the implementation (public static member function)
-	* Returns the number of concurrent threads supported by the implementation. The value should be considered only a hint.
-	* Return value
-		* Number of concurrent threads supported. If the value is not well defined or not computable, returns ​0​.
-* [`std::thread::join` - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/join)
-	* waits for the thread to finish its execution (public member function)
-	* Blocks the current thread until the thread identified by *this finishes its execution.
-	* The completion of the thread identified by *this synchronizes with the corresponding successful return from join().
-	* No synchronization is performed on *this itself. Concurrently calling join() on the same thread object from multiple threads constitutes a data race that results in undefined behavior.
-	* Postconditions
-		* joinable() is false
-	* Exceptions
-		* std::system_error if an error occurs.
-	* Error Conditions
-		* resource_deadlock_would_occur if this->get_id() == std::this_thread::get_id() (deadlock detected)
-		* no_such_process if the thread is not valid
-		* invalid_argument if joinable() is false
-* [Multithreading in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/multithreading-in-cpp/)
-```c++
-// CPP program to demonstrate multithreading
-// using three different callables.
-#include <iostream>
-#include <thread>
-using namespace std;
-
-// A dummy function
-void foo(int Z)
-{
-    for (int i = 0; i < Z; i++) {
-        cout << "Thread using function"
-            " pointer as callable\n";
-    }
-}
-
-// A callable object
-class thread_obj {
-public:
-    void operator()(int x)
-    {
-        for (int i = 0; i < x; i++)
-            cout << "Thread using function"
-                " object as callable\n";
-    }
-};
-
-int main()
-{
-    cout << "Threads 1 and 2 and 3 "
-        "operating independently" << endl;
-
-    // This thread is launched by using
-    // function pointer as callable
-    thread th1(foo, 3);
-
-    // This thread is launched by using
-    // function object as callable
-    thread th2(thread_obj(), 3);
-
-    // Define a Lambda Expression
-    auto f = [](int x) {
-        for (int i = 0; i < x; i++)
-            cout << "Thread using lambda"
-            " expression as callable\n";
-    };
-
-    // This thread is launched by using
-    // lamda expression as callable
-    thread th3(f, 3);
-
-    // Wait for the threads to finish
-    // Wait for thread t1 to finish
-    th1.join();
-
-    // Wait for thread t2 to finish
-    th2.join();
-
-    // Wait for thread t3 to finish
-    th3.join();
-
-    return 0;
-}
-```
-* [用三个线程按顺序循环打印ABC三个字母 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/8575543.html)
-* [C++ 线程的使用](https://mp.weixin.qq.com/s/tMWxvw4Kmga5ayUfXHaaIw)
-  * C++11 之前，C++ 语言没有对并发编程提供语言级别的支持，这使得我们在编写可移植的并发程序时，存在诸多的不便。现在 C++11 中增加了线程以及线程相关的类，很方便地支持了并发编程，使得编写的多线程程序的可移植性得到了很大的提高。
-  * C++11 中提供的线程类叫做 std::thread，基于这个类创建一个新的线程非常的简单，只需要提供线程函数或者函数对象即可，并且可以同时指定线程函数的参数。我们首先来了解一下这个类提供的一些常用 API：
-  * 1. 构造函数
-  * 2. 公共成员函数
-    * 2.1 get_id()
-    * 2.2 join()
-    * 2.3 detach()
-    * 2.5 joinable()
-    * 2.6 operator=
-  * 3. 静态函数
-  * 4. C 线程库
-    * [C语言线程库的使用](https://mp.weixin.qq.com/s?__biz=MzI3ODQ3OTczMw==&mid=2247491745&idx=1&sn=d995e1617ed6ad3d56de28b5be127e73&scene=21#wechat_redirect)
-* How to insert into vector with thread safe ?
-	* [multithreading - C++ STL Concurrent update to values in fixed size map - Is it safe? - Stack Overflow](https://stackoverflow.com/questions/47309237/c-stl-concurrent-update-to-values-in-fixed-size-map-is-it-safe)
-	* [c++ - Can a std::map rebalance during the invocation of a const function? - Stack Overflow](https://stackoverflow.com/questions/26867435/can-a-stdmap-rebalance-during-the-invocation-of-a-const-function/26867506#26867506)
-	* [c++ - Can different threads insert into a map if they always use different keys? - Stack Overflow](https://stackoverflow.com/questions/27829806/can-different-threads-insert-into-a-map-if-they-always-use-different-keys)
-	* [c++ - Populating a vector in parallel, order not important - Stack Overflow](https://stackoverflow.com/questions/41191945/populating-a-vector-in-parallel-order-not-important)
-	* [c++ - Why does vector "emplace_back" behave much slower in multiple threads than single threads - Stack Overflow](https://stackoverflow.com/questions/57343773/why-does-vector-emplace-back-behave-much-slower-in-multiple-threads-than-singl)
-	* [c++ - Are std::vector emplace_back and push_back thread-safe - Stack Overflow](https://stackoverflow.com/questions/66471521/are-stdvector-emplace-back-and-push-back-thread-safe)
-	* [`c++ - Are concurrent calls to emplace_back() and operator[]() from std::deque thread safe? - Stack Overflow`](https://stackoverflow.com/questions/41001062/are-concurrent-calls-to-emplace-back-and-operator-from-stddeque-thread-s)
-	* [c++ - Fill a container from several threads - Code Review Stack Exchange](https://codereview.stackexchange.com/questions/104975/fill-a-container-from-several-threads)
-	* [(2) How do I know if a thread has finished its operation in C++? - Quora](https://www.quora.com/How-do-I-know-if-a-thread-has-finished-its-operation-in-C++)
-	* [(2) How can I know when a thread has finished? I want to check if a thread has finished and update some data structure. - Quora](https://www.quora.com/How-can-I-know-when-a-thread-has-finished-I-want-to-check-if-a-thread-has-finished-and-update-some-data-structure)
-	* [a simple thread example to show thread-safe vector operation](https://gist.github.com/phg1024/8447146)
-```c++
-#include <iostream>
-#include <mutex>
-#include <string>
-#include <thread>
-#include <vector>
-using namespace std;
-
-int main()
-{
-    std::vector<std::string>    v_values{"test1", "test2", "test3", "test4"};
-    std::vector<std::string>    v_results;
-    v_results.reserve(v_values.size());
-
-    std::cout << "std::thread::hardware_concurrency() : " << std::thread::hardware_concurrency() << "\n";
-    auto max_n_threads = std::thread::hardware_concurrency();
-    const auto n_threads = (v_values.size() >= max_n_threads) ? max_n_threads : v_values.size();
-    std::cout << "n_threads : " << n_threads << "\n";
-
-    std::vector<std::thread> v_threads;
-    v_threads.reserve(n_threads);
-
-    std::mutex  mtx_results;
-    auto cmd = [&v_values, &n_threads, &mtx_results, &v_results](auto id) {
-        std::cout << "id : " << id << "\n";
-        auto s = ""s;
-
-        for (auto i = id; i < v_values.size(); i += n_threads) {
-            s = v_values.at(i);
-            auto new_s = s.append("_result");
-            const std::lock_guard<std::mutex> guard(mtx_results);   // lock required
-            v_results.emplace_back(new_s);
-        }
-    };
-
-    for (auto i = 0u; i < n_threads; ++ i) {
-        v_threads.emplace_back(std::thread{cmd, i});
-    }
-
-    auto thread_count = 0;
-    for (auto& it : v_threads) {
-        std::cout << "Joining  : " << thread_count << " : " << it.get_id() << "\n";
-
-        if (it.joinable()) {
-            std::cout << "Joined  : " << thread_count << " : " << it.get_id() << "\n";
-            it.join();
-        }
-
-        ++ thread_count;
-    }
-
-    std::cout << "v_results.size() : " << v_results.size() << "\n";
-    for (auto s : v_results) {
-        std::cout << s << " ";
-    }
-
-    return 0;
-}
-/*
-std::thread::hardware_concurrency() : 2
-n_threads : 2
-Joining  : 0 : 140660807714560
-Joined  : 0 : 140660807714560
-id : 0
-Joining  : 1 : 140660799321856
-Joined  : 1 : 140660799321856
-id : 1
-v_results.size() : 4
-test1_result test3_result test2_result test4_result 
-*/
-```
-
-#### Functions managing the current thread
-
-* [std::this_thread::sleep_for - cppreference.com](https://en.cppreference.com/w/cpp/thread/sleep_for)
-	* Blocks the execution of the current thread for at least the specified sleep_duration.
-	* This function may block for longer than sleep_duration due to scheduling or resource contention delays.
-	* The standard recommends that a steady clock is used to measure the duration. If an implementation uses a system clock instead, the wait time may also be sensitive to clock adjustments.
-* [Sleep v.s. sleep - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/5584088.html)
-
-### [Atomic operations library](https://en.cppreference.com/w/cpp/atomic)
-
-* These components are provided for fine-grained atomic operations allowing for lockless concurrent programming. Each atomic operation is indivisible with regards to any other atomic operation that involves the same object. Atomic objects are [free of data races](https://en.cppreference.com/w/cpp/language/memory_model#Threads_and_data_races).
-* Neither the _Atomic macro, nor any of the non-macro global namespace declarations are provided by any C++ standard library header other than \<stdatomic.h>. (since C++23)
-* Defined in header [\<atomic>](https://en.cppreference.com/w/cpp/header/atomic)
-
-#### [std::atomic](https://en.cppreference.com/w/cpp/atomic/atomic)
-
-* Each instantiation and full specialization of the std::atomic template defines an atomic type. If one thread writes to an atomic object while another thread reads from it, the behavior is well-defined (see memory model for details on data races).
-* In addition, accesses to atomic objects may establish inter-thread synchronization and order non-atomic memory accesses as specified by std::memory_order.
-* std::atomic is neither copyable nor movable.
-* [std::atomic\<T>::atomic - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/atomic)
-    * constructs an atomic object
-* [std::atomic\<T>::compare_exchange_weak, std::atomic\<T>::compare_exchange_strong - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange)
-    * atomically compares the value of the atomic object with non-atomic argument and performs atomic exchange if equal or atomic load if not
-* [atomic_compare_exchange_strong - C++ Reference](https://www.cplusplus.com/reference/atomic/atomic_compare_exchange_strong/)
-    * Compare and exchange contained value (strong)
-    * Compares the contents of the value contained in obj with the value pointed by expected:
-    * - if true, it replaces the contained value with val.
-    * - if false, it replaces the value pointed by expected with the contained value .
-* [std::atomic\<T>::load - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/load)
-    * atomically obtains the value of the atomic object
-* [std::atomic\<T>::store - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/store)
-    * atomically replaces the value of the atomic object with a non-atomic argument
-* [Non-blocking algorithm - Wikipedia](https://en.wikipedia.org/wiki/Non-blocking_algorithm)
-    * In computer science, an algorithm is called non-blocking if failure or suspension of any thread cannot cause failure or suspension of another thread;[1] for some operations, these algorithms provide a useful alternative to traditional blocking implementations. A non-blocking algorithm is lock-free if there is guaranteed system-wide progress, and wait-free if there is also guaranteed per-thread progress. "Non-blocking" was used as a synonym for "lock-free" in the literature until the introduction of obstruction-freedom in 2003.[2]
-* [Linearizability - Wikipedia](https://en.wikipedia.org/wiki/Linearizability)
-    * In concurrent programming, an operation (or set of operations) is linearizable if it consists of an ordered list of invocation and response events (callbacks), that may be extended by adding response events such that:
-        * The extended list can be re-expressed as a sequential history (is serializable).
-        * That sequential history is a subset of the original unextended list.
-    * Informally, this means that the unmodified list of events is linearizable if and only if its invocations were serializable, but some of the responses of the serial schedule have yet to return.[1]
-    * In a concurrent system, processes can access a shared object at the same time. Because multiple processes are accessing a single object, there may arise a situation in which while one process is accessing the object, another process changes its contents. Making a system linearizable is one solution to this problem. In a linearizable system, although operations overlap on a shared object, each operation appears to take place instantaneously. Linearizability is a strong correctness condition, which constrains what outputs are possible when an object is accessed by multiple processes concurrently. It is a safety property which ensures that operations do not complete in an unexpected or unpredictable manner. If a system is linearizable it allows a programmer to reason about the system.[2]
-* [Compare-and-swap - Wikipedia](https://en.wikipedia.org/wiki/Compare-and-swap)
-    * In computer science, compare-and-swap (CAS) is an atomic instruction used in multithreading to achieve synchronization. It compares the contents of a memory location with a given value and, only if they are the same, modifies the contents of that memory location to a new given value. This is done as a single atomic operation. The atomicity guarantees that the new value is calculated based on up-to-date information; if the value had been updated by another thread in the meantime, the write would fail. The result of the operation must indicate whether it performed the substitution; this can be done either with a simple boolean response (this variant is often called compare-and-set), or by returning the value read from the memory location (not the value written to it).
-```c++
-#include <atomic>
-#include <chrono>
-
-mutable std::atomic_bool _wait{ false };
-
-void _setWaitInProgress() const
-{
-    auto expected = false;
-
-    // if _wait is not able to exchange, it will keep looping unless it is released to exchange
-    while (!(_wait.compare_exchange_strong(expected, true))) {
-        expected = false;
-        std::this_thread::sleep_for(std::chrono::milliseconds(5));
-    }
-}
-
-void _setWaitDone() const
-{
-    _wait.store(false);
-}
-
-void TestAtomic()
-{
-    _setWaitInProgress();
-
-    DoSomething();
-
-    _setWaitDone();
-}
-```
-* [The Atomic Boolean - ModernesCpp.com](https://www.modernescpp.com/index.php/the-atomic-boolean)
-```c++
-// atomicCondition.cpp
-
-#include <atomic>
-#include <chrono>
-#include <iostream>
-#include <thread>
-#include <vector>
-
-std::vector<int> mySharedWork;
-std::atomic<bool> dataReady(false);
-
-void waitingForWork(){
-    std::cout << "Waiting " << std::endl;
-    while ( !dataReady.load() ){             // (3)
-        std::this_thread::sleep_for(std::chrono::milliseconds(5));
-    }
-    mySharedWork[1]= 2;                      // (4)
-    std::cout << "Work done " << std::endl;
-}
-
-void setDataReady(){
-    mySharedWork={1,0,3};                    // (1)
-    dataReady= true;                         // (2)
-    std::cout << "Data prepared" << std::endl;
-}
-
-int main()
-{
-    std::cout << std::endl;
-
-    std::thread t1(waitingForWork);
-    std::thread t2(setDataReady);
-
-    t1.join();
-    t2.join();
-
-    for (auto v: mySharedWork){
-        std::cout << v << " ";
-    }
-
-    std::cout << "\n\n";
-}
-```
-![image](https://user-images.githubusercontent.com/34557994/156122924-ede55b2c-d15d-47cc-af2c-0b219f1d3391.png)
-* [C++ 11 开发中的 Atomic 原子操作](https://mp.weixin.qq.com/s/FSE95BtgA2PT59HCX3EzsQ)
-* [std::memory_order - cppreference.com](https://en.cppreference.com/w/cpp/atomic/memory_order)
-	* defines memory ordering constraints for the given atomic operation (enum)
-	* std::memory_order specifies how memory accesses, including regular, non-atomic memory accesses, are to be ordered around an atomic operation. Absent any constraints on a multi-core system, when multiple threads simultaneously read and write to several variables, one thread can observe the values change in an order different from the order another thread wrote them. Indeed, the apparent order of changes can even differ among multiple reader threads. Some similar effects can occur even on uniprocessor systems due to compiler transformations allowed by the memory model.
-	* The default behavior of all atomic operations in the library provides for sequentially consistent ordering (see discussion below). That default can hurt performance, but the library's atomic operations can be given an additional std::memory_order argument to specify the exact constraints, beyond atomicity, that the compiler and processor must enforce for that operation.
-
-### Mutual exclusion
-
-* Mutual exclusion algorithms prevent multiple threads from simultaneously accessing shared resources. This prevents data races and provides support for synchronization between threads.
-* Defined in header [\<mutex>](https://en.cppreference.com/w/cpp/header/mutex)
-
-#### [std::mutex](https://en.cppreference.com/w/cpp/thread/mutex)
-
-* The mutex class is a synchronization primitive that can be used to protect shared data from being simultaneously accessed by multiple threads.
-* mutex offers exclusive, non-recursive ownership semantics:
-	* A calling thread owns a mutex from the time that it successfully calls either lock or try_lock until it calls unlock.
-	* When a thread owns a mutex, all other threads will block (for calls to lock) or receive a false return value (for try_lock) if they attempt to claim ownership of the mutex.
-	* A calling thread must not own the mutex prior to calling lock or try_lock.
-* The behavior of a program is undefined if a mutex is destroyed while still owned by any threads, or a thread terminates while owning a mutex. The mutex class satisfies all requirements of Mutex and StandardLayoutType.
-* std::mutex is neither copyable nor movable.
-* Notes
-	* std::mutex is usually not accessed directly: std::unique_lock, std::lock_guard, or std::scoped_lock (since C++17) manage locking in a more exception-safe manner.
-```c++
-#include <iostream>
-#include <map>
-#include <string>
-#include <chrono>
-#include <thread>
-#include <mutex>
- 
-std::map<std::string, std::string> g_pages;
-std::mutex g_pages_mutex;
- 
-void save_page(const std::string &url)
-{
-    // simulate a long page fetch
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-    std::string result = "fake content";
- 
-    std::lock_guard<std::mutex> guard(g_pages_mutex);
-    g_pages[url] = result;
-}
- 
-int main() 
-{
-    std::thread t1(save_page, "http://foo");
-    std::thread t2(save_page, "http://bar");
-    t1.join();
-    t2.join();
- 
-    // safe to access g_pages without lock now, as the threads are joined
-    for (const auto &pair : g_pages) {
-        std::cout << pair.first << " => " << pair.second << '\n';
-    }
-}
-/*
-http://bar => fake content
-http://foo => fake content
-*/
-```
-* [mutex - C++ Reference](https://www.cplusplus.com/reference/mutex/mutex/)
-	* class mutex;
-	* Mutex class
-		* A mutex is a lockable object that is designed to signal when critical sections of code need exclusive access, preventing other threads with the same protection from executing concurrently and access the same memory locations.
-		* mutex objects provide exclusive ownership and do not support recursivity (i.e., a thread shall not lock a mutex it already owns) -- see recursive_mutex for an alternative class that does.
-		* It is guaranteed to be a standard-layout class.
-
-#### Generic mutex management
-
-* [std::lock_guard - cppreference.com](https://en.cppreference.com/w/cpp/thread/lock_guard)
-	* Defined in header \<mutex>
-	* template\< class Mutex > class lock_guard; (since C++11)
-	* The class lock_guard is a mutex wrapper that provides a convenient RAII-style mechanism for owning a mutex for the duration of a scoped block.
-	* When a lock_guard object is created, it attempts to take ownership of the mutex it is given. When control leaves the scope in which the lock_guard object was created, the lock_guard is destructed and the mutex is released.
-	* The lock_guard class is non-copyable.
-	* Notes
-		* [std::scoped_lock](https://en.cppreference.com/w/cpp/thread/scoped_lock) offers a replacement for lock_guard that provides the ability to lock multiple mutexes using a deadlock avoidance algorithm. (since C++17)
-	* [std::lock_guard\<Mutex>::lock_guard - cppreference.com](https://en.cppreference.com/w/cpp/thread/lock_guard/lock_guard)
-```c++
-#include <thread>
-#include <mutex>
-#include <iostream>
- 
-int g_i = 0;
-std::mutex g_i_mutex;  // protects g_i
- 
-void safe_increment()
-{
-    const std::lock_guard<std::mutex> lock(g_i_mutex);
-    ++g_i;
- 
-    std::cout << "g_i: " << g_i << "; in thread #"
-              << std::this_thread::get_id() << '\n';
- 
-    // g_i_mutex is automatically released when lock
-    // goes out of scope
-}
- 
-int main()
-{
-    std::cout << "g_i: " << g_i << "; in main()\n";
- 
-    std::thread t1(safe_increment);
-    std::thread t2(safe_increment);
- 
-    t1.join();
-    t2.join();
- 
-    std::cout << "g_i: " << g_i << "; in main()\n";
-}
-/*
-g_i: 0; in main()
-g_i: 1; in thread #140487981209344
-g_i: 2; in thread #140487972816640
-g_i: 2; in main()
-*/
-```
-* [lock_guard - C++ Reference](https://www.cplusplus.com/reference/mutex/lock_guard/)
-  * template \<class Mutex> class lock_guard;
-  * Lock guard
-    * A lock guard is an object that manages a mutex object by keeping it always locked.
-    * On construction, the mutex object is locked by the calling thread, and on destruction, the mutex is unlocked. It is the simplest lock, and is specially useful as an object with automatic duration that lasts until the end of its context. In this way, it guarantees the mutex object is properly unlocked in case an exception is thrown.
-    * Note though that the lock_guard object does not manage the lifetime of the mutex object in any way: the duration of the mutex object shall extend at least until the destruction of the lock_guard that locks it.
-* [std::scoped_lock - cppreference.com](https://en.cppreference.com/w/cpp/thread/scoped_lock)
-	* deadlock-avoiding RAII wrapper for multiple mutexes (class template)
-	* The class scoped_lock is a mutex wrapper that provides a convenient RAII-style mechanism for owning one or more mutexes for the duration of a scoped block.
-	* When a scoped_lock object is created, it attempts to take ownership of the mutexes it is given. When control leaves the scope in which the scoped_lock object was created, the scoped_lock is destructed and the mutexes are released. If several mutexes are given, deadlock avoidance algorithm is used as if by std::lock.
-	* The scoped_lock class is non-copyable.
-
-#### Generic locking algorithms
-
-#### Call once
-
-### Futures
-
-* The standard library provides facilities to obtain values that are returned and to catch exceptions that are thrown by asynchronous tasks (i.e. functions launched in separate threads). These values are communicated in a shared state, in which the asynchronous task may write its return value or store an exception, and which may be examined, waited for, and otherwise manipulated by other threads that hold instances of std::future or std::shared_future that reference that shared state.
-* Defined in header [\<future>](https://en.cppreference.com/w/cpp/header/future)
-
-#### [std::async](https://en.cppreference.com/w/cpp/thread/async)
-
-* runs a function asynchronously (potentially in a new thread) and returns a std::future that will hold the result (function template)
-* The function template async runs the function f asynchronously (potentially in a separate thread which might be a part of a thread pool) and returns a std::future that will eventually hold the result of that function call.
-* In any case, the call to std::async synchronizes-with (as defined in std::memory_order) the call to f, and the completion of f is sequenced-before making the shared state ready. If the async policy is chosen, the associated thread completion synchronizes-with the successful return from the first function that is waiting on the shared state, or with the return of the last function that releases the shared state, whichever comes first. If std::decay\<Function>::type or each type in std::decay\<Args>::type is not constructible from its corresponding argument, the program is ill-formed.
-* Parameters
-    * f	-	Callable object to call
-    * args...	-	parameters to pass to f
-    * policy	-	bitmask value, where individual bits control the allowed methods of execution
-        * Bit	Explanation
-        * std::launch::async	enable asynchronous evaluation
-        * std::launch::deferred	enable lazy evaluation
-    * Return value
-        * std::future referring to the shared state created by this call to std::async.
-    * Exceptions
-        * Throws std::system_error with error condition std::errc::resource_unavailable_try_again if the launch policy equals std::launch::async and the implementation is unable to start a new thread (if the policy is async|deferred or has additional bits set, it will fall back to deferred or the implementation-defined policies in this case), or std::bad_alloc if memory for the internal data structures could not be allocated.
-    * Notes
-        * The implementation may extend the behavior of the first overload of std::async by enabling additional (implementation-defined) bits in the default launch policy.
-        * Examples of implementation-defined launch policies are the sync policy (execute immediately, within the async call) and the task policy (similar to async, but thread-locals are not cleared)
-        * If the std::future obtained from std::async is not moved from or bound to a reference, the destructor of the std::future will block at the end of the full expression until the asynchronous operation completes, essentially making code such as the following synchronous:
-        * (note that the destructors of std::futures obtained by means other than a call to std::async never block)
-```c++
-std::async(std::launch::async, []{ f(); }); // temporary's dtor waits for f()
-std::async(std::launch::async, []{ g(); }); // does not start until f() completes
-```
-* [从无栈协程到 C++异步框架](https://mp.weixin.qq.com/s/QVXE7QbxEchl8ue4SoijiQ)
-	* 本文我们将尝试对整个 C++的协程做深入浅出的剥析, 方便大家的理解. 再结合上层的封装, 最终给出一个 C++异步框架实际业务使用的一种形态, 方便大家更好的在实际项目中应用无栈协程。
-
-#### Parse command line
-
-* [Chapter 31. Boost.Program_options - 1.72.0](https://www.boost.org/doc/libs/1_72_0/doc/html/program_options.html)
-  * The program_options library allows program developers to obtain program options, that is (name, value) pairs from the user, via conventional methods such as command line and config file.
-  * [Tutorial - 1.72.0](https://www.boost.org/doc/libs/1_72_0/doc/html/program_options/tutorial.html#id-1.3.32.4.3)
-    * https://github.com/boostorg/program_options/blob/develop/example/first.cpp
-  * [default_value() - Class template typed_value - 1.72.0](https://www.boost.org/doc/libs/1_72_0/doc/html/boost/program_options/typed_value.html#id-1_3_32_9_10_1_1_1_5_1-bb)
-  * [c++ - Boost.Program_Options: When \<bool> is specified as a command-line option, what are valid command-line parameters? - Stack Overflow](https://stackoverflow.com/questions/15629771/boost-program-options-when-bool-is-specified-as-a-command-line-option-what-a)
-  * [Chapter 63. Boost.ProgramOptions](https://theboostcpplibraries.com/boost.program_options)
-
-#### Logging
-
-* [一文详解 C++ 日志框架](https://mp.weixin.qq.com/s/0heKciXbMl95WMTXLfr8UA)
-
-## [Standard Template Library (STL)](https://www.tutorialspoint.com/cplusplus/cpp_stl_tutorial.htm)
-
-* [STL - c-cpp/面试总结之C-C++ at main · haoran119/c-cpp](https://github.com/haoran119/c-cpp/tree/main/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93%E4%B9%8BC-C%2B%2B#stl)
-
 ## [Containers library](https://en.cppreference.com/w/cpp/container)
 
+* [Standard Template Library (STL)](https://www.tutorialspoint.com/cplusplus/cpp_stl_tutorial.htm)
+* [STL - c-cpp/面试总结之C-C++ at main · haoran119/c-cpp](https://github.com/haoran119/c-cpp/tree/main/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93%E4%B9%8BC-C%2B%2B#stl)
 * The Containers library is a generic collection of class templates and algorithms that allow programmers to easily implement common data structures like queues, lists and stacks. There are three classes of containers -- sequence containers, associative containers, and unordered associative containers -- each of which is designed to support a different set of operations.
 * The container manages the storage space that is allocated for its elements and provides member functions to access them, either directly or through iterators (objects with properties similar to pointers).
 * Most containers have at least several member functions in common, and share functionalities. Which container is the best for the particular application depends not only on the offered functionality, but also on its efficiency for different workloads.
@@ -9707,6 +8097,1617 @@ int main()
     std::cout << '\n';
 }
 ```
+
+## [Date and time utilities](https://en.cppreference.com/w/cpp/chrono)
+
+* C++ includes support for two types of time manipulation:
+	* The chrono library, a flexible collection of types that track time with varying degrees of precision (e.g. std::chrono::time_point).
+	* C-style date and time library (e.g. std::time)
+* [C++ Date and Time](https://www.tutorialspoint.com/cplusplus/cpp_date_time.htm)
+* [Chrono in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/chrono-in-c/)
+
+### [\<chrono>](https://en.cppreference.com/w/cpp/header/chrono)
+
+* The chrono library defines three main types as well as utility functions and common typedefs.
+	* clocks
+	* time points
+	* durations
+
+#### Clocks
+
+* A clock consists of a starting point (or epoch) and a tick rate. For example, a clock may have an epoch of January 1, 1970 and tick every second. C++ defines several clock types:
+* [The Three Clocks - ModernesCpp.com](https://www.modernescpp.com/index.php/the-three-clocks)
+
+##### [std::chrono::system_clock](https://en.cppreference.com/w/cpp/chrono/system_clock) 
+
+* Class std::chrono::system_clock represents the system-wide real time wall clock.
+* It may not be monotonic: on most systems, the system time can be adjusted at any moment. It is the only C++ clock that has the ability to map its time points to C-style time.
+* std::chrono::system_clock meets the requirements of TrivialClock.
+* [std::chrono::system_clock::now - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/now)
+	* Returns a time point representing the current point in time.
+* [How to get current time and date in C++? - Stack Overflow](https://stackoverflow.com/questions/997946/how-to-get-current-time-and-date-in-c) 
+	* In C++ 11 you can use std::chrono::system_clock::now()
+* [c++11 - how to convert "std::chrono::system_clock::now()" to double - Stack Overflow](https://stackoverflow.com/questions/45464711/how-to-convert-stdchronosystem-clocknow-to-double)
+	* https://wandbox.org/permlink/qe1MNGQAR5X3zJl8
+```c++
+#include <chrono>
+#include <iostream>
+int main()
+{
+    auto current_time = std::chrono::system_clock::now();
+    auto duration_in_seconds = std::chrono::duration<double>(current_time.time_since_epoch());
+    
+    std::cout << duration_in_seconds.count() << std::endl; // 1.50169e+09
+}
+```
+* How to get certain time in current date ?
+```c++
+#include <iostream>
+#include <iomanip>   // std::put_time
+#include <chrono> 
+
+int main()
+{
+    using namespace std::chrono_literals;
+
+    setenv("TZ", "Asia/Tokyo", 1);
+ 
+    std::tm tm{};  // zero initialise
+    tm.tm_year = 2022-1900; // 2022
+    tm.tm_mon = 10-1; // Oct
+    tm.tm_mday = 18; // 18th
+    tm.tm_hour = 9;
+    tm.tm_min = 0;
+    tm.tm_sec = 0;
+    tm.tm_isdst = 0; // Not daylight saving
+    std::time_t t = std::mktime(&tm); 
+    std::tm local = *std::localtime(&t);
+    std::cout << "local: " << std::put_time(&local, "%c %Z") << '\n';
+    // std::cout << "local: " << std::put_time(std::localtime(&t), "%c %Z") << '\n';
+
+    auto from = std::chrono::system_clock::from_time_t(t) - 0h;
+    auto time = from.time_since_epoch().count();
+    std::cout << time << '\n';
+
+    auto current_time = std::chrono::system_clock::now();
+    auto current_time_t = std::chrono::system_clock::to_time_t(current_time);
+    auto _local = *std::localtime(&current_time_t);
+    std::cout << "_local: " << std::put_time(&_local, "%c %Z") << '\n';
+
+    _local.tm_hour = 9;
+    _local.tm_min = 0;
+    _local.tm_sec = 0;
+    _local.tm_isdst = 0; // Not daylight saving
+    std::cout << "_local: " << std::put_time(&_local, "%c %Z") << '\n';
+
+    std::time_t _t = std::mktime(&_local); 
+    auto _from = std::chrono::system_clock::from_time_t(_t);
+    auto _time = _from.time_since_epoch().count();
+    std::cout << _time << '\n';
+
+    return 0;
+}
+/*
+local: Tue Oct 18 09:00:00 2022 JST
+1666051200000000000
+_local: Tue Oct 18 10:15:42 2022 JST
+_local: Tue Oct 18 09:00:00 2022 JST
+1666051200000000000
+*/
+```
+* [Get current timestamp in milliseconds since Epoch in C++ | Techie Delight](https://www.techiedelight.com/get-current-timestamp-in-milliseconds-since-epoch-in-cpp/#:~:text=Since%20C%2B%2B11%2C%20we,of%20time%20elapsed%20since%20Epoch.)
+	* 1. Using std::chrono
+	* 2. Using std::time
+```c++
+#include <iostream>
+#include <chrono>
+
+int main()
+{
+	using namespace std::chrono;
+
+	uint64_t ns = (system_clock::now().time_since_epoch()).count();
+	std::cout << ns << " nanoseconds since the Epoch\n";
+
+	uint64_t us = duration_cast<microseconds>(system_clock::now().time_since_epoch()).count();
+	std::cout << us << " microseconds since the Epoch\n";
+
+	uint64_t ms = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+	std::cout << ms << " milliseconds since the Epoch\n";
+
+	uint64_t sec = duration_cast<seconds>(system_clock::now().time_since_epoch()).count();
+	std::cout << sec << " seconds since the Epoch\n";
+
+	return 0;
+}
+/*
+1661387354156146179 nanoseconds since the Epoch
+1661387354156241 microseconds since the Epoch
+1661387354156 milliseconds since the Epoch
+1661387354 seconds since the Epoch
+*/
+```
+* [std::chrono::system_clock::to_time_t - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/to_time_t)
+	* Converts t to a std::time_t type.
+	* If std::time_t has lower precision, it is implementation-defined whether the value is rounded or truncated.
+* [std::chrono::system_clock::from_time_t - cppreference.com](https://en.cppreference.com/w/cpp/chrono/system_clock/from_time_t) 
+	* Converts t to a time point type, using the coarser precision of the two types.
+	* If time_point has lower precision, it is implementation defined whether the value is rounded or truncated.
+
+##### [std::chrono::steady_clock](https://en.cppreference.com/w/cpp/chrono/steady_clock) 
+
+* Class std::chrono::steady_clock represents a monotonic clock. The time points of this clock cannot decrease as physical time moves forward and the time between ticks of this clock is constant. This clock is not related to wall clock time (for example, it can be time since last reboot), and is most suitable for measuring intervals.
+* std::chrono::steady_clock meets the requirements of TrivialClock.		
+
+##### [std::chrono::high_resolution_clock](https://en.cppreference.com/w/cpp/chrono/high_resolution_clock) 
+
+* Class std::chrono::high_resolution_clock represents the clock with the smallest tick period provided by the implementation. It may be an alias of std::chrono::system_clock or std::chrono::steady_clock, or a third, independent clock.
+* std::chrono::high_resolution_clock meets the requirements of TrivialClock.		
+
+#### Time point
+
+* A time point is a duration of time that has passed since the epoch of a specific clock.
+* [std::chrono::time_point - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point)
+	* a point in time (class template)
+	* Class template std::chrono::time_point represents a point in time. It is implemented as if it stores a value of type Duration indicating the time interval from the start of the Clock's epoch.
+	* [std::chrono::time_point<Clock,Duration>::time_since_epoch - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point/time_since_epoch)
+		* `constexpr duration time_since_epoch() const;`
+		* returns the time point as duration since the start of its clock (public member function)
+		* Returns a duration representing the amount of time between *this and the clock's epoch.
+	* [operator==,!=,<,<=,>,>=,<=>(std::chrono::time_point) - cppreference.com](https://en.cppreference.com/w/cpp/chrono/time_point/operator_cmp)
+		* Compares two time points. The comparison is done by comparing the results time_since_epoch() for the time points.
+```c++
+#include <iostream>
+#include <chrono>
+#include <ctime>
+ 
+int main()
+{
+    const auto p0 = std::chrono::time_point<std::chrono::system_clock>{};
+    const auto p1 = std::chrono::system_clock::now();
+    const auto p2 = p1 - std::chrono::hours(24);
+ 
+    std::time_t epoch_time = std::chrono::system_clock::to_time_t(p0);
+    std::cout << "epoch: " << std::ctime(&epoch_time);
+    std::time_t today_time = std::chrono::system_clock::to_time_t(p1);
+    std::cout << "today: " << std::ctime(&today_time);
+ 
+    std::cout << "hours since epoch: "
+              << std::chrono::duration_cast<std::chrono::hours>(
+                   p1.time_since_epoch()).count() 
+              << '\n';
+    std::cout << "yesterday, hours since epoch: "
+              << std::chrono::duration_cast<std::chrono::hours>(
+                   p2.time_since_epoch()).count() 
+              << '\n';
+}
+/*
+epoch: Thu Jan  1 00:00:00 1970
+today: Fri Jun 30 10:44:11 2017
+hours since epoch: 416338
+yesterday, hours since epoch: 416314
+*/
+```
+
+#### Duration
+
+* A duration consists of a span of time, defined as some number of ticks of some time unit. For example, "42 seconds" could be represented by a duration consisting of 42 ticks of a 1-second time unit.
+* [std::chrono::duration - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration)
+	* a time interval (class template)
+	* Class template std::chrono::duration represents a time interval.
+	* It consists of a count of ticks of type Rep and a tick period, where the tick period is a compile-time rational fraction representing the time in seconds from one tick to the next.
+	* The only data stored in a duration is a tick count of type Rep. If Rep is floating point, then the duration can represent fractions of ticks. Period is included as part of the duration's type, and is only used when converting between different durations.
+	* [std::chrono::duration<Rep,Period>::count - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration/count)
+		* Returns the number of ticks for this duration.
+	* [std::chrono::duration_cast - cppreference.com](https://en.cppreference.com/w/cpp/chrono/duration/duration_cast)
+		* Converts a std::chrono::duration to a duration of different type ToDuration.
+
+##### Helper types
+
+| std::chrono::nanoseconds(C++11)  | duration type with Period std::nano |
+|- | - |
+| std::chrono::microseconds(C++11) | duration type with Period std::micro |
+| std::chrono::milliseconds(C++11) | duration type with Period std::milli |
+| std::chrono::seconds(C++11)      | duration type with Period std::ratio<1> |
+| std::chrono::minutes(C++11)      | duration type with Period std::ratio<60> |
+| std::chrono::hours(C++11)        | duration type with Period std::ratio<3600> |
+| std::chrono::days(C++20)         | duration type with Period std::ratio<86400> |
+| std::chrono::weeks(C++20)        | duration type with Period std::ratio<604800> |
+| std::chrono::months(C++20)       | duration type with Period std::ratio<2629746> |
+| std::chrono::years(C++20)        | duration type with Period std::ratio<31556952> |
+
+##### Literals
+
+* Defined in inline namespace std::literals::chrono_literals
+
+|[operator""h](https://en.cppreference.com/w/cpp/chrono/operator%22%22h) (C++14)|A std::chrono::duration literal representing hours (function)|
+|-|-|
+|[operator""min](https://en.cppreference.com/w/cpp/chrono/operator%22%22min) (C++14)|A std::chrono::duration literal representing minutes (function)|
+|[operator""s](https://en.cppreference.com/w/cpp/chrono/operator%22%22s) (C++14)|A std::chrono::duration literal representing seconds (function)|
+|[operator""ms](https://en.cppreference.com/w/cpp/chrono/operator%22%22ms) (C++14)|A std::chrono::duration literal representing milliseconds (function)|
+|[operator""us](https://en.cppreference.com/w/cpp/chrono/operator%22%22us) (C++14)|A std::chrono::duration literal representing microseconds (function)|
+|[operator""ns](https://en.cppreference.com/w/cpp/chrono/operator%22%22ns) (C++14)|A std::chrono::duration literal representing nanoseconds (function)|
+|[operator""d](https://en.cppreference.com/w/cpp/chrono/operator%22%22d) (C++20)|A std::chrono::day literal representing a day of a month (function)|
+|[operator""y](https://en.cppreference.com/w/cpp/chrono/operator%22%22y) (C++20)|A std::chrono::year literal representing a particular year (function)|
+
+### [C-style date and time library](https://en.cppreference.com/w/cpp/chrono/c)
+
+* Also provided are the C-style date and time functions, such as std::time_t, std::difftime, and CLOCKS_PER_SEC.
+* Defined in header \<ctime>
+
+#### Functions
+
+* [std::time - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/time)
+	* `std::time_t time( std::time_t* arg );`
+	* returns the current time of the system as time since epoch (function)
+	* Returns the current calendar time encoded as a std::time_t object, and also stores it in the object pointed to by arg, unless arg is a null pointer.
+	* Parameters
+		* arg	-	pointer to a std::time_t object to store the time, or a null pointer
+	* Return value
+		* Current calendar time encoded as std::time_t object on success, (std::time_t)(-1) on error. If arg is not null, the return value is also stored in the object pointed to by arg.
+	* Notes
+		* The encoding of calendar time in std::time_t is unspecified, but most systems conform to the POSIX specification and return a value of integral type holding 86400 times the number of calendar days since the Epoch plus the number of seconds that have passed since the last midnight UTC. Most notably, POSIX time does not (and can not) take leap seconds into account, so that this integral value is not equal to the number of S.I. seconds that have passed since the epoch, but rather is reduced with the number of leap seconds that have occurred since the epoch. Implementations in which std::time_t is a 32-bit signed integer (many historical implementations) fail in the year 2038.
+```c++
+#include <ctime>
+#include <iostream>
+ 
+int main()
+{
+    std::time_t result = std::time(nullptr);
+    std::cout << std::asctime(std::localtime(&result))
+              << result << " seconds since the Epoch\n";
+}
+/*
+Wed Sep 21 10:27:52 2011
+1316615272 seconds since the Epoch
+*/
+```
+* [std::localtime - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/localtime)
+	* `std::tm* localtime( const std::time_t *time );`
+	* converts time since epoch to calendar time expressed as local time (function)
+	* Converts given time since epoch as std::time_t value into calendar time, expressed in local time.
+	* Parameters
+		* time	-	pointer to a std::time_t object to convert
+	* Return value
+		* pointer to a static internal std::tm object on success, or null pointer otherwise. The structure may be shared between std::gmtime, std::localtime, and std::ctime, and may be overwritten on each invocation.
+	* Notes
+		* This function may not be thread-safe.
+		* POSIX requires that this function sets errno to EOVERFLOW if it fails because the argument is too large.
+		* POSIX specifies that the timezone information is determined by this function as if by calling tzset, which reads the environment variable TZ.
+```c++
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <ctime>
+ 
+int main()
+{
+    setenv("TZ", "/usr/share/zoneinfo/America/Los_Angeles", 1); // POSIX-specific
+ 
+    std::tm tm{};  // zero initialise
+    tm.tm_year = 2020-1900; // 2020
+    tm.tm_mon = 2-1; // February
+    tm.tm_mday = 15; // 15th
+    tm.tm_hour = 10;
+    tm.tm_min = 15;
+    tm.tm_isdst = 0; // Not daylight saving
+    std::time_t t = std::mktime(&tm); 
+ 
+    std::cout << "UTC:   " << std::put_time(std::gmtime(&t), "%c %Z") << '\n';
+    std::cout << "local: " << std::put_time(std::localtime(&t), "%c %Z") << '\n';
+}
+/*
+UTC:   Sat Feb 15 18:15:00 2020 GMT
+local: Sat Feb 15 10:15:00 2020 PST
+*/
+```
+* [std::mktime - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/mktime)
+	* `std::time_t mktime( std::tm* time );`
+	* converts calendar time to time since epoch (function)
+	* Converts local calendar time to a time since epoch as a time_t object. time->tm_wday and time->tm_yday are ignored. The values in time are permitted to be outside their normal ranges.
+	* A negative value of time->tm_isdst causes mktime to attempt to determine if Daylight Saving Time was in effect.
+	* If the conversion is successful, the time object is modified. All fields of time are updated to fit their proper ranges. time->tm_wday and time->tm_yday are recalculated using information available in other fields.
+	* Parameters
+		* time	-	pointer to a std::tm object specifying local calendar time to convert
+	* Return value
+		* Time since epoch as a std::time_t object on success or -1 if time cannot be represented as a std::time_t object.
+	* Notes
+		* If the std::tm object was obtained from std::get_time or the POSIX strptime, the value of tm_isdst is indeterminate, and needs to be set explicitly before calling mktime.
+```c++
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <ctime>
+ 
+int main()
+{
+    setenv("TZ", "/usr/share/zoneinfo/America/Los_Angeles", 1); // POSIX-specific
+ 
+    std::tm tm{};  // zero initialise
+    tm.tm_year = 2020-1900; // 2020
+    tm.tm_mon = 2-1; // February
+    tm.tm_mday = 15; // 15th
+    tm.tm_hour = 10;
+    tm.tm_min = 15;
+    tm.tm_isdst = 0; // Not daylight saving
+    std::time_t t = std::mktime(&tm); 
+    std::tm local = *std::localtime(&t);
+ 
+    std::cout << "local: " << std::put_time(&local, "%c %Z") << '\n';
+}
+/*
+local: Sat Feb 15 10:15:00 2020 PST
+*/
+```
+* [C library function - mktime()](https://www.tutorialspoint.com/c_standard_library/c_function_mktime.htm)
+* [mktime - C++ Reference](https://cplusplus.com/reference/ctime/mktime/)
+* [std::get_time - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/get_time)
+	* parses a date/time value of specified format (function template)
+	* Defined in header \<iomanip>
+	* `template< class CharT > /*unspecified*/ get_time( std::tm* tmb, const CharT* fmt ); (since C++11)`
+	* When used in an expression in >> get_time(tmb, fmt), parses the character input as a date/time value according to format string fmt according to the std::time_get facet of the locale currently imbued in the input stream in. The resultant value is stored in a std::tm object pointed to by tmb.
+```c++
+#include <iostream>
+#include <sstream>
+#include <locale>
+#include <iomanip>
+ 
+int main()
+{
+    std::tm t = {};
+    std::istringstream ss("2011-Februar-18 23:12:34");
+    ss.imbue(std::locale("de_DE.utf-8"));
+    ss >> std::get_time(&t, "%Y-%b-%d %H:%M:%S");
+ 
+    if (ss.fail())
+        std::cout << "Parse failed\n";
+    else
+        std::cout << std::put_time(&t, "%c") << '\n';
+}
+/*
+Sun Feb 18 23:12:34 2011
+*/
+```
+* [std::put_time - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/put_time)
+	* formats and outputs a date/time value according to the specified format (function template)
+	* Defined in header \<iomanip>
+	* `template< class CharT > /*unspecified*/ put_time( const std::tm* tmb, const CharT* fmt ); (since C++11)
+	* When used in an expression out << put_time(tmb, fmt), converts the date and time information from a given calendar time tmb to a character string according to format string fmt, as if by calling std::strftime, std::wcsftime, or analog (depending on CharT), according to the std::time_put facet of the locale currently imbued in the output stream out.
+```c++
+#include <iostream>
+#include <iomanip>
+#include <ctime>
+#include <chrono>
+ 
+int main()
+{
+    std::time_t t = std::time(nullptr);
+    std::tm tm = *std::localtime(&t);
+ 
+    std::cout.imbue(std::locale("ru_RU.utf8"));
+    std::cout << "ru_RU: " << std::put_time(&tm, "%c %Z") << '\n';
+ 
+    std::cout.imbue(std::locale("ja_JP.utf8"));
+    std::cout << "ja_JP: " << std::put_time(&tm, "%c %Z") << '\n';
+
+    auto current_time = std::chrono::system_clock::now();
+    auto current_time_t = std::chrono::system_clock::to_time_t(current_time);
+    std::cout << std::put_time(std::localtime(&current_time_t), "%Y%m%d") << '\n';
+
+    // convert current time to string
+    std::stringstream ss {};
+    ss << std::put_time(std::localtime(&current_time_t), "%Y%m%d");
+    std::cout << ss.str() << '\n';
+    
+    return 0;
+}
+/*
+ru_RU: Сб 26 ноя 2022 07:11:36 CET
+ja_JP: 2022年11月26日 07時11分36秒 CET
+20221126
+20221126
+*/
+```
+
+#### Constants
+
+#### Types
+
+* [std::tm - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/tm)
+	* calendar time type (class)
+	* Structure holding a calendar date and time broken down into its components.
+	* Member objects
+
+|int tm_sec | seconds after the minute – [0, 60] (since C++11) (public member object)|
+|-|-|
+|int tm_min|minutes after the hour – [0, 59] (public member object)|
+|int tm_hour|hours since midnight – [0, 23] (public member object)|
+|int tm_mday|day of the month – [1, 31] (public member object)|
+|int tm_mon|months since January – [0, 11] (public member object)|
+|int tm_year|years since 1900 (public member object)|
+|int tm_wday|days since Sunday – [0, 6] (public member object)|
+|int tm_yday|days since January 1 – [0, 365] (public member object)|
+|int tm_isdst|Daylight Saving Time flag. The value is positive if DST is in effect, zero if not and negative if no information is available (public member object)|
+
+```c++
+#include <ctime>
+#include <iostream>
+ 
+int main()
+{
+    std::tm start{};
+    start.tm_mday = 1;
+ 
+    std::mktime(&start);
+    std::cout << std::asctime(&start)
+              << "sizeof(std::tm) = "
+              << sizeof(std::tm) << '\n';
+}
+/*
+Mon Jan  1 00:00:00 1900
+sizeof(std::tm) = 56
+*/
+```
+* [std::time_t - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/time_t)
+	* time since epoch type (typedef)
+	* Arithmetic type capable of representing times.
+	* Although not defined, this is almost always an integral value holding the number of seconds (not counting leap seconds) since 00:00, Jan 1 1970 UTC, corresponding to POSIX time.
+
+### MISC
+
+* [现代C++编程实践(五)—如何使用时间库](https://mp.weixin.qq.com/s/JrXYKSm7sEHV8X87X-Bgzg)
+```c++
+#include <iostream>
+#include <iomanip>
+#include <chrono>
+
+
+std::ostream& operator<<(std::ostream &os,const std::chrono::time_point<std::chrono::system_clock> &t) {
+    const auto ltime(std::chrono::system_clock::to_time_t(t));
+    const auto localTime(std::localtime(&ltime));
+    return os << std::put_time(localTime, "%c %Z");
+}
+
+using hours = std::chrono::duration<std::chrono::hours::rep, 
+                                    std::ratio_multiply<std::chrono::hours::period, std::ratio<1> > >;
+constexpr hours operator ""_hours(unsigned long long h) {
+    return hours {h};
+}
+
+int main()
+{
+    auto now(std::chrono::system_clock::now());
+    std::cout << "当前时间是:" << now << "\n12小时后是:" << (now + 12_hours) << std::endl;
+    return 0;
+}
+/*
+当前时间是:Tue Oct 18 01:02:08 2022 UTC
+12小时后是:Tue Oct 18 13:02:08 2022 UTC
+*/
+```
+* [c++ - How to parse a date string into a c++11 std::chrono time_point or similar? - Stack Overflow](https://stackoverflow.com/questions/21021388/how-to-parse-a-date-string-into-a-c11-stdchrono-time-point-or-similar) 
+	* [std::get_time - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/get_time) 
+		* When used in an expression in >> get_time(tmb, fmt), parses the character input as a date/time value according to format string fmt according to the std::time_get facet of the locale currently imbued in the input stream in. The resultant value is stored in a std::tm object pointed to by tmb.
+	* [mktime - cppreference.com](https://en.cppreference.com/w/c/chrono/mktime)
+		* Renormalizes local calendar time expressed as a struct tm object and also converts it to time since epoch as a time_t object. time->tm_wday and time->tm_yday are ignored. The values in time are not checked for being out of range.
+		* A negative value of time->tm_isdst causes mktime to attempt to determine if Daylight Saving Time was in effect in the specified time.
+		* If the conversion to time_t is successful, the time object is modified. All fields of time are updated to fit their proper ranges. time->tm_wday and time->tm_yday are recalculated using information available in other fields. 
+* [Print System Time in C++ | Delft Stack](https://www.delftstack.com/howto/cpp/system-time-in-cpp/) 
+	* [std::strftime - cppreference.com](https://en.cppreference.com/w/cpp/chrono/c/strftime)
+		* Converts the date and time information from a given calendar time time to a null-terminated multibyte character string str according to format string format. Up to count bytes are written.
+* [Outputting Date and Time in C++ using std::chrono - Stack Overflow](https://stackoverflow.com/questions/17223096/outputting-date-and-time-in-c-using-stdchrono)
+* [c++ - C++11 get current date and time as string - Stack Overflow](https://stackoverflow.com/questions/34963738/c11-get-current-date-and-time-as-string)
+* [c++ - Format no such file or directory - Stack Overflow](https://stackoverflow.com/questions/65083544/format-no-such-file-or-directory)
+  * According to this: https://en.cppreference.com/w/cpp/compiler_support there are currently no compilers that support "Text formatting" (P0645R10, std::format). (As of December 2020)
+* [c++ - can't include std::format - Stack Overflow](https://stackoverflow.com/questions/63017719/cant-include-stdformat)
+  * As of July 2020 none of the standard library implementations provide std::format. Until they do you can use the {fmt} library std::format is based on:
+* [c++ - How to use the \<format> header - Stack Overflow](https://stackoverflow.com/questions/61441494/how-to-use-the-format-header)
+  * Use libfmt. The \<format> header is essentially a standardized libfmt (with a few small features removed, if I remember correctly).
+
+## [Input/output library](https://en.cppreference.com/w/cpp/io)
+
+* C++ includes two input/output libraries: an OOP-style stream-based I/O library and the standard set of C-style I/O functions.
+
+### Stream-based I/O
+
+* The stream-based input/output library is organized around abstract input/output devices. These abstract devices allow the same code to handle input/output to files, memory streams, or custom adaptor devices that perform arbitrary operations (e.g. compression) on the fly.
+* Most of the classes are templated, so they can be adapted to any basic character type. Separate typedefs are provided for the most common basic character types (char and wchar_t). The classes are organized into the following hierarchy:
+![image](https://user-images.githubusercontent.com/34557994/166664893-b2b25c27-7205-42f2-8836-cc67245bd81b.png)
+* [【ZZ】cin、cin.get()、cin.getline()、getline()、gets()等函数的用法 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2011/04/21/2024345.html)
+
+#### File I/O
+
+##### [std::basic_ifstream](https://en.cppreference.com/w/cpp/io/basic_ifstream)
+
+* implements high-level file stream input operations (class template)
+* [ifstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/)
+  * Input file stream class
+    * Input stream class to operate on files.
+    * Objects of this class maintain a filebuf object as their internal stream buffer, which performs input/output operations on the file they are associated with (if any).
+    * File streams are associated with files either on construction, or by calling member open.
+    * Apart from the internal file stream buffer, objects of this class keep a set of internal fields inherited from ios_base, ios and istream
+  * [ifstream::is_open - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/is_open/)
+  * [ifstream::close - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/close/)
+  * [Read file line by line using C++](https://www.tutorialspoint.com/read-file-line-by-line-using-cplusplus)
+  * [reading and using data in a .csv file - C++ Forum](http://www.cplusplus.com/forum/beginner/157129/)
+  * [getline (string) - C++ Reference](https://www.cplusplus.com/reference/string/string/getline/)
+  * [C++检测一个文件是否存在 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/5640920.html)
+
+##### [std::basic_ofstream](https://en.cppreference.com/w/cpp/io/basic_ofstream)
+
+* implements high-level file stream output operations (class template)
+* [ofstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/)
+  * Output file stream
+    * Output stream class to operate on files.
+    * Objects of this class maintain a filebuf object as their internal stream buffer, which performs input/output operations on the file they are associated with (if any).
+    * File streams are associated with files either on construction, or by calling member open.
+    * Apart from the internal file stream buffer, objects of this class keep a set of internal fields inherited from ios_base, ios and istream
+  * [ofstream::close - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/close/)
+    * Close file
+      * Closes the file currently associated with the object, disassociating it from the stream.
+      * Any pending output sequence is written to the file.
+      * If the stream is currently not associated with any file (i.e., no file has successfully been open with it), calling this function fails.
+      * The file association of a stream is kept by its internal stream buffer:
+      * Internally, the function calls rdbuf()->close(), and sets failbit in case of failure.
+      * Note that any open file is automatically closed when the ofstream object is destroyed.
+  * [ofstream::is_open - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/is_open/)
+    * Check if file is open
+      * Returns whether the stream is currently associated to a file.
+      * Streams can be associated to files by a successful call to member open or directly on construction, and disassociated by calling close or on destruction.
+      * The file association of a stream is kept by its internal stream buffer:
+        * Internally, the function calls rdbuf()->is_open()
+  * [ofstream::ofstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/ofstream/)
+    * Construct object
+      * Constructs an ofstream object
+  * [replace line in a file C++](https://www.py4u.net/discuss/81342)
+
+#### String I/O
+
+* Defined in header \<sstream>
+	
+##### [std::basic_stringstream](https://en.cppreference.com/w/cpp/io/basic_stringstream)
+
+* implements high-level string stream input/output operations (class template)
+* Inherited from [std::basic_istream](https://en.cppreference.com/w/cpp/io/basic_istream)
+	* [operator>>](https://en.cppreference.com/w/cpp/io/basic_istream/operator_gtgt)
+		* extracts formatted data (public member function of std::basic_istream\<CharT,Traits>)
+* Inherited from [std::basic_ostream](https://en.cppreference.com/w/cpp/io/basic_ostream)
+	* [operator<<](https://en.cppreference.com/w/cpp/io/basic_ostream/operator_ltlt)
+		* inserts formatted data (public member function of std::basic_ostream\<CharT,Traits>)
+* [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
+* [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
+	* A stringstream associates a string object with a stream allowing you to read from the string as if it were a stream (like cin).
+	* Basic methods are –
+		* clear() — to clear the stream
+		* str() — to get and set string object whose content is present in stream.
+		* operator << — add a string to the stringstream object.
+		* operator >> — read something from the stringstream object,
+* [StringStream | HackerRank](https://www.hackerrank.com/challenges/c-tutorial-stringstream/problem)
+```c++
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <sstream>  // std::stringstream
+using namespace std;
+
+
+vector<int> parseInts(const string &str)
+{
+    stringstream ss(str);
+    char ch;
+    int temp;
+    vector<int> result;
+    
+    while (ss) {
+        ss >> temp >> ch;
+        result.push_back(temp);
+    }
+    
+    return result;    
+}
+
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    string s;
+    cin >> s;
+    
+    vector<int> vResult;
+    vResult = parseInts(s);
+    
+    for (const int &i : vResult)
+        cout << i << endl;
+    
+    return 0;
+}
+```
+
+##### [std::basic_ostringstream](https://en.cppreference.com/w/cpp/io/basic_ostringstream)
+
+* implements high-level string stream output operations (class template)
+* [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
+	* Output stream class to operate on strings.
+	* Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
+	* Characters can be inserted into the stream with any operation allowed on output streams.
+	* [ostringstream::str - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/str/)
+	* string str() const;
+	* void str (const string& s);
+	* Get/set content
+		* The first form (1) returns a string object with a copy of the current contents of the stream.
+		* The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
+		* Internally, the function calls the str member of its internal string buffer object.
+
+#### Synchronized output
+
+* Defined in header \<syncstream>
+
+| [basic_syncbuf (C++20)](https://en.cppreference.com/w/cpp/io/basic_syncbuf) | synchronized output device wrapper (class template) |
+| - | - |
+| [basic_osyncstream (C++20)](https://en.cppreference.com/w/cpp/io/basic_osyncstream) | synchronized output stream wrapper (class template) |
+
+* [Synchronized Output Streams with C++20 - ModernesCpp.com](https://www.modernescpp.com/index.php/synchronized-outputstreams#:~:text=std%3A%3Acout%20is%20thread,Each%20character%20is%20written%20atomically.)
+	* With C++20, writing synchronized to std::cout is a piece of cake. std::basic_syncbuf is a wrapper for a std::basic_streambuf. It accumulates output in its buffer. The wrapper sets its content to the wrapped buffer when it is destructed. Consequently, the content appears as a contiguous sequence of characters, and no interleaving of characters can happen.
+	* Thanks to std::basic_osyncstream, you can directly write synchronously to std::cout by using a named synchronized output stream.
+	* Here is how the previous program coutUnsynchronized.cpp is refactored to write synchronized to std::cout. So far, only GCC 11 supports synchronized output streams.
+
+### Predefined standard stream objects
+
+* Defined in header \<iostream>
+
+| cin / wcin | reads from the standard C input stream stdin (global object) |
+| - | - |
+| cout / wcout | writes to the standard C output stream stdout (global object) | 
+| [cerr / wcerr](https://en.cppreference.com/w/cpp/io/cerr) | writes to the standard C error stream stderr, unbuffered (global object) | 
+| clog / wclog | writes to the standard C error stream stderr (global object) | 
+
+* [std::cin, std::wcin - cppreference.com](https://en.cppreference.com/w/cpp/io/cin)
+	* reads from the standard C input stream stdin (global object)
+	* The global objects std::cin and std::wcin control input from a stream buffer of implementation-defined type (derived from std::streambuf), associated with the standard C input stream stdin.
+	* These objects are guaranteed to be initialized during or before the first time an object of type std::ios_base::Init is constructed and are available for use in the constructors and destructors of static objects with ordered initialization (as long as \<iostream> is included before the object is defined).
+	* `Unless sync_with_stdio(false) has been issued, it is safe to concurrently access these objects from multiple threads for both formatted and unformatted input.`
+	* Once std::cin is constructed, std::cin.tie() returns &std::cout, and likewise, std::wcin.tie() returns &std::wcout. This means that any formatted input operation on std::cin forces a call to std::cout.flush() if any characters are pending for output.
+	* Notes
+		* The 'c' in the name refers to "character" (stroustrup.com FAQ); cin means "character input" and wcin means "wide character input"
+	* [C++ cin 的详细用法](https://mp.weixin.qq.com/s/BP3gfSd7Ya_9MLE_ArM9LA)
+		* https://dablelv.blog.csdn.net/article/details/48213811
+		* 1. cin 简介
+		* 2. cin 的常用读取方法
+			* 2.1 cin>> 的用法
+			* 2.2 cin.get() 的用法
+				* 2.2.1 cin.get() 读取一个字符
+				* 2.2.2 cin.get() 读取一行
+			* 2.3 cin.getline() 读取一行
+		* 3. cin 的条件状态
+		* 4. cin 清空输入缓冲区
+		* 5. 从标准输入读取一行字符串的其它方法
+			* 5.1 getline() 读取一行
+			* 5.2 gets() 读取一行
+* [std::cout, std::wcout - cppreference.com](https://en.cppreference.com/w/cpp/io/cout)
+	* writes to the standard C output stream stdout (global object)
+	* The global objects std::cout and std::wcout control output to a stream buffer of implementation-defined type (derived from std::streambuf), associated with the standard C output stream stdout.
+	* These objects are guaranteed to be initialized during or before the first time an object of type std::ios_base::Init is constructed and are available for use in the constructors and destructors of static objects with ordered initialization (as long as \<iostream> is included before the object is defined).
+	* Unless std::ios_base::sync_with_stdio(false) has been issued, it is safe to concurrently access these objects from multiple threads for both formatted and unformatted output.
+	* By specification of std::cin, std::cin.tie() returns &std::cout. This means that any input operation on std::cin executes std::cout.flush() (via std::basic_istream::sentry's constructor). Similarly, std::wcin.tie() returns &std::wcout.
+	* By specification of std::cerr, std::cerr.tie() returns &std::cout. This means that any output operation on std::cerr executes std::cout.flush() (via std::basic_ostream::sentry's constructor). Similarly, std::wcerr.tie() returns &std::wcout. (since C++11)
+	* Notes
+		* The 'c' in the name refers to "character" (stroustrup.com FAQ); cout means "character output" and wcout means "wide character output".
+		* Because dynamic initialization of templated variables are unordered, it is not guaranteed that std::cout has been initialized to a usable state before the initialization of such variables begins, unless an object of type std::ios_base::Init has been constructed.
+* [Fast I/O for Competitive Programming - GeeksforGeeks](https://www.geeksforgeeks.org/fast-io-for-competitive-programming/)
+    ```c++
+    #include <bits/stdc++.h>
+    using namespace std;
+
+    #define endl '\n'
+
+    int main()
+    {
+      ios_base::sync_with_stdio(false);
+      cin.tie(NULL);
+      return 0;
+    }
+    ```
+    * [c++ - Significance of ios_base::sync_with_stdio(false); cin.tie(NULL); - Stack Overflow](https://stackoverflow.com/questions/31162367/significance-of-ios-basesync-with-stdiofalse-cin-tienull/31165481#31165481)
+    * [std::ios_base::sync_with_stdio - cppreference.com](https://en.cppreference.com/w/cpp/io/ios_base/sync_with_stdio)
+    * [ios::tie - C++ Reference](https://www.cplusplus.com/reference/ios/ios/tie/)
+
+### [Input/output manipulators](https://en.cppreference.com/w/cpp/io/manip)
+
+* The stream-based I/O library uses I/O manipulators (e.g. std::boolalpha, std::hex, etc.) to control how streams behave.
+* [std::boolalpha, std::noboolalpha - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/boolalpha)
+	* switches between textual and numeric representation of booleans
+* [std::endl - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/endl)
+	* outputs '\n' and flushes the output stream (function template)
+	* Inserts a newline character into the output sequence os and flushes it as if by calling os.put(os.widen('\n')) followed by os.flush().
+	* This is an output-only I/O manipulator, it may be called with an expression such as out << std::endl for any out of type std::basic_ostream.
+	* Notes
+		* This manipulator may be used to produce a line of output immediately, e.g. when displaying output from a long-running process, logging activity of multiple threads or logging activity of a program that may crash unexpectedly. An explicit flush of std::cout is also necessary before a call to std::system, if the spawned process performs any screen I/O. In most other usual interactive I/O scenarios, std::endl is redundant when used with std::cout because any input from std::cin, output to std::cerr, or program termination forces a call to std::cout.flush(). Use of std::endl in place of '\n', encouraged by some sources, may significantly degrade output performance.
+		* In many implementations, standard output is line-buffered, and writing '\n' causes a flush anyway, unless std::ios::sync_with_stdio(false) was executed. In those situations, unnecessary endl only degrades the performance of file output, not standard output.
+		* The code samples on this wiki follow Bjarne Stroustrup and The C++ Core Guidelines in flushing the standard output only where necessary.
+		* When an incomplete line of output needs to be flushed, the std::flush manipulator may be used.
+		* When every character of output needs to be flushed, the std::unitbuf manipulator may be used.
+* [std::quoted - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/quoted)
+	* inserts and extracts quoted strings with embedded spaces
+* [manipulators - C++ Reference](http://www.cplusplus.com/reference/library/manipulators/)
+    * Basic format flags
+        * These manipulators are usable on both input and output streams, although many only have an effect when applied to either output or input streams.
+        * Independent flags (switch on):
+            * [showbase - C++ Reference](http://www.cplusplus.com/reference/ios/showbase/)
+            * [showpos - C++ Reference](http://www.cplusplus.com/reference/ios/showpos/)
+            * [uppercase - C++ Reference](http://www.cplusplus.com/reference/ios/uppercase/)
+        * Independent flags (switch off):
+            * [noshowpos - C++ Reference](http://www.cplusplus.com/reference/ios/noshowpos/)
+            * [nouppercase - C++ Reference](http://www.cplusplus.com/reference/ios/nouppercase/)
+        * Numerical base format flags ("basefield" flags):
+            * [dec - C++ Reference](http://www.cplusplus.com/reference/ios/dec/)
+            * [hex - C++ Reference](http://www.cplusplus.com/reference/ios/hex/?kw=hex)
+        * Floating-point format flags ("floatfield" flags):
+            * [fixed - C++ Reference](http://www.cplusplus.com/reference/ios/fixed/)
+            * [scientific - C++ Reference](http://www.cplusplus.com/reference/ios/scientific/)
+        * Adustment format flags ("adjustfield" flags):
+            * [left - C++ Reference](http://www.cplusplus.com/reference/ios/left/)
+            * [right - C++ Reference](http://www.cplusplus.com/reference/ios/right/)
+    * Parameterized manipulators
+        * These functions take parameters when used as manipulators. They require the explicit inclusion of the header file \<iomanip\>.
+        * [setfill - C++ Reference](http://www.cplusplus.com/reference/iomanip/setfill/)
+        * [setprecision - C++ Reference](http://www.cplusplus.com/reference/iomanip/setprecision/)
+        * [setw - C++ Reference](http://www.cplusplus.com/reference/iomanip/setw/)
+* [Print Pretty | HackerRank](https://www.hackerrank.com/challenges/prettyprint/problem)
+```c++
+#include <iostream>
+#include <iomanip> 
+using namespace std;
+
+int main() {
+  int T; cin >> T;
+  cout << setiosflags(ios::uppercase);
+  cout << setw(0xf) << internal;
+  while(T--) {
+      double A; cin >> A;
+      double B; cin >> B;
+      double C; cin >> C;
+
+      // LINE 1 
+      cout << hex << left << showbase << nouppercase; // formatting
+      cout << (long long) A << endl; // output
+
+      // LINE 2
+      cout << dec << right << setw(15) << setfill('_') << showpos << fixed << setprecision(2); // formatting
+      cout << B << endl; // output
+
+      // LINE 3
+      cout << scientific << uppercase << noshowpos << setprecision(9); // formatting
+      cout << C << endl; // output
+  }
+
+  return 0;
+}
+```
+* How to set precision of float / double in output ?
+    * [std::setprecision - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/setprecision)
+        * /*unspecified*/ setprecision( int n );
+        * When used in an expression out << setprecision(n) or in >> setprecision(n), sets the precision parameter of the stream out or in to exactly n.
+    * [std::fixed, std::scientific, std::hexfloat, std::defaultfloat - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/fixed)
+        * This is an I/O manipulator, it may be called with an expression such as out << std::fixed for any out of type std::basic_ostream or with an expression such as in >> std::scientific for any in of type std::basic_istream.
+        * `cout << fixed << setprecision(9) << e << endl; // 14049.304930000`
+
+### [C-style file input/output](https://en.cppreference.com/w/cpp/io/c)
+
+* The C I/O subset of the C++ standard library implements C-style stream input/output operations. The \<cstdio> header provides generic file operation support and supplies functions with narrow and multibyte character input/output capabilities, and the \<cwchar> header provides functions with wide character input/output capabilities.
+* C streams are denoted by objects of type std::FILE that can only be accessed and manipulated through pointers of type std::FILE*. Each C stream is associated with an external physical device (file, standard input stream, printer, serial port, etc).
+* [c++ - Where is `%p` useful with printf? - Stack Overflow](https://stackoverflow.com/questions/2369541/where-is-p-useful-with-printf)
+	* Always use %p for pointers.
+
+### [{fmt}](https://fmt.dev/latest/index.html)
+
+* {fmt} is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
+* [Usage — fmt 8.1.1 documentation](https://fmt.dev/latest/usage.html)
+	* To use the {fmt} library, add fmt/core.h, fmt/format.h, fmt/format-inl.h, src/format.cc and optionally other headers from a release archive or the Git repository to your project. Alternatively, you can build the library with CMake.
+* [Format String Syntax — fmt 8.1.1 documentation](https://fmt.dev/latest/syntax.html)
+
+## [Filesystem library (since C++17)](https://en.cppreference.com/w/cpp/filesystem)
+
+* The Filesystem library provides facilities for performing operations on file systems and their components, such as paths, regular files, and directories.
+* The filesystem library was originally developed as boost.filesystem, was published as the technical specification ISO/IEC TS 18822:2015, and finally merged to ISO C++ as of C++17. The boost implementation is currently available on more compilers and platforms than the C++17 library.
+* The filesystem library facilities may be unavailable if a hierarchical file system is not accessible to the implementation, or if it does not provide the necessary capabilities. Some features may not be available if they are not supported by the underlying file system (e.g. the FAT filesystem lacks symbolic links and forbids multiple hardlinks). In those cases, errors must be reported.
+* The behavior is undefined if the calls to functions in this library introduce a file system race, that is, when multiple threads, processes, or computers interleave access and modification to the same object in a file system.
+* [C如何获取文件夹下所有文件 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/3873279.html)
+* [C++如何用system命令获取文件夹下所有文件名 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/3873250.html)
+* [C++实现获取当前执行文件全路径 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2010/11/02/1867584.html)
+* [freopen - C/C++文件输入输出利器 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2011/04/22/2024418.html)
+* How to read csv files with BOM ?
+	* read as UTF-8 file or
+	* skip BOM in ifstream or
+	* remove BOM in input files
+	* [Byte order mark - Wikipedia](https://en.wikipedia.org/wiki/Byte_order_mark#Representations_of_byte_order_marks_by_encoding)
+		* The byte order mark (BOM) is a particular usage of the special Unicode character, U+FEFF BYTE ORDER MARK, whose appearance as a magic number at the start of a text stream can signal several things to a program reading the text
+	* [Byte Order Mark - Globalization | Microsoft Docs](https://docs.microsoft.com/en-us/globalization/encoding/byte-order-mark)
+	* [c++ - Why am i getting these invalid characters before my file data? - Stack Overflow](https://stackoverflow.com/questions/30720619/why-am-i-getting-these-invalid-characters-before-my-file-data)
+	* [c++ - Characters not recognized while reading from file - Stack Overflow](https://stackoverflow.com/questions/48985128/characters-not-recognized-while-reading-from-file)
+		* [C++ read and write UTF-8 file using standard libarary | sockbandit](https://sockbandit.wordpress.com/2012/05/31/c-read-and-write-utf-8-file-using-standard-libarary/)
+	* [byte - How do I remove the character "ï»¿" from the beginning of a text file in C++? - Stack Overflow](https://stackoverflow.com/questions/20778921/how-do-i-remove-the-character-%C3%AF-from-the-beginning-of-a-text-file-in-c/20778970)
+	* [C++ reading from file puts three weird characters - Stack Overflow](https://stackoverflow.com/questions/10417613/c-reading-from-file-puts-three-weird-characters)
+	* [r - Weird characters added to first column name after reading a toad-exported csv file - Stack Overflow](https://stackoverflow.com/questions/22974765/weird-characters-added-to-first-column-name-after-reading-a-toad-exported-csv-fi)
+	* [How to remove BOM from any text/XML file](https://www.ibm.com/support/pages/how-remove-bom-any-textxml-file)
+```c++
+std::unordered_map<std::string, std::vector<std::string> > ReadCSV(const std::string& filename)
+{
+    std::ifstream ifs(filename, std::ifstream::in);
+    std::unordered_map<std::string, std::vector<std::string> > mData{};
+
+    if (ifs.is_open()) {
+        std::string line{};
+        auto checkedBOM = false;
+        const std::unordered_set<std::string> setBOM{ "\xef\xbb\xbf" };
+
+        while (std::getline(ifs, line)) {
+            if (!checkedBOM) {
+                if (setBOM.count(line.substr(0, 3)) > 0) {
+                    line = line.substr(3);
+                }
+                checkedBOM = true;
+            }
+
+            std::stringstream ss{ line };
+            std::string value{};
+            std::vector<std::string> vValue{};
+
+            while (std::getline(ss, value, ',')) {
+                vValue.push_back(value);
+            }
+
+            mData[vValue[0]] = vValue;
+        }
+
+        ifs.close();
+    }
+    else {
+        std::cerr << "Error opening file [" << filename << "]!";
+    }
+
+    return mData;
+}
+```
+
+### Classes
+
+* Defined in header \<filesystem>
+* Defined in namespace std::filesystem 
+* [\<filesystem> | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/filesystem?view=msvc-160)
+  * Include the header \<filesystem> for access to classes and functions that manipulate and retrieve information about paths, files, and directories.
+
+* [std::filesystem::path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path)
+  * [std::filesystem::path::concat, std::filesystem::path::operator+= - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/concat)
+    * Concatenates the current path and the argument
+  * [std::filesystem::path::extension - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/extension)
+  * [std::filesystem::path::filename - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/filename)
+  * [std::filesystem::operator/(std::filesystem::path) - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/operator_slash)
+    * Concatenates two path components using the preferred directory separator if appropriate (see operator/= for details).
+    * Effectively returns path(lhs) /= rhs.
+  * [std::filesystem::path::parent_path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/parent_path)
+  * [std::filesystem::path::replace_filename - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/replace_filename)
+  * [std::filesystem::path::replace_extension - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/replace_extension)
+  * [std::filesystem::path::stem - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/stem)
+    * Returns the filename identified by the generic-format path stripped of its extension.
+    * Returns the substring from the beginning of filename() up to and not including the last period (.) character, with the following exceptions:
+      * If the first character in the filename is a period, that period is ignored (a filename like ".profile" is not treated as an extension)
+      * If the filename is one of the special filesystem components dot or dot-dot, or if it has no periods, the function returns the entire filename().
+  * [std::filesystem::operator/(std::filesystem::path) - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/operator_slash)
+* [std::filesystem::filesystem_error - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/filesystem_error)
+* [std::filesystem::directory_entry - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/directory_entry)
+  * Represents a directory entry. The object stores a path as a member and may also store additional file attributes (hard link count, status, symlink status file size, and last write time) during directory iteration.
+  * [std::filesystem::directory_entry::path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/directory_entry/path)
+  	* Returns the full path the directory entry refers to.
+  * [How can I get the list of files in a directory using C or C++? - Stack Overflow](https://stackoverflow.com/questions/612097/how-can-i-get-the-list-of-files-in-a-directory-using-c-or-c)
+```c++
+#include <string>
+#include <iostream>
+#include <filesystem>
+namespace fs = std::filesystem;
+
+int main()
+{
+    std::string path = "/path/to/directory";
+    for (const auto & entry : fs::directory_iterator(path))
+        std::cout << entry.path() << std::endl;
+}
+```
+* [std::filesystem::directory_iterator - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/directory_iterator)
+  * directory_iterator is a LegacyInputIterator that iterates over the directory_entry elements of a directory (but does not visit the subdirectories). The iteration order is unspecified, except that each directory entry is visited only once. The special pathnames dot and dot-dot are skipped.
+  * If the directory_iterator reports an error or is advanced past the last directory entry, it becomes equal to the default-constructed iterator, also known as the end iterator. Two end iterators are always equal, dereferencing or incrementing the end iterator is undefined behavior.
+  * If a file or a directory is deleted or added to the directory tree after the directory iterator has been created, it is unspecified whether the change would be observed through the iterator.
+  * [c++ - Get an ordered list of files in a folder - Stack Overflow](https://stackoverflow.com/questions/30983154/get-an-ordered-list-of-files-in-a-folder)
+    ```c++
+    std::vector<std::filesystem::path> files_in_directory;
+    std::copy(std::filesystem::directory_iterator(myFolder), std::filesystem::directory_iterator(), std::back_inserter(files_in_directory));
+    std::sort(files_in_directory.begin(), files_in_directory.end());
+
+    for (const std::string & filename : files_in_directory) {
+        std::cout << path.string() << std::endl; // printed in alphabetical order
+    }
+    ```
+* [std::filesystem::copy_options - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy_options)
+  * [c++ - How to copy a file from a folder to another folder - Stack Overflow](https://stackoverflow.com/questions/9125122/how-to-copy-a-file-from-a-folder-to-another-folder)
+* [std::filesystem::copy - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/copy)
+    * Defined in header \<filesystem> since C++ 17
+* [std::filesystem::create_directory, std::filesystem::create_directories - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/create_directory)
+* [std::filesystem::current_path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/current_path)
+* [std::filesystem::exists - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/exists)
+* [std::filesystem::file_size - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/file_size)
+* [std::filesystem::remove, std::filesystem::remove_all - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/remove)
+* [std::filesystem::rename - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/rename)
+* [std::filesystem::temp_directory_path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/temp_directory_path)
+* [boost Filesystem Reference - Class path](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#class-path)
+  * [Chapter 35. Boost.Filesystem - Files and Directories](https://theboostcpplibraries.com/boost.filesystem-files-and-directories)
+  * [Filesystem Reference - copy_file()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#copy_file)
+  * [Filesystem Reference - create_directories()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#create_directories)
+  * [Filesystem Reference - exists()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#exists)
+  * [Filesystem Reference - filename()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#path-filename)
+  * [Filesystem Reference - path extension()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#path-extension)
+  * [Filesystem Reference - remove()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#remove)
+  * [Filesystem Reference - remove_all()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#remove_all)
+  * [Filesystem Reference - string()](https://www.boost.org/doc/libs/1_72_0/libs/filesystem/doc/reference.html#string)
+  * [c++ - How to use copy_file in boost::filesystem? - Stack Overflow](https://stackoverflow.com/questions/4785491/how-to-use-copy-file-in-boostfilesystem)
+  * [string - How can I extract the file name and extension from a path in C++ - Stack Overflow](https://stackoverflow.com/questions/4430780/how-can-i-extract-the-file-name-and-extension-from-a-path-in-c)
+
+### Non-member functions
+
+## [Concurrency support library](https://en.cppreference.com/w/cpp/thread)
+
+* C++ includes built-in support for threads, atomic operations, mutual exclusion, condition variables, and futures.
+* [CP: Concurrency and parallelism - C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-concurrency)
+* [现代 C++ 并发编程基础](https://mp.weixin.qq.com/s/GGIczr97q-RxAfAnQKeDRg)
+  * https://changkun.de/modern-cpp/zh-cn/07-thread/index.html
+  * 并行基础
+  * 互斥量与临界区
+  * 期物
+  * 条件变量
+* [C++并发编程（C++11到C++17）](https://mp.weixin.qq.com/s/sLaJQl4cj_c-M2qy7iX__A)
+  * 为什么要并发编程
+  * 并发与并行
+    * 并发（Concurrent）与并行（Parallel）都是很常见的术语。
+  * 进程与线程
+  * 并发系统的性能
+  * C++与并发编程
+  * 编译器与C++标准
+  * 测试环境
+  * 线程
+  * 管理当前线程
+  * 一次调用
+  * 并发任务
+  * 竞争条件与临界区
+  * 互斥体与锁
+  * 通用锁定算法
+  * 通用互斥管理
+  * 并行算法
+* [多线程一定能优化程序性能吗？](https://mp.weixin.qq.com/s/tZn8Og6p_1nPc3vqeK_BZw)
+	* 多线程与CPU
+	* 多线程与IO
+	* 多线程与内存
+* [Advanced Parallel Programming in C++ – Patrick Diehl](https://www.diehlpk.de/blog/modern-cpp/)
+* [thread、future、promise、packaged_task、async之间有什么关系？](https://mp.weixin.qq.com/s/fUD4HxtUNhnpVlqGNAbc6Q)
+	* 并发编程一般指多线程编程，C++11之后关于多线程编程有几个高级API：
+		* std::thread 
+		* std::future
+		* std::shared_future
+		* std::promise
+		* std::packaged_task
+		* std::async
+* [打开线程 | 进程 | 协程的大门](https://mp.weixin.qq.com/s/2rVYPeKBnTrFoSxmUEM08g)
+	* 进程和线程是什么
+	* 进程和线程有什么区别
+	* 为什么有了进程又出现线程
+	* 内核态和用户态有啥不同
+	* 协程有什么特点
+* [协程到底有什么用？6种I/O模式告诉你！](https://mp.weixin.qq.com/s/xSf3eHG4CX3rJkzuU8p5IQ)
+	* 为了高效进行IO操作，我们采用的技术是这样演进的：
+		* 单线程串行 + 阻塞式IO(同步)
+		* 多线程并行 + 阻塞式IO(并行)
+		* 单线程 + 非阻塞式IO(异步) + event loop
+		* 单线程 + 非阻塞式IO(异步) + event loop + 回调
+		* Reactor模式(更好的单线程 + 非阻塞式IO+ event loop + 回调)
+		* 单线程 + 非阻塞式IO(异步) + event loop + 协程
+	* 最终我们采用协程技术获取到了异步编程的高效以及同步编程的简单理解，这也是当今高性能服务器常用的一种技术组合。
+* [深入理解协程](https://mp.weixin.qq.com/s/r8KjFEojQaRIqBC2TfByWg)
+	* C++ 在互联网服务端开发方向依然占据着相当大的份额；百度，腾讯，甚至以java为主流开发语言的阿里都在大规模使用C++做互联网服务端开发，今天以C++为例子，分析一下要支持协程，需要考虑哪些问题，如何权衡利弊，反过来也可以了解到协程适合哪些场景。
+* [异步编程到底在说啥？](https://mp.weixin.qq.com/s/aaCVgXekO6unpFDfKchVlA)
+	* 同步就好比你排队去自助售票机取电影票，你必须排队等待前一个人取完电影票才能到你，你不能在前一个取票的过程中取自己的票，这时我们说取电影票时你和前一个人是同步的。
+	* 而异步就好比去吃大餐，你在座位上看菜单点菜，其它人也可以点菜，你不需要等待其它人吃完饭才能下单，这时我们说你点菜和其它人吃饭是异步的。
+* [C++异步从理论到实践总览篇](https://mp.weixin.qq.com/s/tnADuXt4FXIx46JuhgnrPw)
+* [async的两个坑](https://mp.weixin.qq.com/s/gmF5WXHsuFwblYDu_jDeTA)
+	* 一般人可能都知道C++异步操作有async这个东西。但不知道大家是否注意过，其实它有两个坑：
+		* 它不一定真的会异步执行
+		* 它有可能会阻塞
+
+### Threads
+
+* Threads enable programs to execute across several processor cores.
+* Defined in header [\<thread>](https://en.cppreference.com/w/cpp/header/thread)
+
+#### [std::thread](https://en.cppreference.com/w/cpp/thread/thread)
+
+* manages a separate thread (class)
+* Threads enable programs to execute across several processor cores.
+* The class thread represents [a single thread of execution](https://en.wikipedia.org/wiki/Thread_(computing)). Threads allow multiple functions to execute concurrently.
+* Threads begin execution immediately upon construction of the associated thread object (pending any OS scheduling delays), starting at the top-level function provided as a constructor argument. The return value of the top-level function is ignored and if it terminates by throwing an exception, std::terminate is called. The top-level function may communicate its return value or an exception to the caller via std::promise or by modifying shared variables (which may require synchronization, see std::mutex and std::atomic)
+* std::thread objects may also be in the state that does not represent any thread (after default construction, move from, detach, or join), and a thread of execution may not be associated with any thread objects (after detach).
+* No two std::thread objects may represent the same thread of execution; std::thread is not CopyConstructible or CopyAssignable, although it is MoveConstructible and MoveAssignable.
+* [(constructor)](https://en.cppreference.com/w/cpp/thread/thread/thread)
+	* constructs new thread object (public member function)
+	* 1) Creates new thread object which does not represent a thread.
+	* 2) Move constructor. Constructs the thread object to represent the thread of execution that was represented by other. After this call other no longer represents a thread of execution.
+	* 3) Creates new std::thread object and associates it with a thread of execution. The new thread of execution starts executing /*INVOKE*/(std::move(f_copy), std::move(args_copy)...), where
+		* /*INVOKE*/ performs the INVOKE operation specified in Callable, which can be performed by std::invoke (since C++17), and
+		* f_copy is an object of type std::decay\<Function>::type and constructed from std::forward\<Function>(f), and
+		* args_copy... are objects of types std::decay\<Args>::type... and constructed from std::forward\<Args>(args)....
+	* Constructions of these objects are executed in the context of the caller, so that any exceptions thrown during evaluation and copying/moving of the arguments are thrown in the current thread, without starting the new thread. The program is ill-formed if any construction or the INVOKE operation is invalid.
+	* This constructor does not participate in overload resolution if std::decay\<Function>::type is the same type as thread.
+	* The completion of the invocation of the constructor synchronizes-with (as defined in std::memory_order) the beginning of the invocation of the copy of f on the new thread of execution.
+	* 4) The copy constructor is deleted; threads are not copyable. No two std::thread objects may represent the same thread of execution.
+	* Parameters
+		* other	-	another thread object to construct this thread object with
+		* f	-	Callable object to execute in the new thread
+		* args...	-	arguments to pass to the new function
+	* Postconditions
+		* 1) get_id() equal to `std::thread::id()` (i.e. joinable is false)
+		* 2) other.get_id() equal to `std::thread::id()` and get_id() returns the value of other.get_id() prior to the start of construction
+		* 3) get_id() not equal to `std::thread::id()` (i.e. joinable is true)
+	* Exceptions
+		* 3) std::system_error if the thread could not be started. The exception may represent the error condition std::errc::resource_unavailable_try_again or another implementation-specific error condition.
+	* Notes
+		* The arguments to the thread function are moved or copied by value. If a reference argument needs to be passed to the thread function, it has to be wrapped (e.g., with std::ref or std::cref).
+		* Any return value from the function is ignored. If the function throws an exception, std::terminate is called. In order to pass return values or exceptions back to the calling thread, std::promise or std::async may be used.
+* [thread::thread - C++ Reference](https://cplusplus.com/reference/thread/thread/thread/)
+	* Data races
+		* The move constructor (4) modifies x.
+```c++
+// constructing threads
+#include <iostream>       // std::cout
+#include <atomic>         // std::atomic
+#include <thread>         // std::thread
+#include <vector>         // std::vector
+
+std::atomic<int> global_counter (0);
+
+void increase_global (int n) { for (int i=0; i<n; ++i) ++global_counter; }
+
+void increase_reference (std::atomic<int>& variable, int n) { for (int i=0; i<n; ++i) ++variable; }
+
+struct C : std::atomic<int> {
+  C() : std::atomic<int>(0) {}
+  void increase_member (int n) { for (int i=0; i<n; ++i) fetch_add(1); }
+};
+
+int main ()
+{
+  std::vector<std::thread> threads;
+
+  std::cout << "increase global counter with 10 threads...\n";
+  for (int i=1; i<=10; ++i)
+    threads.push_back(std::thread(increase_global,1000));
+
+  std::cout << "increase counter (foo) with 10 threads using reference...\n";
+  std::atomic<int> foo(0);
+  for (int i=1; i<=10; ++i)
+    threads.push_back(std::thread(increase_reference,std::ref(foo),1000));
+
+  std::cout << "increase counter (bar) with 10 threads using member...\n";
+  C bar;
+  for (int i=1; i<=10; ++i)
+    threads.push_back(std::thread(&C::increase_member,std::ref(bar),1000));
+
+  std::cout << "synchronizing all threads...\n";
+  for (auto& th : threads) th.join();
+
+  std::cout << "global_counter: " << global_counter << '\n';
+  std::cout << "foo: " << foo << '\n';
+  std::cout << "bar: " << bar << '\n';
+
+  return 0;
+}
+/*
+increase global counter using 10 threads...
+increase counter (foo) with 10 threads using reference...
+increase counter (bar) with 10 threads using member...
+synchronizing all threads...
+global_counter: 10000
+foo: 10000
+bar: 10000
+*/
+```
+* [`std::thread::joinable` - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/joinable)
+	* checks whether the thread is joinable, i.e. potentially running in parallel context (public member function)
+	* Checks if the std::thread object identifies an active thread of execution. Specifically, returns true if get_id() != `std::thread::id()`. So a default constructed thread is not joinable.
+	* A thread that has finished executing code, but has not yet been joined is still considered an active thread of execution and is therefore joinable.
+	* Return value
+		* true if the thread object identifies an active thread of execution, false otherwise
+* [`std::thread::get_id` - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/get_id)
+	* Returns a value of `std::thread::id` identifying the thread associated with *this.
+	* Return value
+		* A value of type `std::thread::id` identifying the thread associated with *this. If there is no thread associated, default constructed `std::thread::id` is returned.
+* [`std::thread::hardware_concurrency` - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency)
+	* returns the number of concurrent threads supported by the implementation (public static member function)
+	* Returns the number of concurrent threads supported by the implementation. The value should be considered only a hint.
+	* Return value
+		* Number of concurrent threads supported. If the value is not well defined or not computable, returns ​0​.
+* [`std::thread::join` - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/join)
+	* waits for the thread to finish its execution (public member function)
+	* Blocks the current thread until the thread identified by *this finishes its execution.
+	* The completion of the thread identified by *this synchronizes with the corresponding successful return from join().
+	* No synchronization is performed on *this itself. Concurrently calling join() on the same thread object from multiple threads constitutes a data race that results in undefined behavior.
+	* Postconditions
+		* joinable() is false
+	* Exceptions
+		* std::system_error if an error occurs.
+	* Error Conditions
+		* resource_deadlock_would_occur if this->get_id() == std::this_thread::get_id() (deadlock detected)
+		* no_such_process if the thread is not valid
+		* invalid_argument if joinable() is false
+* [Multithreading in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/multithreading-in-cpp/)
+```c++
+// CPP program to demonstrate multithreading
+// using three different callables.
+#include <iostream>
+#include <thread>
+using namespace std;
+
+// A dummy function
+void foo(int Z)
+{
+    for (int i = 0; i < Z; i++) {
+        cout << "Thread using function"
+            " pointer as callable\n";
+    }
+}
+
+// A callable object
+class thread_obj {
+public:
+    void operator()(int x)
+    {
+        for (int i = 0; i < x; i++)
+            cout << "Thread using function"
+                " object as callable\n";
+    }
+};
+
+int main()
+{
+    cout << "Threads 1 and 2 and 3 "
+        "operating independently" << endl;
+
+    // This thread is launched by using
+    // function pointer as callable
+    thread th1(foo, 3);
+
+    // This thread is launched by using
+    // function object as callable
+    thread th2(thread_obj(), 3);
+
+    // Define a Lambda Expression
+    auto f = [](int x) {
+        for (int i = 0; i < x; i++)
+            cout << "Thread using lambda"
+            " expression as callable\n";
+    };
+
+    // This thread is launched by using
+    // lamda expression as callable
+    thread th3(f, 3);
+
+    // Wait for the threads to finish
+    // Wait for thread t1 to finish
+    th1.join();
+
+    // Wait for thread t2 to finish
+    th2.join();
+
+    // Wait for thread t3 to finish
+    th3.join();
+
+    return 0;
+}
+```
+* [用三个线程按顺序循环打印ABC三个字母 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/8575543.html)
+* [C++ 线程的使用](https://mp.weixin.qq.com/s/tMWxvw4Kmga5ayUfXHaaIw)
+  * C++11 之前，C++ 语言没有对并发编程提供语言级别的支持，这使得我们在编写可移植的并发程序时，存在诸多的不便。现在 C++11 中增加了线程以及线程相关的类，很方便地支持了并发编程，使得编写的多线程程序的可移植性得到了很大的提高。
+  * C++11 中提供的线程类叫做 std::thread，基于这个类创建一个新的线程非常的简单，只需要提供线程函数或者函数对象即可，并且可以同时指定线程函数的参数。我们首先来了解一下这个类提供的一些常用 API：
+  * 1. 构造函数
+  * 2. 公共成员函数
+    * 2.1 get_id()
+    * 2.2 join()
+    * 2.3 detach()
+    * 2.5 joinable()
+    * 2.6 operator=
+  * 3. 静态函数
+  * 4. C 线程库
+    * [C语言线程库的使用](https://mp.weixin.qq.com/s?__biz=MzI3ODQ3OTczMw==&mid=2247491745&idx=1&sn=d995e1617ed6ad3d56de28b5be127e73&scene=21#wechat_redirect)
+* How to insert into vector with thread safe ?
+	* [multithreading - C++ STL Concurrent update to values in fixed size map - Is it safe? - Stack Overflow](https://stackoverflow.com/questions/47309237/c-stl-concurrent-update-to-values-in-fixed-size-map-is-it-safe)
+	* [c++ - Can a std::map rebalance during the invocation of a const function? - Stack Overflow](https://stackoverflow.com/questions/26867435/can-a-stdmap-rebalance-during-the-invocation-of-a-const-function/26867506#26867506)
+	* [c++ - Can different threads insert into a map if they always use different keys? - Stack Overflow](https://stackoverflow.com/questions/27829806/can-different-threads-insert-into-a-map-if-they-always-use-different-keys)
+	* [c++ - Populating a vector in parallel, order not important - Stack Overflow](https://stackoverflow.com/questions/41191945/populating-a-vector-in-parallel-order-not-important)
+	* [c++ - Why does vector "emplace_back" behave much slower in multiple threads than single threads - Stack Overflow](https://stackoverflow.com/questions/57343773/why-does-vector-emplace-back-behave-much-slower-in-multiple-threads-than-singl)
+	* [c++ - Are std::vector emplace_back and push_back thread-safe - Stack Overflow](https://stackoverflow.com/questions/66471521/are-stdvector-emplace-back-and-push-back-thread-safe)
+	* [`c++ - Are concurrent calls to emplace_back() and operator[]() from std::deque thread safe? - Stack Overflow`](https://stackoverflow.com/questions/41001062/are-concurrent-calls-to-emplace-back-and-operator-from-stddeque-thread-s)
+	* [c++ - Fill a container from several threads - Code Review Stack Exchange](https://codereview.stackexchange.com/questions/104975/fill-a-container-from-several-threads)
+	* [(2) How do I know if a thread has finished its operation in C++? - Quora](https://www.quora.com/How-do-I-know-if-a-thread-has-finished-its-operation-in-C++)
+	* [(2) How can I know when a thread has finished? I want to check if a thread has finished and update some data structure. - Quora](https://www.quora.com/How-can-I-know-when-a-thread-has-finished-I-want-to-check-if-a-thread-has-finished-and-update-some-data-structure)
+	* [a simple thread example to show thread-safe vector operation](https://gist.github.com/phg1024/8447146)
+```c++
+#include <iostream>
+#include <mutex>
+#include <string>
+#include <thread>
+#include <vector>
+using namespace std;
+
+int main()
+{
+    std::vector<std::string>    v_values{"test1", "test2", "test3", "test4"};
+    std::vector<std::string>    v_results;
+    v_results.reserve(v_values.size());
+
+    std::cout << "std::thread::hardware_concurrency() : " << std::thread::hardware_concurrency() << "\n";
+    auto max_n_threads = std::thread::hardware_concurrency();
+    const auto n_threads = (v_values.size() >= max_n_threads) ? max_n_threads : v_values.size();
+    std::cout << "n_threads : " << n_threads << "\n";
+
+    std::vector<std::thread> v_threads;
+    v_threads.reserve(n_threads);
+
+    std::mutex  mtx_results;
+    auto cmd = [&v_values, &n_threads, &mtx_results, &v_results](auto id) {
+        std::cout << "id : " << id << "\n";
+        auto s = ""s;
+
+        for (auto i = id; i < v_values.size(); i += n_threads) {
+            s = v_values.at(i);
+            auto new_s = s.append("_result");
+            const std::lock_guard<std::mutex> guard(mtx_results);   // lock required
+            v_results.emplace_back(new_s);
+        }
+    };
+
+    for (auto i = 0u; i < n_threads; ++ i) {
+        v_threads.emplace_back(std::thread{cmd, i});
+    }
+
+    auto thread_count = 0;
+    for (auto& it : v_threads) {
+        std::cout << "Joining  : " << thread_count << " : " << it.get_id() << "\n";
+
+        if (it.joinable()) {
+            std::cout << "Joined  : " << thread_count << " : " << it.get_id() << "\n";
+            it.join();
+        }
+
+        ++ thread_count;
+    }
+
+    std::cout << "v_results.size() : " << v_results.size() << "\n";
+    for (auto s : v_results) {
+        std::cout << s << " ";
+    }
+
+    return 0;
+}
+/*
+std::thread::hardware_concurrency() : 2
+n_threads : 2
+Joining  : 0 : 140660807714560
+Joined  : 0 : 140660807714560
+id : 0
+Joining  : 1 : 140660799321856
+Joined  : 1 : 140660799321856
+id : 1
+v_results.size() : 4
+test1_result test3_result test2_result test4_result 
+*/
+```
+
+#### Functions managing the current thread
+
+* [std::this_thread::sleep_for - cppreference.com](https://en.cppreference.com/w/cpp/thread/sleep_for)
+	* Blocks the execution of the current thread for at least the specified sleep_duration.
+	* This function may block for longer than sleep_duration due to scheduling or resource contention delays.
+	* The standard recommends that a steady clock is used to measure the duration. If an implementation uses a system clock instead, the wait time may also be sensitive to clock adjustments.
+* [Sleep v.s. sleep - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/5584088.html)
+
+### [Atomic operations library](https://en.cppreference.com/w/cpp/atomic)
+
+* These components are provided for fine-grained atomic operations allowing for lockless concurrent programming. Each atomic operation is indivisible with regards to any other atomic operation that involves the same object. Atomic objects are [free of data races](https://en.cppreference.com/w/cpp/language/memory_model#Threads_and_data_races).
+* Neither the _Atomic macro, nor any of the non-macro global namespace declarations are provided by any C++ standard library header other than \<stdatomic.h>. (since C++23)
+* Defined in header [\<atomic>](https://en.cppreference.com/w/cpp/header/atomic)
+
+#### [std::atomic](https://en.cppreference.com/w/cpp/atomic/atomic)
+
+* Each instantiation and full specialization of the std::atomic template defines an atomic type. If one thread writes to an atomic object while another thread reads from it, the behavior is well-defined (see memory model for details on data races).
+* In addition, accesses to atomic objects may establish inter-thread synchronization and order non-atomic memory accesses as specified by std::memory_order.
+* std::atomic is neither copyable nor movable.
+* [std::atomic\<T>::atomic - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/atomic)
+    * constructs an atomic object
+* [std::atomic\<T>::compare_exchange_weak, std::atomic\<T>::compare_exchange_strong - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange)
+    * atomically compares the value of the atomic object with non-atomic argument and performs atomic exchange if equal or atomic load if not
+* [atomic_compare_exchange_strong - C++ Reference](https://www.cplusplus.com/reference/atomic/atomic_compare_exchange_strong/)
+    * Compare and exchange contained value (strong)
+    * Compares the contents of the value contained in obj with the value pointed by expected:
+    * - if true, it replaces the contained value with val.
+    * - if false, it replaces the value pointed by expected with the contained value .
+* [std::atomic\<T>::load - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/load)
+    * atomically obtains the value of the atomic object
+* [std::atomic\<T>::store - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/store)
+    * atomically replaces the value of the atomic object with a non-atomic argument
+* [Non-blocking algorithm - Wikipedia](https://en.wikipedia.org/wiki/Non-blocking_algorithm)
+    * In computer science, an algorithm is called non-blocking if failure or suspension of any thread cannot cause failure or suspension of another thread;[1] for some operations, these algorithms provide a useful alternative to traditional blocking implementations. A non-blocking algorithm is lock-free if there is guaranteed system-wide progress, and wait-free if there is also guaranteed per-thread progress. "Non-blocking" was used as a synonym for "lock-free" in the literature until the introduction of obstruction-freedom in 2003.[2]
+* [Linearizability - Wikipedia](https://en.wikipedia.org/wiki/Linearizability)
+    * In concurrent programming, an operation (or set of operations) is linearizable if it consists of an ordered list of invocation and response events (callbacks), that may be extended by adding response events such that:
+        * The extended list can be re-expressed as a sequential history (is serializable).
+        * That sequential history is a subset of the original unextended list.
+    * Informally, this means that the unmodified list of events is linearizable if and only if its invocations were serializable, but some of the responses of the serial schedule have yet to return.[1]
+    * In a concurrent system, processes can access a shared object at the same time. Because multiple processes are accessing a single object, there may arise a situation in which while one process is accessing the object, another process changes its contents. Making a system linearizable is one solution to this problem. In a linearizable system, although operations overlap on a shared object, each operation appears to take place instantaneously. Linearizability is a strong correctness condition, which constrains what outputs are possible when an object is accessed by multiple processes concurrently. It is a safety property which ensures that operations do not complete in an unexpected or unpredictable manner. If a system is linearizable it allows a programmer to reason about the system.[2]
+* [Compare-and-swap - Wikipedia](https://en.wikipedia.org/wiki/Compare-and-swap)
+    * In computer science, compare-and-swap (CAS) is an atomic instruction used in multithreading to achieve synchronization. It compares the contents of a memory location with a given value and, only if they are the same, modifies the contents of that memory location to a new given value. This is done as a single atomic operation. The atomicity guarantees that the new value is calculated based on up-to-date information; if the value had been updated by another thread in the meantime, the write would fail. The result of the operation must indicate whether it performed the substitution; this can be done either with a simple boolean response (this variant is often called compare-and-set), or by returning the value read from the memory location (not the value written to it).
+```c++
+#include <atomic>
+#include <chrono>
+
+mutable std::atomic_bool _wait{ false };
+
+void _setWaitInProgress() const
+{
+    auto expected = false;
+
+    // if _wait is not able to exchange, it will keep looping unless it is released to exchange
+    while (!(_wait.compare_exchange_strong(expected, true))) {
+        expected = false;
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    }
+}
+
+void _setWaitDone() const
+{
+    _wait.store(false);
+}
+
+void TestAtomic()
+{
+    _setWaitInProgress();
+
+    DoSomething();
+
+    _setWaitDone();
+}
+```
+* [The Atomic Boolean - ModernesCpp.com](https://www.modernescpp.com/index.php/the-atomic-boolean)
+```c++
+// atomicCondition.cpp
+
+#include <atomic>
+#include <chrono>
+#include <iostream>
+#include <thread>
+#include <vector>
+
+std::vector<int> mySharedWork;
+std::atomic<bool> dataReady(false);
+
+void waitingForWork(){
+    std::cout << "Waiting " << std::endl;
+    while ( !dataReady.load() ){             // (3)
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    }
+    mySharedWork[1]= 2;                      // (4)
+    std::cout << "Work done " << std::endl;
+}
+
+void setDataReady(){
+    mySharedWork={1,0,3};                    // (1)
+    dataReady= true;                         // (2)
+    std::cout << "Data prepared" << std::endl;
+}
+
+int main()
+{
+    std::cout << std::endl;
+
+    std::thread t1(waitingForWork);
+    std::thread t2(setDataReady);
+
+    t1.join();
+    t2.join();
+
+    for (auto v: mySharedWork){
+        std::cout << v << " ";
+    }
+
+    std::cout << "\n\n";
+}
+```
+![image](https://user-images.githubusercontent.com/34557994/156122924-ede55b2c-d15d-47cc-af2c-0b219f1d3391.png)
+* [C++ 11 开发中的 Atomic 原子操作](https://mp.weixin.qq.com/s/FSE95BtgA2PT59HCX3EzsQ)
+* [std::memory_order - cppreference.com](https://en.cppreference.com/w/cpp/atomic/memory_order)
+	* defines memory ordering constraints for the given atomic operation (enum)
+	* std::memory_order specifies how memory accesses, including regular, non-atomic memory accesses, are to be ordered around an atomic operation. Absent any constraints on a multi-core system, when multiple threads simultaneously read and write to several variables, one thread can observe the values change in an order different from the order another thread wrote them. Indeed, the apparent order of changes can even differ among multiple reader threads. Some similar effects can occur even on uniprocessor systems due to compiler transformations allowed by the memory model.
+	* The default behavior of all atomic operations in the library provides for sequentially consistent ordering (see discussion below). That default can hurt performance, but the library's atomic operations can be given an additional std::memory_order argument to specify the exact constraints, beyond atomicity, that the compiler and processor must enforce for that operation.
+
+### Mutual exclusion
+
+* Mutual exclusion algorithms prevent multiple threads from simultaneously accessing shared resources. This prevents data races and provides support for synchronization between threads.
+* Defined in header [\<mutex>](https://en.cppreference.com/w/cpp/header/mutex)
+
+#### [std::mutex](https://en.cppreference.com/w/cpp/thread/mutex)
+
+* The mutex class is a synchronization primitive that can be used to protect shared data from being simultaneously accessed by multiple threads.
+* mutex offers exclusive, non-recursive ownership semantics:
+	* A calling thread owns a mutex from the time that it successfully calls either lock or try_lock until it calls unlock.
+	* When a thread owns a mutex, all other threads will block (for calls to lock) or receive a false return value (for try_lock) if they attempt to claim ownership of the mutex.
+	* A calling thread must not own the mutex prior to calling lock or try_lock.
+* The behavior of a program is undefined if a mutex is destroyed while still owned by any threads, or a thread terminates while owning a mutex. The mutex class satisfies all requirements of Mutex and StandardLayoutType.
+* std::mutex is neither copyable nor movable.
+* Notes
+	* std::mutex is usually not accessed directly: std::unique_lock, std::lock_guard, or std::scoped_lock (since C++17) manage locking in a more exception-safe manner.
+```c++
+#include <iostream>
+#include <map>
+#include <string>
+#include <chrono>
+#include <thread>
+#include <mutex>
+ 
+std::map<std::string, std::string> g_pages;
+std::mutex g_pages_mutex;
+ 
+void save_page(const std::string &url)
+{
+    // simulate a long page fetch
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    std::string result = "fake content";
+ 
+    std::lock_guard<std::mutex> guard(g_pages_mutex);
+    g_pages[url] = result;
+}
+ 
+int main() 
+{
+    std::thread t1(save_page, "http://foo");
+    std::thread t2(save_page, "http://bar");
+    t1.join();
+    t2.join();
+ 
+    // safe to access g_pages without lock now, as the threads are joined
+    for (const auto &pair : g_pages) {
+        std::cout << pair.first << " => " << pair.second << '\n';
+    }
+}
+/*
+http://bar => fake content
+http://foo => fake content
+*/
+```
+* [mutex - C++ Reference](https://www.cplusplus.com/reference/mutex/mutex/)
+	* class mutex;
+	* Mutex class
+		* A mutex is a lockable object that is designed to signal when critical sections of code need exclusive access, preventing other threads with the same protection from executing concurrently and access the same memory locations.
+		* mutex objects provide exclusive ownership and do not support recursivity (i.e., a thread shall not lock a mutex it already owns) -- see recursive_mutex for an alternative class that does.
+		* It is guaranteed to be a standard-layout class.
+
+#### Generic mutex management
+
+* [std::lock_guard - cppreference.com](https://en.cppreference.com/w/cpp/thread/lock_guard)
+	* Defined in header \<mutex>
+	* template\< class Mutex > class lock_guard; (since C++11)
+	* The class lock_guard is a mutex wrapper that provides a convenient RAII-style mechanism for owning a mutex for the duration of a scoped block.
+	* When a lock_guard object is created, it attempts to take ownership of the mutex it is given. When control leaves the scope in which the lock_guard object was created, the lock_guard is destructed and the mutex is released.
+	* The lock_guard class is non-copyable.
+	* Notes
+		* [std::scoped_lock](https://en.cppreference.com/w/cpp/thread/scoped_lock) offers a replacement for lock_guard that provides the ability to lock multiple mutexes using a deadlock avoidance algorithm. (since C++17)
+	* [std::lock_guard\<Mutex>::lock_guard - cppreference.com](https://en.cppreference.com/w/cpp/thread/lock_guard/lock_guard)
+```c++
+#include <thread>
+#include <mutex>
+#include <iostream>
+ 
+int g_i = 0;
+std::mutex g_i_mutex;  // protects g_i
+ 
+void safe_increment()
+{
+    const std::lock_guard<std::mutex> lock(g_i_mutex);
+    ++g_i;
+ 
+    std::cout << "g_i: " << g_i << "; in thread #"
+              << std::this_thread::get_id() << '\n';
+ 
+    // g_i_mutex is automatically released when lock
+    // goes out of scope
+}
+ 
+int main()
+{
+    std::cout << "g_i: " << g_i << "; in main()\n";
+ 
+    std::thread t1(safe_increment);
+    std::thread t2(safe_increment);
+ 
+    t1.join();
+    t2.join();
+ 
+    std::cout << "g_i: " << g_i << "; in main()\n";
+}
+/*
+g_i: 0; in main()
+g_i: 1; in thread #140487981209344
+g_i: 2; in thread #140487972816640
+g_i: 2; in main()
+*/
+```
+* [lock_guard - C++ Reference](https://www.cplusplus.com/reference/mutex/lock_guard/)
+  * template \<class Mutex> class lock_guard;
+  * Lock guard
+    * A lock guard is an object that manages a mutex object by keeping it always locked.
+    * On construction, the mutex object is locked by the calling thread, and on destruction, the mutex is unlocked. It is the simplest lock, and is specially useful as an object with automatic duration that lasts until the end of its context. In this way, it guarantees the mutex object is properly unlocked in case an exception is thrown.
+    * Note though that the lock_guard object does not manage the lifetime of the mutex object in any way: the duration of the mutex object shall extend at least until the destruction of the lock_guard that locks it.
+* [std::scoped_lock - cppreference.com](https://en.cppreference.com/w/cpp/thread/scoped_lock)
+	* deadlock-avoiding RAII wrapper for multiple mutexes (class template)
+	* The class scoped_lock is a mutex wrapper that provides a convenient RAII-style mechanism for owning one or more mutexes for the duration of a scoped block.
+	* When a scoped_lock object is created, it attempts to take ownership of the mutexes it is given. When control leaves the scope in which the scoped_lock object was created, the scoped_lock is destructed and the mutexes are released. If several mutexes are given, deadlock avoidance algorithm is used as if by std::lock.
+	* The scoped_lock class is non-copyable.
+
+#### Generic locking algorithms
+
+#### Call once
+
+### Futures
+
+* The standard library provides facilities to obtain values that are returned and to catch exceptions that are thrown by asynchronous tasks (i.e. functions launched in separate threads). These values are communicated in a shared state, in which the asynchronous task may write its return value or store an exception, and which may be examined, waited for, and otherwise manipulated by other threads that hold instances of std::future or std::shared_future that reference that shared state.
+* Defined in header [\<future>](https://en.cppreference.com/w/cpp/header/future)
+
+#### [std::async](https://en.cppreference.com/w/cpp/thread/async)
+
+* runs a function asynchronously (potentially in a new thread) and returns a std::future that will hold the result (function template)
+* The function template async runs the function f asynchronously (potentially in a separate thread which might be a part of a thread pool) and returns a std::future that will eventually hold the result of that function call.
+* In any case, the call to std::async synchronizes-with (as defined in std::memory_order) the call to f, and the completion of f is sequenced-before making the shared state ready. If the async policy is chosen, the associated thread completion synchronizes-with the successful return from the first function that is waiting on the shared state, or with the return of the last function that releases the shared state, whichever comes first. If std::decay\<Function>::type or each type in std::decay\<Args>::type is not constructible from its corresponding argument, the program is ill-formed.
+* Parameters
+    * f	-	Callable object to call
+    * args...	-	parameters to pass to f
+    * policy	-	bitmask value, where individual bits control the allowed methods of execution
+        * Bit	Explanation
+        * std::launch::async	enable asynchronous evaluation
+        * std::launch::deferred	enable lazy evaluation
+    * Return value
+        * std::future referring to the shared state created by this call to std::async.
+    * Exceptions
+        * Throws std::system_error with error condition std::errc::resource_unavailable_try_again if the launch policy equals std::launch::async and the implementation is unable to start a new thread (if the policy is async|deferred or has additional bits set, it will fall back to deferred or the implementation-defined policies in this case), or std::bad_alloc if memory for the internal data structures could not be allocated.
+    * Notes
+        * The implementation may extend the behavior of the first overload of std::async by enabling additional (implementation-defined) bits in the default launch policy.
+        * Examples of implementation-defined launch policies are the sync policy (execute immediately, within the async call) and the task policy (similar to async, but thread-locals are not cleared)
+        * If the std::future obtained from std::async is not moved from or bound to a reference, the destructor of the std::future will block at the end of the full expression until the asynchronous operation completes, essentially making code such as the following synchronous:
+        * (note that the destructors of std::futures obtained by means other than a call to std::async never block)
+```c++
+std::async(std::launch::async, []{ f(); }); // temporary's dtor waits for f()
+std::async(std::launch::async, []{ g(); }); // does not start until f() completes
+```
+* [从无栈协程到 C++异步框架](https://mp.weixin.qq.com/s/QVXE7QbxEchl8ue4SoijiQ)
+	* 本文我们将尝试对整个 C++的协程做深入浅出的剥析, 方便大家的理解. 再结合上层的封装, 最终给出一个 C++异步框架实际业务使用的一种形态, 方便大家更好的在实际项目中应用无栈协程。
+
+## MISC
+
+### Parse command line
+
+* [Chapter 31. Boost.Program_options - 1.72.0](https://www.boost.org/doc/libs/1_72_0/doc/html/program_options.html)
+  * The program_options library allows program developers to obtain program options, that is (name, value) pairs from the user, via conventional methods such as command line and config file.
+  * [Tutorial - 1.72.0](https://www.boost.org/doc/libs/1_72_0/doc/html/program_options/tutorial.html#id-1.3.32.4.3)
+    * https://github.com/boostorg/program_options/blob/develop/example/first.cpp
+  * [default_value() - Class template typed_value - 1.72.0](https://www.boost.org/doc/libs/1_72_0/doc/html/boost/program_options/typed_value.html#id-1_3_32_9_10_1_1_1_5_1-bb)
+  * [c++ - Boost.Program_Options: When \<bool> is specified as a command-line option, what are valid command-line parameters? - Stack Overflow](https://stackoverflow.com/questions/15629771/boost-program-options-when-bool-is-specified-as-a-command-line-option-what-a)
+  * [Chapter 63. Boost.ProgramOptions](https://theboostcpplibraries.com/boost.program_options)
+
+### Logging
+
+* [一文详解 C++ 日志框架](https://mp.weixin.qq.com/s/0heKciXbMl95WMTXLfr8UA)
+
 
 ## Best Practice
 
