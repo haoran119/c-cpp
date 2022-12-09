@@ -2791,6 +2791,124 @@ Use = only when you are sure that there can be no narrowing conversions. For bui
     * （3）对于C++来说，由于各编译器的差异，大量依赖模板元编程（特别是最新形式的）的代码可能会有移植性的问题。
     * 所以，对于模板元编程，我们需要扬其长避其短，合理使用模板元编程。
 
+### Type traits
+
+* These type traits define compile-time template-based interfaces to query the properties of types.
+* Attempting to specialize a template defined in the \<type_traits> header and described in this section results in undefined behavior.
+* A template defined in the \<type_traits> header may be instantiated with an incomplete type unless otherwise specified, notwithstanding the general prohibition against instantiating standard library templates with incomplete types.
+* Defined in header \<type_traits>
+
+#### Type relationships
+
+##### [std::is_same](https://en.cppreference.com/w/cpp/types/is_same)
+
+* checks if two types are the same (class template)
+* If T and U name the same type (taking into account const/volatile qualifications), provides the member constant value equal to true. Otherwise value is false.
+* Commutativity is satisfied, i.e. for any two types T and U, is_same<T, U>::value == true if and only if is_same<U, T>::value == true.
+* The behavior of a program that adds specializations for is_same or is_same_v (since C++17) is undefined.
+```c++
+#include <iostream>
+#include <type_traits>
+#include <cstdint>
+ 
+void print_separator()
+{
+    std::cout << "-----\n";
+}
+ 
+int main()
+{
+    std::cout << std::boolalpha;
+ 
+    // some implementation-defined facts
+ 
+    // usually true if 'int' is 32 bit
+    std::cout << std::is_same<int, std::int32_t>::value << ' '; // ~ true
+    // possibly true if ILP64 data model is used
+    std::cout << std::is_same<int, std::int64_t>::value << ' '; // ~ false
+ 
+    // same tests as above, except using C++17's `std::is_same_v<T, U>` format
+    std::cout << std::is_same_v<int, std::int32_t> << ' ';  // ~ true
+    std::cout << std::is_same_v<int, std::int64_t> << '\n'; // ~ false
+ 
+    print_separator();
+ 
+    // compare the types of a couple variables
+    long double num1 = 1.0;
+    long double num2 = 2.0;
+    std::cout << std::is_same_v<decltype(num1), decltype(num2)> << '\n'; // true
+ 
+    print_separator();
+ 
+    // 'float' is never an integral type
+    std::cout << std::is_same<float, std::int32_t>::value << '\n'; // false
+ 
+    print_separator();
+ 
+    // 'int' is implicitly 'signed'
+    std::cout << std::is_same<int, int>::value << ' ';          // true
+    std::cout << std::is_same<int, unsigned int>::value << ' '; // false
+    std::cout << std::is_same<int, signed int>::value << '\n';  // true
+ 
+    print_separator();
+ 
+    // unlike other types, 'char' is neither 'unsigned' nor 'signed'
+    std::cout << std::is_same<char, char>::value << ' ';          // true
+    std::cout << std::is_same<char, unsigned char>::value << ' '; // false
+    std::cout << std::is_same<char, signed char>::value << '\n';  // false
+ 
+    // const-qualified type T is not same as non-const T
+    static_assert( not std::is_same<const int, int>() );
+}
+/*
+true false true false
+-----
+true
+-----
+false
+-----
+true false true
+-----
+true false false
+*/
+```
+
+##### [std::is_base_of](https://en.cppreference.com/w/cpp/types/is_base_of)
+
+* If Derived is derived from Base or if both are the same non-union class (in both cases ignoring cv-qualification), provides the member constant value equal to true. Otherwise value is false.
+* If both Base and Derived are non-union class types, and they are not the same type (ignoring cv-qualification), Derived shall be a complete type; otherwise the behavior is undefined.
+* The behavior of a program that adds specializations for is_base_of or is_base_of_v (since C++17) is undefined.
+```c++
+#include <iostream>
+#include <type_traits>
+#define SHOW(...) \
+    std::cout << #__VA_ARGS__ << " : " \
+              << std:: __VA_ARGS__ << '\n'
+int main()
+{
+    class A {};
+    class B : A {};
+    class C : B {};
+    class D {};
+ 
+    std::cout << std::boolalpha;
+    SHOW( is_base_of_v<A, A> );
+    SHOW( is_base_of_v<A, B> );
+    SHOW( is_base_of_v<A, C> );
+    SHOW( is_base_of_v<A, D> );
+    SHOW( is_base_of_v<B, A> );
+    SHOW( is_base_of_v<int, int> );
+}
+/*
+is_base_of_v<A, A> : true
+is_base_of_v<A, B> : true
+is_base_of_v<A, C> : true
+is_base_of_v<A, D> : false
+is_base_of_v<B, A> : false
+is_base_of_v<int, int> : false
+*/
+```
+
 ## [Dynamic memory management](https://en.cppreference.com/w/cpp/memory)
 
 ### Smart pointers
