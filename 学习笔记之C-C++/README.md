@@ -668,6 +668,87 @@ int main(void)
     * 初始化
   * 枚举
   * 位域
+* [Attending Workshops | HackerRank](https://www.hackerrank.com/challenges/attending-workshops/problem)
+```c++
+// #include<bits/stdc++.h>
+#include<algorithm>
+#include<iostream>
+#include<vector>
+using namespace std;
+
+//Define the structs Workshops and Available_Workshops.
+//Implement the functions initialize and CalculateMaxWorkshops
+struct Workshop {
+    int start, duration, end;
+};
+
+struct Available_Workshops {
+    Available_Workshops(int n) : m_n(n) {}
+
+    int m_n;
+    vector<Workshop> m_vWorkshop;
+};
+
+Available_Workshops* initialize(int* start_time, int* duration, int n)
+{
+    Available_Workshops* pAW = new Available_Workshops(n);
+    Workshop temp;
+
+    for (auto i = 0; i < n; ++ i) {
+        temp.start = start_time[i];
+        temp.duration = duration[i];
+        temp.end = start_time[i] + duration[i];
+        pAW->m_vWorkshop.push_back(temp);
+    }
+
+    sort(pAW->m_vWorkshop.begin(),
+        pAW->m_vWorkshop.end(),
+        [](const Workshop& w1, const Workshop& w2) {
+            return w1.end < w2.end;
+        });
+
+    return pAW;
+}
+
+int CalculateMaxWorkshops(Available_Workshops* ptr)
+{
+    auto maxWorkshops = 0;
+    auto currentEnd = 0;
+
+    for (auto i = 0; i < ptr->m_n; ++ i) {
+        if (ptr->m_vWorkshop.at(i).start >= currentEnd) {
+            currentEnd = ptr->m_vWorkshop.at(i).end;
+            ++ maxWorkshops;
+        }
+    }
+
+    return maxWorkshops;
+}
+
+int main(int argc, char *argv[]) {
+    // freopen("input.txt", "r", stdin);
+
+    int n; // number of workshops
+    cin >> n;
+    // create arrays of unknown size n
+    int* start_time = new int[n];
+    int* duration = new int[n];
+
+    for(int i = 0; i < n; i ++) {
+        cin >> start_time[i];
+    }
+
+    for(int i = 0; i < n; i ++) {
+        cin >> duration[i];
+    }
+
+    Available_Workshops * ptr;
+    ptr = initialize(start_time,duration, n);
+    cout << CalculateMaxWorkshops(ptr) << endl;
+    return 0;
+}
+
+```
 
 ### [Preprocessor](https://en.cppreference.com/w/cpp/preprocessor)
 
@@ -3866,83 +3947,6 @@ int main()
 	* Converts the given character to uppercase according to the character conversion rules defined by the currently installed C locale.
 	* In the default "C" locale, the following lowercase letters abcdefghijklmnopqrstuvwxyz are replaced with respective uppercase letters ABCDEFGHIJKLMNOPQRSTUVWXYZ.
 
-### [String I/O](https://en.cppreference.com/w/cpp/io)
-
-* Defined in header \<sstream>
-	
-#### [std::basic_stringstream](https://en.cppreference.com/w/cpp/io/basic_stringstream)
-
-* implements high-level string stream input/output operations (class template)
-* Inherited from [std::basic_istream](https://en.cppreference.com/w/cpp/io/basic_istream)
-	* [operator>>](https://en.cppreference.com/w/cpp/io/basic_istream/operator_gtgt)
-		* extracts formatted data (public member function of std::basic_istream\<CharT,Traits>)
-* Inherited from [std::basic_ostream](https://en.cppreference.com/w/cpp/io/basic_ostream)
-	* [operator<<](https://en.cppreference.com/w/cpp/io/basic_ostream/operator_ltlt)
-		* inserts formatted data (public member function of std::basic_ostream\<CharT,Traits>)
-* [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
-* [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
-	* A stringstream associates a string object with a stream allowing you to read from the string as if it were a stream (like cin).
-	* Basic methods are –
-		* clear() — to clear the stream
-		* str() — to get and set string object whose content is present in stream.
-		* operator << — add a string to the stringstream object.
-		* operator >> — read something from the stringstream object,
-* [StringStream | HackerRank](https://www.hackerrank.com/challenges/c-tutorial-stringstream/problem)
-```c++
-#include <cmath>
-#include <cstdio>
-#include <vector>
-#include <iostream>
-#include <algorithm>
-#include <sstream>  // std::stringstream
-using namespace std;
-
-
-vector<int> parseInts(const string &str)
-{
-    stringstream ss(str);
-    char ch;
-    int temp;
-    vector<int> result;
-    
-    while (ss) {
-        ss >> temp >> ch;
-        result.push_back(temp);
-    }
-    
-    return result;    
-}
-
-
-int main() {
-    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
-    string s;
-    cin >> s;
-    
-    vector<int> vResult;
-    vResult = parseInts(s);
-    
-    for (const int &i : vResult)
-        cout << i << endl;
-    
-    return 0;
-}
-```
-
-#### [std::basic_ostringstream](https://en.cppreference.com/w/cpp/io/basic_ostringstream)
-
-* implements high-level string stream output operations (class template)
-* [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
-	* Output stream class to operate on strings.
-	* Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
-	* Characters can be inserted into the stream with any operation allowed on output streams.
-	* [ostringstream::str - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/str/)
-	* string str() const;
-	* void str (const string& s);
-	* Get/set content
-		* The first form (1) returns a string object with a copy of the current contents of the stream.
-		* The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
-		* Internally, the function calls the str member of its internal string buffer object.
 
 # ----
 
@@ -5431,21 +5435,96 @@ int main()
 * [c++ - How to use the \<format> header - Stack Overflow](https://stackoverflow.com/questions/61441494/how-to-use-the-format-header)
   * Use libfmt. The \<format> header is essentially a standardized libfmt (with a few small features removed, if I remember correctly).
 
-#### Basic Input/Output
-
-##### [Input/output library](https://en.cppreference.com/w/cpp/io)
+## [Input/output library](https://en.cppreference.com/w/cpp/io)
 
 * C++ includes two input/output libraries: an OOP-style stream-based I/O library and the standard set of C-style I/O functions.
 
-###### Stream-based I/O
+### Stream-based I/O
 
 * The stream-based input/output library is organized around abstract input/output devices. These abstract devices allow the same code to handle input/output to files, memory streams, or custom adaptor devices that perform arbitrary operations (e.g. compression) on the fly.
 * Most of the classes are templated, so they can be adapted to any basic character type. Separate typedefs are provided for the most common basic character types (char and wchar_t). The classes are organized into the following hierarchy:
 ![image](https://user-images.githubusercontent.com/34557994/166664893-b2b25c27-7205-42f2-8836-cc67245bd81b.png)
 * [【ZZ】cin、cin.get()、cin.getline()、getline()、gets()等函数的用法 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2011/04/21/2024345.html)
 
-#
-Synchronized output
+#### String I/O
+
+* Defined in header \<sstream>
+	
+##### [std::basic_stringstream](https://en.cppreference.com/w/cpp/io/basic_stringstream)
+
+* implements high-level string stream input/output operations (class template)
+* Inherited from [std::basic_istream](https://en.cppreference.com/w/cpp/io/basic_istream)
+	* [operator>>](https://en.cppreference.com/w/cpp/io/basic_istream/operator_gtgt)
+		* extracts formatted data (public member function of std::basic_istream\<CharT,Traits>)
+* Inherited from [std::basic_ostream](https://en.cppreference.com/w/cpp/io/basic_ostream)
+	* [operator<<](https://en.cppreference.com/w/cpp/io/basic_ostream/operator_ltlt)
+		* inserts formatted data (public member function of std::basic_ostream\<CharT,Traits>)
+* [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
+* [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
+	* A stringstream associates a string object with a stream allowing you to read from the string as if it were a stream (like cin).
+	* Basic methods are –
+		* clear() — to clear the stream
+		* str() — to get and set string object whose content is present in stream.
+		* operator << — add a string to the stringstream object.
+		* operator >> — read something from the stringstream object,
+* [StringStream | HackerRank](https://www.hackerrank.com/challenges/c-tutorial-stringstream/problem)
+```c++
+#include <cmath>
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <sstream>  // std::stringstream
+using namespace std;
+
+
+vector<int> parseInts(const string &str)
+{
+    stringstream ss(str);
+    char ch;
+    int temp;
+    vector<int> result;
+    
+    while (ss) {
+        ss >> temp >> ch;
+        result.push_back(temp);
+    }
+    
+    return result;    
+}
+
+
+int main() {
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    string s;
+    cin >> s;
+    
+    vector<int> vResult;
+    vResult = parseInts(s);
+    
+    for (const int &i : vResult)
+        cout << i << endl;
+    
+    return 0;
+}
+```
+
+##### [std::basic_ostringstream](https://en.cppreference.com/w/cpp/io/basic_ostringstream)
+
+* implements high-level string stream output operations (class template)
+* [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
+	* Output stream class to operate on strings.
+	* Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
+	* Characters can be inserted into the stream with any operation allowed on output streams.
+	* [ostringstream::str - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/str/)
+	* string str() const;
+	* void str (const string& s);
+	* Get/set content
+		* The first form (1) returns a string object with a copy of the current contents of the stream.
+		* The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
+		* Internally, the function calls the str member of its internal string buffer object.
+
+#### Synchronized output
 
 * Defined in header \<syncstream>
 
@@ -5458,8 +5537,7 @@ Synchronized output
 	* Thanks to std::basic_osyncstream, you can directly write synchronously to std::cout by using a named synchronized output stream.
 	* Here is how the previous program coutUnsynchronized.cpp is refactored to write synchronized to std::cout. So far, only GCC 11 supports synchronized output streams.
 
-#
-Predefined standard stream objects
+### Predefined standard stream objects
 
 * Defined in header \<iostream>
 
@@ -5502,24 +5580,24 @@ Predefined standard stream objects
 		* The 'c' in the name refers to "character" (stroustrup.com FAQ); cout means "character output" and wcout means "wide character output".
 		* Because dynamic initialization of templated variables are unordered, it is not guaranteed that std::cout has been initialized to a usable state before the initialization of such variables begins, unless an object of type std::ios_base::Init has been constructed.
 * [Fast I/O for Competitive Programming - GeeksforGeeks](https://www.geeksforgeeks.org/fast-io-for-competitive-programming/)
-  ```c++
-  #include <bits/stdc++.h>
-  using namespace std;
+    ```c++
+    #include <bits/stdc++.h>
+    using namespace std;
 
-  #define endl '\n'
+    #define endl '\n'
 
-  int main()
-  {
+    int main()
+    {
       ios_base::sync_with_stdio(false);
       cin.tie(NULL);
       return 0;
-  }
-  ```
-  * [c++ - Significance of ios_base::sync_with_stdio(false); cin.tie(NULL); - Stack Overflow](https://stackoverflow.com/questions/31162367/significance-of-ios-basesync-with-stdiofalse-cin-tienull/31165481#31165481)
-  * [std::ios_base::sync_with_stdio - cppreference.com](https://en.cppreference.com/w/cpp/io/ios_base/sync_with_stdio)
-  * [ios::tie - C++ Reference](https://www.cplusplus.com/reference/ios/ios/tie/)
+    }
+    ```
+    * [c++ - Significance of ios_base::sync_with_stdio(false); cin.tie(NULL); - Stack Overflow](https://stackoverflow.com/questions/31162367/significance-of-ios-basesync-with-stdiofalse-cin-tienull/31165481#31165481)
+    * [std::ios_base::sync_with_stdio - cppreference.com](https://en.cppreference.com/w/cpp/io/ios_base/sync_with_stdio)
+    * [ios::tie - C++ Reference](https://www.cplusplus.com/reference/ios/ios/tie/)
 
-###### [Input/output manipulators](https://en.cppreference.com/w/cpp/io/manip)
+### [Input/output manipulators](https://en.cppreference.com/w/cpp/io/manip)
 
 * The stream-based I/O library uses I/O manipulators (e.g. std::boolalpha, std::hex, etc.) to control how streams behave.
 * [std::boolalpha, std::noboolalpha - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/boolalpha)
@@ -5537,168 +5615,81 @@ Predefined standard stream objects
 * [std::quoted - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/quoted)
 	* inserts and extracts quoted strings with embedded spaces
 * [manipulators - C++ Reference](http://www.cplusplus.com/reference/library/manipulators/)
-  * Basic format flags
-    * These manipulators are usable on both input and output streams, although many only have an effect when applied to either output or input streams.
-    * Independent flags (switch on):
-      * [showbase - C++ Reference](http://www.cplusplus.com/reference/ios/showbase/)
-      * [showpos - C++ Reference](http://www.cplusplus.com/reference/ios/showpos/)
-      * [uppercase - C++ Reference](http://www.cplusplus.com/reference/ios/uppercase/)
-    * Independent flags (switch off):
-      * [noshowpos - C++ Reference](http://www.cplusplus.com/reference/ios/noshowpos/)
-      * [nouppercase - C++ Reference](http://www.cplusplus.com/reference/ios/nouppercase/)
-    * Numerical base format flags ("basefield" flags):
-      * [dec - C++ Reference](http://www.cplusplus.com/reference/ios/dec/)
-      * [hex - C++ Reference](http://www.cplusplus.com/reference/ios/hex/?kw=hex)
-    * Floating-point format flags ("floatfield" flags):
-      * [fixed - C++ Reference](http://www.cplusplus.com/reference/ios/fixed/)
-      * [scientific - C++ Reference](http://www.cplusplus.com/reference/ios/scientific/)
-    * Adustment format flags ("adjustfield" flags):
-      * [left - C++ Reference](http://www.cplusplus.com/reference/ios/left/)
-      * [right - C++ Reference](http://www.cplusplus.com/reference/ios/right/)
-  * Parameterized manipulators
-    * These functions take parameters when used as manipulators. They require the explicit inclusion of the header file \<iomanip\>.
-    * [setfill - C++ Reference](http://www.cplusplus.com/reference/iomanip/setfill/)
-    * [setprecision - C++ Reference](http://www.cplusplus.com/reference/iomanip/setprecision/)
-    * [setw - C++ Reference](http://www.cplusplus.com/reference/iomanip/setw/)
-  * [Print Pretty | HackerRank](https://www.hackerrank.com/challenges/prettyprint/problem)
-  ```c++
-  #include <iostream>
-  #include <iomanip> 
-  using namespace std;
+    * Basic format flags
+        * These manipulators are usable on both input and output streams, although many only have an effect when applied to either output or input streams.
+        * Independent flags (switch on):
+            * [showbase - C++ Reference](http://www.cplusplus.com/reference/ios/showbase/)
+            * [showpos - C++ Reference](http://www.cplusplus.com/reference/ios/showpos/)
+            * [uppercase - C++ Reference](http://www.cplusplus.com/reference/ios/uppercase/)
+        * Independent flags (switch off):
+            * [noshowpos - C++ Reference](http://www.cplusplus.com/reference/ios/noshowpos/)
+            * [nouppercase - C++ Reference](http://www.cplusplus.com/reference/ios/nouppercase/)
+        * Numerical base format flags ("basefield" flags):
+            * [dec - C++ Reference](http://www.cplusplus.com/reference/ios/dec/)
+            * [hex - C++ Reference](http://www.cplusplus.com/reference/ios/hex/?kw=hex)
+        * Floating-point format flags ("floatfield" flags):
+            * [fixed - C++ Reference](http://www.cplusplus.com/reference/ios/fixed/)
+            * [scientific - C++ Reference](http://www.cplusplus.com/reference/ios/scientific/)
+        * Adustment format flags ("adjustfield" flags):
+            * [left - C++ Reference](http://www.cplusplus.com/reference/ios/left/)
+            * [right - C++ Reference](http://www.cplusplus.com/reference/ios/right/)
+    * Parameterized manipulators
+        * These functions take parameters when used as manipulators. They require the explicit inclusion of the header file \<iomanip\>.
+        * [setfill - C++ Reference](http://www.cplusplus.com/reference/iomanip/setfill/)
+        * [setprecision - C++ Reference](http://www.cplusplus.com/reference/iomanip/setprecision/)
+        * [setw - C++ Reference](http://www.cplusplus.com/reference/iomanip/setw/)
+* [Print Pretty | HackerRank](https://www.hackerrank.com/challenges/prettyprint/problem)
+```c++
+#include <iostream>
+#include <iomanip> 
+using namespace std;
 
-  int main() {
-      int T; cin >> T;
-      cout << setiosflags(ios::uppercase);
-      cout << setw(0xf) << internal;
-      while(T--) {
-          double A; cin >> A;
-          double B; cin >> B;
-          double C; cin >> C;
+int main() {
+  int T; cin >> T;
+  cout << setiosflags(ios::uppercase);
+  cout << setw(0xf) << internal;
+  while(T--) {
+      double A; cin >> A;
+      double B; cin >> B;
+      double C; cin >> C;
 
-          // LINE 1 
-          cout << hex << left << showbase << nouppercase; // formatting
-          cout << (long long) A << endl; // output
+      // LINE 1 
+      cout << hex << left << showbase << nouppercase; // formatting
+      cout << (long long) A << endl; // output
 
-          // LINE 2
-          cout << dec << right << setw(15) << setfill('_') << showpos << fixed << setprecision(2); // formatting
-          cout << B << endl; // output
+      // LINE 2
+      cout << dec << right << setw(15) << setfill('_') << showpos << fixed << setprecision(2); // formatting
+      cout << B << endl; // output
 
-          // LINE 3
-          cout << scientific << uppercase << noshowpos << setprecision(9); // formatting
-          cout << C << endl; // output
-      }
-
-      return 0;
+      // LINE 3
+      cout << scientific << uppercase << noshowpos << setprecision(9); // formatting
+      cout << C << endl; // output
   }
-  ```
-* How to set precision of float / double in output ?
-  * [std::setprecision - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/setprecision)
-    * /*unspecified*/ setprecision( int n );
-    * When used in an expression out << setprecision(n) or in >> setprecision(n), sets the precision parameter of the stream out or in to exactly n.
-  * [std::fixed, std::scientific, std::hexfloat, std::defaultfloat - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/fixed)
-    * This is an I/O manipulator, it may be called with an expression such as out << std::fixed for any out of type std::basic_ostream or with an expression such as in >> std::scientific for any in of type std::basic_istream.
-  ```c++
-  cout << fixed << setprecision(9) << e << endl; // 14049.304930000  
-  ```
 
-###### [C-style file input/output](https://en.cppreference.com/w/cpp/io/c)
+  return 0;
+}
+```
+* How to set precision of float / double in output ?
+    * [std::setprecision - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/setprecision)
+        * /*unspecified*/ setprecision( int n );
+        * When used in an expression out << setprecision(n) or in >> setprecision(n), sets the precision parameter of the stream out or in to exactly n.
+    * [std::fixed, std::scientific, std::hexfloat, std::defaultfloat - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/fixed)
+        * This is an I/O manipulator, it may be called with an expression such as out << std::fixed for any out of type std::basic_ostream or with an expression such as in >> std::scientific for any in of type std::basic_istream.
+        * `cout << fixed << setprecision(9) << e << endl; // 14049.304930000`
+
+### [C-style file input/output](https://en.cppreference.com/w/cpp/io/c)
 
 * The C I/O subset of the C++ standard library implements C-style stream input/output operations. The \<cstdio> header provides generic file operation support and supplies functions with narrow and multibyte character input/output capabilities, and the \<cwchar> header provides functions with wide character input/output capabilities.
 * C streams are denoted by objects of type std::FILE that can only be accessed and manipulated through pointers of type std::FILE*. Each C stream is associated with an external physical device (file, standard input stream, printer, serial port, etc).
 * [c++ - Where is `%p` useful with printf? - Stack Overflow](https://stackoverflow.com/questions/2369541/where-is-p-useful-with-printf)
 	* Always use %p for pointers.
 
-##### [{fmt}](https://fmt.dev/latest/index.html)
+### [{fmt}](https://fmt.dev/latest/index.html)
 
 * {fmt} is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
 * [Usage — fmt 8.1.1 documentation](https://fmt.dev/latest/usage.html)
 	* To use the {fmt} library, add fmt/core.h, fmt/format.h, fmt/format-inl.h, src/format.cc and optionally other headers from a release archive or the Git repository to your project. Alternatively, you can build the library with CMake.
 * [Format String Syntax — fmt 8.1.1 documentation](https://fmt.dev/latest/syntax.html)
-
-#### Data Structures
-
-* [Data structures - C++ Tutorials](http://www.cplusplus.com/doc/tutorial/structures/)
-* [Attending Workshops | HackerRank](https://www.hackerrank.com/challenges/attending-workshops/problem)
-```c++
-// #include<bits/stdc++.h>
-#include<algorithm>
-#include<iostream>
-#include<vector>
-using namespace std;
-
-//Define the structs Workshops and Available_Workshops.
-//Implement the functions initialize and CalculateMaxWorkshops
-struct Workshop {
-    int start, duration, end;
-};
-
-struct Available_Workshops {
-    Available_Workshops(int n) : m_n(n) {}
-
-    int m_n;
-    vector<Workshop> m_vWorkshop;
-};
-
-Available_Workshops* initialize(int* start_time, int* duration, int n)
-{
-    Available_Workshops* pAW = new Available_Workshops(n);
-    Workshop temp;
-
-    for (auto i = 0; i < n; ++ i) {
-        temp.start = start_time[i];
-        temp.duration = duration[i];
-        temp.end = start_time[i] + duration[i];
-        pAW->m_vWorkshop.push_back(temp);
-    }
-
-    sort(pAW->m_vWorkshop.begin(),
-        pAW->m_vWorkshop.end(),
-        [](const Workshop& w1, const Workshop& w2) {
-            return w1.end < w2.end;
-        });
-
-    return pAW;
-}
-
-int CalculateMaxWorkshops(Available_Workshops* ptr)
-{
-    auto maxWorkshops = 0;
-    auto currentEnd = 0;
-
-    for (auto i = 0; i < ptr->m_n; ++ i) {
-        if (ptr->m_vWorkshop.at(i).start >= currentEnd) {
-            currentEnd = ptr->m_vWorkshop.at(i).end;
-            ++ maxWorkshops;
-        }
-    }
-
-    return maxWorkshops;
-}
-
-int main(int argc, char *argv[]) {
-    // freopen("input.txt", "r", stdin);
-
-    int n; // number of workshops
-    cin >> n;
-    // create arrays of unknown size n
-    int* start_time = new int[n];
-    int* duration = new int[n];
-
-    for(int i = 0; i < n; i ++) {
-        cin >> start_time[i];
-    }
-
-    for(int i = 0; i < n; i ++) {
-        cin >> duration[i];
-    }
-
-    Available_Workshops * ptr;
-    ptr = initialize(start_time,duration, n);
-    cout << CalculateMaxWorkshops(ptr) << endl;
-    return 0;
-}
-
-```
 
 ### Object Oriented Programming
 
