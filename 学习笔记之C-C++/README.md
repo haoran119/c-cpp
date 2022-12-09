@@ -6116,6 +6116,52 @@ int main()
 ![image](https://user-images.githubusercontent.com/34557994/166664893-b2b25c27-7205-42f2-8836-cc67245bd81b.png)
 * [【ZZ】cin、cin.get()、cin.getline()、getline()、gets()等函数的用法 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2011/04/21/2024345.html)
 
+#### File I/O
+
+##### [std::basic_ifstream](https://en.cppreference.com/w/cpp/io/basic_ifstream)
+
+* implements high-level file stream input operations (class template)
+* [ifstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/)
+  * Input file stream class
+    * Input stream class to operate on files.
+    * Objects of this class maintain a filebuf object as their internal stream buffer, which performs input/output operations on the file they are associated with (if any).
+    * File streams are associated with files either on construction, or by calling member open.
+    * Apart from the internal file stream buffer, objects of this class keep a set of internal fields inherited from ios_base, ios and istream
+  * [ifstream::is_open - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/is_open/)
+  * [ifstream::close - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/close/)
+  * [Read file line by line using C++](https://www.tutorialspoint.com/read-file-line-by-line-using-cplusplus)
+  * [reading and using data in a .csv file - C++ Forum](http://www.cplusplus.com/forum/beginner/157129/)
+  * [getline (string) - C++ Reference](https://www.cplusplus.com/reference/string/string/getline/)
+  * [C++检测一个文件是否存在 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/5640920.html)
+
+##### [std::basic_ofstream](https://en.cppreference.com/w/cpp/io/basic_ofstream)
+
+* implements high-level file stream output operations (class template)
+* [ofstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/)
+  * Output file stream
+    * Output stream class to operate on files.
+    * Objects of this class maintain a filebuf object as their internal stream buffer, which performs input/output operations on the file they are associated with (if any).
+    * File streams are associated with files either on construction, or by calling member open.
+    * Apart from the internal file stream buffer, objects of this class keep a set of internal fields inherited from ios_base, ios and istream
+  * [ofstream::close - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/close/)
+    * Close file
+      * Closes the file currently associated with the object, disassociating it from the stream.
+      * Any pending output sequence is written to the file.
+      * If the stream is currently not associated with any file (i.e., no file has successfully been open with it), calling this function fails.
+      * The file association of a stream is kept by its internal stream buffer:
+      * Internally, the function calls rdbuf()->close(), and sets failbit in case of failure.
+      * Note that any open file is automatically closed when the ofstream object is destroyed.
+  * [ofstream::is_open - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/is_open/)
+    * Check if file is open
+      * Returns whether the stream is currently associated to a file.
+      * Streams can be associated to files by a successful call to member open or directly on construction, and disassociated by calling close or on destruction.
+      * The file association of a stream is kept by its internal stream buffer:
+        * Internally, the function calls rdbuf()->is_open()
+  * [ofstream::ofstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/ofstream/)
+    * Construct object
+      * Constructs an ofstream object
+  * [replace line in a file C++](https://www.py4u.net/discuss/81342)
+
 #### String I/O
 
 * Defined in header \<sstream>
@@ -6361,13 +6407,12 @@ int main() {
 	* To use the {fmt} library, add fmt/core.h, fmt/format.h, fmt/format-inl.h, src/format.cc and optionally other headers from a release archive or the Git repository to your project. Alternatively, you can build the library with CMake.
 * [Format String Syntax — fmt 8.1.1 documentation](https://fmt.dev/latest/syntax.html)
 
-# ------
+## [Filesystem library (since C++17)](https://en.cppreference.com/w/cpp/filesystem)
 
-
-### C++ Advanced
-
-#### Files and Streams
-
+* The Filesystem library provides facilities for performing operations on file systems and their components, such as paths, regular files, and directories.
+* The filesystem library was originally developed as boost.filesystem, was published as the technical specification ISO/IEC TS 18822:2015, and finally merged to ISO C++ as of C++17. The boost implementation is currently available on more compilers and platforms than the C++17 library.
+* The filesystem library facilities may be unavailable if a hierarchical file system is not accessible to the implementation, or if it does not provide the necessary capabilities. Some features may not be available if they are not supported by the underlying file system (e.g. the FAT filesystem lacks symbolic links and forbids multiple hardlinks). In those cases, errors must be reported.
+* The behavior is undefined if the calls to functions in this library introduce a file system race, that is, when multiple threads, processes, or computers interleave access and modification to the same object in a file system.
 * [C如何获取文件夹下所有文件 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/3873279.html)
 * [C++如何用system命令获取文件夹下所有文件名 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/3873250.html)
 * [C++实现获取当前执行文件全路径 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2010/11/02/1867584.html)
@@ -6426,7 +6471,7 @@ std::unordered_map<std::string, std::vector<std::string> > ReadCSV(const std::st
 }
 ```
 
-##### \<filesystem>
+### Classes
  
 * [\<filesystem> | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/filesystem?view=msvc-160)
   * Include the header \<filesystem> for access to classes and functions that manipulate and retrieve information about paths, files, and directories.
@@ -6504,45 +6549,9 @@ int main()
   * [c++ - How to use copy_file in boost::filesystem? - Stack Overflow](https://stackoverflow.com/questions/4785491/how-to-use-copy-file-in-boostfilesystem)
   * [string - How can I extract the file name and extension from a path in C++ - Stack Overflow](https://stackoverflow.com/questions/4430780/how-can-i-extract-the-file-name-and-extension-from-a-path-in-c)
 
-##### \<fstream>
 
-* [std::basic_ifstream - cppreference.com](https://en.cppreference.com/w/cpp/io/basic_ifstream)
-* [ifstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/)
-  * Input file stream class
-    * Input stream class to operate on files.
-    * Objects of this class maintain a filebuf object as their internal stream buffer, which performs input/output operations on the file they are associated with (if any).
-    * File streams are associated with files either on construction, or by calling member open.
-    * Apart from the internal file stream buffer, objects of this class keep a set of internal fields inherited from ios_base, ios and istream
-  * [ifstream::is_open - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/is_open/)
-  * [ifstream::close - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/close/)
-  * [Read file line by line using C++](https://www.tutorialspoint.com/read-file-line-by-line-using-cplusplus)
-  * [reading and using data in a .csv file - C++ Forum](http://www.cplusplus.com/forum/beginner/157129/)
-  * [getline (string) - C++ Reference](https://www.cplusplus.com/reference/string/string/getline/)
-  * [C++检测一个文件是否存在 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/5640920.html)
-* [ofstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/)
-  * Output file stream
-    * Output stream class to operate on files.
-    * Objects of this class maintain a filebuf object as their internal stream buffer, which performs input/output operations on the file they are associated with (if any).
-    * File streams are associated with files either on construction, or by calling member open.
-    * Apart from the internal file stream buffer, objects of this class keep a set of internal fields inherited from ios_base, ios and istream
-  * [ofstream::close - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/close/)
-    * Close file
-      * Closes the file currently associated with the object, disassociating it from the stream.
-      * Any pending output sequence is written to the file.
-      * If the stream is currently not associated with any file (i.e., no file has successfully been open with it), calling this function fails.
-      * The file association of a stream is kept by its internal stream buffer:
-      * Internally, the function calls rdbuf()->close(), and sets failbit in case of failure.
-      * Note that any open file is automatically closed when the ofstream object is destroyed.
-  * [ofstream::is_open - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/is_open/)
-    * Check if file is open
-      * Returns whether the stream is currently associated to a file.
-      * Streams can be associated to files by a successful call to member open or directly on construction, and disassociated by calling close or on destruction.
-      * The file association of a stream is kept by its internal stream buffer:
-        * Internally, the function calls rdbuf()->is_open()
-  * [ofstream::ofstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/ofstream/)
-    * Construct object
-      * Constructs an ofstream object
-  * [replace line in a file C++](https://www.py4u.net/discuss/81342)
+# ------
+
 
 #### [Error handling](https://en.cppreference.com/w/cpp/error)
 
