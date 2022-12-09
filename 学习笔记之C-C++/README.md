@@ -2818,7 +2818,7 @@ int main() {
     * noexcept specifications (since C++11)
 * Errors that arise during exception handling are handled by std::terminate` and std::unexpected (until C++17)`.
 
-#### [noexcept specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/noexcept_spec)
+#### [noexcept specifier](https://en.cppreference.com/w/cpp/language/noexcept_spec)
 
 * Specifies whether a function could throw exceptions.
 * [noexcept (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/noexcept-cpp?view=msvc-160)
