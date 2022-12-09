@@ -6873,11 +6873,6 @@ int main()
 
 ### Non-member functions
 
-# ------
-
-
-
-
 ## [Concurrency support library](https://en.cppreference.com/w/cpp/thread)
 
 * C++ includes built-in support for threads, atomic operations, mutual exclusion, condition variables, and futures.
@@ -6945,9 +6940,12 @@ int main()
 		* 它不一定真的会异步执行
 		* 它有可能会阻塞
 
-##### [\<thread>](https://en.cppreference.com/w/cpp/header/thread)
+### Threads
 
-###### [std::thread](https://en.cppreference.com/w/cpp/thread/thread)
+* Threads enable programs to execute across several processor cores.
+* Defined in header [\<thread>](https://en.cppreference.com/w/cpp/header/thread)
+
+#### [std::thread](https://en.cppreference.com/w/cpp/thread/thread)
 
 * manages a separate thread (class)
 * Threads enable programs to execute across several processor cores.
@@ -7229,7 +7227,7 @@ test1_result test3_result test2_result test4_result
 */
 ```
 
-###### Functions managing the current thread
+#### Functions managing the current thread
 
 * [std::this_thread::sleep_for - cppreference.com](https://en.cppreference.com/w/cpp/thread/sleep_for)
 	* Blocks the execution of the current thread for at least the specified sleep_duration.
@@ -7237,38 +7235,40 @@ test1_result test3_result test2_result test4_result
 	* The standard recommends that a steady clock is used to measure the duration. If an implementation uses a system clock instead, the wait time may also be sensitive to clock adjustments.
 * [Sleep v.s. sleep - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/5584088.html)
 
-##### [\<atomic>](https://en.cppreference.com/w/cpp/header/atomic)
+### [Atomic operations library](https://en.cppreference.com/w/cpp/atomic)
 
 * These components are provided for fine-grained atomic operations allowing for lockless concurrent programming. Each atomic operation is indivisible with regards to any other atomic operation that involves the same object. Atomic objects are [free of data races](https://en.cppreference.com/w/cpp/language/memory_model#Threads_and_data_races).
-* [Atomic operations library - cppreference.com](https://en.cppreference.com/w/cpp/atomic)
-	* The atomic library provides components for fine-grained atomic operations allowing for lockless concurrent programming. Each atomic operation is indivisible with regards to any other atomic operation that involves the same object. Atomic objects are free of data races.
-	* [std::atomic - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic)
-		* Each instantiation and full specialization of the std::atomic template defines an atomic type. If one thread writes to an atomic object while another thread reads from it, the behavior is well-defined (see memory model for details on data races).
-		* In addition, accesses to atomic objects may establish inter-thread synchronization and order non-atomic memory accesses as specified by std::memory_order.
-		* std::atomic is neither copyable nor movable.
-		* [std::atomic\<T>::atomic - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/atomic)
-			* constructs an atomic object
-		* [std::atomic\<T>::compare_exchange_weak, std::atomic\<T>::compare_exchange_strong - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange)
-			* atomically compares the value of the atomic object with non-atomic argument and performs atomic exchange if equal or atomic load if not
-		* [atomic_compare_exchange_strong - C++ Reference](https://www.cplusplus.com/reference/atomic/atomic_compare_exchange_strong/)
-			* Compare and exchange contained value (strong)
-			* Compares the contents of the value contained in obj with the value pointed by expected:
-			* - if true, it replaces the contained value with val.
-			* - if false, it replaces the value pointed by expected with the contained value .
-		* [std::atomic\<T>::load - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/load)
-			* atomically obtains the value of the atomic object
-		* [std::atomic\<T>::store - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/store)
-			* atomically replaces the value of the atomic object with a non-atomic argument
-		* [Non-blocking algorithm - Wikipedia](https://en.wikipedia.org/wiki/Non-blocking_algorithm)
-			* In computer science, an algorithm is called non-blocking if failure or suspension of any thread cannot cause failure or suspension of another thread;[1] for some operations, these algorithms provide a useful alternative to traditional blocking implementations. A non-blocking algorithm is lock-free if there is guaranteed system-wide progress, and wait-free if there is also guaranteed per-thread progress. "Non-blocking" was used as a synonym for "lock-free" in the literature until the introduction of obstruction-freedom in 2003.[2]
-		* [Linearizability - Wikipedia](https://en.wikipedia.org/wiki/Linearizability)
-			* In concurrent programming, an operation (or set of operations) is linearizable if it consists of an ordered list of invocation and response events (callbacks), that may be extended by adding response events such that:
-				* The extended list can be re-expressed as a sequential history (is serializable).
-				* That sequential history is a subset of the original unextended list.
-			* Informally, this means that the unmodified list of events is linearizable if and only if its invocations were serializable, but some of the responses of the serial schedule have yet to return.[1]
-			* In a concurrent system, processes can access a shared object at the same time. Because multiple processes are accessing a single object, there may arise a situation in which while one process is accessing the object, another process changes its contents. Making a system linearizable is one solution to this problem. In a linearizable system, although operations overlap on a shared object, each operation appears to take place instantaneously. Linearizability is a strong correctness condition, which constrains what outputs are possible when an object is accessed by multiple processes concurrently. It is a safety property which ensures that operations do not complete in an unexpected or unpredictable manner. If a system is linearizable it allows a programmer to reason about the system.[2]
-		* [Compare-and-swap - Wikipedia](https://en.wikipedia.org/wiki/Compare-and-swap)
-			* In computer science, compare-and-swap (CAS) is an atomic instruction used in multithreading to achieve synchronization. It compares the contents of a memory location with a given value and, only if they are the same, modifies the contents of that memory location to a new given value. This is done as a single atomic operation. The atomicity guarantees that the new value is calculated based on up-to-date information; if the value had been updated by another thread in the meantime, the write would fail. The result of the operation must indicate whether it performed the substitution; this can be done either with a simple boolean response (this variant is often called compare-and-set), or by returning the value read from the memory location (not the value written to it).
+* Neither the _Atomic macro, nor any of the non-macro global namespace declarations are provided by any C++ standard library header other than \<stdatomic.h>. (since C++23)
+* Defined in header [\<atomic>](https://en.cppreference.com/w/cpp/header/atomic)
+
+#### [std::atomic](https://en.cppreference.com/w/cpp/atomic/atomic)
+
+* Each instantiation and full specialization of the std::atomic template defines an atomic type. If one thread writes to an atomic object while another thread reads from it, the behavior is well-defined (see memory model for details on data races).
+* In addition, accesses to atomic objects may establish inter-thread synchronization and order non-atomic memory accesses as specified by std::memory_order.
+* std::atomic is neither copyable nor movable.
+* [std::atomic\<T>::atomic - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/atomic)
+    * constructs an atomic object
+* [std::atomic\<T>::compare_exchange_weak, std::atomic\<T>::compare_exchange_strong - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange)
+    * atomically compares the value of the atomic object with non-atomic argument and performs atomic exchange if equal or atomic load if not
+* [atomic_compare_exchange_strong - C++ Reference](https://www.cplusplus.com/reference/atomic/atomic_compare_exchange_strong/)
+    * Compare and exchange contained value (strong)
+    * Compares the contents of the value contained in obj with the value pointed by expected:
+    * - if true, it replaces the contained value with val.
+    * - if false, it replaces the value pointed by expected with the contained value .
+* [std::atomic\<T>::load - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/load)
+    * atomically obtains the value of the atomic object
+* [std::atomic\<T>::store - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/store)
+    * atomically replaces the value of the atomic object with a non-atomic argument
+* [Non-blocking algorithm - Wikipedia](https://en.wikipedia.org/wiki/Non-blocking_algorithm)
+    * In computer science, an algorithm is called non-blocking if failure or suspension of any thread cannot cause failure or suspension of another thread;[1] for some operations, these algorithms provide a useful alternative to traditional blocking implementations. A non-blocking algorithm is lock-free if there is guaranteed system-wide progress, and wait-free if there is also guaranteed per-thread progress. "Non-blocking" was used as a synonym for "lock-free" in the literature until the introduction of obstruction-freedom in 2003.[2]
+* [Linearizability - Wikipedia](https://en.wikipedia.org/wiki/Linearizability)
+    * In concurrent programming, an operation (or set of operations) is linearizable if it consists of an ordered list of invocation and response events (callbacks), that may be extended by adding response events such that:
+        * The extended list can be re-expressed as a sequential history (is serializable).
+        * That sequential history is a subset of the original unextended list.
+    * Informally, this means that the unmodified list of events is linearizable if and only if its invocations were serializable, but some of the responses of the serial schedule have yet to return.[1]
+    * In a concurrent system, processes can access a shared object at the same time. Because multiple processes are accessing a single object, there may arise a situation in which while one process is accessing the object, another process changes its contents. Making a system linearizable is one solution to this problem. In a linearizable system, although operations overlap on a shared object, each operation appears to take place instantaneously. Linearizability is a strong correctness condition, which constrains what outputs are possible when an object is accessed by multiple processes concurrently. It is a safety property which ensures that operations do not complete in an unexpected or unpredictable manner. If a system is linearizable it allows a programmer to reason about the system.[2]
+* [Compare-and-swap - Wikipedia](https://en.wikipedia.org/wiki/Compare-and-swap)
+    * In computer science, compare-and-swap (CAS) is an atomic instruction used in multithreading to achieve synchronization. It compares the contents of a memory location with a given value and, only if they are the same, modifies the contents of that memory location to a new given value. This is done as a single atomic operation. The atomicity guarantees that the new value is calculated based on up-to-date information; if the value had been updated by another thread in the meantime, the write would fail. The result of the operation must indicate whether it performed the substitution; this can be done either with a simple boolean response (this variant is often called compare-and-set), or by returning the value read from the memory location (not the value written to it).
 ```c++
 #include <atomic>
 #include <chrono>
@@ -7352,11 +7352,12 @@ int main()
 	* std::memory_order specifies how memory accesses, including regular, non-atomic memory accesses, are to be ordered around an atomic operation. Absent any constraints on a multi-core system, when multiple threads simultaneously read and write to several variables, one thread can observe the values change in an order different from the order another thread wrote them. Indeed, the apparent order of changes can even differ among multiple reader threads. Some similar effects can occur even on uniprocessor systems due to compiler transformations allowed by the memory model.
 	* The default behavior of all atomic operations in the library provides for sequentially consistent ordering (see discussion below). That default can hurt performance, but the library's atomic operations can be given an additional std::memory_order argument to specify the exact constraints, beyond atomicity, that the compiler and processor must enforce for that operation.
 
-##### [\<mutex>](https://en.cppreference.com/w/cpp/header/mutex)
+### Mutual exclusion
 
 * Mutual exclusion algorithms prevent multiple threads from simultaneously accessing shared resources. This prevents data races and provides support for synchronization between threads.
+* Defined in header [\<mutex>](https://en.cppreference.com/w/cpp/header/mutex)
 
-###### [std::mutex](https://en.cppreference.com/w/cpp/thread/mutex)
+#### [std::mutex](https://en.cppreference.com/w/cpp/thread/mutex)
 
 * The mutex class is a synchronization primitive that can be used to protect shared data from being simultaneously accessed by multiple threads.
 * mutex offers exclusive, non-recursive ownership semantics:
@@ -7412,7 +7413,7 @@ http://foo => fake content
 		* mutex objects provide exclusive ownership and do not support recursivity (i.e., a thread shall not lock a mutex it already owns) -- see recursive_mutex for an alternative class that does.
 		* It is guaranteed to be a standard-layout class.
 
-###### Generic mutex management
+#### Generic mutex management
 
 * [std::lock_guard - cppreference.com](https://en.cppreference.com/w/cpp/thread/lock_guard)
 	* Defined in header \<mutex>
@@ -7474,33 +7475,36 @@ g_i: 2; in main()
 	* When a scoped_lock object is created, it attempts to take ownership of the mutexes it is given. When control leaves the scope in which the scoped_lock object was created, the scoped_lock is destructed and the mutexes are released. If several mutexes are given, deadlock avoidance algorithm is used as if by std::lock.
 	* The scoped_lock class is non-copyable.
 
-###### Generic locking algorithms
+#### Generic locking algorithms
 
-###### Call once
+#### Call once
 
-##### [\<future>](https://en.cppreference.com/w/cpp/header/future)
+### Futures
 
 * The standard library provides facilities to obtain values that are returned and to catch exceptions that are thrown by asynchronous tasks (i.e. functions launched in separate threads). These values are communicated in a shared state, in which the asynchronous task may write its return value or store an exception, and which may be examined, waited for, and otherwise manipulated by other threads that hold instances of std::future or std::shared_future that reference that shared state.
-* [std::async - cppreference.com](https://en.cppreference.com/w/cpp/thread/async)
-	* runs a function asynchronously (potentially in a new thread) and returns a std::future that will hold the result (function template)
-	* The function template async runs the function f asynchronously (potentially in a separate thread which might be a part of a thread pool) and returns a std::future that will eventually hold the result of that function call.
-	* In any case, the call to std::async synchronizes-with (as defined in std::memory_order) the call to f, and the completion of f is sequenced-before making the shared state ready. If the async policy is chosen, the associated thread completion synchronizes-with the successful return from the first function that is waiting on the shared state, or with the return of the last function that releases the shared state, whichever comes first. If std::decay\<Function>::type or each type in std::decay\<Args>::type is not constructible from its corresponding argument, the program is ill-formed.
-	* Parameters
-		* f	-	Callable object to call
-		* args...	-	parameters to pass to f
-		* policy	-	bitmask value, where individual bits control the allowed methods of execution
-			* Bit	Explanation
-			* std::launch::async	enable asynchronous evaluation
-			* std::launch::deferred	enable lazy evaluation
-		* Return value
-			* std::future referring to the shared state created by this call to std::async.
-		* Exceptions
-			* Throws std::system_error with error condition std::errc::resource_unavailable_try_again if the launch policy equals std::launch::async and the implementation is unable to start a new thread (if the policy is async|deferred or has additional bits set, it will fall back to deferred or the implementation-defined policies in this case), or std::bad_alloc if memory for the internal data structures could not be allocated.
-		* Notes
-			* The implementation may extend the behavior of the first overload of std::async by enabling additional (implementation-defined) bits in the default launch policy.
-			* Examples of implementation-defined launch policies are the sync policy (execute immediately, within the async call) and the task policy (similar to async, but thread-locals are not cleared)
-			* If the std::future obtained from std::async is not moved from or bound to a reference, the destructor of the std::future will block at the end of the full expression until the asynchronous operation completes, essentially making code such as the following synchronous:
-			* (note that the destructors of std::futures obtained by means other than a call to std::async never block)
+* Defined in header [\<future>](https://en.cppreference.com/w/cpp/header/future)
+
+#### [std::async](https://en.cppreference.com/w/cpp/thread/async)
+
+* runs a function asynchronously (potentially in a new thread) and returns a std::future that will hold the result (function template)
+* The function template async runs the function f asynchronously (potentially in a separate thread which might be a part of a thread pool) and returns a std::future that will eventually hold the result of that function call.
+* In any case, the call to std::async synchronizes-with (as defined in std::memory_order) the call to f, and the completion of f is sequenced-before making the shared state ready. If the async policy is chosen, the associated thread completion synchronizes-with the successful return from the first function that is waiting on the shared state, or with the return of the last function that releases the shared state, whichever comes first. If std::decay\<Function>::type or each type in std::decay\<Args>::type is not constructible from its corresponding argument, the program is ill-formed.
+* Parameters
+    * f	-	Callable object to call
+    * args...	-	parameters to pass to f
+    * policy	-	bitmask value, where individual bits control the allowed methods of execution
+        * Bit	Explanation
+        * std::launch::async	enable asynchronous evaluation
+        * std::launch::deferred	enable lazy evaluation
+    * Return value
+        * std::future referring to the shared state created by this call to std::async.
+    * Exceptions
+        * Throws std::system_error with error condition std::errc::resource_unavailable_try_again if the launch policy equals std::launch::async and the implementation is unable to start a new thread (if the policy is async|deferred or has additional bits set, it will fall back to deferred or the implementation-defined policies in this case), or std::bad_alloc if memory for the internal data structures could not be allocated.
+    * Notes
+        * The implementation may extend the behavior of the first overload of std::async by enabling additional (implementation-defined) bits in the default launch policy.
+        * Examples of implementation-defined launch policies are the sync policy (execute immediately, within the async call) and the task policy (similar to async, but thread-locals are not cleared)
+        * If the std::future obtained from std::async is not moved from or bound to a reference, the destructor of the std::future will block at the end of the full expression until the asynchronous operation completes, essentially making code such as the following synchronous:
+        * (note that the destructors of std::futures obtained by means other than a call to std::async never block)
 ```c++
 std::async(std::launch::async, []{ f(); }); // temporary's dtor waits for f()
 std::async(std::launch::async, []{ g(); }); // does not start until f() completes
