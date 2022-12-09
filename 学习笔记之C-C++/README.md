@@ -2423,8 +2423,8 @@ Type relationships
 
 ### [Program support utilities](https://en.cppreference.com/w/cpp/utility/program)
 
-#
-Program termination
+#### Program termination
+
 * The following functions manage program termination and resource cleanup.
 * Defined in header \<cstdlib>
 * [std::abort - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/abort)
@@ -2534,8 +2534,8 @@ at exit #1
 		* terminate() function
 		* exit() function
 
-#
-Communicating with the environment
+#### Communicating with the environment
+
 * Defined in header \<cstdlib>
 * [std::system - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/system)
 	* Calls the host environment's command processor (e.g. /bin/sh, cmd.exe, command.com) with the parameter command. Returns an implementation-defined value (usually the value that the invoked program returns).
@@ -2575,8 +2575,8 @@ Your PATH is: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/
 	* `setenv("ROS_HOSTNAME","xxx",1); // does overwrite`
 	* `setenv("ROS_HOSTNAME","xxx",0); // does not overwrite`
 
-#
-Signals
+#### Signals
+
 * Several functions and macro constants for signal management are provided.
 * Defined in header \<csignal>
 * [std::signal - cppreference.com](https://en.cppreference.com/w/cpp/utility/program/signal)
