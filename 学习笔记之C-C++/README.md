@@ -7878,7 +7878,7 @@ int main()
 
 ### Mathematical functions and types
 
-#### [Common mathematical functions]()
+#### [Common mathematical functions](https://en.cppreference.com/w/cpp/numeric/math)
 
 * The header \<cmath> provides standard C library mathematical functions such as std::fabs, std::sqrt, and std::sin.
 * [std::div, std::ldiv, std::lldiv - cppreference.com](https://en.cppreference.com/w/cpp/numeric/math/div)
