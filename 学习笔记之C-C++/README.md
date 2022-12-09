@@ -3238,18 +3238,14 @@ Operator function objects
 * [std::greater - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/greater)
 	* function object implementing x > y (class template)
 
-# ----
-
-
-
-#### [Strings](https://en.cppreference.com/w/cpp/string)
+## [Strings library](https://en.cppreference.com/w/cpp/string)
 
 * The C++ strings library includes support for three general types of strings:
 	* std::basic_string - a templated class designed to manipulate strings of any character type.
 	* std::basic_string_view (C++17) - a lightweight non-owning read-only view into a subsequence of a string.
 	* Null-terminated strings - arrays of characters terminated by a special null character.
 
-##### [std::basic_string](https://en.cppreference.com/w/cpp/string/basic_string) 
+### [std::basic_string](https://en.cppreference.com/w/cpp/string/basic_string) 
 
 * The class template basic_string stores and manipulates sequences of char-like objects, which are non-array objects of trivial standard-layout type. The class is dependent neither on the character type nor on the nature of operations on that type. The definitions of the operations are supplied via the Traits template parameter - a specialization of std::char_traits or a compatible traits class. Traits::char_type and CharT must name the same type; otherwise the program is ill-formed.
 * The elements of a basic_string are stored contiguously, that is, for a basic_string s, &*(s.begin() + n) == &*s.begin() + n for any n in \[0, s.size()), or, equivalently, a pointer to s\[0] can be passed to functions that expect a pointer to the first element of a null-terminated (since C++11) CharT\[] array.
@@ -3257,7 +3253,7 @@ Operator function objects
 * Member functions of std::basic_string are constexpr: it is possible to create and use std::string objects in the evaluation of a constant expression.
 * However, std::string objects generally cannot be constexpr, because any dynamically allocated storage must be released in the same evaluation of constant expression. (since C++20)
 
-###### Member functions
+#### Member functions
 
 * [std::basic_string<CharT,Traits,Allocator>::basic_string - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/basic_string)
 	* constructs a basic_string (public member function)
@@ -3519,7 +3515,7 @@ After: Some data with some very nice macros to substitute
 	* Exceptions
 		* [std::out_of_range](https://en.cppreference.com/w/cpp/error/out_of_range) if pos > size()
 
-###### Constants
+#### Constants
 
 * [std::basic_string<CharT,Traits,Allocator>::npos - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/npos)
 	* static const size_type npos = -1;
@@ -3527,7 +3523,7 @@ After: Some data with some very nice macros to substitute
 	* Note
 		* Although the definition uses -1, size_type is an unsigned integer type, and the value of npos is the largest positive value it can hold, due to signed-to-unsigned implicit conversion. This is a portable way to specify the largest value of any unsigned type.
 
-###### Non-member functions
+#### Non-member functions
 
 * [operator<<,>>(std::basic_string) - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/operator_ltltgtgt)
 	* performs stream input and output on strings (function template)
@@ -3602,12 +3598,12 @@ int main()
 * [c++ - How to convert a string to uint32_t - Stack Overflow](https://stackoverflow.com/questions/57253837/how-to-convert-a-string-to-uint32-t)
 	* `static_cast<uint32_t>(std::stoul(str))`
 
-###### Literals
+#### Literals
 
 * [std::literals::string_literals::operator""s - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/operator%22%22s)
 	* Forms a string literal of the desired type.
 
-###### MISC
+#### MISC
 
 * [How to split a string in C/C++, Python and Java? - GeeksforGeeks](https://www.geeksforgeeks.org/how-to-split-a-string-in-cc-python-and-java/)
     * Extend the method 1 with delimiter
@@ -3760,7 +3756,7 @@ int main()
 	* 结语
 		* COW的核心思想就是lazy-copy，是一种常见的优化手段，通常发生在拷贝、赋值等操作上，但是如果使用不当，则会导致预期之外的结果，虽然COW在gcc的高版本实现中已经去掉了，但是，因为种种原因，仍然有许多开发人员使用的老版本gcc，那么这个优化导致的问题就不得不引起关注，正所谓知己知彼，方能百战不殆。
 
-##### [std::basic_string_view](https://en.cppreference.com/w/cpp/string/basic_string_view)
+### [std::basic_string_view](https://en.cppreference.com/w/cpp/string/basic_string_view)
 
 * The class template basic_string_view describes an object that can refer to a constant contiguous sequence of char-like objects with the first element of the sequence at position zero.
 * [class std::string_view in C++17 - GeeksforGeeks](https://www.geeksforgeeks.org/class-stdstring_view-in-cpp-17/)
@@ -3816,17 +3812,17 @@ int main()
 		* std::string_view相对于string来说减少了内存的重新分配和内存拷贝
 		* 对于std::string::substr 算法来说string的时间复杂度是线性增长，字符串越长执行时间越长，string_view时间复杂度为常数级。
 
-###### Literals
+#### Literals
 
 * [std::literals::string_view_literals::operator""sv - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string_view/operator%22%22sv)
 	* Defined in header \<string_view>
 	* Creates a string view of a character array literal(function)
 
-##### [Null-terminated byte strings](https://en.cppreference.com/w/cpp/string/byte)
+### [Null-terminated byte strings](https://en.cppreference.com/w/cpp/string/byte)
 
 * A null-terminated byte string (NTBS) is a sequence of nonzero bytes followed by a byte with value zero (the terminating null character). Each byte in a byte string encodes one character of some character set. For example, the character array {'\x63', '\x61', '\x74', '\0'} is an NTBS holding the string "cat" in ASCII encoding.
 
-###### Character classification
+#### Character classification
 
 * Defined in header \<cctype>
 * [std::isalnum - cppreference.com](https://en.cppreference.com/w/cpp/string/byte/isalnum)
@@ -3858,7 +3854,7 @@ int main()
 	* [c++ - std::remove_if and std::isspace - compile-time error - Stack Overflow](https://stackoverflow.com/questions/21578544/stdremove-if-and-stdisspace-compile-time-error)
 		* There is another overload of std::isspace, so you need to specify which one to use. An easy way is to use a lambda (or write your own one-line function if you don't have C++11 support)
 
-###### Character manipulation
+#### Character manipulation
 
 * [std::tolower - cppreference.com](https://en.cppreference.com/w/cpp/string/byte/tolower)
 	* converts a character to lowercase (function)
@@ -3870,11 +3866,11 @@ int main()
 	* Converts the given character to uppercase according to the character conversion rules defined by the currently installed C locale.
 	* In the default "C" locale, the following lowercase letters abcdefghijklmnopqrstuvwxyz are replaced with respective uppercase letters ABCDEFGHIJKLMNOPQRSTUVWXYZ.
 
-##### [String I/O](https://en.cppreference.com/w/cpp/io)
+### [String I/O](https://en.cppreference.com/w/cpp/io)
 
 * Defined in header \<sstream>
 	
-###### [std::basic_stringstream](https://en.cppreference.com/w/cpp/io/basic_stringstream)
+#### [std::basic_stringstream](https://en.cppreference.com/w/cpp/io/basic_stringstream)
 
 * implements high-level string stream input/output operations (class template)
 * Inherited from [std::basic_istream](https://en.cppreference.com/w/cpp/io/basic_istream)
@@ -3933,7 +3929,7 @@ int main() {
 }
 ```
 
-###### [std::basic_ostringstream](https://en.cppreference.com/w/cpp/io/basic_ostringstream)
+#### [std::basic_ostringstream](https://en.cppreference.com/w/cpp/io/basic_ostringstream)
 
 * implements high-level string stream output operations (class template)
 * [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
@@ -3947,6 +3943,8 @@ int main() {
 		* The first form (1) returns a string object with a copy of the current contents of the stream.
 		* The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
 		* Internally, the function calls the str member of its internal string buffer object.
+
+# ----
 
 #### Pointers
 
