@@ -220,7 +220,7 @@
 * delete数组指针，只delete第一个后果
   * 内存泄漏 
 
-### [智能指针](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#smart-pointers)
+### [Smart pointers](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#smart-pointers)
 
 * [Move Semantics and Smart Pointers](https://www.learncpp.com/)
 	* [M.1 — Intro to smart pointers and move semantics – Learn C++](https://www.learncpp.com/cpp-tutorial/intro-to-smart-pointers-move-semantics/)
