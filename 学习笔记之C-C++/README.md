@@ -886,6 +886,36 @@ int main(){
 			* 4 % -2 = 0
 			* -3 % -4 = -3
 
+##### [new expression - cppreference.com](https://en.cppreference.com/w/cpp/language/new)
+
+* Creates and initializes objects with dynamic storage duration, that is, objects whose lifetime is not necessarily limited by the scope in which they were created.
+* Placement new
+    * If placement-params are provided, they are passed to the allocation function as additional arguments. Such allocation functions are known as "placement new", after the standard allocation function void* operator new(std::size_t, void*), which simply returns its second argument unchanged. This is used to construct objects in allocated storage:
+    ```c++
+    // within any block scope...
+    {
+        // Statically allocate the storage with automatic storage duration
+        // which is large enough for any object of type `T`.
+        alignas(T) unsigned char buf[sizeof(T)];
+
+        T* tptr = new(buf) T; // Construct a `T` object, placing it directly into your 
+                              // pre-allocated storage at memory address `buf`.
+
+        tptr->~T();           // You must **manually** call the object's destructor
+                              // if its side effects is depended by the program.
+    }                         // Leaving this block scope automatically deallocates `buf`.
+    ```
+    * Note: this functionality is encapsulated by the member functions of the Allocator classes.
+* Memory leaks
+    * The objects created by new-expressions (objects with dynamic storage duration) persist until the pointer returned by the new-expression is used in a matching delete-expression. If the original value of pointer is lost, the object becomes unreachable and cannot be deallocated: a memory leak occurs.
+    * To simplify management of dynamically-allocated objects, the result of a new-expression is often stored in a smart pointer: std::auto_ptr (until C++17)std::unique_ptr, or std::shared_ptr (since C++11). These pointers guarantee that the delete expression is executed in the situations shown above.
+* [Placement new operator in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/placement-new-operator-cpp/)
+	* Advantages of placement new operator over new operator
+		* The address of memory allocation is known before hand.
+		* Useful when building a memory pool, a garbage collector or simply when performance and exception safety are paramount.
+		* There’s no danger of allocation failure since the memory has already been allocated, and constructing an object on a pre-allocated buffer takes less time.
+		* This feature becomes useful while working in an environment with limited resources.
+
 ##### [typeid operator](https://en.cppreference.com/w/cpp/language/typeid)
 
 * Queries information of a type.
@@ -1733,6 +1763,28 @@ blue
 * [C++ - Why static member function can't be created with 'const' qualifier - Stack Overflow](https://stackoverflow.com/questions/7035356/c-why-static-member-function-cant-be-created-with-const-qualifier)
 	* When you apply the const qualifier to a nonstatic member function, it affects the this pointer. For a const-qualified member function of class C, the this pointer is of type C const*, whereas for a member function that is not const-qualified, the this pointer is of type C*.
 	* A static member function does not have a this pointer (such a function is not called on a particular instance of a class), so const qualification of a static member function doesn't make any sense.
+
+#### Declarators
+
+##### [Pointer declaration](https://en.cppreference.com/w/cpp/language/pointer)
+
+* Declares a variable of a pointer or pointer-to-member type.
+* Should I store pointers or objects in containers ?
+	* [dictionary - Map of Pointers versus Map of Structures/Containers (C++) - Stack Overflow](https://stackoverflow.com/questions/12451980/map-of-pointers-versus-map-of-structures-containers-c)
+		* As I see it, there are a number of factors involved in deciding whether to use pointers vs. objects:
+			* 1. Do you or don't you need polymorphism?
+			* 2. The size of the objects you store and their suitability for copy operations
+			* 3. Other operations you perform on the container and its contents
+		* So clearly, it all depends on the type and size of objects you store, and the type and frequency of the operations you carry out. If the objects you are dealing with are various types of windows, buttons and menus of a GUI application, you will most likely want to use pointers and take advantage of polymorphism. If, on the other hand, you are dealing with huge structures of compact elements, all identical in size and shape, and the operations you perform involve frequent iteration or bulk copying, storing objects directly is perferrable. There may also be situations where the decision is hard to make without trying both and deciding based on the results of memory and time benchmarks.
+	* [c++ - Should I store entire objects, or pointers to objects in containers? - Stack Overflow](https://stackoverflow.com/questions/141337/should-i-store-entire-objects-or-pointers-to-objects-in-containers)
+* [c++ - Is it good practice to NULL a pointer after deleting it? - Stack Overflow](https://stackoverflow.com/questions/1931126/is-it-good-practice-to-null-a-pointer-after-deleting-it#:~:text=Setting%20pointers%20to%20NULL%20following,%2C%20it%20can%27t%20hurt.)
+	* Setting a pointer to 0 (which is "null" in standard C++, the NULL define from C is somewhat different) avoids crashes on double deletes.
+* [c++ - When should I use raw pointers over smart pointers? - Stack Overflow](https://stackoverflow.com/questions/6675651/when-should-i-use-raw-pointers-over-smart-pointers)
+* [F.7: For general use, take T* or T& arguments rather than smart pointers](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f7-for-general-use-take-t-or-t-arguments-rather-than-smart-pointers)
+* [I.11: Never transfer ownership by a raw pointer (T*) or reference (T&)](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i11-never-transfer-ownership-by-a-raw-pointer-t-or-reference-t)
+* [I.12: Declare a pointer that must not be null as not_null](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i12-declare-a-pointer-that-must-not-be-null-as-not_null)
+* [I.13: Do not pass an array as a single pointer](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i13-do-not-pass-an-array-as-a-single-pointer)
+* [I.27: For stable library ABI, consider the Pimpl idiom](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i27-for-stable-library-abi-consider-the-pimpl-idiom)
 
 ### [Initialization](https://en.cppreference.com/w/cpp/language/initialization)
 
@@ -3333,6 +3385,929 @@ Operator function objects
     * （3）对于C++来说，由于各编译器的差异，大量依赖模板元编程（特别是最新形式的）的代码可能会有移植性的问题。
     * 所以，对于模板元编程，我们需要扬其长避其短，合理使用模板元编程。
 
+## [Dynamic memory management](https://en.cppreference.com/w/cpp/memory)
+
+### Smart pointers
+
+* Smart pointers enable automatic, exception-safe, object lifetime management.
+* Defined in header \<memory>
+* [智能指针（现代 C++）](https://msdn.microsoft.com/zh-cn/library/hh279674.aspx)
+	* In modern C++ programming, the Standard Library includes smart pointers, which are used to help ensure that programs are free of memory and resource leaks and are exception-safe.
+	* Smart pointers are defined in the std namespace in the \<memory\> header file. They are crucial to the RAII or Resource Acquisition Is Initialization programming idiom. The main goal of this idiom is to ensure that resource acquisition occurs at the same time that the object is initialized, so that all resources for the object are created and made ready in one line of code. In practical terms, the main principle of RAII is to give ownership of any heap-allocated resource—for example, dynamically-allocated memory or system object handles—to a stack-allocated object whose destructor contains the code to delete or free the resource and also any associated cleanup code.
+	* In most cases, when you initialize a raw pointer or resource handle to point to an actual resource, pass the pointer to a smart pointer immediately. In modern C++, raw pointers are only used in small code blocks of limited scope, loops, or helper functions where performance is critical and there is no chance of confusion about ownership.
+	* The C++ smart pointer idiom resembles object creation in languages such as C#: you create the object and then let the system take care of deleting it at the correct time. The difference is that no separate garbage collector runs in the background; memory is managed through the standard C++ scoping rules so that the runtime environment is faster and more efficient.
+	* Important : Always create smart pointers on a separate line of code, never in a parameter list, so that a subtle resource leak won't occur due to certain parameter list allocation rules.
+	* Use these smart pointers as a first choice for encapsulating pointers to plain old C++ objects (POCO).
+	* unique_ptr
+		* Allows exactly one owner of the underlying pointer. Use as the default choice for POCO unless you know for certain that you require a shared_ptr. Can be moved to a new owner, but not copied or shared. Replaces auto_ptr, which is deprecated. Compare to boost::scoped_ptr. unique_ptr is small and efficient; the size is one pointer and it supports rvalue references for fast insertion and retrieval from C++ Standard Library collections. Header file: \<memory\>. For more information, see [How to: Create and use unique_ptr instances | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/how-to-create-and-use-unique-ptr-instances?view=msvc-160) and [unique_ptr Class](https://docs.microsoft.com/en-us/cpp/standard-library/unique-ptr-class?view=msvc-160).
+		* A unique_ptr does not share its pointer. It cannot be copied to another unique_ptr, passed by value to a function, or used in any C++ Standard Library algorithm that requires copies to be made. A unique_ptr can only be moved. This means that the ownership of the memory resource is transferred to another unique_ptr and the original unique_ptr no longer owns it. We recommend that you restrict an object to one owner, because multiple ownership adds complexity to the program logic. Therefore, when you need a smart pointer for a plain C++ object, use unique_ptr, and when you construct a unique_ptr, use the [make_unique](https://docs.microsoft.com/en-us/cpp/standard-library/memory-functions?view=msvc-160#make_unique) helper function.
+	* shared_ptr
+		* Reference-counted smart pointer. Use when you want to assign one raw pointer to multiple owners, for example, when you return a copy of a pointer from a container but want to keep the original. The raw pointer is not deleted until all shared_ptr owners have gone out of scope or have otherwise given up ownership. The size is two pointers; one for the object and one for the shared control block that contains the reference count. Header file: \<memory\>. For more information, see [How to: Create and use shared_ptr instances | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/how-to-create-and-use-shared-ptr-instances?view=msvc-160) and [shared_ptr Class](https://docs.microsoft.com/en-us/cpp/standard-library/shared-ptr-class?view=msvc-160).
+			* Whenever possible, use the [make_shared](https://docs.microsoft.com/en-us/cpp/standard-library/memory-functions?view=msvc-160#make_shared) function to create a shared_ptr when the memory resource is created for the first time.
+		* The shared_ptr type is a smart pointer in the C++ standard library that is designed for scenarios in which more than one owner might have to manage the lifetime of the object in memory. After you initialize a shared_ptr you can copy it, pass it by value in function arguments, and assign it to other shared_ptr instances. All the instances point to the same object, and share access to one "control block" that increments and decrements the reference count whenever a new shared_ptr is added, goes out of scope, or is reset. When the reference count reaches zero, the control block deletes the memory resource and itself.
+	* weak_ptr
+		* Special-case smart pointer for use in conjunction with shared_ptr. A weak_ptr provides access to an object that is owned by one or more shared_ptr instances, but does not participate in reference counting. Use when you want to observe an object, but do not require it to remain alive. Required in some cases to break circular references between shared_ptr instances. Header file: \<memory\>. For more information, see [How to: Create and use weak_ptr instances | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/how-to-create-and-use-weak-ptr-instances?view=msvc-160) and [weak_ptr Class](https://docs.microsoft.com/en-us/cpp/standard-library/weak-ptr-class?view=msvc-160).
+		* Sometimes an object must store a way to access the underlying object of a shared_ptr without causing the reference count to be incremented. Typically, this situation occurs when you have cyclic references between shared_ptr instances.
+		* The best design is to avoid shared ownership of pointers whenever you can. However, if you must have shared ownership of shared_ptr instances, avoid cyclic references between them. When cyclic references are unavoidable, or even preferable for some reason, use weak_ptr to give one or more of the owners a weak reference to another shared_ptr. By using a weak_ptr, you can create a shared_ptr that joins to an existing set of related instances, but only if the underlying memory resource is still valid. A weak_ptr itself does not participate in the reference counting, and therefore, it cannot prevent the reference count from going to zero. However, you can use a weak_ptr to try to obtain a new copy of the shared_ptr with which it was initialized. If the memory has already been deleted, the weak_ptr's bool operator returns false. If the memory is still valid, the new shared pointer increments the reference count and guarantees that the memory will be valid as long as the shared_ptr variable stays in scope.
+* [Smart pointer - Wikipedia, the free encyclopedia](https://en.wikipedia.org/wiki/Smart_pointer)
+
+#### [std::unique_ptr](https://en.cppreference.com/w/cpp/memory/unique_ptr)
+
+* smart pointer with unique object ownership semantics (class template)
+* std::unique_ptr is a smart pointer that owns and manages another object through a pointer and disposes of that object when the unique_ptr goes out of scope.
+* The object is disposed of, using the associated deleter when either of the following happens:
+    * the managing unique_ptr object is destroyed
+    * the managing unique_ptr object is assigned another pointer via operator= or reset().
+* The object is disposed of, using a potentially user-supplied deleter by calling get_deleter()(ptr). The default deleter uses the delete operator, which destroys the object and deallocates the memory.
+* A unique_ptr may alternatively own no object, in which case it is called empty.
+* There are two versions of std::unique_ptr:
+    * Manages a single object (e.g. allocated with new)
+    * Manages a dynamically-allocated array of objects (e.g. allocated with new[])
+* The class satisfies the requirements of MoveConstructible and MoveAssignable, but of neither CopyConstructible nor CopyAssignable.
+* Type requirements
+    * -Deleter must be FunctionObject or lvalue reference to a FunctionObject or lvalue reference to function, callable with an argument of type unique_ptr\<T, Deleter>::pointer
+* Notes
+    * Only non-const unique_ptr can transfer the ownership of the managed object to another unique_ptr. If an object's lifetime is managed by a const std::unique_ptr, it is limited to the scope in which the pointer was created.
+    * std::unique_ptr is commonly used to manage the lifetime of objects, including:
+        * providing exception safety to classes and functions that handle objects with dynamic lifetime, by guaranteeing deletion on both normal exit and exit through exception
+        * passing ownership of uniquely-owned objects with dynamic lifetime into functions
+        * acquiring ownership of uniquely-owned objects with dynamic lifetime from functions
+        * as the element type in move-aware containers, such as std::vector, which hold pointers to dynamically-allocated objects (e.g. if polymorphic behavior is desired)
+    * std::unique_ptr may be constructed for an incomplete type T, such as to facilitate the use as a handle in the pImpl idiom. If the default deleter is used, T must be complete at the point in code where the deleter is invoked, which happens in the destructor, move assignment operator, and reset member function of std::unique_ptr. (Conversely, std::shared_ptr can't be constructed from a raw pointer to incomplete type, but can be destroyed where T is incomplete). Note that if T is a class template specialization, use of unique_ptr as an operand, e.g. !p requires T's parameters to be complete due to ADL.
+    * If T is a derived class of some base B, then std::unique_ptr\<T> is implicitly convertible to std::unique_ptr\<B>. The default deleter of the resulting std::unique_ptr\<B> will use operator delete for B, leading to undefined behavior unless the destructor of B is virtual. Note that std::shared_ptr behaves differently: std::shared_ptr\<B> will use the operator delete for the type T and the owned object will be deleted correctly even if the destructor of B is not virtual.
+    * Unlike std::shared_ptr, std::unique_ptr may manage an object through any custom handle type that satisfies NullablePointer. This allows, for example, managing objects located in shared memory, by supplying a Deleter that defines typedef boost::offset_ptr pointer; or another fancy pointer.
+* [std::unique_ptr<T,Deleter>::unique_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/unique_ptr)
+    * (constructor)
+* [std::unique_ptr<T,Deleter>::operator= - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/operator%3D)
+    * assigns the unique_ptr (public member function)
+    * 1) Move assignment operator. Transfers ownership from r to *this as if by calling reset(r.release()) followed by an assignment of get_deleter() from std::forward\<Deleter>(r.get_deleter()).
+        * If Deleter is not a reference type, requires that it is nothrow-MoveAssignable.
+        * If Deleter is a reference type, requires that std::remove_reference\<Deleter>::type is nothrow-CopyAssignable.
+        * The move assignment operator only participates in overload resolution if std::is_move_assignable\<Deleter>::value is true.
+    * 2) Converting assignment operator. Behaves same as (1), except that
+        * This assignment operator of the primary template only participates in overload resolution if U is not an array type and unique_ptr\<U,E>::pointer is implicitly convertible to pointer and std::is_assignable\<Deleter&, E&&>::value is true.
+        * This assignment operator in the specialization for arrays, std::unique_ptr<T[]> behaves the same as in the primary template, except that will only participate in overload resolution if all of the following is true:
+            * U is an array type
+            * pointer is the same type as element_type*
+            * unique_ptr\<U,E>::pointer is the same type as unique_ptr\<U,E>::element_type*
+            * unique_ptr\<U,E>::element_type(*)[] is convertible to element_type(*)[]
+            * std::is_assignable\<Deleter&, E&&>::value is true
+    * 3) Effectively the same as calling reset().
+    * Note that unique_ptr's assignment operator only accepts rvalues, which are typically generated by std::move. (The unique_ptr class explicitly deletes its lvalue copy constructor and lvalue assignment operator.)
+```c++
+#include <iostream>
+#include <memory>
+ 
+struct Foo {
+    int id;
+    Foo(int id) : id(id) { std::cout << "Foo " << id << '\n'; }
+    ~Foo() { std::cout << "~Foo " << id << '\n'; }
+};
+ 
+int main() 
+{
+    std::unique_ptr<Foo> p1( std::make_unique<Foo>(1) );
+ 
+    {
+        std::cout << "Creating new Foo...\n";
+        std::unique_ptr<Foo> p2( std::make_unique<Foo>(2) );
+        // p1 = p2; // Error ! can't copy unique_ptr
+        p1 = std::move(p2);
+        std::cout << "About to leave inner block...\n";
+ 
+        // Foo instance will continue to live, 
+        // despite p2 going out of scope
+    }
+ 
+    std::cout << "About to leave program...\n";
+}
+/*
+Foo 1
+Creating new Foo...
+Foo 2
+~Foo 1
+About to leave inner block...
+About to leave program...
+~Foo 2
+*/
+```
+* [std::unique_ptr<T,Deleter>::get - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/get)
+    * returns a pointer to the managed object (public member function)
+    * Returns a pointer to the managed object or nullptr if no object is owned.
+```c++
+#include <iomanip>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <utility>
+ 
+class Res {
+    std::string s;
+ 
+public:
+    Res(std::string arg) : s{ std::move(arg) } {
+        std::cout << "Res::Res(" << std::quoted(s) << ");\n";
+    }
+ 
+    ~Res() {
+        std::cout << "Res::~Res();\n";
+    }
+ 
+private:
+    friend std::ostream& operator<< (std::ostream& os, Res const& r) {
+        return os << "Res { s = " << std::quoted(r.s) << "; }";
+    }
+};
+ 
+int main()
+{
+    std::unique_ptr<Res> up(new Res{"Hello, world!"});
+    Res *res = up.get();
+    std::cout << *res << '\n';
+}
+/*
+Res::Res("Hello, world!");
+Res { s = "Hello, world!"; }
+Res::~Res();
+*/
+```
+* [std::unique_ptr<T,Deleter>::release - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/release)
+    * returns a pointer to the managed object and releases the ownership (public member function)
+    * Releases the ownership of the managed object, if any.
+    * get() returns nullptr after the call.
+    * The caller is responsible for deleting the object.
+```c++
+#include <memory>
+#include <iostream>
+#include <cassert>
+ 
+struct Foo {
+    Foo() { std::cout << "Foo\n"; }
+    ~Foo() { std::cout << "~Foo\n"; }
+};
+ 
+int main()
+{
+    std::cout << "Creating new Foo...\n";
+    std::unique_ptr<Foo> up(new Foo());
+ 
+    std::cout << "About to release Foo...\n";
+    Foo* fp = up.release();
+ 
+    assert (up.get() == nullptr);
+    assert (up == nullptr);
+ 
+    std::cout << "Foo is no longer owned by unique_ptr...\n";
+ 
+    delete fp;
+}
+/*
+Creating new Foo...
+Foo
+About to release Foo...
+Foo is no longer owned by unique_ptr...
+~Foo
+*/
+```
+* [std::unique_ptr<T,Deleter>::reset - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/reset)
+    * replaces the managed object (public member function)
+    * Replaces the managed object.
+        * 1) Given current_ptr, the pointer that was managed by *this, performs the following actions, in this order:
+            * Saves a copy of the current pointer old_ptr = current_ptr
+            * Overwrites the current pointer with the argument current_ptr = ptr
+            * If the old pointer was non-empty, deletes the previously managed object if(old_ptr) get_deleter()(old_ptr).
+        * 2) Behaves the same as the reset member of the primary template, except that it will only participate in overload resolution if either
+            * U is the same type as pointer, or
+            * pointer is the same type as element_type* and U is a pointer type V* such that V(*)[] is convertible to element_type(*)[].
+        * 3) Equivalent to reset(pointer())
+    * Notes
+        * To replace the managed object while supplying a new deleter as well, move assignment operator may be used.
+        * A test for self-reset, i.e. whether ptr points to an object already managed by *this, is not performed, except where provided as a compiler extension or as a debugging assert. Note that code such as p.reset(p.release()) does not involve self-reset, only code like p.reset(p.get()) does.
+```c++
+#include <iostream>
+#include <memory>
+ 
+struct Foo { // object to manage
+    Foo() { std::cout << "Foo...\n"; }
+    ~Foo() { std::cout << "~Foo...\n"; }
+};
+ 
+struct D { // deleter
+    void operator() (Foo* p) {
+        std::cout << "Calling delete for Foo object... \n";
+        delete p;
+    }
+};
+ 
+int main()
+{
+    std::cout << "Creating new Foo...\n";
+    std::unique_ptr<Foo, D> up(new Foo(), D());  // up owns the Foo pointer (deleter D)
+ 
+    std::cout << "Replace owned Foo with a new Foo...\n";
+    up.reset(new Foo());  // calls deleter for the old one
+ 
+    std::cout << "Release and delete the owned Foo...\n";
+    up.reset(nullptr);      
+}
+/*
+Creating new Foo...
+Foo...
+Replace owned Foo with a new Foo...
+Foo...
+Calling delete for Foo object...
+~Foo...
+Release and delete the owned Foo...
+Calling delete for Foo object...
+~Foo...
+*/
+```
+* [std::unique_ptr<T,Deleter>::operator*, std::unique_ptr<T,Deleter>::operator-> - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/operator*)
+    * Single-object version, unique_ptr\<T>
+    * dereferences pointer to the managed object (public member function)
+    * operator* and operator-> provide access to the object owned by *this.
+    * The behavior is undefined if get() == nullptr.
+    * These member functions are only provided for unique_ptr for the single objects i.e. the primary template.
+```c++
+#include <iostream>
+#include <memory>
+ 
+struct Foo {
+    void bar() { std::cout << "Foo::bar\n"; }
+};
+ 
+void f(const Foo&) 
+{
+    std::cout << "f(const Foo&)\n";
+}
+ 
+int main() 
+{
+    std::unique_ptr<Foo> ptr(new Foo);
+ 
+    ptr->bar();
+    f(*ptr);
+}
+/*
+Foo::bar
+f(const Foo&)
+*/
+```
+* [std::unique_ptr<T,Deleter>::operator[] - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/operator_at)
+    * Array version, unique_ptr\<T[]>
+    * provides indexed access to the managed array (public member function)
+    * operator[] provides access to elements of an array managed by a unique_ptr.
+    * The parameter i shall be less than the number of elements in the array; otherwise, the behavior is undefined.
+    * This member function is only provided for specializations for array types.
+```c++
+#include <iostream>
+#include <memory>
+ 
+int main() 
+{
+    const int size = 10; 
+    std::unique_ptr<int[]> fact(new int[size]);
+ 
+    for (int i = 0; i < size; ++i) {
+        fact[i] = (i == 0) ? 1 : i * fact[i-1];
+    }
+ 
+    for (int i = 0; i < size; ++i) {
+        std::cout << i << "! = " << fact[i] << '\n';
+    }
+}
+/*
+0! = 1
+1! = 1
+2! = 2
+3! = 6
+4! = 24
+5! = 120
+6! = 720
+7! = 5040
+8! = 40320
+9! = 362880
+*/
+```
+* [std::make_unique, std::make_unique_for_overwrite - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique)
+    * creates a unique pointer that manages a new object (function template)
+    * Constructs an object of type T and wraps it in a std::unique_ptr.
+```c++
+#include <cassert>
+#include <cstdio>
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+ 
+// helper class for runtime polymorphism demo below
+struct B
+{
+    virtual ~B() = default;
+ 
+    virtual void bar() { std::cout << "B::bar\n"; }
+};
+ 
+struct D : B
+{
+    D() { std::cout << "D::D\n"; }
+    ~D() { std::cout << "D::~D\n"; }
+ 
+    void bar() override { std::cout << "D::bar\n"; }
+};
+ 
+// a function consuming a unique_ptr can take it by value or by rvalue reference
+std::unique_ptr<D> pass_through(std::unique_ptr<D> p)
+{
+    p->bar();
+    return p;
+}
+ 
+// helper function for the custom deleter demo below
+void close_file(std::FILE* fp)
+{
+    std::fclose(fp);
+}
+ 
+// unique_ptr-based linked list demo
+struct List
+{
+    struct Node
+    {
+        int data;
+        std::unique_ptr<Node> next;
+    };
+ 
+    std::unique_ptr<Node> head;
+ 
+    ~List()
+    {
+        // destroy list nodes sequentially in a loop, the default destructor
+        // would have invoked its `next`'s destructor recursively, which would
+        // cause stack overflow for sufficiently large lists.
+        while (head)
+            head = std::move(head->next);
+    }
+ 
+    void push(int data)
+    {
+        head = std::unique_ptr<Node>(new Node{data, std::move(head)});
+    }
+};
+ 
+int main()
+{
+    std::cout << "1) Unique ownership semantics demo\n";
+    {
+        // Create a (uniquely owned) resource
+        std::unique_ptr<D> p = std::make_unique<D>();
+ 
+        // Transfer ownership to `pass_through`,
+        // which in turn transfers ownership back through the return value
+        std::unique_ptr<D> q = pass_through(std::move(p));
+ 
+        // `p` is now in a moved-from 'empty' state, equal to `nullptr`
+        assert(!p);
+    }
+ 
+    std::cout << "\n" "2) Runtime polymorphism demo\n";
+    {
+        // Create a derived resource and point to it via base type
+        std::unique_ptr<B> p = std::make_unique<D>();
+ 
+        // Dynamic dispatch works as expected
+        p->bar();
+    }
+ 
+    std::cout << "\n" "3) Custom deleter demo\n";
+    std::ofstream("demo.txt") << 'x'; // prepare the file to read
+    {
+        using unique_file_t = std::unique_ptr<std::FILE, decltype(&close_file)>;
+        unique_file_t fp(std::fopen("demo.txt", "r"), &close_file);
+        if (fp)
+            std::cout << char(std::fgetc(fp.get())) << '\n';
+    } // `close_file()` called here (if `fp` is not null)
+ 
+    std::cout << "\n" "4) Custom lambda-expression deleter and exception safety demo\n";
+    try
+    {
+        std::unique_ptr<D, void(*)(D*)> p(new D, [](D* ptr)
+        {
+            std::cout << "destroying from a custom deleter...\n";
+            delete ptr;
+        });
+ 
+        throw std::runtime_error(""); // `p` would leak here if it were instead a plain pointer
+    }
+    catch (const std::exception&) { std::cout << "Caught exception\n"; }
+ 
+    std::cout << "\n" "5) Array form of unique_ptr demo\n";
+    {
+        std::unique_ptr<D[]> p(new D[3]);
+    } // `D::~D()` is called 3 times
+ 
+    std::cout << "\n" "6) Linked list demo\n";
+    {
+        List wall;
+        for (int beer = 0; beer != 1'000'000; ++beer)
+            wall.push(beer);
+ 
+        std::cout << "1'000'000 bottles of beer on the wall...\n";
+    } // destroys all the beers
+}
+/*
+1) Unique ownership semantics demo
+D::D
+D::bar
+D::~D
+ 
+2) Runtime polymorphism demo
+D::D
+D::bar
+D::~D
+ 
+3) Custom deleter demo
+x
+ 
+4) Custom lambda-expression deleter and exception safety demo
+D::D
+destroying from a custom deleter...
+D::~D
+Caught exception
+ 
+5) Array form of unique_ptr demo
+D::D
+D::D
+D::D
+D::~D
+D::~D
+D::~D
+ 
+6) Linked list demo
+1'000'000 bottles of beer on the wall...
+*/
+```
+
+#### [std::shared_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/shared_ptr)
+
+* smart pointer with shared object ownership semantics (class template)
+* std::shared_ptr is a smart pointer that retains shared ownership of an object through a pointer. Several shared_ptr objects may own the same object. The object is destroyed and its memory deallocated when either of the following happens:
+    * the last remaining shared_ptr owning the object is destroyed;
+    * the last remaining shared_ptr owning the object is assigned another pointer via operator= or reset().
+* The object is destroyed using delete-expression or a custom deleter that is supplied to shared_ptr during construction.
+* A shared_ptr can share ownership of an object while storing a pointer to another object. This feature can be used to point to member objects while owning the object they belong to. The stored pointer is the one accessed by get(), the dereference and the comparison operators. The managed pointer is the one passed to the deleter when use count reaches zero.
+* A shared_ptr may also own no objects, in which case it is called empty (an empty shared_ptr may have a non-null stored pointer if the aliasing constructor was used to create it).
+* All specializations of shared_ptr meet the requirements of CopyConstructible, CopyAssignable, and LessThanComparable and are contextually convertible to bool.
+* All member functions (including copy constructor and copy assignment) can be called by multiple threads on different instances of shared_ptr without additional synchronization even if these instances are copies and share ownership of the same object. If multiple threads of execution access the same instance of shared_ptr without synchronization and any of those accesses uses a non-const member function of shared_ptr then a data race will occur; the shared_ptr overloads of atomic functions can be used to prevent the data race.
+* Notes
+    * The ownership of an object can only be shared with another shared_ptr by copy constructing or copy assigning its value to another shared_ptr. Constructing a new shared_ptr using the raw underlying pointer owned by another shared_ptr leads to undefined behavior.
+    * std::shared_ptr may be used with an incomplete type T. However, the constructor from a raw pointer (template\<class Y> shared_ptr(Y*)) and the template\<class Y> void reset(Y*) member function may only be called with a pointer to a complete type (note that std::unique_ptr may be constructed from a raw pointer to an incomplete type).
+    * The T in std::shared_ptr\<T> may be a function type: in this case it manages a pointer to function, rather than an object pointer. This is sometimes used to keep a dynamic library or a plugin loaded as long as any of its functions are referenced:
+```c++
+void del(void(*)()) {}
+void fun() {}
+int main(){
+  std::shared_ptr<void()> ee(fun, del);
+  (*ee)();
+}
+```
+* Implementation notes
+    * In a typical implementation, shared_ptr holds only two pointers:
+        * the stored pointer (one returned by get());
+        * a pointer to control block.
+    * The control block is a dynamically-allocated object that holds:
+        * either a pointer to the managed object or the managed object itself;
+        * the deleter (type-erased);
+        * the allocator (type-erased);
+        * the number of shared_ptrs that own the managed object;
+        * the number of weak_ptrs that refer to the managed object.
+    * When shared_ptr is created by calling std::make_shared or std::allocate_shared, the memory for both the control block and the managed object is created with a single allocation. The managed object is constructed in-place in a data member of the control block. When shared_ptr is created via one of the shared_ptr constructors, the managed object and the control block must be allocated separately. In this case, the control block stores a pointer to the managed object.
+    * The pointer held by the shared_ptr directly is the one returned by get(), while the pointer/object held by the control block is the one that will be deleted when the number of shared owners reaches zero. These pointers are not necessarily equal.
+    * The destructor of shared_ptr decrements the number of shared owners of the control block. If that counter reaches zero, the control block calls the destructor of the managed object. The control block does not deallocate itself until the std::weak_ptr counter reaches zero as well.
+    * In existing implementations, the number of weak pointers is incremented ([1], [2]) if there is a shared pointer to the same control block.
+    * To satisfy thread safety requirements, the reference counters are typically incremented using an equivalent of std::atomic::fetch_add with std::memory_order_relaxed (decrementing requires stronger ordering to safely destroy the control block).
+```c++
+#include <iostream>
+#include <memory>
+#include <thread>
+#include <chrono>
+#include <mutex>
+ 
+struct Base
+{
+    Base() { std::cout << "  Base::Base()\n"; }
+    // Note: non-virtual destructor is OK here
+    ~Base() { std::cout << "  Base::~Base()\n"; }
+};
+ 
+struct Derived: public Base
+{
+    Derived() { std::cout << "  Derived::Derived()\n"; }
+    ~Derived() { std::cout << "  Derived::~Derived()\n"; }
+};
+ 
+void thr(std::shared_ptr<Base> p)
+{
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::shared_ptr<Base> lp = p; // thread-safe, even though the
+                                  // shared use_count is incremented
+    {
+        static std::mutex io_mutex;
+        std::lock_guard<std::mutex> lk(io_mutex);
+        std::cout << "local pointer in a thread:\n"
+                  << "  lp.get() = " << lp.get()
+                  << ", lp.use_count() = " << lp.use_count() << '\n';
+    }
+}
+ 
+int main()
+{
+    std::shared_ptr<Base> p = std::make_shared<Derived>();
+ 
+    std::cout << "Created a shared Derived (as a pointer to Base)\n"
+              << "  p.get() = " << p.get()
+              << ", p.use_count() = " << p.use_count() << '\n';
+    std::thread t1(thr, p), t2(thr, p), t3(thr, p);
+    p.reset(); // release ownership from main
+    std::cout << "Shared ownership between 3 threads and released\n"
+              << "ownership from main:\n"
+              << "  p.get() = " << p.get()
+              << ", p.use_count() = " << p.use_count() << '\n';
+    t1.join(); t2.join(); t3.join();
+    std::cout << "All threads completed, the last one deleted Derived\n";
+}
+/*
+Base::Base()
+  Derived::Derived()
+Created a shared Derived (as a pointer to Base)
+  p.get() = 0x2299b30, p.use_count() = 1
+Shared ownership between 3 threads and released
+ownership from main:
+  p.get() = 0, p.use_count() = 0
+local pointer in a thread:
+  lp.get() = 0x2299b30, lp.use_count() = 5
+local pointer in a thread:
+  lp.get() = 0x2299b30, lp.use_count() = 3
+local pointer in a thread:
+  lp.get() = 0x2299b30, lp.use_count() = 2
+  Derived::~Derived()
+  Base::~Base()
+All threads completed, the last one deleted Derived
+*/
+```
+```c++
+#include <memory>
+#include <iostream>
+ 
+struct MyObj
+{
+    MyObj()
+    {
+        std::cout<<"MyObj construced" <<std::endl;
+    }
+ 
+    ~MyObj()
+    {
+        std::cout<<"MyObj destructed" <<std::endl;
+    }
+};
+ 
+struct Container : std::enable_shared_from_this<Container> // note: public inheritance
+{
+    void CreateMember()
+    {
+        memberObj = std::make_shared<MyObj>();
+    }
+    std::shared_ptr<MyObj> memberObj;
+ 
+    std::shared_ptr<MyObj> GetAsMyObj()
+    {
+        // Use an alias shared ptr for member
+        return std::shared_ptr<MyObj>(shared_from_this(), memberObj.get());
+    }
+};
+ 
+ 
+void test()
+{
+ 
+    std::shared_ptr<Container> cont = std::make_shared<Container>();
+    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
+    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
+ 
+    std::cout << "Creating member\n\n";
+    cont->CreateMember();
+    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
+    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
+ 
+    std::cout << "Creating another shared container\n\n";
+    std::shared_ptr<Container> cont2 = cont;
+    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
+    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
+    std::cout << "cont2.use_count() = " << cont2.use_count() << '\n';
+    std::cout << "cont2.memberObj.use_count() = " << cont2->memberObj.use_count() << '\n';
+ 
+    std::cout << "GetAsMyObj\n\n";
+    std::shared_ptr<MyObj> myobj1 = cont->GetAsMyObj();
+    std::cout << "myobj1.use_count() = " << myobj1.use_count() << '\n';
+    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
+    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
+    std::cout << "cont2.use_count() = " << cont2.use_count() << '\n';
+    std::cout << "cont2.memberObj.use_count() = " << cont2->memberObj.use_count() << '\n';
+ 
+    std::cout << "copying alias obj\n\n";
+    std::shared_ptr<MyObj> myobj2 = myobj1;
+    std::cout << "myobj1.use_count() = " << myobj1.use_count() << '\n';
+    std::cout << "myobj2.use_count() = " << myobj2.use_count() << '\n';
+ 
+    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
+    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
+    std::cout << "cont2.use_count() = " << cont2.use_count() << '\n';
+    std::cout << "cont2.memberObj.use_count() = " << cont2->memberObj.use_count() << '\n';
+ 
+    std::cout << "Resetting cont2\n\n";
+    cont2.reset();
+    std::cout << "myobj1.use_count() = " << myobj1.use_count() << '\n';
+    std::cout << "myobj2.use_count() = " << myobj2.use_count() << '\n';
+ 
+    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
+    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
+ 
+    std::cout << "Resetting myobj2\n\n";
+    myobj2.reset();
+    std::cout << "myobj1.use_count() = " << myobj1.use_count() << '\n';
+    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
+    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
+ 
+    std::cout << "Resetting cont\n\n";
+    cont.reset();
+    std::cout << "myobj1.use_count() = " << myobj1.use_count() << '\n';
+ 
+    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
+ 
+}
+ 
+ 
+int main()
+{
+    test();
+}
+/*
+cont.use_count() = 1
+cont.memberObj.use_count() = 0
+Creating member
+ 
+MyObj construced
+cont.use_count() = 1
+cont.memberObj.use_count() = 1
+Creating another shared container
+ 
+cont.use_count() = 2
+cont.memberObj.use_count() = 1
+cont2.use_count() = 2
+cont2.memberObj.use_count() = 1
+GetAsMyObj
+ 
+myobj1.use_count() = 3
+cont.use_count() = 3
+cont.memberObj.use_count() = 1
+cont2.use_count() = 3
+cont2.memberObj.use_count() = 1
+copying alias obj
+ 
+myobj1.use_count() = 4
+myobj2.use_count() = 4
+cont.use_count() = 4
+cont.memberObj.use_count() = 1
+cont2.use_count() = 4
+cont2.memberObj.use_count() = 1
+Resetting cont2
+ 
+myobj1.use_count() = 3
+myobj2.use_count() = 3
+cont.use_count() = 3
+cont.memberObj.use_count() = 1
+Resetting myobj2
+ 
+myobj1.use_count() = 2
+cont.use_count() = 2
+cont.memberObj.use_count() = 1
+Resetting cont
+ 
+myobj1.use_count() = 1
+cont.use_count() = 0
+MyObj destructed
+*/
+```
+* [std::shared_ptr\<T>::use_count - cppreference.com](https://en.cppreference.com/w/cpp/memory/shared_ptr/use_count)
+    * returns the number of shared_ptr objects referring to the same managed object (public member function)
+    * Returns the number of different shared_ptr instances (`this` included) managing the current object. If there is no managed object, `0` is returned.
+    * In multithreaded environment, the value returned by use_count is approximate (typical implementations use a memory_order_relaxed load)
+```c++
+#include <memory>
+#include <iostream>
+ 
+void fun(std::shared_ptr<int> sp)
+{
+    std::cout << "in fun(): sp.use_count() == " << sp.use_count()
+              << " (object @ " << sp << ")\n";
+}
+ 
+int main()
+{
+    auto sp1 = std::make_shared<int>(5);
+    std::cout << "in main(): sp1.use_count() == " << sp1.use_count()
+              << " (object @ " << sp1 << ")\n";
+ 
+    fun(sp1);
+}
+/*
+in main(): sp1.use_count() == 1 (object @ 0x20eec30)
+in fun(): sp.use_count() == 2 (object @ 0x20eec30)
+*/
+```
+* [std::make_shared, std::make_shared_for_overwrite - cppreference.com](https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared)
+    * creates a shared pointer that manages a new object (function template)
+        * 1) Constructs an object of type T and wraps it in a std::shared_ptr using args as the parameter list for the constructor of T. The object is constructed as if by the expression ::new (pv) T(std::forward\<Args>(args)...), where pv is an internal void* pointer to storage suitable to hold an object of type T. The storage is typically larger than sizeof(T) in order to use one allocation for both the control block of the shared pointer and the T object. The std::shared_ptr constructor called by this function enables shared_from_this with a pointer to the newly constructed object of type T.
+            * This overload participates in overload resolution only if T is not an array type (since C++20)
+        * 2,3) Same as (1), but the object constructed is a possibly-multidimensional array whose non-array elements of type std::remove_all_extents_t\<T> are value-initialized as if by placement-new expression ::new(pv) std::remove_all_extents_t\<T>(). The overload (2) creates an array of size N along the first dimension. The array elements are initialized in ascending order of their addresses, and when their lifetime ends are destroyed in the reverse order of their original construction.
+        * 4,5) Same as (2,3), but every element is initialized from the default value u. If U is not an array type, then this is performed as if by the same placement-new expression as in (1); otherwise, this is performed as if by initializing every non-array element of the (possibly multidimensional) array with the corresponding element from u with the same placement-new expression as in (1). The overload (4) creates an array of size N along the first dimension. The array elements are initialized in ascending order of their addresses, and when their lifetime ends are destroyed in the reverse order of their original construction.
+        * 6) Same as (1) if T is not an array type and (3) if T is U[N], except that the created object is default-initialized.
+        * 7) Same as (2), except that the individual array elements are default-initialized.
+    * In each case, the object (or individual elements if T is an array type) (since C++20) will be destroyed by p->~X(), where p is a pointer to the object and X is its type.
+```c++
+#include <memory>
+#include <vector>
+#include <iostream>
+#include <type_traits>
+ 
+struct C
+{
+    // constructors needed (until C++20)
+    C(int i) : i(i) {}
+    C(int i, float f) : i(i), f(f) {}
+    int i;
+    float f{};
+};
+ 
+int main()
+{
+    // using `auto` for the type of `sp1`
+    auto sp1 = std::make_shared<C>(1); // overload (1)
+    static_assert(std::is_same_v<decltype(sp1), std::shared_ptr<C>>);
+    std::cout << "sp1->{ i:" << sp1->i << ", f:" << sp1->f << " }\n";
+ 
+    // being explicit with the type of `sp2`
+    std::shared_ptr<C> sp2 = std::make_shared<C>(2, 3.0f); // overload (1)
+    static_assert(std::is_same_v<decltype(sp2), std::shared_ptr<C>>);
+    static_assert(std::is_same_v<decltype(sp1), decltype(sp2)>);
+    std::cout << "sp2->{ i:" << sp2->i << ", f:" << sp2->f << " }\n";
+ 
+    // shared_ptr to a value-initialized float[64]; overload (2):
+    std::shared_ptr<float[]> sp3 = std::make_shared<float[]>(64);
+ 
+    // shared_ptr to a value-initialized long[5][3][4]; overload (2):
+    std::shared_ptr<long[][3][4]> sp4 = std::make_shared<long[][3][4]>(5);
+ 
+    // shared_ptr to a value-initialized short[128]; overload (3):
+    std::shared_ptr<short[128]> sp5 = std::make_shared<short[128]>();
+ 
+    // shared_ptr to a value-initialized int[7][6][5]; overload (3):
+    std::shared_ptr<int[7][6][5]> sp6 = std::make_shared<int[7][6][5]>();
+ 
+    // shared_ptr to a double[256], where each element is 2.0; overload (4):
+    std::shared_ptr<double[]> sp7 = std::make_shared<double[]>(256, 2.0);
+ 
+    // shared_ptr to a double[7][2], where each double[2] element is {3.0, 4.0}; overload (4):
+    std::shared_ptr<double[][2]> sp8 = std::make_shared<double[][2]>(7, {3.0, 4.0});
+ 
+    // shared_ptr to a vector<int>[4], where each vector has contents {5, 6}; overload (4):
+    std::shared_ptr<std::vector<int>[]> sp9 = std::make_shared<std::vector<int>[]>(4, {5, 6});
+ 
+    // shared_ptr to a float[512], where each element is 1.0; overload (5):
+    std::shared_ptr<float[512]> spA = std::make_shared<float[512]>(1.0);
+ 
+    // shared_ptr to a double[6][2], where each double[2] element is {1.0, 2.0}; overload (5):
+    std::shared_ptr<double[6][2]> spB = std::make_shared<double[6][2]>({1.0, 2.0});
+ 
+    // shared_ptr to a vector<int>[4], where each vector has contents {5, 6}; overload (5):
+    std::shared_ptr<std::vector<int>[4]> spC = std::make_shared<std::vector<int>[4]>({5, 6});
+}
+/*
+sp1->{ i:1, f:0 }
+sp2->{ i:2, f:3 }
+*/
+```
+
+#### [std::weak_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/weak_ptr)
+
+* weak reference to an object managed by std::shared_ptr (class template)
+* std::weak_ptr is a smart pointer that holds a non-owning ("weak") reference to an object that is managed by std::shared_ptr. It must be converted to std::shared_ptr in order to access the referenced object.
+* std::weak_ptr models temporary ownership: when an object needs to be accessed only if it exists, and it may be deleted at any time by someone else, std::weak_ptr is used to track the object, and it is converted to std::shared_ptr to assume temporary ownership. If the original std::shared_ptr is destroyed at this time, the object's lifetime is extended until the temporary std::shared_ptr is destroyed as well.
+* Another use for std::weak_ptr is to break reference cycles formed by objects managed by std::shared_ptr. If such cycle is orphaned (i.e., there are no outside shared pointers into the cycle), the shared_ptr reference counts cannot reach zero and the memory is leaked. To prevent this, one of the pointers in the cycle can be made weak.
+```c++
+#include <iostream>
+#include <memory>
+ 
+std::weak_ptr<int> gw;
+ 
+void observe()
+{
+    std::cout << "gw.use_count() == " << gw.use_count() << "; ";
+    // we have to make a copy of shared pointer before usage:
+    if (std::shared_ptr<int> spt = gw.lock()) {
+        std::cout << "*spt == " << *spt << '\n';
+    }
+    else {
+        std::cout << "gw is expired\n";
+    }
+}
+ 
+int main()
+{
+    {
+        auto sp = std::make_shared<int>(42);
+        gw = sp;
+ 
+        observe();
+    }
+ 
+    observe();
+}
+/*
+gw.use_count() == 1; *spt == 42
+gw.use_count() == 0; gw is expired
+*/
+```
+* [std::weak_ptr\<T>::~weak_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/weak_ptr/~weak_ptr#Example)
+	* Destroys the weak_ptr object. Results in no effect to the managed object.
+	* Example
+		* The program shows the effect of "non-breaking" the cycle of std::shared_ptrs.	
+```c++
+#include <iostream>
+#include <memory>
+#include <variant>
+ 
+class Node {
+    char id;
+    std::variant<std::weak_ptr<Node>, std::shared_ptr<Node>> ptr;
+  public:
+    Node(char id) : id{id} {}
+    ~Node() { std::cout << "  '" << id << "' reclaimed\n"; }
+    /*...*/
+    void assign(std::weak_ptr<Node> p) { ptr = p; }
+    void assign(std::shared_ptr<Node> p) { ptr = p; }
+};
+ 
+enum class shared { all, some };
+ 
+void test_cyclic_graph(const shared x) {
+ 
+    auto A = std::make_shared<Node>('A');
+    auto B = std::make_shared<Node>('B');
+    auto C = std::make_shared<Node>('C');
+ 
+    A->assign(B);
+    B->assign(C);
+ 
+    if (shared::all == x) {
+        C->assign(A);
+        std::cout << "All links are shared pointers";
+    } else {
+        C->assign(std::weak_ptr<Node>(A));
+        std::cout << "One link is a weak_ptr";
+    }
+    /*...*/
+    std::cout << "\nLeaving...\n";
+}
+ 
+int main() {
+    test_cyclic_graph(shared::some);
+    test_cyclic_graph(shared::all); // produces a memory leak
+}
+/*
+One link is a weak_ptr
+Leaving...
+  'A' reclaimed
+  'B' reclaimed
+  'C' reclaimed
+All links are shared pointers
+Leaving...
+*/
+```
+
+#### MISC
+
+* [Smart pointer rule summary - C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-summary-smartptrs)
+* [智能指针：从std::auto_ptr到std::unique_ptr - hanhuili的专栏 - 博客频道 - CSDN.NET](http://blog.csdn.net/hanhuili/article/details/8299912)
+* [拥抱智能指针，告别内存泄露](https://mp.weixin.qq.com/s/evYOoS4_XfjkPXlDWXTnSg)
+* [浅析 C++智能指针和 enable_shared_from_this 机制](https://mp.weixin.qq.com/s/a7Nl2jnbOtkfzEAK1TxVyA)
+* [一文掌握 C++ 智能指针的使用](https://mp.weixin.qq.com/s/bn7BAzBSxgbrkgRMnuy8-A)
+  * RAII 与引用计数
+  * std::shared_ptr
+  * std::unique_ptr
+  * std::weak_ptr
+
 ## [Strings library](https://en.cppreference.com/w/cpp/string)
 
 * The C++ strings library includes support for three general types of strings:
@@ -3964,981 +4939,8 @@ int main()
 
 # ----
 
-#### Pointers
 
-* [new expression - cppreference.com](https://en.cppreference.com/w/cpp/language/new)
-	* Creates and initializes objects with dynamic storage duration, that is, objects whose lifetime is not necessarily limited by the scope in which they were created.
-	* Placement new
-    	* If placement-params are provided, they are passed to the allocation function as additional arguments. Such allocation functions are known as "placement new", after the standard allocation function void* operator new(std::size_t, void*), which simply returns its second argument unchanged. This is used to construct objects in allocated storage:
-        ```c++
-        // within any block scope...
-        {
-            // Statically allocate the storage with automatic storage duration
-            // which is large enough for any object of type `T`.
-            alignas(T) unsigned char buf[sizeof(T)];
-
-            T* tptr = new(buf) T; // Construct a `T` object, placing it directly into your 
-                                  // pre-allocated storage at memory address `buf`.
-
-            tptr->~T();           // You must **manually** call the object's destructor
-                                  // if its side effects is depended by the program.
-        }                         // Leaving this block scope automatically deallocates `buf`.
-        ```
-        * Note: this functionality is encapsulated by the member functions of the Allocator classes.
-    * Memory leaks
-        * The objects created by new-expressions (objects with dynamic storage duration) persist until the pointer returned by the new-expression is used in a matching delete-expression. If the original value of pointer is lost, the object becomes unreachable and cannot be deallocated: a memory leak occurs.
-        * To simplify management of dynamically-allocated objects, the result of a new-expression is often stored in a smart pointer: std::auto_ptr (until C++17)std::unique_ptr, or std::shared_ptr (since C++11). These pointers guarantee that the delete expression is executed in the situations shown above.
-* [Placement new operator in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/placement-new-operator-cpp/)
-	* Advantages of placement new operator over new operator
-		* The address of memory allocation is known before hand.
-		* Useful when building a memory pool, a garbage collector or simply when performance and exception safety are paramount.
-		* There’s no danger of allocation failure since the memory has already been allocated, and constructing an object on a pre-allocated buffer takes less time.
-		* This feature becomes useful while working in an environment with limited resources.
-* Should I store pointers or objects in containers ?
-	* [dictionary - Map of Pointers versus Map of Structures/Containers (C++) - Stack Overflow](https://stackoverflow.com/questions/12451980/map-of-pointers-versus-map-of-structures-containers-c)
-		* As I see it, there are a number of factors involved in deciding whether to use pointers vs. objects:
-			* 1. Do you or don't you need polymorphism?
-			* 2. The size of the objects you store and their suitability for copy operations
-			* 3. Other operations you perform on the container and its contents
-		* So clearly, it all depends on the type and size of objects you store, and the type and frequency of the operations you carry out. If the objects you are dealing with are various types of windows, buttons and menus of a GUI application, you will most likely want to use pointers and take advantage of polymorphism. If, on the other hand, you are dealing with huge structures of compact elements, all identical in size and shape, and the operations you perform involve frequent iteration or bulk copying, storing objects directly is perferrable. There may also be situations where the decision is hard to make without trying both and deciding based on the results of memory and time benchmarks.
-	* [c++ - Should I store entire objects, or pointers to objects in containers? - Stack Overflow](https://stackoverflow.com/questions/141337/should-i-store-entire-objects-or-pointers-to-objects-in-containers)
-* [c++ - Is it good practice to NULL a pointer after deleting it? - Stack Overflow](https://stackoverflow.com/questions/1931126/is-it-good-practice-to-null-a-pointer-after-deleting-it#:~:text=Setting%20pointers%20to%20NULL%20following,%2C%20it%20can%27t%20hurt.)
-	* Setting a pointer to 0 (which is "null" in standard C++, the NULL define from C is somewhat different) avoids crashes on double deletes.
-* [c++ - When should I use raw pointers over smart pointers? - Stack Overflow](https://stackoverflow.com/questions/6675651/when-should-i-use-raw-pointers-over-smart-pointers)
-* [F.7: For general use, take T* or T& arguments rather than smart pointers](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f7-for-general-use-take-t-or-t-arguments-rather-than-smart-pointers)
-* [I.11: Never transfer ownership by a raw pointer (T*) or reference (T&)](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i11-never-transfer-ownership-by-a-raw-pointer-t-or-reference-t)
-* [I.12: Declare a pointer that must not be null as not_null](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i12-declare-a-pointer-that-must-not-be-null-as-not_null)
-* [I.13: Do not pass an array as a single pointer](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i13-do-not-pass-an-array-as-a-single-pointer)
-* [I.27: For stable library ABI, consider the Pimpl idiom](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i27-for-stable-library-abi-consider-the-pimpl-idiom)
-
-##### [Dynamic memory management](https://en.cppreference.com/w/cpp/memory)
-
-###### Smart pointers
-
-* Smart pointers enable automatic, exception-safe, object lifetime management.
-* Defined in header \<memory>
-* [智能指针（现代 C++）](https://msdn.microsoft.com/zh-cn/library/hh279674.aspx)
-	* In modern C++ programming, the Standard Library includes smart pointers, which are used to help ensure that programs are free of memory and resource leaks and are exception-safe.
-	* Smart pointers are defined in the std namespace in the \<memory\> header file. They are crucial to the RAII or Resource Acquisition Is Initialization programming idiom. The main goal of this idiom is to ensure that resource acquisition occurs at the same time that the object is initialized, so that all resources for the object are created and made ready in one line of code. In practical terms, the main principle of RAII is to give ownership of any heap-allocated resource—for example, dynamically-allocated memory or system object handles—to a stack-allocated object whose destructor contains the code to delete or free the resource and also any associated cleanup code.
-	* In most cases, when you initialize a raw pointer or resource handle to point to an actual resource, pass the pointer to a smart pointer immediately. In modern C++, raw pointers are only used in small code blocks of limited scope, loops, or helper functions where performance is critical and there is no chance of confusion about ownership.
-	* The C++ smart pointer idiom resembles object creation in languages such as C#: you create the object and then let the system take care of deleting it at the correct time. The difference is that no separate garbage collector runs in the background; memory is managed through the standard C++ scoping rules so that the runtime environment is faster and more efficient.
-	* Important : Always create smart pointers on a separate line of code, never in a parameter list, so that a subtle resource leak won't occur due to certain parameter list allocation rules.
-	* Use these smart pointers as a first choice for encapsulating pointers to plain old C++ objects (POCO).
-	* unique_ptr
-		* Allows exactly one owner of the underlying pointer. Use as the default choice for POCO unless you know for certain that you require a shared_ptr. Can be moved to a new owner, but not copied or shared. Replaces auto_ptr, which is deprecated. Compare to boost::scoped_ptr. unique_ptr is small and efficient; the size is one pointer and it supports rvalue references for fast insertion and retrieval from C++ Standard Library collections. Header file: \<memory\>. For more information, see [How to: Create and use unique_ptr instances | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/how-to-create-and-use-unique-ptr-instances?view=msvc-160) and [unique_ptr Class](https://docs.microsoft.com/en-us/cpp/standard-library/unique-ptr-class?view=msvc-160).
-		* A unique_ptr does not share its pointer. It cannot be copied to another unique_ptr, passed by value to a function, or used in any C++ Standard Library algorithm that requires copies to be made. A unique_ptr can only be moved. This means that the ownership of the memory resource is transferred to another unique_ptr and the original unique_ptr no longer owns it. We recommend that you restrict an object to one owner, because multiple ownership adds complexity to the program logic. Therefore, when you need a smart pointer for a plain C++ object, use unique_ptr, and when you construct a unique_ptr, use the [make_unique](https://docs.microsoft.com/en-us/cpp/standard-library/memory-functions?view=msvc-160#make_unique) helper function.
-	* shared_ptr
-		* Reference-counted smart pointer. Use when you want to assign one raw pointer to multiple owners, for example, when you return a copy of a pointer from a container but want to keep the original. The raw pointer is not deleted until all shared_ptr owners have gone out of scope or have otherwise given up ownership. The size is two pointers; one for the object and one for the shared control block that contains the reference count. Header file: \<memory\>. For more information, see [How to: Create and use shared_ptr instances | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/how-to-create-and-use-shared-ptr-instances?view=msvc-160) and [shared_ptr Class](https://docs.microsoft.com/en-us/cpp/standard-library/shared-ptr-class?view=msvc-160).
-			* Whenever possible, use the [make_shared](https://docs.microsoft.com/en-us/cpp/standard-library/memory-functions?view=msvc-160#make_shared) function to create a shared_ptr when the memory resource is created for the first time.
-		* The shared_ptr type is a smart pointer in the C++ standard library that is designed for scenarios in which more than one owner might have to manage the lifetime of the object in memory. After you initialize a shared_ptr you can copy it, pass it by value in function arguments, and assign it to other shared_ptr instances. All the instances point to the same object, and share access to one "control block" that increments and decrements the reference count whenever a new shared_ptr is added, goes out of scope, or is reset. When the reference count reaches zero, the control block deletes the memory resource and itself.
-	* weak_ptr
-		* Special-case smart pointer for use in conjunction with shared_ptr. A weak_ptr provides access to an object that is owned by one or more shared_ptr instances, but does not participate in reference counting. Use when you want to observe an object, but do not require it to remain alive. Required in some cases to break circular references between shared_ptr instances. Header file: \<memory\>. For more information, see [How to: Create and use weak_ptr instances | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/how-to-create-and-use-weak-ptr-instances?view=msvc-160) and [weak_ptr Class](https://docs.microsoft.com/en-us/cpp/standard-library/weak-ptr-class?view=msvc-160).
-		* Sometimes an object must store a way to access the underlying object of a shared_ptr without causing the reference count to be incremented. Typically, this situation occurs when you have cyclic references between shared_ptr instances.
-		* The best design is to avoid shared ownership of pointers whenever you can. However, if you must have shared ownership of shared_ptr instances, avoid cyclic references between them. When cyclic references are unavoidable, or even preferable for some reason, use weak_ptr to give one or more of the owners a weak reference to another shared_ptr. By using a weak_ptr, you can create a shared_ptr that joins to an existing set of related instances, but only if the underlying memory resource is still valid. A weak_ptr itself does not participate in the reference counting, and therefore, it cannot prevent the reference count from going to zero. However, you can use a weak_ptr to try to obtain a new copy of the shared_ptr with which it was initialized. If the memory has already been deleted, the weak_ptr's bool operator returns false. If the memory is still valid, the new shared pointer increments the reference count and guarantees that the memory will be valid as long as the shared_ptr variable stays in scope.
-* [Smart pointer - Wikipedia, the free encyclopedia](https://en.wikipedia.org/wiki/Smart_pointer)
-
-# 
-[std::unique_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr)
-
-* smart pointer with unique object ownership semantics (class template)
-* std::unique_ptr is a smart pointer that owns and manages another object through a pointer and disposes of that object when the unique_ptr goes out of scope.
-* The object is disposed of, using the associated deleter when either of the following happens:
-    * the managing unique_ptr object is destroyed
-    * the managing unique_ptr object is assigned another pointer via operator= or reset().
-* The object is disposed of, using a potentially user-supplied deleter by calling get_deleter()(ptr). The default deleter uses the delete operator, which destroys the object and deallocates the memory.
-* A unique_ptr may alternatively own no object, in which case it is called empty.
-* There are two versions of std::unique_ptr:
-    * Manages a single object (e.g. allocated with new)
-    * Manages a dynamically-allocated array of objects (e.g. allocated with new[])
-* The class satisfies the requirements of MoveConstructible and MoveAssignable, but of neither CopyConstructible nor CopyAssignable.
-* Type requirements
-    * -Deleter must be FunctionObject or lvalue reference to a FunctionObject or lvalue reference to function, callable with an argument of type unique_ptr\<T, Deleter>::pointer
-* Notes
-    * Only non-const unique_ptr can transfer the ownership of the managed object to another unique_ptr. If an object's lifetime is managed by a const std::unique_ptr, it is limited to the scope in which the pointer was created.
-    * std::unique_ptr is commonly used to manage the lifetime of objects, including:
-        * providing exception safety to classes and functions that handle objects with dynamic lifetime, by guaranteeing deletion on both normal exit and exit through exception
-        * passing ownership of uniquely-owned objects with dynamic lifetime into functions
-        * acquiring ownership of uniquely-owned objects with dynamic lifetime from functions
-        * as the element type in move-aware containers, such as std::vector, which hold pointers to dynamically-allocated objects (e.g. if polymorphic behavior is desired)
-    * std::unique_ptr may be constructed for an incomplete type T, such as to facilitate the use as a handle in the pImpl idiom. If the default deleter is used, T must be complete at the point in code where the deleter is invoked, which happens in the destructor, move assignment operator, and reset member function of std::unique_ptr. (Conversely, std::shared_ptr can't be constructed from a raw pointer to incomplete type, but can be destroyed where T is incomplete). Note that if T is a class template specialization, use of unique_ptr as an operand, e.g. !p requires T's parameters to be complete due to ADL.
-    * If T is a derived class of some base B, then std::unique_ptr\<T> is implicitly convertible to std::unique_ptr\<B>. The default deleter of the resulting std::unique_ptr\<B> will use operator delete for B, leading to undefined behavior unless the destructor of B is virtual. Note that std::shared_ptr behaves differently: std::shared_ptr\<B> will use the operator delete for the type T and the owned object will be deleted correctly even if the destructor of B is not virtual.
-    * Unlike std::shared_ptr, std::unique_ptr may manage an object through any custom handle type that satisfies NullablePointer. This allows, for example, managing objects located in shared memory, by supplying a Deleter that defines typedef boost::offset_ptr pointer; or another fancy pointer.
-* [std::unique_ptr<T,Deleter>::unique_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/unique_ptr)
-    * (constructor)
-* [std::unique_ptr<T,Deleter>::operator= - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/operator%3D)
-    * assigns the unique_ptr (public member function)
-    * 1) Move assignment operator. Transfers ownership from r to *this as if by calling reset(r.release()) followed by an assignment of get_deleter() from std::forward\<Deleter>(r.get_deleter()).
-        * If Deleter is not a reference type, requires that it is nothrow-MoveAssignable.
-        * If Deleter is a reference type, requires that std::remove_reference\<Deleter>::type is nothrow-CopyAssignable.
-        * The move assignment operator only participates in overload resolution if std::is_move_assignable\<Deleter>::value is true.
-    * 2) Converting assignment operator. Behaves same as (1), except that
-        * This assignment operator of the primary template only participates in overload resolution if U is not an array type and unique_ptr\<U,E>::pointer is implicitly convertible to pointer and std::is_assignable\<Deleter&, E&&>::value is true.
-        * This assignment operator in the specialization for arrays, std::unique_ptr<T[]> behaves the same as in the primary template, except that will only participate in overload resolution if all of the following is true:
-            * U is an array type
-            * pointer is the same type as element_type*
-            * unique_ptr\<U,E>::pointer is the same type as unique_ptr\<U,E>::element_type*
-            * unique_ptr\<U,E>::element_type(*)[] is convertible to element_type(*)[]
-            * std::is_assignable\<Deleter&, E&&>::value is true
-    * 3) Effectively the same as calling reset().
-    * Note that unique_ptr's assignment operator only accepts rvalues, which are typically generated by std::move. (The unique_ptr class explicitly deletes its lvalue copy constructor and lvalue assignment operator.)
-```c++
-#include <iostream>
-#include <memory>
- 
-struct Foo {
-    int id;
-    Foo(int id) : id(id) { std::cout << "Foo " << id << '\n'; }
-    ~Foo() { std::cout << "~Foo " << id << '\n'; }
-};
- 
-int main() 
-{
-    std::unique_ptr<Foo> p1( std::make_unique<Foo>(1) );
- 
-    {
-        std::cout << "Creating new Foo...\n";
-        std::unique_ptr<Foo> p2( std::make_unique<Foo>(2) );
-        // p1 = p2; // Error ! can't copy unique_ptr
-        p1 = std::move(p2);
-        std::cout << "About to leave inner block...\n";
- 
-        // Foo instance will continue to live, 
-        // despite p2 going out of scope
-    }
- 
-    std::cout << "About to leave program...\n";
-}
-/*
-Foo 1
-Creating new Foo...
-Foo 2
-~Foo 1
-About to leave inner block...
-About to leave program...
-~Foo 2
-*/
-```
-* [std::unique_ptr<T,Deleter>::get - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/get)
-    * returns a pointer to the managed object (public member function)
-    * Returns a pointer to the managed object or nullptr if no object is owned.
-```c++
-#include <iomanip>
-#include <iostream>
-#include <memory>
-#include <string>
-#include <utility>
- 
-class Res {
-    std::string s;
- 
-public:
-    Res(std::string arg) : s{ std::move(arg) } {
-        std::cout << "Res::Res(" << std::quoted(s) << ");\n";
-    }
- 
-    ~Res() {
-        std::cout << "Res::~Res();\n";
-    }
- 
-private:
-    friend std::ostream& operator<< (std::ostream& os, Res const& r) {
-        return os << "Res { s = " << std::quoted(r.s) << "; }";
-    }
-};
- 
-int main()
-{
-    std::unique_ptr<Res> up(new Res{"Hello, world!"});
-    Res *res = up.get();
-    std::cout << *res << '\n';
-}
-/*
-Res::Res("Hello, world!");
-Res { s = "Hello, world!"; }
-Res::~Res();
-*/
-```
-* [std::unique_ptr<T,Deleter>::release - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/release)
-    * returns a pointer to the managed object and releases the ownership (public member function)
-    * Releases the ownership of the managed object, if any.
-    * get() returns nullptr after the call.
-    * The caller is responsible for deleting the object.
-```c++
-#include <memory>
-#include <iostream>
-#include <cassert>
- 
-struct Foo {
-    Foo() { std::cout << "Foo\n"; }
-    ~Foo() { std::cout << "~Foo\n"; }
-};
- 
-int main()
-{
-    std::cout << "Creating new Foo...\n";
-    std::unique_ptr<Foo> up(new Foo());
- 
-    std::cout << "About to release Foo...\n";
-    Foo* fp = up.release();
- 
-    assert (up.get() == nullptr);
-    assert (up == nullptr);
- 
-    std::cout << "Foo is no longer owned by unique_ptr...\n";
- 
-    delete fp;
-}
-/*
-Creating new Foo...
-Foo
-About to release Foo...
-Foo is no longer owned by unique_ptr...
-~Foo
-*/
-```
-* [std::unique_ptr<T,Deleter>::reset - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/reset)
-    * replaces the managed object (public member function)
-    * Replaces the managed object.
-        * 1) Given current_ptr, the pointer that was managed by *this, performs the following actions, in this order:
-            * Saves a copy of the current pointer old_ptr = current_ptr
-            * Overwrites the current pointer with the argument current_ptr = ptr
-            * If the old pointer was non-empty, deletes the previously managed object if(old_ptr) get_deleter()(old_ptr).
-        * 2) Behaves the same as the reset member of the primary template, except that it will only participate in overload resolution if either
-            * U is the same type as pointer, or
-            * pointer is the same type as element_type* and U is a pointer type V* such that V(*)[] is convertible to element_type(*)[].
-        * 3) Equivalent to reset(pointer())
-    * Notes
-        * To replace the managed object while supplying a new deleter as well, move assignment operator may be used.
-        * A test for self-reset, i.e. whether ptr points to an object already managed by *this, is not performed, except where provided as a compiler extension or as a debugging assert. Note that code such as p.reset(p.release()) does not involve self-reset, only code like p.reset(p.get()) does.
-```c++
-#include <iostream>
-#include <memory>
- 
-struct Foo { // object to manage
-    Foo() { std::cout << "Foo...\n"; }
-    ~Foo() { std::cout << "~Foo...\n"; }
-};
- 
-struct D { // deleter
-    void operator() (Foo* p) {
-        std::cout << "Calling delete for Foo object... \n";
-        delete p;
-    }
-};
- 
-int main()
-{
-    std::cout << "Creating new Foo...\n";
-    std::unique_ptr<Foo, D> up(new Foo(), D());  // up owns the Foo pointer (deleter D)
- 
-    std::cout << "Replace owned Foo with a new Foo...\n";
-    up.reset(new Foo());  // calls deleter for the old one
- 
-    std::cout << "Release and delete the owned Foo...\n";
-    up.reset(nullptr);      
-}
-/*
-Creating new Foo...
-Foo...
-Replace owned Foo with a new Foo...
-Foo...
-Calling delete for Foo object...
-~Foo...
-Release and delete the owned Foo...
-Calling delete for Foo object...
-~Foo...
-*/
-```
-* [std::unique_ptr<T,Deleter>::operator*, std::unique_ptr<T,Deleter>::operator-> - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/operator*)
-    * Single-object version, unique_ptr\<T>
-    * dereferences pointer to the managed object (public member function)
-    * operator* and operator-> provide access to the object owned by *this.
-    * The behavior is undefined if get() == nullptr.
-    * These member functions are only provided for unique_ptr for the single objects i.e. the primary template.
-```c++
-#include <iostream>
-#include <memory>
- 
-struct Foo {
-    void bar() { std::cout << "Foo::bar\n"; }
-};
- 
-void f(const Foo&) 
-{
-    std::cout << "f(const Foo&)\n";
-}
- 
-int main() 
-{
-    std::unique_ptr<Foo> ptr(new Foo);
- 
-    ptr->bar();
-    f(*ptr);
-}
-/*
-Foo::bar
-f(const Foo&)
-*/
-```
-* [std::unique_ptr<T,Deleter>::operator[] - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/operator_at)
-    * Array version, unique_ptr\<T[]>
-    * provides indexed access to the managed array (public member function)
-    * operator[] provides access to elements of an array managed by a unique_ptr.
-    * The parameter i shall be less than the number of elements in the array; otherwise, the behavior is undefined.
-    * This member function is only provided for specializations for array types.
-```c++
-#include <iostream>
-#include <memory>
- 
-int main() 
-{
-    const int size = 10; 
-    std::unique_ptr<int[]> fact(new int[size]);
- 
-    for (int i = 0; i < size; ++i) {
-        fact[i] = (i == 0) ? 1 : i * fact[i-1];
-    }
- 
-    for (int i = 0; i < size; ++i) {
-        std::cout << i << "! = " << fact[i] << '\n';
-    }
-}
-/*
-0! = 1
-1! = 1
-2! = 2
-3! = 6
-4! = 24
-5! = 120
-6! = 720
-7! = 5040
-8! = 40320
-9! = 362880
-*/
-```
-* [std::make_unique, std::make_unique_for_overwrite - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique)
-    * creates a unique pointer that manages a new object (function template)
-    * Constructs an object of type T and wraps it in a std::unique_ptr.
-```c++
-#include <cassert>
-#include <cstdio>
-#include <fstream>
-#include <iostream>
-#include <memory>
-#include <stdexcept>
- 
-// helper class for runtime polymorphism demo below
-struct B
-{
-    virtual ~B() = default;
- 
-    virtual void bar() { std::cout << "B::bar\n"; }
-};
- 
-struct D : B
-{
-    D() { std::cout << "D::D\n"; }
-    ~D() { std::cout << "D::~D\n"; }
- 
-    void bar() override { std::cout << "D::bar\n"; }
-};
- 
-// a function consuming a unique_ptr can take it by value or by rvalue reference
-std::unique_ptr<D> pass_through(std::unique_ptr<D> p)
-{
-    p->bar();
-    return p;
-}
- 
-// helper function for the custom deleter demo below
-void close_file(std::FILE* fp)
-{
-    std::fclose(fp);
-}
- 
-// unique_ptr-based linked list demo
-struct List
-{
-    struct Node
-    {
-        int data;
-        std::unique_ptr<Node> next;
-    };
- 
-    std::unique_ptr<Node> head;
- 
-    ~List()
-    {
-        // destroy list nodes sequentially in a loop, the default destructor
-        // would have invoked its `next`'s destructor recursively, which would
-        // cause stack overflow for sufficiently large lists.
-        while (head)
-            head = std::move(head->next);
-    }
- 
-    void push(int data)
-    {
-        head = std::unique_ptr<Node>(new Node{data, std::move(head)});
-    }
-};
- 
-int main()
-{
-    std::cout << "1) Unique ownership semantics demo\n";
-    {
-        // Create a (uniquely owned) resource
-        std::unique_ptr<D> p = std::make_unique<D>();
- 
-        // Transfer ownership to `pass_through`,
-        // which in turn transfers ownership back through the return value
-        std::unique_ptr<D> q = pass_through(std::move(p));
- 
-        // `p` is now in a moved-from 'empty' state, equal to `nullptr`
-        assert(!p);
-    }
- 
-    std::cout << "\n" "2) Runtime polymorphism demo\n";
-    {
-        // Create a derived resource and point to it via base type
-        std::unique_ptr<B> p = std::make_unique<D>();
- 
-        // Dynamic dispatch works as expected
-        p->bar();
-    }
- 
-    std::cout << "\n" "3) Custom deleter demo\n";
-    std::ofstream("demo.txt") << 'x'; // prepare the file to read
-    {
-        using unique_file_t = std::unique_ptr<std::FILE, decltype(&close_file)>;
-        unique_file_t fp(std::fopen("demo.txt", "r"), &close_file);
-        if (fp)
-            std::cout << char(std::fgetc(fp.get())) << '\n';
-    } // `close_file()` called here (if `fp` is not null)
- 
-    std::cout << "\n" "4) Custom lambda-expression deleter and exception safety demo\n";
-    try
-    {
-        std::unique_ptr<D, void(*)(D*)> p(new D, [](D* ptr)
-        {
-            std::cout << "destroying from a custom deleter...\n";
-            delete ptr;
-        });
- 
-        throw std::runtime_error(""); // `p` would leak here if it were instead a plain pointer
-    }
-    catch (const std::exception&) { std::cout << "Caught exception\n"; }
- 
-    std::cout << "\n" "5) Array form of unique_ptr demo\n";
-    {
-        std::unique_ptr<D[]> p(new D[3]);
-    } // `D::~D()` is called 3 times
- 
-    std::cout << "\n" "6) Linked list demo\n";
-    {
-        List wall;
-        for (int beer = 0; beer != 1'000'000; ++beer)
-            wall.push(beer);
- 
-        std::cout << "1'000'000 bottles of beer on the wall...\n";
-    } // destroys all the beers
-}
-/*
-1) Unique ownership semantics demo
-D::D
-D::bar
-D::~D
- 
-2) Runtime polymorphism demo
-D::D
-D::bar
-D::~D
- 
-3) Custom deleter demo
-x
- 
-4) Custom lambda-expression deleter and exception safety demo
-D::D
-destroying from a custom deleter...
-D::~D
-Caught exception
- 
-5) Array form of unique_ptr demo
-D::D
-D::D
-D::D
-D::~D
-D::~D
-D::~D
- 
-6) Linked list demo
-1'000'000 bottles of beer on the wall...
-*/
-```
-
-#
-[std::shared_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/shared_ptr)
-
-* smart pointer with shared object ownership semantics (class template)
-* std::shared_ptr is a smart pointer that retains shared ownership of an object through a pointer. Several shared_ptr objects may own the same object. The object is destroyed and its memory deallocated when either of the following happens:
-    * the last remaining shared_ptr owning the object is destroyed;
-    * the last remaining shared_ptr owning the object is assigned another pointer via operator= or reset().
-* The object is destroyed using delete-expression or a custom deleter that is supplied to shared_ptr during construction.
-* A shared_ptr can share ownership of an object while storing a pointer to another object. This feature can be used to point to member objects while owning the object they belong to. The stored pointer is the one accessed by get(), the dereference and the comparison operators. The managed pointer is the one passed to the deleter when use count reaches zero.
-* A shared_ptr may also own no objects, in which case it is called empty (an empty shared_ptr may have a non-null stored pointer if the aliasing constructor was used to create it).
-* All specializations of shared_ptr meet the requirements of CopyConstructible, CopyAssignable, and LessThanComparable and are contextually convertible to bool.
-* All member functions (including copy constructor and copy assignment) can be called by multiple threads on different instances of shared_ptr without additional synchronization even if these instances are copies and share ownership of the same object. If multiple threads of execution access the same instance of shared_ptr without synchronization and any of those accesses uses a non-const member function of shared_ptr then a data race will occur; the shared_ptr overloads of atomic functions can be used to prevent the data race.
-* Notes
-    * The ownership of an object can only be shared with another shared_ptr by copy constructing or copy assigning its value to another shared_ptr. Constructing a new shared_ptr using the raw underlying pointer owned by another shared_ptr leads to undefined behavior.
-    * std::shared_ptr may be used with an incomplete type T. However, the constructor from a raw pointer (template\<class Y> shared_ptr(Y*)) and the template\<class Y> void reset(Y*) member function may only be called with a pointer to a complete type (note that std::unique_ptr may be constructed from a raw pointer to an incomplete type).
-    * The T in std::shared_ptr\<T> may be a function type: in this case it manages a pointer to function, rather than an object pointer. This is sometimes used to keep a dynamic library or a plugin loaded as long as any of its functions are referenced:
-```c++
-void del(void(*)()) {}
-void fun() {}
-int main(){
-  std::shared_ptr<void()> ee(fun, del);
-  (*ee)();
-}
-```
-* Implementation notes
-    * In a typical implementation, shared_ptr holds only two pointers:
-        * the stored pointer (one returned by get());
-        * a pointer to control block.
-    * The control block is a dynamically-allocated object that holds:
-        * either a pointer to the managed object or the managed object itself;
-        * the deleter (type-erased);
-        * the allocator (type-erased);
-        * the number of shared_ptrs that own the managed object;
-        * the number of weak_ptrs that refer to the managed object.
-    * When shared_ptr is created by calling std::make_shared or std::allocate_shared, the memory for both the control block and the managed object is created with a single allocation. The managed object is constructed in-place in a data member of the control block. When shared_ptr is created via one of the shared_ptr constructors, the managed object and the control block must be allocated separately. In this case, the control block stores a pointer to the managed object.
-    * The pointer held by the shared_ptr directly is the one returned by get(), while the pointer/object held by the control block is the one that will be deleted when the number of shared owners reaches zero. These pointers are not necessarily equal.
-    * The destructor of shared_ptr decrements the number of shared owners of the control block. If that counter reaches zero, the control block calls the destructor of the managed object. The control block does not deallocate itself until the std::weak_ptr counter reaches zero as well.
-    * In existing implementations, the number of weak pointers is incremented ([1], [2]) if there is a shared pointer to the same control block.
-    * To satisfy thread safety requirements, the reference counters are typically incremented using an equivalent of std::atomic::fetch_add with std::memory_order_relaxed (decrementing requires stronger ordering to safely destroy the control block).
-```c++
-#include <iostream>
-#include <memory>
-#include <thread>
-#include <chrono>
-#include <mutex>
- 
-struct Base
-{
-    Base() { std::cout << "  Base::Base()\n"; }
-    // Note: non-virtual destructor is OK here
-    ~Base() { std::cout << "  Base::~Base()\n"; }
-};
- 
-struct Derived: public Base
-{
-    Derived() { std::cout << "  Derived::Derived()\n"; }
-    ~Derived() { std::cout << "  Derived::~Derived()\n"; }
-};
- 
-void thr(std::shared_ptr<Base> p)
-{
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    std::shared_ptr<Base> lp = p; // thread-safe, even though the
-                                  // shared use_count is incremented
-    {
-        static std::mutex io_mutex;
-        std::lock_guard<std::mutex> lk(io_mutex);
-        std::cout << "local pointer in a thread:\n"
-                  << "  lp.get() = " << lp.get()
-                  << ", lp.use_count() = " << lp.use_count() << '\n';
-    }
-}
- 
-int main()
-{
-    std::shared_ptr<Base> p = std::make_shared<Derived>();
- 
-    std::cout << "Created a shared Derived (as a pointer to Base)\n"
-              << "  p.get() = " << p.get()
-              << ", p.use_count() = " << p.use_count() << '\n';
-    std::thread t1(thr, p), t2(thr, p), t3(thr, p);
-    p.reset(); // release ownership from main
-    std::cout << "Shared ownership between 3 threads and released\n"
-              << "ownership from main:\n"
-              << "  p.get() = " << p.get()
-              << ", p.use_count() = " << p.use_count() << '\n';
-    t1.join(); t2.join(); t3.join();
-    std::cout << "All threads completed, the last one deleted Derived\n";
-}
-/*
-Base::Base()
-  Derived::Derived()
-Created a shared Derived (as a pointer to Base)
-  p.get() = 0x2299b30, p.use_count() = 1
-Shared ownership between 3 threads and released
-ownership from main:
-  p.get() = 0, p.use_count() = 0
-local pointer in a thread:
-  lp.get() = 0x2299b30, lp.use_count() = 5
-local pointer in a thread:
-  lp.get() = 0x2299b30, lp.use_count() = 3
-local pointer in a thread:
-  lp.get() = 0x2299b30, lp.use_count() = 2
-  Derived::~Derived()
-  Base::~Base()
-All threads completed, the last one deleted Derived
-*/
-```
-```c++
-#include <memory>
-#include <iostream>
- 
-struct MyObj
-{
-    MyObj()
-    {
-        std::cout<<"MyObj construced" <<std::endl;
-    }
- 
-    ~MyObj()
-    {
-        std::cout<<"MyObj destructed" <<std::endl;
-    }
-};
- 
-struct Container : std::enable_shared_from_this<Container> // note: public inheritance
-{
-    void CreateMember()
-    {
-        memberObj = std::make_shared<MyObj>();
-    }
-    std::shared_ptr<MyObj> memberObj;
- 
-    std::shared_ptr<MyObj> GetAsMyObj()
-    {
-        // Use an alias shared ptr for member
-        return std::shared_ptr<MyObj>(shared_from_this(), memberObj.get());
-    }
-};
- 
- 
-void test()
-{
- 
-    std::shared_ptr<Container> cont = std::make_shared<Container>();
-    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
-    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
- 
-    std::cout << "Creating member\n\n";
-    cont->CreateMember();
-    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
-    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
- 
-    std::cout << "Creating another shared container\n\n";
-    std::shared_ptr<Container> cont2 = cont;
-    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
-    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
-    std::cout << "cont2.use_count() = " << cont2.use_count() << '\n';
-    std::cout << "cont2.memberObj.use_count() = " << cont2->memberObj.use_count() << '\n';
- 
-    std::cout << "GetAsMyObj\n\n";
-    std::shared_ptr<MyObj> myobj1 = cont->GetAsMyObj();
-    std::cout << "myobj1.use_count() = " << myobj1.use_count() << '\n';
-    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
-    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
-    std::cout << "cont2.use_count() = " << cont2.use_count() << '\n';
-    std::cout << "cont2.memberObj.use_count() = " << cont2->memberObj.use_count() << '\n';
- 
-    std::cout << "copying alias obj\n\n";
-    std::shared_ptr<MyObj> myobj2 = myobj1;
-    std::cout << "myobj1.use_count() = " << myobj1.use_count() << '\n';
-    std::cout << "myobj2.use_count() = " << myobj2.use_count() << '\n';
- 
-    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
-    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
-    std::cout << "cont2.use_count() = " << cont2.use_count() << '\n';
-    std::cout << "cont2.memberObj.use_count() = " << cont2->memberObj.use_count() << '\n';
- 
-    std::cout << "Resetting cont2\n\n";
-    cont2.reset();
-    std::cout << "myobj1.use_count() = " << myobj1.use_count() << '\n';
-    std::cout << "myobj2.use_count() = " << myobj2.use_count() << '\n';
- 
-    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
-    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
- 
-    std::cout << "Resetting myobj2\n\n";
-    myobj2.reset();
-    std::cout << "myobj1.use_count() = " << myobj1.use_count() << '\n';
-    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
-    std::cout << "cont.memberObj.use_count() = " << cont->memberObj.use_count() << '\n';
- 
-    std::cout << "Resetting cont\n\n";
-    cont.reset();
-    std::cout << "myobj1.use_count() = " << myobj1.use_count() << '\n';
- 
-    std::cout << "cont.use_count() = " << cont.use_count() << '\n';
- 
-}
- 
- 
-int main()
-{
-    test();
-}
-/*
-cont.use_count() = 1
-cont.memberObj.use_count() = 0
-Creating member
- 
-MyObj construced
-cont.use_count() = 1
-cont.memberObj.use_count() = 1
-Creating another shared container
- 
-cont.use_count() = 2
-cont.memberObj.use_count() = 1
-cont2.use_count() = 2
-cont2.memberObj.use_count() = 1
-GetAsMyObj
- 
-myobj1.use_count() = 3
-cont.use_count() = 3
-cont.memberObj.use_count() = 1
-cont2.use_count() = 3
-cont2.memberObj.use_count() = 1
-copying alias obj
- 
-myobj1.use_count() = 4
-myobj2.use_count() = 4
-cont.use_count() = 4
-cont.memberObj.use_count() = 1
-cont2.use_count() = 4
-cont2.memberObj.use_count() = 1
-Resetting cont2
- 
-myobj1.use_count() = 3
-myobj2.use_count() = 3
-cont.use_count() = 3
-cont.memberObj.use_count() = 1
-Resetting myobj2
- 
-myobj1.use_count() = 2
-cont.use_count() = 2
-cont.memberObj.use_count() = 1
-Resetting cont
- 
-myobj1.use_count() = 1
-cont.use_count() = 0
-MyObj destructed
-*/
-```
-* [std::shared_ptr\<T>::use_count - cppreference.com](https://en.cppreference.com/w/cpp/memory/shared_ptr/use_count)
-    * returns the number of shared_ptr objects referring to the same managed object (public member function)
-    * Returns the number of different shared_ptr instances (`this` included) managing the current object. If there is no managed object, `0` is returned.
-    * In multithreaded environment, the value returned by use_count is approximate (typical implementations use a memory_order_relaxed load)
-```c++
-#include <memory>
-#include <iostream>
- 
-void fun(std::shared_ptr<int> sp)
-{
-    std::cout << "in fun(): sp.use_count() == " << sp.use_count()
-              << " (object @ " << sp << ")\n";
-}
- 
-int main()
-{
-    auto sp1 = std::make_shared<int>(5);
-    std::cout << "in main(): sp1.use_count() == " << sp1.use_count()
-              << " (object @ " << sp1 << ")\n";
- 
-    fun(sp1);
-}
-/*
-in main(): sp1.use_count() == 1 (object @ 0x20eec30)
-in fun(): sp.use_count() == 2 (object @ 0x20eec30)
-*/
-```
-* [std::make_shared, std::make_shared_for_overwrite - cppreference.com](https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared)
-    * creates a shared pointer that manages a new object (function template)
-        * 1) Constructs an object of type T and wraps it in a std::shared_ptr using args as the parameter list for the constructor of T. The object is constructed as if by the expression ::new (pv) T(std::forward\<Args>(args)...), where pv is an internal void* pointer to storage suitable to hold an object of type T. The storage is typically larger than sizeof(T) in order to use one allocation for both the control block of the shared pointer and the T object. The std::shared_ptr constructor called by this function enables shared_from_this with a pointer to the newly constructed object of type T.
-            * This overload participates in overload resolution only if T is not an array type (since C++20)
-        * 2,3) Same as (1), but the object constructed is a possibly-multidimensional array whose non-array elements of type std::remove_all_extents_t\<T> are value-initialized as if by placement-new expression ::new(pv) std::remove_all_extents_t\<T>(). The overload (2) creates an array of size N along the first dimension. The array elements are initialized in ascending order of their addresses, and when their lifetime ends are destroyed in the reverse order of their original construction.
-        * 4,5) Same as (2,3), but every element is initialized from the default value u. If U is not an array type, then this is performed as if by the same placement-new expression as in (1); otherwise, this is performed as if by initializing every non-array element of the (possibly multidimensional) array with the corresponding element from u with the same placement-new expression as in (1). The overload (4) creates an array of size N along the first dimension. The array elements are initialized in ascending order of their addresses, and when their lifetime ends are destroyed in the reverse order of their original construction.
-        * 6) Same as (1) if T is not an array type and (3) if T is U[N], except that the created object is default-initialized.
-        * 7) Same as (2), except that the individual array elements are default-initialized.
-    * In each case, the object (or individual elements if T is an array type) (since C++20) will be destroyed by p->~X(), where p is a pointer to the object and X is its type.
-```c++
-#include <memory>
-#include <vector>
-#include <iostream>
-#include <type_traits>
- 
-struct C
-{
-    // constructors needed (until C++20)
-    C(int i) : i(i) {}
-    C(int i, float f) : i(i), f(f) {}
-    int i;
-    float f{};
-};
- 
-int main()
-{
-    // using `auto` for the type of `sp1`
-    auto sp1 = std::make_shared<C>(1); // overload (1)
-    static_assert(std::is_same_v<decltype(sp1), std::shared_ptr<C>>);
-    std::cout << "sp1->{ i:" << sp1->i << ", f:" << sp1->f << " }\n";
- 
-    // being explicit with the type of `sp2`
-    std::shared_ptr<C> sp2 = std::make_shared<C>(2, 3.0f); // overload (1)
-    static_assert(std::is_same_v<decltype(sp2), std::shared_ptr<C>>);
-    static_assert(std::is_same_v<decltype(sp1), decltype(sp2)>);
-    std::cout << "sp2->{ i:" << sp2->i << ", f:" << sp2->f << " }\n";
- 
-    // shared_ptr to a value-initialized float[64]; overload (2):
-    std::shared_ptr<float[]> sp3 = std::make_shared<float[]>(64);
- 
-    // shared_ptr to a value-initialized long[5][3][4]; overload (2):
-    std::shared_ptr<long[][3][4]> sp4 = std::make_shared<long[][3][4]>(5);
- 
-    // shared_ptr to a value-initialized short[128]; overload (3):
-    std::shared_ptr<short[128]> sp5 = std::make_shared<short[128]>();
- 
-    // shared_ptr to a value-initialized int[7][6][5]; overload (3):
-    std::shared_ptr<int[7][6][5]> sp6 = std::make_shared<int[7][6][5]>();
- 
-    // shared_ptr to a double[256], where each element is 2.0; overload (4):
-    std::shared_ptr<double[]> sp7 = std::make_shared<double[]>(256, 2.0);
- 
-    // shared_ptr to a double[7][2], where each double[2] element is {3.0, 4.0}; overload (4):
-    std::shared_ptr<double[][2]> sp8 = std::make_shared<double[][2]>(7, {3.0, 4.0});
- 
-    // shared_ptr to a vector<int>[4], where each vector has contents {5, 6}; overload (4):
-    std::shared_ptr<std::vector<int>[]> sp9 = std::make_shared<std::vector<int>[]>(4, {5, 6});
- 
-    // shared_ptr to a float[512], where each element is 1.0; overload (5):
-    std::shared_ptr<float[512]> spA = std::make_shared<float[512]>(1.0);
- 
-    // shared_ptr to a double[6][2], where each double[2] element is {1.0, 2.0}; overload (5):
-    std::shared_ptr<double[6][2]> spB = std::make_shared<double[6][2]>({1.0, 2.0});
- 
-    // shared_ptr to a vector<int>[4], where each vector has contents {5, 6}; overload (5):
-    std::shared_ptr<std::vector<int>[4]> spC = std::make_shared<std::vector<int>[4]>({5, 6});
-}
-/*
-sp1->{ i:1, f:0 }
-sp2->{ i:2, f:3 }
-*/
-```
-
-#
-[std::weak_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/weak_ptr)
-
-* weak reference to an object managed by std::shared_ptr (class template)
-* std::weak_ptr is a smart pointer that holds a non-owning ("weak") reference to an object that is managed by std::shared_ptr. It must be converted to std::shared_ptr in order to access the referenced object.
-* std::weak_ptr models temporary ownership: when an object needs to be accessed only if it exists, and it may be deleted at any time by someone else, std::weak_ptr is used to track the object, and it is converted to std::shared_ptr to assume temporary ownership. If the original std::shared_ptr is destroyed at this time, the object's lifetime is extended until the temporary std::shared_ptr is destroyed as well.
-* Another use for std::weak_ptr is to break reference cycles formed by objects managed by std::shared_ptr. If such cycle is orphaned (i.e., there are no outside shared pointers into the cycle), the shared_ptr reference counts cannot reach zero and the memory is leaked. To prevent this, one of the pointers in the cycle can be made weak.
-```c++
-#include <iostream>
-#include <memory>
- 
-std::weak_ptr<int> gw;
- 
-void observe()
-{
-    std::cout << "gw.use_count() == " << gw.use_count() << "; ";
-    // we have to make a copy of shared pointer before usage:
-    if (std::shared_ptr<int> spt = gw.lock()) {
-        std::cout << "*spt == " << *spt << '\n';
-    }
-    else {
-        std::cout << "gw is expired\n";
-    }
-}
- 
-int main()
-{
-    {
-        auto sp = std::make_shared<int>(42);
-        gw = sp;
- 
-        observe();
-    }
- 
-    observe();
-}
-/*
-gw.use_count() == 1; *spt == 42
-gw.use_count() == 0; gw is expired
-*/
-```
-* [std::weak_ptr\<T>::~weak_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/weak_ptr/~weak_ptr#Example)
-	* Destroys the weak_ptr object. Results in no effect to the managed object.
-	* Example
-		* The program shows the effect of "non-breaking" the cycle of std::shared_ptrs.	
-```c++
-#include <iostream>
-#include <memory>
-#include <variant>
- 
-class Node {
-    char id;
-    std::variant<std::weak_ptr<Node>, std::shared_ptr<Node>> ptr;
-  public:
-    Node(char id) : id{id} {}
-    ~Node() { std::cout << "  '" << id << "' reclaimed\n"; }
-    /*...*/
-    void assign(std::weak_ptr<Node> p) { ptr = p; }
-    void assign(std::shared_ptr<Node> p) { ptr = p; }
-};
- 
-enum class shared { all, some };
- 
-void test_cyclic_graph(const shared x) {
- 
-    auto A = std::make_shared<Node>('A');
-    auto B = std::make_shared<Node>('B');
-    auto C = std::make_shared<Node>('C');
- 
-    A->assign(B);
-    B->assign(C);
- 
-    if (shared::all == x) {
-        C->assign(A);
-        std::cout << "All links are shared pointers";
-    } else {
-        C->assign(std::weak_ptr<Node>(A));
-        std::cout << "One link is a weak_ptr";
-    }
-    /*...*/
-    std::cout << "\nLeaving...\n";
-}
- 
-int main() {
-    test_cyclic_graph(shared::some);
-    test_cyclic_graph(shared::all); // produces a memory leak
-}
-/*
-One link is a weak_ptr
-Leaving...
-  'A' reclaimed
-  'B' reclaimed
-  'C' reclaimed
-All links are shared pointers
-Leaving...
-*/
-```
-
-#
-MISC
-
-* [Smart pointer rule summary - C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-summary-smartptrs)
-* [智能指针：从std::auto_ptr到std::unique_ptr - hanhuili的专栏 - 博客频道 - CSDN.NET](http://blog.csdn.net/hanhuili/article/details/8299912)
-* [拥抱智能指针，告别内存泄露](https://mp.weixin.qq.com/s/evYOoS4_XfjkPXlDWXTnSg)
-* [浅析 C++智能指针和 enable_shared_from_this 机制](https://mp.weixin.qq.com/s/a7Nl2jnbOtkfzEAK1TxVyA)
-* [一文掌握 C++ 智能指针的使用](https://mp.weixin.qq.com/s/bn7BAzBSxgbrkgRMnuy8-A)
-  * RAII 与引用计数
-  * std::shared_ptr
-  * std::unique_ptr
-  * std::weak_ptr
-
-#### [Date and time utilities](https://en.cppreference.com/w/cpp/chrono)
+## [Date and time utilities](https://en.cppreference.com/w/cpp/chrono)
 
 * C++ includes support for two types of time manipulation:
 	* The chrono library, a flexible collection of types that track time with varying degrees of precision (e.g. std::chrono::time_point).
