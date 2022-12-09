@@ -3319,6 +3319,20 @@ Operator function objects
 * [std::greater - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/greater)
 	* function object implementing x > y (class template)
 
+## [Metaprogramming library](https://en.cppreference.com/w/cpp/meta)
+
+* C++ provides metaprogramming facilities, such as type traits, compile-time rational arithmetic, and compile-time integer sequences.
+* [C++ 高阶操作：模板元编程](https://mp.weixin.qq.com/s/Ypit8BrJSvpx6B3Yf5GRuA)
+  * 泛型编程大家应该都很熟悉了，主要就是利用模板实现“安全的宏”，而模板元编程区别于我们所知道的泛型编程，它是一种较为复杂的模板，属于C++的高阶操作了，它最主要的优点就在于把计算过程提前到编译期，能带来可观的性能提升。
+  * 1.概述
+    * 模板元编程（Template Meta programming，TMP）是编写生成或操纵程序的程序，也是一种复杂且功能强大的编程范式（Programming Paradigm）。
+  * 6.小结
+    * C++模板元编程是图灵完备的且是函数式编程，主要特点是代码在编译期执行，可用于编译期数值计算，能够获得更有效率的运行码。模板的使用，也提高了代码泛化。与此同时，模板元编程也存一定缺点，主要有
+    * （1）模板元编程产生的代码较为复杂，难易阅读，可读性较差；
+    * （2）大量模板的使用，编译时容易导致代码膨胀，提高了编译时间；
+    * （3）对于C++来说，由于各编译器的差异，大量依赖模板元编程（特别是最新形式的）的代码可能会有移植性的问题。
+    * 所以，对于模板元编程，我们需要扬其长避其短，合理使用模板元编程。
+
 ## [Strings library](https://en.cppreference.com/w/cpp/string)
 
 * The C++ strings library includes support for three general types of strings:
@@ -6675,20 +6689,6 @@ int main()
     }
 }
 ```
-
-## [Metaprogramming library](https://en.cppreference.com/w/cpp/meta)
-
-* C++ provides metaprogramming facilities, such as type traits, compile-time rational arithmetic, and compile-time integer sequences.
-* [C++ 高阶操作：模板元编程](https://mp.weixin.qq.com/s/Ypit8BrJSvpx6B3Yf5GRuA)
-  * 泛型编程大家应该都很熟悉了，主要就是利用模板实现“安全的宏”，而模板元编程区别于我们所知道的泛型编程，它是一种较为复杂的模板，属于C++的高阶操作了，它最主要的优点就在于把计算过程提前到编译期，能带来可观的性能提升。
-  * 1.概述
-    * 模板元编程（Template Meta programming，TMP）是编写生成或操纵程序的程序，也是一种复杂且功能强大的编程范式（Programming Paradigm）。
-  * 6.小结
-    * C++模板元编程是图灵完备的且是函数式编程，主要特点是代码在编译期执行，可用于编译期数值计算，能够获得更有效率的运行码。模板的使用，也提高了代码泛化。与此同时，模板元编程也存一定缺点，主要有
-    * （1）模板元编程产生的代码较为复杂，难易阅读，可读性较差；
-    * （2）大量模板的使用，编译时容易导致代码膨胀，提高了编译时间；
-    * （3）对于C++来说，由于各编译器的差异，大量依赖模板元编程（特别是最新形式的）的代码可能会有移植性的问题。
-    * 所以，对于模板元编程，我们需要扬其长避其短，合理使用模板元编程。
 
 ## [Concurrency support library](https://en.cppreference.com/w/cpp/thread)
 
