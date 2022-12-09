@@ -2287,9 +2287,9 @@ for (auto const& x : range | std::views::reverse)
 	* language support libraries, and
 	* general-purpose libraries.
 
-### [Language support library](https://en.cppreference.com/w/cpp/utility#Language_support)
+## [Language support library](https://en.cppreference.com/w/cpp/utility#Language_support)
 
-#### [Type support (basic types, RTTI, type traits)](https://en.cppreference.com/w/cpp/types)
+### [Type support (basic types, RTTI, type traits)](https://en.cppreference.com/w/cpp/types)
 
 #
 Additional basic types and macros
@@ -2421,7 +2421,7 @@ Type relationships
 		* Commutativity is satisfied, i.e. for any two types T and U, is_same\<T, U>::value == true if and only if is_same\<U, T>::value == true.
 		* The behavior of a program that adds specializations for is_same or is_same_v (since C++17) is undefined.
 
-#### [Program support utilities](https://en.cppreference.com/w/cpp/utility/program)
+### [Program support utilities](https://en.cppreference.com/w/cpp/utility/program)
 
 #
 Program termination
@@ -2660,7 +2660,7 @@ SIGFPE|erroneous arithmetic operation such as divide by zero
 * [Shell Scripting - How to send Signal to a Processes - GeeksforGeeks](https://www.geeksforgeeks.org/shell-scripting-how-to-send-signal-to-a-processes/)
 * [UNIX / Linux: 3 Ways to Send Signal to Processes](https://www.thegeekstuff.com/2011/02/send-signal-to-process/)
 
-#### [Initializer lists](https://en.cppreference.com/w/cpp/utility/initializer_list)
+### [Initializer lists](https://en.cppreference.com/w/cpp/utility/initializer_list)
 
 * Defined in header \<initializer_list>
 * [std::initializer_list - cppreference.com](https://en.cppreference.com/w/cpp/utility/initializer_list)(C++11)
@@ -2776,600 +2776,6 @@ Use = only when you are sure that there can be no narrowing conversions. For bui
 	* Use ={...} if you really want an initializer_list\<T>
 	* Note ={} gives copy initialization whereas {} gives direct initialization. Like the distinction between copy-initialization and direct-initialization itself, this can lead to surprises. {} accepts explicit constructors; ={} does not.
 	* Use plain {}-initialization unless you specifically want to disable explicit constructors.	
-
-### [General utilities library](https://en.cppreference.com/w/cpp/utility#General-purpose_utilities)
-
-#### Swap and type operations
-
-* Defined in header \<utility>
-* [std::forward - cppreference.com](https://en.cppreference.com/w/cpp/utility/forward)
-	* forwards a function argument (function template)
-	* 1) Forwards lvalues as either lvalues or as rvalues, depending on T
-	* 2) Forwards rvalues as rvalues and prohibits forwarding of rvalues as lvalues
-* [std::move - cppreference.com](https://en.cppreference.com/w/cpp/utility/move)
-	* obtains an rvalue reference (function template)
-	* std::move is used to indicate that an object t may be "moved from", i.e. allowing the efficient transfer of resources from t to another object.
-	* In particular, std::move produces an [xvalue expression](https://en.cppreference.com/w/cpp/language/value_category) that identifies its argument t. It is exactly equivalent to a static_cast to an rvalue reference type.
-	* Return value
-		* `static_cast<typename std::remove_reference<T>::type&&>(t)`
-```c++
-#include <iomanip>
-#include <iostream>
-#include <utility>
-#include <vector>
-#include <string>
- 
-int main()
-{
-    std::string str = "Salut";
-    std::vector<std::string> v;
- 
-    // uses the push_back(const T&) overload, which means 
-    // we'll incur the cost of copying str
-    v.push_back(str);
-    std::cout << "After copy, str is " << std::quoted(str) << '\n';
- 
-    // uses the rvalue reference push_back(T&&) overload, 
-    // which means no strings will be copied; instead, the contents
-    // of str will be moved into the vector.  This is less
-    // expensive, but also means str might now be empty.
-    v.push_back(std::move(str));
-    std::cout << "After move, str is " << std::quoted(str) << '\n';
- 
-    std::cout << "The contents of the vector are { " << std::quoted(v[0])
-                                             << ", " << std::quoted(v[1]) << " }\n";
-}
-/*
-After copy, str is "Salut"
-After move, str is ""
-The contents of the vector are { "Salut", "Salut" }
-*/
-```
-* [深入理解C++中的move和forward！](https://mp.weixin.qq.com/s/Vc1sz26ACKQNonSzA-cHKQ)
-	* 导语 |  在C++11标准之前，C++中默认的传值类型均为Copy语义，即：不论是指针类型还是值类型，都将会在进行函数调用时被完整的复制一份！对于非指针而言，开销极其巨大！因此在C++11以后，引入了右值和Move语义，极大地提高了效率。本文介绍了在此场景下两个常用的标准库函数：move和forward。
-	* 一、特性背景
-		* （一）Copy语义简述
-			* C++中默认为Copy语义，因此存在大量开销。
-			* 除了我们显式构造的函数之外，我们在调用函数、将对象加入vector的时候，也创建了新的对象！
-			* 并且这个对象不是通过构造函数创建的，事实上是通过复制构造函数创建的！
-		* （二）临时值（右值）简述
-			* Copy语义虽然用起来很方便，但是很多时候我们并不想将值（尤其是一些临时变量）Copy一遍再使用！
-			* 注意：上面的函数在返回时，实际上编译器会对返回值进行优化，并不会先析构v，再在str_split 函数的调用栈中对整个v进行Copy。
-			* 但是之前的C++的确是这么做的，因此会出现类似于下面的代码：
-			* 即：将返回值也作为一个输入参数。
-			* 上面编译器的优化有一个非常学术的名字：RVO (Return Value Optimization)，返回值优化。
-			* 其实这里是可以优化的：
-				* 临时变量其实最终都是要被回收的，如果能把临时变量的内容直接“移入”成员变量中，此时就不需要调用复制构造函数了！
-			* 对于使用过Rust的开发者来说，这里他们是非常熟悉的。因为Rust丧心病狂的将所有赋值操作都默认定义为了Move语义！
-	* 二、使用move函数
-		* （一）move函数的基本使用
-			* 可以看到，相比于Copy，我们直接使用了move函数将变量移入了函数中，此时是没有调用复制构造函数的！
-			* 实际上，C++中的move函数只是做了类型转换，并不会真正的实现值的移动！
-			* 因此，对于自定义的类来说，如果要实现真正意义上的 “移动”，还是要手动重载移动构造函数和移动复制函数。
-			* 即：我们需要在自己的类中实现移动语义，避免深拷贝，充分利用右值引用和std::move的语言特性。
-			* 实际上，通常情况下C++编译器会默认在用户自定义的class和struct中生成移动语义函数。
-			* 但前提是：用户没有主动定义该类的拷贝构造等函数！
-			* 同时也要注意到：使用一个已经被move过的函数是非常危险的事情！
-		* （二）move语义下的析构函数
-			* 对象被move了之后，仍然会在其离开作用域之后调用他的析构函数？
-			* 这是因为：
-				* 虽然将obj的资源给了a_obj ，但是obj并没有立刻析构，只有在obj离开了自己的作用域的时候才会析构；因此，如果继续使用str2的m_data变量，可能会发生意想不到的错误。
-				* 也正因为如此，在自己实现移动构造函数的时候，需要将原对象中的值手动置为空，以防止同一片内存区域被多次释放！
-			* 此外还需要注意：
-				* 如果我们没有提供移动构造函数，只提供了拷贝构造函数，std::move()会失效但是不会发生错误，因为编译器找不到移动构造函数就去寻找拷贝构造函数，这也是拷贝构造函数的参数是const T&常量左值引用的原因！
-				* c++11中的所有容器都实现了move语义，move只是转移了资源的控制权，本质上是将左值强制转化为右值使用，以用于移动拷贝或赋值，避免对含有资源的对象发生无谓的拷贝。
-				* move对于拥有如内存、文件句柄等资源的成员的对象有效，如果是一些基本类型，如int和char[10]数组等，如果使用move，仍会发生拷贝（因为没有对应的移动构造函数），所以说move对含有资源的对象说更有意义。
-			* 这里需要注意，在移动构造函数和移动赋值函数中，我们将当前待移动对象的资源赋值为了空（str._data=nullptr），这里就是我们手动实现了资源的移动！
-			* 下面我们尝试修改两个地方，来导致报错：
-				* 使用资源被move后的对象。
-					* 因为此时obj中的内容已经为空了！
-				* 在实现移动构造函数时不赋值为nullptr。
-					* 此时再执行代码，整个程序会直接崩溃，因为：我们未将已经move掉的资源设置为空值，最终会导致这里的资源被释放两次！
-	* 三、什么又是foward函数
-		* 有了move函数之后，我们又遇到了一个新的问题：
-		* 按照上面的写法，处理临时变量用右值引用T&&，处理普通变量用const引用const T&，我们需要分别建立两个函数，然后入参使用不同的类型，每个函数都要写两遍。
-		* 那么能不能避免重复，将T &&类型和const T &类型合二为一呢？
-		* 答案就是：forward函数，std::forward也被称为完美转发，即：保持原来的值属性不变：
-			* 如果原来的值是左值，经std::forward处理后该值还是左值。
-			* 如果原来的值是右值，经std::forward处理后它还是右值。
-		* 这样一来，我们就可以使用forward函数对入参进行封装，从而保证了入参的统一性，从而可以实现一个方法处理两种类型！
-		* 正因为如此，forward函数被大量用在了入参值类型情况不确定的C++模板中！
-	* 四、move和forward函数的区别
-		* 从上面的分析我们可以看出，基本上forward可以cover所有的需要move的场景，毕竟forward函数左右值通吃。
-		* 那为什么还要使用move呢？原因主要有两点：
-			* 首先，forward函数常用于模板函数这种入参情况不确定的场景中，在使用的时候必须要多带一个模板参数forward\<T>，代码略复杂。
-			* 此外，明确只需要move临时值的情况下如果使用了forward，会导致代码意图不清晰，其他人看着理解起来比较费劲。
-		* 实际上从实现的角度上来说，他们都可以被static_cast替代。
-		* 注意：为什么不用static_cast呢？也是为了阅读和使用起来更方便。
-	* 五、move和forward函数的实现
-		* （一）C++11后加入的一些新规则
-			* 引用折叠规则
-				* 如果间接的创建一个引用的引用，则这些引用就会“折叠”，在所有情况下（除了一个例外），引用折叠成一个普通的左值引用类型。
-				* 一种特殊情况下，引用会折叠成右值引用，即右值引用的右值引用：T&& &&。
-			* 右值引用的特殊类型推断规则
-				* 当将一个左值传递给一个参数是右值引用的函数，且此右值引用指向模板类型参数(T&&)时，编译器推断模板参数类型为实参的左值引用
-			* 从上述两个规则可以得出结论：如果一个函数形参是一个指向模板类型的右值引用，则该参数可以被绑定到一个左值上。
-			* 可以通过static_cast显式地将一个左值转换为一个右值
-		* （二）move函数解析
-			* 需要注意的是：std::move函数仅仅执行到右值类型的无条件转换；就其本身而言，它没有“move”任何东西。
-		* （三）forward函数解析
-	* 六、总结
-		* 首先，std::move和std::forward本质都是转换：
-			* std::move执行强制到右值的无条件转换。
-			* std::forward只有在它的参数绑定到一个右值上的时候，才转换它的参数到一个右值。
-			* std::move没有move任何东西，std::forward没有转发任何东西。
-		* 整个类型转变的实现是在编译期完成的，在运行期，它们没有做任何事情。
-		* 它们没有为移动或者复制产生需要执行的代码，一byte都没有；（换言之，我们需要通过重载移动相关操作函数来自己处理move语义）
-		* 在使用场景方面：
-			* 一般在模板元编程里面，由于入参的值类型不确定，因此对于forward使用比较多。
-			* 在一般的函数中，如果可以确定传入的一定是右值（临时值），可以直接使用move函数，强调使用场景。
-		* https://github.com/JasonkayZK/cpp-learn/tree/value
-* [Modern C++ 最核心的变化是什么？](https://mp.weixin.qq.com/s/7l6JbX_QMry0DIM9mLUFgw)
-	* https://www.zhihu.com/question/22111546/answer/30801982
-	* 个人觉得最核心的变化是右值引用的引入，右值引用是  C++ 走向现代化的最重要一步。建议每一位 C++ 开发者都应该深入去了解并充分使用它。
-	* 右值引用是 C++11 中最重要的新特性之一，它解决了 C++ 中大量的历史遗留问题，使 C++ 标准库的实现在多种场景下消除了不必要的额外开销（如 std::vector, std::string)，也使得另外一些标准库（如 std::unique_ptr, std::function）成为可能。即使你并不直接使用右值引用，也可以通过标准库，间接从这一新特性中受益。为了更好地理解标准库结合右值引用带来的优化，我们有必要了解一下右值引用的重大意义。
-	* 右值引用的意义通常解释为两大作用：移动语义和完美转发。本文主要讨论移动语义。
-* [F.48: Don’t return std::move(local)](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f48-dont-return-stdmovelocal)
-	* `Reason` With guaranteed copy elision, it is now almost always a pessimization to expressly use std::move in a return statement.
-	* `Example, bad`
-    ```c++
-    S f()
-    {
-      S result;
-      return std::move(result);
-    }
-    ```
-	* `Example, good`
-    ```c++
-    S f()
-    {
-      S result;
-      return result;
-    }
-    ```
-	* `Enforcement` This should be enforced by tooling by checking the return expression .
-```c++
-#include <iostream>
-#include <vector>
-  
-void f(std::vector<int>& v)
-{
-    std::vector<int> result = {1, 2};
-    v = std::move(result);
-    
-    return;
-}
-
-std::vector<int> f1()
-{
-    std::vector<int> result = {1, 2};
-    return std::move(result);   
-    // warning: moving a local object in a return statement prevents copy elision [-Wpessimizing-move]
-    // note: remove 'std::move' call
-}
-
-int main()
-{
-    std::vector<int> z{};
-    
-    f(z);
-
-    for (auto it : z)
-        std::cout << it << " "; // 1 2     
- 
-    return 0;
-}
-```
-* [std::as_const - cppreference.com](https://en.cppreference.com/w/cpp/utility/as_const)
-    * obtains a reference to const to its argument (function template)
-    * 1) Forms lvalue reference to const type of t.
-    * 2) const rvalue reference overload is deleted to disallow rvalue arguments.
-```c++
-#include <string>
-#include <cassert>
-#include <utility>
-#include <type_traits>
- 
-int main()
-{
-    std::string mutableString = "Hello World!";
-    auto&& constRef = std::as_const(mutableString);
- 
-//  mutableString.clear(); // OK
-//  constRef.clear(); // error: 'constRef' is 'const' qualified,
-                      //        but 'clear' is not marked const
- 
-    assert( &constRef == &mutableString );
-    assert( &std::as_const( mutableString ) == &mutableString );
- 
-    using ExprType = std::remove_reference_t<decltype(std::as_const(mutableString))>;
- 
-    static_assert(std::is_same_v<std::remove_const_t<ExprType>, std::string>,
-            "ExprType should be some kind of string." );
-    static_assert(!std::is_same_v<ExprType, std::string>,
-            "ExprType shouldn't be a mutable string." );
-}
-```
-
-#### Pairs and tuples
-
-* Defined in header \<utility>
-
-| [pair](https://en.cppreference.com/w/cpp/utility/pair) | implements binary tuple, i.e. a pair of values(class template) |
-| - | - |
-| [tuple](https://en.cppreference.com/w/cpp/utility/tuple) | implements fixed size container, which holds elements of possibly different types(class template) |
-
-* [std::pair - cppreference.com](https://en.cppreference.com/w/cpp/utility/pair)
-	* std::pair is a class template that provides a way to store two heterogeneous objects as a single unit. A pair is a specific case of a std::tuple with two elements.
-	* If neither T1 nor T2 is a possibly cv-qualified class type with non-trivial destructor, or array thereof, the destructor of pair is trivial.
-	* Member objects
-		* Member name
-			* first
-			* second
-	* Non-member functions
-		* [make_pair](https://en.cppreference.com/w/cpp/utility/pair/make_pair)
-			* creates a pair object of type, defined by the argument types(function template)
-* [Pair in C++ Standard Template Library (STL) - GeeksforGeeks](https://www.geeksforgeeks.org/pair-in-cpp-stl/)
-* [c++ - Check if pair is empty or uninitialized - Stack Overflow](https://stackoverflow.com/questions/57109084/check-if-pair-is-empty-or-uninitialized)
-```c++
-#include <optional>
-
-std::optional<std::pair<int, int>> res;
-
-if (res) // the pair is initialized and usable
-   doStuff(*res);
-else // ... it's not, hence initialize it
-   res = std::make_pair(42, 43);
-```
-* [std::tuple - cppreference.com](https://en.cppreference.com/w/cpp/utility/tuple)
-	* Class template std::tuple is a fixed-size collection of heterogeneous values. It is a generalization of std::pair.
-	* If std::is_trivially_destructible\<Ti>::value is true for every Ti in Types, the destructor of tuple is trivial.
-	* Non-member functions
-		* [make_tuple](https://en.cppreference.com/w/cpp/utility/tuple/make_tuple)
-			* creates a tuple object of the type defined by the argument types(function template)
-		* [std::tie - cppreference.com](https://en.cppreference.com/w/cpp/utility/tuple/tie)
-			* creates a tuple of lvalue references or unpacks a tuple into individual objects (function template)
-			* Creates a tuple of lvalue references to its arguments or instances of std::ignore.
-			* Notes
-				* std::tie may be used to unpack a std::pair because std::tuple has a converting assignment from pairs
-	* Helper classes
-		* [std::ignore - cppreference.com](https://en.cppreference.com/w/cpp/utility/tuple/ignore)
-			* placeholder to skip an element when unpacking a tuple using tie (constant)
-			* An object of unspecified type such that any value can be assigned to it with no effect. Intended for use with std::tie when unpacking a std::tuple, as a placeholder for the arguments that are not used.
-			* While the behavior of std::ignore outside of std::tie is not formally specified, some code guides recommend using std::ignore to avoid warnings from unused return values of [[nodiscard]] functions.
-```c++
-#include <iostream>
-#include <string>
-#include <set>
-#include <tuple>
- 
-[[nodiscard]] int dontIgnoreMe()
-{
-    return 42;
-}
- 
-int main()
-{
-    std::ignore = dontIgnoreMe();
- 
-    std::set<std::string> set_of_str;
-    bool inserted = false;
-    std::tie(std::ignore, inserted) = set_of_str.insert("Test");
-    if (inserted) {
-        std::cout << "Value was inserted successfully\n";
-    }
-}
-/*
-Value was inserted successfully
-*/
-```
-* [Tuples in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/tuples-in-c/)
-```c++
-#include <tuple>
-#include <iostream>
-#include <string>
-#include <stdexcept>
- 
-std::tuple<double, char, std::string> get_student(int id)
-{
-    if (id == 0) return std::make_tuple(3.8, 'A', "Lisa Simpson");
-    if (id == 1) return std::make_tuple(2.9, 'C', "Milhouse Van Houten");
-    if (id == 2) return std::make_tuple(1.7, 'D', "Ralph Wiggum");
-    throw std::invalid_argument("id");
-}
- 
-int main()
-{
-    auto student0 = get_student(0);
-    std::cout << "ID: 0, "
-              << "GPA: " << std::get<0>(student0) << ", "
-              << "grade: " << std::get<1>(student0) << ", "
-              << "name: " << std::get<2>(student0) << '\n';
- 
-    double gpa1;
-    char grade1;
-    std::string name1;
-    std::tie(gpa1, grade1, name1) = get_student(1);
-    std::cout << "ID: 1, "
-              << "GPA: " << gpa1 << ", "
-              << "grade: " << grade1 << ", "
-              << "name: " << name1 << '\n';
- 
-    // C++17 structured binding:
-    auto [ gpa2, grade2, name2 ] = get_student(2);
-    std::cout << "ID: 2, "
-              << "GPA: " << gpa2 << ", "
-              << "grade: " << grade2 << ", "
-              << "name: " << name2 << '\n';
-}
-```
-* [【C++11】让程序更简洁—tuple元组](https://mp.weixin.qq.com/s/TiU3L9vkyD-gSr5UD3jAGw)
-	* tuple元组是一个泛化的std::pair，可以在一个数据结构中保存不同类型的变量，这一点和C#里面的tupe类似，由此可见，C++也在逐渐吸收其他编程语言的优良特性，加入到自己的势力范围里面来。
-
-#### Sum types and type erased wrappers
-
-* [std::optional - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional)
-	* Defined in header \<optional>
-	* a wrapper that may or may not hold an object (class template)
-  * template\< class T > class optional; (since C++17)
-  * The class template std::optional manages an optional contained value, i.e. a value that may or may not be present.
-  * A common use case for optional is the return value of a function that may fail. As opposed to other approaches, such as std::pair\<T,bool>, optional handles expensive-to-construct objects well and is more readable, as the intent is expressed explicitly.
-  * Any instance of optional\<T> at any given point in time either contains a value or does not contain a value.
-  * If an optional\<T> contains a value, the value is guaranteed to be allocated as part of the optional object footprint, i.e. no dynamic memory allocation ever takes place. Thus, an optional object models an object, not a pointer, even though operator*() and operator->() are defined.
-  * When an object of type optional\<T> is contextually converted to bool, the conversion returns true if the object contains a value and false if it does not contain a value.
-  * The optional object contains a value in the following conditions:
-    * The object is initialized with/assigned from a value of type T or another optional that contains a value.
-    * The object does not contain a value in the following conditions:
-    * The object is default-initialized.
-    * The object is initialized with/assigned from a value of type std::nullopt_t or an optional object that does not contain a value.
-    * The member function reset() is called.
-  * There are no optional references; a program is ill-formed if it instantiates an optional with a reference type. Alternatively, an optional of a std::reference_wrapper of type T may be used to hold a reference. In addition, a program is ill-formed if it instantiates an optional with the (possibly cv-qualified) tag types std::nullopt_t or std::in_place_t.
-  * [std::optional\<T>::operator->, std::optional\<T>::operator* - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/operator*)
-  	* accesses the contained value (public member function)
-  	* The behavior is undefined if *this does not contain a value.
-  	* Return value
-	  	* Pointer or reference to the contained value.
-  	* Notes
-  		* This operator does not check whether the optional contains a value! You can do so manually by using has_value() or simply operator bool(). Alternatively, if checked access is needed, value() or value_or() may be used.
-  * [std::optional\<T>::value - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/value)
-  	* returns the contained value (public member function)	
-  	* If *this contains a value, returns a reference to the contained value.
-  	* Otherwise, throws a std::bad_optional_access exception.
-  	* Notes
-  		* The dereference operator operator*() does not check if this optional contains a value, which may be more efficient than value().
-  * [std::make_optional - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/make_optional)
-  	* creates an optional object
-```c++
-#include <string>
-#include <functional>
-#include <iostream>
-#include <optional>
- 
-// optional can be used as the return type of a factory that may fail
-std::optional<std::string> create(bool b) {
-    if (b)
-        return "Godzilla";
-    return {};
-}
- 
-// std::nullopt can be used to create any (empty) std::optional
-auto create2(bool b) {
-    return b ? std::optional<std::string>{"Godzilla"} : std::nullopt;
-}
- 
-// std::reference_wrapper may be used to return a reference
-auto create_ref(bool b) {
-    static std::string value = "Godzilla";
-    return b ? std::optional<std::reference_wrapper<std::string>>{value}
-             : std::nullopt;
-}
- 
-int main()
-{
-    std::cout << "create(false) returned "
-              << create(false).value_or("empty") << '\n';
- 
-    // optional-returning factory functions are usable as conditions of while and if
-    if (auto str = create2(true)) {
-        std::cout << "create2(true) returned " << *str << '\n';
-    }
- 
-    if (auto str = create_ref(true)) {
-        // using get() to access the reference_wrapper's value
-        std::cout << "create_ref(true) returned " << str->get() << '\n';
-        str->get() = "Mothra";
-        std::cout << "modifying it changed it to " << str->get() << '\n';
-    }
-}
-```
-* [optional Class | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/optional-class?view=msvc-170)
-* [std::optional: How, when, and why - C++ Team Blog](https://devblogs.microsoft.com/cppblog/stdoptional-how-when-and-why/)
-	* optional is mandatory
-		* optional is particularly well-suited to the delayed initialization problem because it is itself an instance of delayed initialization. The contained T may be initialized at construction, or sometime later, or never. Any contained T must be destroyed when the optional is destroyed. The designers of optional have already answered most of the questions that arise in this context.
-	* Conclusions
-		* Any time you need a tool to express “value-or-not-value”, or “possibly an answer”, or “object with delayed initialization”, you should reach into your toolbox for std::optional. Using a vocabulary type for these cases raises the level of abstraction, making it easier for others to understand what your code is doing. The declarations optional/<T/> f(); and void g(optional/<T/>); express intent more clearly and concisely than do pair/<T, bool> f(); or void g(T t, bool is_valid);. Just as is the case with words, adding to our vocabulary of types increases our capacity to describe complex problems simply – it makes us more efficient.
-* [C++17常用新特性(十四)---std::optional](https://mp.weixin.qq.com/s/q_hSZmY4vwGBu7P-54ZdEw)
-	* C++17提供了std::optional模板帮助我们解决实际编码中的问题，如实际编程时需要返回、传递或者使用一个对象，但是这个对象可能存在或者不存在值。如果要在编码过程中处理这种情况，就要写很多的代码对这些异常情况进行处理。C++17后std::optional<>提供了此类问题的一种类型安全的解决方案。
-* [std::any - cppreference.com](https://en.cppreference.com/w/cpp/utility/any)
-	* Defined in header \<any>
-	* Objects that hold instances of any CopyConstructible type. (class)
-	* The class any describes a type-safe container for single values of any copy constructible type.
-		* 1) An object of class any stores an instance of any type that satisfies the constructor requirements or is empty, and this is referred to as the state of the class any object. The stored instance is called the contained object. Two states are equivalent if they are either both empty or if both are not empty and if the contained objects are equivalent.
-		* 2) The non-member any_cast functions provide type-safe access to the contained object.
-	* Implementations are encouraged to avoid dynamic allocations for small objects, but such an optimization may only be applied to types for which std::is_nothrow_move_constructible returns true.
-* [C++17常用新特性(十三)---std::any](https://mp.weixin.qq.com/s/qzm_hYj7JEr0AOpxQkDm4g)
-
-#### [Function objects](https://en.cppreference.com/w/cpp/utility/functional)
-
-* A function object is any object for which the function call operator is defined. C++ provides many built-in function objects as well as support for creation and manipulation of new function objects.
-
-#
-Function wrappers
-
-* std::function provides support for storing arbitrary function objects.
-* [std::function - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/function)
-	* wraps callable object of any copy constructible type with specified function call signature (class template)
-	* Class template std::function is a general-purpose polymorphic function wrapper. Instances of std::function can store, copy, and invoke any CopyConstructible Callable target -- functions, lambda expressions, bind expressions, or other function objects, as well as pointers to member functions and pointers to data members.
-	* The stored callable object is called the target of std::function. If a std::function contains no target, it is called empty. Invoking the target of an empty std::function results in std::bad_function_call exception being thrown.
-	* std::function satisfies the requirements of CopyConstructible and CopyAssignable.
-* [function - C++ Reference](https://www.cplusplus.com/reference/functional/function/)
-	* Function wrapper
-		* Class that can wrap any kind of callable element (such as functions and function objects) into a copyable object, and whose type depends solely on its call signature (and not on the callable element type itself).
-		* An object of a function class instantiation can wrap any of the following kinds of callable objects: a function, a function pointer, a pointer to member, or any kind of function object (i.e., an object whose class defines operator(), including closures).
-		* A decay copy of the wrapped callable object is stored internally by the object, which becomes the function's target. The specific type of this target callable object is not needed in order to instantiate the function wrapper class; only its call signature.
-		* The function object can be copied and moved around, and can be used to directly invoke the callable object with the specified call signature (see member operator()).
-		* function objects can also be in a state with no target callable object. In this case they are known as empty functions, and calling them throws a bad_function_call exception.
-* [C++ Library - \<functional>](https://www.tutorialspoint.com/cpp_standard_library/functional.htm)
-* [C++ std::function技术浅谈](https://mp.weixin.qq.com/s/v1fz4YVJftuaLxYuJBRLPg)
-	* https://blog.csdn.net/xiangbaohui/article/details/106741654
-	* std::function是一个函数对象的包装器，std::function的实例可以存储，复制和调用任何可调用的目标，包括：
-		* 函数。
-		* lamada表达式。
-		* 绑定表达式或其他函数对象。
-		* 指向成员函数和指向数据成员的指针。
-	* 当std::function对象没有初始化任何实际的可调用元素，调用std::function对象将抛出std::bad_function_call异常。
-* [为什么C++中有函数指针还需要std::function？](https://mp.weixin.qq.com/s/gl47FGdsBM5lOSSJgcObPQ)
-	* 我们将这个结构体命名为closure，注意看，这个结构中有两部分：
-		* 一个指向代码的指针变量
-		* 一个保存数据的变量
-	* 即，closure既包含了一段代码也包含了这段代码使用的数据，这里的数据也被称为context，即上下文，或者environment，即环境，不管怎么称呼，其实就是函数运行依赖的数据
-	* 而这也正是C++中std::function的目的所在。
-	* 单纯的函数指针并没有捕捉上下文的能力，这里的上下文就是指代码依赖的数据，你不得不自己动手构造出一个结构体用来存储代码依赖的上下文。
-	* 在C++中你没有办法单纯的利用函数指针指向对象的成员函数，就是因为函数指针没有办法捕捉this(指向对象的指针)这个上下文。
-	* std::function的作用本质上和我们刚才定义的结构体区别不大。
-	* 利用std::function你不但可以保存一段代码，同时也可以保存必要的上下文，然后在合适的地方基于上下文调用这段代码。
-	* 同时std::function也更加通用，你可以用其存储任何可以被调用的对象(callable object)，只要有正确的函数签名即可。
-
-#
-Partial function application
-
-* std::bind_front and std::bind provide support for [partial function application](https://en.wikipedia.org/wiki/Partial_application), i.e. binding arguments to functions to produce new functions.
-* [std::bind - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/bind)
-	* binds one or more arguments to a function object (function template)
-	* The function template bind generates a forwarding call wrapper for f. Calling this wrapper is equivalent to invoking f with some of its arguments bound to args.
-* [Bind Function and Placeholders in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/bind-function-placeholders-c/)
-	* Sometimes we need to manipulate the operation of a function according to the need, i.e changing some arguments to default, etc. Predefining a function to have default arguments restricts the versatility of a function and forces us to use the default arguments and that too with similar values each time. From C++11 onwards, the introduction of the bind function has made this task easier. 
-	* How does bind() work? 
-		* Bind function with the help of placeholders helps to manipulate the position and number of values to be used by the function and modifies the function according to the desired output. 
-	* What are placeholders? 
-		* Placeholders are namespaces that direct the position of a value in a function. They are represented by _1, _2, _3...
-```c++
-// C++ code to demonstrate bind() and
-// placeholders
-#include <iostream>
-#include <functional> // for bind()
-using namespace std;
-
-// for placeholders
-using namespace std::placeholders;
-
-// Driver function to demonstrate bind()
-void func(int a, int b, int c)
-{
-    cout << (a - b - c) << endl;
-}
-
-int main()
-{
-    // for placeholders
-    using namespace std::placeholders;
-
-    // Use of bind() to bind the function
-    // _1 is for first parameter and assigned
-    // to 'a' in above declaration.
-    // 2 is assigned to b
-    // 3 is assigned to c
-    auto fn1 = bind(func, _1, 2, 3);
-
-    // 2 is assigned to a.
-    // _1 is for first parameter and assigned
-    // to 'b' in above declaration.
-    // 3 is assigned to c.
-    auto fn2 = bind(func, 2, _1, 3);
-
-    // calling of modified functions
-    fn1(10);
-    fn2(10);
-
-    return 0;
-}
-/*
-5
--11
-*/
-```
-* [【C++11】让程序更简洁—std::bind绑定器](https://mp.weixin.qq.com/s/z2rG7n7sViBosGuzFB3paQ)
-	* 在上一期中，介绍了std::function，本节将和大家说一下bind绑定器，它可以将调用对象与调用参数一起绑定，然后将绑定的结果保存在std::function中，在后面我们需要使用的时候在执行函数功能。主要包含两个方面：
-		* 将调用对象和参数绑定成一个仿函数
-		* 将多元调用对象转成一元可用对象，只绑定部分参数；(多元：参数个数为n，n>1)
-	* std::bind的基本用法
-	* std::bind的占位符
-	* std::bind和std::function配合使用
-* [std::placeholders::_1, std::placeholders::_2, ..., std::placeholders::_N - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/placeholders)
-	* placeholders for the unbound arguments in a std::bind expression (constant)
-	* The std::placeholders namespace contains the placeholder objects [_1, ..., _N] where N is an implementation defined maximum number.
-	* When used as an argument in a std::bind expression, the placeholder objects are stored in the generated function object, and when that function object is invoked with unbound arguments, each placeholder _N is replaced by the corresponding Nth unbound argument.
-
-#
-Negators
-
-* std::not_fn creates a function object that negates the result of the callable object passed to it.
-* [std::not_fn - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/not_fn)
-	* Defined in header \<functional>
-	* Creates a function object that returns the complement of the result of the function object it holds (function template)
-	* Creates a forwarding call wrapper that returns the negation of the callable object it holds.
-	* [\<functional> functions | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/functional-functions?view=msvc-170#not_fn)
-		* The not_fn function template takes a callable object and returns a callable object. When the returned callable object is later invoked with some arguments, it passes them to the original callable object, and logically negates the result. It preserves the const qualification and value category behavior of the wrapped callable object. not_fn is new in C++17, and replaces the deprecated std::not1, std::not2, std::unary_negate, and std::binary_negate.
-
-#
-Reference wrappers
-
-* Reference wrappers allow reference arguments to be stored in copyable function objects
-* [std::ref, std::cref - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/ref)
-	* creates a std::reference_wrapper with a type deduced from its argument (function template)
-	* Function templates ref and cref are helper functions that generate an object of type std::reference_wrapper, using template argument deduction to determine the template argument of the result.
-	* T may be an incomplete type. (since C++20)
-```c++
-#include <functional>
-#include <iostream>
- 
-void f(int& n1, int& n2, const int& n3)
-{
-    std::cout << "In function: " << n1 << ' ' << n2 << ' ' << n3 << '\n';
-    ++n1; // increments the copy of n1 stored in the function object
-    ++n2; // increments the main()'s n2
-    // ++n3; // compile error
-}
- 
-int main()
-{
-    int n1 = 1, n2 = 2, n3 = 3;
-    std::function<void()> bound_f = std::bind(f, n1, std::ref(n2), std::cref(n3));
-    n1 = 10;
-    n2 = 11;
-    n3 = 12;
-    std::cout << "Before function: " << n1 << ' ' << n2 << ' ' << n3 << '\n';
-    bound_f();
-    std::cout << "After function: " << n1 << ' ' << n2 << ' ' << n3 << '\n';
-}
-/*
-Before function: 10 11 12
-In function: 1 11 12
-After function: 10 12 12
-*/
-```
-
-#
-Operator function objects
-
-* [std::multiplies - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/multiplies)
-	* function object implementing x * y (class template)
-	* Function object for performing multiplication. Effectively calls operator* on two instances of type T.
-* [std::modulus - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/modulus)
-	* function object implementing x % y (class template)
-	* Function object for computing remainders of divisions. Implements operator% for type T.
-* [std::greater - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/greater)
-	* function object implementing x > y (class template)
 
 ## [Metaprogramming library](https://en.cppreference.com/w/cpp/meta)
 
@@ -4307,6 +3713,600 @@ Leaving...
   * std::shared_ptr
   * std::unique_ptr
   * std::weak_ptr
+
+## [General utilities library](https://en.cppreference.com/w/cpp/utility#General-purpose_utilities)
+
+### Swap and type operations
+
+* Defined in header \<utility>
+* [std::forward - cppreference.com](https://en.cppreference.com/w/cpp/utility/forward)
+	* forwards a function argument (function template)
+	* 1) Forwards lvalues as either lvalues or as rvalues, depending on T
+	* 2) Forwards rvalues as rvalues and prohibits forwarding of rvalues as lvalues
+* [std::move - cppreference.com](https://en.cppreference.com/w/cpp/utility/move)
+	* obtains an rvalue reference (function template)
+	* std::move is used to indicate that an object t may be "moved from", i.e. allowing the efficient transfer of resources from t to another object.
+	* In particular, std::move produces an [xvalue expression](https://en.cppreference.com/w/cpp/language/value_category) that identifies its argument t. It is exactly equivalent to a static_cast to an rvalue reference type.
+	* Return value
+		* `static_cast<typename std::remove_reference<T>::type&&>(t)`
+```c++
+#include <iomanip>
+#include <iostream>
+#include <utility>
+#include <vector>
+#include <string>
+ 
+int main()
+{
+    std::string str = "Salut";
+    std::vector<std::string> v;
+ 
+    // uses the push_back(const T&) overload, which means 
+    // we'll incur the cost of copying str
+    v.push_back(str);
+    std::cout << "After copy, str is " << std::quoted(str) << '\n';
+ 
+    // uses the rvalue reference push_back(T&&) overload, 
+    // which means no strings will be copied; instead, the contents
+    // of str will be moved into the vector.  This is less
+    // expensive, but also means str might now be empty.
+    v.push_back(std::move(str));
+    std::cout << "After move, str is " << std::quoted(str) << '\n';
+ 
+    std::cout << "The contents of the vector are { " << std::quoted(v[0])
+                                             << ", " << std::quoted(v[1]) << " }\n";
+}
+/*
+After copy, str is "Salut"
+After move, str is ""
+The contents of the vector are { "Salut", "Salut" }
+*/
+```
+* [深入理解C++中的move和forward！](https://mp.weixin.qq.com/s/Vc1sz26ACKQNonSzA-cHKQ)
+	* 导语 |  在C++11标准之前，C++中默认的传值类型均为Copy语义，即：不论是指针类型还是值类型，都将会在进行函数调用时被完整的复制一份！对于非指针而言，开销极其巨大！因此在C++11以后，引入了右值和Move语义，极大地提高了效率。本文介绍了在此场景下两个常用的标准库函数：move和forward。
+	* 一、特性背景
+		* （一）Copy语义简述
+			* C++中默认为Copy语义，因此存在大量开销。
+			* 除了我们显式构造的函数之外，我们在调用函数、将对象加入vector的时候，也创建了新的对象！
+			* 并且这个对象不是通过构造函数创建的，事实上是通过复制构造函数创建的！
+		* （二）临时值（右值）简述
+			* Copy语义虽然用起来很方便，但是很多时候我们并不想将值（尤其是一些临时变量）Copy一遍再使用！
+			* 注意：上面的函数在返回时，实际上编译器会对返回值进行优化，并不会先析构v，再在str_split 函数的调用栈中对整个v进行Copy。
+			* 但是之前的C++的确是这么做的，因此会出现类似于下面的代码：
+			* 即：将返回值也作为一个输入参数。
+			* 上面编译器的优化有一个非常学术的名字：RVO (Return Value Optimization)，返回值优化。
+			* 其实这里是可以优化的：
+				* 临时变量其实最终都是要被回收的，如果能把临时变量的内容直接“移入”成员变量中，此时就不需要调用复制构造函数了！
+			* 对于使用过Rust的开发者来说，这里他们是非常熟悉的。因为Rust丧心病狂的将所有赋值操作都默认定义为了Move语义！
+	* 二、使用move函数
+		* （一）move函数的基本使用
+			* 可以看到，相比于Copy，我们直接使用了move函数将变量移入了函数中，此时是没有调用复制构造函数的！
+			* 实际上，C++中的move函数只是做了类型转换，并不会真正的实现值的移动！
+			* 因此，对于自定义的类来说，如果要实现真正意义上的 “移动”，还是要手动重载移动构造函数和移动复制函数。
+			* 即：我们需要在自己的类中实现移动语义，避免深拷贝，充分利用右值引用和std::move的语言特性。
+			* 实际上，通常情况下C++编译器会默认在用户自定义的class和struct中生成移动语义函数。
+			* 但前提是：用户没有主动定义该类的拷贝构造等函数！
+			* 同时也要注意到：使用一个已经被move过的函数是非常危险的事情！
+		* （二）move语义下的析构函数
+			* 对象被move了之后，仍然会在其离开作用域之后调用他的析构函数？
+			* 这是因为：
+				* 虽然将obj的资源给了a_obj ，但是obj并没有立刻析构，只有在obj离开了自己的作用域的时候才会析构；因此，如果继续使用str2的m_data变量，可能会发生意想不到的错误。
+				* 也正因为如此，在自己实现移动构造函数的时候，需要将原对象中的值手动置为空，以防止同一片内存区域被多次释放！
+			* 此外还需要注意：
+				* 如果我们没有提供移动构造函数，只提供了拷贝构造函数，std::move()会失效但是不会发生错误，因为编译器找不到移动构造函数就去寻找拷贝构造函数，这也是拷贝构造函数的参数是const T&常量左值引用的原因！
+				* c++11中的所有容器都实现了move语义，move只是转移了资源的控制权，本质上是将左值强制转化为右值使用，以用于移动拷贝或赋值，避免对含有资源的对象发生无谓的拷贝。
+				* move对于拥有如内存、文件句柄等资源的成员的对象有效，如果是一些基本类型，如int和char[10]数组等，如果使用move，仍会发生拷贝（因为没有对应的移动构造函数），所以说move对含有资源的对象说更有意义。
+			* 这里需要注意，在移动构造函数和移动赋值函数中，我们将当前待移动对象的资源赋值为了空（str._data=nullptr），这里就是我们手动实现了资源的移动！
+			* 下面我们尝试修改两个地方，来导致报错：
+				* 使用资源被move后的对象。
+					* 因为此时obj中的内容已经为空了！
+				* 在实现移动构造函数时不赋值为nullptr。
+					* 此时再执行代码，整个程序会直接崩溃，因为：我们未将已经move掉的资源设置为空值，最终会导致这里的资源被释放两次！
+	* 三、什么又是foward函数
+		* 有了move函数之后，我们又遇到了一个新的问题：
+		* 按照上面的写法，处理临时变量用右值引用T&&，处理普通变量用const引用const T&，我们需要分别建立两个函数，然后入参使用不同的类型，每个函数都要写两遍。
+		* 那么能不能避免重复，将T &&类型和const T &类型合二为一呢？
+		* 答案就是：forward函数，std::forward也被称为完美转发，即：保持原来的值属性不变：
+			* 如果原来的值是左值，经std::forward处理后该值还是左值。
+			* 如果原来的值是右值，经std::forward处理后它还是右值。
+		* 这样一来，我们就可以使用forward函数对入参进行封装，从而保证了入参的统一性，从而可以实现一个方法处理两种类型！
+		* 正因为如此，forward函数被大量用在了入参值类型情况不确定的C++模板中！
+	* 四、move和forward函数的区别
+		* 从上面的分析我们可以看出，基本上forward可以cover所有的需要move的场景，毕竟forward函数左右值通吃。
+		* 那为什么还要使用move呢？原因主要有两点：
+			* 首先，forward函数常用于模板函数这种入参情况不确定的场景中，在使用的时候必须要多带一个模板参数forward\<T>，代码略复杂。
+			* 此外，明确只需要move临时值的情况下如果使用了forward，会导致代码意图不清晰，其他人看着理解起来比较费劲。
+		* 实际上从实现的角度上来说，他们都可以被static_cast替代。
+		* 注意：为什么不用static_cast呢？也是为了阅读和使用起来更方便。
+	* 五、move和forward函数的实现
+		* （一）C++11后加入的一些新规则
+			* 引用折叠规则
+				* 如果间接的创建一个引用的引用，则这些引用就会“折叠”，在所有情况下（除了一个例外），引用折叠成一个普通的左值引用类型。
+				* 一种特殊情况下，引用会折叠成右值引用，即右值引用的右值引用：T&& &&。
+			* 右值引用的特殊类型推断规则
+				* 当将一个左值传递给一个参数是右值引用的函数，且此右值引用指向模板类型参数(T&&)时，编译器推断模板参数类型为实参的左值引用
+			* 从上述两个规则可以得出结论：如果一个函数形参是一个指向模板类型的右值引用，则该参数可以被绑定到一个左值上。
+			* 可以通过static_cast显式地将一个左值转换为一个右值
+		* （二）move函数解析
+			* 需要注意的是：std::move函数仅仅执行到右值类型的无条件转换；就其本身而言，它没有“move”任何东西。
+		* （三）forward函数解析
+	* 六、总结
+		* 首先，std::move和std::forward本质都是转换：
+			* std::move执行强制到右值的无条件转换。
+			* std::forward只有在它的参数绑定到一个右值上的时候，才转换它的参数到一个右值。
+			* std::move没有move任何东西，std::forward没有转发任何东西。
+		* 整个类型转变的实现是在编译期完成的，在运行期，它们没有做任何事情。
+		* 它们没有为移动或者复制产生需要执行的代码，一byte都没有；（换言之，我们需要通过重载移动相关操作函数来自己处理move语义）
+		* 在使用场景方面：
+			* 一般在模板元编程里面，由于入参的值类型不确定，因此对于forward使用比较多。
+			* 在一般的函数中，如果可以确定传入的一定是右值（临时值），可以直接使用move函数，强调使用场景。
+		* https://github.com/JasonkayZK/cpp-learn/tree/value
+* [Modern C++ 最核心的变化是什么？](https://mp.weixin.qq.com/s/7l6JbX_QMry0DIM9mLUFgw)
+	* https://www.zhihu.com/question/22111546/answer/30801982
+	* 个人觉得最核心的变化是右值引用的引入，右值引用是  C++ 走向现代化的最重要一步。建议每一位 C++ 开发者都应该深入去了解并充分使用它。
+	* 右值引用是 C++11 中最重要的新特性之一，它解决了 C++ 中大量的历史遗留问题，使 C++ 标准库的实现在多种场景下消除了不必要的额外开销（如 std::vector, std::string)，也使得另外一些标准库（如 std::unique_ptr, std::function）成为可能。即使你并不直接使用右值引用，也可以通过标准库，间接从这一新特性中受益。为了更好地理解标准库结合右值引用带来的优化，我们有必要了解一下右值引用的重大意义。
+	* 右值引用的意义通常解释为两大作用：移动语义和完美转发。本文主要讨论移动语义。
+* [F.48: Don’t return std::move(local)](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f48-dont-return-stdmovelocal)
+	* `Reason` With guaranteed copy elision, it is now almost always a pessimization to expressly use std::move in a return statement.
+	* `Example, bad`
+    ```c++
+    S f()
+    {
+      S result;
+      return std::move(result);
+    }
+    ```
+	* `Example, good`
+    ```c++
+    S f()
+    {
+      S result;
+      return result;
+    }
+    ```
+	* `Enforcement` This should be enforced by tooling by checking the return expression .
+```c++
+#include <iostream>
+#include <vector>
+  
+void f(std::vector<int>& v)
+{
+    std::vector<int> result = {1, 2};
+    v = std::move(result);
+    
+    return;
+}
+
+std::vector<int> f1()
+{
+    std::vector<int> result = {1, 2};
+    return std::move(result);   
+    // warning: moving a local object in a return statement prevents copy elision [-Wpessimizing-move]
+    // note: remove 'std::move' call
+}
+
+int main()
+{
+    std::vector<int> z{};
+    
+    f(z);
+
+    for (auto it : z)
+        std::cout << it << " "; // 1 2     
+ 
+    return 0;
+}
+```
+* [std::as_const - cppreference.com](https://en.cppreference.com/w/cpp/utility/as_const)
+    * obtains a reference to const to its argument (function template)
+    * 1) Forms lvalue reference to const type of t.
+    * 2) const rvalue reference overload is deleted to disallow rvalue arguments.
+```c++
+#include <string>
+#include <cassert>
+#include <utility>
+#include <type_traits>
+ 
+int main()
+{
+    std::string mutableString = "Hello World!";
+    auto&& constRef = std::as_const(mutableString);
+ 
+//  mutableString.clear(); // OK
+//  constRef.clear(); // error: 'constRef' is 'const' qualified,
+                      //        but 'clear' is not marked const
+ 
+    assert( &constRef == &mutableString );
+    assert( &std::as_const( mutableString ) == &mutableString );
+ 
+    using ExprType = std::remove_reference_t<decltype(std::as_const(mutableString))>;
+ 
+    static_assert(std::is_same_v<std::remove_const_t<ExprType>, std::string>,
+            "ExprType should be some kind of string." );
+    static_assert(!std::is_same_v<ExprType, std::string>,
+            "ExprType shouldn't be a mutable string." );
+}
+```
+
+### Pairs and tuples
+
+* Defined in header \<utility>
+
+| [pair](https://en.cppreference.com/w/cpp/utility/pair) | implements binary tuple, i.e. a pair of values(class template) |
+| - | - |
+| [tuple](https://en.cppreference.com/w/cpp/utility/tuple) | implements fixed size container, which holds elements of possibly different types(class template) |
+
+* [std::pair - cppreference.com](https://en.cppreference.com/w/cpp/utility/pair)
+	* std::pair is a class template that provides a way to store two heterogeneous objects as a single unit. A pair is a specific case of a std::tuple with two elements.
+	* If neither T1 nor T2 is a possibly cv-qualified class type with non-trivial destructor, or array thereof, the destructor of pair is trivial.
+	* Member objects
+		* Member name
+			* first
+			* second
+	* Non-member functions
+		* [make_pair](https://en.cppreference.com/w/cpp/utility/pair/make_pair)
+			* creates a pair object of type, defined by the argument types(function template)
+* [Pair in C++ Standard Template Library (STL) - GeeksforGeeks](https://www.geeksforgeeks.org/pair-in-cpp-stl/)
+* [c++ - Check if pair is empty or uninitialized - Stack Overflow](https://stackoverflow.com/questions/57109084/check-if-pair-is-empty-or-uninitialized)
+```c++
+#include <optional>
+
+std::optional<std::pair<int, int>> res;
+
+if (res) // the pair is initialized and usable
+   doStuff(*res);
+else // ... it's not, hence initialize it
+   res = std::make_pair(42, 43);
+```
+* [std::tuple - cppreference.com](https://en.cppreference.com/w/cpp/utility/tuple)
+	* Class template std::tuple is a fixed-size collection of heterogeneous values. It is a generalization of std::pair.
+	* If std::is_trivially_destructible\<Ti>::value is true for every Ti in Types, the destructor of tuple is trivial.
+	* Non-member functions
+		* [make_tuple](https://en.cppreference.com/w/cpp/utility/tuple/make_tuple)
+			* creates a tuple object of the type defined by the argument types(function template)
+		* [std::tie - cppreference.com](https://en.cppreference.com/w/cpp/utility/tuple/tie)
+			* creates a tuple of lvalue references or unpacks a tuple into individual objects (function template)
+			* Creates a tuple of lvalue references to its arguments or instances of std::ignore.
+			* Notes
+				* std::tie may be used to unpack a std::pair because std::tuple has a converting assignment from pairs
+	* Helper classes
+		* [std::ignore - cppreference.com](https://en.cppreference.com/w/cpp/utility/tuple/ignore)
+			* placeholder to skip an element when unpacking a tuple using tie (constant)
+			* An object of unspecified type such that any value can be assigned to it with no effect. Intended for use with std::tie when unpacking a std::tuple, as a placeholder for the arguments that are not used.
+			* While the behavior of std::ignore outside of std::tie is not formally specified, some code guides recommend using std::ignore to avoid warnings from unused return values of [[nodiscard]] functions.
+```c++
+#include <iostream>
+#include <string>
+#include <set>
+#include <tuple>
+ 
+[[nodiscard]] int dontIgnoreMe()
+{
+    return 42;
+}
+ 
+int main()
+{
+    std::ignore = dontIgnoreMe();
+ 
+    std::set<std::string> set_of_str;
+    bool inserted = false;
+    std::tie(std::ignore, inserted) = set_of_str.insert("Test");
+    if (inserted) {
+        std::cout << "Value was inserted successfully\n";
+    }
+}
+/*
+Value was inserted successfully
+*/
+```
+* [Tuples in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/tuples-in-c/)
+```c++
+#include <tuple>
+#include <iostream>
+#include <string>
+#include <stdexcept>
+ 
+std::tuple<double, char, std::string> get_student(int id)
+{
+    if (id == 0) return std::make_tuple(3.8, 'A', "Lisa Simpson");
+    if (id == 1) return std::make_tuple(2.9, 'C', "Milhouse Van Houten");
+    if (id == 2) return std::make_tuple(1.7, 'D', "Ralph Wiggum");
+    throw std::invalid_argument("id");
+}
+ 
+int main()
+{
+    auto student0 = get_student(0);
+    std::cout << "ID: 0, "
+              << "GPA: " << std::get<0>(student0) << ", "
+              << "grade: " << std::get<1>(student0) << ", "
+              << "name: " << std::get<2>(student0) << '\n';
+ 
+    double gpa1;
+    char grade1;
+    std::string name1;
+    std::tie(gpa1, grade1, name1) = get_student(1);
+    std::cout << "ID: 1, "
+              << "GPA: " << gpa1 << ", "
+              << "grade: " << grade1 << ", "
+              << "name: " << name1 << '\n';
+ 
+    // C++17 structured binding:
+    auto [ gpa2, grade2, name2 ] = get_student(2);
+    std::cout << "ID: 2, "
+              << "GPA: " << gpa2 << ", "
+              << "grade: " << grade2 << ", "
+              << "name: " << name2 << '\n';
+}
+```
+* [【C++11】让程序更简洁—tuple元组](https://mp.weixin.qq.com/s/TiU3L9vkyD-gSr5UD3jAGw)
+	* tuple元组是一个泛化的std::pair，可以在一个数据结构中保存不同类型的变量，这一点和C#里面的tupe类似，由此可见，C++也在逐渐吸收其他编程语言的优良特性，加入到自己的势力范围里面来。
+
+### Sum types and type erased wrappers
+
+* [std::optional - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional)
+	* Defined in header \<optional>
+	* a wrapper that may or may not hold an object (class template)
+  * template\< class T > class optional; (since C++17)
+  * The class template std::optional manages an optional contained value, i.e. a value that may or may not be present.
+  * A common use case for optional is the return value of a function that may fail. As opposed to other approaches, such as std::pair\<T,bool>, optional handles expensive-to-construct objects well and is more readable, as the intent is expressed explicitly.
+  * Any instance of optional\<T> at any given point in time either contains a value or does not contain a value.
+  * If an optional\<T> contains a value, the value is guaranteed to be allocated as part of the optional object footprint, i.e. no dynamic memory allocation ever takes place. Thus, an optional object models an object, not a pointer, even though operator*() and operator->() are defined.
+  * When an object of type optional\<T> is contextually converted to bool, the conversion returns true if the object contains a value and false if it does not contain a value.
+  * The optional object contains a value in the following conditions:
+    * The object is initialized with/assigned from a value of type T or another optional that contains a value.
+    * The object does not contain a value in the following conditions:
+    * The object is default-initialized.
+    * The object is initialized with/assigned from a value of type std::nullopt_t or an optional object that does not contain a value.
+    * The member function reset() is called.
+  * There are no optional references; a program is ill-formed if it instantiates an optional with a reference type. Alternatively, an optional of a std::reference_wrapper of type T may be used to hold a reference. In addition, a program is ill-formed if it instantiates an optional with the (possibly cv-qualified) tag types std::nullopt_t or std::in_place_t.
+  * [std::optional\<T>::operator->, std::optional\<T>::operator* - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/operator*)
+  	* accesses the contained value (public member function)
+  	* The behavior is undefined if *this does not contain a value.
+  	* Return value
+	  	* Pointer or reference to the contained value.
+  	* Notes
+  		* This operator does not check whether the optional contains a value! You can do so manually by using has_value() or simply operator bool(). Alternatively, if checked access is needed, value() or value_or() may be used.
+  * [std::optional\<T>::value - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/value)
+  	* returns the contained value (public member function)	
+  	* If *this contains a value, returns a reference to the contained value.
+  	* Otherwise, throws a std::bad_optional_access exception.
+  	* Notes
+  		* The dereference operator operator*() does not check if this optional contains a value, which may be more efficient than value().
+  * [std::make_optional - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/make_optional)
+  	* creates an optional object
+```c++
+#include <string>
+#include <functional>
+#include <iostream>
+#include <optional>
+ 
+// optional can be used as the return type of a factory that may fail
+std::optional<std::string> create(bool b) {
+    if (b)
+        return "Godzilla";
+    return {};
+}
+ 
+// std::nullopt can be used to create any (empty) std::optional
+auto create2(bool b) {
+    return b ? std::optional<std::string>{"Godzilla"} : std::nullopt;
+}
+ 
+// std::reference_wrapper may be used to return a reference
+auto create_ref(bool b) {
+    static std::string value = "Godzilla";
+    return b ? std::optional<std::reference_wrapper<std::string>>{value}
+             : std::nullopt;
+}
+ 
+int main()
+{
+    std::cout << "create(false) returned "
+              << create(false).value_or("empty") << '\n';
+ 
+    // optional-returning factory functions are usable as conditions of while and if
+    if (auto str = create2(true)) {
+        std::cout << "create2(true) returned " << *str << '\n';
+    }
+ 
+    if (auto str = create_ref(true)) {
+        // using get() to access the reference_wrapper's value
+        std::cout << "create_ref(true) returned " << str->get() << '\n';
+        str->get() = "Mothra";
+        std::cout << "modifying it changed it to " << str->get() << '\n';
+    }
+}
+```
+* [optional Class | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/optional-class?view=msvc-170)
+* [std::optional: How, when, and why - C++ Team Blog](https://devblogs.microsoft.com/cppblog/stdoptional-how-when-and-why/)
+	* optional is mandatory
+		* optional is particularly well-suited to the delayed initialization problem because it is itself an instance of delayed initialization. The contained T may be initialized at construction, or sometime later, or never. Any contained T must be destroyed when the optional is destroyed. The designers of optional have already answered most of the questions that arise in this context.
+	* Conclusions
+		* Any time you need a tool to express “value-or-not-value”, or “possibly an answer”, or “object with delayed initialization”, you should reach into your toolbox for std::optional. Using a vocabulary type for these cases raises the level of abstraction, making it easier for others to understand what your code is doing. The declarations optional/<T/> f(); and void g(optional/<T/>); express intent more clearly and concisely than do pair/<T, bool> f(); or void g(T t, bool is_valid);. Just as is the case with words, adding to our vocabulary of types increases our capacity to describe complex problems simply – it makes us more efficient.
+* [C++17常用新特性(十四)---std::optional](https://mp.weixin.qq.com/s/q_hSZmY4vwGBu7P-54ZdEw)
+	* C++17提供了std::optional模板帮助我们解决实际编码中的问题，如实际编程时需要返回、传递或者使用一个对象，但是这个对象可能存在或者不存在值。如果要在编码过程中处理这种情况，就要写很多的代码对这些异常情况进行处理。C++17后std::optional<>提供了此类问题的一种类型安全的解决方案。
+* [std::any - cppreference.com](https://en.cppreference.com/w/cpp/utility/any)
+	* Defined in header \<any>
+	* Objects that hold instances of any CopyConstructible type. (class)
+	* The class any describes a type-safe container for single values of any copy constructible type.
+		* 1) An object of class any stores an instance of any type that satisfies the constructor requirements or is empty, and this is referred to as the state of the class any object. The stored instance is called the contained object. Two states are equivalent if they are either both empty or if both are not empty and if the contained objects are equivalent.
+		* 2) The non-member any_cast functions provide type-safe access to the contained object.
+	* Implementations are encouraged to avoid dynamic allocations for small objects, but such an optimization may only be applied to types for which std::is_nothrow_move_constructible returns true.
+* [C++17常用新特性(十三)---std::any](https://mp.weixin.qq.com/s/qzm_hYj7JEr0AOpxQkDm4g)
+
+### [Function objects](https://en.cppreference.com/w/cpp/utility/functional)
+
+* A function object is any object for which the function call operator is defined. C++ provides many built-in function objects as well as support for creation and manipulation of new function objects.
+
+#
+Function wrappers
+
+* std::function provides support for storing arbitrary function objects.
+* [std::function - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/function)
+	* wraps callable object of any copy constructible type with specified function call signature (class template)
+	* Class template std::function is a general-purpose polymorphic function wrapper. Instances of std::function can store, copy, and invoke any CopyConstructible Callable target -- functions, lambda expressions, bind expressions, or other function objects, as well as pointers to member functions and pointers to data members.
+	* The stored callable object is called the target of std::function. If a std::function contains no target, it is called empty. Invoking the target of an empty std::function results in std::bad_function_call exception being thrown.
+	* std::function satisfies the requirements of CopyConstructible and CopyAssignable.
+* [function - C++ Reference](https://www.cplusplus.com/reference/functional/function/)
+	* Function wrapper
+		* Class that can wrap any kind of callable element (such as functions and function objects) into a copyable object, and whose type depends solely on its call signature (and not on the callable element type itself).
+		* An object of a function class instantiation can wrap any of the following kinds of callable objects: a function, a function pointer, a pointer to member, or any kind of function object (i.e., an object whose class defines operator(), including closures).
+		* A decay copy of the wrapped callable object is stored internally by the object, which becomes the function's target. The specific type of this target callable object is not needed in order to instantiate the function wrapper class; only its call signature.
+		* The function object can be copied and moved around, and can be used to directly invoke the callable object with the specified call signature (see member operator()).
+		* function objects can also be in a state with no target callable object. In this case they are known as empty functions, and calling them throws a bad_function_call exception.
+* [C++ Library - \<functional>](https://www.tutorialspoint.com/cpp_standard_library/functional.htm)
+* [C++ std::function技术浅谈](https://mp.weixin.qq.com/s/v1fz4YVJftuaLxYuJBRLPg)
+	* https://blog.csdn.net/xiangbaohui/article/details/106741654
+	* std::function是一个函数对象的包装器，std::function的实例可以存储，复制和调用任何可调用的目标，包括：
+		* 函数。
+		* lamada表达式。
+		* 绑定表达式或其他函数对象。
+		* 指向成员函数和指向数据成员的指针。
+	* 当std::function对象没有初始化任何实际的可调用元素，调用std::function对象将抛出std::bad_function_call异常。
+* [为什么C++中有函数指针还需要std::function？](https://mp.weixin.qq.com/s/gl47FGdsBM5lOSSJgcObPQ)
+	* 我们将这个结构体命名为closure，注意看，这个结构中有两部分：
+		* 一个指向代码的指针变量
+		* 一个保存数据的变量
+	* 即，closure既包含了一段代码也包含了这段代码使用的数据，这里的数据也被称为context，即上下文，或者environment，即环境，不管怎么称呼，其实就是函数运行依赖的数据
+	* 而这也正是C++中std::function的目的所在。
+	* 单纯的函数指针并没有捕捉上下文的能力，这里的上下文就是指代码依赖的数据，你不得不自己动手构造出一个结构体用来存储代码依赖的上下文。
+	* 在C++中你没有办法单纯的利用函数指针指向对象的成员函数，就是因为函数指针没有办法捕捉this(指向对象的指针)这个上下文。
+	* std::function的作用本质上和我们刚才定义的结构体区别不大。
+	* 利用std::function你不但可以保存一段代码，同时也可以保存必要的上下文，然后在合适的地方基于上下文调用这段代码。
+	* 同时std::function也更加通用，你可以用其存储任何可以被调用的对象(callable object)，只要有正确的函数签名即可。
+
+#
+Partial function application
+
+* std::bind_front and std::bind provide support for [partial function application](https://en.wikipedia.org/wiki/Partial_application), i.e. binding arguments to functions to produce new functions.
+* [std::bind - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/bind)
+	* binds one or more arguments to a function object (function template)
+	* The function template bind generates a forwarding call wrapper for f. Calling this wrapper is equivalent to invoking f with some of its arguments bound to args.
+* [Bind Function and Placeholders in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/bind-function-placeholders-c/)
+	* Sometimes we need to manipulate the operation of a function according to the need, i.e changing some arguments to default, etc. Predefining a function to have default arguments restricts the versatility of a function and forces us to use the default arguments and that too with similar values each time. From C++11 onwards, the introduction of the bind function has made this task easier. 
+	* How does bind() work? 
+		* Bind function with the help of placeholders helps to manipulate the position and number of values to be used by the function and modifies the function according to the desired output. 
+	* What are placeholders? 
+		* Placeholders are namespaces that direct the position of a value in a function. They are represented by _1, _2, _3...
+```c++
+// C++ code to demonstrate bind() and
+// placeholders
+#include <iostream>
+#include <functional> // for bind()
+using namespace std;
+
+// for placeholders
+using namespace std::placeholders;
+
+// Driver function to demonstrate bind()
+void func(int a, int b, int c)
+{
+    cout << (a - b - c) << endl;
+}
+
+int main()
+{
+    // for placeholders
+    using namespace std::placeholders;
+
+    // Use of bind() to bind the function
+    // _1 is for first parameter and assigned
+    // to 'a' in above declaration.
+    // 2 is assigned to b
+    // 3 is assigned to c
+    auto fn1 = bind(func, _1, 2, 3);
+
+    // 2 is assigned to a.
+    // _1 is for first parameter and assigned
+    // to 'b' in above declaration.
+    // 3 is assigned to c.
+    auto fn2 = bind(func, 2, _1, 3);
+
+    // calling of modified functions
+    fn1(10);
+    fn2(10);
+
+    return 0;
+}
+/*
+5
+-11
+*/
+```
+* [【C++11】让程序更简洁—std::bind绑定器](https://mp.weixin.qq.com/s/z2rG7n7sViBosGuzFB3paQ)
+	* 在上一期中，介绍了std::function，本节将和大家说一下bind绑定器，它可以将调用对象与调用参数一起绑定，然后将绑定的结果保存在std::function中，在后面我们需要使用的时候在执行函数功能。主要包含两个方面：
+		* 将调用对象和参数绑定成一个仿函数
+		* 将多元调用对象转成一元可用对象，只绑定部分参数；(多元：参数个数为n，n>1)
+	* std::bind的基本用法
+	* std::bind的占位符
+	* std::bind和std::function配合使用
+* [std::placeholders::_1, std::placeholders::_2, ..., std::placeholders::_N - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/placeholders)
+	* placeholders for the unbound arguments in a std::bind expression (constant)
+	* The std::placeholders namespace contains the placeholder objects [_1, ..., _N] where N is an implementation defined maximum number.
+	* When used as an argument in a std::bind expression, the placeholder objects are stored in the generated function object, and when that function object is invoked with unbound arguments, each placeholder _N is replaced by the corresponding Nth unbound argument.
+
+#
+Negators
+
+* std::not_fn creates a function object that negates the result of the callable object passed to it.
+* [std::not_fn - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/not_fn)
+	* Defined in header \<functional>
+	* Creates a function object that returns the complement of the result of the function object it holds (function template)
+	* Creates a forwarding call wrapper that returns the negation of the callable object it holds.
+	* [\<functional> functions | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/functional-functions?view=msvc-170#not_fn)
+		* The not_fn function template takes a callable object and returns a callable object. When the returned callable object is later invoked with some arguments, it passes them to the original callable object, and logically negates the result. It preserves the const qualification and value category behavior of the wrapped callable object. not_fn is new in C++17, and replaces the deprecated std::not1, std::not2, std::unary_negate, and std::binary_negate.
+
+#
+Reference wrappers
+
+* Reference wrappers allow reference arguments to be stored in copyable function objects
+* [std::ref, std::cref - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/ref)
+	* creates a std::reference_wrapper with a type deduced from its argument (function template)
+	* Function templates ref and cref are helper functions that generate an object of type std::reference_wrapper, using template argument deduction to determine the template argument of the result.
+	* T may be an incomplete type. (since C++20)
+```c++
+#include <functional>
+#include <iostream>
+ 
+void f(int& n1, int& n2, const int& n3)
+{
+    std::cout << "In function: " << n1 << ' ' << n2 << ' ' << n3 << '\n';
+    ++n1; // increments the copy of n1 stored in the function object
+    ++n2; // increments the main()'s n2
+    // ++n3; // compile error
+}
+ 
+int main()
+{
+    int n1 = 1, n2 = 2, n3 = 3;
+    std::function<void()> bound_f = std::bind(f, n1, std::ref(n2), std::cref(n3));
+    n1 = 10;
+    n2 = 11;
+    n3 = 12;
+    std::cout << "Before function: " << n1 << ' ' << n2 << ' ' << n3 << '\n';
+    bound_f();
+    std::cout << "After function: " << n1 << ' ' << n2 << ' ' << n3 << '\n';
+}
+/*
+Before function: 10 11 12
+In function: 1 11 12
+After function: 10 12 12
+*/
+```
+
+#
+Operator function objects
+
+* [std::multiplies - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/multiplies)
+	* function object implementing x * y (class template)
+	* Function object for performing multiplication. Effectively calls operator* on two instances of type T.
+* [std::modulus - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/modulus)
+	* function object implementing x % y (class template)
+	* Function object for computing remainders of divisions. Implements operator% for type T.
+* [std::greater - cppreference.com](https://en.cppreference.com/w/cpp/utility/functional/greater)
+	* function object implementing x > y (class template)
 
 ## [Strings library](https://en.cppreference.com/w/cpp/string)
 
