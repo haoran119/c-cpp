@@ -366,7 +366,7 @@ Required size of memory|calculated manually|caculated by compiler|caculated by c
 |Default inheritance is public	|Default inheritance is private	|-
 |[not type-parameter-key in Template](https://stackoverflow.com/questions/2520130/why-are-structs-not-allowed-in-template-definitions)	|type-parameter-key in Template	|-
 
-### [volatile](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#const-type-qualifier)
+### [volatile](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#cv-const-and-volatile-type-qualifiers)
 
 * [volatile_百度百科](http://baike.baidu.com/link?url=gPm-SmXKapujjcPjO3COGYDPSvH4VPOMabuV61XG7kM1kMhwX1AnNxF5_VZDiq7fizEaEfpYKLRBVgRt99BxOK)
     * volatile是一个特征修饰符（type specifier）.volatile的作用是作为指令关键字，确保本条指令不会因编译器的优化而省略，且要求每次直接读值。
@@ -1251,7 +1251,7 @@ int main()
     * Unnamed namespaces are the replacement for the static declaration of variables.
   * [Namespaces - cppreference.com](https://en.cppreference.com/w/cpp/language/namespace)
 
-### [prvalue v.s. xvalue v.s. lvalue](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#value-categories)
+### [prvalue v.s. xvalue v.s. lvalue](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#value-categories-lvalue-rvalue-xvalue)
 
 * [左值和右值的区别？左值引用和右值引用的区别，如何将左值转换成右值？](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#value-categories)
   * 左值：指表达式结束后依然存在的持久对象。
@@ -1342,7 +1342,7 @@ int main()
 * 函数对象功能
   * 可以用作类似C里的回调函数，也可以用作函数功能的组合
   
-### [Type casting](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#type-casting)
+### [Type casting](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#conversions)
 
 * [强制类型转换运算符](https://github.com/huihut/interview#%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E8%BF%90%E7%AE%97%E7%AC%A6)
 	* static_cast
@@ -1375,6 +1375,7 @@ int main()
 
 ### [STL](https://github.com/huihut/interview#-stl)
 
+* [Containers library](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#containers-library)
 * [STL 容器](https://github.com/huihut/interview#stl-%E5%AE%B9%E5%99%A8)
 
 容器 | 底层数据结构 | 时间复杂度 | 有无序 | 可不可重复 | 其他
