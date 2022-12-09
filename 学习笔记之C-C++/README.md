@@ -2808,7 +2808,80 @@ int main() {
 
 ### Templates
 
-### Exceptions
+### [Exceptions](https://en.cppreference.com/w/cpp/language/exceptions)
+
+* Exception handling provides a way of transferring control and information from some point in the execution of a program to a handler associated with a point previously passed by the execution (in other words, exception handling transfers control up the call stack)
+* An exception can be thrown by a throw-expression, dynamic_cast, typeid, new-expression, allocation function, and any of the standard library functions that are specified to throw exceptions to signal certain error conditions (e.g. std::vector::at, std::string::substr, etc).
+* In order for an exception to be caught, the throw-expression has to be inside a try-block or inside a function called from a try-block, and there has to be a catch clause that matches the type of the exception object.
+* When declaring a function, the following specification(s) may be provided to limit the types of the exceptions a function may throw:
+    * dynamic exception specifications (until C++17)
+    * noexcept specifications (since C++11)
+* Errors that arise during exception handling are handled by std::terminate` and std::unexpected (until C++17)`.
+
+#### [noexcept specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/noexcept_spec)
+
+* Specifies whether a function could throw exceptions.
+* [noexcept (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/noexcept-cpp?view=msvc-160)
+* [Exception specifications (throw, noexcept) (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/exception-specifications-throw-cpp?view=msvc-160)
+* [Modern C++ best practices for exceptions and error handling | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/errors-and-exception-handling-modern-cpp?view=msvc-160)
+* [C.37: Make destructors noexcept](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c37-make-destructors-noexcept)
+    * Reason A destructor must not fail. If a destructor tries to exit with an exception, it’s a bad design error and the program had better terminate.
+    * Note A destructor (either user-defined or compiler-generated) is implicitly declared noexcept (independently of what code is in its body) if all of the members of its class have noexcept destructors. By explicitly marking destructors noexcept, an author guards against the destructor becoming implicitly noexcept(false) through the addition or modification of a class member.
+    * Example Not all destructors are noexcept by default; one throwing member poisons the whole class hierarchy
+    * So, if in doubt, declare a destructor noexcept.
+    * Note Why not then declare all destructors noexcept? Because that would in many cases – especially simple cases – be distracting clutter.Enforcement (Simple) A destructor should be declared noexcept if it could throw.
+* [C.66: Make move operations noexcept](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c66-make-move-operations-noexcept)
+    * `Reason` A throwing move violates most people’s reasonable assumptions. A non-throwing move will be used more efficiently by standard-library and language facilities.
+    * `Example`
+    ```c++
+    template<typename T>
+    class Vector {
+    public:
+        Vector(Vector&& a) noexcept :elem{a.elem}, sz{a.sz} { a.sz = 0; a.elem = nullptr; }
+        Vector& operator=(Vector&& a) noexcept { elem = a.elem; sz = a.sz; a.sz = 0; a.elem = nullptr; }
+        // ...
+    private:
+        T* elem;
+        int sz;
+    };
+    ```
+    * These operations do not throw.
+    * `Example, bad`
+    ```c++
+    template<typename T>
+    class Vector2 {
+    public:
+        Vector2(Vector2&& a) { *this = a; }             // just use the copy
+        Vector2& operator=(Vector2&& a) { *this = a; }  // just use the copy
+        // ...
+    private:
+        T* elem;
+        int sz;
+    };
+    ```
+    * This Vector2 is not just inefficient, but since a vector copy requires allocation, it can throw.
+    * Enforcement (Simple) A move operation should be marked noexcept.
+* [C++ Core Guidelines - E.12: Use noexcept when exiting a function because of a throw is impossible or unacceptable](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#e12-use-noexcept-when-exiting-a-function-because-of-a-throw-is-impossible-or-unacceptable)
+    * Reason To make error handling systematic, robust, and efficient.
+    * Note Many standard-library functions are noexcept including all the standard-library functions “inherited” from the C Standard Library.
+* [C++ Core Guidelines - F.6: If your function must not throw, declare it noexcept](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f6-if-your-function-must-not-throw-declare-it-noexcept)
+    * Reason If an exception is not supposed to be thrown, the program cannot be assumed to cope with the error and should be terminated as soon as possible. Declaring a function noexcept helps optimizers by reducing the number of alternative execution paths. It also speeds up the exit after failure.
+    * Example Put noexcept on every function written completely in C or in any other language without exceptions. The C++ Standard Library does that implicitly for all functions in the C Standard Library.
+    * Note constexpr functions can throw when evaluated at run time, so you might need conditional noexcept for some of those.
+    * noexcept is most useful (and most clearly correct) for frequently used, low-level functions.
+* [现代C++编程实践(八)—关于noexcept修饰符和noexcept操作符](https://mp.weixin.qq.com/s/mAh7amGmNTbKqgW2GYEIog)
+    * noexcept修饰符和noexcept操作符可以说是两个概念，C++标准委员会给noexcept的这两种用法的定义如下：
+        * noexcept修饰符：指定函数是否抛出异常。
+        * noexcept操作符：运算符进行编译时检查，最终返回一个布尔值，根据布尔值决定是否抛出异常。
+    * 1 noexcept修饰符
+        * 在C++11中，使用noexcept关键字抛出异常后，编译器会默认调用std::terminate()函数终止程序执行，相对throw抛出异常而言，确实会提升一些效率，毕竟减少了异常处理机器产生的一些开销。也正是因为这一特性，noexcept可以有效的避免函数在抛出异常过程中产生的堆栈展开，也可以有效的组织异常的传播与扩散。
+    * 1.1 noexcept避免异常的扩散
+        * 使用noexcept遇到异常会终止程序的继续执行阻止异常的扩散。
+    * 2 noexcept操作符
+        * noexcept操作符通常被用在模板中，可以根据noexcept表达式值的不同判断是否抛出异常。
+        * noexcept关键字允许编译器直接调用std::terminate终止程序的执行，从某种程度来说是保证了程序的执行安全，当然也会引入问题。比如说，暴力终止程序执行的方法会导致析构函数不能执行，无法保证资源的释放等问题。但是在一定的业务场景中终止程序执行确实是一个有效且果断的异常处理办法。毕竟已经错误的程序继续之后后产生的后果也是无法预估的。
+    * 3 总结
+        * 程序异常检测、异常恢复或者说中断程序运行在实际工作中都会遇到。且不同的场景使用的方式也不一样，在众多的分布式系统中，程序异常后使用程序中断然后重新拉起的操作很多，这也是最暴力和有效的手段。当然在一些交易性的业务中，出现异常大可以使用异常恢复的方式进行处理，没有必要中断程序执行和重启。
 
 ## [C++ Standard Library](https://en.cppreference.com/w/cpp/standard_library)
 
@@ -3453,6 +3526,68 @@ is_base_of_v<B, A> : false
 is_base_of_v<int, int> : false
 */
 ```
+
+## [Diagnostics library / Error handling](https://en.cppreference.com/w/cpp/error)
+
+### Exception handling
+
+* The header \<exception> provides several classes and functions related to exception handling in C++ programs.
+* Defined in header \<exception>
+* [Exception Handling](https://www.tutorialspoint.com/cplusplus/cpp_exceptions_handling.htm)
+* [std::exception - cppreference.com](https://en.cppreference.com/w/cpp/error/exception)
+    * base class for exceptions thrown by the standard library components (class)
+	* Provides consistent interface to handle errors through the throw expression.
+	* All exceptions generated by the standard library inherit from std::exception
+* [exception - C++ Reference](http://www.cplusplus.com/reference/exception/exception/)
+    * [Inherited Code | HackerRank](https://www.hackerrank.com/challenges/inherited-code/problem)
+    * [Exceptional Server | HackerRank](https://www.hackerrank.com/challenges/exceptional-server/problem)
+    ```c++
+    class BadLengthException : public exception
+    {
+      public:
+          BadLengthException(int n) : m_n(to_string(n)) {}
+
+          const char* what() const noexcept
+          {
+              return m_n.c_str();
+          }
+
+      private:
+          string m_n;
+
+    };
+    ```
+    ```c++
+    try {
+      cout << Server::compute(A, B) << endl;        
+    } catch (bad_alloc& ex) {
+      cout << "Not enough memory" << endl;
+    } catch (exception& ex) {
+      cout << "Exception: " << ex.what() << endl;
+    } catch (...) {
+      cout << "Other Exception" << endl;
+    }
+    ```
+* [std::terminate - cppreference.com](https://en.cppreference.com/w/cpp/error/terminate)
+	* function called when exception handling fails (function)
+	* std::terminate() is called by the C++ runtime when the program cannot continue for any of the following reasons
+	* std::terminate() may also be called directly from the program.
+	* In any case, std::terminate calls the currently installed std::terminate_handler. The default std::terminate_handler calls std::abort.
+
+### Exception categories
+
+* [std::runtime_error - cppreference.com](https://en.cppreference.com/w/cpp/error/runtime_error)
+  * Defines a type of object to be thrown as exception. It reports errors that are due to events beyond the scope of the program and can not be easily predicted.
+  * [exception - c++: Catch runtime_error - Stack Overflow](https://stackoverflow.com/questions/7491877/c-catch-runtime-error)
+
+### Assertions
+
+* [assert - cppreference.com](https://en.cppreference.com/w/cpp/error/assert)
+	* The definition of the macro assert depends on another macro, NDEBUG, which is not defined by the standard library.
+	* If NDEBUG is defined as a macro name at the point in the source code where \<cassert> or \<assert.h> is included, then assert does nothing.
+	* If NDEBUG is not defined, then assert checks if its argument (which must have scalar type) compares equal to zero. If it does, assert outputs implementation-specific diagnostic information on the standard error output and calls std::abort. The diagnostic information is required to include the text of expression, as well as the values of the predefined variable __func__ and (since C++11) the predefined macros __FILE__ and __LINE__.
+
+### [Stacktrace](https://en.cppreference.com/w/cpp/utility/basic_stacktrace)
 
 ## [Dynamic memory management](https://en.cppreference.com/w/cpp/memory)
 
@@ -6557,127 +6692,6 @@ int main()
 # ------
 
 
-#### [Error handling](https://en.cppreference.com/w/cpp/error)
-
-##### Exception handling
-
-* [Exception Handling](https://www.tutorialspoint.com/cplusplus/cpp_exceptions_handling.htm)
-* [std::exception - cppreference.com](https://en.cppreference.com/w/cpp/error/exception)
-	* Provides consistent interface to handle errors through the throw expression.
-	* All exceptions generated by the standard library inherit from std::exception
-* [exception - C++ Reference](http://www.cplusplus.com/reference/exception/exception/)
-  * [Inherited Code | HackerRank](https://www.hackerrank.com/challenges/inherited-code/problem)
-  * [Exceptional Server | HackerRank](https://www.hackerrank.com/challenges/exceptional-server/problem)
-  ```c++
-  class BadLengthException : public exception
-  {
-      public:
-          BadLengthException(int n) : m_n(to_string(n)) {}
-
-          const char* what() const noexcept
-          {
-              return m_n.c_str();
-          }
-
-      private:
-          string m_n;
-
-  };
-  ```
-  ```c++
-  try {
-      cout << Server::compute(A, B) << endl;        
-  } catch (bad_alloc& ex) {
-      cout << "Not enough memory" << endl;
-  } catch (exception& ex) {
-      cout << "Exception: " << ex.what() << endl;
-  } catch (...) {
-      cout << "Other Exception" << endl;
-  }
-  ```
-* [noexcept specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/noexcept_spec)
-    * Specifies whether a function could throw exceptions.
-    * [noexcept (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/noexcept-cpp?view=msvc-160)
-    * [Exception specifications (throw, noexcept) (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/exception-specifications-throw-cpp?view=msvc-160)
-    * [Modern C++ best practices for exceptions and error handling | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/errors-and-exception-handling-modern-cpp?view=msvc-160)
-    * [C.37: Make destructors noexcept](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c37-make-destructors-noexcept)
-        * Reason A destructor must not fail. If a destructor tries to exit with an exception, it’s a bad design error and the program had better terminate.
-        * Note A destructor (either user-defined or compiler-generated) is implicitly declared noexcept (independently of what code is in its body) if all of the members of its class have noexcept destructors. By explicitly marking destructors noexcept, an author guards against the destructor becoming implicitly noexcept(false) through the addition or modification of a class member.
-        * Example Not all destructors are noexcept by default; one throwing member poisons the whole class hierarchy
-        * So, if in doubt, declare a destructor noexcept.
-        * Note Why not then declare all destructors noexcept? Because that would in many cases – especially simple cases – be distracting clutter.Enforcement (Simple) A destructor should be declared noexcept if it could throw.
-    * [C.66: Make move operations noexcept](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c66-make-move-operations-noexcept)
-        * `Reason` A throwing move violates most people’s reasonable assumptions. A non-throwing move will be used more efficiently by standard-library and language facilities.
-        * `Example`
-        ```c++
-        template<typename T>
-        class Vector {
-        public:
-            Vector(Vector&& a) noexcept :elem{a.elem}, sz{a.sz} { a.sz = 0; a.elem = nullptr; }
-            Vector& operator=(Vector&& a) noexcept { elem = a.elem; sz = a.sz; a.sz = 0; a.elem = nullptr; }
-            // ...
-        private:
-            T* elem;
-            int sz;
-        };
-        ```
-        * These operations do not throw.
-        * `Example, bad`
-        ```c++
-        template<typename T>
-        class Vector2 {
-        public:
-            Vector2(Vector2&& a) { *this = a; }             // just use the copy
-            Vector2& operator=(Vector2&& a) { *this = a; }  // just use the copy
-            // ...
-        private:
-            T* elem;
-            int sz;
-        };
-        ```
-        * This Vector2 is not just inefficient, but since a vector copy requires allocation, it can throw.
-        * Enforcement (Simple) A move operation should be marked noexcept.
-    * [C++ Core Guidelines - E.12: Use noexcept when exiting a function because of a throw is impossible or unacceptable](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#e12-use-noexcept-when-exiting-a-function-because-of-a-throw-is-impossible-or-unacceptable)
-        * Reason To make error handling systematic, robust, and efficient.
-        * Note Many standard-library functions are noexcept including all the standard-library functions “inherited” from the C Standard Library.
-    * [C++ Core Guidelines - F.6: If your function must not throw, declare it noexcept](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f6-if-your-function-must-not-throw-declare-it-noexcept)
-        * Reason If an exception is not supposed to be thrown, the program cannot be assumed to cope with the error and should be terminated as soon as possible. Declaring a function noexcept helps optimizers by reducing the number of alternative execution paths. It also speeds up the exit after failure.
-        * Example Put noexcept on every function written completely in C or in any other language without exceptions. The C++ Standard Library does that implicitly for all functions in the C Standard Library.
-        * Note constexpr functions can throw when evaluated at run time, so you might need conditional noexcept for some of those.
-        * noexcept is most useful (and most clearly correct) for frequently used, low-level functions.
-* [现代C++编程实践(八)—关于noexcept修饰符和noexcept操作符](https://mp.weixin.qq.com/s/mAh7amGmNTbKqgW2GYEIog)
-    * noexcept修饰符和noexcept操作符可以说是两个概念，C++标准委员会给noexcept的这两种用法的定义如下：
-        * noexcept修饰符：指定函数是否抛出异常。
-        * noexcept操作符：运算符进行编译时检查，最终返回一个布尔值，根据布尔值决定是否抛出异常。
-    * 1 noexcept修饰符
-        * 在C++11中，使用noexcept关键字抛出异常后，编译器会默认调用std::terminate()函数终止程序执行，相对throw抛出异常而言，确实会提升一些效率，毕竟减少了异常处理机器产生的一些开销。也正是因为这一特性，noexcept可以有效的避免函数在抛出异常过程中产生的堆栈展开，也可以有效的组织异常的传播与扩散。
-    * 1.1 noexcept避免异常的扩散
-        * 使用noexcept遇到异常会终止程序的继续执行阻止异常的扩散。
-    * 2 noexcept操作符
-        * noexcept操作符通常被用在模板中，可以根据noexcept表达式值的不同判断是否抛出异常。
-        * noexcept关键字允许编译器直接调用std::terminate终止程序的执行，从某种程度来说是保证了程序的执行安全，当然也会引入问题。比如说，暴力终止程序执行的方法会导致析构函数不能执行，无法保证资源的释放等问题。但是在一定的业务场景中终止程序执行确实是一个有效且果断的异常处理办法。毕竟已经错误的程序继续之后后产生的后果也是无法预估的。
-    * 3 总结
-        * 程序异常检测、异常恢复或者说中断程序运行在实际工作中都会遇到。且不同的场景使用的方式也不一样，在众多的分布式系统中，程序异常后使用程序中断然后重新拉起的操作很多，这也是最暴力和有效的手段。当然在一些交易性的业务中，出现异常大可以使用异常恢复的方式进行处理，没有必要中断程序执行和重启。
-* [std::terminate - cppreference.com](https://en.cppreference.com/w/cpp/error/terminate)
-	* function called when exception handling fails (function)
-	* std::terminate() is called by the C++ runtime when the program cannot continue for any of the following reasons
-	* std::terminate() may also be called directly from the program.
-	* In any case, std::terminate calls the currently installed std::terminate_handler. The default std::terminate_handler calls std::abort.
-
-##### Exception categories
-
-* [std::runtime_error - cppreference.com](https://en.cppreference.com/w/cpp/error/runtime_error)
-  * Defines a type of object to be thrown as exception. It reports errors that are due to events beyond the scope of the program and can not be easily predicted.
-  * [exception - c++: Catch runtime_error - Stack Overflow](https://stackoverflow.com/questions/7491877/c-catch-runtime-error)
-
-##### Assertions
-
-* [assert - cppreference.com](https://en.cppreference.com/w/cpp/error/assert)
-	* The definition of the macro assert depends on another macro, NDEBUG, which is not defined by the standard library.
-	* If NDEBUG is defined as a macro name at the point in the source code where \<cassert> or \<assert.h> is included, then assert does nothing.
-	* If NDEBUG is not defined, then assert checks if its argument (which must have scalar type) compares equal to zero. If it does, assert outputs implementation-specific diagnostic information on the standard error output and calls std::abort. The diagnostic information is required to include the text of expression, as well as the values of the predefined variable __func__ and (since C++11) the predefined macros __FILE__ and __LINE__.
-
-##### [Stacktrace](https://en.cppreference.com/w/cpp/utility/basic_stacktrace)
 
 #### [Templates](https://en.cppreference.com/w/cpp/language/templates)
 
