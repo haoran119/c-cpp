@@ -6472,9 +6472,12 @@ std::unordered_map<std::string, std::vector<std::string> > ReadCSV(const std::st
 ```
 
 ### Classes
- 
+
+* Defined in header \<filesystem>
+* Defined in namespace std::filesystem 
 * [\<filesystem> | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/filesystem?view=msvc-160)
   * Include the header \<filesystem> for access to classes and functions that manipulate and retrieve information about paths, files, and directories.
+
 * [std::filesystem::path - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path)
   * [std::filesystem::path::concat, std::filesystem::path::operator+= - cppreference.com](https://en.cppreference.com/w/cpp/filesystem/path/concat)
     * Concatenates the current path and the argument
@@ -6549,6 +6552,7 @@ int main()
   * [c++ - How to use copy_file in boost::filesystem? - Stack Overflow](https://stackoverflow.com/questions/4785491/how-to-use-copy-file-in-boostfilesystem)
   * [string - How can I extract the file name and extension from a path in C++ - Stack Overflow](https://stackoverflow.com/questions/4430780/how-can-i-extract-the-file-name-and-extension-from-a-path-in-c)
 
+### Non-member functions
 
 # ------
 
