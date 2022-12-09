@@ -509,74 +509,6 @@ In programming contests, people do focus more on finding the algorithm to solve 
 	* 原问题：什么指令集支持原子操作？其原理是什么？ 如果考虑到全部的指令集，问题太大了，这里简化下。以X86和ARM为例。
 	* 原子操作是不可分割的操作，在执行完毕时它不会被任何事件中断。在单处理器系统(UniProcessor，简称 UP)中，能够在单条指令中完成的操作都可以认为是原子操作，因为中断只能发生在指令与指令之间。
 
-##### Literals
-
-* Literals are the tokens of a C++ program that represent constant values embedded in the source code.
-	* [integer literals](https://en.cppreference.com/w/cpp/language/integer_literal) are decimal, octal, hexadecimal or binary numbers of integer type.
-		* Allows values of integer type to be used in expressions directly.
-		* (no suffix)	
-			* int
-			* long int
-			* long long int (since C++11)
-		* u or U	
-			* unsigned int
-			* unsigned long int
-			* unsigned long long int (since C++11)
-		* l or L	
-			* long int
-			* long long int (since C++11)
-		* both l/L and u/U	
-			* unsigned long int
-			* unsigned long long int (since C++11)
-		* ll or LL	
-			* long long int (since C++11)
-		* both ll/LL and u/U	
-			* unsigned long long int (since C++11)
-		* z or Z	
-			* the signed version of std::size_t (since C++23)
-		* both z/Z and u/U	
-			* std::size_t (since C++23)
-	* [character literals](https://en.cppreference.com/w/cpp/language/character_literal) are individual characters of type
-		* char or wchar_t
-		* char16_t or char32_t(since C++11)
-		* char8_t(since C++20)
-	* [floating-point literals](https://en.cppreference.com/w/cpp/language/floating_literal) are values of type float, double, or long double
-		* suffix, if present, is one of f, F, l, or L. The suffix determines the type of the floating-point literal:
-			* (no suffix) defines double
-			* f F defines float
-			* l L defines long double
-			* Optional single quotes (') may be inserted between the digits as a separator; they are ignored during compilation.(since C++14)
-		* [为什么将 0.1f 改为 0 会使性能降低 10 倍？](https://mp.weixin.qq.com/s/bMacxnC_JBuqFDz8k2fp3w)
-			* http://cenalulu.github.io/linux/about-denormalized-float-number/
-	* [string literals](https://en.cppreference.com/w/cpp/language/string_literal) are sequences of characters of type
-		* const char[] or const wchar_t[]
-		* const char16_t[] or const char32_t[](since C++11)
-		* const char8_t[](since C++20)
-	* [boolean literals](https://en.cppreference.com/w/cpp/language/bool_literal) are values of type bool, that is true and false
-	* [nullptr](https://en.cppreference.com/w/cpp/language/nullptr) is the pointer literal which specifies a null pointer value
-	* [user-defined literals](https://en.cppreference.com/w/cpp/language/user_literal) are constant values of user-specified type(since C++11)
-	* [NL.11: Make literals readable](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#nl11-make-literals-readable)
-		* Reason Readability.
-		* Example Use digit separators to avoid long strings of digits
-		```c++
-		auto c = 299'792'458; // m/s2
-		auto q2 = 0b0000'1111'0000'0000;
-		auto ss_number = 123'456'7890;
-		```
-		* Example Use literal suffixes where clarification is needed
-		```c++
-		auto hello = "Hello!"s; // a std::string
-		auto world = "world";   // a C-style string
-		auto interval = 100ms;  // using <chrono>
-		```
-		* Note Literals should not be sprinkled all over the code as “magic constants”, but it is still a good idea to make them readable where they are defined. It is easy to make a typo in a long string of integers.
-		* Enforcement Flag long digit sequences. The trouble is to define “long”; maybe 7.
-	* [SF.7: Don’t write using namespace at global scope in a header file](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#sf7-dont-write-using-namespace-at-global-scope-in-a-header-file)
-		* `Reason` Doing so takes away an #includer’s ability to effectively disambiguate and to use alternatives. It also makes #included headers order-dependent as they might have different meaning when included in different orders.
-		* `Note` An exception is using namespace std::literals;. This is necessary to use string literals in header files and given the rules - users are required to name their own UDLs operator""_x - they will not collide with the standard library.
-
-#### [Constants/Literals](https://www.tutorialspoint.com/cplusplus/cpp_constants_literals.htm)
-
 ### [Keywords](https://en.cppreference.com/w/cpp/keyword)
 
 #### [C++ keywords: auto](https://en.cppreference.com/w/cpp/keyword/auto)
@@ -873,6 +805,73 @@ int main(){
     * `An lvalue has an address that your program can access.` Examples of lvalue expressions include variable names, including const variables, array elements, function calls that return an lvalue reference, bit-fields, unions, and class members.
     * `A prvalue expression has no address that is accessible by your program.` Examples of prvalue expressions include literals, function calls that return a non-reference type, and temporary objects that are created during expression evaluation but accessible only by the compiler.
     * `An xvalue expression has an address that no longer accessible by your program but can be used to initialize an rvalue reference, which provides access to the expression.` Examples include function calls that return an rvalue reference, and the array subscript, member and pointer to member expressions where the array or object is an rvalue reference.
+
+#### Literals
+
+* Literals are the tokens of a C++ program that represent constant values embedded in the source code.
+	* [integer literals](https://en.cppreference.com/w/cpp/language/integer_literal) are decimal, octal, hexadecimal or binary numbers of integer type.
+		* Allows values of integer type to be used in expressions directly.
+		* (no suffix)	
+			* int
+			* long int
+			* long long int (since C++11)
+		* u or U	
+			* unsigned int
+			* unsigned long int
+			* unsigned long long int (since C++11)
+		* l or L	
+			* long int
+			* long long int (since C++11)
+		* both l/L and u/U	
+			* unsigned long int
+			* unsigned long long int (since C++11)
+		* ll or LL	
+			* long long int (since C++11)
+		* both ll/LL and u/U	
+			* unsigned long long int (since C++11)
+		* z or Z	
+			* the signed version of std::size_t (since C++23)
+		* both z/Z and u/U	
+			* std::size_t (since C++23)
+	* [character literals](https://en.cppreference.com/w/cpp/language/character_literal) are individual characters of type
+		* char or wchar_t
+		* char16_t or char32_t(since C++11)
+		* char8_t(since C++20)
+	* [floating-point literals](https://en.cppreference.com/w/cpp/language/floating_literal) are values of type float, double, or long double
+		* suffix, if present, is one of f, F, l, or L. The suffix determines the type of the floating-point literal:
+			* (no suffix) defines double
+			* f F defines float
+			* l L defines long double
+			* Optional single quotes (') may be inserted between the digits as a separator; they are ignored during compilation.(since C++14)
+		* [为什么将 0.1f 改为 0 会使性能降低 10 倍？](https://mp.weixin.qq.com/s/bMacxnC_JBuqFDz8k2fp3w)
+			* http://cenalulu.github.io/linux/about-denormalized-float-number/
+	* [string literals](https://en.cppreference.com/w/cpp/language/string_literal) are sequences of characters of type
+		* const char[] or const wchar_t[]
+		* const char16_t[] or const char32_t[](since C++11)
+		* const char8_t[](since C++20)
+	* [boolean literals](https://en.cppreference.com/w/cpp/language/bool_literal) are values of type bool, that is true and false
+	* [nullptr](https://en.cppreference.com/w/cpp/language/nullptr) is the pointer literal which specifies a null pointer value
+	* [user-defined literals](https://en.cppreference.com/w/cpp/language/user_literal) are constant values of user-specified type(since C++11)
+	* [NL.11: Make literals readable](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#nl11-make-literals-readable)
+		* Reason Readability.
+		* Example Use digit separators to avoid long strings of digits
+		```c++
+		auto c = 299'792'458; // m/s2
+		auto q2 = 0b0000'1111'0000'0000;
+		auto ss_number = 123'456'7890;
+		```
+		* Example Use literal suffixes where clarification is needed
+		```c++
+		auto hello = "Hello!"s; // a std::string
+		auto world = "world";   // a C-style string
+		auto interval = 100ms;  // using <chrono>
+		```
+		* Note Literals should not be sprinkled all over the code as “magic constants”, but it is still a good idea to make them readable where they are defined. It is easy to make a typo in a long string of integers.
+		* Enforcement Flag long digit sequences. The trouble is to define “long”; maybe 7.
+	* [SF.7: Don’t write using namespace at global scope in a header file](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#sf7-dont-write-using-namespace-at-global-scope-in-a-header-file)
+		* `Reason` Doing so takes away an #includer’s ability to effectively disambiguate and to use alternatives. It also makes #included headers order-dependent as they might have different meaning when included in different orders.
+		* `Note` An exception is using namespace std::literals;. This is necessary to use string literals in header files and given the rules - users are required to name their own UDLs operator""_x - they will not collide with the standard library.
+* [Constants/Literals](https://www.tutorialspoint.com/cplusplus/cpp_constants_literals.htm)
 
 #### [Operators](https://en.cppreference.com/w/cpp/language/expressions#Operators)
 
