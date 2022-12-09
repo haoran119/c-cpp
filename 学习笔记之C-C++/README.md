@@ -1765,6 +1765,43 @@ blue
 	* When you apply the const qualifier to a nonstatic member function, it affects the this pointer. For a const-qualified member function of class C, the this pointer is of type C const*, whereas for a member function that is not const-qualified, the this pointer is of type C*.
 	* A static member function does not have a this pointer (such a function is not called on a particular instance of a class), so const qualification of a static member function doesn't make any sense.
 
+##### [Attribute specifier sequence](https://en.cppreference.com/w/cpp/language/attributes)
+
+* Introduces implementation-defined attributes for types, objects, code, etc.
+* `[[attr]] [[attr1, attr2, attr3(args)]] [[namespace::attr(args)]] alignas-specifier`
+```c++
+[[gnu::always_inline]] [[gnu::hot]] [[gnu::const]] [[nodiscard]]
+inline int f(); // declare f with four attributes
+ 
+[[gnu::always_inline, gnu::const, gnu::hot, nodiscard]]
+int f(); // same as above, but uses a single attr specifier that contains four attributes
+ 
+// C++17:
+[[using gnu : const, always_inline, hot]] [[nodiscard]]
+int f[[gnu::always_inline]](); // an attribute may appear in multiple specifiers
+ 
+int f() { return 0; }
+ 
+int main() {}
+```
+
+###### [C++ attribute: maybe_unused (since C++17)](https://en.cppreference.com/w/cpp/language/attributes/maybe_unused)
+
+* Suppresses warnings on unused entities.
+```c++
+#include <cassert>
+ 
+[[maybe_unused]] void f([[maybe_unused]] bool thing1,
+                        [[maybe_unused]] bool thing2)
+{
+    [[maybe_unused]] bool b = thing1 && thing2;
+    assert(b); // in release mode, assert is compiled out, and b is unused
+               // no warning because it is declared [[maybe_unused]]
+} // parameters thing1 and thing2 are not used, no warning
+ 
+int main() {}
+```
+
 #### Declarators
 
 ##### [Pointer declaration](https://en.cppreference.com/w/cpp/language/pointer)
