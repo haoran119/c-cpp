@@ -3884,6 +3884,26 @@ is_base_of_v<int, int> : false
   * std::shared_ptr
   * std::unique_ptr
   * std::weak_ptr
+* [Smart developers use smart pointers (1/7) - Smart pointers basics - Fluent C++](https://www.fluentcpp.com/2017/08/22/smart-developers-use-smart-pointers-smart-pointers-basics/)
+    * Smart pointer basics
+    * unique_ptr, shared_ptr, weak_ptr, scoped_ptr, raw pointers: clearly stating your intentions by knowing your smart pointers
+    * Custom deleters and How to make them more expressive
+    * Changing deleters during the life of a unique_ptr
+    * How to implement the pimpl idiom by using unique_ptr
+    * How to make a polymorphic clone in modern C++
+    * How to Return a Smart Pointer AND Use Covariance (by Raoul Borges)
+    * The stack and the heap
+        * Like many other languages, C++ has several types of memories, that correspond to different parts of the physical memory. They are: the static, the stack, and the heap. The static is a topic rich enough to deserve its own moment of glory, so here we focus on the stack and the heap only.
+        * The stack
+            * `Objects allocated on the stack are automatically destroyed when they go out of scope.`
+        * The heap
+            * The heap is where dynamically allocated objects are stored, that is to say `objects that are allocated with a call to new`, which returns a pointer:
+            * Ok strictly speaking, the memory allocated by new is called the `free store`.
+            * Contrary to the stack, objects allocated on the heap are `not destroyed automatically`. 
+            * And deleting a object on the heap is no trivial task: delete has to be called `once and only once` to deallocate a heap-based object. 
+    * RAII: the magic four letters
+        * The principle of RAII is simple: wrap a resource (a pointer for instance) into an object, and dispose of the resource in its destructor. And this is exactly what smart pointers do:
+        * 
 
 #### [std::unique_ptr](https://en.cppreference.com/w/cpp/memory/unique_ptr)
 
