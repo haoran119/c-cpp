@@ -4125,6 +4125,157 @@ is_base_of_v<int, int> : false
     * How to copy an object that is accessible only by an interface that it implements?
     * https://github.com/haoran119/c-cpp/blob/main/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93%E4%B9%8BC-C++/README.md#deep-copy--shallow-copy
 * [How to Return a Smart Pointer AND Use Covariance - Fluent C++](https://www.fluentcpp.com/2017/09/12/how-to-return-a-smart-pointer-and-use-covariance/)
+    * The original problem Jonathan proposed a solution for was how to clone a concrete class when inheriting from multiple interfaces, all declaring the clone method, and all returning a smart pointer (in order to manage life cycle and produce exception safe code).
+    * That solution is simple and targeted to that situation. But here I want to expand on this and tackle the more general problem: in C++, it seems that we can have covariant return, or smart pointer return, but not both. Or can we?
+    * The problem: Covariant return type vs. smart pointers
+        * C++ has support for covariant return type. That is, you can have the following code:
+        ```c++
+        struct Base {};
+        struct Derived : Base {};
+
+        struct Parent
+        {
+           virtual Base * foo();
+        } ;
+
+        struct Child : Parent
+        {
+           virtual Derived * foo() override ;
+        } ;
+        ```
+        * Here, we expect the foo method from Child to return Base * for a successful overriding (and compilation!). With the covariant return type, we can actually replace Base * by any of its derived types. For example, Derived *.
+        * This works for pointers, and for references… But the moment you try to use smart pointers:
+        * … the compiler generates an error.
+    * Use cases
+        * Simple hierarchy:
+        * ![image](https://user-images.githubusercontent.com/34557994/206853537-b0fdfd99-536c-4eb4-8082-647e8cff83c9.png)
+        * Multiple inheritance:
+        * ![image](https://user-images.githubusercontent.com/34557994/206853550-d60e9d33-c273-442c-8701-4f77a037fc13.png)
+        * Deep hierarchy:
+        * ![image](https://user-images.githubusercontent.com/34557994/206853563-c7201cd9-2b9e-4595-b98c-fdfbade9db1c.png)
+        * Diamond inheritance:
+        * ![image](https://user-images.githubusercontent.com/34557994/206853578-f88a8c5d-4bec-495a-aa0a-90d9728b13d1.png)
+    * Preamble: Separation of concerns + private virtual function
+        * Instead of having one clone member function handling everything, we will separate it into two member functions. In the following piece of code:
+        ```c++
+        class some_class
+        {
+        public:
+           std::unique_ptr<some_class> clone() const
+           {
+              return std::unique_ptr<some_class>(this->clone_impl());
+           }
+
+        private:
+           virtual some_class * clone_impl() const
+           {
+              return new some_class(*this) ;
+           }
+        };
+        ```
+    * Simple Hierarchy: Covariance + Name hiding
+        ```c++
+        #include <memory>
+
+        class cloneable
+        {
+        public:
+           virtual ~cloneable() {}
+
+           std::unique_ptr<cloneable> clone() const
+           {
+              return std::unique_ptr<cloneable>(this->clone_impl());
+           }
+
+        private:
+           virtual cloneable * clone_impl() const = 0;
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        class concrete : public cloneable
+        {
+        public:
+           std::unique_ptr<concrete> clone() const
+           {
+              return std::unique_ptr<concrete>(this->clone_impl());
+           }
+
+        private:
+           virtual concrete * clone_impl() const override
+           {
+              return new concrete(*this);
+           }
+        };
+
+        int main()
+        {
+           std::unique_ptr<concrete> c = std::make_unique<concrete>();
+           std::unique_ptr<concrete> cc = c->clone();
+
+           cloneable * p = c.get();
+           std::unique_ptr<cloneable> pp = p->clone();
+        }
+        ```
+        * By separating the concerns, we were able to use covariance at each level of the hierarchy to produce a clone_impl member function returning the exact type of pointer we wanted.
+        * And using a little (usually) annoying feature in C++, name hiding (i.e. when declaring a name in a derived class, this name hides all the symbols with the same name in the base class), we hide (not override) the clone() member function to return a smart pointer of the exact type we wanted.
+    * Simple Hierarchy, v2: Enter the CRTP
+        * We will use it to declare methods with the correct derived prototypes in the CRTP base class, methods that will then be injected through inheritance into the derived class itself:
+        ```c++
+        #include <memory>
+
+        class cloneable
+        {
+        public:
+           virtual ~cloneable() {}
+
+           std::unique_ptr<cloneable> clone() const
+           {
+              return std::unique_ptr<cloneable>(this->clone_impl());
+           }
+
+        private:
+           virtual cloneable * clone_impl() const = 0;
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        template <typename Derived, typename Base>
+        class clone_inherit : public Base
+        {
+        public:
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        private:
+           virtual clone_inherit * clone_impl() const override
+           {
+              return new Derived(*this);
+           }
+        };
+
+        class concrete
+           : public clone_inherit<concrete, cloneable>
+        {
+        public:
+            concrete() = default;   // need to add it
+            concrete(const clone_inherit<concrete, cloneable>&) {}  // need to add it
+        };
+
+        int main()
+        {
+           std::unique_ptr<concrete> c = std::make_unique<concrete>();
+           std::unique_ptr<concrete> cc = c->clone();
+
+           cloneable * p = c.get();
+           std::unique_ptr<cloneable> pp = p->clone();
+        }
+        ```
+        * clone_inherit is a CRTP that knows its derived class, but also all its direct base class. It implements the covariant clone_impl() and hiding clone() member functions as usual, but they use casts to move through the hierarchy of types.
+        * As you can see, the concrete class is now free of clutter.
+        * This effectively adds a polymorphic and covariant clone() to a hierarchy of class.
 
 #### [std::unique_ptr](https://en.cppreference.com/w/cpp/memory/unique_ptr)
 
