@@ -4000,6 +4000,127 @@ is_base_of_v<int, int> : false
         ```
         * None of the houses ends up being destroyed at the end of this code, because the shared_ptrs points into one another. But if one is a weak_ptr instead, there is no longer a circular reference.
         * Another use case pointed out by this answer on Stack Overflow is that weak_ptr can be used to `maintain a cache`. The data may or may not have been cleared from the cache, and the weak_ptr references this data.
+* [How to implement the pimpl idiom by using unique_ptr - Fluent C++](https://www.fluentcpp.com/2017/09/22/make-pimpl-using-unique_ptr/)
+    * The `pimpl`, standing for `pointer to implementation` is a widespread technique to cut compilation dependencies.
+    * The pimpl
+        * Say we have a class reprenseting a fridge (yeah why not?), that works with an engine that it contains. Here is the header of this class:
+        ```c++
+        #include "Engine.h"
+
+        class Fridge
+        {
+        public:
+           void coolDown();
+        private:
+           Engine engine_;
+        };
+        ```
+        * (the contents of the Engine class are not relevant here).
+        * And here is its implementation file:
+        ```c++
+        #include "Fridge.h"
+
+        void Fridge::coolDown()
+        {
+           /* ... */
+        }
+        ```
+        * Now there is an issue with this design (that could be serious or not, depending on how many clients Fridge has). Since Fridge.h #includes Engine.h, any client of the Fridge class will indirectly #include the Engine class. `So when the Engine class is modified, all the clients of Fridge have to recompile, even if they don’t use Engine directly`.
+        * The pimpl idiom aims at solving this issue by `adding a level of indirection`, FridgeImpl, that takes on the Engine.
+        * The header file becomes:
+        ```c++
+        class Fridge
+        {
+        public:
+           Fridge();
+           ~Fridge();
+
+           void coolDown();
+        private:
+           class FridgeImpl;
+           FridgeImpl* impl_;
+        };
+        ```
+        * Note that it no longer #include Engine.h.
+        * And the implementation file becomes:
+        ```c++
+        #include "Engine.h"
+        #include "Fridge.h"
+
+        class Fridge::FridgeImpl
+        {
+        public:
+           void coolDown()
+           {
+              /* ... */
+           }
+        private:
+           Engine engine_;
+        };
+
+        Fridge::Fridge() : impl_(new FridgeImpl) {}
+
+        Fridge::~Fridge()
+        {
+           delete impl_;
+        }
+
+        void Fridge::coolDown()
+        {
+           impl_->coolDown();
+        }
+        ```
+        * The class now delegates its functionalities and members to FridgeImpl, and Fridge only has to forward the calls and `manage the life cycle` of the impl_ pointer.
+        * What makes it work is that `pointers only need a forward declaration to compile`. For this reason, the header file of the Fridge class doesn’t need to see the full definition of FridgeImpl, and therefore neither do Fridge‘s clients.
+    * Using std::unique_ptr to manage the life cycle
+        * Today it’s a bit unsettling to leave a raw pointer managing its own resource in C++. A natural thing to do would be to replace it with an std::unique_ptr (or with another smart pointer). This way the Fridge destructor no longer needs to do anything, and we can leave the compiler automatically generate it for us.
+        * Oops, we get the following compilation errors!
+        ```c++
+        use of undefined type 'FridgeImpl'
+        can't delete an incomplete type
+        ```
+        * Can you see what’s going on here?
+    * Destructor visibility
+        * There is a rule in C++ that says that deleting a pointer leads to undefined behaviour if:
+            * this pointer has type void*, or
+            * the type pointed to is incomplete, that is to say is only forward declared, like FridgeImpl in our header file.
+        * std::unique_ptr happens to check in its destructor if the definition of the type is visible before calling delete. `So it refuses to compile and to call delete if the type is only forward declared`.
+        * Since we removed the declaration of the destructor in the Fridge class, the compiler took over and defined it for us. But compiler-generated methods are declared `inline`, so they are implemented in the header file directly. And there, the type of FridgeImpl is incomplete. Hence the error.
+        * The fix would then be to `declare the destructor and thus prevent the compiler from doing it for us`. So the header file becomes:
+        ```c++
+        #include <memory>
+
+        class Fridge
+        {
+        public:
+           Fridge();
+           ~Fridge();
+           void coolDown();
+        private:
+           class FridgeImpl;
+           std::unique_ptr<FridgeImpl> impl_;
+        };
+        ```
+        * And we can still use the default implentation for the destructor that the compiler would have generated. But we need to put it in the implementation file, after the definition of FridgeImpl:
+        ```c++
+        #include "Engine.h"
+        #include "Fridge.h"
+
+        class FridgeImpl
+        {
+        public:
+           void coolDown()
+           {
+              /* ... */
+           }
+        private:
+           Engine engine_;
+        };
+
+        Fridge::Fridge() : impl_(new FridgeImpl) {}
+
+        Fridge::~Fridge() = default;
+        ```
 
 #### [std::unique_ptr](https://en.cppreference.com/w/cpp/memory/unique_ptr)
 
