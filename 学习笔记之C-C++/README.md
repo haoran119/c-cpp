@@ -3884,6 +3884,9 @@ is_base_of_v<int, int> : false
   * std::shared_ptr
   * std::unique_ptr
   * std::weak_ptr
+
+#
+
 * [Smart developers use smart pointers (1/7) - Smart pointers basics - Fluent C++](https://www.fluentcpp.com/2017/08/22/smart-developers-use-smart-pointers-smart-pointers-basics/)
     * Smart pointer basics
     * unique_ptr, shared_ptr, weak_ptr, scoped_ptr, raw pointers: clearly stating your intentions by knowing your smart pointers
@@ -3903,7 +3906,36 @@ is_base_of_v<int, int> : false
             * And deleting a object on the heap is no trivial task: delete has to be called `once and only once` to deallocate a heap-based object. 
     * RAII: the magic four letters
         * The principle of RAII is simple: wrap a resource (a pointer for instance) into an object, and dispose of the resource in its destructor. And this is exactly what smart pointers do:
-        * 
+        ```c++
+        template <typename T>
+        class SmartPointer
+        {
+        public:
+            explicit SmartPointer(T* p) : p_(p) {}
+            ~SmartPointer() { delete p_; }
+
+        private:
+            T* p_;
+        };
+        ```
+        * The point is that you can manipulate smart pointers as objects allocated on the stack. And the compiler will take care of automatically calling the destructor of the smart pointer because… `objects allocated on the stack are automatically destroyed when they go out of scope`. And this will therefore call delete on the wrapped pointer. Only once. In a nutshell, smart pointers behave like pointers, but when they are destroyed they delete the object they point to.
+        * The above code example was only made to get a grasp of RAII. But by no means is it a complete interface of a realistic smart pointer.
+        * First, a smart pointer syntactically behaves like a pointer in many way: it can be dereferenced with operator* or operator->, that is to say you can call *sp or sp->member on it. And it is also convertible to bool, so that it can be used in an if statement like a pointer:
+        ```c++
+        if (sp)
+        {
+            ...
+        ```
+        * which tests the nullity of the underlying pointer. And finally, the underlying pointer itself is accessible with a .get() method.
+        * Second, and maybe more importantly, there is a missing aspect from the above interface: it doesn’t deal with copy! Indeed, as is, a SmartPointer copied also copies the underlying pointer, so the below code has a bug:
+        ```c++
+        {
+            SmartPointer<int> sp1(new int(42));
+            SmartPointer<int> sp2 = sp1; // now both sp1 and sp2 point to the same object
+        } // sp1 and sp2 are both destroyed, the pointer is deleted twice!
+        ```
+        * Indeed, it deletes the underlying object twice, leading to undefined behaviour.
+        * How to deal with copy then? This is a feature on which the various types of smart pointer differ. And it turns out that this lets you express your intentions in code quite precisely. Stay tuned, as this is what we see in the next episode of this series.
 
 #### [std::unique_ptr](https://en.cppreference.com/w/cpp/memory/unique_ptr)
 
