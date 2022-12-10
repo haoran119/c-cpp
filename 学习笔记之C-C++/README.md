@@ -3940,6 +3940,66 @@ is_base_of_v<int, int> : false
     * std::unique_ptr
         * The semantics of std::unique_ptr is that it is the sole owner of a memory resource. A std::unique_ptr will hold a pointer and delete it in its destructor (unless you customize this, which is the topic of another post).
         * Note that std::unique_ptr is the preferred pointer to return from a factory function. Indeed, on the top of taking care of handling the memory, std::unique_ptr wraps a normal pointer and is therefore compatible with polymorphism.
+        * But since you are the owner, you are allowed to safely modify the pointed to object, and the rest of the design should take this into account. If you don’t want this to happen, the way to express it is by using a unique_ptr to const:
+        ```c++
+        std::unique_ptr<const House> buildAHouse(); // for some reason, I don't want you
+                                                    // to modify the house you're being passed
+        ```
+        * To ensure that there is only one unique_ptr that owns a memory resource, std::unique_ptr cannot be copied. The ownership can however be transferred from one unique_ptr to another (which is how you can pass them or return them from a function) by moving a unique_ptr into another one.
+        * A move can be achieved by returning an std::unique_ptr by value from a function, or explicitly in code:
+        ```c++
+        std::unique_ptr<int> p1 = std::make_unique(42);
+        std::unique_ptr<int> p2 = move(p1); // now p2 hold the resource
+                                               and p1 no longer hold anything
+        ```
+    * Raw pointers
+        * For now I only want to focus on what raw pointers and references express in code: `raw pointers and references represent access to an object, but not ownership`. In fact, this is the default way of passing objects to functions and methods:
+        * `void renderHouse(House const& house);`
+        * This is particularly relevant to note when you hold an object with a unique_ptr and want to pass it to an interface. You don’t pass the unique_ptr, nor a reference to it, but rather a reference to the pointed to object:
+        ```c++
+        std::unique_ptr<House> house = buildAHouse();
+        renderHouse(*house);
+        ```
+    * std::shared_ptr
+        * `A single memory resource can be held by several std::shared_ptrs at the same time`. The shared_ptrs internally maintain a count of how many of them there are holding the same resource, and when the last one is destroyed, it deletes the memory resource.
+        * Therefore std::shared_ptr allows copies, but with a reference-counting mechanism to make sure that every resource is deleted once and only once.
+        * At first glance, std::shared_ptr looks like the panacea for memory management, as it can be passed around and still maintain memory safety.
+        * But std::shared_ptr should not be used by default, for several reasons:
+            * Having several simultaneous holders of a resource makes for a more complex system than with one unique holder, like with std::unique_ptr. Even though an std::unique_ptr doesn’t prevent from accessing and modifying its resource, it sends a message that it is the priviledged owner of a resource. For this reason you’d expect it to centralize the control of the resource, at least to some degree.
+            * Having several simultaneous holders of a resource makes thread-safety harder,
+            * It makes the code counter-intuitive when an object is not shared in terms of the domain and still appears as “shared” in the code for a technical reason,
+            * It can incur a performance cost, both in time and memory, because of the bookkeeping related to the reference-counting.
+        * One good case for using std::shared_ptr though is when objects are `shared in the domain`. Using shared pointers then reflects it in an expressive way. Typically, the nodes of a graphs are well represented as shared pointers, because several nodes can hold a reference to one other node.
+    * std::weak_ptr
+        * std::weak_ptrs can hold a reference to a shared object along with other std::shared_ptrs, but they don’t increment the reference count. This means that if no more std::shared_ptr are holding an object, this object will be deleted even if some weak pointers still point to it.
+        * For this reason, a weak pointer needs to check if the object it points to is still alive. To do this, it has to be copied into to a std::shared_ptr:
+        ```c++
+        void useMyWeakPointer(std::weak_ptr<int> wp)
+        {
+            if (std::shared_ptr<int> sp = wp.lock())
+            {
+                // the resource is still here and can be used
+            }
+            else
+            {
+                // the resource is no longer here
+            }
+        }
+        ```
+        * A typical use case for this is about `breaking shared_ptr circular references`. Consider the following code:
+        ```c++
+        struct House
+        {
+            std::shared_ptr<House> neighbour;
+        };
+
+        std::shared_ptr<House> house1 = std::make_shared<House>();
+        std::shared_ptr<House> house2 = std::make_shared<House>();;
+        house1->neighbour = house2;
+        house2->neighbour = house1;
+        ```
+        * None of the houses ends up being destroyed at the end of this code, because the shared_ptrs points into one another. But if one is a weak_ptr instead, there is no longer a circular reference.
+        * Another use case pointed out by this answer on Stack Overflow is that weak_ptr can be used to `maintain a cache`. The data may or may not have been cleared from the cache, and the weak_ptr references this data.
 
 #### [std::unique_ptr](https://en.cppreference.com/w/cpp/memory/unique_ptr)
 
