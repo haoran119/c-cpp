@@ -4121,6 +4121,10 @@ is_base_of_v<int, int> : false
 
         Fridge::~Fridge() = default;
         ```
+* [Polymorphic clones in modern C++ - Fluent C++](https://www.fluentcpp.com/2017/09/08/make-polymorphic-copy-modern-cpp/)
+    * How to copy an object that is accessible only by an interface that it implements?
+    * https://github.com/haoran119/c-cpp/blob/main/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93%E4%B9%8BC-C++/README.md#deep-copy--shallow-copy
+* [How to Return a Smart Pointer AND Use Covariance - Fluent C++](https://www.fluentcpp.com/2017/09/12/how-to-return-a-smart-pointer-and-use-covariance/)
 
 #### [std::unique_ptr](https://en.cppreference.com/w/cpp/memory/unique_ptr)
 
