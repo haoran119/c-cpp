@@ -3936,6 +3936,10 @@ is_base_of_v<int, int> : false
         ```
         * Indeed, it deletes the underlying object twice, leading to undefined behaviour.
         * How to deal with copy then? This is a feature on which the various types of smart pointer differ. And it turns out that this lets you express your intentions in code quite precisely. Stay tuned, as this is what we see in the next episode of this series.
+* [unique_ptr, shared_ptr, weak_ptr, scoped_ptr, raw pointers - Knowing your smart pointers (2/7) - Fluent C++](https://www.fluentcpp.com/2017/08/25/knowing-your-smart-pointers/)
+    * std::unique_ptr
+        * The semantics of std::unique_ptr is that it is the sole owner of a memory resource. A std::unique_ptr will hold a pointer and delete it in its destructor (unless you customize this, which is the topic of another post).
+        * Note that std::unique_ptr is the preferred pointer to return from a factory function. Indeed, on the top of taking care of handling the memory, std::unique_ptr wraps a normal pointer and is therefore compatible with polymorphism.
 
 #### [std::unique_ptr](https://en.cppreference.com/w/cpp/memory/unique_ptr)
 
