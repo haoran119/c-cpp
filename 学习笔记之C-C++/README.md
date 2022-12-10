@@ -2555,6 +2555,14 @@ int main()
 
 #### Special member functions
 
+* Some member functions are special: under certain circumstances they are defined by the compiler even if not defined by the user. They are:
+    * Default constructor
+    * Copy constructor
+    * Move constructor (since C++11)
+    * Copy assignment operator
+    * Move assignment operator (since C++11)
+    * Destructor (until C++20)Prospective destructor (since C++20)
+* Special member functions along with the comparison operators (since C++20) are the only functions that can be defaulted, that is, defined using `= default` instead of the function body (see their pages for details).
 * [Default constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/default_constructor)
 	* A default constructor is a constructor which can be called with no arguments (either defined with an empty parameter list, or with default arguments provided for every parameter). A type with a public default constructor is DefaultConstructible.
 	* Explanation
