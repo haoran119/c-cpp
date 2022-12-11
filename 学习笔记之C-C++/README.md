@@ -1030,6 +1030,64 @@ Alignment of
 * Used where the dynamic type of a polymorphic object must be known and for static type identification.
 * There is no guarantee that the same std::type_info instance will be referred to by all evaluations of the typeid expression on the same type, although they would compare equal, std::type_info::hash_code of those type_info objects would be identical, as would be their std::type_index.
 
+##### [operator overloading](https://en.cppreference.com/w/cpp/language/operators)
+
+* Customizes the C++ operators for operands of user-defined types.
+* Canonical implementations
+    * Besides the restrictions above, the language puts no other constraints on what the overloaded operators do, or on the return type (it does not participate in overload resolution), but in general, overloaded operators are expected to behave as similar as possible to the built-in operators: operator+ is expected to add, rather than multiply its arguments, operator= is expected to assign, etc. The related operators are expected to behave similarly (operator+ and operator+= do the same addition-like operation). The return types are limited by the expressions in which the operator is expected to be used: for example, assignment operators return by reference to make it possible to write a = b = c = d, because the built-in operators allow that.
+    * Commonly overloaded operators have the following typical, canonical forms:[1]
+    * Assignment operator
+        * The assignment operator (operator=) has special properties: see copy assignment and move assignment for details.
+        * The canonical copy-assignment operator is expected to [perform no action on self-assignment](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c62-make-copy-assignment-safe-for-self-assignment), and to return the lhs by reference:
+        ```c++
+        // copy assignment
+        T& operator=(const T& other)
+        {
+            // Guard self assignment
+            if (this == &other)
+                return *this;
+
+            // assume *this manages a reusable resource, such as a heap-allocated buffer mArray
+            if (size != other.size)           // resource in *this cannot be reused
+            {
+                delete[] mArray;              // release resource in *this
+                mArray = nullptr;
+                size = 0;                     // preserve invariants in case next line throws
+                mArray = new int[other.size]; // allocate resource in *this
+                size = other.size;
+            } 
+
+            std::copy(other.mArray, other.mArray + other.size, mArray);
+            return *this;
+        }
+        ```
+        * The canonical move assignment is expected to [leave the moved-from object in valid state](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c64-a-move-operation-should-move-and-leave-its-source-in-a-valid-state) (that is, a state with class invariants intact), and either [do nothing](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c65-make-move-assignment-safe-for-self-assignment) or at least leave the object in a valid state on self-assignment, and return the lhs by reference to non-const, and be noexcept:
+        ```c++
+        // move assignment
+        T& operator=(T&& other) noexcept
+        {
+            // Guard self assignment
+            if (this == &other)
+                return *this; // delete[]/size=0 would also be ok
+
+            delete[] mArray;                               // release resource in *this
+            mArray = std::exchange(other.mArray, nullptr); // leave other in valid state
+            size = std::exchange(other.size, 0);
+            return *this;
+        }
+        ```
+        * In those situations where copy assignment `cannot benefit from resource reuse` (it does not manage a heap-allocated array and does not have a (possibly transitive) member that does, such as a member std::vector or std::string), there is a popular convenient shorthand: `the copy-and-swap assignment operator`, which takes its parameter by value (thus working as both copy- and move-assignment depending on the value category of the argument), swaps with the parameter, and lets the destructor clean it up.
+        ```c++
+        // copy assignment (copy-and-swap idiom)
+        T& T::operator=(T other) noexcept // call copy or move constructor to construct other
+        {
+            std::swap(size, other.size); // exchange resources between *this and other
+            std::swap(mArray, other.mArray);
+            return *this;
+        } // destructor of other is called to release the resources formerly managed by *this
+        ```
+        * This form automatically provides [strong exception guarantee](https://en.cppreference.com/w/cpp/language/exceptions#Exception_safety), but prohibits resource reuse.
+
 #### [Conversions](https://en.cppreference.com/w/cpp/language/expressions#Conversions)
 
 * Type casting
@@ -2731,15 +2789,104 @@ int main()
     * Move assignment operator (since C++11)
     * Destructor (until C++20)Prospective destructor (since C++20)
 * Special member functions along with the comparison operators (since C++20) are the only functions that can be defaulted, that is, defined using `= default` instead of the function body (see their pages for details).
-* [Default constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/default_constructor)
-	* A default constructor is a constructor which can be called with no arguments (either defined with an empty parameter list, or with default arguments provided for every parameter). A type with a public default constructor is DefaultConstructible.
-	* Explanation
-		1) Declaration of a default constructor inside of class definition.
-		2) Definition of the constructor outside of class definition (the class must contain a declaration (1)). See constructors and member initializer lists for details on the constructor body.
-		3) Deleted default constructor: if it is selected by overload resolution, the program fails to compile.
-		4) Defaulted default constructor: the compiler will define the implicit default constructor even if other constructors are present.
-		5) Defaulted default constructor outside of class definition (the class must contain a declaration (1)). Such constructor is treated as user-provided (see below and value initialization).
-	* Default constructors are called during default initializations and value initializations.
+
+##### [Default constructors](https://en.cppreference.com/w/cpp/language/default_constructor)
+
+* A default constructor is a constructor which can be called with no arguments (either defined with an empty parameter list, or with default arguments provided for every parameter). A type with a public default constructor is DefaultConstructible.
+* Explanation
+    1) Declaration of a default constructor inside of class definition.
+    2) Definition of the constructor outside of class definition (the class must contain a declaration (1)). See constructors and member initializer lists for details on the constructor body.
+    3) Deleted default constructor: if it is selected by overload resolution, the program fails to compile.
+    4) Defaulted default constructor: the compiler will define the implicit default constructor even if other constructors are present.
+    5) Defaulted default constructor outside of class definition (the class must contain a declaration (1)). Such constructor is treated as user-provided (see below and value initialization).
+* Default constructors are called during default initializations and value initializations.
+* Implicitly-declared default constructor
+    * If no user-declared constructors of any kind are provided for a class type (struct, class, or union), the compiler will always declare a default constructor as an inline public member of its class.
+    * If some user-declared constructors are present, the user may still force the automatic generation of a default constructor by the compiler that would be implicitly-declared otherwise with the keyword default. (since C++11)
+    * The implicitly-declared (or defaulted on its first declaration) default constructor has an exception specification as described in dynamic exception specification (until C++17)exception specification (since C++17).
+* Implicitly-defined default constructor
+    * If the implicitly-declared default constructor is not defined as deleted, it is defined (that is, a function body is generated and compiled) by the compiler if odr-used or needed for constant evaluation (since C++11), and it has the same effect as a user-defined constructor with empty body and empty initializer list. That is, it calls the default constructors of the bases and of the non-static members of this class. Class types with an empty user-provided constructor may get treated differently than those with an implicitly-defined or defaulted default constructor during value initialization.
+    * If this satisfies the requirements of a constexpr constructor (until C++23)constexpr function (since C++23), the generated constructor is constexpr.
+    * If some user-defined constructors are present, the user may still force the automatic generation of a default constructor by the compiler that would be implicitly-declared otherwise with the keyword default. (since C++11)
+* Deleted implicitly-declared default constructor
+* Trivial default constructor
+* Eligible default constructor
+    * A default constructor is eligible if
+        * it is not deleted, and
+        * its associated constraints, if any, are satisfied, and
+        * no default constructor is more constrained than it. (since C++20)
+    * Triviality of eligible default constructors determines whether the class is an [implicit-lifetime type](https://en.cppreference.com/w/cpp/language/lifetime#Implicit-lifetime_types), and whether the class is a [trivial type](https://en.cppreference.com/w/cpp/named_req/TrivialType).
+```c++
+struct A
+{
+    int x;
+    A(int x = 1): x(x) {} // user-defined default constructor
+};
+ 
+struct B: A
+{
+    // B::B() is implicitly-defined, calls A::A()
+};
+ 
+struct C
+{
+    A a;
+    // C::C() is implicitly-defined, calls A::A()
+};
+ 
+struct D: A
+{
+    D(int y): A(y) {}
+    // D::D() is not declared because another constructor exists
+};
+ 
+struct E: A
+{
+    E(int y): A(y) {}
+    E() = default; // explicitly defaulted, calls A::A()
+};
+ 
+struct F
+{
+    int& ref; // reference member
+    const int c; // const member
+    // F::F() is implicitly defined as deleted
+};
+ 
+// user declared copy constructor (either user-provided, deleted or defaulted)
+// prevents the implicit generation of a default constructor
+ 
+struct G
+{
+    G(const G&) {}
+    // G::G() is implicitly defined as deleted
+};
+ 
+struct H
+{
+    H(const H&) = delete;
+    // H::H() is implicitly defined as deleted
+};
+ 
+struct I
+{
+    I(const I&) = default;
+    // I::I() is implicitly defined as deleted
+};
+ 
+int main()
+{
+    A a;
+    B b;
+    C c;
+//  D d; // compile error
+    E e;
+//  F f; // compile error
+//  G g; // compile error
+//  H h; // compile error
+//  I i; // compile error
+}
+```
 * [C.49: Prefer initialization to assignment in constructors](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c49-prefer-initialization-to-assignment-in-constructors)
 	* `Reason` An initialization explicitly states that initialization, rather than assignment, is done and can be more elegant and efficient. Prevents “use before set” errors.
     ```c++
@@ -2750,27 +2897,35 @@ int main()
         // ...
     };
     ```
-* [Copy constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/copy_constructor)
-	* A copy constructor of class T is a non-template constructor whose first parameter is T&‍, const T&‍, volatile T&‍, or const volatile T&‍, and either there are no other parameters, or the rest of the parameters all have default values.
-* [Move constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/move_constructor)
-	* A move constructor of class T is a non-template constructor whose first parameter is T&&, const T&&, volatile T&&, or const volatile T&&, and either there are no other parameters, or the rest of the parameters all have default values.
-	* [std::exchange - cppreference.com](https://en.cppreference.com/w/cpp/utility/exchange)
-		* Replaces the value of obj with new_value and returns the old value of obj.
-* [operator overloading - cppreference.com](https://en.cppreference.com/w/cpp/language/operators#Assignment_operator)
-* [Copy assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/copy_assignment)
-	* A copy assignment operator of class T is a non-template non-static member function with the name operator= that takes exactly one parameter of type T, T&, const T&, volatile T&, or const volatile T&. For a type to be CopyAssignable, it must have a public copy assignment operator.
-* [Move assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/move_assignment)
-	* A move assignment operator of class T is a non-template non-static member function with the name operator= that takes exactly one parameter of type T&&, const T&&, volatile T&&, or const volatile T&&.
-	* Syntax
-		* class-name & class-name :: operator= ( class-name && )	(1)	(since C++11)
-		* class-name & class-name :: operator= ( class-name && ) = default;	(2)	(since C++11)
-		* class-name & class-name :: operator= ( class-name && ) = delete;	(3)	(since C++11)
-	* Explanation
-		* 1) Typical declaration of a move assignment operator.
-		* 2) Forcing a move assignment operator to be generated by the compiler.
-		* 3) Avoiding implicit move assignment.
-		* The move assignment operator is called whenever it is selected by overload resolution, e.g. when an object appears on the left-hand side of an assignment expression, where the right-hand side is an rvalue of the same or implicitly convertible type.
-		* Move assignment operators typically "steal" the resources held by the argument (e.g. pointers to dynamically-allocated objects, file descriptors, TCP sockets, I/O streams, running threads, etc.), rather than make copies of them, and leave the argument in some valid but otherwise indeterminate state. For example, move-assigning from a std::string or from a std::vector may result in the argument being left empty. This is not, however, a guarantee. A move assignment is less, not more restrictively defined than ordinary assignment; where ordinary assignment must leave two copies of data at completion, move assignment is required to leave only one.
+
+##### [Copy constructors](https://en.cppreference.com/w/cpp/language/copy_constructor)
+
+* A copy constructor of class T is a non-template constructor whose first parameter is T&‍, const T&‍, volatile T&‍, or const volatile T&‍, and either there are no other parameters, or the rest of the parameters all have default values.
+
+##### [Move constructors](https://en.cppreference.com/w/cpp/language/move_constructor)
+
+* A move constructor of class T is a non-template constructor whose first parameter is T&&, const T&&, volatile T&&, or const volatile T&&, and either there are no other parameters, or the rest of the parameters all have default values.
+* [std::exchange - cppreference.com](https://en.cppreference.com/w/cpp/utility/exchange)
+    * Replaces the value of obj with new_value and returns the old value of obj.
+
+##### [Copy assignment operator](https://en.cppreference.com/w/cpp/language/copy_assignment)
+
+* A copy assignment operator of class T is a non-template non-static member function with the name operator= that takes exactly one parameter of type T, T&, const T&, volatile T&, or const volatile T&. For a type to be CopyAssignable, it must have a public copy assignment operator.
+
+
+##### [Move assignment operator](https://en.cppreference.com/w/cpp/language/move_assignment)
+
+* A move assignment operator of class T is a non-template non-static member function with the name operator= that takes exactly one parameter of type T&&, const T&&, volatile T&&, or const volatile T&&.
+* Syntax
+    * class-name & class-name :: operator= ( class-name && )	(1)	(since C++11)
+    * class-name & class-name :: operator= ( class-name && ) = default;	(2)	(since C++11)
+    * class-name & class-name :: operator= ( class-name && ) = delete;	(3)	(since C++11)
+* Explanation
+    * 1) Typical declaration of a move assignment operator.
+    * 2) Forcing a move assignment operator to be generated by the compiler.
+    * 3) Avoiding implicit move assignment.
+    * The move assignment operator is called whenever it is selected by overload resolution, e.g. when an object appears on the left-hand side of an assignment expression, where the right-hand side is an rvalue of the same or implicitly convertible type.
+    * Move assignment operators typically "steal" the resources held by the argument (e.g. pointers to dynamically-allocated objects, file descriptors, TCP sockets, I/O streams, running threads, etc.), rather than make copies of them, and leave the argument in some valid but otherwise indeterminate state. For example, move-assigning from a std::string or from a std::vector may result in the argument being left empty. This is not, however, a guarantee. A move assignment is less, not more restrictively defined than ordinary assignment; where ordinary assignment must leave two copies of data at completion, move assignment is required to leave only one.
 ```c++
 #include <string>
 #include <iostream>
