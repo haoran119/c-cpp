@@ -2789,6 +2789,70 @@ int main()
     * Move assignment operator (since C++11)
     * Destructor (until C++20)Prospective destructor (since C++20)
 * Special member functions along with the comparison operators (since C++20) are the only functions that can be defaulted, that is, defined using `= default` instead of the function body (see their pages for details).
+* [C++中 =defaule 和 =delete 使用](https://mp.weixin.qq.com/s/XRuLVEF1Yhsmm52t-l010w)
+	* C++的类有四类特殊成员函数，它们分别是：默认构造函数、析构函数、拷贝构造函数、拷贝赋值运算符。如果实际编码时没有显示定义，那么编译器将会默认生成这四类成员函数。使用=default和=delete可以控制编译器默认函数体的使用。
+	* 1 =default
+		* C++11新增了=default标识，编译器看到后，会生成默认的执行效率更高的函数定义体，同时会减轻编码时的工作量。当然，这里会引入一个问题，既然编译器会默认生成构造函数，那么=default的优势在哪里呢？
+		* =default就给我们提供了这样一个功能，加上之后，编译器就会给我们默认生成函数体，减轻工作量。上面的类就这可以这些写：
+        ```c++
+        class Test{
+        public:
+            Test(int a):x(a){};
+            Test()=default;
+        private:
+            int x;
+        };
+        ```
+		* 当然，=default不但可以在类成员内部添加也可以在类之外添加，但是使用=default时，必须遵守一个准则：default 函数特性只能用于类的特殊成员函数或者函数没有默认参数。=default写在类之外的方式如下：
+        ```c++
+        class Test{
+        public:
+            Test(int a):x(a){};
+            Test()=default;
+            Test(const Test& ts);
+            Test& operator = (const Test& ts);
+        private:
+            int x;
+        };
+        Test::Test(const Test& ts) =default;
+        Test& Test::operator = (const Test& ts) =default;
+        ```
+		* 上面的代码中演示了=default在类成员外部使用的场景。但是类中确没有析构函数，编码时，如果涉及到类的继承和派生，尤其是通过基类指针指向了派生类对象，当调用delete删除派生对象时，如果基类没有显示定义析构函数，编译器会为基类默认生成析构函数，基类对象会被正常释放，但是也会产生一个问题，派生类没有正确释放，可能会产生内存泄露等问题。正确解决这种问题的做法是在基类中显示定义一个虚析构函数。这种方法在C++11之前是我们解决这种问题经常使用的，但是C++11之后，可以使用=default，从而减轻我们的编码量，且编译器生成的代码效率更高。
+        ```c++
+        class Base{
+        public:
+            virtual ~Base()=default;
+        private:
+            int x;
+        };
+        class A : public Base{
+        private:
+            int y;
+        };
+        int main ()
+        {
+          Base *pBase = new A;
+          delete pBase;
+          return 0;
+        }
+        ```
+	* 2 =delete
+		* C++11之前，delete是和new配对使用的，释放程序在堆上开辟得空间，将资源返还给操作系统，C++11之后，delete又多了一个含义既：禁用成员函数的使用。使用方法为：在函数名称后面加上=delete。
+		* 如果不想在传入非整型的数据时编译通过，就可以使用=delete来抑制这种问题的产生。如使用=delete解决上面的问题
+        ```c++
+        class Test { 
+        public: 
+            Test(int a):x(a) {std::cout<<x<<std::endl;} 
+            Test(double)=delete;
+        private:
+            int x;
+        }; 
+        int main() { 
+            Test test1(1); 
+            Test test2(1.1);  
+            return 0;
+        ```
+		* 如上可知，使用=delete后，可以使我们禁用一些不需要编译器生成的默认函数，还可以避免因为数据类型原因导致的错误的函数调用。
 
 ##### [Default constructors](https://en.cppreference.com/w/cpp/language/default_constructor)
 
@@ -2901,17 +2965,225 @@ int main()
 ##### [Copy constructors](https://en.cppreference.com/w/cpp/language/copy_constructor)
 
 * A copy constructor of class T is a non-template constructor whose first parameter is T&‍, const T&‍, volatile T&‍, or const volatile T&‍, and either there are no other parameters, or the rest of the parameters all have default values.
+* Notes
+    * In many situations, copy constructors are optimized out even if they would produce observable side-effects, see [copy elision](https://en.cppreference.com/w/cpp/language/copy_elision).
+```c++
+struct A
+{
+    int n;
+    A(int n = 1) : n(n) {}
+    A(const A& a) : n(a.n) {} // user-defined copy constructor
+};
+ 
+struct B : A
+{
+    // implicit default constructor B::B()
+    // implicit copy constructor B::B(const B&)
+};
+ 
+struct C : B
+{
+    C() : B() {}
+private:
+    C(const C&); // non-copyable, C++98 style
+};
+ 
+int main()
+{
+    A a1(7);
+    A a2(a1); // calls the copy constructor
+ 
+    B b;
+    B b2 = b;
+    A a3 = b; // conversion to A& and copy constructor
+ 
+    volatile A va(10);
+    // A a4 = va; // compile error
+ 
+    C c;
+    // C c2 = c; // compile error
+}
+```
 
 ##### [Move constructors](https://en.cppreference.com/w/cpp/language/move_constructor)
 
 * A move constructor of class T is a non-template constructor whose first parameter is T&&, const T&&, volatile T&&, or const volatile T&&, and either there are no other parameters, or the rest of the parameters all have default values.
-* [std::exchange - cppreference.com](https://en.cppreference.com/w/cpp/utility/exchange)
-    * Replaces the value of obj with new_value and returns the old value of obj.
+* Notes
+    * To make the strong exception guarantee possible, user-defined move constructors should not throw exceptions. For example, std::vector relies on std::move_if_noexcept to choose between move and copy when the elements need to be relocated.
+    * If both copy and move constructors are provided and no other constructors are viable, overload resolution selects the move constructor if the argument is an rvalue of the same type (an xvalue such as the result of std::move or a prvalue such as a nameless temporary (until C++17)), and selects the copy constructor if the argument is an lvalue (named object or a function/operator returning lvalue reference). If only the copy constructor is provided, all argument categories select it (as long as it takes a reference to const, since rvalues can bind to const references), which makes copying the fallback for moving, when moving is unavailable.
+    * A constructor is called a 'move constructor' when it takes an rvalue reference as a parameter. It is not obligated to move anything, the class is not required to have a resource to be moved and a 'move constructor' may not be able to move a resource as in the allowable (but maybe not sensible) case where the parameter is a const rvalue reference (const T&&).
+```c++
+#include <string>
+#include <iostream>
+#include <iomanip>
+#include <utility>
+ 
+struct A
+{
+    std::string s;
+    int k;
+ 
+    A() : s("test"), k(-1) {}
+    A(const A& o) : s(o.s), k(o.k) { std::cout << "move failed!\n"; }
+    A(A&& o) noexcept :
+        s(std::move(o.s)),       // explicit move of a member of class type
+        k(std::exchange(o.k, 0)) // explicit move of a member of non-class type
+    {}
+};
+ 
+A f(A a)
+{
+    return a;
+}
+ 
+struct B : A
+{
+    std::string s2;
+    int n;
+    // implicit move constructor B::(B&&)
+    // calls A's move constructor
+    // calls s2's move constructor
+    // and makes a bitwise copy of n
+};
+ 
+struct C : B
+{
+    ~C() {} // destructor prevents implicit move constructor C::(C&&)
+};
+ 
+struct D : B
+{
+    D() {}
+    ~D() {}           // destructor would prevent implicit move constructor D::(D&&)
+    D(D&&) = default; // forces a move constructor anyway
+};
+ 
+int main()
+{
+    std::cout << "Trying to move A\n";
+    A a1 = f(A()); // return by value move-constructs the target
+                   // from the function parameter
+ 
+    std::cout << "Before move, a1.s = " << std::quoted(a1.s)
+        << " a1.k = " << a1.k << '\n';
+ 
+    A a2 = std::move(a1); // move-constructs from xvalue
+    std::cout << "After move, a1.s = " << std::quoted(a1.s)
+        << " a1.k = " << a1.k << '\n';
+ 
+ 
+    std::cout << "\nTrying to move B\n";
+    B b1;
+ 
+    std::cout << "Before move, b1.s = " << std::quoted(b1.s) << "\n";
+ 
+    B b2 = std::move(b1); // calls implicit move constructor
+    std::cout << "After move, b1.s = " << std::quoted(b1.s) << "\n";
+ 
+ 
+    std::cout << "\nTrying to move C\n";
+    C c1;
+    C c2 = std::move(c1); // calls copy constructor
+ 
+    std::cout << "\nTrying to move D\n";
+    D d1;
+    D d2 = std::move(d1);
+}
+/*
+Trying to move A
+Before move, a1.s = "test" a1.k = -1
+After move, a1.s = "" a1.k = 0
+ 
+Trying to move B
+Before move, b1.s = "test"
+After move, b1.s = ""
+ 
+Trying to move C
+move failed!
+ 
+Trying to move D
+*/
+```
 
 ##### [Copy assignment operator](https://en.cppreference.com/w/cpp/language/copy_assignment)
 
 * A copy assignment operator of class T is a non-template non-static member function with the name operator= that takes exactly one parameter of type T, T&, const T&, volatile T&, or const volatile T&. For a type to be CopyAssignable, it must have a public copy assignment operator.
-
+* Notes
+    * If both copy and move assignment operators are provided, overload resolution selects the move assignment if the argument is an rvalue (either a prvalue such as a nameless temporary or an xvalue such as the result of std::move), and selects the copy assignment if the argument is an lvalue (named object or a function/operator returning lvalue reference). If only the copy assignment is provided, all argument categories select it (as long as it takes its argument by value or as reference to const, since rvalues can bind to const references), which makes copy assignment the fallback for move assignment, when move is unavailable.
+    * It is unspecified whether virtual base class subobjects that are accessible through more than one path in the inheritance lattice, are assigned more than once by the implicitly-defined copy assignment operator (same applies to move assignment).
+    * See assignment operator overloading for additional detail on the expected behavior of a user-defined copy-assignment operator.
+```c++
+#include <iostream>
+#include <memory>
+#include <string>
+#include <algorithm>
+ 
+struct A
+{
+    int n;
+    std::string s1;
+ 
+    A() = default;
+    A(A const&) = default;
+ 
+    // user-defined copy assignment (copy-and-swap idiom)
+    A& operator=(A other)
+    {
+        std::cout << "copy assignment of A\n";
+        std::swap(n, other.n);
+        std::swap(s1, other.s1);
+        return *this;
+    }
+};
+ 
+struct B : A
+{
+    std::string s2;
+    // implicitly-defined copy assignment
+};
+ 
+struct C
+{
+    std::unique_ptr<int[]> data;
+    std::size_t size;
+ 
+    // user-defined copy assignment (non copy-and-swap idiom)
+    // note: copy-and-swap would always reallocate resources
+    C& operator=(const C& other)
+    {
+        if (this != &other) // not a self-assignment
+        {
+            if (size != other.size) // resource cannot be reused
+            {
+                data.reset(new int[other.size]);
+                size = other.size;
+            }
+            std::copy(&other.data[0], &other.data[0] + size, &data[0]);
+        }
+        return *this;
+    }
+};
+ 
+int main()
+{
+    A a1, a2;
+    std::cout << "a1 = a2 calls ";
+    a1 = a2; // user-defined copy assignment
+ 
+    B b1, b2;
+    b2.s1 = "foo";
+    b2.s2 = "bar";
+    std::cout << "b1 = b2 calls ";
+    b1 = b2; // implicitly-defined copy assignment
+ 
+    std::cout << "b1.s1 = " << b1.s1 << "; b1.s2 = " << b1.s2 << '\n';
+}
+/*
+a1 = a2 calls copy assignment of A
+b1 = b2 calls copy assignment of A
+b1.s1 = foo; b1.s2 = bar
+*/
+```
 
 ##### [Move assignment operator](https://en.cppreference.com/w/cpp/language/move_assignment)
 
@@ -2926,6 +3198,10 @@ int main()
     * 3) Avoiding implicit move assignment.
     * The move assignment operator is called whenever it is selected by overload resolution, e.g. when an object appears on the left-hand side of an assignment expression, where the right-hand side is an rvalue of the same or implicitly convertible type.
     * Move assignment operators typically "steal" the resources held by the argument (e.g. pointers to dynamically-allocated objects, file descriptors, TCP sockets, I/O streams, running threads, etc.), rather than make copies of them, and leave the argument in some valid but otherwise indeterminate state. For example, move-assigning from a std::string or from a std::vector may result in the argument being left empty. This is not, however, a guarantee. A move assignment is less, not more restrictively defined than ordinary assignment; where ordinary assignment must leave two copies of data at completion, move assignment is required to leave only one.
+* Notes
+    * If both copy and move assignment operators are provided, overload resolution selects the move assignment if the argument is an rvalue (either a prvalue such as a nameless temporary or an xvalue such as the result of std::move), and selects the copy assignment if the argument is an lvalue (named object or a function/operator returning lvalue reference). If only the copy assignment is provided, all argument categories select it (as long as it takes its argument by value or as reference to const, since rvalues can bind to const references), which makes copy assignment the fallback for move assignment, when move is unavailable.
+    * It is unspecified whether virtual base class subobjects that are accessible through more than one path in the inheritance lattice, are assigned more than once by the implicitly-defined move assignment operator (same applies to copy assignment).
+    * See assignment operator overloading for additional detail on the expected behavior of a user-defined move-assignment operator.
 ```c++
 #include <string>
 #include <iostream>
@@ -3020,70 +3296,6 @@ Trying to move-assign D
 move assigned
 */
 ```
-* [C++中 =defaule 和 =delete 使用](https://mp.weixin.qq.com/s/XRuLVEF1Yhsmm52t-l010w)
-	* C++的类有四类特殊成员函数，它们分别是：默认构造函数、析构函数、拷贝构造函数、拷贝赋值运算符。如果实际编码时没有显示定义，那么编译器将会默认生成这四类成员函数。使用=default和=delete可以控制编译器默认函数体的使用。
-	* 1 =default
-		* C++11新增了=default标识，编译器看到后，会生成默认的执行效率更高的函数定义体，同时会减轻编码时的工作量。当然，这里会引入一个问题，既然编译器会默认生成构造函数，那么=default的优势在哪里呢？
-		* =default就给我们提供了这样一个功能，加上之后，编译器就会给我们默认生成函数体，减轻工作量。上面的类就这可以这些写：
-        ```c++
-        class Test{
-        public:
-            Test(int a):x(a){};
-            Test()=default;
-        private:
-            int x;
-        };
-        ```
-		* 当然，=default不但可以在类成员内部添加也可以在类之外添加，但是使用=default时，必须遵守一个准则：default 函数特性只能用于类的特殊成员函数或者函数没有默认参数。=default写在类之外的方式如下：
-        ```c++
-        class Test{
-        public:
-            Test(int a):x(a){};
-            Test()=default;
-            Test(const Test& ts);
-            Test& operator = (const Test& ts);
-        private:
-            int x;
-        };
-        Test::Test(const Test& ts) =default;
-        Test& Test::operator = (const Test& ts) =default;
-        ```
-		* 上面的代码中演示了=default在类成员外部使用的场景。但是类中确没有析构函数，编码时，如果涉及到类的继承和派生，尤其是通过基类指针指向了派生类对象，当调用delete删除派生对象时，如果基类没有显示定义析构函数，编译器会为基类默认生成析构函数，基类对象会被正常释放，但是也会产生一个问题，派生类没有正确释放，可能会产生内存泄露等问题。正确解决这种问题的做法是在基类中显示定义一个虚析构函数。这种方法在C++11之前是我们解决这种问题经常使用的，但是C++11之后，可以使用=default，从而减轻我们的编码量，且编译器生成的代码效率更高。
-        ```c++
-        class Base{
-        public:
-            virtual ~Base()=default;
-        private:
-            int x;
-        };
-        class A : public Base{
-        private:
-            int y;
-        };
-        int main ()
-        {
-          Base *pBase = new A;
-          delete pBase;
-          return 0;
-        }
-        ```
-	* 2 =delete
-		* C++11之前，delete是和new配对使用的，释放程序在堆上开辟得空间，将资源返还给操作系统，C++11之后，delete又多了一个含义既：禁用成员函数的使用。使用方法为：在函数名称后面加上=delete。
-		* 如果不想在传入非整型的数据时编译通过，就可以使用=delete来抑制这种问题的产生。如使用=delete解决上面的问题
-        ```c++
-        class Test { 
-        public: 
-            Test(int a):x(a) {std::cout<<x<<std::endl;} 
-            Test(double)=delete;
-        private:
-            int x;
-        }; 
-        int main() { 
-            Test test1(1); 
-            Test test2(1.1);  
-            return 0;
-        ```
-		* 如上可知，使用=delete后，可以使我们禁用一些不需要编译器生成的默认函数，还可以避免因为数据类型原因导致的错误的函数调用。
 
 #### Inheritance
 
@@ -5498,16 +5710,116 @@ Leaving...
 ### Swap and type operations
 
 * Defined in header \<utility>
-* [std::forward - cppreference.com](https://en.cppreference.com/w/cpp/utility/forward)
-	* forwards a function argument (function template)
-	* 1) Forwards lvalues as either lvalues or as rvalues, depending on T
-	* 2) Forwards rvalues as rvalues and prohibits forwarding of rvalues as lvalues
-* [std::move - cppreference.com](https://en.cppreference.com/w/cpp/utility/move)
-	* obtains an rvalue reference (function template)
-	* std::move is used to indicate that an object t may be "moved from", i.e. allowing the efficient transfer of resources from t to another object.
-	* In particular, std::move produces an [xvalue expression](https://en.cppreference.com/w/cpp/language/value_category) that identifies its argument t. It is exactly equivalent to a static_cast to an rvalue reference type.
-	* Return value
-		* `static_cast<typename std::remove_reference<T>::type&&>(t)`
+
+#### [std::exchange](https://en.cppreference.com/w/cpp/utility/exchange)
+    
+* replaces the argument with a new value and returns its previous value (function template)
+* Replaces the value of obj with new_value and returns the old value of obj.
+* Notes
+    * The std::exchange can be used when implementing move assignment operators and move constructors:
+    ```c++
+    struct S
+    {
+      int n;
+
+      S(S&& other) noexcept : n{std::exchange(other.n, 0)}
+      {}
+
+      S& operator=(S&& other) noexcept 
+      {
+        if(this != &other)
+            n = std::exchange(other.n, 0); // move n, while leaving zero in other.n
+        return *this;
+      }
+    };
+    ```
+```c++
+#include <iostream>
+#include <utility>
+#include <vector>
+#include <iterator>
+ 
+class stream
+{
+  public:
+ 
+   using flags_type = int;
+ 
+  public:
+ 
+    flags_type flags() const
+    { return flags_; }
+ 
+    // Replaces flags_ by newf, and returns the old value.
+    flags_type flags(flags_type newf)
+    { return std::exchange(flags_, newf); }
+ 
+  private:
+ 
+    flags_type flags_ = 0;
+};
+ 
+void f() { std::cout << "f()"; }
+ 
+int main()
+{
+   stream s;
+ 
+   std::cout << s.flags() << '\n';
+   std::cout << s.flags(12) << '\n';
+   std::cout << s.flags() << "\n\n";
+ 
+   std::vector<int> v;
+ 
+   // Since the second template parameter has a default value, it is possible
+   // to use a braced-init-list as second argument. The expression below
+   // is equivalent to std::exchange(v, std::vector<int>{1,2,3,4});
+ 
+   std::exchange(v, {1,2,3,4});
+ 
+   std::copy(begin(v),end(v), std::ostream_iterator<int>(std::cout,", "));
+ 
+   std::cout << "\n\n";
+ 
+   void (*fun)();
+ 
+   // the default value of template parameter also makes possible to use a
+   // normal function as second argument. The expression below is equivalent to
+   // std::exchange(fun, static_cast<void(*)()>(f))
+   std::exchange(fun,f);
+   fun();
+ 
+   std::cout << "\n\nFibonacci sequence: ";
+   for (int a{0}, b{1}; a < 100; a = std::exchange(b, a + b))
+       std::cout << a << ", ";
+   std::cout << "...\n";
+}
+/*
+0
+0
+12
+ 
+1, 2, 3, 4, 
+ 
+f()
+ 
+Fibonacci sequence: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, ...
+*/
+```
+
+#### [std::forward](https://en.cppreference.com/w/cpp/utility/forward)
+
+* forwards a function argument (function template)
+* 1) Forwards lvalues as either lvalues or as rvalues, depending on T
+* 2) Forwards rvalues as rvalues and prohibits forwarding of rvalues as lvalues
+
+#### [std::move](https://en.cppreference.com/w/cpp/utility/move)
+	
+* obtains an rvalue reference (function template)
+* std::move is used to indicate that an object t may be "moved from", i.e. allowing the efficient transfer of resources from t to another object.
+* In particular, std::move produces an [xvalue expression](https://en.cppreference.com/w/cpp/language/value_category) that identifies its argument t. It is exactly equivalent to a static_cast to an rvalue reference type.
+* Return value
+    * `static_cast<typename std::remove_reference<T>::type&&>(t)`
 ```c++
 #include <iomanip>
 #include <iostream>
@@ -5676,10 +5988,12 @@ int main()
     return 0;
 }
 ```
-* [std::as_const - cppreference.com](https://en.cppreference.com/w/cpp/utility/as_const)
-    * obtains a reference to const to its argument (function template)
-    * 1) Forms lvalue reference to const type of t.
-    * 2) const rvalue reference overload is deleted to disallow rvalue arguments.
+
+#### [std::as_const - cppreference.com](https://en.cppreference.com/w/cpp/utility/as_const)
+    
+* obtains a reference to const to its argument (function template)
+* 1) Forms lvalue reference to const type of t.
+* 2) const rvalue reference overload is deleted to disallow rvalue arguments.
 ```c++
 #include <string>
 #include <cassert>
