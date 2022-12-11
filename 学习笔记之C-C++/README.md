@@ -971,6 +971,59 @@ int main(){
 		* There’s no danger of allocation failure since the memory has already been allocated, and constructing an object on a pre-allocated buffer takes less time.
 		* This feature becomes useful while working in an environment with limited resources.
 
+##### [alignof operator](https://en.cppreference.com/w/cpp/language/alignof)
+
+* Queries alignment requirements of a type.
+* Syntax
+    * `alignof( type-id )`
+    * Returns a value of type std::size_t.
+* Explanation
+    * Returns the alignment, in bytes, required for any instance of the type indicated by type-id, which is either complete object type, an array type whose element type is complete, or a reference type to one of those types.
+    * If the type is reference type, the operator returns the alignment of referenced type; if the type is array type, alignment requirement of the element type is returned.
+```c++
+#include <iostream>
+ 
+struct Foo
+{
+    int   i;
+    float f;
+    char  c;
+};
+ 
+// Note: `alignas(alignof(long double))` below can be simplified to simply 
+// `alignas(long double)` if desired.
+struct alignas(alignof(long double)) Foo2
+{
+    // put your definition here
+}; 
+ 
+struct Empty {};
+ 
+struct alignas(64) Empty64 {};
+ 
+int main()
+{
+    std::cout << "Alignment of"  "\n"
+        "- char            : " << alignof(char)    << "\n"
+        "- pointer         : " << alignof(int*)    << "\n"
+        "- class Foo       : " << alignof(Foo)     << "\n"
+        "- class Foo2      : " << alignof(Foo2)    << "\n"
+        "- empty class     : " << alignof(Empty)   << "\n"
+        "- empty class\n"
+        "  with alignas(64): " << alignof(Empty64) << "\n";
+}
+/*
+Alignment of
+- char            : 1
+- pointer         : 8
+- class Foo       : 4
+- class Foo2      : 16
+- empty class     : 1
+- empty class
+  with alignas(64): 64
+*/
+```
+
 ##### [typeid operator](https://en.cppreference.com/w/cpp/language/typeid)
 
 * Queries information of a type.
