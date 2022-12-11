@@ -1660,6 +1660,67 @@ blue
 * For functions, specifies that the return type will be deduced from its return statements. (since C++14)
 * For non-type template parameters, specifies that the type will be deduced from the argument. (since C++17)
 
+##### [alignas specifier](https://en.cppreference.com/w/cpp/language/alignas)
+
+* Specifies the [alignment requirement](https://en.cppreference.com/w/cpp/language/object#Alignment) of a type or an object.
+* Syntax
+    * `alignas( expression )`
+    * `alignas( type-id )`
+    * `alignas( pack ... )`
+    * 1) expression must be an integral constant expression that evaluates to zero, or to a valid value for an alignment or extended alignment.
+    * 2) Equivalent to alignas(alignof(type-id))
+    * 3) Equivalent to multiple alignas specifiers applied to the same declaration, one for each member of the parameter pack, which can be either type or non-type parameter pack.
+```c++
+// every object of type struct_float will be aligned to alignof(float) boundary
+// (usually 4):
+struct alignas(float) struct_float
+{
+    // your definition here
+};
+ 
+// every object of type sse_t will be aligned to 32-byte boundary:
+struct alignas(32) sse_t
+{
+    float sse_data[4];
+};
+ 
+// the array "cacheline" will be aligned to 64-byte boundary:
+alignas(64) char cacheline[64];
+ 
+ 
+#include <iostream>
+int main()
+{
+    struct default_aligned { float data[4]; } a, b, c;
+    sse_t x, y, z;
+ 
+    std::cout
+        << "alignof(struct_float) = " << alignof(struct_float) << '\n'
+        << "sizeof(sse_t) = " << sizeof(sse_t) << '\n'
+        << "alignof(sse_t) = " << alignof(sse_t) << '\n'
+        << "alignof(cacheline) = " << alignof(alignas(64) char[64]) << '\n'
+        << std::hex << std::showbase
+        << "&a: " << &a << '\n'
+        << "&b: " << &b << '\n'
+        << "&c: " << &c << '\n'
+        << "&x: " << &x << '\n'
+        << "&y: " << &y << '\n'
+        << "&z: " << &z << '\n';
+}
+/*
+alignof(struct_float) = 4
+sizeof(sse_t) = 32
+alignof(sse_t) = 32
+alignof(cacheline) = 64
+&a: 0x7fffcec89930
+&b: 0x7fffcec89940
+&c: 0x7fffcec89950
+&x: 0x7fffcec89960
+&y: 0x7fffcec89980
+&z: 0x7fffcec899a0
+*/
+```
+
 ##### [cv (const and volatile) type qualifiers](https://en.cppreference.com/w/cpp/language/cv)
 
 * Appear in any type specifier, including decl-specifier-seq of declaration grammar, to specify constness or volatility of the object being declared or of the type being named.
