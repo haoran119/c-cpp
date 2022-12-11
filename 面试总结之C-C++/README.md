@@ -393,6 +393,39 @@ Required size of memory|calculated manually|caculated by compiler|caculated by c
     * 参数区别：隐藏函数和被隐藏函数参数列表可以相同，也可以不同，但函数名一定相同；当参数不同时，无论基类中的函数是否被 virtual 修饰，基类函数都是被隐藏，而不是重写。
 * C++虚拟机制
   * 用来实现多态
+* [C++ Public, Protected and Private Inheritance](https://www.programiz.com/cpp-programming/public-protected-private-inheritance)
+    * `public` inheritance makes `public` members of the base class `public` in the derived class, and the `protected` members of the base class remain `protected` in the derived class.
+    * `protected` inheritance makes the `public` and `protected` members of the base class `protected` in the derived class.
+    * `private` inheritance makes the `public` and `protected` members of the base class `private` in the derived class.
+    * Note: `private` members of the base class are `inaccessible` to the derived class.
+```c++
+class Base {
+  public:
+    int x;
+  protected:
+    int y;
+  private:
+    int z;
+};
+
+class PublicDerived: public Base {
+  // x is public
+  // y is protected
+  // z is not accessible from PublicDerived
+};
+
+class ProtectedDerived: protected Base {
+  // x is protected
+  // y is protected
+  // z is not accessible from ProtectedDerived
+};
+
+class PrivateDerived: private Base {
+  // x is private
+  // y is private
+  // z is not accessible from PrivateDerived
+};
+```
 
 ### 多重继承
 
