@@ -511,6 +511,60 @@ In programming contests, people do focus more on finding the algorithm to solve 
 	* 原问题：什么指令集支持原子操作？其原理是什么？ 如果考虑到全部的指令集，问题太大了，这里简化下。以X86和ARM为例。
 	* 原子操作是不可分割的操作，在执行完毕时它不会被任何事件中断。在单处理器系统(UniProcessor，简称 UP)中，能够在单条指令中完成的操作都可以认为是原子操作，因为中断只能发生在指令与指令之间。
 
+#### [Object](https://en.cppreference.com/w/cpp/language/object)
+
+* C++ programs create, destroy, refer to, access, and manipulate objects.
+* An object, in C++, has
+    * size (can be determined with sizeof);
+    * alignment requirement (can be determined with alignof);
+    * storage duration (automatic, static, dynamic, thread-local);
+    * lifetime (bounded by storage duration or temporary);
+    * type;
+    * value (which may be indeterminate, e.g. for default-initialized non-class types);
+    * optionally, a name.
+* The following entities are not objects: value, reference, function, enumerator, type, non-static class member, template, class or function template specialization, namespace, parameter pack, and this.
+* A variable is an object or a reference that is not a non-static data member, that is introduced by a declaration.
+
+##### [Alignment](https://en.cppreference.com/w/cpp/language/object#Alignment)
+
+* Every object type has the property called alignment requirement, which is an integer value (of type std::size_t, always a power of 2) representing the number of bytes between successive addresses at which objects of this type can be allocated.
+* The alignment requirement of a type can be queried with alignof or std::alignment_of. The pointer alignment function std::align can be used to obtain a suitably-aligned pointer within some buffer, and std::aligned_storage can be used to obtain suitably-aligned storage. (since C++11)
+* Each object type imposes its alignment requirement on every object of that type; stricter alignment (with larger alignment requirement) can be requested using alignas (since C++11).
+* In order to satisfy alignment requirements of all non-static members of a class, padding bits may be inserted after some of its members.
+```c++
+#include <iostream>
+ 
+// objects of type S can be allocated at any address
+// because both S.a and S.b can be allocated at any address
+struct S
+{
+    char a; // size: 1, alignment: 1
+    char b; // size: 1, alignment: 1
+}; // size: 2, alignment: 1
+ 
+// objects of type X must be allocated at 4-byte boundaries
+// because X.n must be allocated at 4-byte boundaries
+// because int's alignment requirement is (usually) 4
+struct X
+{
+    int n;  // size: 4, alignment: 4
+    char c; // size: 1, alignment: 1
+    // three bytes of padding bits
+}; // size: 8, alignment: 4 
+ 
+int main()
+{
+    std::cout << "sizeof(S) = " << sizeof(S)
+              << " alignof(S) = " << alignof(S) << '\n';
+    std::cout << "sizeof(X) = " << sizeof(X)
+              << " alignof(X) = " << alignof(X) << '\n';
+}
+/*
+sizeof(S) = 2 alignof(S) = 1
+sizeof(X) = 8 alignof(X) = 4
+*/
+```
+
 ### [Keywords](https://en.cppreference.com/w/cpp/keyword)
 
 #### [C++ keywords: auto](https://en.cppreference.com/w/cpp/keyword/auto)
