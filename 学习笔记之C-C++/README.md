@@ -5989,7 +5989,7 @@ int main()
 }
 ```
 
-#### [std::as_const - cppreference.com](https://en.cppreference.com/w/cpp/utility/as_const)
+#### [std::as_const](https://en.cppreference.com/w/cpp/utility/as_const)
     
 * obtains a reference to const to its argument (function template)
 * 1) Forms lvalue reference to const type of t.
