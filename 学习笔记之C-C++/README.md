@@ -9775,7 +9775,7 @@ int main()
 * Threads begin execution immediately upon construction of the associated thread object (pending any OS scheduling delays), starting at the top-level function provided as a constructor argument. The return value of the top-level function is ignored and if it terminates by throwing an exception, std::terminate is called. The top-level function may communicate its return value or an exception to the caller via std::promise or by modifying shared variables (which may require synchronization, see std::mutex and std::atomic)
 * std::thread objects may also be in the state that does not represent any thread (after default construction, move from, detach, or join), and a thread of execution may not be associated with any thread objects (after detach).
 * No two std::thread objects may represent the same thread of execution; std::thread is not CopyConstructible or CopyAssignable, although it is MoveConstructible and MoveAssignable.
-* [std::thread::thread](https://en.cppreference.com/w/cpp/thread/thread/thread)
+* [`std::thread::thread`](https://en.cppreference.com/w/cpp/thread/thread/thread)
     * (constructor)
 	* constructs new thread object (public member function)
 	* 1) Creates new thread object which does not represent a thread.
@@ -9895,6 +9895,14 @@ bar: 10000
 		* no_such_process if the thread is not valid
 		* invalid_argument if joinable() is false
 * [Multithreading in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/multithreading-in-cpp/)
+    * std::thread is the thread class that represents a single thread in C++. To start a thread we simply need to create a new thread object and pass the executing code to be called (i.e, a callable object) into the constructor of the object. Once the object is created a new thread is launched which will execute the code specified in callable.
+    * A `callable` can be either of the three
+        * A function pointer
+        * A function object, e.g. A class with an overridden operator()
+        * A lambda expression
+    * After defining callable, pass it to the constructor.
+    * Waiting for threads to finish
+        * To wait for a thread use the std::thread::join() function. This function makes the current thread wait until the thread identified by *this has finished executing.
 ```c++
 // CPP program to demonstrate multithreading
 // using three different callables.
