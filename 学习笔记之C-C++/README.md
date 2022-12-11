@@ -9775,7 +9775,8 @@ int main()
 * Threads begin execution immediately upon construction of the associated thread object (pending any OS scheduling delays), starting at the top-level function provided as a constructor argument. The return value of the top-level function is ignored and if it terminates by throwing an exception, std::terminate is called. The top-level function may communicate its return value or an exception to the caller via std::promise or by modifying shared variables (which may require synchronization, see std::mutex and std::atomic)
 * std::thread objects may also be in the state that does not represent any thread (after default construction, move from, detach, or join), and a thread of execution may not be associated with any thread objects (after detach).
 * No two std::thread objects may represent the same thread of execution; std::thread is not CopyConstructible or CopyAssignable, although it is MoveConstructible and MoveAssignable.
-* [(constructor)](https://en.cppreference.com/w/cpp/thread/thread/thread)
+* [std::thread::thread](https://en.cppreference.com/w/cpp/thread/thread/thread)
+    * (constructor)
 	* constructs new thread object (public member function)
 	* 1) Creates new thread object which does not represent a thread.
 	* 2) Move constructor. Constructs the thread object to represent the thread of execution that was represented by other. After this call other no longer represents a thread of execution.
@@ -9788,9 +9789,16 @@ int main()
 	* The completion of the invocation of the constructor synchronizes-with (as defined in std::memory_order) the beginning of the invocation of the copy of f on the new thread of execution.
 	* 4) The copy constructor is deleted; threads are not copyable. No two std::thread objects may represent the same thread of execution.
 	* Parameters
-		* other	-	another thread object to construct this thread object with
-		* f	-	Callable object to execute in the new thread
+		* other	- another thread object to construct this thread object with
+		* f	- [Callable](https://en.cppreference.com/w/cpp/named_req/Callable) object to execute in the new thread
 		* args...	-	arguments to pass to the new function
+		* C++ named requirements: Callable
+            * A Callable type is a type for which the INVOKE operation (used by, e.g., std::function, std::bind, and std::thread::thread) is applicable.
+            * The INVOKE operation may be performed explicitly using the library function std::invoke. (since C++17)
+            * The INVOKE operation with explicitly specified return type (INVOKE\<R>) may be performed explicitly using the library function std::invoke_r. (since C++23)
+            * Notes
+                * For pointers to member functions and pointers to data members, t1 may be a `regular pointer` or an `object of class type that overloads operator*`, such as std::unique_ptr or std::shared_ptr.
+                * `Pointers to data members` are Callable, even though no function calls take place.
 	* Postconditions
 		* 1) get_id() equal to `std::thread::id()` (i.e. joinable is false)
 		* 2) other.get_id() equal to `std::thread::id()` and get_id() returns the value of other.get_id() prior to the start of construction
