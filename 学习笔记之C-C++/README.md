@@ -3327,8 +3327,6 @@ move assigned
 		* Flag default arguments on virtual functions if they differ between base and derived declarations.
 * [Abstract Classes - Polymorphism | HackerRank](https://www.hackerrank.com/challenges/abstract-classes-polymorphism/problem)
   * [LRU Cache Implementation - GeeksforGeeks](https://www.geeksforgeeks.org/lru-cache-implementation/)
-  * [list - C++ Reference](http://www.cplusplus.com/reference/list/list/?kw=list)
-  * [pair - C++ Reference](http://www.cplusplus.com/reference/utility/pair/?kw=pair)
 ```c++
 #include <bits/stdc++.h>
 using namespace std;
@@ -7464,6 +7462,71 @@ The first character is 'o'.
 
 ###### Modifiers
 
+* [std::list<T,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/container/list/erase)
+    * erases elements (public member function)
+    * `iterator erase( const_iterator pos ); (1) (since C++11)`
+    * `iterator erase( const_iterator first, const_iterator last ); (2) (since C++11)`
+    * Erases the specified elements from the container.
+        * 1) Removes the element at pos.
+        * 2) Removes the elements in the range \[first, last).
+    * References and iterators to the erased elements are invalidated. Other references and iterators are not affected.
+    * The iterator pos must be valid and dereferenceable. Thus the end() iterator (which is valid, but is not dereferenceable) cannot be used as a value for pos.
+    * The iterator first does not need to be dereferenceable if first == last: erasing an empty range is a no-op.
+    * Return value
+        * Iterator following the last removed element.
+        * If pos refers to the last element, then the end() iterator is returned.
+        * If last == end() prior to removal, then the updated end() iterator is returned.
+        * If \[first, last) is an empty range, then last is returned.
+    * Exceptions
+        * (none)
+    * Complexity
+        * 1) Constant.
+        * 2) Linear in the distance between first and last.
+```c++
+#include <list>
+#include <iostream>
+#include <iterator>
+ 
+void print_container(const std::list<int>& c) 
+{
+    for (int i : c)
+        std::cout << i << " ";
+    std::cout << '\n';
+}
+ 
+int main( )
+{
+    std::list<int> c{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    print_container(c);
+ 
+    c.erase(c.begin());
+    print_container(c);
+ 
+    std::list<int>::iterator range_begin = c.begin();
+    std::list<int>::iterator range_end = c.begin();
+    std::advance(range_begin,2);
+    std::advance(range_end,5);
+ 
+    c.erase(range_begin, range_end);
+    print_container(c);
+ 
+    // Erase all even numbers
+    for (std::list<int>::iterator it = c.begin(); it != c.end();)
+    {
+        if (*it % 2 == 0)
+            it = c.erase(it);
+        else
+            ++it;
+    }
+    print_container(c);
+}
+/*
+0 1 2 3 4 5 6 7 8 9
+1 2 3 4 5 6 7 8 9
+1 2 6 7 8 9
+1 7 9
+*/
+```
 * [std::list<T,Allocator>::push_back - cppreference.com](https://en.cppreference.com/w/cpp/container/list/push_back)
     * adds an element to the end (public member function)
     * Appends the given element value to the end of the container.
