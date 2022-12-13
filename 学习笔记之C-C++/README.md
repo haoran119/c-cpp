@@ -7394,6 +7394,230 @@ int main()
 * std::list is a container that supports constant time insertion and removal of elements from anywhere in the container. Fast random access is not supported. It is usually implemented as a doubly-linked list. Compared to std::forward_list this container provides bidirectional iteration capability while being less space efficient.
 * Adding, removing and moving the elements within the list or across several lists does not invalidate the iterators or references. An iterator is invalidated only when the corresponding element is deleted.
 * std::list meets the requirements of Container, AllocatorAwareContainer, SequenceContainer and ReversibleContainer.
+```c++
+#include <algorithm>
+#include <iostream>
+#include <list>
+ 
+int main()
+{
+    // Create a list containing integers
+    std::list<int> l = {7, 5, 16, 8};
+ 
+    // Add an integer to the front of the list
+    l.push_front(25);
+    // Add an integer to the back of the list
+    l.push_back(13);
+ 
+    // Insert an integer before 16 by searching
+    auto it = std::find(l.begin(), l.end(), 16);
+    if (it != l.end())
+        l.insert(it, 42);
+ 
+    // Print out the list
+    std::cout << "l = { ";
+    for (int n : l)
+        std::cout << n << ", ";
+    std::cout << "};\n";
+}
+/*
+l = { 25, 7, 5, 42, 16, 8, 13, };
+*/
+```
+
+##### Member functions
+
+###### Element access
+
+* [std::list<T,Allocator>::front - cppreference.com](https://en.cppreference.com/w/cpp/container/list/front)
+    * access the first element (public member function)
+    * Returns a reference to the first element in the container.
+    * Calling front on an empty container is undefined.
+    * Complexity
+        * Constant
+    * Notes
+        * For a container c, the expression c.front() is equivalent to *c.begin().
+```c++
+#include <list>
+#include <iostream>
+ 
+int main()
+{
+    std::list<char> letters {'o', 'm', 'g', 'w', 't', 'f'};
+ 
+    if (!letters.empty()) {
+        std::cout << "The first character is '" << letters.front() << "'.\n";
+    }  
+}
+/*
+The first character is 'o'.
+*/
+```
+* [std::list<T,Allocator>::back - cppreference.com](https://en.cppreference.com/w/cpp/container/list/back)
+    * access the last element (public member function)
+    * Returns a reference to the last element in the container.
+    * Calling back on an empty container causes undefined behavior.
+    * Complexity
+        * Constant.
+    * Notes
+        * For a non-empty container c, the expression c.back() is equivalent to *std::prev(c.end())
+
+###### Modifiers
+
+* [std::list<T,Allocator>::push_back - cppreference.com](https://en.cppreference.com/w/cpp/container/list/push_back)
+    * adds an element to the end (public member function)
+    * Appends the given element value to the end of the container.
+        * 1) The new element is initialized as a copy of value.
+        * 2) value is moved into the new element.
+    * No iterators or references are invalidated.
+    * Complexity
+        * Constant.
+    * Exceptions
+        * If an exception is thrown (which can be due to Allocator::allocate() or element copy/move constructor/assignment), this function has no effect (strong exception guarantee).
+```c++
+#include <list>
+#include <iostream>
+#include <iomanip>
+#include <string>
+ 
+int main()
+{
+    std::list<std::string> letters;
+ 
+    letters.push_back("abc");
+    std::string s{"def"};
+    letters.push_back(std::move(s));
+ 
+    std::cout << "std::list `letters` holds: ";
+    for (auto&& e : letters) std::cout << std::quoted(e) << ' ';
+ 
+    std::cout << "\nMoved-from string `s` holds: " << std::quoted(s) << '\n';
+}
+/*
+std::list `letters` holds: "abc" "def" 
+Moved-from string `s` holds: ""
+*/
+```
+* [std::list<T,Allocator>::emplace_back - cppreference.com](https://en.cppreference.com/w/cpp/container/list/emplace_back)
+    * constructs an element in-place at the end (public member function)
+    * Appends a new element to the end of the container. The element is constructed through std::allocator_traits::construct, which typically uses placement-new to construct the element in-place at the location provided by the container. The arguments args... are forwarded to the constructor as std::forward\<Args>(args)....
+    * No iterators or references are invalidated.
+    * Complexity
+        * Constant.
+    * Exceptions
+        * If an exception is thrown, this function has no effect (strong exception guarantee).
+```c++
+#include <list>
+#include <string>
+#include <cassert>
+#include <iostream>
+ 
+struct President
+{
+    std::string name;
+    std::string country;
+    int year;
+ 
+    President(std::string p_name, std::string p_country, int p_year)
+        : name(std::move(p_name)), country(std::move(p_country)), year(p_year)
+    {
+        std::cout << "I am being constructed.\n";
+    }
+    President(President&& other)
+        : name(std::move(other.name)), country(std::move(other.country)), year(other.year)
+    {
+        std::cout << "I am being moved.\n";
+    }
+    President& operator=(const President& other) = default;
+};
+ 
+int main()
+{
+    std::list<President> elections;
+    std::cout << "emplace_back:\n";
+    auto& ref = elections.emplace_back("Nelson Mandela", "South Africa", 1994);
+    assert(ref.year == 1994 && "uses a reference to the created object (C++17)");
+ 
+    std::list<President> reElections;
+    std::cout << "\npush_back:\n";
+    reElections.push_back(President("Franklin Delano Roosevelt", "the USA", 1936));
+ 
+    std::cout << "\nContents:\n";
+    for (President const& president: elections) {
+        std::cout << president.name << " was elected president of "
+                  << president.country << " in " << president.year << ".\n";
+    }
+    for (President const& president: reElections) {
+        std::cout << president.name << " was re-elected president of "
+                  << president.country << " in " << president.year << ".\n";
+    }
+}
+/*
+emplace_back:
+I am being constructed.
+ 
+push_back:
+I am being constructed.
+I am being moved.
+ 
+Contents:
+Nelson Mandela was elected president of South Africa in 1994.
+Franklin Delano Roosevelt was re-elected president of the USA in 1936.
+*/
+```
+* [std::list<T,Allocator>::pop_back - cppreference.com](https://en.cppreference.com/w/cpp/container/list/pop_back)
+    * removes the last element (public member function)
+    * Removes the last element of the container.
+    * Calling pop_back on an empty container results in undefined behavior.
+    * References and iterators to the erased element are invalidated.
+    * Complexity
+        * Constant.
+    * Exceptions
+        * Throws nothing.
+* [std::list<T,Allocator>::push_front - cppreference.com](https://en.cppreference.com/w/cpp/container/list/push_front)
+    * inserts an element to the beginning (public member function)
+    * Prepends the given element value to the beginning of the container.
+    * No iterators or references are invalidated.
+    * Complexity
+        * Constant.
+    * Exceptions
+        * If an exception is thrown, this function has no effect (strong exception guarantee).
+* [std::list<T,Allocator>::emplace_front - cppreference.com](https://en.cppreference.com/w/cpp/container/list/emplace_front)
+    * constructs an element in-place at the beginning (public member function)
+    * Inserts a new element to the beginning of the container. The element is constructed through std::allocator_traits::construct, which typically uses placement-new to construct the element in-place at the location provided by the container. The arguments args... are forwarded to the constructor as std::forward\<Args>(args)....
+    * No iterators or references are invalidated.
+    * Complexity
+        * Constant.
+    * Exceptions
+        * If an exception is thrown, this function has no effect (strong exception guarantee).
+* [std::list<T,Allocator>::pop_front - cppreference.com](https://en.cppreference.com/w/cpp/container/list/pop_front)
+    * removes the first element (public member function)
+    * Removes the first element of the container. If there are no elements in the container, the behavior is undefined.
+    * References and iterators to the erased element are invalidated.
+    * Complexity
+        * Constant.
+    * Exceptions
+        * Does not throw.
+```c++
+#include <list>
+#include <iostream>
+ 
+int main()
+{
+    std::list<char> chars{'A', 'B', 'C', 'D'};
+ 
+    for (; !chars.empty(); chars.pop_front())
+    {
+        std::cout << "chars.front(): '" << chars.front() << "'\n";
+    }
+}
+/*
+chars.front(): 'A'
+chars.front(): 'B'
+chars.front(): 'C'
+chars.front(): 'D'
+*/
+```
 
 ### Associative
 
