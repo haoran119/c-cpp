@@ -6136,37 +6136,168 @@ int main()
 
 ### Sum types and type erased wrappers
 
-* [std::optional - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional)
-	* Defined in header \<optional>
-	* a wrapper that may or may not hold an object (class template)
-  * template\< class T > class optional; (since C++17)
-  * The class template std::optional manages an optional contained value, i.e. a value that may or may not be present.
-  * A common use case for optional is the return value of a function that may fail. As opposed to other approaches, such as std::pair\<T,bool>, optional handles expensive-to-construct objects well and is more readable, as the intent is expressed explicitly.
-  * Any instance of optional\<T> at any given point in time either contains a value or does not contain a value.
-  * If an optional\<T> contains a value, the value is guaranteed to be allocated as part of the optional object footprint, i.e. no dynamic memory allocation ever takes place. Thus, an optional object models an object, not a pointer, even though operator*() and operator->() are defined.
-  * When an object of type optional\<T> is contextually converted to bool, the conversion returns true if the object contains a value and false if it does not contain a value.
-  * The optional object contains a value in the following conditions:
-    * The object is initialized with/assigned from a value of type T or another optional that contains a value.
-    * The object does not contain a value in the following conditions:
-    * The object is default-initialized.
-    * The object is initialized with/assigned from a value of type std::nullopt_t or an optional object that does not contain a value.
-    * The member function reset() is called.
-  * There are no optional references; a program is ill-formed if it instantiates an optional with a reference type. Alternatively, an optional of a std::reference_wrapper of type T may be used to hold a reference. In addition, a program is ill-formed if it instantiates an optional with the (possibly cv-qualified) tag types std::nullopt_t or std::in_place_t.
-  * [std::optional\<T>::operator->, std::optional\<T>::operator* - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/operator*)
-  	* accesses the contained value (public member function)
-  	* The behavior is undefined if *this does not contain a value.
-  	* Return value
-	  	* Pointer or reference to the contained value.
-  	* Notes
-  		* This operator does not check whether the optional contains a value! You can do so manually by using has_value() or simply operator bool(). Alternatively, if checked access is needed, value() or value_or() may be used.
-  * [std::optional\<T>::value - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/value)
-  	* returns the contained value (public member function)	
-  	* If *this contains a value, returns a reference to the contained value.
-  	* Otherwise, throws a std::bad_optional_access exception.
-  	* Notes
-  		* The dereference operator operator*() does not check if this optional contains a value, which may be more efficient than value().
-  * [std::make_optional - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/make_optional)
-  	* creates an optional object
+#### [std::optional - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional)
+
+* Defined in header \<optional>
+* a wrapper that may or may not hold an object (class template)
+* template\< class T > class optional; (since C++17)
+* The class template std::optional manages an optional contained value, i.e. a value that may or may not be present.
+* A common use case for optional is the return value of a function that may fail. As opposed to other approaches, such as std::pair\<T,bool>, optional handles expensive-to-construct objects well and is more readable, as the intent is expressed explicitly.
+* Any instance of optional\<T> at any given point in time either contains a value or does not contain a value.
+* If an optional\<T> contains a value, the value is guaranteed to be allocated as part of the optional object footprint, i.e. no dynamic memory allocation ever takes place. Thus, an optional object models an object, not a pointer, even though operator*() and operator->() are defined.
+* When an object of type optional\<T> is contextually converted to bool, the conversion returns true if the object contains a value and false if it does not contain a value.
+* The optional object contains a value in the following conditions:
+* The object is initialized with/assigned from a value of type T or another optional that contains a value.
+* The object does not contain a value in the following conditions:
+* The object is default-initialized.
+* The object is initialized with/assigned from a value of type std::nullopt_t or an optional object that does not contain a value.
+* The member function reset() is called.
+* There are no optional references; a program is ill-formed if it instantiates an optional with a reference type. Alternatively, an optional of a std::reference_wrapper of type T may be used to hold a reference. In addition, a program is ill-formed if it instantiates an optional with the (possibly cv-qualified) tag types std::nullopt_t or std::in_place_t.
+
+##### Member functions
+
+###### Observers
+
+* [std::optional\<T>::operator->, std::optional\<T>::operator* - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/operator*)
+    * accesses the contained value (public member function)
+    * The behavior is undefined if *this does not contain a value.
+    * Return value
+        * Pointer or reference to the contained value.
+    * Notes
+        * This operator does not check whether the optional contains a value! You can do so manually by using has_value() or simply operator bool(). Alternatively, if checked access is needed, value() or value_or() may be used.
+```c++
+#include <optional>
+#include <iostream>
+#include <string>
+ 
+int main()
+{
+    using namespace std::string_literals;
+ 
+    std::optional<int> opt1 = 1;
+    std::cout<< "opt1: "  << *opt1 << '\n';
+ 
+    *opt1 = 2;
+    std::cout<< "opt1: "  << *opt1 << '\n';
+ 
+    std::optional<std::string> opt2 = "abc"s;
+    std::cout<< "opt2: " << *opt2 << " size: " << opt2->size() << '\n';
+ 
+    // You can "take" the contained value by calling operator* on a rvalue to optional
+ 
+    auto taken = *std::move(opt2);
+    std::cout << "taken: " << taken << " opt2: " << *opt2 << "size: " << opt2->size()  << '\n';
+}
+/*
+opt1: 1
+opt1: 2
+opt2: abc size: 3
+taken: abc opt2: size: 0
+*/
+```
+* [std::optional<T>::operator bool, std::optional<T>::has_value - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/operator_bool)
+    * checks whether the object contains a value (public member function)
+    * Checks whether *this contains a value.
+```c++
+#include <optional>
+#include <iostream>
+ 
+int main()
+{
+    std::cout << std::boolalpha;
+ 
+    std::optional<int> opt;
+    std::cout << opt.has_value() << '\n';
+ 
+    opt = 43;
+    if (opt)
+        std::cout << "value set to " << opt.value() << '\n';
+    else
+        std::cout << "value not set\n";
+ 
+    opt.reset();
+    if (opt.has_value())
+        std::cout << "value still set to " << opt.value() << '\n';
+    else
+        std::cout << "value no longer set\n";
+}
+/*
+false
+value set to 43
+value no longer set
+*/
+```
+* [std::optional\<T>::value - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/value)
+    * returns the contained value (public member function)	
+    * If *this contains a value, returns a reference to the contained value.
+    * Otherwise, throws a std::bad_optional_access exception.
+    * Notes
+        * The dereference operator operator*() does not check if this optional contains a value, which may be more efficient than value().
+```c++
+#include <optional>
+#include <iostream>
+int main()
+{
+    std::optional<int> opt = {};
+ 
+    try {
+        [[maybe_unused]] int n = opt.value();
+    } catch(const std::bad_optional_access& e) {
+        std::cout << e.what() << '\n';
+    }
+    try {
+        opt.value() = 42;
+    } catch(const std::bad_optional_access& e) {
+        std::cout << e.what() << '\n';
+    }
+ 
+    opt = 43;
+    std::cout << *opt << '\n';
+ 
+    opt.value() = 44;
+    std::cout << opt.value() << '\n';
+}
+/*
+bad optional access
+bad optional access
+43
+44
+*/
+```
+* [std::optional<T>::value_or - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/value_or)
+    * returns the contained value if available, another value otherwise (public member function)
+    * Returns the contained value if *this has a value, otherwise returns default_value.
+        * 1) Equivalent to bool(*this) ? **this : static_cast\<T>(std::forward\<U>(default_value))
+        * 2) Equivalent to bool(*this) ? std::move(**this) : static_cast\<T>(std::forward\<U>(default_value))
+    * Return value
+        * The current value if *this has a value, or default_value otherwise.
+    * Exceptions
+        * Any exception thrown by the selected constructor of the return value T.
+```c++
+#include <optional>
+#include <iostream>
+#include <cstdlib>
+ 
+std::optional<const char*> maybe_getenv(const char* n)
+{
+    if(const char* x = std::getenv(n))
+       return x;
+    else
+       return {};
+}
+int main()
+{
+     std::cout << maybe_getenv("MYPWD").value_or("(none)") << '\n';
+}
+/*
+(none)
+*/
+```
+
+##### Non-member functions
+
+* [std::make_optional - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/make_optional)
+    * creates an optional object
 ```c++
 #include <string>
 #include <functional>
@@ -6210,6 +6341,15 @@ int main()
     }
 }
 ```
+
+##### Helpers
+
+* [std::nullopt - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/nullopt)
+    * an object of type nullopt_t (constant)
+    * std::nullopt is a constant of type std::nullopt_t that is used to indicate optional type with uninitialized state.
+
+##### MISC
+
 * [optional Class | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/optional-class?view=msvc-170)
 * [std::optional: How, when, and why - C++ Team Blog](https://devblogs.microsoft.com/cppblog/stdoptional-how-when-and-why/)
 	* optional is mandatory
@@ -6218,13 +6358,15 @@ int main()
 		* Any time you need a tool to express “value-or-not-value”, or “possibly an answer”, or “object with delayed initialization”, you should reach into your toolbox for std::optional. Using a vocabulary type for these cases raises the level of abstraction, making it easier for others to understand what your code is doing. The declarations optional/<T/> f(); and void g(optional/<T/>); express intent more clearly and concisely than do pair/<T, bool> f(); or void g(T t, bool is_valid);. Just as is the case with words, adding to our vocabulary of types increases our capacity to describe complex problems simply – it makes us more efficient.
 * [C++17常用新特性(十四)---std::optional](https://mp.weixin.qq.com/s/q_hSZmY4vwGBu7P-54ZdEw)
 	* C++17提供了std::optional模板帮助我们解决实际编码中的问题，如实际编程时需要返回、传递或者使用一个对象，但是这个对象可能存在或者不存在值。如果要在编码过程中处理这种情况，就要写很多的代码对这些异常情况进行处理。C++17后std::optional<>提供了此类问题的一种类型安全的解决方案。
-* [std::any - cppreference.com](https://en.cppreference.com/w/cpp/utility/any)
-	* Defined in header \<any>
-	* Objects that hold instances of any CopyConstructible type. (class)
-	* The class any describes a type-safe container for single values of any copy constructible type.
-		* 1) An object of class any stores an instance of any type that satisfies the constructor requirements or is empty, and this is referred to as the state of the class any object. The stored instance is called the contained object. Two states are equivalent if they are either both empty or if both are not empty and if the contained objects are equivalent.
-		* 2) The non-member any_cast functions provide type-safe access to the contained object.
-	* Implementations are encouraged to avoid dynamic allocations for small objects, but such an optimization may only be applied to types for which std::is_nothrow_move_constructible returns true.
+
+#### [std::any - cppreference.com](https://en.cppreference.com/w/cpp/utility/any)
+
+* Defined in header \<any>
+* Objects that hold instances of any CopyConstructible type. (class)
+* The class any describes a type-safe container for single values of any copy constructible type.
+    * 1) An object of class any stores an instance of any type that satisfies the constructor requirements or is empty, and this is referred to as the state of the class any object. The stored instance is called the contained object. Two states are equivalent if they are either both empty or if both are not empty and if the contained objects are equivalent.
+    * 2) The non-member any_cast functions provide type-safe access to the contained object.
+* Implementations are encouraged to avoid dynamic allocations for small objects, but such an optimization may only be applied to types for which std::is_nothrow_move_constructible returns true.
 * [C++17常用新特性(十三)---std::any](https://mp.weixin.qq.com/s/qzm_hYj7JEr0AOpxQkDm4g)
 
 ### [Function objects](https://en.cppreference.com/w/cpp/utility/functional)
