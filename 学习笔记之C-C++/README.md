@@ -6136,7 +6136,7 @@ int main()
 
 ### Sum types and type erased wrappers
 
-#### [std::optional - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional)
+#### [std::optional](https://en.cppreference.com/w/cpp/utility/optional)
 
 * Defined in header \<optional>
 * a wrapper that may or may not hold an object (class template)
@@ -6153,6 +6153,49 @@ int main()
 * The object is initialized with/assigned from a value of type std::nullopt_t or an optional object that does not contain a value.
 * The member function reset() is called.
 * There are no optional references; a program is ill-formed if it instantiates an optional with a reference type. Alternatively, an optional of a std::reference_wrapper of type T may be used to hold a reference. In addition, a program is ill-formed if it instantiates an optional with the (possibly cv-qualified) tag types std::nullopt_t or std::in_place_t.
+```c++
+#include <string>
+#include <functional>
+#include <iostream>
+#include <optional>
+ 
+// optional can be used as the return type of a factory that may fail
+std::optional<std::string> create(bool b) {
+    if (b)
+        return "Godzilla";
+    return {};
+}
+ 
+// std::nullopt can be used to create any (empty) std::optional
+auto create2(bool b) {
+    return b ? std::optional<std::string>{"Godzilla"} : std::nullopt;
+}
+ 
+// std::reference_wrapper may be used to return a reference
+auto create_ref(bool b) {
+    static std::string value = "Godzilla";
+    return b ? std::optional<std::reference_wrapper<std::string>>{value}
+             : std::nullopt;
+}
+ 
+int main()
+{
+    std::cout << "create(false) returned "
+              << create(false).value_or("empty") << '\n';
+ 
+    // optional-returning factory functions are usable as conditions of while and if
+    if (auto str = create2(true)) {
+        std::cout << "create2(true) returned " << *str << '\n';
+    }
+ 
+    if (auto str = create_ref(true)) {
+        // using get() to access the reference_wrapper's value
+        std::cout << "create_ref(true) returned " << str->get() << '\n';
+        str->get() = "Mothra";
+        std::cout << "modifying it changed it to " << str->get() << '\n';
+    }
+}
+```
 
 ##### Member functions
 
@@ -6195,7 +6238,7 @@ opt2: abc size: 3
 taken: abc opt2: size: 0
 */
 ```
-* [std::optional<T>::operator bool, std::optional<T>::has_value - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/operator_bool)
+* [std::optional\<T>::operator bool, std::optional\<T>::has_value - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/operator_bool)
     * checks whether the object contains a value (public member function)
     * Checks whether *this contains a value.
 ```c++
@@ -6264,7 +6307,7 @@ bad optional access
 44
 */
 ```
-* [std::optional<T>::value_or - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/value_or)
+* [std::optional\<T>::value_or - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/value_or)
     * returns the contained value if available, another value otherwise (public member function)
     * Returns the contained value if *this has a value, otherwise returns default_value.
         * 1) Equivalent to bool(*this) ? **this : static_cast\<T>(std::forward\<U>(default_value))
@@ -6299,47 +6342,35 @@ int main()
 * [std::make_optional - cppreference.com](https://en.cppreference.com/w/cpp/utility/optional/make_optional)
     * creates an optional object
 ```c++
-#include <string>
-#include <functional>
-#include <iostream>
 #include <optional>
- 
-// optional can be used as the return type of a factory that may fail
-std::optional<std::string> create(bool b) {
-    if (b)
-        return "Godzilla";
-    return {};
-}
- 
-// std::nullopt can be used to create any (empty) std::optional
-auto create2(bool b) {
-    return b ? std::optional<std::string>{"Godzilla"} : std::nullopt;
-}
- 
-// std::reference_wrapper may be used to return a reference
-auto create_ref(bool b) {
-    static std::string value = "Godzilla";
-    return b ? std::optional<std::reference_wrapper<std::string>>{value}
-             : std::nullopt;
-}
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
  
 int main()
 {
-    std::cout << "create(false) returned "
-              << create(false).value_or("empty") << '\n';
- 
-    // optional-returning factory functions are usable as conditions of while and if
-    if (auto str = create2(true)) {
-        std::cout << "create2(true) returned " << *str << '\n';
+    auto op1 = std::make_optional<std::vector<char>>({'a','b','c'});
+    std::cout << "op1: ";
+    for (char c: op1.value()){
+        std::cout << c << ",";
     }
- 
-    if (auto str = create_ref(true)) {
-        // using get() to access the reference_wrapper's value
-        std::cout << "create_ref(true) returned " << str->get() << '\n';
-        str->get() = "Mothra";
-        std::cout << "modifying it changed it to " << str->get() << '\n';
+    auto op2 = std::make_optional<std::vector<int>>(5, 2);
+    std::cout << "\nop2: ";
+    for (int i: *op2){
+        std::cout << i << ",";
     }
+    std::string str{"hello world"};
+    auto op3 = std::make_optional<std::string>(std::move(str));
+    std::cout << "\nop3: " << quoted(op3.value_or("empty value")) << '\n';
+    std::cout << "str: " << std::quoted(str) << '\n';
 }
+/*
+op1: a,b,c,
+op2: 2,2,2,2,2,
+op3: "hello world"
+str: ""
+*/
 ```
 
 ##### Helpers
@@ -6359,7 +6390,7 @@ int main()
 * [C++17常用新特性(十四)---std::optional](https://mp.weixin.qq.com/s/q_hSZmY4vwGBu7P-54ZdEw)
 	* C++17提供了std::optional模板帮助我们解决实际编码中的问题，如实际编程时需要返回、传递或者使用一个对象，但是这个对象可能存在或者不存在值。如果要在编码过程中处理这种情况，就要写很多的代码对这些异常情况进行处理。C++17后std::optional<>提供了此类问题的一种类型安全的解决方案。
 
-#### [std::any - cppreference.com](https://en.cppreference.com/w/cpp/utility/any)
+#### [std::any](https://en.cppreference.com/w/cpp/utility/any)
 
 * Defined in header \<any>
 * Objects that hold instances of any CopyConstructible type. (class)
