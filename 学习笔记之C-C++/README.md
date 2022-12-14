@@ -9462,6 +9462,87 @@ min element at: 1
 */
 ```
 
+#### [std::minmax](https://en.cppreference.com/w/cpp/algorithm/minmax)
+
+* returns the smaller and larger of two elements (function template)
+* Returns the lowest and the greatest of the given values.
+    * 1-2) Returns references to the smaller and the greater of a and b.
+    * 3-4) Returns the smallest and the greatest of the values in initializer list ilist.
+* The (1,3) versions use operator< to compare the values, whereas the (2,4) versions use the given comparison function comp.
+* Return value
+    * 1-2) Returns the result of std::pair\<const T&, const T&>(a, b) if a\<b or if a is equivalent to b. Returns the result of std::pair\<const T&, const T&>(b, a) if b<a.
+    * 3-4) A pair with the smallest value in ilist as the first element and the greatest as the second. If several elements are equivalent to the smallest, the leftmost such element is returned. If several elements are equivalent to the largest, the rightmost such element is returned.
+* Complexity
+    * 1-2) Exactly one comparison
+    * 3-4) At most ilist.size() * 3 / 2 comparisons
+* Notes
+    * For overloads (1,2), if one of the parameters is a temporary, the reference returned becomes a dangling reference at the end of the full expression that contains the call to minmax:
+```c++
+int n = 1;
+auto p = std::minmax(n, n+1);
+int m = p.first; // ok
+int x = p.second; // undefined behavior
+ 
+// Note that structured bindings have the same issue
+auto [mm, xx] = std::minmax(n, n+1);
+xx; // undefined behavior
+```
+* Example
+```c++
+#include <algorithm>
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+ 
+int main()
+{
+    std::vector<int> v {3, 1, 4, 1, 5, 9, 2, 6}; 
+    std::srand(std::time(0));
+    std::pair<int, int> bounds = std::minmax(std::rand() % v.size(),
+                                             std::rand() % v.size());
+ 
+    std::cout << "v[" << bounds.first << "," << bounds.second << "]: ";
+    for (int i = bounds.first; i < bounds.second; ++i) {
+        std::cout << v[i] << ' ';
+    }
+    std::cout << '\n';
+}
+/*
+v[2,7]: 4 1 5 9 2
+*/
+```
+* [std::minmax() and std::minmax_element() in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/stdminmax-stdminmax_element-c-stl/)
+
+#### [std::minmax_element](https://en.cppreference.com/w/cpp/algorithm/minmax_element)
+
+* returns the smallest and the largest elements in a range (function template)
+* Finds the smallest and greatest element in the range \[first, last).
+* Return value
+    * a pair consisting of an iterator to the smallest element as the first element and an iterator to the greatest element as the second. Returns std::make_pair(first, first) if the range is empty. If several elements are equivalent to the smallest element, the iterator to the first such element is returned. If several elements are equivalent to the largest element, the iterator to the last such element is returned.
+* Complexity
+    * At most max(floor((3/2)*(N−1)), 0) applications of the predicate, where N = std::distance(first, last).
+* Exceptions
+    * The overloads with a template parameter named ExecutionPolicy report errors as follows:
+        * If execution of a function invoked as part of the algorithm throws an exception and ExecutionPolicy is one of the standard policies, std::terminate is called. For any other ExecutionPolicy, the behavior is implementation-defined.
+        * If the algorithm fails to allocate memory, std::bad_alloc is thrown.
+* Notes
+    * This algorithm is different from std::make_pair(std::min_element(), std::max_element()), not only in efficiency, but also in that this algorithm finds the last biggest element while std::max_element finds the first biggest element.
+```c++
+#include <algorithm>
+#include <iostream>
+ 
+int main() {
+    const auto v = { 3, 9, 1, 4, 2, 5, 9 };
+    const auto [min, max] = std::minmax_element(begin(v), end(v));
+ 
+    std::cout << "min = " << *min << ", max = " << *max << '\n';
+}
+/*
+min = 1, max = 9
+*/
+```
+
 ### Comparison operations
 
 ### Permutation operations
