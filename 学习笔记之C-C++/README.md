@@ -9644,11 +9644,72 @@ min = 1, max = 9
 ### Numeric operations
 
 * Defined in header \<numeric>
-* [std::accumulate - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/accumulate)
-	* sums up a range of elements(function template)
-	* Return value
-		* 1) The sum of the given value and elements in the given range.
-		* 2) The result of left fold of the given range over op
+
+#### [std::iota](https://en.cppreference.com/w/cpp/algorithm/iota)
+
+* fills a range with successive increments of the starting value (function template)
+* Fills the range \[first, last) with sequentially increasing values, starting with value and repetitively evaluating ++value.
+* Equivalent operation:
+```c++
+*(first)   = value;
+*(first+1) = ++value;
+*(first+2) = ++value;
+*(first+3) = ++value;
+...
+```
+* Complexity
+    * Exactly last - first increments and assignments.
+```c++
+#include <algorithm>
+#include <iomanip>
+#include <iostream>
+#include <list>
+#include <numeric>
+#include <random>
+#include <vector>
+ 
+class BigData // inefficient to copy
+{
+    int data[1024]; /* some raw data */
+public:
+    explicit BigData(int i = 0) { data[0] = i; /* ... */ }
+    operator int () const { return data[0]; }
+    BigData& operator=(int i) { data[0] = i; return *this; }
+    /* ... */
+};
+ 
+int main()
+{
+    std::list<BigData> l(10);
+    std::iota(l.begin(), l.end(), -4);
+ 
+    std::vector<std::list<BigData>::iterator> v(l.size());
+    std::iota(v.begin(), v.end(), l.begin());
+    // Vector of iterators (to original data) is used to avoid expensive copying,
+    // and because std::shuffle (below) cannot be applied to a std::list directly.
+ 
+    std::shuffle(v.begin(), v.end(), std::mt19937{std::random_device{}()});
+ 
+    std::cout << "Original contents of the list l:\t";
+    for(auto const& n: l) std::cout << std::setw(2) << n << ' ';
+    std::cout << '\n';
+ 
+    std::cout << "Contents of l, viewed via shuffled v:\t";
+    for(auto const i: v) std::cout << std::setw(2) << *i << ' ';
+    std::cout << '\n';
+}
+/*
+Original contents of the list l:        -4 -3 -2 -1  0  1  2  3  4  5
+Contents of l, viewed via shuffled v:   -1  5 -4  0  2  1  4 -2  3 -3
+*/
+```
+
+#### [std::accumulate](https://en.cppreference.com/w/cpp/algorithm/accumulate)
+	
+* sums up a range of elements(function template)
+* Return value
+    * 1) The sum of the given value and elements in the given range.
+    * 2) The result of left fold of the given range over op
 ```c++
 #include <iostream>
 #include <numeric>
@@ -9698,9 +9759,11 @@ dash-separated string: 1-2-3-4-5-6-7-8-9-10
 dash-separated string (right-folded): 10-9-8-7-6-5-4-3-2-1
 */
 ```
-* [std::inner_product - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/inner_product)
-	* computes the inner product of two ranges of elements (function template)
-	* Computes inner product (i.e. sum of products) or performs ordered map/reduce operation on the range \[first1, last1) and the range beginning at first2.
+
+#### [std::inner_product](https://en.cppreference.com/w/cpp/algorithm/inner_product)
+	
+* computes the inner product of two ranges of elements (function template)
+* Computes inner product (i.e. sum of products) or performs ordered map/reduce operation on the range \[first1, last1) and the range beginning at first2.
 ```c++
 #include <numeric>
 #include <iostream>
@@ -9719,10 +9782,12 @@ int main()
     std::cout << "Number of pairwise matches between a and b: " <<  r2 << '\n';
 }
 ```
-* [std::partial_sum - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/partial_sum)
-	* computes the partial sum of a range of elements(function template)
-	* Return value
-		* Iterator to the element past the last element written.
+
+#### [std::partial_sum](https://en.cppreference.com/w/cpp/algorithm/partial_sum)
+	
+* computes the partial sum of a range of elements(function template)
+* Return value
+    * Iterator to the element past the last element written.
 
 ### Operations on uninitialized memory
 
