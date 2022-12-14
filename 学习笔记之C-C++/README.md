@@ -2585,10 +2585,104 @@ for (auto const& x : range | std::views::reverse)
 
 #### Members
 
+##### [Non-static data members](https://en.cppreference.com/w/cpp/language/data_members)
+
+* Non-static data members are declared in a member specification of a class.
+```c++
+class S
+{
+    int n;              // non-static data member
+    int& r;             // non-static data member of reference type
+    int a[2] = {1, 2};  // non-static data member with default member initializer (C++11)
+    std::string s, *ps; // two non-static data members
+ 
+    struct NestedS
+    {
+        std::string s;
+    } d5;               // non-static data member of nested type
+ 
+    char bit : 2;       // two-bit bitfield
+};
+```
+* Any simple declarations are allowed, except
+    * extern and register storage class specifiers are not allowed;
+    * thread_local storage class specifier is not allowed (but it is allowed for static data members); (since C++11)
+    * incomplete types, abstract class types, and arrays thereof are not allowed: in particular, a class C cannot have a non-static data member of type C, although it can have a non-static data member of type C& (reference to C) or C* (pointer to C);
+    * a non-static data member cannot have the same name as the name of the class if at least one user-declared constructor is present;
+    * a placeholder type specifier (i.e. auto, decltype(auto) (since C++14), a class template name subject to deduction (since C++17), a constrained placeholder (since C++20)) cannot be used in a non-static data member declaration (although it is allowed for static data members that are initialized in the class definition). (since C++11)
+* In addition, bit-field declarations are allowed.
+
 ##### [static members](https://en.cppreference.com/w/cpp/language/static)
 
-* Inside a class definition, the keyword static declares members that are not bound to class instances.
+* Inside a class definition, the keyword `static` declares members that are not bound to class instances.
 * Outside a class definition, it has a different meaning: see storage duration.
+
+##### [Non-static member functions](https://en.cppreference.com/w/cpp/language/member_functions)
+
+* A non-static member function is a function that is declared in a member specification of a class without a `static` or `friend specifier`. (see static member functions and friend declaration for the effect of those keywords)
+```c++
+class S
+{
+    int mf1(); // non-static member function declaration
+    void mf2() volatile, mf3() &&; // can have cv-qualifiers and/or a reference-qualifier
+        // the declaration above is equivalent to two separate declarations:
+        // void mf2() volatile;
+        // void mf3() &&;
+ 
+    int mf4() const { return data; } // can be defined inline
+    virtual void mf5() final; // can be virtual, can use final/override
+    S() : data(12) {} // constructors are member functions too
+    int data;
+};
+ 
+int S::mf1() { return 7; } // if not defined inline, has to be defined at namespace
+```
+* Constructors, destructors, and conversion functions use special syntaxes for their declarations. The rules described in this page may not apply to these functions. See their respective pages for details.
+* Any function declarations are allowed, with additional syntax elements that are only available for non-static member functions: pure-specifiers, cv-qualifiers, ref-qualifiers, final and override specifiers (since C++11), and member initialization lists.
+
+###### member functions with cv-qualifiers
+
+* A non-static member function can be declared with a cv-qualifier sequence (const, volatile, or a combination of const and volatile), this sequence appears after the parameter list in the function declaration. Functions with different cv-qualifier sequences (or no sequence) have different types and so may overload each other.
+* In the body of a function with a cv-qualifier sequence, *this is cv-qualified, e.g. in a member function with const qualifier, only other member functions with const qualifier may be called normally. (A member function without const qualifier may still be called if const_cast is applied or through an access path that does not involve this.)
+```c++
+#include <vector>
+ 
+struct Array
+{
+    std::vector<int> data;
+    Array(int sz) : data(sz) {}
+ 
+    // const member function
+    int operator[](int idx) const
+    {                     // the this pointer has type const Array*
+        return data[idx]; // transformed to (*this).data[idx];
+    }
+ 
+    // non-const member function
+    int& operator[](int idx)
+    {                     // the this pointer has type Array*
+        return data[idx]; // transformed to (*this).data[idx]
+    }
+};
+ 
+int main()
+{
+    Array a(10);
+    a[1] = 1;  // OK: the type of a[1] is int&
+    const Array ca(10);
+    ca[1] = 2; // Error: the type of ca[1] is int
+}
+```
+* [c++ - Calling a const function rather than its non-const version - Stack Overflow](https://stackoverflow.com/questions/7287065/calling-a-const-function-rather-than-its-non-const-version)
+    * If you have two overloads that differ only in their const-ness, then the compiler resolves the call based on whether *this is const or not. In your example code, test is not const, so the non-const overload is called.
+    * If you did this:
+    ```c++
+    testType test;
+    const testType &test2 = test;
+    test2->x();
+    ```
+    * you should see that the other overload gets called, because test2 is const.
+* [Const member functions in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/const-member-functions-c/#:~:text=To%20make%20a%20member%20function,also%20be%20declared%20as%20const.)
 
 ##### [Friend declaration](https://en.cppreference.com/w/cpp/language/friend)
 
