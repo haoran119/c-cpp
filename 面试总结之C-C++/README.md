@@ -188,20 +188,20 @@
 
 ## 编译内存相关
 
-* #include “filename.h”和#include <filename.h>的区别
-  * #include “filename.h”是指编译器将从当前工作目录上开始查找此文件
-  * #include <filename.h>是指编译器将从标准库目录中开始查找此文件
+* `#include “filename.h”`和`#include <filename.h>`的区别
+    * `#include “filename.h”`是指编译器将从当前工作目录上开始查找此文件
+    * `#include <filename.h>`是指编译器将从标准库目录中开始查找此文件
 * C++ 内存管理
-  * C++ 内存分区：栈、堆、全局/静态存储区、常量存储区、代码区。
-  * 栈：存放函数的局部变量、函数参数、返回地址等，由编译器自动分配和释放。
-  * 堆：动态申请的内存空间，就是由 malloc 分配的内存块，由程序员控制它的分配和释放，如果程序执行结束还没有释放，操作系统会自动回收。
-  * 全局区/静态存储区（.bss 段和 .data 段）：存放全局变量和静态变量，程序运行结束操作系统自动释放，在 C 语言中，未初始化的放在 .bss 段中，初始化的放在 .data 段中，C++ 中不再区分了。
-  * 常量存储区（.rodata 段）：存放的是常量，不允许修改，程序运行结束自动释放。
-  * 代码区（.text 段）：存放代码，不允许修改，但可以执行。编译后的二进制文件存放在这里。
-  * 说明：
-    * 从操作系统的本身来讲，以上存储区在内存中的分布是如下形式(从低地址到高地址)：.text 段 --> .data 段 --> .bss 段 --> 堆 --> unused --> 栈 --> env
+    * C++ 内存分区：栈、堆、全局/静态存储区、常量存储区、代码区。
+    * 栈：存放函数的局部变量、函数参数、返回地址等，由编译器自动分配和释放。
+    * 堆：动态申请的内存空间，就是由 malloc 分配的内存块，由程序员控制它的分配和释放，如果程序执行结束还没有释放，操作系统会自动回收。
+    * 全局区/静态存储区（.bss 段和 .data 段）：存放全局变量和静态变量，程序运行结束操作系统自动释放，在 C 语言中，未初始化的放在 .bss 段中，初始化的放在 .data 段中，C++ 中不再区分了。
+    * 常量存储区（.rodata 段）：存放的是常量，不允许修改，程序运行结束自动释放。
+    * 代码区（.text 段）：存放代码，不允许修改，但可以执行。编译后的二进制文件存放在这里。
+    * 说明：
+        * 从操作系统的本身来讲，以上存储区在内存中的分布是如下形式(从低地址到高地址)：.text 段 --> .data 段 --> .bss 段 --> 堆 --> unused --> 栈 --> env
 * 变量的内存分区
-  * [C/C++的四大内存分区 - CSDN博客](https://blog.csdn.net/K346K346/article/details/45592329)
+    * [C/C++的四大内存分区 - CSDN博客](https://blog.csdn.net/K346K346/article/details/45592329)
 * 对象创建限制在堆或栈
 	* [如何定义一个只能在堆上（栈上）生成对象的类？](https://github.com/huihut/interview#%E5%A6%82%E4%BD%95%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA%E5%8F%AA%E8%83%BD%E5%9C%A8%E5%A0%86%E4%B8%8A%E6%A0%88%E4%B8%8A%E7%94%9F%E6%88%90%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%B1%BB)
 	* 只能在堆上
@@ -211,14 +211,14 @@
 		* 方法：将 new 和 delete 重载为私有
 		* 原因：在堆上生成对象，使用 new 关键词操作，其过程分为两阶段：第一阶段，使用 new 在堆上寻找可用内存，分配给对象；第二阶段，调用构造函数生成对象。将 new 操作设置为私有，那么第一阶段就无法完成，就不能够在堆上生成对象。
 * C structure，数据结构里有inter,char,float时，数据的内存布局会是怎样
-  * 数据会以4位或是8位，16位等等方式对齐
+    * 数据会以4位或是8位，16位等等方式对齐
 * 为什么会有这种对齐
-  * 这是因为机器寻址就是按照这种方式进行的，这样可以一次而不是多次读取一定数据
+    * 这是因为机器寻址就是按照这种方式进行的，这样可以一次而不是多次读取一定数据
 * [面试常考，项目易错！C/C++中的字节对齐 (qq.com)](https://mp.weixin.qq.com/s/F0QIjH-fMe7KP-CtlQVbHA)
 * C pointer,指向数据结构与指向char的指针有区别吗
-  * 它们正做+1运算时产生的位移不同
+    * 它们正做+1运算时产生的位移不同
 * delete数组指针，只delete第一个后果
-  * 内存泄漏 
+    * 内存泄漏 
 
 ### [Smart pointers](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#smart-pointers)
 
@@ -244,12 +244,20 @@
 	* 事实上，智能指针能够做的还有很多事情，例如处理线程安全，提供写时复制，确保协议，并且提供远程交互服务。有能够为这些ESP (Extremely Smart Pointers)创建一般智能指针的方法，但是并没有涵盖进来。
 	* 智能指针的大部分使用是用于生存期控制，阶段控制。它们使用operator->和operator*来生成原始指针，这样智能指针看上去就像一个普通指针。
 	* 这样的一个类来自标准库：std::auto_ptr。它是为解决资源所有权问题设计的，但是缺少对引用数和数组的支持。并且，std::auto_ptr在被复制的时候会传输所有权。在大多数情况下，你需要更多的和/或者是不同的功能。这时就需要加入smart_ptr类。
+* [c++ - Does C++11 unique_ptr and shared_ptr able to convert to each other's type? - Stack Overflow](https://stackoverflow.com/questions/37884728/does-c11-unique-ptr-and-shared-ptr-able-to-convert-to-each-others-type)
+    * In short, you can easily and efficiently convert a std::unique_ptr to std::shared_ptr but you cannot convert std::shared_ptr to std::unique_ptr.
+```c++
+std::unique_ptr<std::string> unique = std::make_unique<std::string>("test");
+std::shared_ptr<std::string> shared = std::move(unique);
+// or:
+std::shared_ptr<std::string> shared = std::make_unique<std::string>("test");
+```
 
 ## 语言对比
 
 * C++如何实现JAVA接口
-  * [java接口_百度百科](http://baike.baidu.com/link?url=hoPdmBnxPUNPpyCRPD80NQVbOPS0qT5IoI1jezWUDT4Dz0MdgaVrPEurjtacqy6rJRZxO0CrQCNqDn5czUriNK)
-  * [C++中的抽象类以及接口的区别联系_Linux编程_Linux公社-Linux系统门户网站](http://www.linuxidc.com/Linux/2012-10/73243.htm)
+    * [java接口_百度百科](http://baike.baidu.com/link?url=hoPdmBnxPUNPpyCRPD80NQVbOPS0qT5IoI1jezWUDT4Dz0MdgaVrPEurjtacqy6rJRZxO0CrQCNqDn5czUriNK)
+    * [C++中的抽象类以及接口的区别联系_Linux编程_Linux公社-Linux系统门户网站](http://www.linuxidc.com/Linux/2012-10/73243.htm)
 
 ### Modern C++
 
@@ -258,24 +266,24 @@
 * [B.3 — Introduction to C++17 – Learn C++](https://www.learncpp.com/cpp-tutorial/b-3-introduction-to-c17/)
 * [B.4 — Introduction to C++20 – Learn C++](https://www.learncpp.com/cpp-tutorial/introduction-to-c20/)
 * [每个开发者都应该了解的一些C++特性](https://mp.weixin.qq.com/s/Hpn7KqYlBKz0JdryiozqyQ)
-  * https://www.freecodecamp.org/news/some-awesome-modern-c-features-that-every-developer-should-know-5e3bf6f79a3c/
-  * C++ 是一种强大的编程语言，但也因为其复杂性一直让用户望而却步。后来，C++ 决定做出改变，然后发展至今，成了编程社区最受欢迎的语言之一。C++ 有一些新特性非常好用，本文对此进行了介绍，比如 auto、lambda、constexpr、tuple、智能指针等。
-  * auto 概念
-  * lambda 表达式
-  * if 或 switch 语句里的初始状态
-  * 编译时执行 constexpr
-  * tuple
-  * 类模版参数推断
-  * 智能指针
+    * https://www.freecodecamp.org/news/some-awesome-modern-c-features-that-every-developer-should-know-5e3bf6f79a3c/
+    * C++ 是一种强大的编程语言，但也因为其复杂性一直让用户望而却步。后来，C++ 决定做出改变，然后发展至今，成了编程社区最受欢迎的语言之一。C++ 有一些新特性非常好用，本文对此进行了介绍，比如 auto、lambda、constexpr、tuple、智能指针等。
+    * auto 概念
+    * lambda 表达式
+    * if 或 switch 语句里的初始状态
+    * 编译时执行 constexpr
+    * tuple
+    * 类模版参数推断
+    * 智能指针
 * [C++ 中的各种特性](https://mp.weixin.qq.com/s?__biz=MzA4MjI3NzQ1Nw==&mid=2247502245&idx=1&sn=9e472ebac369ffc5219ebd9e5cf67b9f&chksm=9f8aac9ba8fd258db6d136449963bbe2669fb65183a58822824314995faad442f5e5211444cc&scene=178&cur_album_id=1511180677537464321#rd)
 	* https://blog.csdn.net/a15920804211/article/details/90691525
 * [C++ 11 新特性梳理](https://mp.weixin.qq.com/s/c6BCvqbmwU6jCOhjL7qQPQ)
-  * https://www.jianshu.com/p/78c700c8d72d
-  * 在面试中，经常被问的一个问题就是：你了解C++11哪些新特性？一般而言，回答以下四个方面就够了：
-    * “语法糖”：nullptr, auto自动类型推导，范围for循环，初始化列表, lambda表达式等
-    * 右值引用和移动语义
-    * 智能指针
-    * C++11多线程编程：thread库及其相配套的同步原语mutex, lock_guard, condition_variable, 以及异步std::furture
+    * https://www.jianshu.com/p/78c700c8d72d
+    * 在面试中，经常被问的一个问题就是：你了解C++11哪些新特性？一般而言，回答以下四个方面就够了：
+        * “语法糖”：nullptr, auto自动类型推导，范围for循环，初始化列表, lambda表达式等
+        * 右值引用和移动语义
+        * 智能指针
+        * C++11多线程编程：thread库及其相配套的同步原语mutex, lock_guard, condition_variable, 以及异步std::furture
 * [【C++面试知识】C++11新特性](https://mp.weixin.qq.com/s/jZRnb8WxNoJvdbiHrSuFlQ)
 	* https://blog.csdn.net/a15920804211/article/details/90691525
 * [C++17 在业务代码中最好用的十个特性](https://mp.weixin.qq.com/s/jlM1NWRNpoOvW2qrBtxflQ)
@@ -301,7 +309,7 @@
 	* 总结
 		* 以上是笔者在生产环境中最常用的 c++17 特性，除了本文描述的十个特性外，c++17 还添加了如lambda 值捕获*this, 钳夹函数 std::clamp(), 强制检查返回值[[nodiscard]]等非常易用的特性，本文篇幅有限不做赘述，欢迎有兴趣的读者自行探索。
 * [解读C++即将迎来的重大更新（一）：C++20的四大新特性](https://mp.weixin.qq.com/s/QpqvZ3a7nFdHGjIBiKX67g)
-  * https://www.modernescpp.com/index.php/thebigfour
+    * https://www.modernescpp.com/index.php/thebigfour
 * [Google “战败”后，C++20 用微软的提案进入协程时代！](https://mp.weixin.qq.com/s/SlTObQQeDXvLLXuoxbO1yg)
 
 ## 关键字库函数
@@ -311,27 +319,27 @@
 ### static
 
 * static关键字至少有下列n个作用：
-  * 函数体内static变量的作用范围为该函数体，不同于auto变量，该变量的内存只被分配一次，因此其值在下次调用时仍维持上次的值；
-  * 在模块内的static全局变量可以被模块内所用函数访问，但不能被模块外其它函数访问；
-  * 在模块内的static函数只可被这一模块内的其它函数调用，这个函数的使用范围被限制在声明它的模块内；
-  * 在类中的static成员变量属于整个类所拥有，对类的所有对象只有一份拷贝；
-  * 在类中的static成员函数属于整个类所拥有，这个函数不接收this指针，因而只能访问类的static成员变量。
+    * 函数体内static变量的作用范围为该函数体，不同于auto变量，该变量的内存只被分配一次，因此其值在下次调用时仍维持上次的值；
+    * 在模块内的static全局变量可以被模块内所用函数访问，但不能被模块外其它函数访问；
+    * 在模块内的static函数只可被这一模块内的其它函数调用，这个函数的使用范围被限制在声明它的模块内；
+    * 在类中的static成员变量属于整个类所拥有，对类的所有对象只有一份拷贝；
+    * 在类中的static成员函数属于整个类所拥有，这个函数不接收this指针，因而只能访问类的static成员变量。
 
 ### const
 
 * const关键字至少有下列n个作用：
-  * 欲阻止一个变量被改变，可以使用const关键字。在定义该const变量时，通常需要对它进行初始化，因为以后就没有机会再去改变它了；
-  * 对指针来说，可以指定指针本身为const，也可以指定指针所指的数据为const，或二者同时指定为const；
-  * 在一个函数声明中，const可以修饰形参，表明它是一个输入参数，在函数内部不能改变其值；
-  * 对于类的成员函数，若指定其为const类型，则表明其是一个常函数，不能修改类的成员变量；
-  * 对于类的成员函数，有时候必须指定其返回值为const类型，以使得其返回值不为“左值”。
+    * 欲阻止一个变量被改变，可以使用const关键字。在定义该const变量时，通常需要对它进行初始化，因为以后就没有机会再去改变它了；
+    * 对指针来说，可以指定指针本身为const，也可以指定指针所指的数据为const，或二者同时指定为const；
+    * 在一个函数声明中，const可以修饰形参，表明它是一个输入参数，在函数内部不能改变其值；
+    * 对于类的成员函数，若指定其为const类型，则表明其是一个常函数，不能修改类的成员变量；
+    * 对于类的成员函数，有时候必须指定其返回值为const类型，以使得其返回值不为“左值”。
 
 ### inline
 
 * 短小而被频繁调用的程序如何处理？
-  * C语言用宏代替。
-  * C++用inline，内联函数机制。
-  * 内联函数可以得到宏的替换功能，所有可预见的状态和常规函数的类型检查。
+    * C语言用宏代替。
+    * C++用inline，内联函数机制。
+    * 内联函数可以得到宏的替换功能，所有可预见的状态和常规函数的类型检查。
 
 ### new
 
