@@ -9326,17 +9326,20 @@ int main()
 
 ### Minimum/maximum operations
 
-* [std::max - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/max)
-	* returns the greater of the given values (function template)
+#### [std::max](https://en.cppreference.com/w/cpp/algorithm/max)
+	
+* returns the greater of the given values (function template)
 * [Maximum of three values in C++ - Code Review Stack Exchange](https://codereview.stackexchange.com/questions/26100/maximum-of-three-values-in-c)
 	* `std::max({a, b, c})`
-* [std::max_element - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/max_element)
-	* returns the largest element in a range (function template)
-	* Finds the greatest element in the range \[first, last).
-	* Return value
-		* Iterator to the greatest element in the range \[first, last). If several elements in the range are equivalent to the greatest element, returns the iterator to the first such element. Returns last if the range is empty.
-	* Complexity
-		* Exactly max(N-1,0) comparisons, where N = std::distance(first, last).
+
+#### [std::max_element](https://en.cppreference.com/w/cpp/algorithm/max_element)
+	
+* returns the largest element in a range (function template)
+* Finds the greatest element in the range \[first, last).
+* Return value
+    * Iterator to the greatest element in the range \[first, last). If several elements in the range are equivalent to the greatest element, returns the iterator to the first such element. Returns last if the range is empty.
+* Complexity
+    * Exactly max(N-1,0) comparisons, where N = std::distance(first, last).
 ```c++
 #include <algorithm>
 #include <iostream>
@@ -9390,19 +9393,74 @@ int main()
     return 0;
 }
 ```
-* [std::min - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/min)
-	* Returns the smaller of the given values.
-		* 1-2) Returns the smaller of a and b.
-		* 3-4) Returns the smallest of the values in initializer list ilist.
-	* The (1,3) versions use operator< to compare the values, the (2,4) versions use the given comparison function comp.
-	* [std::min in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdmin-in-cpp/)
-	* [max - Find the smallest amongst 3 numbers in C++ - Stack Overflow](https://stackoverflow.com/questions/9424173/find-the-smallest-amongst-3-numbers-in-c)
-		* `std::min({x, y, z})`
-* [std::min_element - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/min_element)
-	* returns the smallest element in a range (function template)
-	* returns the smallest element in a range (function template)
-	* Return value
-		* Iterator to the smallest element in the range \[first, last). If several elements in the range are equivalent to the smallest element, returns the iterator to the first such element. Returns last if the range is empty.
+
+#### [std::min](https://en.cppreference.com/w/cpp/algorithm/min)
+	
+* Returns the smaller of the given values.
+    * 1-2) Returns the smaller of a and b.
+    * 3-4) Returns the smallest of the values in initializer list ilist.
+* The (1,3) versions use operator< to compare the values, the (2,4) versions use the given comparison function comp.
+* Notes
+    * Capturing the result of std::min by reference produces a dangling reference if one of the parameters is a temporary and that parameter is returned:
+```c++
+int n = 1;
+const int& r = std::min(n - 1, n + 1); // r is dangling
+```
+* Example
+```c++
+#include <algorithm>
+#include <iostream>
+#include <string_view>
+ 
+int main()
+{
+    std::cout << "smaller of 1 and 9999 is " << std::min(1, 9999) << '\n'
+              << "smaller of 'a', and 'b' is '" << std::min('a', 'b') << "'\n"
+              << "shortest of \"foo\", \"bar\", and \"hello\" is \""
+              << std::min({"foo", "bar", "hello"},
+                          [](const std::string_view s1, const std::string_view s2)
+                          {
+                              return s1.size() < s2.size();
+                          }) << "\"\n";
+}
+/*
+smaller of 1 and 9999 is 1
+smaller of 'a', and 'b' is 'a'
+shortest of "foo", "bar", and "hello" is "foo"
+*/
+```
+* [std::min in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdmin-in-cpp/)
+* [max - Find the smallest amongst 3 numbers in C++ - Stack Overflow](https://stackoverflow.com/questions/9424173/find-the-smallest-amongst-3-numbers-in-c)
+    * `std::min({x, y, z})`
+
+#### [std::min_element](https://en.cppreference.com/w/cpp/algorithm/min_element)
+	
+* returns the smallest element in a range (function template)
+* returns the smallest element in a range (function template)
+* Return value
+    * Iterator to the smallest element in the range \[first, last). If several elements in the range are equivalent to the smallest element, returns the iterator to the first such element. Returns last if the range is empty.
+* Complexity
+    * Exactly max(N-1,0) comparisons, where N = std::distance(first, last).
+* Exceptions
+    * The overloads with a template parameter named ExecutionPolicy report errors as follows:
+        * If execution of a function invoked as part of the algorithm throws an exception and ExecutionPolicy is one of the standard policies, std::terminate is called. For any other ExecutionPolicy, the behavior is implementation-defined.
+        * If the algorithm fails to allocate memory, std::bad_alloc is thrown.
+```c++
+#include <algorithm>
+#include <iostream>
+#include <vector>
+ 
+int main()
+{
+    std::vector<int> v{3, 1, 4, 1, 5, 9};
+ 
+    std::vector<int>::iterator result = std::min_element(v.begin(), v.end());
+    std::cout << "min element at: " << std::distance(v.begin(), result);
+}
+/*
+min element at: 1
+*/
+```
 
 ### Comparison operations
 
