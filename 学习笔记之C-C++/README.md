@@ -3807,6 +3807,79 @@ int main()
 #### [noexcept specifier](https://en.cppreference.com/w/cpp/language/noexcept_spec)
 
 * Specifies whether a function could throw exceptions.
+
+##### Syntax
+
+* `noexcept`	(1)	
+* `noexcept(expression)`	(2)	
+* `throw()`	(3)	(deprecated in C++17) (removed in C++20)
+* 1) Same as noexcept(true)
+* 2) If expression evaluates to true, the function is declared not to throw any exceptions. A ( following noexcept is always a part of this form (it can never start an initializer).
+* 3) Same as noexcept(true) (see dynamic exception specification for its semantics before C++17)
+* expression	-	contextually converted constant expression of type bool
+
+##### Explanation
+
+* The noexcept-specification is a part of the function type and may appear as part of any function declarator. (since C++17)
+* Functions differing only in their exception specification cannot be overloaded `(just like the return type, exception specification is part of function type, but not part of the function signature) (since C++17)`.
+```c++
+void f() noexcept;
+void f(); // error: different exception specification
+void g() noexcept(false);
+void g(); // ok, both declarations for g are potentially-throwing
+```
+* Pointers (including pointers to member function) to non-throwing functions `can be assigned to or used to initialize (until C++17)` `are implicitly convertible to (since C++17)` pointers to potentially-throwing functions, but not the other way around.
+```c++
+void ft(); // potentially-throwing
+void (*fn)() noexcept = ft; // error
+```
+* If a virtual function is non-throwing, all declarations, including the definition, of every overrider must be non-throwing as well, unless the overrider is defined as deleted:
+```c++
+struct B
+{
+    virtual void f() noexcept;
+    virtual void g();
+    virtual void h() noexcept = delete;
+};
+ 
+struct D: B
+{
+    void f();          // ill-formed: D::f is potentially-throwing, B::f is non-throwing
+    void g() noexcept; // OK
+    void h() = delete; // OK
+};
+```
+* `Non-throwing functions are permitted to call potentially-throwing functions.` Whenever an exception is thrown and the search for a handler encounters the outermost block of a non-throwing function, the function std::terminate is called:
+```c++
+extern void f(); // potentially-throwing
+ 
+void g() noexcept
+{
+    f();      // valid, even if f throws
+    throw 42; // valid, effectively a call to std::terminate
+}
+```
+* Example
+```c++
+// whether foo is declared noexcept depends on if the expression
+// T() will throw any exceptions
+template<class T>
+void foo() noexcept(noexcept(T())) {}
+ 
+void bar() noexcept(true) {}
+void baz() noexcept { throw 42; } // noexcept is the same as noexcept(true)
+ 
+int main() 
+{
+    foo<int>(); // noexcept(noexcept(int())) => noexcept(true), so this is fine
+ 
+    bar(); // fine
+    baz(); // compiles, but at runtime this calls std::terminate
+}
+```
+
+##### MISC
+
 * [noexcept (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/noexcept-cpp?view=msvc-160)
 * [Exception specifications (throw, noexcept) (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/exception-specifications-throw-cpp?view=msvc-160)
 * [Modern C++ best practices for exceptions and error handling | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/errors-and-exception-handling-modern-cpp?view=msvc-160)
