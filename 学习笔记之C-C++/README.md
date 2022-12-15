@@ -3859,6 +3859,11 @@ void g() noexcept
     throw 42; // valid, effectively a call to std::terminate
 }
 ```
+* Notes
+    * One of the uses of the constant expression is (along with the noexcept operator) to define function templates that declare noexcept for some types but not others.
+    * Note that a noexcept specification on a function is not a compile-time check; it is merely a method for a programmer to inform the compiler whether or not a function should throw exceptions. The compiler can use this information to enable certain optimizations on non-throwing functions as well as enable the noexcept operator, which can check at compile time if a particular expression is declared to throw any exceptions. For example, containers such as std::vector will move their elements if the elements' move constructor is noexcept, and copy otherwise (unless the copy constructor is not accessible, but a potentially throwing move constructor is, in which case the strong exception guarantee is waived).
+    * Deprecates
+        * `noexcept` is an improved version of `throw()`, which is deprecated in C++11. Unlike pre-C++17 throw(), noexcept will not call `std::unexpected`, may or may not unwind the stack, and will call `std::terminate`, which potentially allows the compiler to implement `noexcept` without the runtime overhead of `throw()`. As of C++17, `throw()` is redefined to be an exact equivalent of `noexcept(true)`.
 * Example
 ```c++
 // whether foo is declared noexcept depends on if the expression
