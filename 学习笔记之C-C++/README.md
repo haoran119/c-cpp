@@ -2702,6 +2702,48 @@ int demo()
 }
 ```
 
+##### Constexpr if
+
+* The statement that begins with `if constexpr` is known as the `constexpr if statement`.
+* In a constexpr if statement, the value of `condition` must be `a contextually converted constant expression of type bool (until C++23)``an expression contextually converted to bool, where the conversion is a constant expression (since C++23)`. If the value is `true`, then `statement-false` is discarded (if present), otherwise, `statement-true` is discarded.
+    * `A contextually converted constant expression of type bool` is an expression, contextually converted to bool, where the converted expression is a constant expression and the conversion sequence contains only the conversions above.
+* The return statements in a discarded statement do not participate in function return type deduction:
+```c++
+template<typename T>
+auto get_value(T t)
+{
+    if constexpr (std::is_pointer_v<T>)
+        return *t; // deduces return type to int for T = int*
+    else
+        return t;  // deduces return type to int for T = int
+}
+```
+* The discarded statement can odr-use a variable that is not defined:
+```c++
+extern int x; // no definition of x required
+ 
+int f()
+{
+    if constexpr (true)
+        return 0;
+    else if (x)
+        return x;
+    else
+        return -x;
+}
+```
+* Outside a template, a discarded statement is fully checked. if constexpr is not a substitute for the #if preprocessing directive:
+```c++
+void f()
+{
+    if constexpr(false)
+    {
+        int i = 0;
+        int *p = i; // Error even though in discarded statement
+    }
+}
+```
+
 #### [for loop](https://en.cppreference.com/w/cpp/language/for)
 
 * as the declaration of the loop
