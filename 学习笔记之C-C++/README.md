@@ -1553,7 +1553,146 @@ The value "Hello" already exists in the set.
 	* C++17 introduced structured binding, which lets you assign an expression to multiple variables.
 	* However, this is for creating new variables to hold the result. If you want to assign the result to existing variables, then you can use the old standby std::tie.
 
+##### [Type alias, alias template](https://en.cppreference.com/w/cpp/language/type_alias)
+
+* Type alias is a name that refers to a previously defined type (similar to typedef).
+* Alias template is a name that refers to a family of types.
+
+###### Syntax
+
+* Alias declarations are declarations with the following syntax:
+    * `using identifier attr(optional) = type-id ;`	(1)	
+    * `template < template-parameter-list > using identifier attr(optional) = type-id ;`(2)	
+    * attr	-	optional sequence of any number of attributes
+    * identifier	-	the name that is introduced by this declaration, which becomes either a type name (1) or a template name (2)
+    * template-parameter-list	-	template parameter list, as in template declaration
+    * type-id	-	abstract declarator or any other valid type-id (which may introduce a new type, as noted in type-id). The type-id cannot directly or indirectly refer to identifier. Note that the point of declaration of the identifier is at the semicolon following type-id.
+
+###### Explanation
+
+* Example
+```c++
+#include <iostream>
+#include <string>
+#include <typeinfo>
+#include <type_traits>
+ 
+// type alias, identical to
+// typedef std::ios_base::fmtflags flags;
+using flags = std::ios_base::fmtflags;
+// the name 'flags' now denotes a type:
+flags fl = std::ios_base::dec;
+ 
+// type alias, identical to
+// typedef void (*func)(int, int);
+using func = void (*) (int, int);
+// the name 'func' now denotes a pointer to function:
+void example(int, int) {}
+func f = example;
+ 
+// alias template
+template<class T>
+using ptr = T*;
+// the name 'ptr<T>' is now an alias for pointer to T
+ptr<int> x;
+ 
+// type alias used to hide a template parameter
+template<class CharT>
+using mystring = std::basic_string<CharT, std::char_traits<CharT>>;
+mystring<char> str;
+ 
+// type alias can introduce a member typedef name
+template<typename T>
+struct Container { using value_type = T; };
+// which can be used in generic programming
+template<typename ContainerT>
+void info(const ContainerT& c)
+{
+    typename ContainerT::value_type T;
+    std::cout << "ContainerT is `" << typeid(decltype(c)).name() << "`\n"
+                 "value_type is `" << typeid(T).name() << "`\n";
+}
+ 
+// type alias used to simplify the syntax of std::enable_if
+template<typename T>
+using Invoke = typename T::type;
+template<typename Condition>
+using EnableIf = Invoke<std::enable_if<Condition::value>>;
+template<typename T, typename = EnableIf<std::is_polymorphic<T>>>
+int fpoly_only(T) { return 1; }
+ 
+struct S { virtual ~S() {} };
+ 
+int main()
+{
+    Container<int> c;
+    info(c); // Container::value_type will be int in this function
+//  fpoly_only(c); // error: enable_if prohibits this
+    S s;
+    fpoly_only(s); // okay: enable_if allows this
+}
+/*
+ContainerT is `struct Container<int>`
+value_type is `int`
+*/
+```
+
 #### Specifiers
+
+##### [typedef specifier](https://en.cppreference.com/w/cpp/language/typedef)
+
+* typedef - creates an alias that can be used anywhere in place of a (possibly complex) type name.
+* Notes
+    * type aliases provide the same functionality as typedefs using a different syntax, and are also applicable to template names.
+* Example
+```c++
+// simple typedef
+typedef unsigned long ulong;
+ 
+// the following two objects have the same type
+unsigned long l1;
+ulong l2;
+ 
+// more complicated typedef
+typedef int int_t, *intp_t, (&fp)(int, ulong), arr_t[10];
+ 
+// the following two objects have the same type
+int a1[10];
+arr_t a2;
+ 
+// beware: the following two objects do not have the same type
+const intp_t p1 = 0; // int *const p1 = 0
+const int *p2;
+ 
+// common C idiom to avoid having to write "struct S"
+typedef struct {int a; int b;} S, *pS;
+ 
+// the following two objects have the same type
+pS ps1;
+S* ps2;
+ 
+// error: storage-class-specifier cannot appear in a typedef declaration
+// typedef static unsigned int uint;
+ 
+// typedef can be used anywhere in the decl-specifier-seq
+long unsigned typedef int long ullong;
+// more conventionally spelled "typedef unsigned long long int ullong;"
+ 
+// std::add_const, like many other metafunctions, use member typedefs
+template<class T>
+struct add_const
+{
+    typedef const T type;
+};
+ 
+typedef struct Node
+{
+    struct listNode* next; // declares a new (incomplete) struct type named listNode
+} listNode; // error: conflicts with the previously declared struct name
+ 
+// C++20 error: "struct with typedef name for linkage" has member functions
+typedef struct { void f() {} } C_Incompatible;
+```
 
 ##### [inline specifier](https://en.cppreference.com/w/cpp/language/inline)
 
