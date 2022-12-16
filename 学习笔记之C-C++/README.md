@@ -5067,7 +5067,7 @@ Use = only when you are sure that there can be no narrowing conversions. For bui
     * （3）对于C++来说，由于各编译器的差异，大量依赖模板元编程（特别是最新形式的）的代码可能会有移植性的问题。
     * 所以，对于模板元编程，我们需要扬其长避其短，合理使用模板元编程。
 
-### Type traits
+### Type property
 
 * These type traits define compile-time template-based interfaces to query the properties of types.
 * Attempting to specialize a template defined in the \<type_traits> header and described in this section results in undefined behavior.
@@ -5183,6 +5183,62 @@ is_base_of_v<A, D> : false
 is_base_of_v<B, A> : false
 is_base_of_v<int, int> : false
 */
+```
+
+### Type modifications
+
+* These type traits apply modifications on a template parameter, and declare (sometimes conditionally) the type member typedef as the resulting type.
+* Attempting to specialize a template defined in the \<type_traits> header and described in this section results in undefined behavior, except that std::common_type and std::basic_common_reference (since C++20) may be specialized as required in description.
+* A template defined in the \<type_traits> header may be instantiated with an incomplete type unless otherwise specified, notwithstanding the general prohibition against instantiating standard library templates with incomplete types.
+* Defined in header \<type_traits>
+
+### Miscellaneous transformations
+
+* Defined in header \<type_traits>
+
+#### [std::enable_if](https://en.cppreference.com/w/cpp/types/enable_if)
+
+* conditionally [removes](https://en.cppreference.com/w/cpp/language/sfinae) a function overload or template specialization from overload resolution (class template)
+* `template< bool B, class T = void > struct enable_if;` (since C++11)
+* If B is `true`, std::enable_if has a public member typedef type, equal to T; otherwise, there is no member typedef.
+* This metafunction is a convenient way to leverage SFINAE prior to C++20's concepts, in particular for conditionally removing functions from the candidate set based on type traits, allowing separate function overloads or specializations based on those different type traits.
+* std::enable_if can be used in many forms, including:
+    * as an additional function argument (not applicable to operator overloads)
+    * as a return type (not applicable to constructors and destructors)
+    * as a class template or function template parameter
+* The behavior of a program that adds specializations for enable_if is undefined.
+* Notes
+    * A common mistake is to declare two function templates that differ only in their default template arguments. This does not work because the declarations are treated as redeclarations of the same function template (default template arguments are not accounted for in [function template equivalence](https://en.cppreference.com/w/cpp/language/function_template#Function_template_overloading)).
+```c++
+/* WRONG */
+ 
+struct T {
+    enum { int_t, float_t } type;
+    template <typename Integer,
+              typename = std::enable_if_t<std::is_integral<Integer>::value>
+    >
+    T(Integer) : type(int_t) {}
+ 
+    template <typename Floating,
+              typename = std::enable_if_t<std::is_floating_point<Floating>::value>
+    >
+    T(Floating) : type(float_t) {} // error: treated as redefinition
+};
+ 
+/* RIGHT */
+ 
+struct T {
+    enum { int_t, float_t } type;
+    template <typename Integer,
+              std::enable_if_t<std::is_integral<Integer>::value, bool> = true
+    >
+    T(Integer) : type(int_t) {}
+ 
+    template <typename Floating,
+              std::enable_if_t<std::is_floating_point<Floating>::value, bool> = true
+    >
+    T(Floating) : type(float_t) {} // OK
+};
 ```
 
 ## [Diagnostics library / Error handling](https://en.cppreference.com/w/cpp/error)
