@@ -1291,6 +1291,11 @@ int main()
     * The unnamed namespaces you have created will only be accessible within the file you created it in.
     * Unnamed namespaces are the replacement for the static declaration of variables.
   * [Namespaces - cppreference.com](https://en.cppreference.com/w/cpp/language/namespace)
+* [constexpr if](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#constexpr-if)
+    * It can simplify template functions that previously used std::enable_if_t
+        * [constexpr if - 7 Features of C++17 that will simplify your code](https://www.codingame.com/playgrounds/2205/7-features-of-c17-that-will-simplify-your-code/constexpr-if)
+        * [Simplify Code with if constexpr and Concepts in C++17/C++20 - C++ Stories](https://www.cppstories.com/2018/03/ifconstexpr/)
+
 
 ### [prvalue v.s. xvalue v.s. lvalue](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#value-categories-lvalue-rvalue-xvalue)
 
