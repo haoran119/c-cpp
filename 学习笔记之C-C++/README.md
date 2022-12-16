@@ -7481,7 +7481,7 @@ int main()
 
 ### Sequence
 
-Sequence containers implement data structures which can be accessed sequentially.
+* Sequence containers implement data structures which can be accessed sequentially.
 
 | array | static contiguous array |
 | - | - |
@@ -7492,7 +7492,11 @@ Sequence containers implement data structures which can be accessed sequentially
 
 #### [std::array](https://en.cppreference.com/w/cpp/container/array)
 
+* static contiguous array (class template)
+
 * std::array is a container that encapsulates fixed size arrays.
+* Defined in header \<array>
+* `template<class T, std::size_t N> struct array; (since C++11)`
 * This container is an aggregate type with the same semantics as a struct holding a C-style array T[N] as its only non-static data member. Unlike a C-style array, it doesn't decay to T* automatically. As an aggregate type, it can be initialized with aggregate-initialization given at most N initializers that are convertible to T: std::array\<int, 3> a = {1,2,3};.
 * The struct combines the performance and accessibility of a C-style array with the benefits of a standard container, such as knowing its own size, supporting assignment, random access iterators, etc.
 * std::array satisfies the requirements of Container and ReversibleContainer except that default-constructed array is not empty and that the complexity of swapping is linear, satisfies the requirements of ContiguousContainer, (since C++17) and partially satisfies the requirements of SequenceContainer.
