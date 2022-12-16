@@ -2745,6 +2745,10 @@ void f()
 ```
 * ...
 
+###### MISC
+
+* [constexpr if - ModernesCpp.com](https://www.modernescpp.com/index.php/constespr-if)
+
 #### [for loop](https://en.cppreference.com/w/cpp/language/for)
 
 * as the declaration of the loop
