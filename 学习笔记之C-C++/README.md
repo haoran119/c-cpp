@@ -4000,6 +4000,44 @@ void g() noexcept
     throw 42; // valid, effectively a call to std::terminate
 }
 ```
+* Formal definition of potentially-throwing expression (used to determine the default exception specification of destructors, constructors, and assignment operators as described above):
+    * An expression e is potentially-throwing if:
+        * e is a function call to a function, pointer to function, or pointer to member function which is potentially-throwing, unless e is a core constant expression (until C++17)
+        * e makes an implicit call to a potentially-throwing function (such as an overloaded operator, an allocation function in a new-expression, a constructor for a function argument, or a destructor if e is a full-expression)
+        * e is a throw-expression
+        * e is a dynamic_cast that casts a polymorphic reference type
+        * e is a typeid expression applied to a dereferenced pointer to a polymorphic type
+        * e has an immediate subexpression that is potentially-throwing
+```c++
+struct A
+{
+    A(int = (A(5), 0)) noexcept;
+    A(const A&) noexcept;
+    A(A&&) noexcept;
+    ~A();
+};
+ 
+struct B
+{
+    B() throw();
+    B(const B&) = default; // implicit exception specification is noexcept(true)
+    B(B&&, int = (throw Y(), 0)) noexcept;
+    ~B() noexcept(false);
+};
+ 
+int n = 7;
+struct D : public A, public B
+{
+    int * p = new int[n];
+    // D::D() potentially-throwing because of the new operator
+    // D::D(const D&) non-throwing
+    // D::D(D&&) potentially-throwing: the default argument for B’s constructor may throw
+    // D::~D() potentially-throwing
+ 
+    // note; if A::~A() were virtual, this program would be ill-formed because an overrider
+    // of a non-throwing virtual cannot be potentially-throwing
+};
+```
 * Notes
     * One of the uses of the constant expression is (along with the noexcept operator) to define function templates that declare noexcept for some types but not others.
     * Note that a noexcept specification on a function is not a compile-time check; it is merely a method for a programmer to inform the compiler whether or not a function should throw exceptions. The compiler can use this information to enable certain optimizations on non-throwing functions as well as enable the noexcept operator, which can check at compile time if a particular expression is declared to throw any exceptions. For example, containers such as std::vector will move their elements if the elements' move constructor is noexcept, and copy otherwise (unless the copy constructor is not accessible, but a potentially throwing move constructor is, in which case the strong exception guarantee is waived).
@@ -4022,6 +4060,18 @@ int main()
     bar(); // fine
     baz(); // compiles, but at runtime this calls std::terminate
 }
+/*
+Compiler messages:
+
+main.cpp: In function 'void baz()':
+main.cpp:7:23: warning: 'throw' will always call 'terminate' [-Wterminate]
+    7 | void baz() noexcept { throw 42; } // noexcept is the same as noexcept(true)
+      |                       ^~~~~~~~
+
+Output:
+
+terminate called after throwing an instance of 'int'
+*/
 ```
 
 ##### MISC
