@@ -3824,15 +3824,22 @@ int main()
 #### [throw expression](https://en.cppreference.com/w/cpp/language/throw)
 
 * Signals an erroneous condition and executes an error handler.
-* Syntax
-    * `throw expression`	(1)
-    * `throw`	(2)	
-* `Stack unwinding`
-    * Once the exception object is constructed, the control flow works backwards (up the call stack) until it reaches the start of a try block, at which point the parameters of all associated catch blocks are compared, in order of appearance, with the type of the exception object to find a match (see try-catch for details on this process). If no match is found, the control flow continues to unwind the stack until the next try block, and so on. If a match is found, the control flow jumps to the matching catch block.
-    * ...
-    * This process is called stack unwinding.
-    * If any function that is called directly by the stack unwinding mechanism, after initialization of the exception object and before the start of the exception handler, exits with an exception, std::terminate is called. Such functions include destructors of objects with automatic storage duration whose scopes are exited, and the copy constructor of the exception object that is called (if not elided) to initialize catch-by-value arguments.
-    * If an exception is thrown and not caught, including exceptions that escape the initial function of std::thread, the main function, and the constructor or destructor of any static or thread-local objects, then std::terminate is called. It is implementation-defined whether any stack unwinding takes place for uncaught exceptions.
+
+##### Syntax
+
+* `throw expression`	(1)
+* `throw`	(2)	
+
+##### Stack unwinding
+
+* Once the exception object is constructed, the control flow works backwards (up the call stack) until it reaches the start of a try block, at which point the parameters of all associated catch blocks are compared, in order of appearance, with the type of the exception object to find a match (see try-catch for details on this process). If no match is found, the control flow continues to unwind the stack until the next try block, and so on. If a match is found, the control flow jumps to the matching catch block.
+* ...
+* This process is called stack unwinding.
+* If any function that is called directly by the stack unwinding mechanism, after initialization of the exception object and before the start of the exception handler, exits with an exception, std::terminate is called. Such functions include destructors of objects with automatic storage duration whose scopes are exited, and the copy constructor of the exception object that is called (if not elided) to initialize catch-by-value arguments.
+* If an exception is thrown and not caught, including exceptions that escape the initial function of std::thread, the main function, and the constructor or destructor of any static or thread-local objects, then std::terminate is called. It is implementation-defined whether any stack unwinding takes place for uncaught exceptions.
+
+##### Explanation
+
 * Notes
     * When rethrowing exceptions, the second form must be used to avoid `object slicing` in the (typical) case where exception objects use inheritance:
     ```c++
