@@ -2163,6 +2163,13 @@ int main() {}
 ##### [Copy elision](https://en.cppreference.com/w/cpp/language/copy_elision)
 
 * Omits copy and move (since C++11) constructors, resulting in zero-copy pass-by-value semantics.
+* Mandatory elision of copy/move operations
+    * Under the following circumstances, the compilers are required to omit the copy and move construction of class objects, even if the copy/move constructor and the destructor have observable side-effects. The objects are constructed directly into the storage where they would otherwise be copied/moved to. The copy/move constructors need not be present or accessible:
+* Non-mandatory elision of copy/move (since C++11) operations
+    * Under the following circumstances, the compilers are permitted, but not required to omit the copy and move (since C++11) construction of class objects even if the copy/move (since C++11) constructor and the destructor have observable side-effects. The objects are constructed directly into the storage where they would otherwise be copied/moved to. This is an optimization: even when it takes place and the copy/move (since C++11) constructor is not called, it still must be present and accessible (as if no optimization happened at all), otherwise the program is ill-formed:
+* Notes
+    * Copy elision is `one of the two allowed forms of optimization, alongside allocation elision and extension, (since C++14)` that can change the observable side-effects. Because some compilers do not perform copy elision in every situation where it is allowed (e.g., in debug mode), programs that rely on the side-effects of copy/move constructors and destructors are not portable.
+    * In a return statement or a throw-expression, if the compiler cannot perform copy elision but the conditions for copy elision are met or would be met, except that the source is a function parameter, the compiler will attempt to use the move constructor even if the object is designated by an lvalue; see return statement for details. (since C++11)
 ```c++
 #include <iostream>
  
