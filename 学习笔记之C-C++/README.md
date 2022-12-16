@@ -3945,6 +3945,220 @@ main() failed to create C with: error
 */
 ```
 
+#### [Function-try-block](https://en.cppreference.com/w/cpp/language/function-try-block)
+
+* Establishes an exception handler around the body of a function.
+
+##### Syntax
+
+* The function-try-block is one of the alternative syntax forms for function-body, which is a part of function definition.
+* `try ctor-initializer(optional) compound-statement handler-sequence`
+* ctor-initializer	-	member initializer list, only allowed in constructors
+* compound-statement	-	the brace-enclosed sequence of statements that constitutes the body of a function
+* handler-sequence	-	sequence of one or more catch-clauses
+
+##### Explanation
+
+* A `function-try-block` associates a sequence of catch clauses with the entire function body, and with the `member initializer list` (if used in a constructor) as well. Every exception thrown from any statement in the function body, or (for constructors) from any member or base constructor, or (for destructors) from any member or base destructor, transfers control to the `handler-sequence` the same way an exception thrown in a regular `try block` would.
+```c++
+#include <iostream>
+#include <string>
+ 
+struct S
+{
+    std::string m;
+ 
+    S(const std::string& str, int idx) try : m(str, idx)
+    {
+        std::cout << "S(" << str << ", " << idx << ") constructed, m = " << m << '\n';
+    }
+    catch(const std::exception& e)
+    {
+        std::cout << "S(" << str << ", " << idx << ") failed: " << e.what() << '\n';
+    } // implicit "throw;" here
+};
+ 
+int main()
+{
+    S s1{"ABC", 1}; // does not throw (index is in bounds)
+ 
+    try
+    {
+        S s2{"ABC", 4}; // throws (out of bounds)
+    }
+    catch (std::exception& e)
+    {
+        std::cout << "S s2... raised an exception: " << e.what() << '\n';
+    }
+}
+/*
+Output:
+
+S(ABC, 1) constructed, m = BC
+S(ABC, 4) failed: basic_string::basic_string: __pos (which is 4) > this->size() (which is 3)
+S s2... raised an exception: basic_string::basic_string: __pos (which is 4) > this->size() (which is 3)
+*/
+```
+* Before any catch clauses of a function-try-block on a constructor are entered, all fully-constructed members and bases have already been destroyed.
+* If the function-try-block is on a delegating constructor, which called a non-delegating constructor that completed successfully, but then the body of the delegating constructor throws, the destructor of this object will be completed before any catch clauses of the function-try-block are entered. (since C++11)
+* Before any catch clauses of a function-try-block on a destructor are entered, all bases and non-variant members have already been destroyed.
+* The behavior is undefined if the catch-clause of a function-try-block used on a constructor or a destructor accesses a base or a non-static member of the object.
+* Every catch-clause in the function-try-block for a constructor must terminate by throwing an exception. If the control reaches the end of such handler, the current exception is automatically rethrown as if by `throw;`. The return statement is not allowed in any catch clause of a constructor's function-try-block.
+* Reaching the end of a catch clause for a function-try-block on a destructor also automatically rethrows the current exception as if by `throw;`, but a return statement is allowed.
+* For all other functions, reaching the end of a catch clause is equivalent to `return;` if the function's return type is (possibly cv-qualified) `void`, otherwise the behavior is undefined.
+* Notes
+    * The primary purpose of function-try-blocks is to respond to an exception thrown from the member initializer list in a constructor by logging and rethrowing, modifying the exception object and rethrowing, throwing a different exception instead, or terminating the program. They are rarely used with destructors or with regular functions.
+    * Function-try-block does not catch the exceptions thrown by the copy/move constructors and the destructors of the function parameters passed by value: those exceptions are thrown in context of the caller.
+    * Function-try-block of the top-level function of a thread does not catch the exceptions thrown from the constructors and destructors of thread-local objects (except for the constructors of function-scoped thread-locals).	(since C++11)
+    * Likewise, function-try-block of the main() function does not catch the exceptions thrown from the constructors and destructors of static objects (except for the constructors of function-local statics).
+    * The scope and lifetime of the function parameters (but not any objects declared in the function itself), extend to the end of the handler-sequence.
+```c++
+#include <cassert>
+#include <iostream>
+
+int f(int n = 2) try
+{
+    ++ n; // increments the function parameter
+    throw n;
+}
+catch(...)
+{
+    ++ n; // n is in scope and still refers to the function parameter
+    assert(n == 4);
+    return n;
+}
+
+int main()
+{
+    std::cout << f();   // 4
+}
+```
+
+#### [try/catch block](https://en.cppreference.com/w/cpp/language/try_catch)
+
+* Associates one or more exception handlers (catch-clauses) with a compound statement.
+
+##### Syntax
+
+* `try compound-statement handler-sequence`
+* where handler-sequence is a sequence of one or more handlers, which have the following syntax:
+    * `catch ( attr(optional) type-specifier-seq declarator ) compound-statement`	(1)	
+    * `catch ( attr(optional) type-specifier-seq abstract-declarator(optional) ) compound-statement`	(2)	
+    * `catch ( ... ) compound-statement`	(3)	
+    * compound-statement	-	brace-enclosed sequence of statements
+    * attr	-	(since C++11) any number of attributes, applies to the formal parameter
+    * type-specifier-seq	-	part of a formal parameter declaration, same as in a function parameter list
+    * declarator	-	part of a formal parameter declaration, same as in a function parameter list
+    * abstract-declarator	-	part of an unnamed formal parameter declaration, same as in function parameter list
+    * 1) Catch-clause that declares a named formal parameter
+        * `try { /* */ } catch (const std::exception& e) { /* */ }`
+    * 2) Catch-clause that declares an unnamed parameter
+        * `try { /* */ } catch (const std::exception&) { /* */ }`
+    * 3) Catch-all handler, which is activated for any exception
+        * `try { /* */ } catch (...) { /* */ }`
+
+##### Explanation
+
+```c++
+try
+{
+    f();
+}
+catch (const std::overflow_error& e)
+{} // this executes if f() throws std::overflow_error (same type rule)
+catch (const std::runtime_error& e)
+{} // this executes if f() throws std::underflow_error (base class rule)
+catch (const std::exception& e)
+{} // this executes if f() throws std::logic_error (base class rule)
+catch (...)
+{} // this executes if f() throws std::string or int or any other unrelated type
+```
+* The catch-all clause `catch (...)` matches exceptions of any type. If present, it has to be the last catch clause in the `handler-seq`. Catch-all block may be used to ensure that no uncaught exceptions can possibly escape from a function that offers `nothrow exception guarantee`.
+* If no matches are found after all catch-clauses were examined, the exception propagation continues to the containing try-block, as described in `throw-expression`. If there are no containing try-blocks left, `std::terminate` is executed (in this case, it is implementation-defined whether any stack unwinding occurs at all: throwing an uncaught exception is permitted to terminate the program without invoking any destructors).
+* When entering a catch clause, if its formal parameter is a base class of the exception type, it is `copy-initialized` from the base class subobject of the exception object. Otherwise, it is copy-initialized from the exception object (this copy is subject to `copy elision`).
+```c++
+try
+{
+    std::string("abc").substr(10); // throws std::length_error
+}
+// catch (std::exception e) // copy-initialization from the std::exception base
+// {
+//     std::cout << e.what(); // information from length_error is lost
+// }
+catch (const std::exception& e) // reference to the base of a polymorphic object
+{
+    std::cout << e.what(); // information from length_error printed
+}
+```
+* Notes
+    * The throw-expression throw NULL; is not guaranteed to be matched by a pointer catch clause, because the exception object type may be int, but throw nullptr; is assuredly matched by any pointer or pointer-to-member catch clause.
+    * If a catch-clause for a derived class is placed after the catch-clause for a base class, the derived catch-clause will never be executed:
+    ```c++
+    try
+    {
+        f();
+    }
+    catch (const std::exception& e)
+    {} // will be executed if f() throws std::runtime_error
+    catch (const std::runtime_error& e)
+    {} // dead code!
+    ```
+    * If goto is used to exit a try-block and if any of the destructors of block-scoped automatic variables that are executed by the goto throw exceptions, those exceptions are caught by the try blocks in which the variables are defined:
+    ```c++
+    label:
+        try
+        {
+            T1 t1;
+            try
+            {
+                T2 t2;
+                if (condition)
+                    goto label; // destroys t2, then destroys t1, then jumps to label
+            }
+            catch (...) {} // catches the exception from the destructor of t2
+        }
+        catch (...) {}     // catches the exception from the destructor of t1
+    ```
+* Example
+    * The following example demonstrates several usage cases of the try-catch block
+```c++
+#include <iostream>
+#include <vector>
+ 
+int main()
+{
+    try
+    {
+        std::cout << "Throwing an integer exception...\n";
+        throw 42;
+    }
+    catch (int i)
+    {
+        std::cout << " the integer exception was caught, with value: " << i << '\n';
+    }
+ 
+    try
+    {
+        std::cout << "Creating a vector of size 5... \n";
+        std::vector<int> v(5);
+        std::cout << "Accessing the 11th element of the vector...\n";
+        std::cout << v.at(10); // vector::at() throws std::out_of_range
+    }
+    catch (const std::exception& e) // caught by reference to base
+    {
+        std::cout << " a standard exception was caught, with message '"
+                  << e.what() << "'\n";
+    }
+}
+/*
+Throwing an integer exception...
+ the integer exception was caught, with value: 42
+Creating a vector of size 5...
+Accessing the 11th element of the vector...
+ a standard exception was caught, with message 'out_of_range'
+*/
+```
+
 #### [noexcept specifier](https://en.cppreference.com/w/cpp/language/noexcept_spec)
 
 * Specifies whether a function could throw exceptions.
