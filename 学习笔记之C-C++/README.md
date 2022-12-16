@@ -5200,7 +5200,7 @@ is_base_of_v<int, int> : false
 
 * conditionally [removes](https://en.cppreference.com/w/cpp/language/sfinae) a function overload or template specialization from overload resolution (class template)
 * `template< bool B, class T = void > struct enable_if;` (since C++11)
-* If B is `true`, std::enable_if has a public member typedef type, equal to T; otherwise, there is no member typedef.
+* If B is `true`, std::enable_if has a public member typedef `type`, equal to T; otherwise, there is `no` member typedef.
 * This metafunction is a convenient way to leverage SFINAE prior to C++20's concepts, in particular for conditionally removing functions from the candidate set based on type traits, allowing separate function overloads or specializations based on those different type traits.
 * std::enable_if can be used in many forms, including:
     * as an additional function argument (not applicable to operator overloads)
