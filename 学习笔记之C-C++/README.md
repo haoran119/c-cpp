@@ -3797,12 +3797,146 @@ int main()
 ### [Exceptions](https://en.cppreference.com/w/cpp/language/exceptions)
 
 * Exception handling provides a way of transferring control and information from some point in the execution of a program to a handler associated with a point previously passed by the execution (in other words, exception handling transfers control up the call stack)
-* An exception can be thrown by a throw-expression, dynamic_cast, typeid, new-expression, allocation function, and any of the standard library functions that are specified to throw exceptions to signal certain error conditions (e.g. std::vector::at, std::string::substr, etc).
-* In order for an exception to be caught, the throw-expression has to be inside a try-block or inside a function called from a try-block, and there has to be a catch clause that matches the type of the exception object.
+* An exception can be thrown by a `throw-expression, dynamic_cast, typeid, new-expression, allocation function, and any of the standard library functions` that are specified to throw exceptions to signal certain error conditions (e.g. `std::vector::at`, `std::string::substr`, etc).
+* In order for an exception to be caught, the throw-expression has to be inside a `try-block` or inside a function called from a try-block, and there has to be a `catch clause` that matches the type of the exception object.
 * When declaring a function, the following specification(s) may be provided to limit the types of the exceptions a function may throw:
-    * dynamic exception specifications (until C++17)
-    * noexcept specifications (since C++11)
-* Errors that arise during exception handling are handled by std::terminate` and std::unexpected (until C++17)`.
+    * `dynamic exception specifications (until C++17)`
+    * `noexcept specifications (since C++11)`
+* Errors that arise during exception handling are handled by `std::terminate` and `std::unexpected (until C++17)`.
+* Error handling
+    * Throwing an exception is used to signal errors from functions, where "errors" are typically limited to only the following[1][2][3]:
+        * Failures to meet the postconditions, such as failing to produce a valid return value object
+        * Failures to meet the preconditions of another function that must be called
+        * (for non-private member functions) Failures to (re)establish a class invariant
+    * In particular, this implies that the failures of constructors (see also RAII) and most operators should be reported by throwing exceptions.
+    * In addition, so-called wide contract functions use exceptions to indicate unacceptable inputs, for example, std::string::at has no preconditions, but throws an exception to indicate index out of range.
+* Exception safety
+    * After the error condition is reported by a function, additional guarantees may be provided with regards to the state of the program. The following four levels of exception guarantee are generally recognized[4][5][6], which are strict supersets of each other:
+        * `Nothrow (or nofail) exception guarantee` -- the function never throws exceptions. Nothrow (errors are reported by other means or concealed) is expected of destructors and other functions that may be called during stack unwinding. `The destructors are noexcept by default. (since C++11)` Nofail (the function always succeeds) is expected of `swaps`, `move constructors`, and other functions used by those that provide strong exception guarantee.
+        * `Strong exception guarantee` -- If the function throws an exception, the state of the program is rolled back to the state just before the function call. (for example, `std::vector::push_back`)
+        * `Basic exception guarantee` -- If the function throws an exception, the program is in a valid state. No resources are leaked, and all objects' invariants are intact.
+        * `No exception guarantee` -- If the function throws an exception, the program may not be in a valid state: resource leaks, memory corruption, or other invariant-destroying errors may have occurred.
+    * Generic components may, in addition, offer exception-neutral guarantee: if an exception is thrown from a template parameter (e.g. from the Compare function object of std::sort or from the constructor of T in std::make_shared), it is propagated, unchanged, to the caller.
+* Exception objects
+    * While objects of any complete type and cv pointers to void may be thrown as exception objects, all standard library functions throw anonymous temporary objects by value, and the types of those objects are derived (directly or indirectly) from std::exception. User-defined exceptions usually follow this pattern.[7][8][9]
+    * To avoid unnecessary copying of the exception object and object slicing, the best practice for catch clauses is to catch by reference.[10][11][12][13]
+
+#### [throw expression](https://en.cppreference.com/w/cpp/language/throw)
+
+* Signals an erroneous condition and executes an error handler.
+* Syntax
+    * `throw expression`	(1)
+    * `throw`	(2)	
+* `Stack unwinding`
+    * Once the exception object is constructed, the control flow works backwards (up the call stack) until it reaches the start of a try block, at which point the parameters of all associated catch blocks are compared, in order of appearance, with the type of the exception object to find a match (see try-catch for details on this process). If no match is found, the control flow continues to unwind the stack until the next try block, and so on. If a match is found, the control flow jumps to the matching catch block.
+    * ...
+    * This process is called stack unwinding.
+    * If any function that is called directly by the stack unwinding mechanism, after initialization of the exception object and before the start of the exception handler, exits with an exception, std::terminate is called. Such functions include destructors of objects with automatic storage duration whose scopes are exited, and the copy constructor of the exception object that is called (if not elided) to initialize catch-by-value arguments.
+    * If an exception is thrown and not caught, including exceptions that escape the initial function of std::thread, the main function, and the constructor or destructor of any static or thread-local objects, then std::terminate is called. It is implementation-defined whether any stack unwinding takes place for uncaught exceptions.
+* Notes
+    * When rethrowing exceptions, the second form must be used to avoid `object slicing` in the (typical) case where exception objects use inheritance:
+    ```c++
+    try
+    {
+        std::string("abc").substr(10); // throws std::length_error
+    }
+    catch (const std::exception& e)
+    {
+        std::cout << e.what() << '\n';
+    //  throw e; // copy-initializes a new exception object of type std::exception
+        throw;   // rethrows the exception object of type std::length_error
+    }
+    ```
+    * The throw-expression is classified as `prvalue expression` of type `void`. Like any other expression, it may be a sub-expression in another expression, most commonly in the `conditional operator`:
+    ```c++
+    double f(double d)
+    {
+        return d > 1e7 ? throw std::overflow_error("too big") : d;
+    }
+
+    int main()  
+    {
+        try
+        {
+            std::cout << f(1e10) << '\n';
+        }
+        catch (const std::overflow_error& e)
+        {
+            std::cout << e.what() << '\n';
+        }
+    }
+    ```
+* Example
+```c++
+#include <iostream>
+#include <stdexcept>
+ 
+struct A
+{
+    int n;
+ 
+    A(int n = 0): n(n) { std::cout << "A(" << n << ") constructed successfully\n"; }
+    ~A() { std::cout << "A(" << n << ") destroyed\n"; }
+};
+ 
+int foo()
+{
+    throw std::runtime_error("error");
+}
+ 
+struct B
+{
+    A a1, a2, a3;
+ 
+    B() try : a1(1), a2(foo()), a3(3)
+    {
+        std::cout << "B constructed successfully\n";
+    }
+    catch(...)
+    {
+    	std::cout << "B::B() exiting with exception\n";
+    }
+ 
+    ~B() { std::cout << "B destroyed\n"; }
+};
+ 
+struct C : A, B
+{
+    C() try
+    {
+        std::cout << "C::C() completed successfully\n";
+    }
+    catch(...)
+    {
+        std::cout << "C::C() exiting with exception\n";
+    }
+ 
+    ~C() { std::cout << "C destroyed\n"; }
+};
+ 
+int main () try
+{
+    // creates the A base subobject
+    // creates the a1 member of B
+    // fails to create the a2 member of B
+    // unwinding destroys the a1 member of B
+    // unwinding destroys the A base subobject
+    C c;
+}
+catch (const std::exception& e)
+{
+    std::cout << "main() failed to create C with: " << e.what();
+}
+/*
+A(0) constructed successfully
+A(1) constructed successfully
+A(1) destroyed
+B::B() exiting with exception
+A(0) destroyed
+C::C() exiting with exception
+main() failed to create C with: error
+*/
+```
 
 #### [noexcept specifier](https://en.cppreference.com/w/cpp/language/noexcept_spec)
 
