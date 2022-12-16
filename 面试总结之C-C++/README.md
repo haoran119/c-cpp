@@ -1414,6 +1414,8 @@ int main()
 ### [C++ Templates](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#templates)
 
 * 简化对类似函数的设计，比如要设计两个函数 abs(int a), abs(float a),就可以用模板去设计一个函数就可以了
+* How to defind a [template alias](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#type-alias-alias-template) ?
+    * `template<class T> using UP = std::unique_ptr<T, std::function<void (T*)> >;`
 
 ### [STL](https://github.com/huihut/interview#-stl)
 
