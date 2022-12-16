@@ -2705,7 +2705,7 @@ int demo()
 ##### Constexpr if
 
 * The statement that begins with `if constexpr` is known as the `constexpr if statement`.
-* In a constexpr if statement, the value of `condition` must be `a contextually converted constant expression of type bool (until C++23)``an expression contextually converted to bool, where the conversion is a constant expression (since C++23)`. If the value is `true`, then `statement-false` is discarded (if present), otherwise, `statement-true` is discarded.
+* In a constexpr if statement, the value of `condition` must be `a contextually converted constant expression of type bool (until C++23)` `an expression contextually converted to bool, where the conversion is a constant expression (since C++23)`. If the value is `true`, then `statement-false` is discarded (if present), otherwise, `statement-true` is discarded.
     * `A contextually converted constant expression of type bool` is an expression, contextually converted to bool, where the converted expression is a constant expression and the conversion sequence contains only the conversions above.
 * The return statements in a discarded statement do not participate in function return type deduction:
 ```c++
