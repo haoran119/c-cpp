@@ -4468,7 +4468,7 @@ arr = { 1, 2.71, 3.14, 42 }
 */
 ```
 
-##### [fold expression(since C++17)](https://en.cppreference.com/w/cpp/language/fold)
+##### [fold expression](https://en.cppreference.com/w/cpp/language/fold)
 
 * Reduces (folds) a parameter pack over a binary operator.
 
@@ -4482,7 +4482,7 @@ arr = { 1, 2.71, 3.14, 42 }
 * 2) unary left fold
 * 3) binary right fold
 * 4) binary left fold
-* op	-	any of the following 32 binary operators: + - * / % ^ & | = < > << >> += -= *= /= %= ^= &= |= <<= >>= == != <= >= && || , .* ->*. In a binary fold, both ops must be the same.
+* op	-	any of the following 32 binary operators: `+ - * / % ^ & | = < > << >> += -= *= /= %= ^= &= |= <<= >>= == != <= >= && || , .* ->*`. In a binary fold, both ops must be the same.
 * pack	-	an expression that contains an unexpanded parameter pack and does not contain an operator with precedence lower than cast at the top level (formally, a cast-expression)
 * init	-	an expression that does not contain an unexpanded parameter pack and does not contain an operator with precedence lower than cast at the top level (formally, a cast-expression)
 * Note that the opening and closing parentheses are a required part of the fold expression.
