@@ -1503,7 +1503,9 @@ int main()
         ```
     * [19.2 — Template non-type parameters – Learn C++](https://www.learncpp.com/cpp-tutorial/template-non-type-parameters/)
     * [Types-, Non-Types, and Templates as Template Parameters - ModernesCpp.com](https://www.modernescpp.com/index.php/types-non-types-and-templates-as-template-parameters)
-* [Parameter pack](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#parameter-pack) ?
+* What's [Parameter pack](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#parameter-pack) ?
+    * A `template parameter pack` is a template parameter that accepts zero or more template arguments (non-types, types, or templates). A `function parameter pack` is a function parameter that accepts zero or more function arguments.
+    * A template with at least one parameter pack is called a `variadic template`.
 
 ### [STL](https://github.com/huihut/interview#-stl)
 
