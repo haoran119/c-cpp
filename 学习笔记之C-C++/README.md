@@ -4182,6 +4182,60 @@ class Map
 };
 ```
 
+###### Name resolution for template parameters
+
+##### Template arguments
+
+* In order for a template to be instantiated, every template parameter (`type`, `non-type`, or `template`) must be replaced by a corresponding template argument. For `class templates`, the arguments are either explicitly provided`, deduced from the initializer, (since C++17)` or defaulted. For `function templates`, the arguments are explicitly provided, deduced from the context, or defaulted.
+* If an argument can be interpreted as both a `type-id` and an `expression`, it is always interpreted as a type-id, even if the corresponding template parameter is non-type:
+```c++
+template<class T>
+void f(); // #1
+ 
+template<int I>
+void f(); // #2
+ 
+void g()
+{
+    f<int()>(); // "int()" is both a type and an expression,
+                // calls #1 because it is interpreted as a type
+}
+```
+
+###### Template non-type arguments
+
+* The following limitations apply when instantiating templates that have non-type template parameters:
+* ...
+
+###### Template type arguments
+
+* A template argument for a type template parameter must be a type-id, which may name an incomplete type:
+```c++
+template<typename T>
+class X {}; // class template
+ 
+struct A;            // incomplete type
+typedef struct {} B; // type alias to an unnamed type
+ 
+int main()
+{
+    X<A> x1;  // OK: 'A' names a type
+    X<A*> x2; // OK: 'A*' names a type
+    X<B> x3;  // OK: 'B' names a type
+}
+```
+
+###### Template template arguments
+
+* A template argument for a template template parameter must be an `id-expression` which names a class template or a template alias.
+
+###### Default template arguments
+
+* Default template arguments are specified in the parameter lists after the `=` sign. Defaults can be specified for any kind of template parameter (type, non-type, or template), but not to parameter packs.
+* If the default is specified for a template parameter of a primary class template`, primary variable template, (since C++14)` or alias template, each subsequent template parameter must have a default argument, except the very last one may be a template parameter pack. In a function template, there are no restrictions on the parameters that follow a default, and a parameter pack may be followed by more type parameters only if they have defaults or can be deduced from the function arguments.
+
+###### Template argument equivalence
+
 #### [Class template](https://en.cppreference.com/w/cpp/language/class_template)
 
 * [C++ Class Template Specialization | HackerRank](https://www.hackerrank.com/challenges/cpp-class-template-specialization/problem) 
