@@ -1040,60 +1040,198 @@ Alignment of
 ##### [operator overloading](https://en.cppreference.com/w/cpp/language/operators)
 
 * Customizes the C++ operators for operands of user-defined types.
-* Canonical implementations
-    * Besides the restrictions above, the language puts no other constraints on what the overloaded operators do, or on the return type (it does not participate in overload resolution), but in general, overloaded operators are expected to behave as similar as possible to the built-in operators: operator+ is expected to add, rather than multiply its arguments, operator= is expected to assign, etc. The related operators are expected to behave similarly (operator+ and operator+= do the same addition-like operation). The return types are limited by the expressions in which the operator is expected to be used: for example, assignment operators return by reference to make it possible to write a = b = c = d, because the built-in operators allow that.
-    * Commonly overloaded operators have the following typical, canonical forms:[1]
-    * Assignment operator
-        * The assignment operator (operator=) has special properties: see copy assignment and move assignment for details.
-        * The canonical copy-assignment operator is expected to [perform no action on self-assignment](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c62-make-copy-assignment-safe-for-self-assignment), and to return the lhs by reference:
+* Special operators
+    * `static_cast` converts one type to another related type
+    * `dynamic_cast` converts within inheritance hierarchies
+    * `const_cast` adds or removes cv-qualifiers
+    * `reinterpret_cast` converts type to unrelated type
+    * `C-style cast` converts one type to another by a mix of static_cast, const_cast, and reinterpret_cast
+    * `new` creates objects with dynamic storage duration
+    * `delete` destructs objects previously created by the new expression and releases obtained memory area
+    * `sizeof` queries the size of a type
+    * `sizeof...` queries the size of a parameter pack (since C++11)
+    * `typeid` queries the type information of a type
+    * `noexcept` checks if an expression can throw an exception (since C++11)
+    * `alignof` queries alignment requirements of a type (since C++11)
+* Example
+```c++
+#include <iostream>
+ 
+class Fraction
+{
+    // or C++17's std::gcd
+    constexpr int gcd(int a, int b) { return b == 0 ? a : gcd(b, a % b); }
+ 
+    int n, d;
+public:
+    constexpr Fraction(int n, int d = 1) : n(n/gcd(n, d)), d(d/gcd(n, d)) {}
+ 
+    constexpr int num() const { return n; }
+    constexpr int den() const { return d; }
+ 
+    constexpr Fraction& operator*=(const Fraction& rhs)
+    {
+        int new_n = n * rhs.n / gcd(n * rhs.n, d * rhs.d);
+        d = d * rhs.d / gcd(n * rhs.n, d * rhs.d);
+        n = new_n;
+        return *this;
+    }
+};
+ 
+std::ostream& operator<<(std::ostream& out, const Fraction& f)
+{
+   return out << f.num() << '/' << f.den() ;
+}
+ 
+constexpr bool operator==(const Fraction& lhs, const Fraction& rhs)
+{
+    return lhs.num() == rhs.num() && lhs.den() == rhs.den();
+}
+ 
+constexpr bool operator!=(const Fraction& lhs, const Fraction& rhs)
+{
+    return !(lhs == rhs);
+}
+ 
+constexpr Fraction operator*(Fraction lhs, const Fraction& rhs)
+{
+    return lhs *= rhs;
+}
+ 
+int main()
+{
+    constexpr Fraction f1{3, 8}, f2{1, 2}, f3{10, 2};
+    std::cout << f1 << " * " << f2 << " = " << f1 * f2 << '\n'
+              << f2 << " * " << f3 << " = " << f2 * f3 << '\n'
+              <<  2 << " * " << f1 << " = " <<  2 * f1 << '\n';
+    static_assert(f3 == f2 * 10);
+}
+/*
+3/8 * 1/2 = 3/16
+1/2 * 5/1 = 5/2
+2 * 3/8 = 3/4
+*/
+```
+
+###### Syntax
+
+* `Overloaded operators are functions with special function names`:
+    * operator op	(1)	
+    * operator type	(2)	
+    * operator new  (3)	
+    * operator new []	
+    * operator delete   (4)	
+    * operator delete []	
+    * operator "" suffix-identifier	(5)	(since C++11)
+    * operator co_await	(6)	(since C++20)
+    * op	-	any of the following operators:`+ - * / % ^ & | ~ ! = < > += -= *= /= %= ^= &= |= << >> >>= <<= == != <= >= <=> (since C++20) && || ++ -- , ->* -> ( ) [ ]`
+    * 1) overloaded operator;
+    * 2) user-defined conversion function;
+    * 3) allocation function;
+    * 4) deallocation function;
+    * 5) user-defined literal;
+    * 6) overloaded co_await operator for use in co_await expressions.
+
+###### Canonical implementations
+
+* Besides the restrictions above, the language puts no other constraints on what the overloaded operators do, or on the return type (it does not participate in overload resolution), but in general, overloaded operators are expected to behave as similar as possible to the built-in operators: operator+ is expected to add, rather than multiply its arguments, operator= is expected to assign, etc. The related operators are expected to behave similarly (operator+ and operator+= do the same addition-like operation). The return types are limited by the expressions in which the operator is expected to be used: for example, assignment operators return by reference to make it possible to write a = b = c = d, because the built-in operators allow that.
+* Commonly overloaded operators have the following typical, canonical forms:[1]
+
+# 
+Assignment operator
+
+* The assignment operator (operator=) has special properties: see copy assignment and move assignment for details.
+* The canonical copy-assignment operator is expected to [perform no action on self-assignment](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c62-make-copy-assignment-safe-for-self-assignment), and to return the lhs by reference:
+```c++
+// copy assignment
+T& operator=(const T& other)
+{
+    // Guard self assignment
+    if (this == &other)
+        return *this;
+
+    // assume *this manages a reusable resource, such as a heap-allocated buffer mArray
+    if (size != other.size)           // resource in *this cannot be reused
+    {
+        delete[] mArray;              // release resource in *this
+        mArray = nullptr;
+        size = 0;                     // preserve invariants in case next line throws
+        mArray = new int[other.size]; // allocate resource in *this
+        size = other.size;
+    } 
+
+    std::copy(other.mArray, other.mArray + other.size, mArray);
+    return *this;
+}
+```
+* The canonical move assignment is expected to [leave the moved-from object in valid state](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c64-a-move-operation-should-move-and-leave-its-source-in-a-valid-state) (that is, a state with class invariants intact), and either [do nothing](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c65-make-move-assignment-safe-for-self-assignment) or at least leave the object in a valid state on self-assignment, and return the lhs by reference to non-const, and be noexcept:
+```c++
+// move assignment
+T& operator=(T&& other) noexcept
+{
+    // Guard self assignment
+    if (this == &other)
+        return *this; // delete[]/size=0 would also be ok
+
+    delete[] mArray;                               // release resource in *this
+    mArray = std::exchange(other.mArray, nullptr); // leave other in valid state
+    size = std::exchange(other.size, 0);
+    return *this;
+}
+```
+* In those situations where copy assignment `cannot benefit from resource reuse` (it does not manage a heap-allocated array and does not have a (possibly transitive) member that does, such as a member std::vector or std::string), there is a popular convenient shorthand: `the copy-and-swap assignment operator`, which takes its parameter by value (thus working as both copy- and move-assignment depending on the value category of the argument), swaps with the parameter, and lets the destructor clean it up.
+```c++
+// copy assignment (copy-and-swap idiom)
+T& T::operator=(T other) noexcept // call copy or move constructor to construct other
+{
+    std::swap(size, other.size); // exchange resources between *this and other
+    std::swap(mArray, other.mArray);
+    return *this;
+} // destructor of other is called to release the resources formerly managed by *this
+```
+* This form automatically provides [strong exception guarantee](https://en.cppreference.com/w/cpp/language/exceptions#Exception_safety), but prohibits resource reuse.
+
+###### MISC
+
+* [Operator Overloading in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/operator-overloading-c/)
+    * What is the difference between operator functions and normal functions? 
+        * Operator functions are the same as normal functions. The only differences are, that the name of an operator function is always the operator keyword followed by the symbol of the operator and operator functions are called when the corresponding operator is used. 
+    * Can we overload all operators? 
+        * Almost all operators can be overloaded except a few. Following is the list of operators that cannot be overloaded. 
+            * sizeof
+            * typeid
+            * Scope resolution (::)
+            * Class member access operators (.(dot), .* (pointer to member operator))
+            * Ternary or conditional (?:)
+    * Important points about operator overloading 
+        * 1) For operator overloading to work, at least `one` of the operands must be a `user-defined class object`.
+        * 2) Assignment Operator: Compiler automatically creates a `default assignment operator` with every class. The default assignment operator does assign all members of the right side to the left side and works fine in most cases (this behaviour is the same as the `copy constructor`). See [this](https://www.geeksforgeeks.org/assignment-operator-overloading-in-c/) for more details. 
+        * 3) Conversion Operator: We can also write conversion operators that can be used to convert one type to another type. 
+            * Overloaded conversion operators must be a member method. Other operators can either be the member method or the global method.
         ```c++
-        // copy assignment
-        T& operator=(const T& other)
+        #include <iostream>
+        using namespace std;
+        class Fraction
         {
-            // Guard self assignment
-            if (this == &other)
-                return *this;
+        private:
+            int num, den;
+        public:
+            Fraction(int n, int d) { num = n; den = d; }
 
-            // assume *this manages a reusable resource, such as a heap-allocated buffer mArray
-            if (size != other.size)           // resource in *this cannot be reused
-            {
-                delete[] mArray;              // release resource in *this
-                mArray = nullptr;
-                size = 0;                     // preserve invariants in case next line throws
-                mArray = new int[other.size]; // allocate resource in *this
-                size = other.size;
-            } 
+            // Conversion operator: return float value of fraction
+            operator float() const {
+                return float(num) / float(den);
+            }
+        };
 
-            std::copy(other.mArray, other.mArray + other.size, mArray);
-            return *this;
+        int main() {
+            Fraction f(2, 5);
+            float val = f;
+            cout << val << '\n';    // 0.4
+            return 0;
         }
         ```
-        * The canonical move assignment is expected to [leave the moved-from object in valid state](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c64-a-move-operation-should-move-and-leave-its-source-in-a-valid-state) (that is, a state with class invariants intact), and either [do nothing](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c65-make-move-assignment-safe-for-self-assignment) or at least leave the object in a valid state on self-assignment, and return the lhs by reference to non-const, and be noexcept:
-        ```c++
-        // move assignment
-        T& operator=(T&& other) noexcept
-        {
-            // Guard self assignment
-            if (this == &other)
-                return *this; // delete[]/size=0 would also be ok
-
-            delete[] mArray;                               // release resource in *this
-            mArray = std::exchange(other.mArray, nullptr); // leave other in valid state
-            size = std::exchange(other.size, 0);
-            return *this;
-        }
-        ```
-        * In those situations where copy assignment `cannot benefit from resource reuse` (it does not manage a heap-allocated array and does not have a (possibly transitive) member that does, such as a member std::vector or std::string), there is a popular convenient shorthand: `the copy-and-swap assignment operator`, which takes its parameter by value (thus working as both copy- and move-assignment depending on the value category of the argument), swaps with the parameter, and lets the destructor clean it up.
-        ```c++
-        // copy assignment (copy-and-swap idiom)
-        T& T::operator=(T other) noexcept // call copy or move constructor to construct other
-        {
-            std::swap(size, other.size); // exchange resources between *this and other
-            std::swap(mArray, other.mArray);
-            return *this;
-        } // destructor of other is called to release the resources formerly managed by *this
-        ```
-        * This form automatically provides [strong exception guarantee](https://en.cppreference.com/w/cpp/language/exceptions#Exception_safety), but prohibits resource reuse.
+        * 4) Any constructor that can be called with a single argument works as a conversion constructor, which means it can also be used for implicit conversion to the class being constructed.  
 
 #### [Conversions](https://en.cppreference.com/w/cpp/language/expressions#Conversions)
 
