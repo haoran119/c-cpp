@@ -5228,6 +5228,76 @@ Use = only when you are sure that there can be no narrowing conversions. For bui
 * A template defined in the \<type_traits> header may be instantiated with an incomplete type unless otherwise specified, notwithstanding the general prohibition against instantiating standard library templates with incomplete types.
 * Defined in header \<type_traits>
 
+#### Type properties
+
+##### [std::is_empty](https://en.cppreference.com/w/cpp/types/is_empty)
+
+* checks if a type is a class (but not union) type and has no non-static data members (class template)
+* `template< class T > struct is_empty;` (since C++11)
+* If T is an empty type (that is, a non-union class type with no non-static data members other than bit-fields of size 0, no virtual functions, no virtual base classes, and no non-empty base classes), provides the member constant value equal to true. For any other type, value is false.
+* If T is a non-union class type, T shall be a complete type; otherwise, the behavior is undefined.
+* The behavior of a program that adds specializations for is_empty or is_empty_v (since C++17) is undefined.
+* Template parameters
+    * `T`	-	a type to check
+* Helper variable template
+    * `template< class T > inline constexpr bool is_empty_v = is_empty<T>::value;` (since C++17)
+* Notes
+    * Inheriting from empty base classes usually does not increase the size of a class due to [empty base optimization](https://en.cppreference.com/w/cpp/language/ebo).
+    * `std::is_empty<T>` and all other type traits are empty classes.
+* Example
+```c++
+#include <iostream>
+#include <type_traits>
+ 
+struct A {};
+ 
+struct B {
+    int m;
+};
+ 
+struct C {
+    static int m;
+};
+ 
+struct D {
+    virtual ~D();
+};
+ 
+union E {};
+ 
+struct F {
+    [[no_unique_address]] E e;
+};
+ 
+struct G {
+    int:0;  
+    // C++ standard allow "as a special case, an unnamed bit-field with a width of zero 
+    // specifies alignment of the next bit-field at an allocation unit boundary.
+    // Only when declaring an unnamed bit-field may the width be zero."
+};
+ 
+int main()
+{
+    std::cout << std::boolalpha;
+    std::cout << "A " << std::is_empty<A>::value << '\n';
+    std::cout << "B " << std::is_empty<B>::value << '\n';
+    std::cout << "C " << std::is_empty<C>::value << '\n';
+    std::cout << "D " << std::is_empty<D>::value << '\n';
+    std::cout << "E " << std::is_empty<E>::value << '\n';
+    std::cout << "F " << std::is_empty<F>::value << '\n'; // the result is ABI-dependent
+    std::cout << "G " << std::is_empty<G>::value << '\n'; // unnamed bit-fields of width of 0
+}
+/*
+A true
+B false
+C true
+D false
+E false
+F true
+G true
+*/
+```
+
 #### Type relationships
 
 ##### [std::is_same](https://en.cppreference.com/w/cpp/types/is_same)
