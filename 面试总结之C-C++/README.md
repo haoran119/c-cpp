@@ -1422,12 +1422,88 @@ int main()
 	* bad_cast
 		* 由于强制转换为引用类型失败，dynamic_cast 运算符引发 bad_cast 异常。
 
-### [C++ Templates](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#templates)
+### [Templates](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#templates)
 
 * 简化对类似函数的设计，比如要设计两个函数 abs(int a), abs(float a),就可以用模板去设计一个函数就可以了
 * How to defind a [template alias](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#type-alias-alias-template) ?
     * `template<class T> using UP = std::unique_ptr<T, std::function<void (T*)> >;`
-* What's [non-type template parameter](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#non-type-template-parameter) / [type template parameter](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#type-template-parameter) / [template template parameter](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#template-template-parameter) / [Parameter pack](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#parameter-pack) ?
+* What's [non-type template parameter](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#non-type-template-parameter) / [type template parameter](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#type-template-parameter) / [template template parameter](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#template-template-parameter)?
+    * A `template type parameter` is a placeholder type that is substituted for a type passed in as an argument.
+        ```c++
+        std::vector<int> myVec;
+        std::map<std::string, int> myMap;
+        std::lock_guard<std::mutex> myLockGuard;
+        ```
+    * A `template non-type parameter` is a template parameter where the type of the parameter is predefined and is substituted for a constexpr value passed in as an argument.
+        * Non-types can be a
+            * lvalue reference
+            * nullptr
+            * pointer
+            * enumerator
+            * integral type
+        * Integrals are the most used non-types. std::array is the typical example because you have to specify at compile time the size of a std::array:
+            * `std::array<int, 3> myArray{1, 2, 3};`
+    * A `template template parameter` is a template parameter where the name of this parameter is a template-name (and needs arguments to be instantiated).
+        * The container adaptors std::stack, std::queue, and std::priority_queue use per default a std::deque to hold their arguments, but you can use a different container. Their usage is straightforward.
+        ```c++
+        std::stack<int> stack1;
+        stack1.push(5);
+
+        std::stack<double, std::vector<double>> stack2;
+        stack2.push(10.5);
+        ```
+        * Their definition may look a little bit weird.
+        ```c++
+        // templateTemplateParameters.cpp
+
+        #include <iostream>
+        #include <list>
+        #include <vector>
+        #include <string>
+
+        template <typename T, template <typename, typename> class Cont >   // (1)
+        class Matrix{
+        public:
+          explicit Matrix(std::initializer_list<T> inList): data(inList){  // (2)
+            for (auto d: data) std::cout << d << " ";
+          }
+          int getSize() const{
+            return data.size();
+          }
+
+        private:
+          Cont<T, std::allocator<T>> data;                                 // (3)                               
+
+        };
+
+        int main(){
+
+          std::cout << std::endl;
+
+                                                                            // (4)
+          Matrix<int, std::vector> myIntVec{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; 
+          std::cout << std::endl;
+          std::cout << "myIntVec.getSize(): " << myIntVec.getSize() << std::endl;
+
+          std::cout << std::endl;
+
+          Matrix<double, std::vector> myDoubleVec{1.1, 2.2, 3.3, 4.4, 5.5}; // (5)
+          std::cout << std::endl;
+          std::cout << "myDoubleVec.getSize(): "  << myDoubleVec.getSize() << std::endl;
+
+          std::cout << std::endl;
+                                                                            // (6)
+          Matrix<std::string, std::list> myStringList{"one", "two", "three", "four"};  
+          std::cout << std::endl;
+          std::cout << "myStringList.getSize(): " << myStringList.getSize() << std::endl;
+
+          std::cout << std::endl;
+
+        }
+        ```
+    * [19.2 — Template non-type parameters – Learn C++](https://www.learncpp.com/cpp-tutorial/template-non-type-parameters/)
+    * [Types-, Non-Types, and Templates as Template Parameters - ModernesCpp.com](https://www.modernescpp.com/index.php/types-non-types-and-templates-as-template-parameters)
+* [Parameter pack](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#parameter-pack) ?
 
 ### [STL](https://github.com/huihut/interview#-stl)
 
