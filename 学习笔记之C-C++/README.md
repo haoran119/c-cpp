@@ -4319,6 +4319,271 @@ D2::impl()
 
 #### [Parameter pack](https://en.cppreference.com/w/cpp/language/parameter_pack)
 
+* A template parameter pack is a template parameter that accepts `zero or more template arguments (non-types, types, or templates)`. A function parameter pack is a function parameter that accepts `zero or more function arguments`.
+* A template with at least `one parameter pack` is called a `variadic template`.
+* Example
+    * The below example defines a function similar to std::printf, that replace each occurrence of the character % in the format string with a value.
+    * The first overload is called when only the format string is passed and there is no parameter expansion.
+    * The second overload contains a separate template parameter for the head of the arguments and a parameter pack, this allows the recursive call to pass only the tail of the parameters until it becomes empty.
+    * Targs is the `template parameter pack` and Fargs is the `function parameter pack`.
+```c++
+#include <iostream>
+ 
+void tprintf(const char* format) // base function
+{
+    std::cout << format;
+}
+ 
+template<typename T, typename... Targs>
+void tprintf(const char* format, T value, Targs... Fargs) // recursive variadic function
+{
+    for (; *format != '\0'; format++)
+    {
+        if (*format == '%')
+        {
+            std::cout << value;
+            tprintf(format + 1, Fargs...); // recursive call
+            return;
+        }
+        std::cout << *format;
+    }
+}
+ 
+int main()
+{
+    tprintf("% world% %\n", "Hello", '!', 123);
+}
+/*
+Hello world! 123
+*/
+```
+
+##### Syntax
+
+* Template parameter pack (appears in alias template, class template`, variable template (since C++14)` and function template parameter lists)
+    * `type ... pack-name(optional)`	(1)	
+    * `typename|class ... pack-name(optional)`	(2)	
+    * `type-constraint ... pack-name(optional)`	(3)	(since C++20)
+    * `template < parameter-list > typename|class ... pack-name(optional)`	(4)	(since C++17)
+    * Function parameter pack (a form of declarator, appears in a function parameter list of a variadic function template)
+    * `pack-name ... pack-param-name(optional)`	(5)	
+    * Parameter pack expansion (appears in a body of a variadic template)
+    * `pattern ...`	(6)	
+    * 1) A non-type template parameter pack with an optional name
+    * 2) A type template parameter pack with an optional name
+    * 3) A constrained type template parameter pack with an optional name (since C++20)
+    * 4) A template template parameter pack with an optional name
+    * 5) A function parameter pack with an optional name
+    * 6) Parameter pack expansion: expands to comma-separated list of zero or more patterns. Pattern must include at least one parameter pack.
+
+##### Explanation
+
+* A variadic class template can be instantiated with any number of template arguments:
+```c++
+template<class... Types>
+struct Tuple {};
+ 
+Tuple<> t0;           // Types contains no arguments
+Tuple<int> t1;        // Types contains one argument: int
+Tuple<int, float> t2; // Types contains two arguments: int and float
+Tuple<0> t3;          // error: 0 is not a type
+```
+* A variadic function template can be called with any number of function arguments (the template arguments are deduced through template argument deduction):
+```c++
+template<class... Types>
+void f(Types... args);
+ 
+f();       // OK: args contains no arguments
+f(1);      // OK: args contains one argument: int
+f(2, 1.0); // OK: args contains two arguments: int and double
+```
+* In a primary class template, the template parameter pack must be the final parameter in the template parameter list. In a function template, the template parameter pack may appear earlier in the list provided that all following parameters can be deduced from the function arguments, or have default arguments:
+```c++
+template<typename U, typename... Ts>    // OK: can deduce U
+struct valid;
+// template<typename... Ts, typename U> // Error: Ts... not at the end
+// struct Invalid;
+ 
+template<typename... Ts, typename U, typename=void>
+void valid(U, Ts...);    // OK: can deduce U
+// void valid(Ts..., U); // Can't be used: Ts... is a non-deduced context in this position
+ 
+valid(1.0, 1, 2, 3);     // OK: deduces U as double, Ts as {int, int, int}
+```
+* If every valid specialization of a variadic template requires an empty template parameter pack, the program is ill-formed, no diagnostic required.
+
+##### Pack expansion
+
+* A pattern followed by an ellipsis, in which the name of at least one parameter pack appears at least once, is expanded into zero or more comma-separated instantiations of the pattern, where the name of the parameter pack is replaced by each of the elements from the pack, in order.
+```c++
+template<class... Us>
+void f(Us... pargs) {}
+ 
+template<class... Ts>
+void g(Ts... args)
+{
+    f(&args...); // “&args...” is a pack expansion
+                 // “&args” is its pattern
+}
+ 
+g(1, 0.2, "a"); // Ts... args expand to int E1, double E2, const char* E3
+                // &args... expands to &E1, &E2, &E3
+                // Us... pargs expand to int* E1, double* E2, const char** E3
+```
+
+##### Expansion loci
+
+* Depending on where the expansion takes place, the resulting comma-separated list is a different kind of list: function parameter list, member initializer list, attribute list, etc. The following is the list of all allowed contexts:
+* ...
+
+##### [sizeof... operator](https://en.cppreference.com/w/cpp/language/sizeof...)
+
+* Queries the number of elements in a parameter pack.
+* Syntax
+    * `sizeof...( parameter-pack )`
+    * Returns a constant of type std::size_t.
+* Example
+```c++
+#include <array>
+#include <iostream>
+#include <type_traits>
+ 
+template<typename... Ts>
+constexpr auto make_array(Ts&&... ts)
+{
+    using CT = std::common_type_t<Ts...>;
+    return std::array<CT, sizeof...(Ts)>{std::forward<CT>(ts)...};
+}
+ 
+int main()
+{
+    std::array<double, 4ul> arr = make_array(1, 2.71f, 3.14, '*');
+    std::cout << "arr = { ";
+    for (auto s{arr.size()}; double elem : arr)
+        std::cout << elem << (--s ? ", " : " ");
+    std::cout << "}\n";
+}
+/*
+arr = { 1, 2.71, 3.14, 42 }
+*/
+```
+
+##### [fold expression(since C++17)](https://en.cppreference.com/w/cpp/language/fold)
+
+* Reduces (folds) a parameter pack over a binary operator.
+
+###### Syntax
+
+* `( pack op ... )`	(1)	
+* `( ... op pack )`	(2)	
+* `( pack op ... op init )`	(3)	
+* `( init op ... op pack )`	(4)	
+* 1) unary right fold
+* 2) unary left fold
+* 3) binary right fold
+* 4) binary left fold
+* op	-	any of the following 32 binary operators: + - * / % ^ & | = < > << >> += -= *= /= %= ^= &= |= <<= >>= == != <= >= && || , .* ->*. In a binary fold, both ops must be the same.
+* pack	-	an expression that contains an unexpanded parameter pack and does not contain an operator with precedence lower than cast at the top level (formally, a cast-expression)
+* init	-	an expression that does not contain an unexpanded parameter pack and does not contain an operator with precedence lower than cast at the top level (formally, a cast-expression)
+* Note that the opening and closing parentheses are a required part of the fold expression.
+
+###### Explanation
+
+* The instantiation of a fold expression expands the expression e as follows:
+* 1) Unary right fold (E op ...) becomes (E1 op (... op (EN-1 op EN)))
+* 2) Unary left fold (... op E) becomes (((E1 op E2) op ...) op EN)
+* 3) Binary right fold (E op ... op I) becomes (E1 op (... op (EN−1 op (EN op I))))
+* 4) Binary left fold (I op ... op E) becomes ((((I op E1) op E2) op ...) op EN)
+* (where N is the number of elements in the pack expansion)
+* For example,
+```c++
+template<typename... Args>
+bool all(Args... args) { return (... && args); }
+ 
+bool b = all(true, true, true, false);
+// within all(), the unary left fold expands as
+//  return ((true && true) && true) && false;
+// b is false
+```
+* When a unary fold is used with a pack expansion of length zero, only the following operators are allowed:
+    * 1) Logical AND (&&). The value for the empty pack is true
+    * 2) Logical OR (||). The value for the empty pack is false
+    * 3) The comma operator (,). The value for the empty pack is void()
+* Notes
+    * If the expression used as init or as pack has an operator with precedence below cast at the top level, it must be parenthesized:
+```c++
+template<typename... Args>
+int sum(Args&&... args)
+{
+//  return (args + ... + 1 * 2);   // Error: operator with precedence below cast
+    return (args + ... + (1 * 2)); // OK
+}
+```
+* Example
+```c++
+#include <climits>
+#include <concepts>
+#include <cstdint>
+#include <iostream>
+#include <type_traits>
+#include <utility>
+#include <vector>
+ 
+template<typename... Args>
+void printer(Args&&... args)
+{
+    (std::cout << ... << args) << '\n';
+}
+ 
+template<typename T, typename... Args>
+void push_back_vec(std::vector<T>& v, Args&&... args)
+{
+    static_assert((std::is_constructible_v<T, Args&&> && ...));
+    (v.push_back(std::forward<Args>(args)), ...);
+}
+ 
+template<class T, std::size_t... dummy_pack>
+constexpr T bswap_impl(T i, std::index_sequence<dummy_pack...>)
+{
+    T low_byte_mask = (unsigned char)-1;
+    T ret{};
+    ([&]
+    {
+        (void)dummy_pack;
+        ret <<= CHAR_BIT;
+        ret |= i & low_byte_mask;
+        i >>= CHAR_BIT;
+    }(), ...);
+    return ret;
+}
+ 
+constexpr auto bswap(std::unsigned_integral auto i)
+{
+    return bswap_impl(i, std::make_index_sequence<sizeof(i)>{});
+}
+ 
+int main()
+{
+    printer(1, 2, 3, "abc");
+ 
+    std::vector<int> v;
+    push_back_vec(v, 6, 2, 45, 12);
+    push_back_vec(v, 1, 2, 9);
+    for (int i : v) std::cout << i << ' ';
+ 
+    static_assert(bswap<std::uint16_t>(0x1234u) == 
+                                       0x3412u);
+    static_assert(bswap<std::uint64_t>(0x0123456789abcdefull) ==
+                                       0xefcdab8967452301ULL);
+}
+/*
+123abc
+6 2 45 12 1 2 9
+*/
+```
+
+##### MISC
+
 * [C++ Variadics | HackerRank](https://www.hackerrank.com/challenges/cpp-variadics/problem)
 ```c++
 #include <iostream>
