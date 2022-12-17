@@ -3986,30 +3986,201 @@ int main() {
 
 #### [Template parameters and template arguments](https://en.cppreference.com/w/cpp/language/template_parameters)
 
-* Every template is parameterized by one or more template parameters, indicated in the parameter-list of the template declaration syntax:
+* Examples
+```c++
+#include <array>
+#include <iostream>
+#include <numeric>
+ 
+// simple non-type template parameter
+template<int N>
+struct S { int a[N]; };
+ 
+template<const char*>
+struct S2 {};
+ 
+// complicated non-type example
+template
+<
+    char c,             // integral type
+    int (&ra)[5],       // lvalue reference to object (of array type)
+    int (*pf)(int),     // pointer to function
+    int (S<10>::*a)[10] // pointer to member object (of type int[10])
+>
+struct Complicated
+{
+    // calls the function selected at compile time
+    // and stores the result in the array selected at compile time
+    void foo(char base)
+    {
+        ra[4] = pf(c - base);
+    }
+};
+ 
+//  S2<"fail"> s2;        // error: string literal cannot be used
+    char okay[] = "okay"; // static object with linkage
+//  S2<&okay[0]> s3;      // error: array element has no linkage
+    S2<okay> s4;          // works
+ 
+int a[5];
+int f(int n) { return n; }
+ 
+// C++20: NTTP can be a literal class type
+template<std::array arr>
+constexpr
+auto sum() { return std::accumulate(arr.cbegin(), arr.cend(), 0); }
+ 
+// C++20: class template arguments are deduced at the call site
+static_assert(sum<std::array<double, 8>{3, 1, 4, 1, 5, 9, 2, 6}>() == 31.0);
+// C++20: NTTP argument deduction and CTAD
+static_assert(sum<std::array{2, 7, 1, 8, 2, 8}>() == 28);
+ 
+int main()
+{
+    S<10> s; // s.a is an array of 10 int
+    s.a[9] = 4;
+ 
+    Complicated<'2', a, f, &S<10>::a> c;
+    c.foo('0');
+ 
+    std::cout << s.a[9] << a[4] << '\n';
+}
+/*
+42
+*/
+```
+
+##### Template parameters
+
+* Every `template` is parameterized by one or more template parameters, indicated in the `parameter-list` of the template declaration syntax:
 	* `template < parameter-list > declaration		`
-	* Each parameter in parameter-list may be:
+	* Each parameter in `parameter-list` may be:
 		* a non-type template parameter;
 		* a type template parameter;
 		* a template template parameter.
-* Non-type template parameter
-	* `type name(optional)	(1)	`
-	* `type name(optional) = default	(2)	`
-	* `type ... name(optional)	(3)	(since C++11)`
-	* `placeholder name	(4)	(since C++17)`
-	* 1) A non-type template parameter with an optional name.
-	* 2) A non-type template parameter with an optional name and a default value.
-	* 3) A non-type template parameter pack with an optional name.
-	* 4) A non-type template parameter with a placeholder type. placeholder may be any type that includes the placeholder auto (such as plain auto, auto ** or auto &), a placeholder for a deduced class type (since C++20), or decltype(auto).
-* Type template parameter
-	* `type-parameter-key name(optional)	(1)	`
-	* `type-parameter-key name(optional) = default	(2)	`
-	* `type-parameter-key ... name(optional)	(3)	(since C++11)`
-	* `type-constraint name(optional)	(4)	(since C++20)`
-	* `type-constraint name(optional) = default	(5)	(since C++20)`
-	* `type-constraint ... name(optional)	(6)	(since C++20)`
-	* type-parameter-key	-	either `typename` or `class`. There is no difference between these keywords in a type template parameter declaration
-	* type-constraint	-	either the name of a concept or the name of a concept followed by a list of template arguments (in angle brackets). Either way, the concept name may be optionally qualified
+
+###### Non-type template parameter
+
+* `type name(optional)	(1)	`
+* `type name(optional) = default	(2)	`
+* `type ... name(optional)	(3)	(since C++11)`
+* `placeholder name	(4)	(since C++17)`
+* 1) A non-type template parameter with an optional name.
+* 2) A non-type template parameter with an optional name and a default value.
+* 3) A non-type template parameter pack with an optional name.
+* 4) A non-type template parameter with a placeholder type. `placeholder` may be any type that includes the placeholder `auto` (such as plain `auto`, `auto **` or `auto &`)`, a placeholder for a deduced class type (since C++20)`, or `decltype(auto)`.
+* A non-type template parameter must have a `structural type`, which is one of the following types (optionally cv-qualified, the qualifiers are ignored):
+    * lvalue reference type (to object or to function);
+    * an integral type;
+    * a pointer type (to object or to function);
+    * a pointer to member type (to member object or to member function);
+    * an enumeration type;
+    * std::nullptr_t; (since C++11)
+    * a floating-point type; (since C++20)
+    * a literal class type with the following properties:
+        * all base classes and non-static data members are public and non-mutable and
+        * the types of all base classes and non-static data members are structural types or (possibly multi-dimensional) array thereof. 
+* Array and function types may be written in a template declaration, but they are automatically replaced by pointer to object and pointer to function as appropriate.
+* ...
+* The type of a non-type template parameter may be deduced if it includes a placeholder type (auto`, a placeholder for a deduced class type (since C++20)`, or decltype(auto)). The deduction is performed as if by deducing the type of the variable x in the invented declaration `T x = template-argument;`, where T is the declared type of the template parameter. If the deduced type is not permitted for a non-type template parameter, the program is ill-formed.
+```c++
+template<auto n>
+struct B { /* ... */ };
+ 
+B<5> b1;   // OK: non-type template parameter type is int
+B<'a'> b2; // OK: non-type template parameter type is char
+B<2.5> b3; // error (until C++20): non-type template parameter type cannot be double
+ 
+// C++20 deduced class type placeholder, class template arguments are deduced at the call site
+template<std::array arr>
+void f();
+ 
+f<std::array<double, 8>{}>();
+```
+* For non-type template parameter packs whose type uses a placeholder type, the type is independently deduced for each template argument and need not match:
+```c++
+template<auto...>
+struct C {};
+ 
+C<'C', 0, 2L, nullptr> x; // OK
+```
+
+###### Type template parameter
+
+* `type-parameter-key name(optional)	(1)	`
+* `type-parameter-key name(optional) = default	(2)	`
+* `type-parameter-key ... name(optional)	(3)	(since C++11)`
+* `type-constraint name(optional)	(4)	(since C++20)`
+* `type-constraint name(optional) = default	(5)	(since C++20)`
+* `type-constraint ... name(optional)	(6)	(since C++20)`
+* type-parameter-key	-	either `typename` or `class`. There is no difference between these keywords in a type template parameter declaration
+* type-constraint	-	either the name of a concept or the name of a concept followed by a list of template arguments (in angle brackets). Either way, the concept name may be optionally qualified
+* 1) A type template parameter without a default.
+```c++
+template<class T>
+class My_vector { /* ... */ };
+```
+* 2) A type template parameter with a default.
+```c++
+template<class T = void>
+struct My_op_functor { /* ... */ };
+```
+* 3) A type template parameter pack.
+```c++
+template<typename... Ts>
+class My_tuple { /* ... */ };
+```
+* 4) A constrained type template parameter without a default.
+```c++
+template<My_concept T>
+class My_constrained_vector { /* ... */ };
+```
+* 5) A constrained type template parameter with a default.
+```c++
+template<My_concept T = void>
+class My_constrained_op_functor { /* ... */ };
+```
+* 6) A constrained type template parameter pack.
+```c++
+template<My_concept... Ts>
+class My_constrained_tuple { /* ... */ };
+```
+* The name of the parameter is optional:
+```c++
+// Declarations of the templates shown above:
+template<class>
+class My_vector;
+
+template<class = void>
+struct My_op_functor;
+
+template<typename...>
+class My_tuple;
+```
+* In the body of the template declaration, the name of a type parameter is a `typedef-name which aliases the type supplied when the template is instantiated`.
+
+###### Template template parameter
+
+* `template < parameter-list > type-parameter-key name(optional)`	(1)	
+* `template < parameter-list > type-parameter-key name(optional) = default`	(2)	
+* `template < parameter-list > type-parameter-key ... name(optional)`	(3)	(since C++11)
+* type-parameter-key	-	class `or typename (since C++17)`
+    * 1) A template template parameter with an optional name.
+    * 2) A template template parameter with an optional name and a default.
+    * 3) A template template parameter pack with an optional name.
+* In the body of the template declaration, the name of this parameter is a `template-name (and needs arguments to be instantiated)`.
+```c++
+template<typename T>
+class my_array {};
+ 
+// two type template parameters and one template template parameter:
+template<typename K, typename V, template<typename> typename C = my_array>
+class Map
+{
+    C<K> key;
+    C<V> value;
+};
+```
 
 #### [Class template](https://en.cppreference.com/w/cpp/language/class_template)
 
