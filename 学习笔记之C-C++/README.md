@@ -4318,6 +4318,21 @@ D2::impl()
 
 #### [Function template](https://en.cppreference.com/w/cpp/language/function_template)
 
+* A function template defines a family of functions.
+
+##### Syntax
+
+* `template < parameter-list > function-declaration`	(1)	
+* `template < parameter-list > requires constraint function-declaration	(2)`	(since C++20)
+* `function-declaration-with-placeholders`	(3)	(since C++20)
+
+##### Explanation
+
+* `parameter-list`	-	a non-empty comma-separated list of the template parameters, each of which is either non-type parameter, a type parameter, a template parameter, or a parameter pack of any of those. `As with any template, parameters may be constrained (since C++20)`
+* `function-declaration`	-	a function declaration. The function name declared becomes a template name.
+* `constraint`	-	a constraint expression which restricts the template parameters accepted by this function template
+* `function-declaration-with-placeholders`	-	a function declaration where the type of at least one parameter uses the placeholder auto or Concept auto: the template parameter list will have one invented parameter for each placeholder (see Abbreviated function templates below)
+
 #### [Parameter pack](https://en.cppreference.com/w/cpp/language/parameter_pack)
 
 * A template parameter pack is a template parameter that accepts `zero or more template arguments (non-types, types, or templates)`. A function parameter pack is a function parameter that accepts `zero or more function arguments`.
