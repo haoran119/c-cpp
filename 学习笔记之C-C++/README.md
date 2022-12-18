@@ -6432,18 +6432,6 @@ d1 almost equals d2
 * ULONG_MAX      = 18446744073709551615
 * DBL_MAX          = 1.79769e+308
 
-#
-Type relationships
-* [is_same - C++ Reference](https://www.cplusplus.com/reference/type_traits/is_same/)
-	* template \<class T, class U> struct is_same;
-	* Trait class that identifies whether T is the same type as U, including having the same const and/or volatile qualification, if any.
-	* Two different type names are considered to represent the same type if -and only if- one is a typedef of the other: Two names representing types with the exact same characteristics but which none is a typedef of the other are not considered the same type.
-	* is_same inherits from integral_constant as being either true_type or false_type, depending on whether T and U are the same type.
-	* [std::is_same - cppreference.com](https://en.cppreference.com/w/cpp/types/is_same)
-		* If T and U name the same type (taking into account const/volatile qualifications), provides the member constant value equal to true. Otherwise value is false.
-		* Commutativity is satisfied, i.e. for any two types T and U, is_same\<T, U>::value == true if and only if is_same\<U, T>::value == true.
-		* The behavior of a program that adds specializations for is_same or is_same_v (since C++17) is undefined.
-
 ### [Program support utilities](https://en.cppreference.com/w/cpp/utility/program)
 
 #### Program termination
@@ -6897,7 +6885,7 @@ G true
 
 * checks if two types are the same (class template)
 * If T and U name the same type (taking into account const/volatile qualifications), provides the member constant value equal to true. Otherwise value is false.
-* Commutativity is satisfied, i.e. for any two types T and U, is_same<T, U>::value == true if and only if is_same<U, T>::value == true.
+* Commutativity is satisfied, i.e. for any two types T and U, `is_same<T, U>::value == true` if and only if `is_same<U, T>::value == true`.
 * The behavior of a program that adds specializations for is_same or is_same_v (since C++17) is undefined.
 ```c++
 #include <iostream>
@@ -6965,6 +6953,11 @@ true false true
 true false false
 */
 ```
+* [is_same - C++ Reference](https://www.cplusplus.com/reference/type_traits/is_same/)
+	* `template <class T, class U> struct is_same;`
+	* Trait class that identifies whether T is the same type as U, including having the same const and/or volatile qualification, if any.
+	* Two different type names are considered to represent the same type if -and only if- one is a typedef of the other: Two names representing types with the exact same characteristics but which none is a typedef of the other are not considered the same type.
+	* is_same inherits from integral_constant as being either true_type or false_type, depending on whether T and U are the same type.
 
 ##### [std::is_base_of](https://en.cppreference.com/w/cpp/types/is_base_of)
 
