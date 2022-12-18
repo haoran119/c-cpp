@@ -13578,6 +13578,69 @@ int main()
 
 ### Non-member functions
 
+## [Regular expressions library](https://en.cppreference.com/w/cpp/regex)
+
+* The regular expressions library provides a class that represents [regular expressions](https://en.wikipedia.org/wiki/Regular_expression), which are a kind of mini-language used to perform pattern matching within strings. Almost all operations with regexes can be characterized by operating on several of the following objects:
+    * `Target sequence`. The character sequence that is searched for a pattern. This may be a range specified by two iterators, a null-terminated character string or a std::string.
+    * `Pattern`. This is the regular expression itself. It determines what constitutes a match. It is an object of type std::basic_regex, constructed from a string with special syntax. See regex_constants::syntax_option_type for the description of supported syntax variations.
+    * `Matched array`. The information about matches may be retrieved as an object of type std::match_results.
+    * `Replacement string`. This is a string that determines how to replace the matches, see regex_constants::match_flag_type for the description of supported syntax variations.
+* Example
+```c++
+#include <iostream>
+#include <iterator>
+#include <string>
+#include <regex>
+ 
+int main()
+{
+    std::string s = "Some people, when confronted with a problem, think "
+        "\"I know, I'll use regular expressions.\" "
+        "Now they have two problems.";
+ 
+    std::regex self_regex("REGULAR EXPRESSIONS",
+            std::regex_constants::ECMAScript | std::regex_constants::icase);
+    if (std::regex_search(s, self_regex)) {
+        std::cout << "Text contains the phrase 'regular expressions'\n";
+    }
+ 
+    std::regex word_regex("(\\w+)");
+    auto words_begin = 
+        std::sregex_iterator(s.begin(), s.end(), word_regex);
+    auto words_end = std::sregex_iterator();
+ 
+    std::cout << "Found "
+              << std::distance(words_begin, words_end)
+              << " words\n";
+ 
+    const int N = 6;
+    std::cout << "Words longer than " << N << " characters:\n";
+    for (std::sregex_iterator i = words_begin; i != words_end; ++i) {
+        std::smatch match = *i;
+        std::string match_str = match.str();
+        if (match_str.size() > N) {
+            std::cout << "  " << match_str << '\n';
+        }
+    }
+ 
+    std::regex long_word_regex("(\\w{7,})");
+    std::string new_s = std::regex_replace(s, long_word_regex, "[$&]");
+    std::cout << new_s << '\n';
+}
+/*
+Text contains the phrase 'regular expressions'
+Found 20 words
+Words longer than 6 characters:
+  confronted
+  problem
+  regular
+  expressions
+  problems
+Some people, when [confronted] with a [problem], think 
+"I know, I'll use [regular] [expressions]." Now they have two [problems].
+*/
+```
+
 ## [Concurrency support library](https://en.cppreference.com/w/cpp/thread)
 
 * C++ includes built-in support for threads, atomic operations, mutual exclusion, condition variables, and futures.
