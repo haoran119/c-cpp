@@ -2546,6 +2546,11 @@ destructed at 0x7fffd635fd4e
 	* std::tie的实现方式相对于std::tuple来讲可读性变强了，返回值可以直接通过std::tie中的定义获取。除此之外，还有一个优势就是，可以忽略不想要的值，这个在std::tuple中是不可能做到的。
 	* C++17版本中提供了结构化绑定
 
+#### [Default arguments](https://en.cppreference.com/w/cpp/language/default_arguments)
+
+* Allows a function to be called without providing one or more trailing arguments.
+* Indicated by using the following syntax for a parameter in the `parameter-list` of a [function declaration](https://en.cppreference.com/w/cpp/language/function).
+
 #### [Lambda expressions](https://en.cppreference.com/w/cpp/language/lambda)
 
 * Constructs a [closure](https://en.wikipedia.org/wiki/Closure_(computer_programming)): an unnamed function object capable of capturing variables in scope.
