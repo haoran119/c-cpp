@@ -3827,10 +3827,255 @@ move assigned
 
 #### Inheritance
 
-* [override specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/override)
-	* Specifies that a virtual function overrides another virtual function.
-* [final specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/final)
-	* Specifies that a virtual function cannot be overridden in a derived class or that a class cannot be derived from.
+##### [Base and derived classes](https://en.cppreference.com/w/cpp/language/derived_class)
+
+* Any class type (whether declared with class-key class or struct) may be declared as derived from one or more base classes which, in turn, may be derived from their own base classes, forming an inheritance hierarchy.
+* The list of base classes is provided in the base-clause of the class declaration syntax. The base-clause consists of the character : followed by a comma-separated list of one or more base-specifiers.
+```c++
+struct Base
+{
+    int a, b, c;
+};
+ 
+// every object of type Derived includes Base as a subobject
+struct Derived : Base
+{
+    int b;
+};
+ 
+// every object of type Derived2 includes Derived and Base as subobjects
+struct Derived2 : Derived
+{
+    int c;
+};
+```
+
+###### Virtual base classes
+
+* For each distinct base class that is specified `virtual`, the most derived object contains only `one base class subobject` of that type, even if the class appears many times in the inheritance hierarchy (as long as it is inherited virtual every time).
+```c++
+struct B { int n; };
+class X : public virtual B {};
+class Y : virtual public B {};
+class Z : public B {};
+ 
+// every object of type AA has one X, one Y, one Z, and two B's:
+// one that is the base of Z and one that is shared by X and Y
+struct AA : X, Y, Z
+{
+    AA()
+    {
+        X::n = 1; // modifies the virtual B subobject's member
+        Y::n = 2; // modifies the same virtual B subobject's member
+        Z::n = 3; // modifies the non-virtual B subobject's member
+ 
+        std::cout << X::n << Y::n << Z::n << '\n'; // prints 223
+    }
+};
+```
+* An example of an inheritance hierarchy with virtual base classes is the iostreams hierarchy of the standard library: `std::istream` and `std::ostream` are derived from `std::ios` using virtual inheritance. `std::iostream` is derived from both `std::istream` and `std::ostream`, so every instance of `std::iostream` contains a `std::ostream` subobject, a `std::istream` subobject, and just one `std::ios` subobject (and, consequently, one `std::ios_base`).
+* All `virtual` base subobjects are initialized before any `non-virtual` base subobject, so only the `most derived class` calls the constructors of the `virtual bases` in its member initializer list:
+```c++
+struct B
+{
+    int n;
+ 
+    B(int x) : n(x) {}
+};
+ 
+struct X : virtual B { X() : B(1) {} };
+struct Y : virtual B { Y() : B(2) {} };
+struct AA : X, Y     { AA() : B(3), X(), Y() {} };
+ 
+// the default constructor of AA calls the default constructors of X and Y
+// but those constructors do not call the constructor of B because B is a virtual base
+AA a; // a.n == 3
+ 
+// the default constructor of X calls the constructor of B
+X x;  // x.n == 1
+```
+* There are [special rules](https://en.cppreference.com/w/cpp/language/unqualified_lookup#Member_function_definition) for unqualified name lookup for class members when virtual inheritance is involved (sometimes referred to as the rules of dominance).
+
+###### Public inheritance
+
+* When a class uses public member access specifier to derive from a base, all public members of the base class are accessible as public members of the derived class and all protected members of the base class are accessible as protected members of the derived class (private members of the base are never accessible unless `friended`)
+* Public inheritance models the `subtyping relationship of object-oriented programming`: the derived class object IS-A base class object. References and pointers to a derived object are expected to be usable by any code that expects references or pointers to any of its public bases (see LSP) or, in DbC terms, a derived class should maintain class invariants of its public bases, should not strengthen any precondition or weaken any postcondition of a member function it overrides.
+```c++
+#include <vector>
+#include <string>
+#include <iostream>
+ 
+struct MenuOption { std::string title; };
+ 
+// Menu is a vector of MenuOption: options can be inserted, removed, reordered...
+// and has a title.
+class Menu : public std::vector<MenuOption>
+{
+public:
+    std::string title;
+ 
+    void print() const
+    {
+        std::cout << title << ":\n";
+        for (std::size_t i = 0, s = size(); i < s; ++i)
+            std::cout << "  " << (i+1) << ". " << at(i).title << '\n';
+    }
+};
+// Note: Menu::title is not problematic because its role is independent of the base class.
+ 
+enum class Color { WHITE, RED, BLUE, GREEN };
+ 
+void apply_terminal_color(Color) { /* OS-specific */ }
+ 
+// THIS IS BAD!
+// ColorMenu is a Menu where every option has a custom color.
+class ColorMenu : public Menu
+{
+public:
+    std::vector<Color> colors;
+ 
+    void print() const
+    {
+        std::cout << title << ":\n";
+ 
+        for (std::size_t i = 0, s = size(); i < s; ++i)
+        {
+            std::cout << "  " << (i+1) << ". ";
+            apply_terminal_color(colors[i]);
+            std::cout << at(i).title << '\n';
+            apply_terminal_color(Color::WHITE);
+        }
+    }
+};
+// ColorMenu needs the following invariants that cannot be satisfied
+// by publicly inheriting from Menu, for example:
+// - ColorMenu::colors and Menu must have the same number of elements
+// - To make sense, calling erase() should remove also elements from colors,
+//   in order to let options keep their colors
+// Basically every non-const call to a std::vector method will break the invariant
+// of the ColorMenu and will need fixing from the user by correctly managing colors.
+ 
+int main()
+{
+    ColorMenu color_menu;
+ 
+    // The big problem of this class is that we must keep ColorMenu::Color
+    // in sync with Menu.
+    color_menu.push_back(MenuOption{"Some choice"});
+ 
+    // color_menu.print(); // ERROR! colors[i] in print() is out of range
+ 
+    color_menu.colors.push_back(Color::RED);
+ 
+    color_menu.print(); // OK: colors and Menu has the same number of elements
+}
+```
+
+###### Protected inheritance
+
+* When a class uses protected member access specifier to derive from a base, all public and protected members of the base class are accessible as protected members of the derived class (private members of the base are never accessible unless friended)
+* Protected inheritance may be used for `controlled polymorphism`: within the members of Derived, as well as within the members of all further-derived classes, the derived class IS-A base: references and pointers to Derived may be used where references and pointers to Base are expected.
+
+###### Private inheritance
+
+* When a class uses private member access specifier to derive from a base, all public and protected members of the base class are accessible as private members of the derived class (private members of the base are never accessible unless friended).
+* Private inheritance is commonly used in `policy-based design`, since policies are usually empty classes, and using them as bases both enables static polymorphism and leverages empty-base optimization.
+* Private inheritance can also be used to implement the `composition relationship` (the base class subobject is an implementation detail of the derived class object). Using a member offers better encapsulation and is generally preferred unless the derived class requires access to protected members (including constructors) of the base, needs to override a virtual member of the base, needs the base to be constructed before and destructed after some other base subobject, needs to share a virtual base or needs to control the construction of a virtual base. Use of members to implement composition is also not applicable in the case of multiple inheritance from a parameter pack or when the identities of the base classes are determined at compile time through template metaprogramming.
+* Similar to protected inheritance, private inheritance may also be used for `controlled polymorphism`: within the members of the derived (but not within further-derived classes), derived IS-A base.
+```c++
+template<typename Transport>
+class service : private Transport // private inheritance from the Transport policy
+{
+public:
+    void transmit()
+    {
+        this->send(...); // send using whatever transport was supplied
+    }
+};
+ 
+// TCP transport policy
+class tcp
+{
+public:
+    void send(...);
+};
+ 
+// UDP transport policy
+class udp
+{
+public:
+    void send(...);
+};
+ 
+service<tcp> service(host, port); 
+service.transmit(...); // send over TCP
+```
+
+###### Member name lookup
+
+* Unqualified and qualified name lookup rules for class members are detailed in [name lookup](https://en.cppreference.com/w/cpp/language/lookup).
+
+##### [Empty base optimization (EBO)](https://en.cppreference.com/w/cpp/language/ebo)
+
+* Allows the size of an empty base subobject to be zero.
+* The size of any object or member subobject is required to be at least 1 even if the type is an empty class type (that is, a class or struct that has no non-static data members), `(unless with [[no_unique_address]], see below) (since C++20)` in order to be able to guarantee that the addresses of distinct objects of the same type are always distinct.
+* However, base class subobjects are not so constrained, and can be completely optimized out from the object layout:
+```c++
+struct Base {}; // empty class
+ 
+struct Derived1 : Base {
+    int i;
+};
+ 
+int main()
+{
+    // the size of any object of empty class type is at least 1
+    static_assert(sizeof(Base) >= 1);
+ 
+    // empty base optimization applies
+    static_assert(sizeof(Derived1) == sizeof(int));
+}
+```
+* Empty base optimization is prohibited if one of the empty base classes is also the type or the base of the type of the `first non-static data member`, since the two base subobjects of the same type are required to have different addresses within the object representation of the most derived type.
+* A typical example of such situation is the naive implementation of std::reverse_iterator (derived from the empty base std::iterator), which holds the underlying iterator (also derived from std::iterator) as its first non-static data member.
+```c++
+struct Base {}; // empty class
+ 
+struct Derived1 : Base {
+    int i;
+};
+ 
+struct Derived2 : Base {
+    Base c; // Base, occupies 1 byte, followed by padding for i
+    int i;
+};
+ 
+struct Derived3 : Base {
+    Derived1 c; // derived from Base, occupies sizeof(int) bytes
+    int i;
+};
+ 
+int main()
+{
+    // empty base optimization does not apply,
+    // base occupies 1 byte, Base member occupies 1 byte
+    // followed by 2 bytes of padding to satisfy int alignment requirements
+    static_assert(sizeof(Derived2) == 2*sizeof(int));
+ 
+    // empty base optimization does not apply,
+    // base takes up at least 1 byte plus the padding
+    // to satisfy alignment requirement of the first member (whose
+    // alignment is the same as int)
+    static_assert(sizeof(Derived3) == 3*sizeof(int));
+}
+```
+* Notes
+    * Empty base optimization is commonly used by `allocator-aware standard library classes` (std::vector, std::function, std::shared_ptr, etc) to avoid occupying any additional storage for its allocator member if the allocator is stateless. This is achieved by storing one of the required data members (e.g., begin, end, or capacity pointer for the vector) in an equivalent of boost::compressed_pair with the allocator.
+
+##### Virtual member functions
+
+* The `virtual` specifier specifies that a `non-static member function` is virtual and supports dynamic dispatch. It may only appear in the decl-specifier-seq of the initial declaration of a non-static member function (i.e., when it is declared in the `class definition`).
+
 * [C.128: Virtual functions should specify exactly one of virtual, override, or final](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-override)
 	* Reason
 		* Readability. Detection of mistakes. Writing explicit virtual, override, or final is self-documenting and enables the compiler to catch mismatch of types and/or names between base and derived classes. However, writing more than one of these three is both redundant and a potential source of errors.
@@ -3853,6 +4098,10 @@ move assigned
 		* That can cause confusion: An overrider does not inherit default arguments.
 	* Enforcement
 		* Flag default arguments on virtual functions if they differ between base and derived declarations.
+* [C++虚函数表原理浅析 (qq.com)](https://mp.weixin.qq.com/s/lKfOZUM1txbUncD6ZBSO4w)
+
+##### Pure virtual functions and abstract classes
+
 * [Abstract Classes - Polymorphism | HackerRank](https://www.hackerrank.com/challenges/abstract-classes-polymorphism/problem)
   * [LRU Cache Implementation - GeeksforGeeks](https://www.geeksforgeeks.org/lru-cache-implementation/)
 ```c++
@@ -3950,7 +4199,14 @@ int main() {
     return 0;
 }
 ```
-* [C++虚函数表原理浅析 (qq.com)](https://mp.weixin.qq.com/s/lKfOZUM1txbUncD6ZBSO4w)
+
+##### [override specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/override)
+	
+* Specifies that a virtual function overrides another virtual function.
+
+##### [final specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/final)
+
+* Specifies that a virtual function cannot be overridden in a derived class or that a class cannot be derived from.
 
 ### [Templates](https://en.cppreference.com/w/cpp/language/templates)
 
