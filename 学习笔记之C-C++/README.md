@@ -4606,6 +4606,15 @@ struct Concrete : Abstract
 
 ###### MISC
 
+* [Pure Virtual Functions and Abstract Classes in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/pure-virtual-functions-and-abstract-classes/?ref=lbp)
+    * A `pure virtual function` (or abstract function) in C++ is a virtual function for which we can have implementation, But we must override that function in the derived class, otherwise the derived class will also become abstract class
+* [Pure Virtual Destructor in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/pure-virtual-destructor-c/)
+    * A `pure virtual destructor` can be declared in C++. After a destructor has been created as a pure virtual object(instance of a class), where the destructor body is provided. This is due to the fact that destructors will `not be overridden` in derived classes, but will instead be `called in reverse order`. As a result, for a pure virtual destructor, you `must` specify a destructor body.
+    * Note: `Only Destructors can be Virtual`. `Constructors cannot be declared as virtual`, this is because if you try to override a constructor by declaring it in a base/super class and call it in the derived/sub class with same functionalities it will always give an error as overriding means a feature that lets us to use a method from the parent class in the child class which is not possible. 
+    * ...
+    * How did the above code work MAGICALLY?
+        * This basically works because the destructors will be called recursively bottom to up if and only if the value is passed in the virtual destructor. So `vtable` is a table containing pointers of all virtual functions that the class defines, and the compiler provides `vptr` to the class as a `hidden pointer` that points to the ideal vtable, so the compiler makes use of an accurate or correct index, calculated at compile-time, to the vtable which will dispatch the correct virtual function at runtime.
+        * It is important to note that a class becomes an `abstract class`(at least a function that has no definition) when it contains a `pure virtual destructor`.
 * [Abstract Classes - Polymorphism | HackerRank](https://www.hackerrank.com/challenges/abstract-classes-polymorphism/problem)
   * [LRU Cache Implementation - GeeksforGeeks](https://www.geeksforgeeks.org/lru-cache-implementation/)
 ```c++
