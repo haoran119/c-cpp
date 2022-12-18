@@ -317,6 +317,60 @@ std::shared_ptr<std::string> shared = std::make_unique<std::string>("test");
 
 * [size_t_百度百科](http://baike.baidu.com/link?url=sh8RRfasW1QG-PhcWPZhfcZ75Uw-KYLKh443jzpNg36hVk1Fu7WeTh4lEPLCuBx_iT0wglX5MRQUqXJMWV-oUK)
 
+### [explicit](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#explicit-specifier)
+
+* explicit 的作用（如何避免编译器进行隐式类型转换）?
+    * 作用：用来声明类构造函数是显示调用的，而非隐式调用，可以阻止调用构造函数时进行隐式转换。只可用于修饰单参构造函数，因为无参构造函数和多参构造函数本身就是显示调用的，再加上 explicit 关键字也没有什么意义。
+    * 隐式转换：
+    ```c++
+    #include <iostream>
+    #include <cstring>
+
+    using namespace std;
+
+    class A
+    {
+    public:
+        int var;
+        A(int tmp)
+        {
+            var = tmp;
+        }
+    };
+
+    int main()
+    {
+        A ex = 10; // 发生了隐式转换
+        return 0;
+    }
+    ```
+    * 上述代码中，A ex = 10; 在编译时，进行了`隐式转换，将 10 转换成 A 类型的对象，然后将该对象赋值给 ex`
+    * 为了避免隐式转换，可用 explicit 关键字进行声明：
+    ```c++
+    #include <iostream>
+    #include <cstring>
+
+    using namespace std;
+
+    class A
+    {
+    public:
+        int var;
+        explicit A(int tmp)
+        {
+            var = tmp;
+            cout << var << endl;  
+        }
+    };
+
+    int main()
+    {
+        A ex(100);
+        A ex1 = 10; // error: conversion from 'int' to non-scalar type 'A' requested
+        return 0;
+    }
+    ```
+
 ### static
 
 * static关键字至少有下列n个作用：
