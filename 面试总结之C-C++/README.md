@@ -444,6 +444,33 @@ Required size of memory|calculated manually|caculated by compiler|caculated by c
 * mutable - permits modification of the class member declared mutable even if the containing object is declared const.
 * May appear in the declaration of a non-static class members of non-reference non-const type
 * Mutable is used to specify that the member does not affect the externally visible state of the class (as often used for mutexes, memo caches, lazy evaluation, and access instrumentation).
+* [C++ mutable keyword - GeeksforGeeks](https://www.geeksforgeeks.org/c-mutable-keyword/)
+    * What is the need of mutable? 
+        * Sometimes there is requirement to modify one or more data members of class / struct through `const function` even though you don’t want the function to update other members of class / struct. This task can be easily performed by using `mutable` keyword.
+        * The keyword `mutable` is mainly used to allow a particular data member of `const` object to be modified. When we declare a function as `const`, the this pointer passed to function becomes `const`. Adding `mutable` to a variable allows a `const pointer` to change members. 
+        * `mutable` is particularly useful if most of the members should be constant but a few need to be updatable. Data members declared as `mutable` can be modified even though they are the part of object declared as `const`. You cannot use the `mutable` specifier with names declared as `static` or `const`, or `reference`.
+```c++
+#include <iostream>
+
+class Test {
+public:
+    int x;
+    mutable int y;
+    Test() { x = 4; y = 10; }
+};
+
+int main()
+{
+	const Test t1;
+
+    // t1.x = 8;   // error: assignment of member 'Test::x' in read-only object
+
+	t1.y = 20;
+	std::cout << t1.y;   // 20
+    
+	return 0;
+}
+```
 
 ## 面向对象
 
