@@ -461,14 +461,14 @@ public:
 
 int main()
 {
-	const Test t1;
+    const Test t1;
 
     // t1.x = 8;   // error: assignment of member 'Test::x' in read-only object
 
-	t1.y = 20;
-	std::cout << t1.y;   // 20
-    
-	return 0;
+    t1.y = 20;
+    std::cout << t1.y;   // 20
+
+    return 0;
 }
 ```
 
