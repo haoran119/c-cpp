@@ -439,6 +439,12 @@ Required size of memory|calculated manually|caculated by compiler|caculated by c
     * 简单地说就是防止编译器对代码进行优化。
     * 精确地说就是，编译器在用到这个变量时必须每次都小心地重新读取这个变量的值，而不是使用保存在寄存器里的备份。
 
+### [mutable](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#mutable-specifier)
+
+* mutable - permits modification of the class member declared mutable even if the containing object is declared const.
+* May appear in the declaration of a non-static class members of non-reference non-const type
+* Mutable is used to specify that the member does not affect the externally visible state of the class (as often used for mutexes, memo caches, lazy evaluation, and access instrumentation).
+
 ## 面向对象
 
 * 面向对象的三大特性：
