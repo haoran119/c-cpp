@@ -6279,16 +6279,51 @@ terminate called after throwing an instance of 'int'
 
 ### [Type support (basic types, RTTI, type traits)](https://en.cppreference.com/w/cpp/types)
 
-#
-Additional basic types and macros
+#### Additional basic types and macros
 
 * Defined in header \<cstddef>
-* [std::size_t - cppreference.com](https://en.cppreference.com/w/cpp/types/size_t)
-	* std::size_t is the unsigned integer type of the result of the sizeof operator as well as the sizeof... operator and the alignof operator (since C++11).
-	* The bit width of std::size_t is not less than 16.(since C++11)
 
-#
-[Fixed width integer types (since C++11)](https://en.cppreference.com/w/cpp/types/integer)
+##### [std::size_t](https://en.cppreference.com/w/cpp/types/size_t)
+
+* unsigned integer type returned by the [sizeof](https://en.cppreference.com/w/cpp/language/sizeof) operator (typedef)
+* `std::size_t` is the `unsigned integer` type of the result of the sizeof operator as well as the `sizeof...` operator and the `alignof` operator.
+* The bit width of std::size_t is not less than 16.
+* Notes
+    * std::size_t can store the maximum size of a theoretically possible object of any type (including array). A type whose size cannot be represented by std::size_t is ill-formed. On many platforms (an exception is systems with segmented addressing) std::size_t can safely store the value of any non-member pointer, in which case it is synonymous with std::uintptr_t.
+    * std::size_t is commonly used for array indexing and loop counting. Programs that use other types, such as unsigned int, for array indexing may fail on, e.g. 64-bit systems when the index exceeds UINT_MAX or if it relies on 32-bit modular arithmetic.
+    * When indexing C++ `containers`, such as std::string, std::vector, etc, the appropriate type is `the member typedef size_type provided by such containers`. It is usually defined as a synonym for std::size_t.
+    * The integer literal suffix for std::size_t is any combination of z or Z with u or U (i.e. zu, zU, Zu, ZU, uz, uZ, Uz, or UZ). (since C++23)
+* Example
+```c++
+#include <cstddef>
+#include <iostream>
+#include <array>
+ 
+int main()
+{
+    std::array<std::size_t, 10> a;
+ 
+    // Example with C++23 size_t literal
+    for (auto i = 0uz; i != a.size(); ++i)
+        std::cout << (a[i] = i) << ' ';
+    std::cout << '\n';
+ 
+    // Example of decrementing loop
+    for (std::size_t i = a.size(); i--;)
+        std::cout << a[i] << ' ';
+ 
+    // Note the naive decrementing loop:
+    //  for (std::size_t i = a.size() - 1; i >= 0; --i) ...
+    // is an infinite loop, because unsigned numbers are always non-negative
+}
+/*
+0 1 2 3 4 5 6 7 8 9 
+9 8 7 6 5 4 3 2 1 0
+*/
+```
+
+#### [Fixed width integer types](https://en.cppreference.com/w/cpp/types/integer)
+
 * Types
 * Defined in header \<cstdint>
 * [g77-mingw32/include/stdint.h](https://www.rpi.edu/dept/cis/software/g77-mingw32/include/stdint.h)
@@ -6296,8 +6331,8 @@ Additional basic types and macros
 |uint8_t/uint16_t/uint32_t/uint64_t(optional) | unsigned integer type with width of exactly 8, 16, 32 and 64 bits respectively (provided if and only if the implementation directly supports the type) (typedef) |
 | - | - |
 
-#
-[Numeric limits](https://en.cppreference.com/w/cpp/types/numeric_limits)
+#### [Numeric limits](https://en.cppreference.com/w/cpp/types/numeric_limits)
+
 * Defined in header \<limits>
 * provides an interface to query properties of all fundamental numeric types. (class template)
 * The numeric_limits class template provides a standardized way to query various properties of arithmetic types (e.g. the largest possible value for type int is std::numeric_limits\<int>::max()).
@@ -6389,8 +6424,8 @@ d1 almost equals d2
 * [std::numeric_limits\<T>::infinity - cppreference.com](https://en.cppreference.com/w/cpp/types/numeric_limits/infinity)
 	* Returns the special value "positive infinity", as represented by the floating-point type T. Only meaningful if std::numeric_limits\<T>::has_infinity == true. In IEEE 754, the most common binary representation of floating-point numbers, the positive infinity is the value with all bits of the exponent set and all bits of the fraction cleared.
 
-#
-[C numeric limits interface](https://en.cppreference.com/w/cpp/types/climits)
+#### [C numeric limits interface](https://en.cppreference.com/w/cpp/types/climits)
+
 * INT_MAX        = 2147483647
 * LONG_MAX       = 9223372036854775807
 * UINT_MAX       = 4294967295
