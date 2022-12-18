@@ -315,7 +315,9 @@ std::shared_ptr<std::string> shared = std::make_unique<std::string>("test");
 
 ## 关键字库函数
 
-* [size_t_百度百科](http://baike.baidu.com/link?url=sh8RRfasW1QG-PhcWPZhfcZ75Uw-KYLKh443jzpNg36hVk1Fu7WeTh4lEPLCuBx_iT0wglX5MRQUqXJMWV-oUK)
+### [std::size_t](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#stdsize_t)
+
+* unsigned integer type returned by the sizeof operator (typedef)
 
 ### [explicit](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#explicit-specifier)
 
