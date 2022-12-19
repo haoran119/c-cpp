@@ -2065,13 +2065,13 @@ Deletion time   | log(n) + Rebalance  | Same as search
                 * Should uniformly distribute the keys (Each table position equally likely for each key)
         * In practice, we can often employ heuristic techniques to create a hash function that performs well. 
         * The two heuristic methods are hashing by division and hashing by multiplication which are as follows: 
-            * The mod method: 
+            * The `mod` method: 
                 * In this method for creating hash functions, we map a key into one of the slots of table by taking the remainder of key divided by table_size.
                 * That is, the hash function is
                     * `h(key) = key mod table_size`
                     * `i.e. key % table_size`
-                * Hence it can be seen that by this hash function, many keys can have the same hash. This is called Collision.
-            * The multiplication method: 
+                * Hence it can be seen that by this hash function, many keys can have the same hash. This is called `Collision`.
+            * The `multiplication` method: 
                 * In multiplication method, we multiply the key k by a constant real number c in the range 0 < c < 1 and extract the fractional part of k * c.
                 * Then we multiply this value by table_size m and take the floor of the result. It can be represented as
                     * `h(k) = floor (m * (k * c mod 1))`
