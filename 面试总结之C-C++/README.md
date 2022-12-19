@@ -1028,11 +1028,11 @@ int main()
   * 它是单个参数的构造函数，其参数是与它同属一类的对象的(常)引用；类定义中，如果未提供自己的拷贝构造函数，C++提供一个默认拷贝构造函数，该默认拷贝构造函数完成一个成员到一个成员的拷贝
 * 要在C++防止对象被复制，有什么方法
   * [Explicitly Defaulted and Deleted Functions | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/explicitly-defaulted-and-deleted-functions?view=msvc-160)
-  * Pre-C++11 定义一个基类，将其中的拷贝构造函数和赋值构造函数声明为私有private
+  * Pre-C++11 定义一个基类，将其中的拷贝构造函数和赋值构造函数声明为私有`private`
   * C++11则可以对拷贝构造函数和赋值构造函数声明为`delete`
-  * 派生类以私有private的方式继承基类
+  * 派生类以私有`private`的方式继承基类
 
-### Deep Copy / Shallow Copy
+### deep copy / shallow copy
 
 * 什么是深浅拷贝?
     * `浅拷贝`是创建了一个对象用一个现成的对象初始化它的时候只是复制了成员(简单赋值)而没有拷贝分配给成员的资源(如给其指针变量成员分配了动态内存)
@@ -1053,7 +1053,7 @@ int main()
         ```
     * Depending upon the resources like `dynamic memory` held by the object, either we need to perform `Shallow Copy` or `Deep Copy` in order to create a replica of the object. In general, if the variables of an object have been dynamically allocated, then it is required to do a `Deep Copy` in order to create a copy of the object.
     * Shallow Copy
-        * In shallow copy, an object is created by simply copying the data of all variables of the original object. This works well if none of the variables of the object are defined in the [heap section of memory](https://www.geeksforgeeks.org/stack-vs-heap-memory-allocation/). If some variables are dynamically allocated memory from heap section, then the copied object variable will also reference the same memory location.
+        * In `shallow copy`, an object is created by simply `copying the data of all variables of the original object`. This works well if none of the variables of the object are defined in the [heap section of memory](https://www.geeksforgeeks.org/stack-vs-heap-memory-allocation/). If some variables are dynamically allocated memory from heap section, then the copied object variable will also reference the same memory location.
         * This will create `ambiguity and run-time errors, dangling pointer`. Since both objects will reference to the same memory location, then change made by one will reflect those change in another object as well. Since we wanted to create a replica of the object, this purpose will not be filled by Shallow copy. 
         * Note: C++ compiler `implicitly` creates a [copy constructor](https://www.geeksforgeeks.org/copy-constructor-in-cpp/) and [overloads assignment operator](https://www.geeksforgeeks.org/assignment-operator-overloading-in-c/) in order to `perform shallow copy at compile time`.
         ```c++
@@ -1128,7 +1128,7 @@ int main()
         */
         ```
     * Deep Copy
-        * In Deep copy, an object is created by copying data of all variables, and it also `allocates similar memory resources with the same value to the object`. In order to perform Deep copy, we need to `explicitly define the copy constructor and assign dynamic memory` as well, if required. Also, it is required to `dynamically allocate memory to the variables in the other constructors`, as well.
+        * In `Deep copy`, an object is created by `copying data of all variables`, and it also `allocates similar memory resources with the same value to the object`. In order to perform Deep copy, we need to `explicitly define the copy constructor and assign dynamic memory` as well, if required. Also, it is required to `dynamically allocate memory to the variables in the other constructors`, as well.
         ```c++
         // C++ program to implement the
         // deep copy
