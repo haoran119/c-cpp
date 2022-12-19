@@ -1486,10 +1486,23 @@ return 0;
     * The move constructor is used instead of the copy constructor, if the object has type "rvalue-reference" (Type &&).
     * std::move() is a cast that produces an rvalue-reference to an object, to enable moving from it.
     * It's a new C++ way to avoid copies. For example, using a move constructor, a std::vector could just copy its internal pointer to data to the new object, leaving the moved object in an moved from state, therefore not copying all the data.  
-* std::move() 实现原理：
-    * 利用引用折叠原理将右值经过 T&& 传递类型保持不变还是右值，而左值经过 T&& 变为普通的左值引用，以保证模板可以传递任意实参，且保持类型不变；
-    * 然后通过 remove_refrence 移除引用，得到具体的类型 T；
-    * 最后通过 static_cast\<> 进行强制类型转换，返回 T&& 右值引用。
+* std::move() 函数的实现原理 ?
+    * std::move() 函数原型：
+        ```c++
+        template <typename T>
+        typename remove_reference<T>::type&& move(T&& t)
+        {
+         return static_cast<typename remove_reference<T>::type &&>(t);
+        }
+        ```
+        * 说明：引用折叠原理
+            * 右值传递给上述函数的形参 T&& 依然是右值，即 T&& && 相当于 T&&。
+            * 左值传递给上述函数的形参 T&& 依然是左值，即 T&& & 相当于 T&。
+        * 小结：通过引用折叠原理可以知道，move() 函数的形参既可以是左值也可以是右值。
+    * std::move() 实现原理：
+        * 利用引用折叠原理将右值经过 T&& 传递类型保持不变还是右值，而左值经过 T&& 变为普通的左值引用，以保证模板可以传递任意实参，且保持类型不变；
+        * 然后通过 remove_refrence 移除引用，得到具体的类型 T；
+        * 最后通过 static_cast\<> 进行强制类型转换，返回 T&& 右值引用。
     
 ### pointer v.s. reference
 
