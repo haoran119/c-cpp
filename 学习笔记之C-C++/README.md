@@ -10009,10 +10009,11 @@ int main()
 * The Containers library is a generic collection of class templates and algorithms that allow programmers to easily implement common data structures like queues, lists and stacks. There are three classes of containers -- sequence containers, associative containers, and unordered associative containers -- each of which is designed to support a different set of operations.
 * The container manages the storage space that is allocated for its elements and provides member functions to access them, either directly or through iterators (objects with properties similar to pointers).
 * Most containers have at least several member functions in common, and share functionalities. Which container is the best for the particular application depends not only on the offered functionality, but also on its efficiency for different workloads.
-* Iterator invalidation
+* `Iterator invalidation`
 	* Read-only methods never invalidate iterators or references. Methods which modify the contents of a container may invalidate iterators and/or references, as summarized in this table.
 <img width="780" alt="截屏2022-12-19 下午11 13 54" src="https://user-images.githubusercontent.com/34557994/208423882-896a920a-0e64-4e3b-81a3-77520f54794d.png">
-* Thread safety
+
+* `Thread safety`
 	* All container functions can be called concurrently by different threads on different containers. More generally, the C++ standard library functions do not read objects accessible by other threads unless those objects are directly or indirectly accessible via the function arguments, including the this pointer.
 	* All const member functions can be called concurrently by different threads on the same container. In addition, the member functions begin(), end(), rbegin(), rend(), front(), back(), data(), find(), lower_bound(), upper_bound(), equal_range(), at(), and, except in associative containers, operator[], behave as const for the purposes of thread safety (that is, they can also be called concurrently by different threads on the same container). More generally, the C++ standard library functions do not modify objects unless those objects are accessible, directly or indirectly, via the function's non-const arguments, including the this pointer.
 	* Different elements in the same container can be modified concurrently by different threads, except for the elements of std::vector\<bool> (for example, a vector of std::future objects can be receiving values from multiple threads).
