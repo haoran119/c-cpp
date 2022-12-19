@@ -2565,6 +2565,55 @@ int main()
     return 0;
 }
 ```
+```c++
+#include<iostream>
+
+struct A {
+    A(int value) : m_value(value)
+    {
+        std::cout << "A(" << m_value << ")" << std::endl;
+    }
+
+    ~A()
+    {
+        std::cout << "~A(" << m_value << ")" << std::endl;
+    }
+
+    A(const A& other) : m_value(other.m_value)
+    {
+        std::cout << "copy constructor" << std::endl;
+    }
+
+    A& operator=(const A& other)
+    {
+        std::cout << "copy assignment" << std::endl;
+        this->m_value = other.m_value;
+        return *this;
+    }
+
+    int m_value;
+};
+
+int main()
+{
+    A a(1);         // A(1)
+
+    {
+        A aa(a);   // copy constructor
+    }               // ~A(1)
+
+    {
+        A aaa = a;   // copy constructor
+    }               // ~A(1)
+
+    {
+        A b(2);     // A(2)
+        b = a;      // copy assignment
+    }               // ~A(1)
+
+    return 0;
+}                   // ~A(1)
+```
 
 #### STL
 
