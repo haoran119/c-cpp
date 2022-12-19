@@ -1470,6 +1470,9 @@ return 0;
 
 ### [prvalue v.s. xvalue v.s. lvalue](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#value-categories-lvalue-rvalue-xvalue)
 
+* `An lvalue has an address that your program can access`. Examples of lvalue expressions include variable names, including const variables, array elements, function calls that return an lvalue reference, bit-fields, unions, and class members.
+* `A prvalue expression has no address that is accessible by your program`. Examples of prvalue expressions include literals, function calls that return a non-reference type, and temporary objects that are created during expression evaluation but accessible only by the compiler.
+* `An xvalue expression has an address that no longer accessible by your program but can be used to initialize an rvalue reference, which provides access to the expression`. Examples include function calls that return an rvalue reference, and the array subscript, member and pointer to member expressions where the array or object is an rvalue reference.
 * [左值和右值的区别？左值引用和右值引用的区别，如何将左值转换成右值？](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#value-categories)
   * 左值：指表达式结束后依然存在的持久对象。
   * 右值：表达式结束就不再存在的临时对象。
