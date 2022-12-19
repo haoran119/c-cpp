@@ -1862,11 +1862,11 @@ lexicographical_compare(beg1, end1, beg2, end2, comp);
 | Vector | List | 
 | - | - | 
 | It has contiguous memory.	| While it has non-contiguous memory. | 
-| It is synchronized. | While it is not synchronized. | 
+| It is synchronized. | ??? While it is not synchronized. | 
 | Vector may have a default size. | List does not have default size. | 
 | In vector, each element only requires the space for itself only. | In list, each element requires extra space for the node which holds the element, including pointers to the next and previous elements in the list. | 
 | Insertion at the end requires constant time but insertion elsewhere is costly. | Insertion is cheap no matter where in the list it occurs. | 
-| Vector is thread safe. | List is not thread safe. | 
+| Vector is thread safe. | ??? List is not thread safe. | 
 | Deletion at the end of the vector needs constant time but for the rest it is O(n). | Deletion is cheap no matter where in the list it occurs. | 
 | Random access of elements is possible. | Random access of elements is not possible. | 
 | Iterators become invalid if elements are added to or removed from the vector. | Iterators are valid if elements are added to or removed from the list. | 
@@ -2080,13 +2080,13 @@ Deletion time   | log(n) + Rebalance  | Same as search
   * [string - C++ Reference](https://www.cplusplus.com/reference/string/string/)
   * [C++之旅-string](https://mp.weixin.qq.com/s/P2nd-9fmhpn20bB45hBioQ)
 
-### [Object Slicing](https://en.wikipedia.org/wiki/Object_slicing)
+### [object slicing](https://en.wikipedia.org/wiki/Object_slicing)
 
-* In C++ programming, object slicing occurs when an object of a subclass type is copied to an object of superclass type: the superclass copy will not have any of the member variables defined in the subclass. These variables have, in effect, been "sliced off".) More subtly, object slicing can also occur when an object of a subclass type is copied to an object of the same type by the superclass's assignment operator, in which case some of the target object's member variables will retain their original values instead of being copied from the source object.
+* In C++ programming, `object slicing` occurs when an object of a `subclass` type is copied to an object of `superclass` type: the `superclass copy` will not have any of the member variables defined in the `subclass`. These variables have, in effect, been `sliced off`.) More subtly, object slicing can also occur when an object of a subclass type is copied to an object of the same type by the superclass's assignment operator, in which case some of the target object's member variables will retain their original values instead of being copied from the source object.
 * This issue is not inherently unique to C++, but it does not occur naturally in most other object-oriented languages — even C++'s relatives such as D, Java, and C# — because copying of objects is not a basic operation in those languages. (Instead, those languages prefer to manipulate objects via implicit references, such that only copying the reference is a basic operation.) In C++, by contrast, objects are copied automatically whenever a function takes an object argument by value or returns an object by value. Additionally, due to the lack of garbage collection in C++, programs will frequently copy an object whenever the ownership and lifetime of a single shared object would be unclear; for example, inserting an object into a standard-library collection, such as a std::vector, actually involves inserting a copy into the collection.
 * [c++对象切割 - CSDN博客](https://blog.csdn.net/weiwangchao_/article/details/4702241)
 
-### [Exceptions](https://en.cppreference.com/w/cpp/language/exceptions)
+### [exceptions](https://en.cppreference.com/w/cpp/language/exceptions)
 
 * 异常,异常的功能
   * 保证异常的健壮性，结构化处理出错信息
