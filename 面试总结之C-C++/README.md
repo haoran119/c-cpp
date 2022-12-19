@@ -375,27 +375,64 @@ std::shared_ptr<std::string> shared = std::make_unique<std::string>("test");
 
 ### static
 
-* static关键字至少有下列n个作用：
-    * 函数体内static变量的作用范围为该函数体，不同于auto变量，该变量的内存只被分配一次，因此其值在下次调用时仍维持上次的值；
-    * 在模块内的static全局变量可以被模块内所用函数访问，但不能被模块外其它函数访问；
-    * 在模块内的static函数只可被这一模块内的其它函数调用，这个函数的使用范围被限制在声明它的模块内；
-    * 在类中的static成员变量属于整个类所拥有，对类的所有对象只有一份拷贝；
-    * 在类中的static成员函数属于整个类所拥有，这个函数不接收this指针，因而只能访问类的static成员变量。
+* `static`关键字至少有下列n个作用：
+    * 保持变量内容持久
+        * 函数体内`static变量`的作用范围为该函数体，不同于auto变量，该变量的内存只被分配一次，因此其值在下次调用时仍维持上次的值；
+    * 隐藏
+        * 在模块内的`static全局变量`可以被模块内所用函数访问，但不能被模块外其它函数访问；
+        * 在模块内的`static函数`只可被这一模块内的其它函数调用，这个函数的使用范围被限制在声明它的模块内；
+        * 注：普通全局变量和函数具有全局可见性，即其他的源文件也可以使用。
+    * 类
+        * 在类中的`static成员变量`属于整个类所拥有，对类的所有对象只有一份拷贝；
+        * 在类中的`static成员函数`属于整个类所拥有，这个函数不接收`this指针`，因而只能访问类的`static成员变量`。
+```c++
+#include<iostream>
+using namespace std;
+
+class A
+{
+    private:
+    int var;
+    static int s_var; // 静态成员变量
+public:
+    void show()
+    {
+        cout << s_var++ << endl;
+    }
+
+    static void s_show()
+    {
+        cout << s_var << endl;
+        // cout << var << endl; // error: invalid use of member 'A::a' in static member function. 静态成员函数不能调用非静态成员变量。无法使用 this.var
+        // show();  // error: cannot call member function 'void A::show()' without object. 静态成员函数不能调用非静态成员函数。无法使用 this.show()
+    }
+};
+
+int A::s_var = 1;  // 静态成员变量在类外进行初始化赋值，默认初始化为 0
+
+int main()
+{
+ // cout << A::sa << endl;    // error: 'int A::sa' is private within this context
+    A ex;
+    ex.show();
+    A::s_show();
+}
+```
 
 ### const
 
-* const关键字至少有下列n个作用：
-    * 欲阻止一个变量被改变，可以使用const关键字。在定义该const变量时，通常需要对它进行初始化，因为以后就没有机会再去改变它了；
-    * 对指针来说，可以指定指针本身为const，也可以指定指针所指的数据为const，或二者同时指定为const；
-    * 在一个函数声明中，const可以修饰形参，表明它是一个输入参数，在函数内部不能改变其值；
-    * 对于类的成员函数，若指定其为const类型，则表明其是一个常函数，不能修改类的成员变量；
-    * 对于类的成员函数，有时候必须指定其返回值为const类型，以使得其返回值不为“左值”。
+* `const`关键字至少有下列n个作用：
+    * 欲阻止一个变量被改变，可以使用`const`关键字。在定义该`const变量`时，通常需要对它进行初始化，因为以后就没有机会再去改变它了；相较于`宏常量`，可进行类型检查，节省内存空间，提高了效率。
+    * 对指针来说，可以指定指针本身为`const`，也可以指定指针所指的数据为`const`，或二者同时指定为`const`；
+    * 在一个函数声明中，`const`可以修饰形参，表明它是一个输入参数，在函数内部不能改变其值；
+    * 对于类的成员函数，若指定其为`const`类型，则表明其是一个`const成员函数`，不能修改类的成员变量；也不能调用`非const成员函数`，因为`非const成员函数`可能会修改成员变量。
+    * 对于类的成员函数，有时候必须指定其返回值为`const`类型，以使得其返回值不为“左值”。
 
 ### inline
 
 * 短小而被频繁调用的程序如何处理？
-    * C语言用宏代替。
-    * C++用inline，内联函数机制。
+    * C语言用`macro` `宏`代替。
+    * C++用`inline`，内联函数机制。
     * 内联函数可以得到宏的替换功能，所有可预见的状态和常规函数的类型检查。
 
 ### new
