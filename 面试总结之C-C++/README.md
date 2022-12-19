@@ -221,7 +221,7 @@
 * delete数组指针，只delete第一个后果
     * 内存泄漏 
 
-### [Smart pointers](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#smart-pointers)
+### [smart pointers](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#smart-pointers)
 
 * [Move Semantics and Smart Pointers](https://www.learncpp.com/)
 	* [M.1 — Intro to smart pointers and move semantics – Learn C++](https://www.learncpp.com/cpp-tutorial/intro-to-smart-pointers-move-semantics/)
@@ -260,7 +260,7 @@ std::shared_ptr<std::string> shared = std::make_unique<std::string>("test");
     * [java接口_百度百科](http://baike.baidu.com/link?url=hoPdmBnxPUNPpyCRPD80NQVbOPS0qT5IoI1jezWUDT4Dz0MdgaVrPEurjtacqy6rJRZxO0CrQCNqDn5czUriNK)
     * [C++中的抽象类以及接口的区别联系_Linux编程_Linux公社-Linux系统门户网站](http://www.linuxidc.com/Linux/2012-10/73243.htm)
 
-### Modern C++
+### modern C++
 
 * [B.1 — Introduction to C++11 – Learn C++](https://www.learncpp.com/cpp-tutorial/b-1-introduction-to-c11/)
 * [B.2 — Introduction to C++14 – Learn C++](https://www.learncpp.com/cpp-tutorial/b-2-introduction-to-c14/)
