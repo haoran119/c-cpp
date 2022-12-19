@@ -2092,10 +2092,10 @@ Deletion time   | log(n) + Rebalance  | Same as search
   * 保证异常的健壮性，结构化处理出错信息
 * Exception safety
     * After the error condition is reported by a function, additional guarantees may be provided with regards to the state of the program. The following four levels of exception guarantee are generally recognized[4][5][6], which are strict supersets of each other:
-        * Nothrow (or nofail) exception guarantee -- the function never throws exceptions. Nothrow (errors are reported by other means or concealed) is expected of destructors and other functions that may be called during stack unwinding. The destructors are noexcept by default. (since C++11) Nofail (the function always succeeds) is expected of swaps, move constructors, and other functions used by those that provide strong exception guarantee.
-        * Strong exception guarantee -- If the function throws an exception, the state of the program is rolled back to the state just before the function call. (for example, std::vector::push_back)
-        * Basic exception guarantee -- If the function throws an exception, the program is in a valid state. No resources are leaked, and all objects' invariants are intact.
-        * No exception guarantee -- If the function throws an exception, the program may not be in a valid state: resource leaks, memory corruption, or other invariant-destroying errors may have occurred.
+        * `Nothrow (or nofail) exception guarantee` -- the function never throws exceptions. Nothrow (errors are reported by other means or concealed) is expected of destructors and other functions that may be called during stack unwinding. The destructors are noexcept by default. (since C++11) Nofail (the function always succeeds) is expected of swaps, move constructors, and other functions used by those that provide strong exception guarantee.
+        * `Strong exception guarantee` -- If the function throws an exception, the state of the program is rolled back to the state just before the function call. (for example, std::vector::push_back)
+        * `Basic exception guarantee` -- If the function throws an exception, the program is in a valid state. No resources are leaked, and all objects' invariants are intact.
+        * `No exception guarantee` -- If the function throws an exception, the program may not be in a valid state: resource leaks, memory corruption, or other invariant-destroying errors may have occurred.
     * Generic components may, in addition, offer exception-neutral guarantee: if an exception is thrown from a template parameter (e.g. from the Compare function object of std::sort or from the constructor of T in std::make_shared), it is propagated, unchanged, to the caller.
 	* [Exception safety - Wikipedia](https://en.wikipedia.org/wiki/Exception_safety)
 		* The C++ standard library provides several levels of exception safety (in decreasing order of safety):[6]
