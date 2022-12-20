@@ -2331,6 +2331,47 @@ int main()
     return 0;
 }
 ```
+```c++
+#include <cstdio>
+#include <cstring>
+
+int atoi(char* s)
+{
+    if (s == nullptr) {         // remember to check
+        return 0;
+    }
+
+    int result = 0;
+
+    bool is_negative = false;   // remember to check
+    if (*s == '-') {
+        is_negative = true;
+        ++ s;
+    }
+
+    while (*s) {
+        result = result * 10 + *s - '0';
+        ++ s;
+    }
+
+    return is_negative ? -result : result;  // remember for negative
+}
+
+int main()
+{
+    char* s = new char[4];      // remember to new and one more place for '\0'
+
+    strcpy(s, "123");
+    printf("%d\n", atoi(s));
+
+    strcpy(s, "-23");
+    printf("%d\n", atoi(s));
+
+    delete [] s;                // remember to delete
+
+    return 0;
+}
+```
 
 #### Class
 
