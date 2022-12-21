@@ -13588,7 +13588,7 @@ int main() {
     * When an incomplete line of output needs to be flushed, the std::flush manipulator may be used.
     * When every character of output needs to be flushed, the std::unitbuf manipulator may be used.
 
-#### [std::quoted - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/quoted)
+#### [std::quoted](https://en.cppreference.com/w/cpp/io/manip/quoted)
 	
 * inserts and extracts quoted strings with embedded spaces
 
