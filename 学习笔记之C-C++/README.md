@@ -13515,38 +13515,41 @@ int main() {
 | [cerr / wcerr](https://en.cppreference.com/w/cpp/io/cerr) | writes to the standard C error stream stderr, unbuffered (global object) | 
 | clog / wclog | writes to the standard C error stream stderr (global object) | 
 
-* [std::cin, std::wcin - cppreference.com](https://en.cppreference.com/w/cpp/io/cin)
-	* reads from the standard C input stream stdin (global object)
-	* The global objects std::cin and std::wcin control input from a stream buffer of implementation-defined type (derived from std::streambuf), associated with the standard C input stream stdin.
-	* These objects are guaranteed to be initialized during or before the first time an object of type std::ios_base::Init is constructed and are available for use in the constructors and destructors of static objects with ordered initialization (as long as \<iostream> is included before the object is defined).
-	* `Unless sync_with_stdio(false) has been issued, it is safe to concurrently access these objects from multiple threads for both formatted and unformatted input.`
-	* Once std::cin is constructed, std::cin.tie() returns &std::cout, and likewise, std::wcin.tie() returns &std::wcout. This means that any formatted input operation on std::cin forces a call to std::cout.flush() if any characters are pending for output.
-	* Notes
-		* The 'c' in the name refers to "character" (stroustrup.com FAQ); cin means "character input" and wcin means "wide character input"
-	* [C++ cin 的详细用法](https://mp.weixin.qq.com/s/BP3gfSd7Ya_9MLE_ArM9LA)
-		* https://dablelv.blog.csdn.net/article/details/48213811
-		* 1. cin 简介
-		* 2. cin 的常用读取方法
-			* 2.1 cin>> 的用法
-			* 2.2 cin.get() 的用法
-				* 2.2.1 cin.get() 读取一个字符
-				* 2.2.2 cin.get() 读取一行
-			* 2.3 cin.getline() 读取一行
-		* 3. cin 的条件状态
-		* 4. cin 清空输入缓冲区
-		* 5. 从标准输入读取一行字符串的其它方法
-			* 5.1 getline() 读取一行
-			* 5.2 gets() 读取一行
-* [std::cout, std::wcout - cppreference.com](https://en.cppreference.com/w/cpp/io/cout)
-	* writes to the standard C output stream stdout (global object)
-	* The global objects std::cout and std::wcout control output to a stream buffer of implementation-defined type (derived from std::streambuf), associated with the standard C output stream stdout.
-	* These objects are guaranteed to be initialized during or before the first time an object of type std::ios_base::Init is constructed and are available for use in the constructors and destructors of static objects with ordered initialization (as long as \<iostream> is included before the object is defined).
-	* Unless std::ios_base::sync_with_stdio(false) has been issued, it is safe to concurrently access these objects from multiple threads for both formatted and unformatted output.
-	* By specification of std::cin, std::cin.tie() returns &std::cout. This means that any input operation on std::cin executes std::cout.flush() (via std::basic_istream::sentry's constructor). Similarly, std::wcin.tie() returns &std::wcout.
-	* By specification of std::cerr, std::cerr.tie() returns &std::cout. This means that any output operation on std::cerr executes std::cout.flush() (via std::basic_ostream::sentry's constructor). Similarly, std::wcerr.tie() returns &std::wcout. (since C++11)
-	* Notes
-		* The 'c' in the name refers to "character" (stroustrup.com FAQ); cout means "character output" and wcout means "wide character output".
-		* Because dynamic initialization of templated variables are unordered, it is not guaranteed that std::cout has been initialized to a usable state before the initialization of such variables begins, unless an object of type std::ios_base::Init has been constructed.
+#### [std::cin, std::wcin](https://en.cppreference.com/w/cpp/io/cin)
+
+* reads from the standard C input stream stdin (global object)
+* The global objects std::cin and std::wcin control input from a stream buffer of implementation-defined type (derived from std::streambuf), associated with the standard C input stream stdin.
+* These objects are guaranteed to be initialized during or before the first time an object of type std::ios_base::Init is constructed and are available for use in the constructors and destructors of static objects with ordered initialization (as long as \<iostream> is included before the object is defined).
+* `Unless sync_with_stdio(false) has been issued, it is safe to concurrently access these objects from multiple threads for both formatted and unformatted input.`
+* Once std::cin is constructed, std::cin.tie() returns &std::cout, and likewise, std::wcin.tie() returns &std::wcout. This means that any formatted input operation on std::cin forces a call to std::cout.flush() if any characters are pending for output.
+* Notes
+    * The 'c' in the name refers to "character" (stroustrup.com FAQ); cin means "character input" and wcin means "wide character input"
+* [C++ cin 的详细用法](https://mp.weixin.qq.com/s/BP3gfSd7Ya_9MLE_ArM9LA)
+    * https://dablelv.blog.csdn.net/article/details/48213811
+    * 1. cin 简介
+    * 2. cin 的常用读取方法
+        * 2.1 cin>> 的用法
+        * 2.2 cin.get() 的用法
+            * 2.2.1 cin.get() 读取一个字符
+            * 2.2.2 cin.get() 读取一行
+        * 2.3 cin.getline() 读取一行
+    * 3. cin 的条件状态
+    * 4. cin 清空输入缓冲区
+    * 5. 从标准输入读取一行字符串的其它方法
+        * 5.1 getline() 读取一行
+        * 5.2 gets() 读取一行
+
+#### [std::cout, std::wcout](https://en.cppreference.com/w/cpp/io/cout)
+	
+* writes to the standard C output stream stdout (global object)
+* The global objects std::cout and std::wcout control output to a stream buffer of implementation-defined type (derived from std::streambuf), associated with the standard C output stream stdout.
+* These objects are guaranteed to be initialized during or before the first time an object of type std::ios_base::Init is constructed and are available for use in the constructors and destructors of static objects with ordered initialization (as long as \<iostream> is included before the object is defined).
+* Unless `std::ios_base::sync_with_stdio(false)` has been issued, it is safe to concurrently access these objects from multiple threads for both formatted and unformatted output.
+* By specification of std::cin, std::cin.tie() returns &std::cout. This means that any input operation on std::cin executes std::cout.flush() (via std::basic_istream::sentry's constructor). Similarly, std::wcin.tie() returns &std::wcout.
+* By specification of std::cerr, std::cerr.tie() returns &std::cout. This means that any output operation on std::cerr executes std::cout.flush() (via std::basic_ostream::sentry's constructor). Similarly, std::wcerr.tie() returns &std::wcout. (since C++11)
+* Notes
+    * The 'c' in the name refers to "character" (stroustrup.com FAQ); cout means "character output" and wcout means "wide character output".
+    * Because dynamic initialization of templated variables are unordered, it is not guaranteed that std::cout has been initialized to a usable state before the initialization of such variables begins, unless an object of type std::ios_base::Init has been constructed.
 * [Fast I/O for Competitive Programming - GeeksforGeeks](https://www.geeksforgeeks.org/fast-io-for-competitive-programming/)
     ```c++
     #include <bits/stdc++.h>
@@ -13568,20 +13571,29 @@ int main() {
 ### [Input/output manipulators](https://en.cppreference.com/w/cpp/io/manip)
 
 * The stream-based I/O library uses I/O manipulators (e.g. std::boolalpha, std::hex, etc.) to control how streams behave.
-* [std::boolalpha, std::noboolalpha - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/boolalpha)
-	* switches between textual and numeric representation of booleans
-* [std::endl - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/endl)
-	* outputs '\n' and flushes the output stream (function template)
-	* Inserts a newline character into the output sequence os and flushes it as if by calling os.put(os.widen('\n')) followed by os.flush().
-	* This is an output-only I/O manipulator, it may be called with an expression such as out << std::endl for any out of type std::basic_ostream.
-	* Notes
-		* This manipulator may be used to produce a line of output immediately, e.g. when displaying output from a long-running process, logging activity of multiple threads or logging activity of a program that may crash unexpectedly. An explicit flush of std::cout is also necessary before a call to std::system, if the spawned process performs any screen I/O. In most other usual interactive I/O scenarios, std::endl is redundant when used with std::cout because any input from std::cin, output to std::cerr, or program termination forces a call to std::cout.flush(). Use of std::endl in place of '\n', encouraged by some sources, may significantly degrade output performance.
-		* In many implementations, standard output is line-buffered, and writing '\n' causes a flush anyway, unless std::ios::sync_with_stdio(false) was executed. In those situations, unnecessary endl only degrades the performance of file output, not standard output.
-		* The code samples on this wiki follow Bjarne Stroustrup and The C++ Core Guidelines in flushing the standard output only where necessary.
-		* When an incomplete line of output needs to be flushed, the std::flush manipulator may be used.
-		* When every character of output needs to be flushed, the std::unitbuf manipulator may be used.
-* [std::quoted - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/quoted)
-	* inserts and extracts quoted strings with embedded spaces
+
+#### [std::boolalpha, std::noboolalpha](https://en.cppreference.com/w/cpp/io/manip/boolalpha)
+	
+* switches between textual and numeric representation of booleans
+
+#### [std::endl](https://en.cppreference.com/w/cpp/io/manip/endl)
+	
+* outputs '\n' and flushes the output stream (function template)
+* Inserts a newline character into the output sequence os and flushes it as if by calling os.put(os.widen('\n')) followed by os.flush().
+* This is an output-only I/O manipulator, it may be called with an expression such as out << std::endl for any out of type std::basic_ostream.
+* Notes
+    * This manipulator may be used to produce a line of output immediately, e.g. when displaying output from a long-running process, logging activity of multiple threads or logging activity of a program that may crash unexpectedly. An explicit flush of std::cout is also necessary before a call to std::system, if the spawned process performs any screen I/O. In most other usual interactive I/O scenarios, std::endl is redundant when used with std::cout because any input from std::cin, output to std::cerr, or program termination forces a call to std::cout.flush(). Use of std::endl in place of '\n', encouraged by some sources, may significantly degrade output performance.
+    * In many implementations, standard output is line-buffered, and writing '\n' causes a flush anyway, unless std::ios::sync_with_stdio(false) was executed. In those situations, unnecessary endl only degrades the performance of file output, not standard output.
+    * The code samples on this wiki follow Bjarne Stroustrup and The C++ Core Guidelines in flushing the standard output only where necessary.
+    * When an incomplete line of output needs to be flushed, the std::flush manipulator may be used.
+    * When every character of output needs to be flushed, the std::unitbuf manipulator may be used.
+
+#### [std::quoted - cppreference.com](https://en.cppreference.com/w/cpp/io/manip/quoted)
+	
+* inserts and extracts quoted strings with embedded spaces
+
+#### MISC
+
 * [manipulators - C++ Reference](http://www.cplusplus.com/reference/library/manipulators/)
     * Basic format flags
         * These manipulators are usable on both input and output streams, although many only have an effect when applied to either output or input streams.
