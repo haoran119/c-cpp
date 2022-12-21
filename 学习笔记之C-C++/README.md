@@ -10002,6 +10002,111 @@ int main()
 	* Converts the given character to uppercase according to the character conversion rules defined by the currently installed C locale.
 	* In the default "C" locale, the following lowercase letters abcdefghijklmnopqrstuvwxyz are replaced with respective uppercase letters ABCDEFGHIJKLMNOPQRSTUVWXYZ.
 
+#### Conversions to numeric formats
+
+* Defined in header /<cstdlib>
+
+##### [std::atoi, std::atol, std::atoll](https://en.cppreference.com/w/cpp/string/byte/atoi)
+    
+* converts a byte string to an integer value (function)
+* `int       atoi( const char *str );`
+* `long      atol( const char *str );`
+* `long long atoll( const char *str );`
+* Interprets an integer value in a byte string pointed to by str. The implied radix is always 10.
+* Discards any whitespace characters until the first non-whitespace character is found, then takes as many characters as possible to form a valid integer number representation and converts them to an integer value. The valid integer value consists of the following parts:
+    * (optional) plus or minus sign
+    * numeric digits
+* If the value of the result cannot be represented, i.e. the converted value falls out of range of the corresponding return type, the behavior is undefined.
+* Return value
+    * Integer value corresponding to the contents of str on success.
+    * If no conversion can be performed, `0` is returned.    
+* Example
+```c++
+#include <cstdlib>
+#include <iostream>
+ 
+int main()
+{
+    const auto data = { 
+        "42",
+        "0x2A", // treated as "0" and junk "x2A", not as hexadecimal
+        "3.14159",
+        "31337 with words",
+        "words and 2",
+        "-012345",
+        "10000000000" // note: out of int32_t range
+    };
+ 
+    for (const char* s : data) {
+        const int i {std::atoi(s)};
+        std::cout << "std::atoi('" << s << "') is " << i << '\n';
+        if (const long long ll {std::atoll(s)}; i != ll) {
+            std::cout << "std::atoll('" << s << "') is " << ll << '\n';
+        }
+    }
+}
+/*
+std::atoi('42') is 42
+std::atoi('0x2A') is 0
+std::atoi('3.14159') is 3
+std::atoi('31337 with words') is 31337
+std::atoi('words and 2') is 0
+std::atoi('-012345') is -12345
+std::atoi('10000000000') is 1410065408
+std::atoll('10000000000') is 10000000000
+*/    
+```
+    
+###### Possible implementation
+    
+```c++    
+template<typename T>
+T atoi_impl(const char* str)
+{
+    while (std::isspace(static_cast<unsigned char>(*str)))
+    {
+        ++str;
+    }
+ 
+    bool negative = false;
+ 
+    if (*str == '+')
+    {
+        ++str;
+    }
+    else if (*str == '-')
+    {
+        ++str;
+        negative = true;
+    }
+ 
+    T result = 0;
+    for (; std::isdigit(static_cast<unsigned char>(*str)); ++str)
+    {
+        int digit = *str - '0';
+        result *= 10;
+        result -= digit; // calculate in negatives to support INT_MIN, LONG_MIN,..
+    }
+ 
+    return negative ? result : -result;
+}
+ 
+int atoi(const char* str)
+{
+    return atoi_impl<int>(str);
+}
+ 
+long atol(const char* str)
+{
+    return atoi_impl<long>(str);
+}
+ 
+long long atoll(const char* str)
+{
+    return atoi_impl<long long>(str);
+}
+```   
+    
 ## [Containers library](https://en.cppreference.com/w/cpp/container)
 
 * [Standard Template Library (STL)](https://www.tutorialspoint.com/cplusplus/cpp_stl_tutorial.htm)
