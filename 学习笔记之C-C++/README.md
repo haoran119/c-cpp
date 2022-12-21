@@ -13252,49 +13252,51 @@ int main()
 
 #### File I/O
 
+* Defined in header \<fstream>
+
 ##### [std::basic_ifstream](https://en.cppreference.com/w/cpp/io/basic_ifstream)
 
 * implements high-level file stream input operations (class template)
 * [ifstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/)
-  * Input file stream class
-    * Input stream class to operate on files.
-    * Objects of this class maintain a filebuf object as their internal stream buffer, which performs input/output operations on the file they are associated with (if any).
-    * File streams are associated with files either on construction, or by calling member open.
-    * Apart from the internal file stream buffer, objects of this class keep a set of internal fields inherited from ios_base, ios and istream
-  * [ifstream::is_open - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/is_open/)
-  * [ifstream::close - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/close/)
-  * [Read file line by line using C++](https://www.tutorialspoint.com/read-file-line-by-line-using-cplusplus)
-  * [reading and using data in a .csv file - C++ Forum](http://www.cplusplus.com/forum/beginner/157129/)
-  * [getline (string) - C++ Reference](https://www.cplusplus.com/reference/string/string/getline/)
-  * [C++检测一个文件是否存在 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/5640920.html)
+    * Input file stream class
+        * Input stream class to operate on files.
+        * Objects of this class maintain a filebuf object as their internal stream buffer, which performs input/output operations on the file they are associated with (if any).
+        * File streams are associated with files either on construction, or by calling member open.
+        * Apart from the internal file stream buffer, objects of this class keep a set of internal fields inherited from ios_base, ios and istream
+    * [ifstream::is_open - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/is_open/)
+    * [ifstream::close - C++ Reference](https://www.cplusplus.com/reference/fstream/ifstream/close/)
+    * [Read file line by line using C++](https://www.tutorialspoint.com/read-file-line-by-line-using-cplusplus)
+    * [reading and using data in a .csv file - C++ Forum](http://www.cplusplus.com/forum/beginner/157129/)
+    * [getline (string) - C++ Reference](https://www.cplusplus.com/reference/string/string/getline/)
+    * [C++检测一个文件是否存在 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/5640920.html)
 
 ##### [std::basic_ofstream](https://en.cppreference.com/w/cpp/io/basic_ofstream)
 
 * implements high-level file stream output operations (class template)
 * [ofstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/)
-  * Output file stream
-    * Output stream class to operate on files.
-    * Objects of this class maintain a filebuf object as their internal stream buffer, which performs input/output operations on the file they are associated with (if any).
-    * File streams are associated with files either on construction, or by calling member open.
-    * Apart from the internal file stream buffer, objects of this class keep a set of internal fields inherited from ios_base, ios and istream
-  * [ofstream::close - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/close/)
-    * Close file
-      * Closes the file currently associated with the object, disassociating it from the stream.
-      * Any pending output sequence is written to the file.
-      * If the stream is currently not associated with any file (i.e., no file has successfully been open with it), calling this function fails.
-      * The file association of a stream is kept by its internal stream buffer:
-      * Internally, the function calls rdbuf()->close(), and sets failbit in case of failure.
-      * Note that any open file is automatically closed when the ofstream object is destroyed.
-  * [ofstream::is_open - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/is_open/)
-    * Check if file is open
-      * Returns whether the stream is currently associated to a file.
-      * Streams can be associated to files by a successful call to member open or directly on construction, and disassociated by calling close or on destruction.
-      * The file association of a stream is kept by its internal stream buffer:
-        * Internally, the function calls rdbuf()->is_open()
-  * [ofstream::ofstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/ofstream/)
-    * Construct object
-      * Constructs an ofstream object
-  * [replace line in a file C++](https://www.py4u.net/discuss/81342)
+    * Output file stream
+        * Output stream class to operate on files.
+        * Objects of this class maintain a filebuf object as their internal stream buffer, which performs input/output operations on the file they are associated with (if any).
+        * File streams are associated with files either on construction, or by calling member open.
+        * Apart from the internal file stream buffer, objects of this class keep a set of internal fields inherited from ios_base, ios and istream
+    * [ofstream::close - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/close/)
+        * Close file
+            * Closes the file currently associated with the object, disassociating it from the stream.
+            * Any pending output sequence is written to the file.
+            * If the stream is currently not associated with any file (i.e., no file has successfully been open with it), calling this function fails.
+            * The file association of a stream is kept by its internal stream buffer:
+            * Internally, the function calls rdbuf()->close(), and sets failbit in case of failure.
+            * Note that any open file is automatically closed when the ofstream object is destroyed.
+    * [ofstream::is_open - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/is_open/)
+        * Check if file is open
+            * Returns whether the stream is currently associated to a file.
+            * Streams can be associated to files by a successful call to member open or directly on construction, and disassociated by calling close or on destruction.
+            * The file association of a stream is kept by its internal stream buffer:
+                * Internally, the function calls rdbuf()->is_open()
+    * [ofstream::ofstream - C++ Reference](https://www.cplusplus.com/reference/fstream/ofstream/ofstream/)
+        * Construct object
+            * Constructs an ofstream object
+    * [replace line in a file C++](https://www.py4u.net/discuss/81342)
 
 #### String I/O
 
