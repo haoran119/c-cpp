@@ -9952,7 +9952,7 @@ int main()
 
 * [std::literals::string_view_literals::operator""sv - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string_view/operator%22%22sv)
 	* Defined in header \<string_view>
-	* Creates a string view of a character array literal(function)
+	* Creates a string view of a character array literal (function)
 
 ### [Null-terminated byte strings](https://en.cppreference.com/w/cpp/string/byte)
 
@@ -9961,50 +9961,61 @@ int main()
 #### Character classification
 
 * Defined in header \<cctype>
-* [std::isalnum - cppreference.com](https://en.cppreference.com/w/cpp/string/byte/isalnum)
-	* checks if a character is alphanumeric (function)
-	* Checks if the given character is an alphanumeric character as classified by the current C locale. In the default locale, the following characters are alphanumeric:
-		* digits (0123456789)
-		* uppercase letters (ABCDEFGHIJKLMNOPQRSTUVWXYZ)
-		* lowercase letters (abcdefghijklmnopqrstuvwxyz)
-	* The behavior is undefined if the value of ch is not representable as unsigned char and is not equal to EOF.
-* [std::isalpha - cppreference.com](https://en.cppreference.com/w/cpp/string/byte/isalpha)
-	* checks if a character is alphabetic (function)
-	* Checks if the given character is an alphabetic character as classified by the currently installed C locale. In the default locale, the following characters are alphabetic:
-		* uppercase letters ABCDEFGHIJKLMNOPQRSTUVWXYZ
-		* lowercase letters abcdefghijklmnopqrstuvwxyz
-	* In locales other than "C", an alphabetic character is a character for which std::isupper() or std::islower() returns non-zero or any other character considered alphabetic by the locale. In any case, std::iscntrl(), std::isdigit(), std::ispunct() and std::isspace() will return zero for this character.
-	* The behavior is undefined if the value of ch is not representable as unsigned char and is not equal to EOF.
-* [std::isdigit - cppreference.com](https://en.cppreference.com/w/cpp/string/byte/isdigit)
-	* `int isdigit( int ch );`
-	* checks if a character is a digit (function)
-	* Checks if the given character is one of the 10 decimal digits: 0123456789.
-	* The behavior is undefined if the value of ch is not representable as unsigned char and is not equal to EOF.
-	* [Determine if a String Is a Number in C++ | Delft Stack](https://www.delftstack.com/howto/cpp/how-to-determine-if-a-string-is-number-cpp/#:~:text=Use%20std%3A%3Aisdigit%20Method%20to%20Determine%20if%20a%20String%20Is%20a%20Number,-The%20first%20version&text=Namely%2C%20pass%20a%20string%20as,none%20is%20found%20returns%20true.)
-		* Use std::isdigit Method to Determine if a String Is a Number
-		* Use std::isdigit With std::ranges::all_of to Determine if a String Is a Number
-		* Use find_first_not_of Method to Determine if a String Is a Number
-* [std::isspace - cppreference.com](https://en.cppreference.com/w/cpp/string/byte/isspace)
-	* `int isspace( int ch );`
-	* checks if a character is a space character (function)
-	* [c++ - std::remove_if and std::isspace - compile-time error - Stack Overflow](https://stackoverflow.com/questions/21578544/stdremove-if-and-stdisspace-compile-time-error)
-		* There is another overload of std::isspace, so you need to specify which one to use. An easy way is to use a lambda (or write your own one-line function if you don't have C++11 support)
+
+##### [std::isalnum](https://en.cppreference.com/w/cpp/string/byte/isalnum)
+
+* checks if a character is alphanumeric (function)
+* Checks if the given character is an alphanumeric character as classified by the current C locale. In the default locale, the following characters are alphanumeric:
+    * digits `0123456789`
+    * uppercase letters `ABCDEFGHIJKLMNOPQRSTUVWXYZ`
+    * lowercase letters `abcdefghijklmnopqrstuvwxyz`
+* The behavior is undefined if the value of ch is not representable as unsigned char and is not equal to EOF.
+
+##### [std::isalpha](https://en.cppreference.com/w/cpp/string/byte/isalpha)
+	
+* checks if a character is alphabetic (function)
+* Checks if the given character is an alphabetic character as classified by the currently installed C locale. In the default locale, the following characters are alphabetic:
+    * uppercase letters `ABCDEFGHIJKLMNOPQRSTUVWXYZ`
+    * lowercase letters `abcdefghijklmnopqrstuvwxyz`
+* In locales other than "C", an alphabetic character is a character for which std::isupper() or std::islower() returns non-zero or any other character considered alphabetic by the locale. In any case, std::iscntrl(), std::isdigit(), std::ispunct() and std::isspace() will return zero for this character.
+* The behavior is undefined if the value of ch is not representable as unsigned char and is not equal to EOF.
+
+##### [std::isdigit](https://en.cppreference.com/w/cpp/string/byte/isdigit)
+	
+* `int isdigit( int ch );`
+* checks if a character is a digit (function)
+* Checks if the given character is one of the 10 decimal digits: 0123456789.
+* The behavior is undefined if the value of ch is not representable as unsigned char and is not equal to EOF.
+* [Determine if a String Is a Number in C++ | Delft Stack](https://www.delftstack.com/howto/cpp/how-to-determine-if-a-string-is-number-cpp/#:~:text=Use%20std%3A%3Aisdigit%20Method%20to%20Determine%20if%20a%20String%20Is%20a%20Number,-The%20first%20version&text=Namely%2C%20pass%20a%20string%20as,none%20is%20found%20returns%20true.)
+    * Use std::isdigit Method to Determine if a String Is a Number
+    * Use std::isdigit With std::ranges::all_of to Determine if a String Is a Number
+    * Use find_first_not_of Method to Determine if a String Is a Number
+
+##### [std::isspace](https://en.cppreference.com/w/cpp/string/byte/isspace)
+
+* `int isspace( int ch );`
+* checks if a character is a space character (function)
+* [c++ - std::remove_if and std::isspace - compile-time error - Stack Overflow](https://stackoverflow.com/questions/21578544/stdremove-if-and-stdisspace-compile-time-error)
+    * There is another overload of std::isspace, so you need to specify which one to use. An easy way is to use a lambda (or write your own one-line function if you don't have C++11 support)
 
 #### Character manipulation
 
-* [std::tolower - cppreference.com](https://en.cppreference.com/w/cpp/string/byte/tolower)
-	* converts a character to lowercase (function)
-	* `int tolower( int ch );`
-	* Converts the given character to lowercase according to the character conversion rules defined by the currently installed C locale.
-	* In the default "C" locale, the following uppercase letters ABCDEFGHIJKLMNOPQRSTUVWXYZ are replaced with respective lowercase letters abcdefghijklmnopqrstuvwxyz.
-* [std::toupper - cppreference.com](https://en.cppreference.com/w/cpp/string/byte/toupper)
-	* converts a character to uppercase (function)
-	* Converts the given character to uppercase according to the character conversion rules defined by the currently installed C locale.
-	* In the default "C" locale, the following lowercase letters abcdefghijklmnopqrstuvwxyz are replaced with respective uppercase letters ABCDEFGHIJKLMNOPQRSTUVWXYZ.
+##### [std::tolower](https://en.cppreference.com/w/cpp/string/byte/tolower)
+
+* converts a character to lowercase (function)
+* `int tolower( int ch );`
+* Converts the given character to lowercase according to the character conversion rules defined by the currently installed C locale.
+* In the default "C" locale, the following uppercase letters `ABCDEFGHIJKLMNOPQRSTUVWXYZ` are replaced with respective lowercase letters `abcdefghijklmnopqrstuvwxyz`.
+
+##### [std::toupper](https://en.cppreference.com/w/cpp/string/byte/toupper)
+
+* converts a character to uppercase (function)
+* Converts the given character to uppercase according to the character conversion rules defined by the currently installed C locale.
+* In the default "C" locale, the following lowercase letters `abcdefghijklmnopqrstuvwxyz` are replaced with respective uppercase letters `ABCDEFGHIJKLMNOPQRSTUVWXYZ`.
 
 #### Conversions to numeric formats
 
-* Defined in header /<cstdlib>
+* Defined in header \<cstdlib>
 
 ##### [std::atoi, std::atol, std::atoll](https://en.cppreference.com/w/cpp/string/byte/atoi)
     
