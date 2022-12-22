@@ -9811,6 +9811,8 @@ d
     * The C++ getline() is a standard library function that is used to read a string or a line from an input stream. It is a part of the \<string> header. The getline() function extracts characters from the input stream and appends it to the string object until the delimiting character is encountered. While doing so the previously stored value in the string object str will be replaced by the input string if any.
 * How to read data from input stream and arguments ?
     * `$ cat ./input.txt | ./my_app 10`
+    * [Passing contents of file as argument into C++ program - Stack Overflow](https://stackoverflow.com/questions/48652223/passing-contents-of-file-as-argument-into-c-program)
+    * [c++ - Passing text file to standard input - Stack Overflow](https://stackoverflow.com/questions/25985639/passing-text-file-to-standard-input)
 ```c++
 #include <cstdlib>
 #include <iostream>
