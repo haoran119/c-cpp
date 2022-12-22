@@ -9755,17 +9755,10 @@ After: Some data with some very nice macros to substitute
 * Notes
     * When consuming whitespace-delimited input (e.g. int n; std::cin >> n;) any whitespace that follows, including a newline character, will be left on the input stream. Then when switching to line-oriented input, the first line retrieved with getline will be just that whitespace. In the likely case that this is unwanted behaviour, possible solutions include:
         * An explicit extraneous initial call to getline
-        * Removing consecutive whitespace with std::cin >> std::ws 
-        * Ignoring all leftover characters on the line of input with cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-* [getline (string) - C++ Reference](https://cplusplus.com/reference/string/string/getline/)
-    * Get line from stream into string
-        * Extracts characters from is and stores them into str until the delimitation character delim is found (or the newline character, '\n', for (2)).
-        * The extraction also stops if the end of file is reached in is or if some other error occurs during the input operation.
-        * If the delimiter is found, it is extracted and discarded (i.e. it is not stored and the next input operation will begin after it).
-        * Note that any content in str before the call is replaced by the newly extracted sequence.
-        * Each extracted character is appended to the string as if its member push_back was called.
-* [getline (string) in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/getline-string-c/)
-    * The C++ getline() is a standard library function that is used to read a string or a line from an input stream. It is a part of the \<string> header. The getline() function extracts characters from the input stream and appends it to the string object until the delimiting character is encountered. While doing so the previously stored value in the string object str will be replaced by the input string if any.
+        * Removing consecutive whitespace with `std::cin >> std::ws`
+        * Ignoring all leftover characters on the line of input with `cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');`
+* Example
+    * The following example demonstrates how to use getline function to read user's input and how to process file line by line.
 ```c++
 #include <string>
 #include <iostream>
@@ -9794,6 +9787,50 @@ int main()
     for (std::string line; std::getline(input2, line, ';'); ) {
         std::cout << line << '\n';
     }
+}
+/*
+What is your name? John Q. Public
+Hello John Q. Public, nice to meet you.
+ 
+The sum is 28.
+ 
+a
+b
+c
+d
+*/
+```
+* [getline (string) - C++ Reference](https://cplusplus.com/reference/string/string/getline/)
+    * Get line from stream into string
+        * Extracts characters from is and stores them into str until the delimitation character delim is found (or the newline character, '\n', for (2)).
+        * The extraction also stops if the end of file is reached in is or if some other error occurs during the input operation.
+        * If the delimiter is found, it is extracted and discarded (i.e. it is not stored and the next input operation will begin after it).
+        * Note that any content in str before the call is replaced by the newly extracted sequence.
+        * Each extracted character is appended to the string as if its member push_back was called.
+* [getline (string) in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/getline-string-c/)
+    * The C++ getline() is a standard library function that is used to read a string or a line from an input stream. It is a part of the \<string> header. The getline() function extracts characters from the input stream and appends it to the string object until the delimiting character is encountered. While doing so the previously stored value in the string object str will be replaced by the input string if any.
+* How to read data from input stream and arguments ?
+    * `$ cat ./input.txt | ./my_app 10`
+```c++
+#include <cstdlib>
+#include <iostream>
+#include <string>
+
+int main(int argc, char* argv[])
+{
+    if (argc < 2) {
+        std::cout << "Usage: " << argv[0] << " <depth>\n";
+        return 1;
+    }
+
+    auto depth = std::atoi(argv[1]);
+    std::cout << depth << '\n';
+
+    for (std::string s_message{}; std::getline(std::cin, s_message); ) {
+        std::cout << s_message << '\n';
+    }
+
+    return 0;
 }
 ```
 
