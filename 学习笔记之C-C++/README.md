@@ -9383,67 +9383,132 @@ Operator function objects
 
 ### [std::basic_string](https://en.cppreference.com/w/cpp/string/basic_string) 
 
-* The class template basic_string stores and manipulates sequences of char-like objects, which are non-array objects of trivial standard-layout type. The class is dependent neither on the character type nor on the nature of operations on that type. The definitions of the operations are supplied via the Traits template parameter - a specialization of std::char_traits or a compatible traits class. Traits::char_type and CharT must name the same type; otherwise the program is ill-formed.
-* The elements of a basic_string are stored contiguously, that is, for a basic_string s, &*(s.begin() + n) == &*s.begin() + n for any n in \[0, s.size()), or, equivalently, a pointer to s\[0] can be passed to functions that expect a pointer to the first element of a null-terminated (since C++11) CharT\[] array.
-* std::basic_string satisfies the requirements of AllocatorAwareContainer, SequenceContainer and ContiguousContainer (since C++17)
-* Member functions of std::basic_string are constexpr: it is possible to create and use std::string objects in the evaluation of a constant expression.
-* However, std::string objects generally cannot be constexpr, because any dynamically allocated storage must be released in the same evaluation of constant expression. (since C++20)
+* Defined in header \<string>
+```c++
+template<
+    class CharT,
+    class Traits = std::char_traits<CharT>,
+    class Allocator = std::allocator<CharT>
+> class basic_string;   (1)	
+
+namespace pmr {
+    template <class CharT, class Traits = std::char_traits<CharT>>
+    using basic_string = std::basic_string< CharT, Traits,
+                                            std::pmr::polymorphic_allocator<CharT> >;
+}   (2)	(since C++17)
+```
+* The class template basic_string stores and manipulates sequences of `char`-like objects, which are non-array objects of trivial standard-layout type. The class is dependent neither on the character type nor on the nature of operations on that type. The definitions of the operations are supplied via the Traits template parameter - a specialization of `std::char_traits` or a compatible traits class. Traits::char_type and CharT must name the same type; otherwise the program is ill-formed.
+* The elements of a basic_string are stored contiguously, that is, for a basic_string s, `&*(s.begin() + n) == &*s.begin() + n` for any n in `[0, s.size())`, or, equivalently, a pointer to `s[0]` can be passed to functions that expect a pointer to the first element of a `null-terminated CharT[] array`.
+* std::basic_string satisfies the requirements of AllocatorAwareContainer, SequenceContainer `and ContiguousContainer (since C++17)`
+* `Member functions of std::basic_string are constexpr: it is possible to create and use std::string objects in the evaluation of a constant expression. (since C++20)`
+* `However, std::string objects generally cannot be constexpr, because any dynamically allocated storage must be released in the same evaluation of constant expression. (since C++20)`
+* Template parameters
+    * `CharT`	-	character type
+    * `Traits`	-	traits class specifying the operations on the character type
+    * `Allocator`	-	Allocator type used to allocate internal storage
+```c++
+#include <iostream>
+#include <string>
+ 
+int main()
+{
+    using namespace std::literals;
+ 
+    // Creating a string from const char*
+    std::string str1 = "hello";
+ 
+    // Creating a string using string literal
+    auto str2 = "world"s;
+ 
+    // Concatenating strings
+    std::string str3 = str1 + " " + str2;
+ 
+    // Print out the result
+    std::cout << str3 << '\n';
+ 
+    std::string::size_type pos = str3.find(" ");
+    str1 = str3.substr(pos + 1); // the part after the space
+    str2 = str3.substr(0, pos);  // the part till the space
+ 
+    std::cout << str1 << ' ' << str2 << '\n';
+ 
+    // Accessing an element using subscript operator[]
+    std::cout << str1[0] << '\n';
+    str1[0] = 'W';
+    std::cout << str1 << '\n';
+}
+/*
+hello world
+world hello
+w
+World
+*/
+```
 
 #### Member functions
 
-* [std::basic_string<CharT,Traits,Allocator>::basic_string - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/basic_string)
-	* constructs a basic_string (public member function)
-	* Constructs new string from a variety of data sources and optionally using user supplied allocator alloc.
+##### [std::basic_string<CharT,Traits,Allocator>::basic_string](https://en.cppreference.com/w/cpp/string/basic_string/basic_string)
+
+* constructs a basic_string (public member function)
+* Constructs new string from a variety of data sources and optionally using user supplied allocator alloc.
 * [c++ - Converting int to String of its ASCII - Stack Overflow](https://stackoverflow.com/questions/34462964/converting-int-to-string-of-its-ascii)
 	* `std::string(1, char(97))	// 'a'`
 
-#
-Element access
+##### Element access
 
-* [std::basic_string<CharT,Traits,Allocator>::at - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/at)
-	* accesses the specified character with bounds checking (public member function)
-	* Returns a reference to the character at specified location pos. Bounds checking is performed, exception of type std::out_of_range will be thrown on invalid access.
-	* Return value
-		* Reference to the requested character.
-	* Exceptions
-		* Throws std::out_of_range if pos >= size().
-	* Complexity
-		* Constant.
-* [std::basic_string<CharT,Traits,Allocator>::c_str - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/c_str)
-	* returns a non-modifiable standard C character array version of the string (public member function)
-	* Returns a pointer to a null-terminated character array with data equivalent to those stored in the string.
-	* The pointer is such that the range \[c_str(); c_str() + size()] is valid and the values in it correspond to the values stored in the string with an additional null character after the last position.
-	* The pointer obtained from c_str() may be invalidated by:
-		* Passing a non-const reference to the string to any standard library function, or
-		* Calling non-const member functions on the string, excluding operator[], at(), front(), back(), begin(), rbegin(), end() and rend() (since C++11).
-	* Writing to the character array accessed through c_str() is undefined behavior.
-	* c_str() and data() perform the same function. (since C++11)
+###### [std::basic_string<CharT,Traits,Allocator>::at](https://en.cppreference.com/w/cpp/string/basic_string/at)
 
-#
-Operations
+* accesses the specified character with bounds checking (public member function)
+* Returns a reference to the character at specified location pos. Bounds checking is performed, exception of type std::out_of_range will be thrown on invalid access.
+* Return value
+    * Reference to the requested character.
+* Exceptions
+    * Throws std::out_of_range if pos >= size().
+* Complexity
+    * Constant.
 
-* [std::basic_string<CharT,Traits,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/erase)
-	* Removes specified characters from the string.
-		1) Removes min(count, size() - index) characters starting at index.
-		2) Removes the character at position.
-		3) Removes the characters in the range \[first, last).
+###### [std::basic_string<CharT,Traits,Allocator>::c_str](https://en.cppreference.com/w/cpp/string/basic_string/c_str)
+
+* returns a non-modifiable standard C character array version of the string (public member function)
+* Returns a pointer to a null-terminated character array with data equivalent to those stored in the string.
+* The pointer is such that the range \[c_str(); c_str() + size()] is valid and the values in it correspond to the values stored in the string with an additional null character after the last position.
+* The pointer obtained from c_str() may be invalidated by:
+    * Passing a non-const reference to the string to any standard library function, or
+    * Calling non-const member functions on the string, excluding operator[], at(), front(), back(), begin(), rbegin(), end() and rend()
+* Writing to the character array accessed through c_str() is undefined behavior.
+* c_str() and data() perform the same function. (since C++11)
+
+##### Operations
+
+###### [std::basic_string<CharT,Traits,Allocator>::erase](https://en.cppreference.com/w/cpp/string/basic_string/erase)
+
+* Removes specified characters from the string.
+    1) Removes min(count, size() - index) characters starting at index.
+    2) Removes the character at position.
+    3) Removes the characters in the range \[first, last).
 * [c++ - How to trim a std::string? - Stack Overflow](https://stackoverflow.com/questions/216823/how-to-trim-a-stdstring)
 ```c++
 s.erase(s.find_last_not_of(" \n\r\t")+1);
 ```
-* [string::append - C++ Reference](https://www.cplusplus.com/reference/string/string/append/)
-	* Append to string
-		* Extends the string by appending additional characters at the end of its current value:
-	* Complexity
-		* Unspecified, but generally up to linear in the new string length.
-* [string::compare - C++ Reference](https://www.cplusplus.com/reference/string/string/compare/)
-	* Compare strings
-		* Compares the value of the string object (or a substring) to the sequence of characters specified by its arguments.
-		* The compared string is the value of the string object or -if the signature used has a pos and a len parameters- the substring that begins at its character in position pos and spans len characters.
-		* This string is compared to a comparing string, which is determined by the other arguments passed to the function.
-* [std::basic_string<CharT,Traits,Allocator>::replace - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/replace)
-	* replaces specified portion of a string (public member function)
-	* Replaces the part of the string indicated by either \[pos, pos + count) or \[first, last) with a new string.
+
+###### [std::basic_string<CharT,Traits,Allocator>::append](https://en.cppreference.com/w/cpp/string/basic_string/append)
+
+* Append to string
+    * Extends the string by appending additional characters at the end of its current value:
+* Complexity
+    * Unspecified, but generally up to linear in the new string length.
+
+###### [std::basic_string<CharT,Traits,Allocator>::compare](https://en.cppreference.com/w/cpp/string/basic_string/compare)
+
+* Compare strings
+    * Compares the value of the string object (or a substring) to the sequence of characters specified by its arguments.
+    * The compared string is the value of the string object or -if the signature used has a pos and a len parameters- the substring that begins at its character in position pos and spans len characters.
+    * This string is compared to a comparing string, which is determined by the other arguments passed to the function.
+
+###### [std::basic_string<CharT,Traits,Allocator>::replace](https://en.cppreference.com/w/cpp/string/basic_string/replace)
+
+* replaces specified portion of a string (public member function)
+* Replaces the part of the string indicated by either \[pos, pos + count) or \[first, last) with a new string.
 ```c++
 #include <cassert>
 #include <cstddef>
@@ -9510,9 +9575,11 @@ A quick red fox jumps over the lazy dog.
 #4 : : :
 */
 ```
-* [std::basic_string<CharT,Traits,Allocator>::substr - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/substr)
-	* returns a substring (public member function)
-	* Returns a substring \[pos, pos+count). If the requested substring extends past the end of the string, i.e. the count is greater than size() - pos (e.g. if count == npos), the returned substring is \[pos, size()).
+
+###### [std::basic_string<CharT,Traits,Allocator>::substr](https://en.cppreference.com/w/cpp/string/basic_string/substr)
+
+* returns a substring (public member function)
+* Returns a substring `[pos, pos+count)`. If the requested substring extends past the end of the string, i.e. the count is greater than size() - pos (e.g. if count == npos), the returned substring is `[pos, size())`.
 ```c++
 #include <string>
 #include <iostream>
@@ -9553,17 +9620,17 @@ pos exceeds string size
 */
 ```
 
-#
-Search
+##### Search
 
-* [std::basic_string<CharT,Traits,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find)
-	* Return value
-		* Position of the first character of the found substring or [npos](https://en.cppreference.com/w/cpp/string/basic_string/npos) if no such substring is found.
-	* [string::find - C++ Reference](https://www.cplusplus.com/reference/string/string/find/)
-		* Find content in string
-			* Searches the string for the first occurrence of the sequence specified by its arguments.
-			* When pos is specified, the search only includes characters at or after position pos, ignoring any possible occurrences that include characters before pos.
-			* Notice that unlike member find_first_of, whenever more than one character is being searched for, it is not enough that just one of these characters match, but the entire sequence must match.
+###### [std::basic_string<CharT,Traits,Allocator>::find](https://en.cppreference.com/w/cpp/string/basic_string/find)
+
+* Return value
+    * Position of the first character of the found substring or [npos](https://en.cppreference.com/w/cpp/string/basic_string/npos) if no such substring is found.
+* [string::find - C++ Reference](https://www.cplusplus.com/reference/string/string/find/)
+    * Find content in string
+        * Searches the string for the first occurrence of the sequence specified by its arguments.
+        * When pos is specified, the search only includes characters at or after position pos, ignoring any possible occurrences that include characters before pos.
+        * Notice that unlike member find_first_of, whenever more than one character is being searched for, it is not enough that just one of these characters match, but the entire sequence must match.
 ```c++
 #include <string>
 #include <iostream>
@@ -9605,9 +9672,11 @@ found: a string
 not found
 */
 ```
-* [std::basic_string<CharT,Traits,Allocator>::find_first_not_of - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find_first_not_of)
-	* find first absence of characters (public member function)
-	* Finds the first character equal to none of the characters in the given character sequence. The search considers only the interval \[pos, size()). If the character is not present in the interval, npos will be returned.
+
+###### [std::basic_string<CharT,Traits,Allocator>::find_first_not_of - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find_first_not_of)
+
+* find first absence of characters (public member function)
+* Finds the first character equal to none of the characters in the given character sequence. The search considers only the interval `[pos, size())`. If the character is not present in the interval, npos will be returned.
 ```c++
 #include <string>
 #include <iostream>
@@ -9637,55 +9706,66 @@ Before: Some data with %MACROS to substitute
 After: Some data with some very nice macros to substitute
 */
 ```
-* [std::basic_string<CharT,Traits,Allocator>::find_last_not_of - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/find_last_not_of)
-	* find last absence of characters (public member function)
-	* Finds the last character equal to none of the characters in the given character sequence. The search considers only the interval [0, pos]. If the character is not present in the interval, npos will be returned.
-	* 1) Finds the last character equal to none of characters in str.
-	* 2) Finds the last character equal to none of characters in the range \[s, s+count). This range can include null characters.
-	* 3) Finds the last character equal to none of characters in character string pointed to by s. The length of the string is determined by the first null character using Traits::length(s).
-	* 4) Finds the last character not equal to ch.
-	* 5) Implicitly converts t to a string view sv as if by std::basic_string_view<CharT, Traits> sv = t;, then finds the last character equal to none of characters in sv. This overload participates in overload resolution only if std::is_convertible_v<const StringViewLike&, std::basic_string_view<CharT, Traits>> is true and std::is_convertible_v<const StringViewLike&, const CharT*> is false.
-	* In all cases, equality is checked by calling Traits::eq.
-* [std::basic_string<CharT,Traits,Allocator>::substr - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/substr)
-	* Returns a substring \[pos, pos+count). If the requested substring extends past the end of the string, i.e. the count is greater than size() - pos (e.g. if count == npos), the returned substring is \[pos, [size()](https://en.cppreference.com/w/cpp/string/basic_string/size)).
-	* Exceptions
-		* [std::out_of_range](https://en.cppreference.com/w/cpp/error/out_of_range) if pos > size()
+
+###### [std::basic_string<CharT,Traits,Allocator>::find_last_not_of](https://en.cppreference.com/w/cpp/string/basic_string/find_last_not_of)
+
+* find last absence of characters (public member function)
+* Finds the last character equal to none of the characters in the given character sequence. The search considers only the interval `[0, pos]`. If the character is not present in the interval, npos will be returned.
+* 1) Finds the last character equal to none of characters in str.
+* 2) Finds the last character equal to none of characters in the range `[s, s+count)`. This range can include null characters.
+* 3) Finds the last character equal to none of characters in character string pointed to by s. The length of the string is determined by the first null character using Traits::length(s).
+* 4) Finds the last character not equal to ch.
+* 5) Implicitly converts t to a string view sv as if by `std::basic_string_view<CharT, Traits> sv = t;`, then finds the last character equal to none of characters in sv. This overload participates in overload resolution only if `std::is_convertible_v<const StringViewLike&, std::basic_string_view<CharT, Traits>>` is true and `std::is_convertible_v<const StringViewLike&, const CharT*>` is false.
+* In all cases, equality is checked by calling Traits::eq.
+
+###### [std::basic_string<CharT,Traits,Allocator>::substr](https://en.cppreference.com/w/cpp/string/basic_string/substr)
+
+* Returns a substring `[pos, pos+count)`. If the requested substring extends past the end of the string, i.e. the count is greater than size() - pos (e.g. if count == npos), the returned substring is \[pos, [size()](https://en.cppreference.com/w/cpp/string/basic_string/size)).
+* Exceptions
+    * [std::out_of_range](https://en.cppreference.com/w/cpp/error/out_of_range) if pos > size()
 
 #### Constants
 
-* [std::basic_string<CharT,Traits,Allocator>::npos - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/npos)
-	* static const size_type npos = -1;
-	* This is a special value equal to the maximum value representable by the type size_type. The exact meaning depends on context, but it is generally used either as end of string indicator by the functions that expect a string index or as the error indicator by the functions that return a string index.
-	* Note
-		* Although the definition uses -1, size_type is an unsigned integer type, and the value of npos is the largest positive value it can hold, due to signed-to-unsigned implicit conversion. This is a portable way to specify the largest value of any unsigned type.
+##### [std::basic_string<CharT,Traits,Allocator>::npos](https://en.cppreference.com/w/cpp/string/basic_string/npos)
+
+* special value. The exact meaning depends on the context (public static member constant)
+* `static const size_type npos = -1;`
+* This is a special value equal to the maximum value representable by the type size_type. The exact meaning depends on context, but it is generally used either as end of string indicator by the functions that expect a string index or as the error indicator by the functions that return a string index.
+* Note
+    * Although the definition uses -1, size_type is an unsigned integer type, and the value of npos is the largest positive value it can hold, due to signed-to-unsigned implicit conversion. This is a portable way to specify the largest value of any unsigned type.
 
 #### Non-member functions
 
-* [operator<<,>>(std::basic_string) - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/operator_ltltgtgt)
-	* performs stream input and output on strings (function template)
-* [std::getline - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/getline)
-	* read data from an I/O stream into a string (function template)
-	* getline reads characters from an input stream and places them into a string
-	* Parameters
-		* input	-	the stream to get data from
-		* str	-	the string to put the data into
-		* delim	-	the delimiter character
-	* Return value
-		* input
-	* Notes
-		* When consuming whitespace-delimited input (e.g. int n; std::cin >> n;) any whitespace that follows, including a newline character, will be left on the input stream. Then when switching to line-oriented input, the first line retrieved with getline will be just that whitespace. In the likely case that this is unwanted behaviour, possible solutions include:
-			* An explicit extraneous initial call to getline
-			* Removing consecutive whitespace with std::cin >> std::ws 
-			* Ignoring all leftover characters on the line of input with cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-	* [getline (string) - C++ Reference](https://cplusplus.com/reference/string/string/getline/)
-		* Get line from stream into string
-			* Extracts characters from is and stores them into str until the delimitation character delim is found (or the newline character, '\n', for (2)).
-			* The extraction also stops if the end of file is reached in is or if some other error occurs during the input operation.
-			* If the delimiter is found, it is extracted and discarded (i.e. it is not stored and the next input operation will begin after it).
-			* Note that any content in str before the call is replaced by the newly extracted sequence.
-			* Each extracted character is appended to the string as if its member push_back was called.
-	* [getline (string) in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/getline-string-c/)
-		* The C++ getline() is a standard library function that is used to read a string or a line from an input stream. It is a part of the \<string> header. The getline() function extracts characters from the input stream and appends it to the string object until the delimiting character is encountered. While doing so the previously stored value in the string object str will be replaced by the input string if any.
+##### Input/output
+
+###### [operator<<,>>(std::basic_string)](https://en.cppreference.com/w/cpp/string/basic_string/operator_ltltgtgt)
+
+* performs stream input and output on strings (function template)
+
+###### [std::getline](https://en.cppreference.com/w/cpp/string/basic_string/getline)
+	
+* read data from an I/O stream into a string (function template)
+* getline reads characters from an input stream and places them into a string
+* Parameters
+    * `input`	-	the stream to get data from
+    * `str`	-	the string to put the data into
+    * `delim`	-	the delimiter character
+* Return value
+    * `input`
+* Notes
+    * When consuming whitespace-delimited input (e.g. int n; std::cin >> n;) any whitespace that follows, including a newline character, will be left on the input stream. Then when switching to line-oriented input, the first line retrieved with getline will be just that whitespace. In the likely case that this is unwanted behaviour, possible solutions include:
+        * An explicit extraneous initial call to getline
+        * Removing consecutive whitespace with std::cin >> std::ws 
+        * Ignoring all leftover characters on the line of input with cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+* [getline (string) - C++ Reference](https://cplusplus.com/reference/string/string/getline/)
+    * Get line from stream into string
+        * Extracts characters from is and stores them into str until the delimitation character delim is found (or the newline character, '\n', for (2)).
+        * The extraction also stops if the end of file is reached in is or if some other error occurs during the input operation.
+        * If the delimiter is found, it is extracted and discarded (i.e. it is not stored and the next input operation will begin after it).
+        * Note that any content in str before the call is replaced by the newly extracted sequence.
+        * Each extracted character is appended to the string as if its member push_back was called.
+* [getline (string) in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/getline-string-c/)
+    * The C++ getline() is a standard library function that is used to read a string or a line from an input stream. It is a part of the \<string> header. The getline() function extracts characters from the input stream and appends it to the string object until the delimiting character is encountered. While doing so the previously stored value in the string object str will be replaced by the input string if any.
 ```c++
 #include <string>
 #include <iostream>
@@ -9717,7 +9797,7 @@ int main()
 }
 ```
 
-* Numeric conversions
+##### Numeric conversions
 
 | [stoi/stol/stoll](https://en.cppreference.com/w/cpp/string/basic_string/stol) | converts a string to a signed integer |
 | - | - |
@@ -9726,18 +9806,137 @@ int main()
 | [to_string](https://en.cppreference.com/w/cpp/string/basic_string/to_string) | converts an integral or floating point value to string |
 | [to_wstring](https://en.cppreference.com/w/cpp/string/basic_string/to_wstring) | converts an integral or floating point value to wstring |
 
-* [std::to_string - C++ Reference](https://www.cplusplus.com/reference/string/to_string/)
-	* Convert numerical value to string
-		* Returns a string with the representation of val.
-		* Discards any whitespace characters (as identified by calling std::isspace) until the first non-whitespace character is found, then takes as many characters as possible to form a valid base-n (where n=base) integer number representation and converts them to an integer value. 
-* [C++ String to float/double and vice-versa](https://www.programiz.com/cpp-programming/string-float-conversion#:~:text=C%2B%2B%20string%20to%20float%20and,convert%20string%20to%20long%20double%20.)
+###### [std::stoi, std::stol, std::stoll](https://en.cppreference.com/w/cpp/string/basic_string/stol)
+
+* converts a string to a signed integer
+```c++
+#include <string>
+#include <iomanip>
+#include <utility>
+#include <iostream>
+#include <stdexcept>
+ 
+int main()
+{
+    const auto data = {
+        "45",
+        "+45",
+        " -45",
+        "3.14159",
+        "31337 with words",
+        "words and 2",
+        "12345678901",
+    };
+ 
+    for (const std::string s : data)
+    {
+        std::size_t pos{};
+        try
+        {
+            std::cout << "std::stoi('" << s << "'): ";
+            const int i {std::stoi(s, &pos)};
+            std::cout << i << "; pos: " << pos << '\n';
+        }
+        catch(std::invalid_argument const& ex)
+        {
+            std::cout << "std::invalid_argument::what(): " << ex.what() << '\n';
+        }
+        catch(std::out_of_range const& ex)
+        {
+            std::cout << "std::out_of_range::what(): " << ex.what() << '\n';
+            const long long ll {std::stoll(s, &pos)};
+            std::cout << "std::stoll('" << s << "'): " << ll << "; pos: " << pos << '\n';
+        }
+    }
+ 
+    std::cout << "\nCalling with different radixes:\n";
+    for (const auto& [s, base]: { std::pair<const char*, int>
+        {"11",  2}, {"22",  3}, {"33",  4}, {"77",  8},
+        {"99", 10}, {"FF", 16}, {"jJ", 20}, {"Zz", 36}, })
+    {
+        const int i {std::stoi(s, nullptr, base)};
+        std::cout << "std::stoi('" << s << "', " << base << "): " << i << '\n';
+    }
+}
+/*
+std::stoi('45'): 45; pos: 2
+std::stoi('+45'): 45; pos: 3
+std::stoi(' -45'): -45; pos: 4
+std::stoi('3.14159'): 3; pos: 1
+std::stoi('31337 with words'): 31337; pos: 5
+std::stoi('words and 2'): std::invalid_argument::what(): stoi
+std::stoi('12345678901'): std::out_of_range::what(): stoi
+std::stoll('12345678901'): 12345678901; pos: 11
+ 
+Calling with different radixes:
+std::stoi('11', 2): 3
+std::stoi('22', 3): 8
+std::stoi('33', 4): 15
+std::stoi('77', 8): 63
+std::stoi('99', 10): 99
+std::stoi('FF', 16): 255
+std::stoi('jJ', 20): 399
+std::stoi('Zz', 36): 1295
+*/
+```
+
+###### [std::stoul, std::stoull](https://en.cppreference.com/w/cpp/string/basic_string/stoul) 
+
+* converts a string to an unsigned integer
 * [c++ - How to convert a string to uint32_t - Stack Overflow](https://stackoverflow.com/questions/57253837/how-to-convert-a-string-to-uint32-t)
 	* `static_cast<uint32_t>(std::stoul(str))`
 
+###### [std::stof, std::stod, std::stold](https://en.cppreference.com/w/cpp/string/basic_string/stof) 
+
+* converts a string to a floating point value
+* [C++ String to float/double and vice-versa](https://www.programiz.com/cpp-programming/string-float-conversion#:~:text=C%2B%2B%20string%20to%20float%20and,convert%20string%20to%20long%20double%20.)
+
+###### [std::to_string](https://en.cppreference.com/w/cpp/string/basic_string/to_string)
+
+* converts an integral or floating point value to string (function)
+* Convert numerical value to string
+    * Returns a string with the representation of val.
+    * Discards any whitespace characters (as identified by calling std::isspace) until the first non-whitespace character is found, then takes as many characters as possible to form a valid base-n (where n=base) integer number representation and converts them to an integer value. 
+* Notes
+    * With floating point types std::to_string may yield unexpected results as the number of significant digits in the returned string can be zero, see the example.
+    * The return value may differ significantly from what std::cout prints by default, see the example.
+    * std::to_string relies on the current locale for formatting purposes, and therefore concurrent calls to std::to_string from multiple threads may result in partial serialization of calls. C++17 provides [std::to_chars](https://en.cppreference.com/w/cpp/utility/to_chars) as a higher-performance locale-independent alternative.
+```c++
+#include <iostream>
+#include <string>
+ 
+int main()
+{
+    for (const double f : {23.43, 1e-9, 1e40, 1e-40, 123456789.})
+        std::cout << "std::cout: " << f << '\n'
+                  << "to_string: " << std::to_string(f) << "\n\n";
+}
+/*
+std::cout: 23.43
+to_string: 23.430000
+ 
+std::cout: 1e-09
+to_string: 0.000000
+ 
+std::cout: 1e+40
+to_string: 10000000000000000303786028427003666890752.000000
+ 
+std::cout: 1e-40
+to_string: 0.000000
+ 
+std::cout: 1.23457e+08
+to_string: 123456789.000000
+*/
+```
+
 #### Literals
 
-* [std::literals::string_literals::operator""s - cppreference.com](https://en.cppreference.com/w/cpp/string/basic_string/operator%22%22s)
-	* Forms a string literal of the desired type.
+* Defined in inline namespace `std::literals::string_literals`
+
+##### [std::literals::string_literals::operator""s](https://en.cppreference.com/w/cpp/string/basic_string/operator%22%22s)
+
+* Converts a character array literal to basic_string (function)
+* Forms a string literal of the desired type.
 
 #### MISC
 
