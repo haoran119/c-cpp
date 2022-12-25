@@ -3137,6 +3137,13 @@ red
 
 * as the declaration of the loop
 * Executes init-statement once, then executes statement and iteration-expression repeatedly, until the value of condition becomes false. The test takes place before each iteration.
+* [c++ - Is it possible to declare two variables of different types in a for loop? - Stack Overflow](https://stackoverflow.com/questions/2687392/is-it-possible-to-declare-two-variables-of-different-types-in-a-for-loop)
+    * C++17: Yes! You should use a structured binding declaration. 
+```c++
+for (auto [i, f, s] = std::tuple{1, 1.0, std::string{"ab"}}; i < N; ++i, f += 1.5) {
+    // ...
+}
+```
 
 #### [range-based for loop](https://en.cppreference.com/w/cpp/language/range-for)
 
