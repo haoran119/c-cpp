@@ -454,6 +454,26 @@ In programming contests, people do focus more on finding the algorithm to solve 
     * 杂项运算符
     * C++ 中的运算符优先级
 
+#### [ASCII Chart](https://en.cppreference.com/w/cpp/language/ascii)
+
+* The following chart contains all 128 ASCII decimal (dec), octal (oct), hexadecimal (hex) and character (ch) codes.
+* Example
+```c++
+#include <iostream>
+int main()
+{
+    std::cout << "Printable ASCII [32..126]:\n";
+    for (char c{' '}; c <= '~'; c++) {
+        std::cout << c << ((c+1) % 32 ? ' ' : '\n');
+    }
+}
+/*
+Printable ASCII [32..126]:
+  ! " # $ % & ' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ?
+@ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z [ \ ] ^ _
+` a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~
+```
+
 #### [Types](https://en.cppreference.com/w/cpp/language/type) – [Fundamental types](https://en.cppreference.com/w/cpp/language/types)
 
 * Objects, references, functions including function template specializations, and expressions have a property called type, which both restricts the operations that are permitted for those entities and provides semantic meaning to the otherwise generic sequences of bits.
