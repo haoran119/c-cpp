@@ -1425,6 +1425,85 @@ type::i = 4
 
 * converts type to unrelated type
 * Converts between types by reinterpreting the underlying bit pattern.
+* Unlike `static_cast`, but like `const_cast`, the `reinterpret_cast` expression does not compile to any CPU instructions (except when converting between integers and pointers or on obscure architectures where pointer representation depends on its type). It is purely a compile-time directive which instructs the compiler to treat expression as if it had the type new-type.
+* Example
+    * Demonstrates some uses of reinterpret_cast:
+```c++
+#include <cstdint>
+#include <cassert>
+#include <iostream>
+ 
+int f() { return 42; }
+ 
+int main()
+{
+    int i = 7;
+ 
+    // pointer to integer and back
+    std::uintptr_t v1 = reinterpret_cast<std::uintptr_t>(&i); // static_cast is an error
+    std::cout << "The value of &i is " << std::showbase << std::hex << v1 << '\n';
+    int* p1 = reinterpret_cast<int*>(v1);
+    assert(p1 == &i);
+ 
+    // pointer to function to another and back
+    void(*fp1)() = reinterpret_cast<void(*)()>(f);
+    // fp1(); undefined behavior
+    int(*fp2)() = reinterpret_cast<int(*)()>(fp1);
+    std::cout << std::dec << fp2() << '\n'; // safe
+ 
+    // type aliasing through pointer
+    char* p2 = reinterpret_cast<char*>(&i);
+    std::cout << (p2[0] == '\x7' ? "This system is little-endian\n"
+                                 : "This system is big-endian\n");
+ 
+    // type aliasing through reference
+    reinterpret_cast<unsigned int&>(i) = 42;
+    std::cout << i << '\n';
+ 
+    [[maybe_unused]] const int &const_iref = i;
+    // int &iref = reinterpret_cast<int&>(
+    //     const_iref); // compiler error - can't get rid of const
+    // Must use const_cast instead: int &iref = const_cast<int&>(const_iref);
+}
+/*
+The value of &i is 0x7fff352c3580
+42
+This system is little-endian
+42
+*/
+```
+* How to convert little-endian binary encoded integer to integer ?
+```c++
+#include <iostream>
+
+static uint32_t get_uint32_from_char_buffer(const char* buffer)
+{
+    return *(uint32_t*)buffer;
+}
+
+static uint32_t _get_uint32_from_char_buffer(const char* buffer)
+{
+    return *reinterpret_cast<const uint32_t*>(buffer);
+}
+
+// static uint32_t _get_uint32_from_char_buffer(const char* buffer)
+// {
+//     // error: invalid 'static_cast' from type 'const char*' to type 'const uint32_t*' {aka 'const unsigned int*'}
+//     return *static_cast<const uint32_t*>(buffer);
+// }
+
+int main()
+{
+    // unsigned little-endian binary encoded integer
+    char s[5] = {'\x01', '\x01', '\x00', '\x00'};
+
+    // 257
+    std::cout << get_uint32_from_char_buffer(s) << '\n';
+    std::cout << _get_uint32_from_char_buffer(s) << '\n';
+
+    return 0;
+}
+```
 
 ##### [dynamic_cast conversion](https://en.cppreference.com/w/cpp/language/dynamic_cast)
 
@@ -1645,6 +1724,72 @@ c is an instance of the class Parent
 c is an instance of the class Child
 p is not an instance of the class Child
 c is not an instance of AnotherClass class
+*/
+```
+
+##### [Explicit conversions (T)a, T(a)](https://en.cppreference.com/w/cpp/language/explicit_cast)
+
+* C-style cast converts one type to another by a mix of static_cast, const_cast, and reinterpret_cast
+* Converts between types using a combination of explicit and implicit conversions.
+* Syntax
+    * `( new-type ) expression`	(1)	
+    * `new-type ( expression-list(optional) )`	(2)	
+    * `new-type { expression-list(optional) }`	(3)	(since C++11)
+    * `template-name ( expression-list(optional) )`	(4)	(since C++17)
+    * `template-name { expression-list(optional) }`	(5)	(since C++17)
+    * `auto ( expression )`	(6)	(since C++23)
+    * `auto { expression }`	(7)	(since C++23)
+    * Returns a value of type new-type.
+* Example
+```c++
+#include <cassert>
+#include <iostream>
+ 
+double f = 3.14;
+unsigned int n1 = (unsigned int)f; // C-style cast
+unsigned int n2 = unsigned(f);     // function-style cast
+ 
+class C1;
+class C2;
+C2* foo(C1* p)
+{
+    return (C2*)p; // casts incomplete type to incomplete type
+}
+ 
+void cpp23_decay_copy_demo()
+{
+    auto inc_print = [](int& x, const int& y)
+    {
+        ++x;
+        std::cout << "x:" << x << ", y:" << y << '\n';
+    };
+ 
+    int p{1};
+    inc_print(p, p); // prints x:2 y:2, because param y here is an alias of p
+    int q{1};
+    inc_print(q, auto{q}); // prints x:2 y:1, auto{q} (C++23) casts to prvalue,
+                           // so the param y is a copy of q (not an alias of q)
+}
+ 
+// In this example, C-style cast is interpreted as static_cast
+// even though it would work as reinterpret_cast
+struct A {};
+struct I1 : A {};
+struct I2 : A {};
+struct D : I1, I2 {};
+ 
+int main()
+{
+    D* d = nullptr;
+//  A* a = (A*)d;                   // compile-time error
+    A* a = reinterpret_cast<A*>(d); // this compiles
+    assert(a == nullptr);
+ 
+    cpp23_decay_copy_demo();
+}
+/*
+x:2 y:2
+x:2 y:1
 */
 ```
 
