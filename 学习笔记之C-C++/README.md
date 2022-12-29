@@ -1476,17 +1476,17 @@ This system is little-endian
 ```c++
 #include <iostream>
 
-static uint32_t get_uint32_from_char_buffer(const char* buffer)
+uint32_t get_uint32_from_char_buffer(const char* buffer)
 {
     return *(uint32_t*)buffer;
 }
 
-static uint32_t _get_uint32_from_char_buffer(const char* buffer)
+uint32_t _get_uint32_from_char_buffer(const char* buffer)
 {
     return *reinterpret_cast<const uint32_t*>(buffer);
 }
 
-// static uint32_t _get_uint32_from_char_buffer(const char* buffer)
+// uint32_t _get_uint32_from_char_buffer(const char* buffer)
 // {
 //     // error: invalid 'static_cast' from type 'const char*' to type 'const uint32_t*' {aka 'const unsigned int*'}
 //     return *static_cast<const uint32_t*>(buffer);
