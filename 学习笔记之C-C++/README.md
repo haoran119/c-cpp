@@ -3438,6 +3438,62 @@ int main()
 }
 ```
 
+##### [Default member initializer](https://en.cppreference.com/w/cpp/language/data_members#Member_initialization)
+
+* Non-static data members may be initialized in one of two ways:
+    * 1) In the member initializer list of the constructor.
+    ```c++
+    struct S
+    {
+        int n;
+        std::string s;
+        S() : n(7) {} // direct-initializes n, default-initializes s
+    };
+    ```
+    * 2) Through a default member initializer, which is a brace or equals initializer included in the member declaration and is used if the member is omitted from the member initializer list of a constructor.
+    ```c++
+    struct S
+    {
+        int n = 7;
+        std::string s{'a', 'b', 'c'};
+        S() {} // default member initializer will copy-initialize n, list-initialize s
+    };
+    ```
+    * If a member has a default member initializer and also appears in the member initialization list in a constructor, the default member initializer is ignored for that constructor.
+    ```c++
+    #include <iostream>
+
+    int x = 0;
+    struct S
+    {
+        int n = ++x;
+        S() {}                 // uses default member initializer
+        S(int arg) : n(arg) {} // uses member initializer 
+    };
+
+    int main()
+    {
+        std::cout << x << '\n'; // prints 0
+        S s1;                   // default initializer ran
+        std::cout << x << '\n'; // prints 1
+        S s2(7);                // default initializer did not run
+        std::cout << x << '\n'; // prints 1
+    }
+    ```
+* How to fix error `Vector declaration "expected parameter declarator"` ?
+    * [c++ - Vector declaration "expected parameter declarator" - Stack Overflow](https://stackoverflow.com/questions/39560277/vector-declaration-expected-parameter-declarator)
+    * [c++ - Why can't member initializers use parentheses? - Stack Overflow](https://stackoverflow.com/questions/24836526/why-cant-member-initializers-use-parentheses)
+    * You have to initialize the variable in the constructor's initializer list:
+```c++
+class X 
+{
+    private:
+     vector<double> dQdt;
+    public:
+     X() : dQdt(3) {}
+};
+```
+
 ##### [Friend declaration](https://en.cppreference.com/w/cpp/language/friend)
 
 * The friend declaration appears in a class body and grants a function or another class access to private and protected members of the class where the friend declaration appears.
