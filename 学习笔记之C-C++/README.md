@@ -1472,7 +1472,14 @@ This system is little-endian
 42
 */
 ```
+
+###### MISC
+
 * How to convert little-endian binary encoded integer to integer ?
+    * [Little and Big Endian Mystery - GeeksforGeeks](https://www.geeksforgeeks.org/little-and-big-endian-mystery/)
+    * ![image](https://user-images.githubusercontent.com/34557994/210064770-2b7af10d-1875-4520-af69-d7927dde9f8f.png)
+    * [turn array of HEX into one number - Using Arduino / Programming Questions - Arduino Forum](https://forum.arduino.cc/t/turn-array-of-hex-into-one-number/688986)
+    * [How to convert a 4-byte hexadecimal sequence in a little-endian architecture into decimal – Today I Learned… in Code](https://www.tilcode.com/how-to-convert-a-4-byte-hexadecimal-sequence-in-a-little-endian-architecture-into-decimal/)
 ```c++
 #include <iostream>
 
