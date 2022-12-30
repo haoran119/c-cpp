@@ -14088,18 +14088,105 @@ int main()
 
 #### String I/O
 
-* Defined in header \<sstream>
-	
+* Defined in header `<sstream>`
+
+##### [std::basic_ostringstream](https://en.cppreference.com/w/cpp/io/basic_ostringstream)
+
+* implements high-level string stream output operations (class template)
+* [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
+	* Output stream class to operate on strings.
+	* Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
+	* Characters can be inserted into the stream with any operation allowed on output streams.
+	* [ostringstream::str - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/str/)
+	* string str() const;
+	* void str (const string& s);
+	* Get/set content
+		* The first form (1) returns a string object with a copy of the current contents of the stream.
+		* The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
+		* Internally, the function calls the str member of its internal string buffer object.
+
 ##### [std::basic_stringstream](https://en.cppreference.com/w/cpp/io/basic_stringstream)
 
 * implements high-level string stream input/output operations (class template)
+
+###### Member types
+
+###### Member functions
+
+* [std::basic_stringstream::rdbuf](https://en.cppreference.com/w/cpp/io/basic_stringstream/rdbuf)
+    * returns the underlying raw string device object (public member function)
+    * Returns pointer to the underlying raw string device object.
+* [c++ - How to read a whole text file at once? - Stack Overflow](https://stackoverflow.com/questions/13035674/how-to-read-a-file-line-by-line-or-a-whole-text-file-at-once)
+```c++
+int main(int argc, char* argv[])
+{
+    std::stringstream ss{};
+    ss << std::cin.rdbuf();
+    auto s = ss.str();
+    std::cout << s << '\n' << s.size() << '\n';
+}
+
+$ cat ./test.in | ./my_pgm
+```
+
+#
+String operations
+
+* [std::basic_stringstream<CharT,Traits,Allocator>::str](https://en.cppreference.com/w/cpp/io/basic_stringstream/str)
+    * gets or sets the contents of underlying string device object (public member function)
+* Notes
+    * The copy of the underlying string returned by str is a temporary object that will be destructed at the end of the expression, so directly calling c_str() on the result of str() (for example in `auto *ptr = out.str().c_str();`) results in a `dangling pointer`.
+* Example
+```c++
+#include <sstream>
+#include <iostream>
+int main()
+{
+    int n;
+ 
+    std::istringstream in;  // could also use in("1 2")
+    in.str("1 2");
+    in >> n;
+    std::cout << "after reading the first int from \"1 2\", the int is "
+              << n << ", str() = \"" << in.str() << "\"\n";
+ 
+    std::ostringstream out("1 2");
+    out << 3;
+    std::cout << "after writing the int '3' to output stream \"1 2\""
+              << ", str() = \"" << out.str() << "\"\n";
+ 
+    std::ostringstream ate("1 2", std::ios_base::ate);
+    ate << 3;
+    std::cout << "after writing the int '3' to append stream \"1 2\""
+              << ", str() = \"" << ate.str() << "\"\n";
+}
+/*
+after reading the first int from "1 2", the int is 1, str() = "1 2"
+after writing the int '3' to output stream "1 2", str() = "3 2"
+after writing the int '3' to append stream "1 2", str() = "1 23"
+*/
+```
+
+###### Non-member functions
+
+#
 * Inherited from [std::basic_istream](https://en.cppreference.com/w/cpp/io/basic_istream)
 	* [operator>>](https://en.cppreference.com/w/cpp/io/basic_istream/operator_gtgt)
 		* extracts formatted data (public member function of std::basic_istream\<CharT,Traits>)
+
+#
 * Inherited from [std::basic_ostream](https://en.cppreference.com/w/cpp/io/basic_ostream)
 	* [operator<<](https://en.cppreference.com/w/cpp/io/basic_ostream/operator_ltlt)
 		* inserts formatted data (public member function of std::basic_ostream\<CharT,Traits>)
-* [stringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/stringstream/)
+
+#
+* Inherited from [std::basic_ios](https://en.cppreference.com/w/cpp/io/basic_ios)
+
+#
+* Inherited from [std::ios_base](https://en.cppreference.com/w/cpp/io/ios_base)
+
+###### MISC
+
 * [stringstream in C++ and its applications - GeeksforGeeks](https://www.geeksforgeeks.org/stringstream-c-applications/)
 	* A stringstream associates a string object with a stream allowing you to read from the string as if it were a stream (like cin).
 	* Basic methods are –
@@ -14148,21 +14235,6 @@ int main() {
     return 0;
 }
 ```
-
-##### [std::basic_ostringstream](https://en.cppreference.com/w/cpp/io/basic_ostringstream)
-
-* implements high-level string stream output operations (class template)
-* [ostringstream - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/)
-	* Output stream class to operate on strings.
-	* Objects of this class use a string buffer that contains a sequence of characters. This sequence of characters can be accessed directly as a string object, using member str.
-	* Characters can be inserted into the stream with any operation allowed on output streams.
-	* [ostringstream::str - C++ Reference](https://www.cplusplus.com/reference/sstream/ostringstream/str/)
-	* string str() const;
-	* void str (const string& s);
-	* Get/set content
-		* The first form (1) returns a string object with a copy of the current contents of the stream.
-		* The second form (2) sets s as the contents of the stream, discarding any previous contents. The object preserves its open mode: if this includes ios_base::ate, the writing position is moved to the end of the new sequence.
-		* Internally, the function calls the str member of its internal string buffer object.
 
 #### Synchronized output
 
