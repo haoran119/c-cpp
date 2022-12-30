@@ -10192,7 +10192,7 @@ After: Some data with some very nice macros to substitute
         * Removing consecutive whitespace with `std::cin >> std::ws`
         * Ignoring all leftover characters on the line of input with `cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');`
 * Example
-    * The following example demonstrates how to use getline function to read user's input and how to process file line by line.
+    * The following example demonstrates how to use getline function to read user's input and how to process file `line by line`.
 ```c++
 #include <string>
 #include <iostream>
@@ -10243,8 +10243,9 @@ d
         * Each extracted character is appended to the string as if its member push_back was called.
 * [getline (string) in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/getline-string-c/)
     * The C++ getline() is a standard library function that is used to read a string or a line from an input stream. It is a part of the \<string> header. The getline() function extracts characters from the input stream and appends it to the string object until the delimiting character is encountered. While doing so the previously stored value in the string object str will be replaced by the input string if any.
-* How to read data from input stream and arguments ?
+* How to read data from input stream line by line and arguments ?
     * `$ cat ./input.txt | ./my_app 10`
+    * Note that stream may be cut due to line seperator. Use `std::cin.rdbuf()` to read the whole input stream at once.
     * [Passing contents of file as argument into C++ program - Stack Overflow](https://stackoverflow.com/questions/48652223/passing-contents-of-file-as-argument-into-c-program)
     * [c++ - Passing text file to standard input - Stack Overflow](https://stackoverflow.com/questions/25985639/passing-text-file-to-standard-input)
 ```c++
@@ -14038,9 +14039,118 @@ int main()
 ![image](https://user-images.githubusercontent.com/34557994/166664893-b2b25c27-7205-42f2-8836-cc67245bd81b.png)
 * [【ZZ】cin、cin.get()、cin.getline()、getline()、gets()等函数的用法 - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/archive/2011/04/21/2024345.html)
 
+#### Abstraction
+
+* Defined in header `<ios>`
+
+##### [std::basic_ios](https://en.cppreference.com/w/cpp/io/basic_ios)
+
+* manages an arbitrary stream buffer (class template)
+* The class `std::basic_ios` provides facilities for interfacing with objects that have `std::basic_streambuf` interface. Several `std::basic_ios` objects can refer to one actual `std::basic_streambuf` object.
+
+###### Public member functions
+
+#
+Miscellaneous
+
+* [std::basic_ios<CharT,Traits>::rdbuf](https://en.cppreference.com/w/cpp/io/basic_ios/rdbuf)
+    * manages associated stream buffer (public member function)
+    * Example
+    ```c++
+    #include <iostream>
+    #include <sstream>
+
+    int main()
+    {
+        std::ostringstream local;
+        auto cout_buff = std::cout.rdbuf(); // save pointer to std::cout buffer
+
+        std::cout.rdbuf(local.rdbuf()); // substitute internal std::cout buffer with
+            // buffer of 'local' object
+
+        // now std::cout work with 'local' buffer
+        // you don't see this message
+        std::cout << "some message";
+
+        // go back to old buffer
+        std::cout.rdbuf(cout_buff);
+
+        // you will see this message
+        std::cout << "back to default buffer\n";
+
+        // print 'local' content
+        std::cout << "local content: " << local.str() << "\n";
+    }
+    /*
+    back to default buffer
+    local content: some message
+    */
+    ```
+* [c++ - How to read a whole text file at once? - Stack Overflow](https://stackoverflow.com/questions/13035674/how-to-read-a-file-line-by-line-or-a-whole-text-file-at-once)
+```c++
+int main(int argc, char* argv[])
+{
+    std::stringstream ss{};
+    ss << std::cin.rdbuf();
+    auto s = ss.str();
+    std::cout << s << '\n' << s.size() << '\n';
+}
+
+$ cat ./test.in | ./my_pgm
+```
+
+##### [std::basic_istream](https://en.cppreference.com/w/cpp/io/basic_istream)
+
+* The class template basic_istream provides support for high level input operations on character streams. The supported operations include formatted input (e.g. integer values or whitespace-separated characters and characters strings) and unformatted input (e.g. raw characters and character arrays). This functionality is implemented in terms of the interface provided by the underlying basic_streambuf class, accessed through the basic_ios base class. The only non-inherited data member of basic_istream, in most implementations, is the value returned by `basic_istream::gcount()`.
+
+###### Member functions
+
+#
+Unformatted input
+
+* [std::basic_istream<CharT,Traits>::read](https://en.cppreference.com/w/cpp/io/basic_istream/read)
+    * extracts blocks of characters (public member function)
+    * Extracts characters from stream.
+    * Example
+    ```c++
+    #include <iostream>
+    #include <fstream>
+    #include <sstream>
+    #include <string>
+    #include <cstdint>
+
+    int main()
+    {
+        // read() is often used for binary I/O
+        std::string bin = {'\x12', '\x12', '\x12', '\x12'};
+        std::istringstream raw(bin);
+        std::uint32_t n;
+        if(raw.read(reinterpret_cast<char*>(&n), sizeof n))
+            std::cout << std::hex << std::showbase << n << '\n';
+
+        // prepare file for next snippet
+        std::ofstream("test.txt", std::ios::binary) << "abcd1\nabcd2\nabcd3";
+
+        // read entire file into string
+        if(std::ifstream is{"test.txt", std::ios::binary | std::ios::ate}) {
+            auto size = is.tellg();
+            std::string str(size, '\0'); // construct string to stream size
+            is.seekg(0);
+            if(is.read(&str[0], size))
+                std::cout << str << '\n';
+        }
+    }
+    /*
+    0x12121212
+    abcd1
+    abcd2
+    abcd3
+    */
+    ```
+
 #### File I/O
 
-* Defined in header \<fstream>
+* Defined in header `<fstream>`
 
 ##### [std::basic_ifstream](https://en.cppreference.com/w/cpp/io/basic_ifstream)
 
@@ -14116,18 +14226,6 @@ int main()
 * [std::basic_stringstream::rdbuf](https://en.cppreference.com/w/cpp/io/basic_stringstream/rdbuf)
     * returns the underlying raw string device object (public member function)
     * Returns pointer to the underlying raw string device object.
-* [c++ - How to read a whole text file at once? - Stack Overflow](https://stackoverflow.com/questions/13035674/how-to-read-a-file-line-by-line-or-a-whole-text-file-at-once)
-```c++
-int main(int argc, char* argv[])
-{
-    std::stringstream ss{};
-    ss << std::cin.rdbuf();
-    auto s = ss.str();
-    std::cout << s << '\n' << s.size() << '\n';
-}
-
-$ cat ./test.in | ./my_pgm
-```
 
 #
 String operations
