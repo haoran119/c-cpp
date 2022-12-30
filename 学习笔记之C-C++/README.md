@@ -963,7 +963,7 @@ int main(){
 * [为什么将 0.1f 改为 0 会使性能降低 10 倍？](https://mp.weixin.qq.com/s/bMacxnC_JBuqFDz8k2fp3w)
     * http://cenalulu.github.io/linux/about-denormalized-float-number/
 	
-##### [string literals](https://en.cppreference.com/w/cpp/language/string_literal) are sequences of characters of type
+##### [string literals](https://en.cppreference.com/w/cpp/language/string_literal)
 
 * string literals are sequences of characters of type
 * const char[] or const wchar_t[]
