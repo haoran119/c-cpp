@@ -1504,6 +1504,44 @@ int main()
     return 0;
 }
 ```
+* How to convert char* to struct ?
+```c++
+#include <iostream>
+#include <sstream>
+
+struct message_header
+{
+    char type;
+    char symbol[3];
+
+    std::string get_symbol() const
+    {
+        return std::string(symbol, 3);
+    }
+
+    std::string to_string() const
+    {
+        std::stringstream ss{};
+        ss << "type=" << type << "|symbol=" << get_symbol();
+        return ss.str();
+    }
+};
+
+void decode_message(const char* message)
+{
+    auto header = reinterpret_cast<const message_header*>(message);
+    std::cout << header->to_string() << '\n';
+}
+
+int main()
+{
+    char s[5] = {'\x41', '\x41', '\x42', '\x30'};
+
+    decode_message(s);  // type=A|symbol=AB0
+
+    return 0;
+}
+```
 
 ##### [dynamic_cast conversion](https://en.cppreference.com/w/cpp/language/dynamic_cast)
 
