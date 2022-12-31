@@ -12359,7 +12359,7 @@ int main()
 */
 ```
 
-#### [std::prev - cppreference.com](https://en.cppreference.com/w/cpp/iterator/prev)
+#### [std::prev](https://en.cppreference.com/w/cpp/iterator/prev)
 
 * decrement an iterator (function template)
 * Return the nth predecessor of iterator it.
