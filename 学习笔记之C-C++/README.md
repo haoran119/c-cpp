@@ -12363,16 +12363,63 @@ int main()
 ###### Iterators
 
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::begin(size_type), std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::cbegin(size_type) - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/begin2)
+    * returns an iterator to the beginning (public member function)
 
 ###### Capacity
 
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::size - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/size)
+    * returns the number of elements (public member function)
 
 ###### Modifiers
 
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::emplace](https://en.cppreference.com/w/cpp/container/unordered_map/emplace)
     * constructs element in-place (public member function)
-    * 
+    * Inserts a new element into the container constructed in-place with the given args if there is no element with the key in the container.
+    * Careful use of emplace allows the new element to be constructed while avoiding unnecessary copy or move operations. The constructor of the new element (i.e. `std::pair<const Key, T>`) is called with exactly the same arguments as supplied to emplace, forwarded via `std::forward<Args>(args)...`. The element may be constructed even if there already is an element with the key in the container, in which case the newly constructed element will be destroyed immediately.
+    * If rehashing occurs due to the insertion, all iterators are invalidated. Otherwise iterators are not affected. References are not invalidated. Rehashing occurs only if the new number of elements is greater than `max_load_factor() * bucket_count()`.
+    * Return value
+        * Returns a pair consisting of an iterator to the inserted element, or the already-existing element if no insertion happened, and a `bool` denoting whether the insertion took place (`true` if insertion happened, `false` if it did not).
+    * Exceptions
+        * If an exception is thrown by any operation, this function has no effect (strong exception guarantee).
+    * Complexity
+        * Amortized constant on average, worst case linear in the size of the container.
+    * Example
+    ```c++
+    #include <iostream>
+    #include <utility>
+    #include <string>
+    #include <unordered_map>
+
+    int main()
+    {
+        std::unordered_map<std::string, std::string> m;
+
+        // uses pair's move constructor
+        m.emplace(std::make_pair(std::string("a"), std::string("a")));
+
+        // uses pair's converting move constructor
+        m.emplace(std::make_pair("b", "abcd"));
+
+        // uses pair's template constructor
+        m.emplace("d", "ddd");
+
+        // uses pair's piecewise constructor
+        m.emplace(std::piecewise_construct,
+                  std::forward_as_tuple("c"),
+                  std::forward_as_tuple(10, 'c'));
+        // as of C++17, m.try_emplace("c", 10, 'c'); can be used
+
+        for (const auto &p : m) {
+            std::cout << p.first << " => " << p.second << '\n';
+        }
+    }
+    /*
+    a => a
+    b => abcd
+    c => cccccccccc
+    d => ddd
+    */
+    ```
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::extract - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/extract)
 	* extracts nodes from the container (public member function)
 	* Return value
