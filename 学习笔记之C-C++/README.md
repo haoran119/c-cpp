@@ -10836,19 +10836,76 @@ long long atoll(const char* str)
 
 #### [std::vector](https://en.cppreference.com/w/cpp/container/vector)
 
+* Defined in header `<vector>`
+```c++
+template<
+    class T,
+    class Allocator = std::allocator<T>
+> class vector;
+(1)	
+namespace pmr {
+    template< class T >
+    using vector = std::vector<T, std::pmr::polymorphic_allocator<T>>;
+}
+(2)	(since C++17)
+```
 * 1) std::vector is a sequence container that encapsulates dynamic size arrays.
 * 2) std::pmr::vector is an alias template that uses a polymorphic allocator.
 * The elements are stored contiguously, which means that elements can be accessed not only through iterators, but also using offsets to regular pointers to elements. This means that a pointer to an element of a vector may be passed to any function that expects a pointer to an element of an array.
-* The storage of the vector is handled automatically, being expanded and contracted as needed. Vectors usually occupy more space than static arrays, because more memory is allocated to handle future growth. This way a vector does not need to reallocate each time an element is inserted, but only when the additional memory is exhausted. The total amount of allocated memory can be queried using capacity() function. Extra memory can be returned to the system via a call to shrink_to_fit(). (since C++11)
+* The storage of the vector is handled automatically, being expanded and contracted as needed. Vectors usually occupy more space than static arrays, because more memory is allocated to handle future growth. This way a vector does not need to reallocate each time an element is inserted, but only when the additional memory is exhausted. The total amount of allocated memory can be queried using capacity() function. `Extra memory can be returned to the system via a call to shrink_to_fit().`
 * Reallocations are usually costly operations in terms of performance. The reserve() function can be used to eliminate reallocations if the number of elements is known beforehand.
 * The complexity (efficiency) of common operations on vectors is as follows:
 	* Random access - constant 𝓞(1)
 	* Insertion or removal of elements at the end - amortized constant 𝓞(1)
 	* Insertion or removal of elements - linear in the distance to the end of the vector 𝓞(n)
 * std::vector (for T other than bool) meets the requirements of Container, AllocatorAwareContainer, SequenceContainer , ContiguousContainer (since C++17) and ReversibleContainer.
-* [std::vector<T,Allocator>::vector - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/vector)
-	* constructs the vector (public member function)
-	* Constructs a new container from a variety of data sources, optionally using a user supplied allocator alloc.
+* Example
+```c++
+#include <iostream>
+#include <vector>
+ 
+int main()
+{
+    // Create a vector containing integers
+    std::vector<int> v = {7, 5, 16, 8};
+ 
+    // Add two more integers to vector
+    v.push_back(25);
+    v.push_back(13);
+ 
+    // Print out the vector
+    std::cout << "v = { ";
+    for (int n : v)
+        std::cout << n << ", ";
+    std::cout << "}; \n";
+}
+/*
+v = { 7, 5, 16, 8, 25, 13, };
+*/
+```
+
+##### Iterator invalidation
+
+Operations | Invalidated
+- | -
+All read only operations | Never
+swap, std::swap | end()
+clear, operator=, assign | Always
+reserve, shrink_to_fit | If the vector changed capacity, all of them. If not, none.
+erase | Erased elements and all elements after them (including end())
+push_back, emplace_back | If the vector changed capacity, all of them. If not, only end().
+insert, emplace | If the vector changed capacity, all of them. If not, only those at or after the insertion point (including end()).
+resize | If the vector changed capacity, all of them. If not, only end() and any elements erased.
+pop_back | The element erased and end().
+
+##### Member types
+
+##### Member functions
+
+###### [std::vector<T,Allocator>::vector](https://en.cppreference.com/w/cpp/container/vector/vector)
+
+* constructs the vector (public member function)
+* Constructs a new container from a variety of data sources, optionally using a user supplied allocator alloc.
 * [Initialize a vector in C++ (7 different ways) - GeeksforGeeks](https://www.geeksforgeeks.org/initialize-a-vector-in-cpp-different-ways/)
 	* 1. Initializing by pushing values one by one 
 	* 2. Specifying size and initializing all values 
@@ -10877,26 +10934,35 @@ int main()
 	return 0;
 }
 ```
-* [std::vector<T,Allocator>::operator= - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/operator%3D)
-	* assigns values to the container (public member function)
-	* Replaces the contents of the container.
-		* 1) Copy assignment operator. Replaces the contents with a copy of the contents of other.
-		* If std::allocator_traits\<allocator_type>::propagate_on_container_copy_assignment::value is true, the allocator of *this is replaced by a copy of that of other. If the allocator of *this after assignment would compare unequal to its old value, the old allocator is used to deallocate the memory, then the new allocator is used to allocate it before copying the elements. Otherwise, the memory owned by *this may be reused when possible. In any case, the elements originally belonging to *this may be either destroyed or replaced by element-wise copy-assignment. (since C++11)
-		* 2) Move assignment operator. Replaces the contents with those of other using move semantics (i.e. the data in other is moved from other into this container). other is in a valid but unspecified state afterwards.
-		* If std::allocator_traits<allocator_type>::propagate_on_container_move_assignment::value is true, the allocator of *this is replaced by a copy of that of other. If it is false and the allocators of *this and other do not compare equal, *this cannot take ownership of the memory owned by other and must move-assign each element individually, allocating additional memory using its own allocator as needed. In any case, all elements originally belonging to *this are either destroyed or replaced by element-wise move-assignment.
-		* 3) Replaces the contents with those identified by initializer list ilist.
-* [std::vector<T,Allocator>::assign - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/assign)
-	* assigns values to the container (public member function)
-	* Replaces the contents of the container.
-		* 1) Replaces the contents with count copies of value value
-		* 2) Replaces the contents with copies of those in the range \[first, last). The behavior is undefined if either argument is an iterator into *this.
-		* This overload has the same effect as overload (1) if InputIt is an integral type. (until C++11)
-		* This overload participates in overload resolution only if InputIt satisfies LegacyInputIterator. (since C++11)
-		* 3) Replaces the contents with the elements from the initializer list ilist.
-	* All iterators, pointers and references to the elements of the container are invalidated. The past-the-end iterator is also invalidated.
+* [vector初始化与否导致的巨大性能差异](https://mp.weixin.qq.com/s/HISHvxxd1LVBwouAE-uZHg)
+	* 最近在优化引擎代码，在优化的过程中发现一个很奇怪的问题，一个简单的对象，存放在std::vector<> v中，如果v定义的时候为每个元素指定初值，那么后面对v中每个元素的写就飞快；相反的，如果v定义的时候，不指定初始值，那么后面对v中元素写操作的时候，就花费大约前一种2-3倍的时间。
+
+###### [std::vector<T,Allocator>::operator=](https://en.cppreference.com/w/cpp/container/vector/operator%3D)
+
+* assigns values to the container (public member function)
+* Replaces the contents of the container.
+    * 1) Copy assignment operator. Replaces the contents with a copy of the contents of other.
+    * If std::allocator_traits\<allocator_type>::propagate_on_container_copy_assignment::value is true, the allocator of *this is replaced by a copy of that of other. If the allocator of *this after assignment would compare unequal to its old value, the old allocator is used to deallocate the memory, then the new allocator is used to allocate it before copying the elements. Otherwise, the memory owned by *this may be reused when possible. In any case, the elements originally belonging to *this may be either destroyed or replaced by element-wise copy-assignment. (since C++11)
+    * 2) Move assignment operator. Replaces the contents with those of other using move semantics (i.e. the data in other is moved from other into this container). other is in a valid but unspecified state afterwards.
+    * If std::allocator_traits<allocator_type>::propagate_on_container_move_assignment::value is true, the allocator of *this is replaced by a copy of that of other. If it is false and the allocators of *this and other do not compare equal, *this cannot take ownership of the memory owned by other and must move-assign each element individually, allocating additional memory using its own allocator as needed. In any case, all elements originally belonging to *this are either destroyed or replaced by element-wise move-assignment.
+    * 3) Replaces the contents with those identified by initializer list ilist.
+
+###### [std::vector<T,Allocator>::assign](https://en.cppreference.com/w/cpp/container/vector/assign)
+
+* assigns values to the container (public member function)
+* Replaces the contents of the container.
+    * 1) Replaces the contents with count copies of value value
+    * 2) Replaces the contents with copies of those in the range \[first, last). The behavior is undefined if either argument is an iterator into *this.
+    * This overload has the same effect as overload (1) if InputIt is an integral type. (until C++11)
+    * This overload participates in overload resolution only if InputIt satisfies LegacyInputIterator. (since C++11)
+    * 3) Replaces the contents with the elements from the initializer list ilist.
+* All iterators, pointers and references to the elements of the container are invalidated. The past-the-end iterator is also invalidated.
 * [c++ - How to initialize std::vector from C-style array? - Stack Overflow](https://stackoverflow.com/questions/2434196/how-to-initialize-stdvector-from-c-style-array)
 	* Don't forget that you can treat pointers as iterators:
 	* `w_.assign(w, w + len);`
+
+###### Element access
+
 * [std::vector<T,Allocator>::at - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/at)
 	* access specified element with bounds checking (public member function)
 	* Returns a reference to the element at specified location pos, with bounds checking.
@@ -10906,8 +10972,14 @@ int main()
 	* Returns a reference to the element at specified location pos. No bounds checking is performed.
 	* Notes
 		* Unlike std::map::operator[], this operator never inserts a new element into the container. Accessing a nonexistent element through this operator is undefined behavior.
+
+###### Iterators
+
 * [std::vector<T,Allocator>::rbegin, std::vector<T,Allocator>::crbegin - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/rbegin)
 	* Returns a reverse iterator to the first element of the reversed vector. It corresponds to the last element of the non-reversed vector. If the vector is empty, the returned iterator is equal to rend().
+
+###### Capacity
+
 * [std::vector<T,Allocator>::empty - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/empty)
 	* Checks if the container has no elements, i.e. whether begin() == end().
 * [std::vector<T,Allocator>::reserve - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/reserve)
@@ -10920,6 +10992,9 @@ int main()
 	* Requests the removal of unused capacity.
 	* It is a non-binding request to reduce capacity() to size(). It depends on the implementation whether the request is fulfilled.
 	* If reallocation occurs, all iterators, including the past the end iterator, and all references to the elements are invalidated. If no reallocation takes place, no iterators or references are invalidated.
+
+###### Modifiers
+
 * [std::vector<T,Allocator>::clear - cppreference.com](https://en.cppreference.com/w/cpp/container/vector/clear)
 	* Erases all elements from the container. After this call, size() returns zero.
 	* Invalidates any references, pointers, or iterators referring to contained elements. Any past-the-end iterators are also invalidated.  
@@ -11007,6 +11082,11 @@ After resize down to 2: 1 2
 After resize up to 6 (initializer = 4): 1 2 4 4 4 4
 */
 ```
+
+##### Non-member functions
+
+##### MISC
+
 * [2D Vector In C++ With User Defined Size - GeeksforGeeks](https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/)
 ```c++
 // CPP program
@@ -11040,8 +11120,6 @@ int main()
 }
 
 ```
-* [vector初始化与否导致的巨大性能差异](https://mp.weixin.qq.com/s/HISHvxxd1LVBwouAE-uZHg)
-	* 最近在优化引擎代码，在优化的过程中发现一个很奇怪的问题，一个简单的对象，存放在std::vector<> v中，如果v定义的时候为每个元素指定初值，那么后面对v中每个元素的写就飞快；相反的，如果v定义的时候，不指定初始值，那么后面对v中元素写操作的时候，就花费大约前一种2-3倍的时间。
 
 #### [std::deque](https://en.cppreference.com/w/cpp/container/deque)
 
