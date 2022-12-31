@@ -12263,15 +12263,18 @@ Output:
 
 ### Iterator operations
 
-* Defined in header \<iterator>
-* [std::advance - cppreference.com](https://en.cppreference.com/w/cpp/iterator/advance)
-	* Increments given iterator it by n elements.
-	* If n is negative, the iterator is decremented. In this case, InputIt must meet the requirements of LegacyBidirectionalIterator, otherwise the behavior is undefined.
-	* [advance - C++ Reference](https://www.cplusplus.com/reference/iterator/advance/)
-		* Advance iterator
-			* Advances the iterator it by n element positions.
-			* If it is a random-access iterator, the function uses just once operator+ or operator-. Otherwise, the function uses repeatedly the increase or decrease operator (operator++ or operator--) until n elements have been advanced.
-	* [std::advance in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdadvance-in-cpp/)
+* Defined in header `<iterator>`
+
+#### [std::advance](https://en.cppreference.com/w/cpp/iterator/advance)
+
+* advances an iterator by given distance (function template)
+* Increments given iterator it by n elements.
+* If n is negative, the iterator is decremented. In this case, InputIt must meet the requirements of LegacyBidirectionalIterator, otherwise the behavior is undefined.
+* [advance - C++ Reference](https://www.cplusplus.com/reference/iterator/advance/)
+    * Advance iterator
+        * Advances the iterator it by n element positions.
+        * If it is a random-access iterator, the function uses just once operator+ or operator-. Otherwise, the function uses repeatedly the increase or decrease operator (operator++ or operator--) until n elements have been advanced.
+* [std::advance in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdadvance-in-cpp/)
 ```c++
 #include <iostream>
 #include <iterator>
@@ -12293,16 +12296,46 @@ int main()
 4 1
 */
 ```
-* [std::distance - cppreference.com](https://en.cppreference.com/w/cpp/iterator/distance)
-	* returns the distance between two iterators (function template)
-	* Returns the number of hops from first to last.
-	* The behavior is undefined if last is not reachable from first by (possibly repeatedly) incrementing first. (until C++11)
-	* If InputIt is not LegacyRandomAccessIterator, the behavior is undefined if last is not reachable from first by (possibly repeatedly) incrementing first. If InputIt is LegacyRandomAccessIterator, the behavior is undefined if last is not reachable from first and first is not reachable from last. (since C++11)
-* [std::next - cppreference.com](https://en.cppreference.com/w/cpp/iterator/next)
-	* increment an iterator (function template)
-	* Return the nth successor of iterator it.
-	* Notes
-		* Although the expression ++c.begin() often compiles, it is not guaranteed to do so: c.begin() is an rvalue expression, and there is no LegacyInputIterator requirement that specifies that increment of an rvalue is guaranteed to work. In particular, when iterators are implemented as pointers or its operator++ is lvalue-ref-qualified, ++c.begin() does not compile, while std::next(c.begin()) does.
+
+#### [std::distance](https://en.cppreference.com/w/cpp/iterator/distance)
+
+* returns the distance between two iterators (function template)
+* Returns the number of hops from first to last.
+* If InputIt is not LegacyRandomAccessIterator, the behavior is undefined if last is not reachable from first by (possibly repeatedly) incrementing first. If InputIt is LegacyRandomAccessIterator, the behavior is undefined if last is not reachable from first and first is not reachable from last. 
+* Return value
+    * The number of increments needed to go from first to last. `The value may be negative if random-access iterators are used and first is reachable from last`
+* Example
+```c++
+#include <iostream>
+#include <iterator>
+#include <vector>
+ 
+int main() 
+{
+    std::vector<int> v{ 3, 1, 4 };
+    std::cout << "distance(first, last) = "
+              << std::distance(v.begin(), v.end()) << '\n'
+              << "distance(last, first) = "
+              << std::distance(v.end(), v.begin()) << '\n';
+               //the behavior is undefined (until C++11)
+ 
+    static constexpr auto il = { 3, 1, 4 };
+    // Since C++17 `distance` can be used in constexpr context.
+    static_assert(std::distance(il.begin(), il.end()) == 3);
+    static_assert(std::distance(il.end(), il.begin()) == -3);
+}
+/*
+distance(first, last) = 3
+distance(last, first) = -3
+*/
+```
+
+#### [std::next](https://en.cppreference.com/w/cpp/iterator/next)
+
+* increment an iterator (function template)
+* Return the nth successor of iterator it.
+* Notes
+    * Although the expression `++c.begin()` often compiles, it is not guaranteed to do so: `c.begin()` is an rvalue expression, and there is no LegacyInputIterator requirement that specifies that increment of an rvalue is guaranteed to work. In particular, when iterators are implemented as pointers or its operator++ is lvalue-ref-qualified, `++c.begin()` does not compile, while `std::next(c.begin())` does.
 ```c++
 #include <iostream>
 #include <iterator>
@@ -12325,11 +12358,13 @@ int main()
  5
 */
 ```
-* [std::prev - cppreference.com](https://en.cppreference.com/w/cpp/iterator/prev)
-	* decrement an iterator (function template)
-	* Return the nth predecessor of iterator it.
-	* Notes
-		* Although the expression --c.end() often compiles, it is not guaranteed to do so: c.end() is an rvalue expression, and there is no iterator requirement that specifies that decrement of an rvalue is guaranteed to work. In particular, when iterators are implemented as pointers or its operator-- is lvalue-ref-qualified, --c.end() does not compile, while std::prev(c.end()) does.
+
+#### [std::prev - cppreference.com](https://en.cppreference.com/w/cpp/iterator/prev)
+
+* decrement an iterator (function template)
+* Return the nth predecessor of iterator it.
+* Notes
+    * Although the expression --c.end() often compiles, it is not guaranteed to do so: c.end() is an rvalue expression, and there is no iterator requirement that specifies that decrement of an rvalue is guaranteed to work. In particular, when iterators are implemented as pointers or its operator-- is lvalue-ref-qualified, --c.end() does not compile, while std::prev(c.end()) does.
 
 ### Range access
 
