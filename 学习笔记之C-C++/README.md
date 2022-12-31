@@ -10886,17 +10886,17 @@ v = { 7, 5, 16, 8, 25, 13, };
 
 ##### Iterator invalidation
 
-Operations | Invalidated
-- | -
-All read only operations | Never
-swap, std::swap | end()
-clear, operator=, assign | Always
-reserve, shrink_to_fit | If the vector changed capacity, all of them. If not, none.
-erase | Erased elements and all elements after them (including end())
-push_back, emplace_back | If the vector changed capacity, all of them. If not, only end().
-insert, emplace | If the vector changed capacity, all of them. If not, only those at or after the insertion point (including end()).
-resize | If the vector changed capacity, all of them. If not, only end() and any elements erased.
-pop_back | The element erased and end().
+| Operations | Invalidated | 
+| - | - | 
+| All read only operations | Never | 
+| swap, std::swap | end() | 
+| clear, operator=, assign | Always | 
+| reserve, shrink_to_fit | If the vector changed capacity, all of them. If not, none. | 
+| erase | Erased elements and all elements after them (including end()) | 
+| push_back, emplace_back | If the vector changed capacity, all of them. If not, only end(). | 
+| insert, emplace | If the vector changed capacity, all of them. If not, only those at or after the insertion point (including end()). | 
+| resize | If the vector changed capacity, all of them. If not, only end() and any elements erased. | 
+| pop_back | The element erased and end(). | 
 
 ##### Member types
 
