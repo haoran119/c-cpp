@@ -10934,6 +10934,38 @@ int main()
 	return 0;
 }
 ```
+* [2D Vector In C++ With User Defined Size - GeeksforGeeks](https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/)
+```c++
+// CPP program
+#include <iostream>
+#include <vector>
+using namespace std;
+int main()
+{
+    int n = 3;
+    int m = 4;
+
+    /*
+    We create a 2D vector containing "n"
+    elements each having the value "vector<int> (m, 0)".
+    "vector<int> (m, 0)" means a vector having "m"
+    elements each of value "0".
+    Here these elements are vectors.
+    */
+    vector<vector<int>> vec( n , vector<int> (m, 0));
+
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < m; j++)
+        {
+            cout << vec[i][j] << " ";
+        }
+        cout<< endl;
+    }
+    
+    return 0;
+}
+```
 * [vector初始化与否导致的巨大性能差异](https://mp.weixin.qq.com/s/HISHvxxd1LVBwouAE-uZHg)
 	* 最近在优化引擎代码，在优化的过程中发现一个很奇怪的问题，一个简单的对象，存放在std::vector<> v中，如果v定义的时候为每个元素指定初值，那么后面对v中每个元素的写就飞快；相反的，如果v定义的时候，不指定初始值，那么后面对v中元素写操作的时候，就花费大约前一种2-3倍的时间。
 
@@ -11084,42 +11116,6 @@ After resize up to 6 (initializer = 4): 1 2 4 4 4 4
 ```
 
 ##### Non-member functions
-
-##### MISC
-
-* [2D Vector In C++ With User Defined Size - GeeksforGeeks](https://www.geeksforgeeks.org/2d-vector-in-cpp-with-user-defined-size/)
-```c++
-// CPP program
-#include <iostream>
-#include <vector>
-using namespace std;
-int main()
-{
-    int n = 3;
-    int m = 4;
-
-    /*
-    We create a 2D vector containing "n"
-    elements each having the value "vector<int> (m, 0)".
-    "vector<int> (m, 0)" means a vector having "m"
-    elements each of value "0".
-    Here these elements are vectors.
-    */
-    vector<vector<int>> vec( n , vector<int> (m, 0));
-
-    for(int i = 0; i < n; i++)
-    {
-        for(int j = 0; j < m; j++)
-        {
-            cout << vec[i][j] << " ";
-        }
-        cout<< endl;
-    }
-    
-    return 0;
-}
-
-```
 
 #### [std::deque](https://en.cppreference.com/w/cpp/container/deque)
 
