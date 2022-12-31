@@ -12151,12 +12151,228 @@ int main()
 
 #### [std::unordered_map](https://en.cppreference.com/w/cpp/container/unordered_map)
 
+* Defined in header `<unordered_map>`
+```c++
+template<
+    class Key,
+    class T,
+    class Hash = std::hash<Key>,
+    class KeyEqual = std::equal_to<Key>,
+    class Allocator = std::allocator< std::pair<const Key, T> >
+> class unordered_map;  (1)	(since C++11)
+
+namespace pmr {
+template <
+    class Key,
+    class T,
+    class Hash = std::hash<Key>,
+    class KeyEqual = std::equal_to<Key>
+> using unordered_map = std::unordered_map<Key, T, Hash, KeyEqual,
+                            std::pmr::polymorphic_allocator<std::pair<const Key,T>>>;
+}   (2)	(since C++17)
+```
 * Unordered map is an associative container that contains key-value pairs with unique keys. Search, insertion, and removal of elements have average constant-time complexity.
 * Internally, the elements are not sorted in any particular order, but organized into buckets. Which bucket an element is placed into depends entirely on the hash of its key. Keys with the same hash code appear in the same bucket. This allows fast access to individual elements, since once the hash is computed, it refers to the exact bucket the element is placed into.
 * std::unordered_map meets the requirements of Container, AllocatorAwareContainer, UnorderedAssociativeContainer.
-* [(constructor)](https://en.cppreference.com/w/cpp/container/unordered_map/unordered_map)
+* Example
+```c++
+#include <iostream>
+#include <string>
+#include <unordered_map>
+ 
+int main()
+{
+    // Create an unordered_map of three strings (that map to strings)
+    std::unordered_map<std::string, std::string> u = {
+        {"RED","#FF0000"},
+        {"GREEN","#00FF00"},
+        {"BLUE","#0000FF"}
+    };
+ 
+    // Helper lambda function to print key-value pairs
+    auto print_key_value = [](const auto& key, const auto& value)
+    {
+        std::cout << "Key:[" << key << "] Value:[" << value << "]\n";
+    };
+ 
+    std::cout << "Iterate and print key-value pairs of unordered_map, being\n"
+                 "explicit with their types:\n";
+    for( const std::pair<const std::string, std::string>& n : u )
+        print_key_value(n.first, n.second);
+ 
+    std::cout << "\nIterate and print key-value pairs using C++17 structured binding:\n";
+    for( const auto& [key, value] : u )
+        print_key_value(key, value);
+ 
+    // Add two new entries to the unordered_map
+    u["BLACK"] = "#000000";
+    u["WHITE"] = "#FFFFFF";
+ 
+    std::cout << "\nOutput values by key:\n"
+                 "The HEX of color RED is:[" << u["RED"] << "]\n"
+                 "The HEX of color BLACK is:[" << u["BLACK"] << "]\n\n";
+ 
+    std::cout << "Use operator[] with non-existent key to insert a new key-value pair:\n";
+    print_key_value("new_key", u["new_key"]);
+ 
+    std::cout << "\nIterate and print key-value pairs, using `auto`;\n"
+                 "new_key is now one of the keys in the map:\n";
+    for( const auto& n : u )
+        print_key_value(n.first, n.second);
+}
+/*
+Iterate and print key-value pairs of unordered_map, being
+explicit with their types:
+Key:[BLUE] Value:[#0000FF]
+Key:[GREEN] Value:[#00FF00]
+Key:[RED] Value:[#FF0000]
+ 
+Iterate and print key-value pairs using C++17 structured binding:
+Key:[BLUE] Value:[#0000FF]
+Key:[GREEN] Value:[#00FF00]
+Key:[RED] Value:[#FF0000]
+ 
+Output values by key:
+The HEX of color RED is:[#FF0000]
+The HEX of color BLACK is:[#000000]
+ 
+Use operator[] with non-existent key to insert a new key-value pair:
+Key:[new_key] Value:[]
+ 
+Iterate and print key-value pairs, using `auto`;
+new_key is now one of the keys in the map:
+Key:[new_key] Value:[]
+Key:[WHITE] Value:[#FFFFFF]
+Key:[BLACK] Value:[#000000]
+Key:[BLUE] Value:[#0000FF]
+Key:[GREEN] Value:[#00FF00]
+Key:[RED] Value:[#FF0000]
+*/
+```
+
+##### Iterator invalidation
+
+| Operations | Invalidated |
+| - | - |
+| All read only operations, swap, std::swap | Never |
+| clear, rehash, reserve, operator= | Always |
+| insert, emplace, emplace_hint, operator[] | Only if causes rehash |
+| erase | Only to the element erased |
+
+* Notes
+    * The swap functions do not invalidate any of the iterators inside the container, but they do invalidate the iterator marking the end of the swap region.
+    * References and pointers to either key or data stored in the container are only invalidated by erasing that element, even when the corresponding iterator is invalidated.
+
+##### Member types
+
+##### Member functions
+
+###### [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::unordered_map](https://en.cppreference.com/w/cpp/container/unordered_map/unordered_map)
+
+* constructs the unordered_map (public member function)
+* Constructs new container from a variety of data sources. Optionally uses user supplied bucket_count as a minimal number of buckets to create, hash as the hash function, equal as the function to compare keys and alloc as the allocator.
+* Notes
+    * After container move construction (overload (4)), references, pointers, and iterators (other than the end iterator) to other remain valid, but refer to elements that are now in `*this`. The current standard makes this guarantee via the blanket statement in `[container.requirements.general]/12`, and a more direct guarantee is under consideration via `LWG 2321`.
+    * Although not formally required until C++23, some implementations has already put the template parameter Allocator into `non-deduced contexts` in earlier modes.
+* Example
+```c++
+#include <unordered_map>
+#include <vector>
+#include <bitset>
+#include <string>
+#include <utility>
+ 
+struct Key {
+    std::string first;
+    std::string second;
+};
+ 
+struct KeyHash {
+ std::size_t operator()(const Key& k) const
+ {
+     return std::hash<std::string>()(k.first) ^
+            (std::hash<std::string>()(k.second) << 1);
+ }
+};
+ 
+struct KeyEqual {
+ bool operator()(const Key& lhs, const Key& rhs) const
+ {
+    return lhs.first == rhs.first && lhs.second == rhs.second;
+ }
+};
+ 
+struct Foo {
+    Foo(int val_) : val(val_) {}
+    int val;
+    bool operator==(const Foo &rhs) const { return val == rhs.val; }
+};
+ 
+template<> struct std::hash<Foo> {
+    std::size_t operator()(const Foo &f) const {
+        return std::hash<int>{}(f.val);
+    }  
+};
+ 
+int main()
+{
+    // default constructor: empty map
+    std::unordered_map<std::string, std::string> m1;
+ 
+    // list constructor
+    std::unordered_map<int, std::string> m2 =
+    {
+        {1, "foo"},
+        {3, "bar"},
+        {2, "baz"},
+    };
+ 
+    // copy constructor
+    std::unordered_map<int, std::string> m3 = m2;
+ 
+    // move constructor
+    std::unordered_map<int, std::string> m4 = std::move(m2);
+ 
+    // range constructor
+    std::vector<std::pair<std::bitset<8>, int>> v = { {0x12, 1}, {0x01,-1} };
+    std::unordered_map<std::bitset<8>, double> m5(v.begin(), v.end());
+ 
+    //Option 1 for a constructor with a custom Key type
+    // Define the KeyHash and KeyEqual structs and use them in the template
+    std::unordered_map<Key, std::string, KeyHash, KeyEqual> m6 = {
+            { {"John", "Doe"}, "example"},
+            { {"Mary", "Sue"}, "another"}
+    };
+ 
+    //Option 2 for a constructor with a custom Key type
+    // Define a const == operator for the class/struct and specialize std::hash
+    // structure in the std namespace
+    std::unordered_map<Foo, std::string> m7 = {
+        { Foo(1), "One"}, { 2, "Two"}, { 3, "Three"}
+    };
+ 
+    //Option 3: Use lambdas
+    // Note that the initial bucket count has to be passed to the constructor
+    struct Goo {int val; };
+    auto hash = [](const Goo &g){ return std::hash<int>{}(g.val); };
+    auto comp = [](const Goo &l, const Goo &r){ return l.val == r.val; };
+    std::unordered_map<Goo, double, decltype(hash), decltype(comp)> m8(10, hash, comp);
+}
+```
+
+###### Iterators
+
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::begin(size_type), std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::cbegin(size_type) - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/begin2)
+
+###### Capacity
+
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::size - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/size)
+
+###### Modifiers
+
+* [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::emplace](https://en.cppreference.com/w/cpp/container/unordered_map/emplace)
+    * constructs element in-place (public member function)
+    * 
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::extract - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/extract)
 	* extracts nodes from the container (public member function)
 	* Return value
@@ -12168,6 +12384,9 @@ int main()
 		* 1,2,3) Average case O(1), worst case O(a.size()).
 	* Notes
 		* extract is the only way to change a key of a map element without reallocation:
+
+###### Lookup
+
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::at - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/at)
 	* Returns a reference to the mapped value of the element with key equivalent to key. If no such element exists, an exception of type std::out_of_range is thrown.
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::operator[] - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/operator_at)
@@ -12176,6 +12395,9 @@ int main()
 	* returns the number of elements matching specific key
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/find)
 	* finds element with specific key
+
+###### MISC
+
 * [unordered_map - C++ Reference](https://www.cplusplus.com/reference/unordered_map/unordered_map/)
 	* Unordered Map
 	* Unordered maps are associative containers that store elements formed by the combination of a key value and a mapped value, and which allows for fast retrieval of individual elements based on their keys.
