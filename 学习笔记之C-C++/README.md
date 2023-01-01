@@ -14673,6 +14673,32 @@ int main()
 
 * Defined in header `<ios>`
 
+##### [std::ios_base](https://en.cppreference.com/w/cpp/io/ios_base)
+
+* manages formatting flags and input/output exceptions (class)
+
+###### Member functions
+
+###### Member classes
+
+###### Member types and constants
+
+#
+[std::ios_base::openmode](https://en.cppreference.com/w/cpp/io/ios_base/openmode)
+
+* stream open mode type
+* Specifies available file open flags. It is a BitmaskType, the following constants are defined:
+
+| Constant | Explanation |
+| - | - |
+| app | seek to the end of stream before each write |
+| binary | open in binary mode |
+| in | open for reading |
+| out | open for writing |
+| trunc | discard the contents of the stream when opening |
+| ate | seek to the end of stream immediately after open |
+| noreplace (C++23) | open in exclusive mode |
+
 ##### [std::basic_ios](https://en.cppreference.com/w/cpp/io/basic_ios)
 
 * manages an arbitrary stream buffer (class template)
@@ -14990,10 +15016,10 @@ int main() {
 #### [std::cin, std::wcin](https://en.cppreference.com/w/cpp/io/cin)
 
 * reads from the standard C input stream stdin (global object)
-* The global objects std::cin and std::wcin control input from a stream buffer of implementation-defined type (derived from std::streambuf), associated with the standard C input stream stdin.
-* These objects are guaranteed to be initialized during or before the first time an object of type std::ios_base::Init is constructed and are available for use in the constructors and destructors of static objects with ordered initialization (as long as \<iostream> is included before the object is defined).
+* The global objects `std::cin` and `std::wcin` control input from a stream buffer of implementation-defined type (derived from [std::streambuf](https://en.cppreference.com/w/cpp/io/basic_streambuf)), associated with the standard C input stream [stdin](https://en.cppreference.com/w/cpp/io/c/std_streams).
+* These objects are guaranteed to be initialized during or before the first time an object of type [std::ios_base::Init](https://en.cppreference.com/w/cpp/io/ios_base/Init) is constructed and are available for use in the constructors and destructors of static objects with [ordered initialization](https://en.cppreference.com/w/cpp/language/initialization#Non-local_variables) (as long as `<iostream>` is included before the object is defined).
 * `Unless sync_with_stdio(false) has been issued, it is safe to concurrently access these objects from multiple threads for both formatted and unformatted input.`
-* Once std::cin is constructed, std::cin.tie() returns &std::cout, and likewise, std::wcin.tie() returns &std::wcout. This means that any formatted input operation on std::cin forces a call to std::cout.flush() if any characters are pending for output.
+* Once std::cin is constructed, `std::cin.tie()` returns `&std::cout`, and likewise, `std::wcin.tie()` returns `&std::wcout`. This means that any formatted input operation on std::cin forces a call to `std::cout.flush()` if any characters are pending for output.
 * Notes
     * The 'c' in the name refers to "character" (stroustrup.com FAQ); cin means "character input" and wcin means "wide character input"
 * [C++ cin 的详细用法](https://mp.weixin.qq.com/s/BP3gfSd7Ya_9MLE_ArM9LA)
