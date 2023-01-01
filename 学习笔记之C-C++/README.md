@@ -13733,11 +13733,50 @@ min = 1, max = 9
 
 ### Comparison operations
 
+* Defined in header `<algorithm>`
+
+#### [std::equal](https://en.cppreference.com/w/cpp/algorithm/equal)
+
+* determines if two sets of elements are the same (function template)
+* Two ranges are considered equal if they have the same number of elements and, for every iterator i in the range `[first1,last1)`, `*i` equals `*(first2 + (i - first1))`. The overloads (1,2,5,6) use `operator==` to determine if two elements are equal, whereas overloads (3,4,7,8) use the given binary predicate `p`.
+* Notes
+    * `std::equal` should `not` be used to compare the ranges formed by the iterators from `std::unordered_set`, `std::unordered_multiset`, `std::unordered_map`, or `std::unordered_multimap` because the order in which the elements are stored in those containers may be different even if the two containers store the same elements.
+    * When comparing entire containers for equality, `operator==` for the corresponding container are usually preferred.
+* Example
+    * The following code uses std::equal to test if a string is a palindrome.
+```c++
+#include <algorithm>
+#include <iostream>
+#include <string_view>
+ 
+constexpr bool is_palindrome(const std::string_view& s)
+{
+    return std::equal(s.begin(), s.begin() + s.size()/2, s.rbegin());
+}
+ 
+void test(const std::string_view& s)
+{
+    std::cout << "\"" << s << "\" "
+        << (is_palindrome(s) ? "is" : "is not")
+        << " a palindrome\n";
+}
+ 
+int main()
+{
+    test("radar");
+    test("hello");
+}
+/*
+"radar" is a palindrome
+"hello" is not a palindrome
+*/
+```
+
 ### Permutation operations
 
 ### Numeric operations
 
-* Defined in header \<numeric>
+* Defined in header `<numeric>`
 
 #### [std::iota](https://en.cppreference.com/w/cpp/algorithm/iota)
 
