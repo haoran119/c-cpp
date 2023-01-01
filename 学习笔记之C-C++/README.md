@@ -14755,8 +14755,52 @@ int main(int argc, char* argv[])
 $ cat ./test.in | ./my_pgm
 ```
 
+##### [std::basic_ostream](https://en.cppreference.com/w/cpp/io/basic_ostream)
+
+* Defined in header `<ostream>`
+* wraps a given abstract device (std::basic_streambuf) and provides high-level output interface (class template)
+* The class template basic_ostream provides support for high level output operations on character streams. The supported operations include formatted output (e.g. integer values) and unformatted output (e.g. raw characters and character arrays). This functionality is implemented in terms of the interface provided by the basic_streambuf class, accessed through the basic_ios base class. In typical implementations, basic_ostream has no non-inherited data members.
+
+###### Member functions
+
+#
+Unformatted output
+
+* [std::basic_ostream<CharT,Traits>::write](https://en.cppreference.com/w/cpp/io/basic_ostream/write)
+    * inserts blocks of characters (public member function)
+    * `basic_ostream& write( const char_type* s, std::streamsize count );`
+    * Behaves as an UnformattedOutputFunction. After constructing and checking the sentry object, outputs the characters from successive locations in the character array whose first element is pointed to by s. Characters are inserted into the output sequence until one of the following occurs:
+        * exactly count characters are inserted
+        * inserting into the output sequence fails (in which case `setstate(badbit)` is called)
+* Return value
+    * `*this`
+* Notes
+    * This function is not overloaded for the types `signed char` or `unsigned char`, unlike the formatted `operator<<`
+    * Also, unlike the formatted output functions, this function does not set the failbit on failure.
+    * When using a non-converting locale (the default locale is non-converting), the overrider of this function in `std::basic_ofstream` may be optimized for zero-copy bulk I/O (by means of overriding `std::streambuf::xsputn`)
+* Example
+    * This function may be used to output object representations, i.e. binary output
+```c++
+#include <iostream>
+ 
+int main()
+{
+    int n = 0x41424344;
+    std::cout.write(reinterpret_cast<char*>(&n), sizeof n) << '\n';
+ 
+    char c[]="This is sample text.";
+    std::cout.write(c, 4).write("!\n", 2);
+}
+/*
+DCBA
+This!
+*/
+```
+
 ##### [std::basic_istream](https://en.cppreference.com/w/cpp/io/basic_istream)
 
+* Defined in header `<istream>`
+* wraps a given abstract device (std::basic_streambuf) and provides high-level input interface (class template)
 * The class template basic_istream provides support for high level input operations on character streams. The supported operations include formatted input (e.g. integer values or whitespace-separated characters and characters strings) and unformatted input (e.g. raw characters and character arrays). This functionality is implemented in terms of the interface provided by the underlying basic_streambuf class, accessed through the basic_ios base class. The only non-inherited data member of basic_istream, in most implementations, is the value returned by `basic_istream::gcount()`.
 
 ###### Member functions
