@@ -10688,7 +10688,7 @@ int main()
 
 #### Conversions to numeric formats
 
-* Defined in header \<cstdlib>
+* Defined in header `<cstdlib>`
 
 ##### [std::atoi, std::atol, std::atoll](https://en.cppreference.com/w/cpp/string/byte/atoi)
     
@@ -10791,6 +10791,93 @@ long long atoll(const char* str)
 }
 ```   
     
+#### String manipulation
+
+* Defined in header `<cstring>`
+
+##### [std::strncpy](https://en.cppreference.com/w/cpp/string/byte/strncpy)
+
+* copies a certain amount of characters from one string to another (function)
+* `char *strncpy( char *dest, const char *src, std::size_t count );`
+* Copies at most count characters of the byte string pointed to by src (including the terminating null character) to character array pointed to by dest.
+* If count is reached before the entire string src was copied, the resulting character array is not null-terminated.
+* If, after copying the terminating null character from src, count is not reached, additional null characters are written to dest until the total of count characters have been written.
+* If the strings overlap, the behavior is undefined.
+* Example
+```c++
+#include <iostream>
+#include <cstring>
+ 
+int main()
+{
+    const char* src = "hi";
+    char dest[6] = {'a', 'b', 'c', 'd', 'e', 'f'};
+    std::strncpy(dest, src, 5);
+ 
+    std::cout << "The contents of dest are: ";
+    for (char c : dest) {
+        if (c) {
+            std::cout << c << ' ';
+        } else {
+            std::cout << "\\0" << ' ';
+        }
+    }
+    std::cout << '\n';
+}
+/*
+The contents of dest are: h i \0 \0 \0 f
+*/
+```
+
+#### String examination
+
+* Defined in header `<cstring>`
+
+##### [std::strncmp](https://en.cppreference.com/w/cpp/string/byte/strncmp)
+
+* `int strncmp( const char *lhs, const char *rhs, std::size_t count );`
+* Compares at most count characters of two possibly null-terminated arrays. The comparison is done lexicographically. Characters following the null character are not compared.
+* The sign of the result is the sign of the difference between the values of the first pair of characters (both interpreted as `unsigned char`) that differ in the arrays being compared.
+* The behavior is undefined when access occurs past the end of either array lhs or rhs. The behavior is undefined when either lhs or rhs is the null pointer.
+* Return value
+    * Negative value if lhs appears before rhs in lexicographical order.
+    * Zero if lhs and rhs compare equal, or if count is zero.
+    * Positive value if lhs appears after rhs in lexicographical order.
+* Notes
+    * This function is not locale-sensitive, unlike [std::strcoll](https://en.cppreference.com/w/cpp/string/byte/strcoll) and [std::strxfrm](https://en.cppreference.com/w/cpp/string/byte/strxfrm).
+* Example
+```c++
+#include <cstring>
+#include <iostream>
+ 
+void demo(const char* lhs, const char* rhs, int sz)
+{
+    int rc = std::strncmp(lhs, rhs, sz);
+    if(rc == 0)
+        std::cout << "First " << sz << " chars of ["
+                  << lhs << "] equal [" << rhs << "]\n";
+    else if(rc < 0)
+        std::cout << "First " << sz << " chars of ["
+                  << lhs << "] precede [" << rhs << "]\n";
+    else if(rc > 0)
+        std::cout << "First " << sz << " chars of ["
+                  << lhs << "] follow [" << rhs << "]\n";
+}
+int main()
+{
+    demo("Hello, world!", "Hello, everybody!", 13);
+    demo("Hello, everybody!", "Hello, world!", 13);
+    demo("Hello, everybody!", "Hello, world!", 7);
+    demo("Hello, everybody!" + 12, "Hello, somebody!" + 11, 5);
+}
+/*
+First 13 chars of [Hello, world!] follow [Hello, everybody!]
+First 13 chars of [Hello, everybody!] precede [Hello, world!]
+First 7 chars of [Hello, everybody!] equal [Hello, world!]
+First 5 chars of [body!] equal [body!]
+*/
+```
+
 ## [Containers library](https://en.cppreference.com/w/cpp/container)
 
 * [Standard Template Library (STL)](https://www.tutorialspoint.com/cplusplus/cpp_stl_tutorial.htm)
