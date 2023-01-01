@@ -12420,6 +12420,51 @@ int main()
     d => ddd
     */
     ```
+* [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::erase](https://en.cppreference.com/w/cpp/container/unordered_map/erase)
+    * erases elements (public member function)
+    * Removes specified elements from the container.
+        * 1) Removes the element at `pos`.
+        * 2) Removes the elements in the range `[first; last)`, which must be a valid range in `*this`.
+        * 3) Removes the element (if one exists) with the key equivalent to `key`.
+        * 4) Removes the element (if one exists) with key that compares equivalent to the value `x`. This overload participates in overload resolution only if `Hash::is_transparent` and `KeyEqual::is_transparent` are valid and each denotes a type, and neither iterator nor const_iterator is implicitly convertible from K. This assumes that such Hash is callable with both K and Key type, and that the KeyEqual is transparent, which, together, allows calling this function without constructing an instance of Key.
+    * References and iterators to the erased elements are invalidated. Other iterators and references are not invalidated.
+    * The iterator pos must be valid and dereferenceable. Thus the `end()` iterator (which is valid, but is not dereferenceable) cannot be used as a value for pos.
+    * The order of the elements that are not erased is preserved. (This makes it possible to erase individual elements while iterating through the container.)
+    * Complexity
+        * Given an instance `c` of unordered_map:
+            * 1) Average case: constant, worst case: `c.size()`
+            * 2) Average case: `std::distance(first, last)`, worst case: `c.size()`
+            * 3) Average case: `c.count(key)`, worst case: `c.size()`
+            * 4) Average case: `c.count(x)`, worst case: `c.size()`
+    * Example
+    ```c++
+    #include <unordered_map>
+    #include <iostream>
+
+    int main()
+    {
+        std::unordered_map<int, std::string> c =
+        {
+            {1, "one" }, {2, "two" }, {3, "three"},
+            {4, "four"}, {5, "five"}, {6, "six"  }
+        };
+
+        // erase all odd numbers from c
+        for (auto it = c.begin(); it != c.end();)
+        {
+            if (it->first % 2 != 0)
+                it = c.erase(it);
+            else
+                ++it;
+        }
+
+        for (auto& p : c)
+            std::cout << p.second << ' ';
+    }
+    /*
+    two four six
+    */
+    ```
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::extract - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/extract)
 	* extracts nodes from the container (public member function)
 	* Return value
@@ -12441,7 +12486,56 @@ int main()
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::count - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/count)
 	* returns the number of elements matching specific key
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/find)
-	* finds element with specific key
+	* finds element with specific key (public member function)
+	* Return value
+	    * Iterator to an element with key equivalent to key. If no such element is found, past-the-end (see `end()`) iterator is returned.
+    * Complexity
+        * Constant on average, worst case linear in the size of the container.
+    * Example
+    ```c++
+    #include <cstddef>
+    #include <functional>
+    #include <iostream>
+    #include <string>
+    #include <string_view>
+    #include <unordered_map>
+
+    using namespace std::literals;
+
+    struct string_hash
+    {
+        using hash_type = std::hash<std::string_view>;
+        using is_transparent = void;
+
+        std::size_t operator()(const char* str) const        { return hash_type{}(str); }
+        std::size_t operator()(std::string_view str) const   { return hash_type{}(str); }
+        std::size_t operator()(std::string const& str) const { return hash_type{}(str); }
+    };
+
+    int main()
+    {
+        // simple comparison demo
+        std::unordered_map<int,char> example = {{1, 'a'}, {2, 'b'}};
+
+        if (auto search = example.find(2); search != example.end())
+            std::cout << "Found " << search->first << " " << search->second << '\n';
+        else
+            std::cout << "Not found\n";
+
+        // C++20 demo: Heterogeneous lookup for unordered containers (transparent hashing)
+        std::unordered_map<std::string, size_t, string_hash, std::equal_to<>> map{{"one"s, 1}};
+        std::cout << std::boolalpha
+            << (map.find("one")   != map.end()) << '\n'
+            << (map.find("one"s)  != map.end()) << '\n'
+            << (map.find("one"sv) != map.end()) << '\n';
+    }
+    /*
+    Found 2 b
+    true
+    true
+    true
+    */
+    ```
 
 ###### MISC
 
