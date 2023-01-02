@@ -16596,6 +16596,7 @@ int main()
 #### QUANT
 
 * [rburkholder/trade-frame: C++ 17 based library (with sample applications) for testing equities, futures, etfs & options based automated trading ideas using DTN IQFeed real time data feed and Interactive Brokers (IB TWS API) for trade execution. [I have a private repository which has more recent changes, which get back-ported randomly][irc: #tradeframe on OFTC]](https://github.com/rburkholder/trade-frame)
+* [Building a Market Data Feed with Liquibook | Object Computing, Inc.](https://objectcomputing.com/resources/publications/sett/august-2013-building-a-market-data-feed-with-liquibook)
 * How to build a order book ?
 	* https://www.google.com/search?q=c%2B%2B+order+book+implementation&oq=c%2B%2B+order+book&aqs=edge.1.69i57j0i512j0i22i30l2j0i390l3.13525j0j1&sourceid=chrome&ie=UTF-8#scso=_TI-5Yt2ZPMPTz7sP5q6-8Ao27:740.9090576171875
 	* https://github.com/bigfatwhale/orderbook
