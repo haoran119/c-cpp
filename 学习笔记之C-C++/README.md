@@ -14880,6 +14880,7 @@ Unformatted input
 #### File I/O
 
 * Defined in header `<fstream>`
+* [Reading and writing binary file in C/C++](https://www.tutorialspoint.com/reading-and-writing-binary-file-in-c-cplusplus#)
 
 ##### [std::basic_ifstream](https://en.cppreference.com/w/cpp/io/basic_ifstream)
 
