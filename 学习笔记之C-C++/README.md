@@ -7921,6 +7921,83 @@ struct T {
         * clone_inherit is a CRTP that knows its derived class, but also all its direct base class. It implements the covariant clone_impl() and hiding clone() member functions as usual, but they use casts to move through the hierarchy of types.
         * As you can see, the concrete class is now free of clutter.
         * This effectively adds a polymorphic and covariant clone() to a hierarchy of class.
+    * Multiple Inheritance: Variadic templates to the rescue
+        * ![image](https://user-images.githubusercontent.com/34557994/210284273-bbab247a-88a8-422e-bb5b-1828c53a4dc1.png)
+        * In our case, how can we extend our solution to support the case where the concrete class inherits from two bases classes that both provide the same clone feature?
+        * The solution first needs the two base classes, foo and bar, to offer the clone/clone_impl member functions:
+        * There’s a bit of boilerplate, here, but we’ll address it later. For now, we must solve the inheritance issue, and C++11 provides us with an easy solution: Variadic templates.
+        * We only need to modify the clone_inherit CRTP to support it:
+        * Last, but not least, we can use our classes with both covariance and smart pointers:
+        ```c++
+        #include <iostream>
+        #include <memory>
+
+        class foo
+        {
+        public:
+           virtual ~foo() = default;
+
+           std::unique_ptr<foo> clone() const
+           {
+              return std::unique_ptr<foo>(this->clone_impl());
+           }
+
+        private:
+           virtual foo * clone_impl() const = 0;
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        class bar
+        {
+        public:
+           virtual ~bar() = default;
+
+           std::unique_ptr<bar> clone() const
+           {
+              return std::unique_ptr<bar>(this->clone_impl());
+           }
+
+        private:
+           virtual bar * clone_impl() const = 0;
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        template <typename Derived, typename ... Bases>
+        class clone_inherit : public Bases...
+        {
+        public:
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        private:
+           virtual clone_inherit * clone_impl() const override
+           {
+              return new Derived(static_cast<const Derived & >(*this));
+           }
+        };
+
+        class concrete
+           : public clone_inherit<concrete, foo, bar>
+        {
+        };
+
+        int main()
+        {
+           std::unique_ptr<concrete> c = std::make_unique<concrete>();
+
+           std::unique_ptr<concrete> cc = c->clone();
+
+           foo * f = c.get();
+           std::unique_ptr<foo> ff = f->clone();
+
+           bar * b = c.get();
+           std::unique_ptr<bar> bb = b->clone();
+        }
+        ```
 
 #### [std::unique_ptr](https://en.cppreference.com/w/cpp/memory/unique_ptr)
 
