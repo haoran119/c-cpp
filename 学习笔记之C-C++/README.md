@@ -8962,6 +8962,420 @@ Leaving...
            std::unique_ptr<bar> bb = b->clone();
         }
         ```
+    * Deep Hierarchy: Abstracting
+        * Another complication of OO Hierarchies is that they can go deeper than two levels:
+        * ![image](https://user-images.githubusercontent.com/34557994/210350969-26600e5c-758d-43b9-88eb-7e2069d8e31a.png)
+        * The thing is, as Scott Meyers advised us, non-leaf classes are not supposed to be instantiable by themselves (More Effective C++, item 33).
+        * In our case, the clone_impl method in the non-leaf class must then be pure virtual.
+        * Our solution must thus support the choice of declaring clone_impl pure virtual, or implemented.
+        * It starts to be is a lot of code, but this will enable the user to actually use the feature with no boilerplate at all, as demonstrated by the following code:
+        * Again, we succeeded in not cluttering too much the user code, and make this pattern scalable.
+        ```c++
+        #include <iostream>
+        #include <memory>
+
+        template <typename T>
+        class abstract_method
+        {
+        };
+
+        // general: inheritance + clone_impl implemented
+        template <typename Derived, typename ... Bases>
+        class clone_inherit : public Bases...
+        {
+        public:
+           virtual ~clone_inherit() = default;
+
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        private:
+           virtual clone_inherit * clone_impl() const override
+           {
+              return new Derived(static_cast<const Derived & >(*this));
+           }
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        // specialization: inheritance + clone_impl NOT implemented
+        template <typename Derived, typename ... Bases>
+        class clone_inherit<abstract_method<Derived>, Bases...> : public Bases...
+        {
+        public:
+           virtual ~clone_inherit() = default;
+
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        private:
+           virtual clone_inherit * clone_impl() const = 0;
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        // specialization: NO inheritance + clone_impl implemented
+        template <typename Derived>
+        class clone_inherit<Derived>
+        {
+        public:
+           virtual ~clone_inherit() = default;
+
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        private:
+           virtual clone_inherit * clone_impl() const override
+           {
+              return new Derived(static_cast<const Derived & >(*this));
+           }
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        // specialization: NO inheritance + clone_impl NOT implemented
+        template <typename Derived>
+        class clone_inherit<abstract_method<Derived>>
+        {
+        public:
+           virtual ~clone_inherit() = default;
+
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        private:
+           virtual clone_inherit * clone_impl() const = 0;
+        };
+
+        class cloneable
+           : public clone_inherit<abstract_method<cloneable>>
+        {
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        class abstracted
+           : public clone_inherit<abstract_method<abstracted>, cloneable>
+        {
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        class concrete
+           : public clone_inherit<concrete, abstracted>
+        {
+        };
+        int main()
+        {
+           std::unique_ptr<concrete> c = std::make_unique<concrete>();
+           std::unique_ptr<concrete> cc = c->clone();
+
+           abstracted * a = c.get();
+           std::unique_ptr<abstracted> aa = a->clone();
+
+           cloneable * p = c.get();
+           std::unique_ptr<cloneable> pp = p->clone();
+        }
+        ```
+    * Diamond Inheritance: Virtual-ing
+        * Yet another complication of OO Hierarchies is that we can have a diamond inheritance:
+        * ![image](https://user-images.githubusercontent.com/34557994/210352742-f9225531-f3d2-4678-85ed-d6e2096375a0.png)
+        * In C++, this means we have a choice to do: Is the base class inherited virtually, or not?
+        * This choice must thus be provided by clone_inherit. The thing is, declaring a virtual inheritance is much more tricky because of the template parameter pack
+        * Let’s write a class that will do the indirection:
+        * This class actually applies the virtual inheritance to its base class T, which is exactly what we wanted. Now, all we need is to use this class to explicit our virtual inheritance need:
+        * Again, we succeeded in not cluttering too much the user code, and make this pattern scalable.
+        ```c++
+        #include <iostream>
+        #include <memory>
+
+        template <typename T>
+        class abstract_method
+        {
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        // general: inheritance + clone_impl implemented
+        template <typename Derived, typename ... Bases>
+        class clone_inherit : public Bases...
+        {
+        public:
+           virtual ~clone_inherit() = default;
+
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        private:
+           virtual clone_inherit * clone_impl() const override
+           {
+              return new Derived(static_cast<const Derived & >(*this));
+           }
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        // specialization: inheritance + clone_impl NOT implemented
+        template <typename Derived, typename ... Bases>
+        class clone_inherit<abstract_method<Derived>, Bases...> : public Bases...
+        {
+        public:
+           virtual ~clone_inherit() = default;
+
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        private:
+           virtual clone_inherit * clone_impl() const = 0;
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        // specialization: NO inheritance + clone_impl implemented
+        template <typename Derived>
+        class clone_inherit<Derived>
+        {
+        public:
+           virtual ~clone_inherit() = default;
+
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        private:
+           virtual clone_inherit * clone_impl() const override
+           {
+              return new Derived(static_cast<const Derived & >(*this));
+           }
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        // specialization: NO inheritance + clone_impl NOT implemented
+        template <typename Derived>
+        class clone_inherit<abstract_method<Derived>>
+        {
+        public:
+           virtual ~clone_inherit() = default;
+
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        private:
+           virtual clone_inherit * clone_impl() const = 0;
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        class cloneable
+           : public clone_inherit<abstract_method<cloneable>>
+        {
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        template <typename T>
+        class virtual_inherit_from : virtual public T
+        {
+           using T::T;
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        class foo
+           : public clone_inherit<abstract_method<foo>, virtual_inherit_from<cloneable>>
+        {
+        };
+
+        class bar
+           : public clone_inherit<abstract_method<bar>, virtual_inherit_from<cloneable>>
+        {
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        class concrete
+           : public clone_inherit<concrete, foo, bar>
+        {
+        };
+
+        int main()
+        {
+           std::unique_ptr<concrete> c = std::make_unique<concrete>();
+           std::unique_ptr<concrete> cc = c->clone();
+
+           foo * f = c.get();
+           std::unique_ptr<foo> ff = c->clone();
+
+           bar * b = c.get();
+           std::unique_ptr<bar> bb = c->clone();
+
+           cloneable * p = c.get();
+           std::unique_ptr<cloneable> pp = p->clone();
+        }
+        ```
+    * The whole package
+        ```c++
+        #include <iostream>
+        #include <memory>
+
+        // The whole clone-ing code
+
+        template <typename T>
+        class abstract_method
+        {
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        template <typename T>
+        class virtual_inherit_from : virtual public T
+        {
+           using T::T;
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        template <typename Derived, typename ... Bases>
+        class clone_inherit : public Bases...
+        {
+        public:
+           virtual ~clone_inherit() = default;
+
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        protected:
+           //         desirable, but impossible in C++17
+           //         see: http://cplusplus.github.io/EWG/ewg-active.html#102
+           // using typename... Bases::Bases;
+
+        private:
+           virtual clone_inherit * clone_impl() const override
+           {
+              return new Derived(static_cast<const Derived & >(*this));
+           }
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        template <typename Derived, typename ... Bases>
+        class clone_inherit<abstract_method<Derived>, Bases...> : public Bases...
+        {
+        public:
+           virtual ~clone_inherit() = default;
+
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        protected:
+           //         desirable, but impossible in C++17
+           //         see: http://cplusplus.github.io/EWG/ewg-active.html#102
+           // using typename... Bases::Bases;
+
+        private:
+           virtual clone_inherit * clone_impl() const = 0;
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        template <typename Derived>
+        class clone_inherit<Derived>
+        {
+        public:
+           virtual ~clone_inherit() = default;
+
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        private:
+           virtual clone_inherit * clone_impl() const override
+           {
+              return new Derived(static_cast<const Derived & >(*this));
+           }
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        template <typename Derived>
+        class clone_inherit<abstract_method<Derived>>
+        {
+        public:
+           virtual ~clone_inherit() = default;
+
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        private:
+           virtual clone_inherit * clone_impl() const = 0;
+        };
+
+        // user code
+
+        class cloneable
+           : public clone_inherit<abstract_method<cloneable>>
+        {
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        class foo
+           : public clone_inherit<abstract_method<foo>, virtual_inherit_from<cloneable>>
+        {
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        class bar
+           : public clone_inherit<abstract_method<bar>, virtual_inherit_from<cloneable>>
+        {
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        class concrete
+           : public clone_inherit<concrete, foo, bar>
+        {
+        };
+
+        int main()
+        {
+           std::unique_ptr<concrete> c = std::make_unique<concrete>();
+           std::unique_ptr<concrete> cc = c->clone();
+
+           foo * f = c.get();
+           std::unique_ptr<foo> ff = c->clone();
+
+           bar * b = c.get();
+           std::unique_ptr<bar> bb = c->clone();
+
+           cloneable * p = c.get();
+           std::unique_ptr<cloneable> pp = p->clone();
+        }
+        ```
 
 ## [General utilities library](https://en.cppreference.com/w/cpp/utility#General-purpose_utilities)
 
