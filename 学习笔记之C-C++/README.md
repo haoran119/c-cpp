@@ -7521,483 +7521,6 @@ struct T {
 		* The best design is to avoid shared ownership of pointers whenever you can. However, if you must have shared ownership of shared_ptr instances, avoid cyclic references between them. When cyclic references are unavoidable, or even preferable for some reason, use weak_ptr to give one or more of the owners a weak reference to another shared_ptr. By using a weak_ptr, you can create a shared_ptr that joins to an existing set of related instances, but only if the underlying memory resource is still valid. A weak_ptr itself does not participate in the reference counting, and therefore, it cannot prevent the reference count from going to zero. However, you can use a weak_ptr to try to obtain a new copy of the shared_ptr with which it was initialized. If the memory has already been deleted, the weak_ptr's bool operator returns false. If the memory is still valid, the new shared pointer increments the reference count and guarantees that the memory will be valid as long as the shared_ptr variable stays in scope.
 * [Smart pointer - Wikipedia, the free encyclopedia](https://en.wikipedia.org/wiki/Smart_pointer)
 * [Smart pointer rule summary - C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-summary-smartptrs)
-* [智能指针：从std::auto_ptr到std::unique_ptr - hanhuili的专栏 - 博客频道 - CSDN.NET](http://blog.csdn.net/hanhuili/article/details/8299912)
-* [拥抱智能指针，告别内存泄露](https://mp.weixin.qq.com/s/evYOoS4_XfjkPXlDWXTnSg)
-* [浅析 C++智能指针和 enable_shared_from_this 机制](https://mp.weixin.qq.com/s/a7Nl2jnbOtkfzEAK1TxVyA)
-* [一文掌握 C++ 智能指针的使用](https://mp.weixin.qq.com/s/bn7BAzBSxgbrkgRMnuy8-A)
-  * RAII 与引用计数
-  * std::shared_ptr
-  * std::unique_ptr
-  * std::weak_ptr
-
-#
-
-* [Smart developers use smart pointers (1/7) - Smart pointers basics - Fluent C++](https://www.fluentcpp.com/2017/08/22/smart-developers-use-smart-pointers-smart-pointers-basics/)
-    * Smart pointer basics
-    * unique_ptr, shared_ptr, weak_ptr, scoped_ptr, raw pointers: clearly stating your intentions by knowing your smart pointers
-    * Custom deleters and How to make them more expressive
-    * Changing deleters during the life of a unique_ptr
-    * How to implement the pimpl idiom by using unique_ptr
-    * How to make a polymorphic clone in modern C++
-    * How to Return a Smart Pointer AND Use Covariance (by Raoul Borges)
-    * The stack and the heap
-        * Like many other languages, C++ has several types of memories, that correspond to different parts of the physical memory. They are: the static, the stack, and the heap. The static is a topic rich enough to deserve its own moment of glory, so here we focus on the stack and the heap only.
-        * The stack
-            * `Objects allocated on the stack are automatically destroyed when they go out of scope.`
-        * The heap
-            * The heap is where dynamically allocated objects are stored, that is to say `objects that are allocated with a call to new`, which returns a pointer:
-            * Ok strictly speaking, the memory allocated by new is called the `free store`.
-            * Contrary to the stack, objects allocated on the heap are `not destroyed automatically`. 
-            * And deleting a object on the heap is no trivial task: delete has to be called `once and only once` to deallocate a heap-based object. 
-    * RAII: the magic four letters
-        * The principle of RAII is simple: wrap a resource (a pointer for instance) into an object, and dispose of the resource in its destructor. And this is exactly what smart pointers do:
-        ```c++
-        template <typename T>
-        class SmartPointer
-        {
-        public:
-            explicit SmartPointer(T* p) : p_(p) {}
-            ~SmartPointer() { delete p_; }
-
-        private:
-            T* p_;
-        };
-        ```
-        * The point is that you can manipulate smart pointers as objects allocated on the stack. And the compiler will take care of automatically calling the destructor of the smart pointer because… `objects allocated on the stack are automatically destroyed when they go out of scope`. And this will therefore call delete on the wrapped pointer. Only once. In a nutshell, smart pointers behave like pointers, but when they are destroyed they delete the object they point to.
-        * The above code example was only made to get a grasp of RAII. But by no means is it a complete interface of a realistic smart pointer.
-        * First, a smart pointer syntactically behaves like a pointer in many way: it can be dereferenced with operator* or operator->, that is to say you can call *sp or sp->member on it. And it is also convertible to bool, so that it can be used in an if statement like a pointer:
-        ```c++
-        if (sp)
-        {
-            ...
-        ```
-        * which tests the nullity of the underlying pointer. And finally, the underlying pointer itself is accessible with a .get() method.
-        * Second, and maybe more importantly, there is a missing aspect from the above interface: it doesn’t deal with copy! Indeed, as is, a SmartPointer copied also copies the underlying pointer, so the below code has a bug:
-        ```c++
-        {
-            SmartPointer<int> sp1(new int(42));
-            SmartPointer<int> sp2 = sp1; // now both sp1 and sp2 point to the same object
-        } // sp1 and sp2 are both destroyed, the pointer is deleted twice!
-        ```
-        * Indeed, it deletes the underlying object twice, leading to undefined behaviour.
-        * How to deal with copy then? This is a feature on which the various types of smart pointer differ. And it turns out that this lets you express your intentions in code quite precisely. Stay tuned, as this is what we see in the next episode of this series.
-* [unique_ptr, shared_ptr, weak_ptr, scoped_ptr, raw pointers - Knowing your smart pointers (2/7) - Fluent C++](https://www.fluentcpp.com/2017/08/25/knowing-your-smart-pointers/)
-    * std::unique_ptr
-        * The semantics of std::unique_ptr is that it is the sole owner of a memory resource. A std::unique_ptr will hold a pointer and delete it in its destructor (unless you customize this, which is the topic of another post).
-        * Note that std::unique_ptr is the preferred pointer to return from a factory function. Indeed, on the top of taking care of handling the memory, std::unique_ptr wraps a normal pointer and is therefore compatible with polymorphism.
-        * But since you are the owner, you are allowed to safely modify the pointed to object, and the rest of the design should take this into account. If you don’t want this to happen, the way to express it is by using a unique_ptr to const:
-        ```c++
-        std::unique_ptr<const House> buildAHouse(); // for some reason, I don't want you
-                                                    // to modify the house you're being passed
-        ```
-        * To ensure that there is only one unique_ptr that owns a memory resource, std::unique_ptr cannot be copied. The ownership can however be transferred from one unique_ptr to another (which is how you can pass them or return them from a function) by moving a unique_ptr into another one.
-        * A move can be achieved by returning an std::unique_ptr by value from a function, or explicitly in code:
-        ```c++
-        std::unique_ptr<int> p1 = std::make_unique(42);
-        std::unique_ptr<int> p2 = move(p1); // now p2 hold the resource
-                                               and p1 no longer hold anything
-        ```
-    * Raw pointers
-        * For now I only want to focus on what raw pointers and references express in code: `raw pointers and references represent access to an object, but not ownership`. In fact, this is the default way of passing objects to functions and methods:
-        * `void renderHouse(House const& house);`
-        * This is particularly relevant to note when you hold an object with a unique_ptr and want to pass it to an interface. You don’t pass the unique_ptr, nor a reference to it, but rather a reference to the pointed to object:
-        ```c++
-        std::unique_ptr<House> house = buildAHouse();
-        renderHouse(*house);
-        ```
-    * std::shared_ptr
-        * `A single memory resource can be held by several std::shared_ptrs at the same time`. The shared_ptrs internally maintain a count of how many of them there are holding the same resource, and when the last one is destroyed, it deletes the memory resource.
-        * Therefore std::shared_ptr allows copies, but with a reference-counting mechanism to make sure that every resource is deleted once and only once.
-        * At first glance, std::shared_ptr looks like the panacea for memory management, as it can be passed around and still maintain memory safety.
-        * But std::shared_ptr should not be used by default, for several reasons:
-            * Having several simultaneous holders of a resource makes for a more complex system than with one unique holder, like with std::unique_ptr. Even though an std::unique_ptr doesn’t prevent from accessing and modifying its resource, it sends a message that it is the priviledged owner of a resource. For this reason you’d expect it to centralize the control of the resource, at least to some degree.
-            * Having several simultaneous holders of a resource makes thread-safety harder,
-            * It makes the code counter-intuitive when an object is not shared in terms of the domain and still appears as “shared” in the code for a technical reason,
-            * It can incur a performance cost, both in time and memory, because of the bookkeeping related to the reference-counting.
-        * One good case for using std::shared_ptr though is when objects are `shared in the domain`. Using shared pointers then reflects it in an expressive way. Typically, the nodes of a graphs are well represented as shared pointers, because several nodes can hold a reference to one other node.
-    * std::weak_ptr
-        * std::weak_ptrs can hold a reference to a shared object along with other std::shared_ptrs, but they don’t increment the reference count. This means that if no more std::shared_ptr are holding an object, this object will be deleted even if some weak pointers still point to it.
-        * For this reason, a weak pointer needs to check if the object it points to is still alive. To do this, it has to be copied into to a std::shared_ptr:
-        ```c++
-        void useMyWeakPointer(std::weak_ptr<int> wp)
-        {
-            if (std::shared_ptr<int> sp = wp.lock())
-            {
-                // the resource is still here and can be used
-            }
-            else
-            {
-                // the resource is no longer here
-            }
-        }
-        ```
-        * A typical use case for this is about `breaking shared_ptr circular references`. Consider the following code:
-        ```c++
-        struct House
-        {
-            std::shared_ptr<House> neighbour;
-        };
-
-        std::shared_ptr<House> house1 = std::make_shared<House>();
-        std::shared_ptr<House> house2 = std::make_shared<House>();;
-        house1->neighbour = house2;
-        house2->neighbour = house1;
-        ```
-        * None of the houses ends up being destroyed at the end of this code, because the shared_ptrs points into one another. But if one is a weak_ptr instead, there is no longer a circular reference.
-        * Another use case pointed out by this answer on Stack Overflow is that weak_ptr can be used to `maintain a cache`. The data may or may not have been cleared from the cache, and the weak_ptr references this data.
-* [How to implement the pimpl idiom by using unique_ptr - Fluent C++](https://www.fluentcpp.com/2017/09/22/make-pimpl-using-unique_ptr/)
-    * The `pimpl`, standing for `pointer to implementation` is a widespread technique to cut compilation dependencies.
-    * The pimpl
-        * Say we have a class reprenseting a fridge (yeah why not?), that works with an engine that it contains. Here is the header of this class:
-        ```c++
-        #include "Engine.h"
-
-        class Fridge
-        {
-        public:
-           void coolDown();
-        private:
-           Engine engine_;
-        };
-        ```
-        * (the contents of the Engine class are not relevant here).
-        * And here is its implementation file:
-        ```c++
-        #include "Fridge.h"
-
-        void Fridge::coolDown()
-        {
-           /* ... */
-        }
-        ```
-        * Now there is an issue with this design (that could be serious or not, depending on how many clients Fridge has). Since Fridge.h #includes Engine.h, any client of the Fridge class will indirectly #include the Engine class. `So when the Engine class is modified, all the clients of Fridge have to recompile, even if they don’t use Engine directly`.
-        * The pimpl idiom aims at solving this issue by `adding a level of indirection`, FridgeImpl, that takes on the Engine.
-        * The header file becomes:
-        ```c++
-        class Fridge
-        {
-        public:
-           Fridge();
-           ~Fridge();
-
-           void coolDown();
-        private:
-           class FridgeImpl;
-           FridgeImpl* impl_;
-        };
-        ```
-        * Note that it no longer #include Engine.h.
-        * And the implementation file becomes:
-        ```c++
-        #include "Engine.h"
-        #include "Fridge.h"
-
-        class Fridge::FridgeImpl
-        {
-        public:
-           void coolDown()
-           {
-              /* ... */
-           }
-        private:
-           Engine engine_;
-        };
-
-        Fridge::Fridge() : impl_(new FridgeImpl) {}
-
-        Fridge::~Fridge()
-        {
-           delete impl_;
-        }
-
-        void Fridge::coolDown()
-        {
-           impl_->coolDown();
-        }
-        ```
-        * The class now delegates its functionalities and members to FridgeImpl, and Fridge only has to forward the calls and `manage the life cycle` of the impl_ pointer.
-        * What makes it work is that `pointers only need a forward declaration to compile`. For this reason, the header file of the Fridge class doesn’t need to see the full definition of FridgeImpl, and therefore neither do Fridge‘s clients.
-    * Using std::unique_ptr to manage the life cycle
-        * Today it’s a bit unsettling to leave a raw pointer managing its own resource in C++. A natural thing to do would be to replace it with an std::unique_ptr (or with another smart pointer). This way the Fridge destructor no longer needs to do anything, and we can leave the compiler automatically generate it for us.
-        * Oops, we get the following compilation errors!
-        ```c++
-        use of undefined type 'FridgeImpl'
-        can't delete an incomplete type
-        ```
-        * Can you see what’s going on here?
-    * Destructor visibility
-        * There is a rule in C++ that says that deleting a pointer leads to undefined behaviour if:
-            * this pointer has type void*, or
-            * the type pointed to is incomplete, that is to say is only forward declared, like FridgeImpl in our header file.
-        * std::unique_ptr happens to check in its destructor if the definition of the type is visible before calling delete. `So it refuses to compile and to call delete if the type is only forward declared`.
-        * Since we removed the declaration of the destructor in the Fridge class, the compiler took over and defined it for us. But compiler-generated methods are declared `inline`, so they are implemented in the header file directly. And there, the type of FridgeImpl is incomplete. Hence the error.
-        * The fix would then be to `declare the destructor and thus prevent the compiler from doing it for us`. So the header file becomes:
-        ```c++
-        #include <memory>
-
-        class Fridge
-        {
-        public:
-           Fridge();
-           ~Fridge();
-           void coolDown();
-        private:
-           class FridgeImpl;
-           std::unique_ptr<FridgeImpl> impl_;
-        };
-        ```
-        * And we can still use the default implentation for the destructor that the compiler would have generated. But we need to put it in the implementation file, after the definition of FridgeImpl:
-        ```c++
-        #include "Engine.h"
-        #include "Fridge.h"
-
-        class FridgeImpl
-        {
-        public:
-           void coolDown()
-           {
-              /* ... */
-           }
-        private:
-           Engine engine_;
-        };
-
-        Fridge::Fridge() : impl_(new FridgeImpl) {}
-
-        Fridge::~Fridge() = default;
-        ```
-* [Polymorphic clones in modern C++ - Fluent C++](https://www.fluentcpp.com/2017/09/08/make-polymorphic-copy-modern-cpp/)
-    * How to copy an object that is accessible only by an interface that it implements?
-    * https://github.com/haoran119/c-cpp/blob/main/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93%E4%B9%8BC-C++/README.md#deep-copy--shallow-copy
-* [How to Return a Smart Pointer AND Use Covariance - Fluent C++](https://www.fluentcpp.com/2017/09/12/how-to-return-a-smart-pointer-and-use-covariance/)
-    * The original problem Jonathan proposed a solution for was how to clone a concrete class when inheriting from multiple interfaces, all declaring the clone method, and all returning a smart pointer (in order to manage life cycle and produce exception safe code).
-    * That solution is simple and targeted to that situation. But here I want to expand on this and tackle the more general problem: in C++, it seems that we can have covariant return, or smart pointer return, but not both. Or can we?
-    * The problem: Covariant return type vs. smart pointers
-        * C++ has support for covariant return type. That is, you can have the following code:
-        ```c++
-        struct Base {};
-        struct Derived : Base {};
-
-        struct Parent
-        {
-           virtual Base * foo();
-        } ;
-
-        struct Child : Parent
-        {
-           virtual Derived * foo() override ;
-        } ;
-        ```
-        * Here, we expect the foo method from Child to return Base * for a successful overriding (and compilation!). With the covariant return type, we can actually replace Base * by any of its derived types. For example, Derived *.
-        * This works for pointers, and for references… But the moment you try to use smart pointers:
-        * … the compiler generates an error.
-    * Use cases
-        * Simple hierarchy:
-        * ![image](https://user-images.githubusercontent.com/34557994/206853537-b0fdfd99-536c-4eb4-8082-647e8cff83c9.png)
-        * Multiple inheritance:
-        * ![image](https://user-images.githubusercontent.com/34557994/206853550-d60e9d33-c273-442c-8701-4f77a037fc13.png)
-        * Deep hierarchy:
-        * ![image](https://user-images.githubusercontent.com/34557994/206853563-c7201cd9-2b9e-4595-b98c-fdfbade9db1c.png)
-        * Diamond inheritance:
-        * ![image](https://user-images.githubusercontent.com/34557994/206853578-f88a8c5d-4bec-495a-aa0a-90d9728b13d1.png)
-    * Preamble: Separation of concerns + private virtual function
-        * Instead of having one clone member function handling everything, we will separate it into two member functions. In the following piece of code:
-        ```c++
-        class some_class
-        {
-        public:
-           std::unique_ptr<some_class> clone() const
-           {
-              return std::unique_ptr<some_class>(this->clone_impl());
-           }
-
-        private:
-           virtual some_class * clone_impl() const
-           {
-              return new some_class(*this) ;
-           }
-        };
-        ```
-    * Simple Hierarchy: Covariance + Name hiding
-        ```c++
-        #include <memory>
-
-        class cloneable
-        {
-        public:
-           virtual ~cloneable() {}
-
-           std::unique_ptr<cloneable> clone() const
-           {
-              return std::unique_ptr<cloneable>(this->clone_impl());
-           }
-
-        private:
-           virtual cloneable * clone_impl() const = 0;
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-
-        class concrete : public cloneable
-        {
-        public:
-           std::unique_ptr<concrete> clone() const
-           {
-              return std::unique_ptr<concrete>(this->clone_impl());
-           }
-
-        private:
-           virtual concrete * clone_impl() const override
-           {
-              return new concrete(*this);
-           }
-        };
-
-        int main()
-        {
-           std::unique_ptr<concrete> c = std::make_unique<concrete>();
-           std::unique_ptr<concrete> cc = c->clone();
-
-           cloneable * p = c.get();
-           std::unique_ptr<cloneable> pp = p->clone();
-        }
-        ```
-        * By separating the concerns, we were able to use covariance at each level of the hierarchy to produce a clone_impl member function returning the exact type of pointer we wanted.
-        * And using a little (usually) annoying feature in C++, name hiding (i.e. when declaring a name in a derived class, this name hides all the symbols with the same name in the base class), we hide (not override) the clone() member function to return a smart pointer of the exact type we wanted.
-    * Simple Hierarchy, v2: Enter the CRTP
-        * We will use it to declare methods with the correct derived prototypes in the CRTP base class, methods that will then be injected through inheritance into the derived class itself:
-        ```c++
-        #include <memory>
-
-        class cloneable
-        {
-        public:
-           virtual ~cloneable() {}
-
-           std::unique_ptr<cloneable> clone() const
-           {
-              return std::unique_ptr<cloneable>(this->clone_impl());
-           }
-
-        private:
-           virtual cloneable * clone_impl() const = 0;
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-
-        template <typename Derived, typename Base>
-        class clone_inherit : public Base
-        {
-        public:
-           std::unique_ptr<Derived> clone() const
-           {
-              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
-           }
-
-        private:
-           virtual clone_inherit * clone_impl() const override
-           {
-              return new Derived(*this);
-           }
-        };
-
-        class concrete
-           : public clone_inherit<concrete, cloneable>
-        {
-        public:
-            concrete() = default;   // need to add it
-            concrete(const clone_inherit<concrete, cloneable>&) {}  // need to add it
-        };
-
-        int main()
-        {
-           std::unique_ptr<concrete> c = std::make_unique<concrete>();
-           std::unique_ptr<concrete> cc = c->clone();
-
-           cloneable * p = c.get();
-           std::unique_ptr<cloneable> pp = p->clone();
-        }
-        ```
-        * clone_inherit is a CRTP that knows its derived class, but also all its direct base class. It implements the covariant clone_impl() and hiding clone() member functions as usual, but they use casts to move through the hierarchy of types.
-        * As you can see, the concrete class is now free of clutter.
-        * This effectively adds a polymorphic and covariant clone() to a hierarchy of class.
-    * Multiple Inheritance: Variadic templates to the rescue
-        * ![image](https://user-images.githubusercontent.com/34557994/210284273-bbab247a-88a8-422e-bb5b-1828c53a4dc1.png)
-        * In our case, how can we extend our solution to support the case where the concrete class inherits from two bases classes that both provide the same clone feature?
-        * The solution first needs the two base classes, foo and bar, to offer the clone/clone_impl member functions:
-        * There’s a bit of boilerplate, here, but we’ll address it later. For now, we must solve the inheritance issue, and C++11 provides us with an easy solution: Variadic templates.
-        * We only need to modify the clone_inherit CRTP to support it:
-        * Last, but not least, we can use our classes with both covariance and smart pointers:
-        ```c++
-        #include <iostream>
-        #include <memory>
-
-        class foo
-        {
-        public:
-           virtual ~foo() = default;
-
-           std::unique_ptr<foo> clone() const
-           {
-              return std::unique_ptr<foo>(this->clone_impl());
-           }
-
-        private:
-           virtual foo * clone_impl() const = 0;
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-
-        class bar
-        {
-        public:
-           virtual ~bar() = default;
-
-           std::unique_ptr<bar> clone() const
-           {
-              return std::unique_ptr<bar>(this->clone_impl());
-           }
-
-        private:
-           virtual bar * clone_impl() const = 0;
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-
-        template <typename Derived, typename ... Bases>
-        class clone_inherit : public Bases...
-        {
-        public:
-           std::unique_ptr<Derived> clone() const
-           {
-              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
-           }
-
-        private:
-           virtual clone_inherit * clone_impl() const override
-           {
-              return new Derived(static_cast<const Derived & >(*this));
-           }
-        };
-
-        class concrete
-           : public clone_inherit<concrete, foo, bar>
-        {
-        };
-
-        int main()
-        {
-           std::unique_ptr<concrete> c = std::make_unique<concrete>();
-
-           std::unique_ptr<concrete> cc = c->clone();
-
-           foo * f = c.get();
-           std::unique_ptr<foo> ff = f->clone();
-
-           bar * b = c.get();
-           std::unique_ptr<bar> bb = b->clone();
-        }
-        ```
 
 #### [std::unique_ptr](https://en.cppreference.com/w/cpp/memory/unique_ptr)
 
@@ -8883,6 +8406,562 @@ All links are shared pointers
 Leaving...
 */
 ```
+
+#### MISC
+
+* [智能指针：从std::auto_ptr到std::unique_ptr - hanhuili的专栏 - 博客频道 - CSDN.NET](http://blog.csdn.net/hanhuili/article/details/8299912)
+* [拥抱智能指针，告别内存泄露](https://mp.weixin.qq.com/s/evYOoS4_XfjkPXlDWXTnSg)
+* [浅析 C++智能指针和 enable_shared_from_this 机制](https://mp.weixin.qq.com/s/a7Nl2jnbOtkfzEAK1TxVyA)
+* [一文掌握 C++ 智能指针的使用](https://mp.weixin.qq.com/s/bn7BAzBSxgbrkgRMnuy8-A)
+  * RAII 与引用计数
+  * std::shared_ptr
+  * std::unique_ptr
+  * std::weak_ptr
+
+##### Smart developers use smart pointers
+
+* [Smart developers use smart pointers (1/7) - Smart pointers basics - Fluent C++](https://www.fluentcpp.com/2017/08/22/smart-developers-use-smart-pointers-smart-pointers-basics/)
+    * Smart pointer basics
+    * unique_ptr, shared_ptr, weak_ptr, scoped_ptr, raw pointers: clearly stating your intentions by knowing your smart pointers
+    * Custom deleters and How to make them more expressive
+    * Changing deleters during the life of a unique_ptr
+    * How to implement the pimpl idiom by using unique_ptr
+    * How to make a polymorphic clone in modern C++
+    * How to Return a Smart Pointer AND Use Covariance (by Raoul Borges)
+    * The stack and the heap
+        * Like many other languages, C++ has several types of memories, that correspond to different parts of the physical memory. They are: the static, the stack, and the heap. The static is a topic rich enough to deserve its own moment of glory, so here we focus on the stack and the heap only.
+        * The stack
+            * `Objects allocated on the stack are automatically destroyed when they go out of scope.`
+        * The heap
+            * The heap is where dynamically allocated objects are stored, that is to say `objects that are allocated with a call to new`, which returns a pointer:
+            * Ok strictly speaking, the memory allocated by new is called the `free store`.
+            * Contrary to the stack, objects allocated on the heap are `not destroyed automatically`. 
+            * And deleting a object on the heap is no trivial task: delete has to be called `once and only once` to deallocate a heap-based object. 
+    * RAII: the magic four letters
+        * The principle of RAII is simple: wrap a resource (a pointer for instance) into an object, and dispose of the resource in its destructor. And this is exactly what smart pointers do:
+        ```c++
+        template <typename T>
+        class SmartPointer
+        {
+        public:
+            explicit SmartPointer(T* p) : p_(p) {}
+            ~SmartPointer() { delete p_; }
+
+        private:
+            T* p_;
+        };
+        ```
+        * The point is that you can manipulate smart pointers as objects allocated on the stack. And the compiler will take care of automatically calling the destructor of the smart pointer because… `objects allocated on the stack are automatically destroyed when they go out of scope`. And this will therefore call delete on the wrapped pointer. Only once. In a nutshell, smart pointers behave like pointers, but when they are destroyed they delete the object they point to.
+        * The above code example was only made to get a grasp of RAII. But by no means is it a complete interface of a realistic smart pointer.
+        * First, a smart pointer syntactically behaves like a pointer in many way: it can be dereferenced with operator* or operator->, that is to say you can call *sp or sp->member on it. And it is also convertible to bool, so that it can be used in an if statement like a pointer:
+        ```c++
+        if (sp)
+        {
+            ...
+        ```
+        * which tests the nullity of the underlying pointer. And finally, the underlying pointer itself is accessible with a .get() method.
+        * Second, and maybe more importantly, there is a missing aspect from the above interface: it doesn’t deal with copy! Indeed, as is, a SmartPointer copied also copies the underlying pointer, so the below code has a bug:
+        ```c++
+        {
+            SmartPointer<int> sp1(new int(42));
+            SmartPointer<int> sp2 = sp1; // now both sp1 and sp2 point to the same object
+        } // sp1 and sp2 are both destroyed, the pointer is deleted twice!
+        ```
+        * Indeed, it deletes the underlying object twice, leading to undefined behaviour.
+        * How to deal with copy then? This is a feature on which the various types of smart pointer differ. And it turns out that this lets you express your intentions in code quite precisely. Stay tuned, as this is what we see in the next episode of this series.
+* [unique_ptr, shared_ptr, weak_ptr, scoped_ptr, raw pointers - Knowing your smart pointers (2/7) - Fluent C++](https://www.fluentcpp.com/2017/08/25/knowing-your-smart-pointers/)
+    * std::unique_ptr
+        * The semantics of std::unique_ptr is that it is the sole owner of a memory resource. A std::unique_ptr will hold a pointer and delete it in its destructor (unless you customize this, which is the topic of another post).
+        * Note that std::unique_ptr is the preferred pointer to return from a factory function. Indeed, on the top of taking care of handling the memory, std::unique_ptr wraps a normal pointer and is therefore compatible with polymorphism.
+        * But since you are the owner, you are allowed to safely modify the pointed to object, and the rest of the design should take this into account. If you don’t want this to happen, the way to express it is by using a unique_ptr to const:
+        ```c++
+        std::unique_ptr<const House> buildAHouse(); // for some reason, I don't want you
+                                                    // to modify the house you're being passed
+        ```
+        * To ensure that there is only one unique_ptr that owns a memory resource, std::unique_ptr cannot be copied. The ownership can however be transferred from one unique_ptr to another (which is how you can pass them or return them from a function) by moving a unique_ptr into another one.
+        * A move can be achieved by returning an std::unique_ptr by value from a function, or explicitly in code:
+        ```c++
+        std::unique_ptr<int> p1 = std::make_unique(42);
+        std::unique_ptr<int> p2 = move(p1); // now p2 hold the resource
+                                               and p1 no longer hold anything
+        ```
+    * Raw pointers
+        * For now I only want to focus on what raw pointers and references express in code: `raw pointers and references represent access to an object, but not ownership`. In fact, this is the default way of passing objects to functions and methods:
+        * `void renderHouse(House const& house);`
+        * This is particularly relevant to note when you hold an object with a unique_ptr and want to pass it to an interface. You don’t pass the unique_ptr, nor a reference to it, but rather a reference to the pointed to object:
+        ```c++
+        std::unique_ptr<House> house = buildAHouse();
+        renderHouse(*house);
+        ```
+    * std::shared_ptr
+        * `A single memory resource can be held by several std::shared_ptrs at the same time`. The shared_ptrs internally maintain a count of how many of them there are holding the same resource, and when the last one is destroyed, it deletes the memory resource.
+        * Therefore std::shared_ptr allows copies, but with a reference-counting mechanism to make sure that every resource is deleted once and only once.
+        * At first glance, std::shared_ptr looks like the panacea for memory management, as it can be passed around and still maintain memory safety.
+        * But std::shared_ptr should not be used by default, for several reasons:
+            * Having several simultaneous holders of a resource makes for a more complex system than with one unique holder, like with std::unique_ptr. Even though an std::unique_ptr doesn’t prevent from accessing and modifying its resource, it sends a message that it is the priviledged owner of a resource. For this reason you’d expect it to centralize the control of the resource, at least to some degree.
+            * Having several simultaneous holders of a resource makes thread-safety harder,
+            * It makes the code counter-intuitive when an object is not shared in terms of the domain and still appears as “shared” in the code for a technical reason,
+            * It can incur a performance cost, both in time and memory, because of the bookkeeping related to the reference-counting.
+        * One good case for using std::shared_ptr though is when objects are `shared in the domain`. Using shared pointers then reflects it in an expressive way. Typically, the nodes of a graphs are well represented as shared pointers, because several nodes can hold a reference to one other node.
+    * std::weak_ptr
+        * std::weak_ptrs can hold a reference to a shared object along with other std::shared_ptrs, but they don’t increment the reference count. This means that if no more std::shared_ptr are holding an object, this object will be deleted even if some weak pointers still point to it.
+        * For this reason, a weak pointer needs to check if the object it points to is still alive. To do this, it has to be copied into to a std::shared_ptr:
+        ```c++
+        void useMyWeakPointer(std::weak_ptr<int> wp)
+        {
+            if (std::shared_ptr<int> sp = wp.lock())
+            {
+                // the resource is still here and can be used
+            }
+            else
+            {
+                // the resource is no longer here
+            }
+        }
+        ```
+        * A typical use case for this is about `breaking shared_ptr circular references`. Consider the following code:
+        ```c++
+        struct House
+        {
+            std::shared_ptr<House> neighbour;
+        };
+
+        std::shared_ptr<House> house1 = std::make_shared<House>();
+        std::shared_ptr<House> house2 = std::make_shared<House>();;
+        house1->neighbour = house2;
+        house2->neighbour = house1;
+        ```
+        * None of the houses ends up being destroyed at the end of this code, because the shared_ptrs points into one another. But if one is a weak_ptr instead, there is no longer a circular reference.
+        * Another use case pointed out by this answer on Stack Overflow is that weak_ptr can be used to `maintain a cache`. The data may or may not have been cleared from the cache, and the weak_ptr references this data.
+* [How to implement the pimpl idiom by using unique_ptr - Fluent C++](https://www.fluentcpp.com/2017/09/22/make-pimpl-using-unique_ptr/)
+    * The `pimpl`, standing for `pointer to implementation` is a widespread technique to cut compilation dependencies.
+    * The pimpl
+        * Say we have a class reprenseting a fridge (yeah why not?), that works with an engine that it contains. Here is the header of this class:
+        ```c++
+        #include "Engine.h"
+
+        class Fridge
+        {
+        public:
+           void coolDown();
+        private:
+           Engine engine_;
+        };
+        ```
+        * (the contents of the Engine class are not relevant here).
+        * And here is its implementation file:
+        ```c++
+        #include "Fridge.h"
+
+        void Fridge::coolDown()
+        {
+           /* ... */
+        }
+        ```
+        * Now there is an issue with this design (that could be serious or not, depending on how many clients Fridge has). Since Fridge.h #includes Engine.h, any client of the Fridge class will indirectly #include the Engine class. `So when the Engine class is modified, all the clients of Fridge have to recompile, even if they don’t use Engine directly`.
+        * The pimpl idiom aims at solving this issue by `adding a level of indirection`, FridgeImpl, that takes on the Engine.
+        * The header file becomes:
+        ```c++
+        class Fridge
+        {
+        public:
+           Fridge();
+           ~Fridge();
+
+           void coolDown();
+        private:
+           class FridgeImpl;
+           FridgeImpl* impl_;
+        };
+        ```
+        * Note that it no longer #include Engine.h.
+        * And the implementation file becomes:
+        ```c++
+        #include "Engine.h"
+        #include "Fridge.h"
+
+        class Fridge::FridgeImpl
+        {
+        public:
+           void coolDown()
+           {
+              /* ... */
+           }
+        private:
+           Engine engine_;
+        };
+
+        Fridge::Fridge() : impl_(new FridgeImpl) {}
+
+        Fridge::~Fridge()
+        {
+           delete impl_;
+        }
+
+        void Fridge::coolDown()
+        {
+           impl_->coolDown();
+        }
+        ```
+        * The class now delegates its functionalities and members to FridgeImpl, and Fridge only has to forward the calls and `manage the life cycle` of the impl_ pointer.
+        * What makes it work is that `pointers only need a forward declaration to compile`. For this reason, the header file of the Fridge class doesn’t need to see the full definition of FridgeImpl, and therefore neither do Fridge‘s clients.
+    * Using std::unique_ptr to manage the life cycle
+        * Today it’s a bit unsettling to leave a raw pointer managing its own resource in C++. A natural thing to do would be to replace it with an std::unique_ptr (or with another smart pointer). This way the Fridge destructor no longer needs to do anything, and we can leave the compiler automatically generate it for us.
+        * Oops, we get the following compilation errors!
+        ```c++
+        use of undefined type 'FridgeImpl'
+        can't delete an incomplete type
+        ```
+        * Can you see what’s going on here?
+    * Destructor visibility
+        * There is a rule in C++ that says that deleting a pointer leads to undefined behaviour if:
+            * this pointer has type void*, or
+            * the type pointed to is incomplete, that is to say is only forward declared, like FridgeImpl in our header file.
+        * std::unique_ptr happens to check in its destructor if the definition of the type is visible before calling delete. `So it refuses to compile and to call delete if the type is only forward declared`.
+        * Since we removed the declaration of the destructor in the Fridge class, the compiler took over and defined it for us. But compiler-generated methods are declared `inline`, so they are implemented in the header file directly. And there, the type of FridgeImpl is incomplete. Hence the error.
+        * The fix would then be to `declare the destructor and thus prevent the compiler from doing it for us`. So the header file becomes:
+        ```c++
+        #include <memory>
+
+        class Fridge
+        {
+        public:
+           Fridge();
+           ~Fridge();
+           void coolDown();
+        private:
+           class FridgeImpl;
+           std::unique_ptr<FridgeImpl> impl_;
+        };
+        ```
+        * And we can still use the default implentation for the destructor that the compiler would have generated. But we need to put it in the implementation file, after the definition of FridgeImpl:
+        ```c++
+        #include "Engine.h"
+        #include "Fridge.h"
+
+        class FridgeImpl
+        {
+        public:
+           void coolDown()
+           {
+              /* ... */
+           }
+        private:
+           Engine engine_;
+        };
+
+        Fridge::Fridge() : impl_(new FridgeImpl) {}
+
+        Fridge::~Fridge() = default;
+        ```
+* [Polymorphic clones in modern C++ - Fluent C++](https://www.fluentcpp.com/2017/09/08/make-polymorphic-copy-modern-cpp/)
+    * How to copy an object that is accessible only by an interface that it implements?
+    * https://github.com/haoran119/c-cpp/blob/main/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93%E4%B9%8BC-C++/README.md#deep-copy--shallow-copy
+* [How to Return a Smart Pointer AND Use Covariance - Fluent C++](https://www.fluentcpp.com/2017/09/12/how-to-return-a-smart-pointer-and-use-covariance/)
+    * The original problem Jonathan proposed a solution for was how to clone a concrete class when inheriting from multiple interfaces, all declaring the clone method, and all returning a smart pointer (in order to manage life cycle and produce exception safe code).
+    * That solution is simple and targeted to that situation. But here I want to expand on this and tackle the more general problem: in C++, it seems that we can have covariant return, or smart pointer return, but not both. Or can we?
+    * The problem: Covariant return type vs. smart pointers
+        * C++ has support for covariant return type. That is, you can have the following code:
+        ```c++
+        struct Base {};
+        struct Derived : Base {};
+
+        struct Parent
+        {
+           virtual Base * foo();
+        } ;
+
+        struct Child : Parent
+        {
+           virtual Derived * foo() override ;
+        } ;
+        ```
+        * Here, we expect the foo method from Child to return Base * for a successful overriding (and compilation!). With the covariant return type, we can actually replace Base * by any of its derived types. For example, Derived *.
+        * This works for pointers, and for references… But the moment you try to use smart pointers:
+        * … the compiler generates an error.
+    * Use cases
+        * Simple hierarchy:
+        * ![image](https://user-images.githubusercontent.com/34557994/206853537-b0fdfd99-536c-4eb4-8082-647e8cff83c9.png)
+        * Multiple inheritance:
+        * ![image](https://user-images.githubusercontent.com/34557994/206853550-d60e9d33-c273-442c-8701-4f77a037fc13.png)
+        * Deep hierarchy:
+        * ![image](https://user-images.githubusercontent.com/34557994/206853563-c7201cd9-2b9e-4595-b98c-fdfbade9db1c.png)
+        * Diamond inheritance:
+        * ![image](https://user-images.githubusercontent.com/34557994/206853578-f88a8c5d-4bec-495a-aa0a-90d9728b13d1.png)
+    * Preamble: Separation of concerns + private virtual function
+        * Instead of having one clone member function handling everything, we will separate it into two member functions. In the following piece of code:
+        ```c++
+        class some_class
+        {
+        public:
+           std::unique_ptr<some_class> clone() const
+           {
+              return std::unique_ptr<some_class>(this->clone_impl());
+           }
+
+        private:
+           virtual some_class * clone_impl() const
+           {
+              return new some_class(*this) ;
+           }
+        };
+        ```
+    * Simple Hierarchy: Covariance + Name hiding
+        ```c++
+        #include <memory>
+
+        class cloneable
+        {
+        public:
+           virtual ~cloneable() {}
+
+           std::unique_ptr<cloneable> clone() const
+           {
+              return std::unique_ptr<cloneable>(this->clone_impl());
+           }
+
+        private:
+           virtual cloneable * clone_impl() const = 0;
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        class concrete : public cloneable
+        {
+        public:
+           std::unique_ptr<concrete> clone() const
+           {
+              return std::unique_ptr<concrete>(this->clone_impl());
+           }
+
+        private:
+           virtual concrete * clone_impl() const override
+           {
+              return new concrete(*this);
+           }
+        };
+
+        int main()
+        {
+           std::unique_ptr<concrete> c = std::make_unique<concrete>();
+           std::unique_ptr<concrete> cc = c->clone();
+
+           cloneable * p = c.get();
+           std::unique_ptr<cloneable> pp = p->clone();
+        }
+        ```
+        * By separating the concerns, we were able to use covariance at each level of the hierarchy to produce a clone_impl member function returning the exact type of pointer we wanted.
+        * And using a little (usually) annoying feature in C++, name hiding (i.e. when declaring a name in a derived class, this name hides all the symbols with the same name in the base class), we hide (not override) the clone() member function to return a smart pointer of the exact type we wanted.
+    * Simple Hierarchy, v2: Enter the CRTP
+        * We will use it to declare methods with the correct derived prototypes in the CRTP base class, methods that will then be injected through inheritance into the derived class itself:
+        ```c++
+        #include <memory>
+
+        class cloneable
+        {
+        public:
+           virtual ~cloneable() {}
+
+           std::unique_ptr<cloneable> clone() const
+           {
+              return std::unique_ptr<cloneable>(this->clone_impl());
+           }
+
+        private:
+           virtual cloneable * clone_impl() const = 0;
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        template <typename Derived, typename Base>
+        class clone_inherit : public Base
+        {
+        public:
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        private:
+           virtual clone_inherit * clone_impl() const override
+           {
+              return new Derived(*this);
+           }
+        };
+
+        class concrete
+           : public clone_inherit<concrete, cloneable>
+        {
+        public:
+            concrete() = default;   // need to add it
+            concrete(const clone_inherit<concrete, cloneable>&) {}  // need to add it
+        };
+
+        int main()
+        {
+           std::unique_ptr<concrete> c = std::make_unique<concrete>();
+           std::unique_ptr<concrete> cc = c->clone();
+
+           cloneable * p = c.get();
+           std::unique_ptr<cloneable> pp = p->clone();
+        }
+        ```
+        * clone_inherit is a CRTP that knows its derived class, but also all its direct base class. It implements the covariant clone_impl() and hiding clone() member functions as usual, but they use casts to move through the hierarchy of types.
+        * As you can see, the concrete class is now free of clutter.
+        * This effectively adds a polymorphic and covariant clone() to a hierarchy of class.
+    * Multiple Inheritance: Variadic templates to the rescue
+        * ![image](https://user-images.githubusercontent.com/34557994/210284273-bbab247a-88a8-422e-bb5b-1828c53a4dc1.png)
+        * In our case, how can we extend our solution to support the case where the concrete class inherits from two bases classes that both provide the same clone feature?
+        * The solution first needs the two base classes, foo and bar, to offer the clone/clone_impl member functions:
+        * There’s a bit of boilerplate, here, but we’ll address it later. For now, we must solve the inheritance issue, and C++11 provides us with an easy solution: Variadic templates.
+        * We only need to modify the clone_inherit CRTP to support it:
+        * Last, but not least, we can use our classes with both covariance and smart pointers:
+        ```c++
+        #include <iostream>
+        #include <memory>
+
+        class foo
+        {
+        public:
+           virtual ~foo() = default;
+
+           std::unique_ptr<foo> clone() const
+           {
+              return std::unique_ptr<foo>(this->clone_impl());
+           }
+
+        private:
+           virtual foo * clone_impl() const = 0;
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        class bar
+        {
+        public:
+           virtual ~bar() = default;
+
+           std::unique_ptr<bar> clone() const
+           {
+              return std::unique_ptr<bar>(this->clone_impl());
+           }
+
+        private:
+           virtual bar * clone_impl() const = 0;
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        template <typename Derived, typename ... Bases>
+        class clone_inherit : public Bases...
+        {
+        public:
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        private:
+           virtual clone_inherit * clone_impl() const override
+           {
+              return new Derived(static_cast<const Derived & >(*this));
+           }
+        };
+
+        class concrete
+           : public clone_inherit<concrete, foo, bar>
+        {
+        };
+
+        int main()
+        {
+           std::unique_ptr<concrete> c = std::make_unique<concrete>();
+
+           std::unique_ptr<concrete> cc = c->clone();
+
+           foo * f = c.get();
+           std::unique_ptr<foo> ff = f->clone();
+
+           bar * b = c.get();
+           std::unique_ptr<bar> bb = b->clone();
+        }
+        ```
+    * Multiple Inheritance v2: Specialization to the rescue
+        * Now, let’s address the clutter: Both foo and bar offer the same “cloneable” feature. And in our case, both should be virtually destructible.
+        * The solution is to specialize clone_inherit to handle the case when no base class is desired, provide the virtual destructors, and have foo and bar inherit from it:
+        ```c++
+        #include <iostream>
+        #include <memory>
+
+        template <typename Derived, typename ... Bases>
+        class clone_inherit : public Bases...
+        {
+        public:
+           virtual ~clone_inherit() = default;
+
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        private:
+           virtual clone_inherit * clone_impl() const override
+           {
+              return new Derived(static_cast<const Derived & >(*this));
+           }
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        template <typename Derived>
+        class clone_inherit<Derived>
+        {
+        public:
+           virtual ~clone_inherit() = default;
+
+           std::unique_ptr<Derived> clone() const
+           {
+              return std::unique_ptr<Derived>(static_cast<Derived *>(this->clone_impl()));
+           }
+
+        private:
+           virtual clone_inherit * clone_impl() const = 0;
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        class foo
+           : public clone_inherit<foo>
+        {
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        class bar
+           : public clone_inherit<bar>
+        {
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        class concrete
+           : public clone_inherit<concrete, foo, bar>
+        {
+        };
+
+        int main()
+        {
+           std::unique_ptr<concrete> c = std::make_unique<concrete>();
+
+           std::unique_ptr<concrete> cc = c->clone();
+
+           foo * f = c.get();
+           std::unique_ptr<foo> ff = f->clone();
+
+           bar * b = c.get();
+           std::unique_ptr<bar> bb = b->clone();
+        }
+        ```
 
 ## [General utilities library](https://en.cppreference.com/w/cpp/utility#General-purpose_utilities)
 
