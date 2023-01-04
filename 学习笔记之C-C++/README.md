@@ -5757,9 +5757,61 @@ D2::impl()
 * The CRTP, episode Three: An implementation helper for the CRTP
 * What CRTP is
     * The CRTP consists in:
-        * inheriting from a template class,
-        * use the derived class itself as a template parameter of the base class.
+        * `inheriting from a template class`,
+        * `use the derived class itself as a template parameter of the base class`.
+    * The purpose of doing this is `using the derived class in the base class`. From the perspective of the base object, the derived object is itself, but downcasted. Therefore the base class can access the derived class by `static_casting` itself into the derived class.
+    * Note that contrary to typical casts to derived class, we don’t use `dynamic_cast` here. A `dynamic_cast` is used when you want to make sure at run-time that the derived class you are casting into is the correct one. But here we don’t need this guarantee: the Base class is `designed` to be inherited from by its template parameter, and by nothing else. Therefore it takes this as an assumption, and a `static_cast` is enough.
+    ```c++
+    template <typename T>
+    class Base
+    {
+    public:
+        void doSomething()
+        {
+            T& derived = static_cast<T&>(*this);
+            use derived...
+        }
+    };
 
+    class Derived : public Base<Derived>
+    {
+        ...
+    };
+    ```
+* What could go wrong
+    * `If two classes happen to derive from the same CRTP base class we likely get to undefined behaviour when the CRTP will try to use the wrong class`:
+    ```c++
+    class Derived1 : public Base<Derived1>
+    {
+        ...
+    };
+
+    class Derived2 : public Base<Derived1> // bug in this line of code
+    {
+        ...
+    };
+    ```
+    * There is a solution to prevent this. It consists in `adding a private constructor in the base class, and making the base class friend with the templated class`:
+    ```c++
+    template <typename T>
+    class Base
+    {
+    public:
+        // ...
+    private:
+        Base(){};
+        friend T;
+    };
+    ```
+    * Indeed, the constructors of the derived class have to call the constructor of the base class (even if you don’t write it explicitly in the code, the compiler will do his best to do it for you). Since the constructor in the base class is private, no one can access it except the friend classes. And the only friend class is `the template class`! `So if the derived class is different from the template class, the code doesn’t compile`.
+    * Another risk with CRTP is that `methods in the derived class will hide methods from the base class with the same name`. As explained in Effective C++ Item 33, the reason for that is that these methods are not virtual. Therefore you want to be careful not to have identical names in the base and derived classes:
+    ```c++
+    class Derived : public Base<Derived>
+    {
+    public:
+        void doSomething(); // oops this hides the doSomething methods from the base class !
+    }
+    ```
 
 #### [Function template](https://en.cppreference.com/w/cpp/language/function_template)
 
