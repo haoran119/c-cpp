@@ -5910,6 +5910,107 @@ D2::impl()
     * The most important thing to note is that, although the Amount class is used polymorphically, there isn’t any `virtual` in the code. This means that the `polymorphic call` has been resolved `at compile-time`, thus avoiding the `run-time cost of virtual functions`. For more about this impact on performance you can see the [study Eli Bendersky made](http://eli.thegreenplace.net/2013/12/05/the-cost-of-dynamic-virtual-calls-vs-static-crtp-dispatch-in-c) on his (great) website.
     * From a design point of view, we were able to avoid the virtual calls here because the information of which class to use was `available at compile-time`. And like we saw in the [Extract Interface refactoring at compile-time](https://www.fluentcpp.com/2017/04/28/extract-interface-cpp/), when you know the info, why wait until the last moment to use it?
 
+#
+[The cost of dynamic (virtual calls) vs. static (CRTP) dispatch in C++ - Eli Bendersky's website](https://eli.thegreenplace.net/2013/12/05/the-cost-of-dynamic-virtual-calls-vs-static-crtp-dispatch-in-c)
+
+* Hypothesis - what makes virtual calls slower
+	* The [previous article](http://eli.thegreenplace.net/2011/05/17/the-curiously-recurring-template-pattern-in-c/) listed the following components in the runtime cost of virtual calls:
+        * Extra indirection (pointer dereference) for each call to a virtual method.
+        * Virtual methods usually can’t be inlined, which may be a significant cost hit for some small methods.
+        * Additional pointer per object. On 64-bit systems which are prevalent these days, this is 8 bytes per object. For small objects that carry little data this may be a serious overhead.
+    * While the third component can definitely play a role in some scenarios (i.e. a lot of small objects where the additional memory means less of them fit into L1 data cache), I'll focus on the first two in this article, because they are easier to expose in a simple synthetic benchmark.
+* The source code - what are we comparing?
+    ```c++
+    class DynamicInterface {
+    public:
+      virtual void tick(uint64_t n) = 0;
+      virtual uint64_t getvalue() = 0;
+    };
+
+    class DynamicImplementation : public DynamicInterface {
+      uint64_t counter;
+
+    public:
+      DynamicImplementation()
+        : counter(0) {
+      }
+
+      virtual void tick(uint64_t n) {
+        counter += n;
+      }
+
+      virtual uint64_t getvalue() {
+        return counter;
+      }
+    };
+
+    // The following code runs the actual benchmark:
+
+    const unsigned N = 40000;
+
+    void run_dynamic(DynamicInterface* obj) {
+      for (unsigned i = 0; i < N; ++i) {
+        for (unsigned j = 0; j < i; ++j) {
+          obj->tick(j);
+        }
+      }
+    }
+    ```
+    * What this does is simply invoke the virtual method tick on the base pointer obj in the order of O(N^2) times.
+    * The alternative statically-polymorphic implementation is this [1]:
+    ```c++
+    template <typename Implementation>
+    class CRTPInterface {
+    public:
+      void tick(uint64_t n) {
+        impl().tick(n);
+      }
+
+      uint64_t getvalue() {
+        return impl().getvalue();
+      }
+    private:
+      Implementation& impl() {
+        return *static_cast<Implementation*>(this);
+      }
+    };
+
+    class CRTPImplementation : public CRTPInterface<CRTPImplementation> {
+      uint64_t counter;
+    public:
+      CRTPImplementation()
+        : counter(0) {
+      }
+
+      void tick(uint64_t n) {
+        counter += n;
+      }
+
+      uint64_t getvalue() {
+        return counter;
+      }
+    };
+
+    template <typename Implementation>
+    void run_crtp(CRTPInterface<Implementation>* obj) {
+      for (unsigned i = 0; i < N; ++i) {
+        for (unsigned j = 0; j < i; ++j) {
+          obj->tick(j);
+        }
+      }
+    }
+    ```
+* Performance numbers
+    * As expected, the `CRTP approach is much faster`. The benchmark above takes 1.25 seconds on my i7-4771 CPU for run_dynamic and 0.21 seconds for run_crtp This is a huge difference, and it's much larger than I expected. I was looking for a 2x boost, not `6x` [2]. So here comes the 4th bullet of the benchmarking methodology I outlined above. Let's look more carefully at the numbers.
+* Conclusions
+    * Benchmarking is an art - if everything is too easy, you're either doing something trivial or wrong. Always cross-verify your assumptions and results with hard data like disassembly listings and detailed performance numbers.
+    * Beware of different compilers and different targets. The above discusses gcc 4.8 for x86-64. Elsewhere, you may expect slightly or considerably different results. Ah, if only programming was easy. But then I guess programmers wouldn't get paid a lot for clicking in front of computers all day.
+    * Compiler optimizations are, by definition, a multi-layered affair. Each is simple but they enable each other. Inlining enables some additional optimizations (such as moving hot code out of inner loops). Other optimizations may enable inlining (by making the leaf methods smaller).
+    * CRTP, when implemented correctly, is recognized by the compiler as static dispatch and optimized accordingly.
+    * CRTP can thus be significantly more efficient than virtual calls, mostly due to inlining. This also means that inlining is crucial to its performance (as it is to many performance features of C++).
+* [1]	This is a degenerate use of CRTP, for sure. It's not here to be realistic - just to demonstrate the same mechanism used in a simple scenario. See the previous article for a more use-focused discussion of CRTP.
+* [2]	These numbers depend on the CPU, of course. When I tried the same benchmark on a Xeon E5-2690 (Sandy Bridge) with gcc 4.6.3 (same code generated) the speed difference is just `3x` (0.46 vs 1.39 sec).
+
 #### [Function template](https://en.cppreference.com/w/cpp/language/function_template)
 
 * A function template defines a family of functions.
