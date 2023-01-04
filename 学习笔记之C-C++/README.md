@@ -6011,6 +6011,60 @@ D2::impl()
 * [1]	This is a degenerate use of CRTP, for sure. It's not here to be realistic - just to demonstrate the same mechanism used in a simple scenario. See the previous article for a more use-focused discussion of CRTP.
 * [2]	These numbers depend on the CPU, of course. When I tried the same benchmark on a Xeon E5-2690 (Sandy Bridge) with gcc 4.6.3 (same code generated) the speed difference is just `3x` (0.46 vs 1.39 sec).
 
+#
+[An Implementation Helper For The Curiously Recurring Template Pattern - Fluent C++](https://www.fluentcpp.com/2017/05/19/crtp-helper/)
+
+* In this final episode of the series on the `Curiously Recuring Template Pattern`, let’s see an implementation that makes it easier to write `CRTP` classes.
+* Getting rid of static_cast
+    * It would be nice to factor out these static_casts. This can be achieved by forwarding the underlying type to a higher hierarchy level:
+    * Plus it deals with the case where the underlying object is const, which we hadn’t mentioned yet.
+    ```c++
+    template <typename T>
+    struct crtp
+    {
+        T& underlying() { return static_cast<T&>(*this); }
+        T const& underlying() const { return static_cast<T const&>(*this); }
+    };
+
+    template <typename T>
+    struct NumericalFunctions : crtp<T>
+    {
+        void scale(double multiplicator)
+        {
+            this->underlying().setValue(this->underlying().getValue() * multiplicator);
+        }
+        // ...
+    };
+    ```
+    * Note that the `static_cast` is gone and a `this->` appeared. Without it the code would not compile. Indeed, the compiler is not sure where underlying is declared. Even if it is declared in the template class crtp, in theory nothing guarantees that this template class won’t be specialized and rewritten on a particular type, that would not expose an underlying method. For that reason, names in template base classes are ignored in C++.
+    * Using `this->` is a way to include them back in the scope of functions considered to resolve the call. There are other ways to do it, although they are arguably not as adapted to this situation. In any case, you can read all about this topic in Effective C++ Item 43.
+    * Anyway, the above code relieves you from writing the `static_casts`, which become really cumbersome when they are several of them.
+    * All this works if you class `only add one functionality` via CRTP, but it stops working if there are `more`.
+* Adding several functionalities with CRTP
+    * For the sake of the example let’s split our CRTP classes into two: one that scales values and one that squares them:
+    * And add these two functionalities to the Sensitivity class:
+    * This looks ok at first glance but does not compile as soon as we call a method of either one of the base class!
+        * `error: 'crtp<Sensitivity>' is an ambiguous base of 'Sensitivity'`
+    * The reason is that we have a diamond inheritance here:
+    * ![image](https://user-images.githubusercontent.com/34557994/210545204-dfccecb5-8a47-4e4f-84a8-08861a6c44cc.png)
+    * Another approach is to steer away from the `diamond inheritance` (which sounds like a good idea), by having every functionality (scale, square) `inherit` from its own crtp class. And this can be achieved by `CRTP`!
+    * Indeed, we can add a `template parameter` to the crtp class, corresponding to the base class. Note the addition of the crtpType template parameter.
+    ```c++
+    template <typename T, template<typename> class crtpType>
+    struct crtp
+    {
+        T& underlying() { return static_cast<T&>(*this); }
+        T const& underlying() const { return static_cast<T const&>(*this); }
+    private:
+        crtp(){}
+        friend crtpType<T>;
+    };
+    ```
+    * Note that the template parameter is not just a `typename`, but rather a `template<typename> class`. This simply means that the parameter is not just a type, bu rather a template itself, templated over a type whose name is omitted. For example crtpType can be Scale.
+    * This parameter is here to differentiate types only, and is not used in the implementation of crtp (except for the technical check in the friend declaration). Such an unused template parameter is called a `phantom type` (or to be more accurate here we could call it a `phantom template`).
+    * The class hierarchy now looks like the following:
+    * ![image](https://user-images.githubusercontent.com/34557994/210545784-c34da1b2-02c7-401c-b3b8-db82428a822e.png)
+
 #### [Function template](https://en.cppreference.com/w/cpp/language/function_template)
 
 * A function template defines a family of functions.
