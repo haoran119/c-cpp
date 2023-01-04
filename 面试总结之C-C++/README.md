@@ -10,7 +10,7 @@
 
 * [Solve C++ | HackerRank](https://www.hackerrank.com/domains/cpp)
 * [C++ Programming Language - GeeksforGeeks](https://www.geeksforgeeks.org/c-plus-plus/?ref=shm#C++inCompetitiveProgramming)
-    * [C++ Interview Questions For Freshers & Experienced - GeeksforGeeks](https://www.geeksforgeeks.org/cpp-interview-questions/)
+    * [C++ Interview Questions (2023)](https://www.geeksforgeeks.org/cpp-interview-questions/)
     * [Commonly Asked C++ Interview Questions | Set 1 - GeeksforGeeks](https://www.geeksforgeeks.org/commonly-asked-c-interview-questions-set-1/)
     * [Commonly Asked C++ Interview Questions | Set 2 - GeeksforGeeks](https://www.geeksforgeeks.org/commonly-asked-c-interview-questions-set-2/?ref=lbp)
     * [C/C++ Programs - GeeksforGeeks](https://www.geeksforgeeks.org/cc-programs/)	
