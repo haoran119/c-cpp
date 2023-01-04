@@ -2183,9 +2183,90 @@ Deletion time   | log(n) + Rebalance  | Same as search
 		* Because the presence of a user-defined (or = default or = delete declared) destructor, copy-constructor, or copy-assignment operator prevents implicit definition of the move constructor and the move assignment operator, any class for which move semantics are desirable, has to declare all five special member functions
 		* Unlike Rule of Three, failing to provide move constructor and move assignment is usually not an error, but a missed optimization opportunity.
 		* [C.21: If you define or =delete any copy, move, or destructor function, define or =delete them all](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c21-if-you-define-or-delete-any-copy-move-or-destructor-function-define-or-delete-them-all)
+		    * `Reason` `The semantics of copy, move, and destruction are closely related, so if one needs to be declared, the odds are that others need consideration too.`
+		    * Declaring any copy/move/destructor function, even as `=default` or `=delete`, will suppress the implicit declaration of a move constructor and move assignment operator. Declaring a move constructor or move assignment operator, even as `=default` or `=delete`, will cause an implicitly generated copy constructor or implicitly generated copy assignment operator to be defined as deleted. So as soon as any of these are declared, the others should all be declared to avoid unwanted effects like turning all potential moves into more expensive copies, or making a class move-only.
+		    * `Example, bad`
+            ```c++
+            struct M2 {   // bad: incomplete set of copy/move/destructor operations
+            public:
+                // ...
+                // ... no copy or move operations ...
+                ~M2() { delete[] rep; }
+            private:
+                pair<int, int>* rep;  // zero-terminated set of pairs
+            };
+
+            void use()
+            {
+                M2 x;
+                M2 y;
+                // ...
+                x = y;   // the default assignment
+                // ...
+            }
+            ```
+            * Given that “special attention” was needed for the destructor (here, to deallocate), the likelihood that the implicitly-defined copy and move assignment operators will be correct is low (here, we would get `double deletion`).
+            * `Note` This is known as `the rule of five.`
+            * `Note` If you want a default implementation (while defining another), write `=default` to show you’re doing so intentionally for that function. If you don’t want a generated default function, suppress it with `=delete`.
+            * `Example, good` When a destructor needs to be declared just to make it virtual, it can be defined as defaulted.
+            ```c++
+            class AbstractBase {
+            public:
+                virtual ~AbstractBase() = default;
+                // ...
+            };
+            ```
+            * To prevent slicing as per [C.67](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rc-copy-virtual), make the copy and move operations protected or `=delete`d, and add a `clone`:
+            ```c++
+            class ClonableBase {
+            public:
+                virtual unique_ptr<ClonableBase> clone() const;
+                virtual ~ClonableBase() = default;
+                CloneableBase() = default;
+                ClonableBase(const ClonableBase&) = delete;
+                ClonableBase& operator=(const ClonableBase&) = delete;
+                ClonableBase(ClonableBase&&) = delete;
+                ClonableBase& operator=(ClonableBase&&) = delete;
+                // ... other constructors and functions ...
+            };
+            ```
+            * Defining only the move operations or only the copy operations would have the same effect here, but stating the intent explicitly for each special member makes it more obvious to the reader.
+            * `Note` Compilers enforce much of this rule and ideally warn about any violation.
+            * `Note` Relying on an implicitly generated copy operation in a class with a destructor is deprecated.
+            * `Note` Writing these functions can be error-prone. Note their argument types:
+            ```c++
+            class X {
+            public:
+                // ...
+                virtual ~X() = default;            // destructor (virtual if X is meant to be a base class)
+                X(const X&) = default;             // copy constructor
+                X& operator=(const X&) = default;  // copy assignment
+                X(X&&) = default;                  // move constructor
+                X& operator=(X&&) = default;       // move assignment
+            };
+            ```
+            * A minor mistake (such as a misspelling, leaving out a `const`, using `&` instead of `&&`, or leaving out a special function) can lead to errors or warnings. To avoid the tedium and the possibility of errors, try to follow the [rule of zero](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rc-zero).
+            * `Enforcement` (Simple) A class should have a declaration (even a `=delete` one) for either `all` or `none` of the `copy/move/destructor functions`.
 	* Rule of zero
 		* Classes that have custom destructors, copy/move constructors or copy/move assignment operators should deal exclusively with ownership (which follows from the Single Responsibility Principle). Other classes should not have custom destructors, copy/move constructors or copy/move assignment operators[1].
 		* This rule also appears in the C++ Core Guidelines as [C.20: If you can avoid defining default operations, do](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c20-if-you-can-avoid-defining-default-operations-do).
+		    * `Reason` It’s the simplest and gives the cleanest semantics.
+		    * `Example`
+            ```c++
+            struct Named_map {
+            public:
+                // ... no default operations declared ...
+            private:
+                string name;
+                map<int, int> rep;
+            };
+
+            Named_map nm;        // default construct
+            Named_map nm2 {nm};  // copy construct
+            ```
+            * Since std::map and string have all the special functions, no further work is needed.
+            * `Note` This is known as `the rule of zero`.
+            * `Enforcement` (Not enforceable) While not enforceable, a good static analyzer can detect patterns that indicate a possible improvement to meet this rule. For example, a class with a (pointer, size) pair of members and a destructor that `delete`s the pointer could probably be converted to a `vector`.
 		* When a base class is intended for polymorphic use, its destructor may have to be declared public and virtual. This blocks implicit moves (and deprecates implicit copies), and so the special member functions have to be declared as defaulted[2].
 		* however, this makes the class prone to slicing, which is why polymorphic classes often define copy as deleted (see [C.67: A polymorphic class should suppress copying](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c67-a-polymorphic-class-should-suppress-public-copymove) in C++ Core Guidelines), which leads to the following generic wording for the Rule of Five:
 		* [C.21: If you define or =delete any default operation, define or =delete them all](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c21-if-you-define-or-delete-any-copy-move-or-destructor-function-define-or-delete-them-all)
