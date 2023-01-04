@@ -2268,8 +2268,62 @@ Deletion time   | log(n) + Rebalance  | Same as search
             * `Note` This is known as `the rule of zero`.
             * `Enforcement` (Not enforceable) While not enforceable, a good static analyzer can detect patterns that indicate a possible improvement to meet this rule. For example, a class with a (pointer, size) pair of members and a destructor that `delete`s the pointer could probably be converted to a `vector`.
 		* When a base class is intended for polymorphic use, its destructor may have to be declared public and virtual. This blocks implicit moves (and deprecates implicit copies), and so the special member functions have to be declared as defaulted[2].
-		* however, this makes the class prone to slicing, which is why polymorphic classes often define copy as deleted (see [C.67: A polymorphic class should suppress copying](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c67-a-polymorphic-class-should-suppress-public-copymove) in C++ Core Guidelines), which leads to the following generic wording for the Rule of Five:
-		* [C.21: If you define or =delete any default operation, define or =delete them all](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c21-if-you-define-or-delete-any-copy-move-or-destructor-function-define-or-delete-them-all)
+		* however, this makes the class prone to slicing, which is why polymorphic classes often define copy as deleted (see [C.67: A polymorphic class should suppress copying](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c67-a-polymorphic-class-should-suppress-public-copymove) in C++ Core Guidelines), which leads to the following generic wording for the `Rule of Five`: [C.21: If you define or =delete any default operation, define or =delete them all](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c21-if-you-define-or-delete-any-copy-move-or-destructor-function-define-or-delete-them-all)
+		* [C.67: A polymorphic class should suppress copying](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c67-a-polymorphic-class-should-suppress-public-copymove)
+		    * `Reason` A `polymorphic class` is a class that `defines or inherits at least one virtual function`. It is likely that it will be used as a base class for other derived classes with polymorphic behavior. If it is accidentally passed by value, with the implicitly generated copy constructor and assignment, we risk `slicing`: only the base portion of a derived object will be copied, and the polymorphic behavior will be corrupted.
+		    * If the class has no data, `=delete` the `copy/move` functions. Otherwise, make them `protected`.
+		    * `Example, bad`
+            ```c++
+            class B { // BAD: polymorphic base class doesn't suppress copying
+            public:
+                virtual char m() { return 'B'; }
+                // ... nothing about copy operations, so uses default ...
+            };
+
+            class D : public B {
+            public:
+                char m() override { return 'D'; }
+                // ...
+            };
+
+            void f(B& b)
+            {
+                auto b2 = b; // oops, slices the object; b2.m() will return 'B'
+            }
+
+            D d;
+            f(d);
+            ```
+            * `Example`
+            ```c++
+            class B { // GOOD: polymorphic class suppresses copying
+            public:
+                B() = default;
+                B(const B&) = delete;
+                B& operator=(const B&) = delete;
+                virtual char m() { return 'B'; }
+                // ...
+            };
+
+            class D : public B {
+            public:
+                char m() override { return 'D'; }
+                // ...
+            };
+
+            void f(B& b)
+            {
+                auto b2 = b; // ok, compiler will detect inadvertent copying, and protest
+            }
+
+            D d;
+            f(d);
+            ```
+            * `Note` If you need to create deep copies of polymorphic objects, use clone() functions: see [C.130](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-copy).
+            * `Exception` Classes that represent exception objects need both to be polymorphic and copy-constructible.
+            * `Enforcement`
+                * Flag a polymorphic class with a public copy operation.
+                * Flag an assignment of polymorphic class objects.
 	* [Rule of three (C++ programming) - Wikipedia](https://en.wikipedia.org/wiki/Rule_of_three_(C%2B%2B_programming))
 * [Zero-overhead principle - cppreference.com](https://en.cppreference.com/w/cpp/language/Zero-overhead_principle)
 	* The zero-overhead principle is a C++ design principle that states:
