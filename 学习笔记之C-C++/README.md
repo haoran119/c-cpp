@@ -5750,6 +5750,17 @@ D2::impl()
 	* The curiously recurring template pattern (CRTP) is an idiom in C++ in which a class X derives from a class template instantiation using X itself as a template argument.[1] More generally it is known as F-bound polymorphism, and it is a form of F-bounded quantification.
 * [Curiously recurring template pattern (CRTP) - GeeksforGeeks](https://www.geeksforgeeks.org/curiously-recurring-template-pattern-crtp-2/)
 
+###### [The Curiously Recurring Template Pattern (CRTP) - Fluent C++](https://www.fluentcpp.com/2017/05/12/curiously-recurring-template-pattern/)
+
+* The CRTP, episode One: Definition
+* The CRTP, episode Two: What the CRTP can bring to your code
+* The CRTP, episode Three: An implementation helper for the CRTP
+* What CRTP is
+    * The CRTP consists in:
+        * inheriting from a template class,
+        * use the derived class itself as a template parameter of the base class.
+
+
 #### [Function template](https://en.cppreference.com/w/cpp/language/function_template)
 
 * A function template defines a family of functions.
