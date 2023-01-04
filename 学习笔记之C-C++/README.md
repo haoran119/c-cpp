@@ -5813,6 +5813,103 @@ D2::impl()
     }
     ```
 
+#
+[What the Curiously Recurring Template Pattern can bring to your code - Fluent C++](https://www.fluentcpp.com/2017/05/16/what-the-crtp-brings-to-code/)
+
+* But there are several ways the `CRTP` can be useful. Here I am presenting the one that I see most in code, `Adding Functionality`, and another one that is interesting but that I don’t encounter as often: creating `Static Interfaces`.
+* Adding functionality
+    * Some classes provide generic functionality, that can be re-used by many other classes.
+    * This is where the CRTP comes into play. Here we can factor out the 3 numerical functions into a separate class:
+    * and use the CRTP to allow Sensitivity to use it:
+    * For this to work, the implementation of the 3 numerical methods need to access the getValue and setValue methods from the Sensitivity class:
+    * This way we effectively `added functionality` to the initial Sensitivity class by using the `CRTP`. And this class can be inherited from by other classes, by using the same technique.
+    ```c++
+    template <typename T>
+    struct NumericalFunctions
+    {
+        void scale(double multiplicator)
+        {
+            T& underlying = static_cast<T&>(*this);
+            underlying.setValue(underlying.getValue() * multiplicator);
+        }
+        void square()
+        {
+            T& underlying = static_cast<T&>(*this);
+            underlying.setValue(underlying.getValue() * underlying.getValue());
+        }
+        void setToOpposite()
+        {
+            scale(-1);
+        };
+    };
+
+    class Sensitivity : public NumericalFunctions<Sensitivity>
+    {
+    public:
+        double getValue() const;
+        void setValue(double value);
+        // rest of the sensitivity's rich interface...
+    };
+    ```
+* Why not non-member template functions?
+    * There is at least one argument for using the `CRTP` over `non-member template functions`: `the CRTP shows in the interface`.
+    * With the CRTP, you can see that Sensitivity offers the interface of NumericalFunctions:
+    * And with the template non-member functions you don’t. They would be hidden behind a `#include` somewhere.
+    * And even if you knew the existence of these 3 non-member functions, you wouldn’t have the guarantee that they would be compatible with a particular class (maybe they call get() or getData() instead of getValue()?). Whereas with the CRTP the code binding Sensitivity has already been compiled, so you know they have a `compatible interface`.
+* Who’s Your Interface Now?
+    * A interesting point to note is that, although the `CRTP` uses `inheritance`, its usage of it does not have the same meaning as other cases of inheritance.
+    * With the CRTP the situation is radically different. The derived class does not express the fact it `is a` base class. Rather, it `expands its interface` by inherting from the base class, in order to add more functionality. In this case it makes sense to use the derived class directly, and to never use the base class (which is true for this usage of the CRTP, but `not` the one described below on `static interfaces`).
+    * Therefore the base class is not the `interface`, and the derived class is not the `implementation`. Rather, it is the other way around: the base class uses the derived class methods (such as getValue and setValue). In this regard, `the derived class offers an interface to the base class`. This illustrates again the fact that inheritance in the context of the CRTP can express quite a different thing from classical inheritance.
+* Static interfaces
+    * The second usage of the CRTP is, as described in this [answer on Stack Overflow](http://stackoverflow.com/a/262984), to create `static interfaces`. In this case, the base class does represent the `interface` and the derived one does represent the `implementation`, as usual with `polymorphism`. But the difference with traditional polymorphism is that there is no `virtual` involved and all calls are resolved during `compilation`.
+    * Say we have two implementations for this interface: one that always returns a constant, and one whose value can be set. These two implementations inherit from the CRTP Amount base class:
+    ```c++
+    #include <iostream>
+
+    template <typename T>
+    class Amount
+    {
+    public:
+        double getValue() const
+        {
+            return static_cast<T const&>(*this).getValue();
+        }
+    };
+
+    class Constant42 : public Amount<Constant42>
+    {
+    public:
+        double getValue() const {return 42;}
+    };
+
+    class Variable : public Amount<Variable>
+    {
+    public:
+        explicit Variable(int value) : value_(value) {}
+        double getValue() const {return value_;}
+    private:
+        int value_;
+    };
+
+    template<typename T>
+    void print(Amount<T> const& amount)
+    {
+        std::cout << amount.getValue() << '\n';
+    }
+
+    int main()
+    {
+        Constant42 c42;
+        print(c42); // 42
+        Variable v(43);
+        print(v);   // 43
+
+        return 0;
+    }
+    ```
+    * The most important thing to note is that, although the Amount class is used polymorphically, there isn’t any `virtual` in the code. This means that the `polymorphic call` has been resolved `at compile-time`, thus avoiding the `run-time cost of virtual functions`. For more about this impact on performance you can see the [study Eli Bendersky made](http://eli.thegreenplace.net/2013/12/05/the-cost-of-dynamic-virtual-calls-vs-static-crtp-dispatch-in-c) on his (great) website.
+    * From a design point of view, we were able to avoid the virtual calls here because the information of which class to use was `available at compile-time`. And like we saw in the [Extract Interface refactoring at compile-time](https://www.fluentcpp.com/2017/04/28/extract-interface-cpp/), when you know the info, why wait until the last moment to use it?
+
 #### [Function template](https://en.cppreference.com/w/cpp/language/function_template)
 
 * A function template defines a family of functions.
