@@ -12170,16 +12170,193 @@ After resize up to 6 (initializer = 4): 1 2 4 4 4 4
 
 #### [std::deque](https://en.cppreference.com/w/cpp/container/deque)
 
-* std::deque (double-ended queue) is an indexed sequence container that allows fast insertion and deletion at both its beginning and its end. In addition, insertion and deletion at either end of a deque never invalidates pointers or references to the rest of the elements.
-* As opposed to std::vector, the elements of a deque are not stored contiguously: typical implementations use a sequence of individually allocated fixed-size arrays, with additional bookkeeping, which means indexed access to deque must perform two pointer dereferences, compared to vector's indexed access which performs only one.
+* Defined in header `<deque>`
+```c++
+template<
+    class T,
+    class Allocator = std::allocator<T>
+> class deque;  (1)	
+namespace pmr {
+    template< class T >
+    using deque = std::deque<T, std::pmr::polymorphic_allocator<T>>;
+}   (2)	(since C++17)
+```
+* `std::deque` (`double-ended queue`) is an indexed sequence container that allows `fast insertion and deletion` at both its `beginning` and its `end`. In addition, `insertion and deletion at either end of a deque never invalidates pointers or references to the rest of the elements`.
+* As opposed to std::vector, the elements of a deque are `not` stored contiguously: typical implementations use a sequence of individually allocated fixed-size arrays, with additional bookkeeping, which means indexed access to deque must perform two pointer dereferences, compared to vector's indexed access which performs only one.
 * The storage of a deque is automatically expanded and contracted as needed. Expansion of a deque is cheaper than the expansion of a std::vector because it does not involve copying of the existing elements to a new memory location. On the other hand, deques typically have large minimal memory cost; a deque holding just one element has to allocate its full internal array (e.g. 8 times the object size on 64-bit libstdc++; 16 times the object size or 4096 bytes, whichever is larger, on 64-bit libc++).
 * The complexity (efficiency) of common operations on deques is as follows:
-	* Random access - constant O(1)
-	* Insertion or removal of elements at the end or beginning - constant O(1)
-	* Insertion or removal of elements - linear O(n)
+	* `Random access` - constant O(1)
+	* `Insertion or removal of elements at the end or beginning` - constant O(1)
+	* `Insertion or removal of elements` - linear O(n)
 * std::deque meets the requirements of Container, AllocatorAwareContainer, SequenceContainer and ReversibleContainer.
-* [deque - C++ Reference](http://www.cplusplus.com/reference/deque/deque/)
-	* deque (usually pronounced like "deck") is an irregular acronym of double-ended queue. Double-ended queues are sequence containers with dynamic sizes that can be expanded or contracted on both ends (either its front or its back).
+* Example
+```c++
+#include <iostream>
+#include <deque>
+ 
+int main()
+{
+    // Create a deque containing integers
+    std::deque<int> d = {7, 5, 16, 8};
+ 
+    // Add an integer to the beginning and end of the deque
+    d.push_front(13);
+    d.push_back(25);
+ 
+    // Iterate and print values of deque
+    for(int n : d)
+        std::cout << n << ' ';
+}
+/*
+13 7 5 16 8 25
+*/
+```
+
+##### Member functions
+
+###### Capacity
+
+* [std::deque<T,Allocator>::size](https://en.cppreference.com/w/cpp/container/deque/size)
+    * Returns the number of elements in the container, i.e. `std::distance(begin(), end())`.
+
+###### Modifiers
+
+* [std::deque<T,Allocator>::erase](https://en.cppreference.com/w/cpp/container/deque/erase)
+    * erases elements (public member function)
+    * Erases the specified elements from the container.
+        * 1) Removes the element at `pos`.
+        * 2) Removes the elements in the range `[first, last)`.
+    * All iterators and references are invalidated, unless the erased elements are at the `end` or the `beginning` of the container, in which case only the iterators and references to the erased elements are invalidated.
+    * The past-the-end iterator is also invalidated unless the erased elements are at the beginning of the container and the last element is not erased.
+    * The iterator `pos` must be valid and dereferenceable. Thus the [end()](https://en.cppreference.com/w/cpp/container/deque/end) iterator (which is valid, but is not dereferenceable) cannot be used as a value for `pos`.
+    * The iterator `first` does not need to be dereferenceable if `first == last`: erasing an empty range is a no-op.
+    * Return value
+        * Iterator following the last removed element.
+        * If `pos` refers to the last element, then the `end()` iterator is returned.
+        * If `last == end()` prior to removal, then the updated `end()` iterator is returned.
+        * If `[first, last)` is an empty range, then `last` is returned.
+    * Exceptions
+        * Does not throw unless an exception is thrown by the assignment operator of T.
+    * Complexity
+        * Linear: the number of calls to the destructor of T is the same as the number of elements erased, the number of calls to the assignment operator of T is no more than the lesser of the number of elements before the erased elements and the number of elements after the erased elements
+    * Example
+    ```c++
+    #include <deque>
+    #include <iostream>
+
+
+    void print_container(const std::deque<int>& c) 
+    {
+        for (int i : c)
+            std::cout << i << " ";
+        std::cout << '\n';
+    }
+
+    int main( )
+    {
+        std::deque<int> c{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        print_container(c);
+
+        c.erase(c.begin());
+        print_container(c);
+
+        c.erase(c.begin()+2, c.begin()+5);
+        print_container(c);
+
+        // Erase all even numbers
+        for (std::deque<int>::iterator it = c.begin(); it != c.end();)
+        {
+            if (*it % 2 == 0)
+                it = c.erase(it);
+            else
+                ++it;
+        }
+        print_container(c);
+    }
+    /*
+    0 1 2 3 4 5 6 7 8 9
+    1 2 3 4 5 6 7 8 9
+    1 2 6 7 8 9
+    1 7 9
+    */
+    ```
+* [std::deque<T,Allocator>::pop_back](https://en.cppreference.com/w/cpp/container/deque/pop_back)
+    * Removes the last element of the container.
+    * Calling pop_back on an empty container results in `undefined behavior`.
+    * Iterators and references to the erased element are invalidated. The past-the-end iterator is also invalidated. Other references and iterators are not affected.
+    * Example
+    ```c++
+    #include <deque>
+    #include <iostream>
+
+    template<typename T>
+    void print(T const & xs)
+    {
+        std::cout << "[ ";
+        for(auto const & x : xs) {
+            std::cout << x << ' ';
+        }
+        std::cout << "]\n";
+    }
+
+    int main()
+    {
+        std::deque<int> numbers;
+
+        print(numbers); 
+
+        numbers.push_back(5);
+        numbers.push_back(3);
+        numbers.push_back(4);
+
+        print(numbers); 
+
+        numbers.pop_back();
+
+        print(numbers); 
+    }
+    /*
+    [ ]
+    [ 5 3 4 ]
+    [ 5 3 ]
+    */
+    ```
+* [std::deque<T,Allocator>::push_front](https://en.cppreference.com/w/cpp/container/deque/push_front)    
+    * inserts an element to the beginning (public member function)
+    * Prepends the given element value to the beginning of the container.
+    * All iterators, including the past-the-end iterator, are invalidated. No references are invalidated.
+    * Complexity
+        * Constant.
+    * Exceptions
+        * If an exception is thrown, this function has no effect (strong exception guarantee).
+    * Example
+    ```c++
+    #include <deque>
+    #include <iostream>
+    #include <iomanip>
+    #include <string>
+
+    int main()
+    {
+        std::deque<std::string> letters;
+
+        letters.push_front("abc");
+        std::string s{"def"};
+        letters.push_front(std::move(s));
+
+        std::cout << "std::deque `letters` holds: ";
+        for (auto&& e : letters) std::cout << std::quoted(e) << ' ';
+
+        std::cout << "\nMoved-from string `s` holds: " << std::quoted(s) << '\n';
+    }
+    /*
+    std::deque `letters` holds: "def" "abc" 
+    Moved-from string `s` holds: ""
+    */
+    ```
+    
+##### MISC
+
 * [Sliding Window Maximum (Maximum of all subarrays of size k) - GeeksforGeeks](https://www.geeksforgeeks.org/sliding-window-maximum-maximum-of-all-subarrays-of-size-k/#disqus_thread)
 * [Deque-STL | HackerRank](https://www.hackerrank.com/challenges/deque-stl/problem)
 ```c++
