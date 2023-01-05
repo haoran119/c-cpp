@@ -13834,8 +13834,31 @@ Top element: 6
 
 #### [std::queue](https://en.cppreference.com/w/cpp/container/queue)
 
-* The std::queue class is a container adaptor that gives the programmer the functionality of a queue - specifically, a FIFO (first-in, first-out) data structure.
-* The class template acts as a wrapper to the underlying container - only a specific set of functions is provided. The queue pushes the elements on the back of the underlying container and pops them from the front.
+* The std::queue class is a container adaptor that gives the programmer the functionality of a queue - specifically, a `FIFO` (`first-in, first-out`) data structure.
+* The class template acts as a wrapper to the underlying container - only a specific set of functions is provided. The queue `pushes the elements on the back` of the underlying container and `pops them from the front`.
+
+##### Template parameters
+
+* T	- The type of the stored elements. `The behavior is undefined if T is not the same type as Container::value_type. (since C++17)`
+* Container	- The type of the underlying container to use to store the elements. The container must satisfy the requirements of [SequenceContainer](https://en.cppreference.com/w/cpp/named_req/SequenceContainer). Additionally, it must provide the following functions with the usual semantics:
+    * back()
+    * front()
+    * push_back()
+    * pop_front()
+    * The standard containers [std::deque](https://en.cppreference.com/w/cpp/container/deque) and [std::list](https://en.cppreference.com/w/cpp/container/list) satisfy these requirements.
+
+##### Member functions
+
+###### Modifiers
+
+* [std::queue<T,Container>::push](https://en.cppreference.com/w/cpp/container/queue/push)
+    * inserts element at the end (public member function)
+    * Pushes the given element value to the end of the queue.
+        * 1) Effectively calls `c.push_back(value)`
+        * 2) Effectively calls `c.push_back(std::move(value))`
+* [std::queue<T,Container>::pop](https://en.cppreference.com/w/cpp/container/queue/pop)
+    * removes the first element (public member function)
+    * Removes an element from the front of the queue. Effectively calls `c.pop_front()`
 
 #### [std::priority_queue](https://en.cppreference.com/w/cpp/container/priority_queue)
 
