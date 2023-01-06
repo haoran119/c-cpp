@@ -13501,8 +13501,8 @@ template <
                             std::pmr::polymorphic_allocator<std::pair<const Key,T>>>;
 }   (2)	(since C++17)
 ```
-* Unordered map is an associative container that contains key-value pairs with unique keys. Search, insertion, and removal of elements have average constant-time complexity.
-* Internally, the elements are not sorted in any particular order, but organized into buckets. Which bucket an element is placed into depends entirely on the hash of its key. Keys with the same hash code appear in the same bucket. This allows fast access to individual elements, since once the hash is computed, it refers to the exact bucket the element is placed into.
+* Unordered map is an `associative container` that contains `key-value pairs` with `unique keys`. Search, insertion, and removal of elements have `average constant-time complexity`.
+* Internally, the elements are `not sorted` in any particular order, but organized into `buckets`. Which bucket an element is placed into depends entirely on the hash of its key. Keys with the same hash code appear in the same bucket. This allows fast access to individual elements, since once the hash is computed, it refers to the exact bucket the element is placed into.
 * std::unordered_map meets the requirements of Container, AllocatorAwareContainer, UnorderedAssociativeContainer.
 * Example
 ```c++
@@ -13815,6 +13815,11 @@ int main()
 	* Returns a reference to the value that is mapped to a key equivalent to key, performing an insertion if such key does not already exist.
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::count - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/count)
 	* returns the number of elements matching specific key
+	* Return value
+	    * 1) Number of elements with key key, that is either 1 or 0.
+	    * 2) Number of elements with key that compares equivalent to x.
+    * Complexity
+        * Constant on average, worst case linear in the size of the container.
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/find)
 	* finds element with specific key (public member function)
 	* Return value
