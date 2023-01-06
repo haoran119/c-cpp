@@ -12832,17 +12832,107 @@ int main()
 
 #### [std::map](https://en.cppreference.com/w/cpp/container/map)
 
-* std::map is a sorted associative container that contains key-value pairs with unique keys. Keys are sorted by using the comparison function Compare. Search, removal, and insertion operations have logarithmic complexity. Maps are usually implemented as red-black trees.
-* Everywhere the standard library uses the Compare requirements, uniqueness is determined by using the equivalence relation. In imprecise terms, two objects a and b are considered equivalent (not unique) if neither compares less than the other: !comp(a, b) && !comp(b, a).
+* Defined in header `<map>`
+```c++
+template<
+    class Key,
+    class T,
+    class Compare = std::less<Key>,
+    class Allocator = std::allocator<std::pair<const Key, T>>
+> class map;    (1)	
+namespace pmr {
+    template< class Key, class T, class Compare = std::less<Key> >
+    using map = std::map<
+        Key, T, Compare,
+        std::pmr::polymorphic_allocator<std::pair<const Key, T>>
+    >;
+}   (2)	(since C++17)
+```
+* std::map is a `sorted associative container` that contains `key-value pairs` with `unique keys`. Keys are sorted by using the comparison function Compare. Search, removal, and insertion operations have `logarithmic complexity`. Maps are usually implemented as [red-black trees](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree).
+* Everywhere the standard library uses the Compare requirements, uniqueness is determined by using the equivalence relation. In imprecise terms, two objects `a` and `b` are considered equivalent (not unique) if neither compares less than the other: `!comp(a, b) && !comp(b, a)`.
 * std::map meets the requirements of Container, AllocatorAwareContainer, AssociativeContainer and ReversibleContainer.
-* [map - C++ Reference](http://www.cplusplus.com/reference/map/map/)
-* [(constructor)](https://en.cppreference.com/w/cpp/container/map/map)
-	* constructs the map (public member function)
-	* Constructs new container from a variety of data sources and optionally using user supplied allocator alloc or comparison function object comp.
-	* [Copy a map in C++ | Techie Delight](https://www.techiedelight.com/copy-a-map-in-cpp/)
-		* 1. Using copy constructor
-		* 2. Using std::map::insert
-		* 3. Using std::copy 
+* Example
+```c++
+#include <iostream>
+#include <map>
+#include <string>
+#include <string_view>
+ 
+void print_map(std::string_view comment, const std::map<std::string, int>& m)
+{
+    std::cout << comment;
+    // iterate using C++17 facilities
+    for (const auto& [key, value] : m)
+        std::cout << '[' << key << "] = " << value << "; ";
+ 
+// C++11 alternative:
+//  for (const auto& n : m)
+//      std::cout << n.first << " = " << n.second << "; ";
+//
+// C++98 alternative
+//  for (std::map<std::string, int>::const_iterator it = m.begin(); it != m.end(); it++)
+//      std::cout << it->first << " = " << it->second << "; ";
+ 
+    std::cout << '\n';
+}
+ 
+int main()
+{
+    // Create a map of three (string, int) pairs
+    std::map<std::string, int> m{{"CPU", 10}, {"GPU", 15}, {"RAM", 20}};
+ 
+    print_map("1) Initial map: ", m);
+ 
+    m["CPU"] = 25; // update an existing value
+    m["SSD"] = 30; // insert a new value
+    print_map("2) Updated map: ", m);
+ 
+    // using operator[] with non-existent key always performs an insert
+    std::cout << "3) m[UPS] = " << m["UPS"] << '\n';
+    print_map("4) Updated map: ", m);
+ 
+    m.erase("GPU");
+    print_map("5) After erase: ", m);
+ 
+    std::erase_if(m, [](const auto& pair){ return pair.second > 25; });
+    print_map("6) After erase: ", m);
+    std::cout << "7) m.size() = " << m.size() << '\n';
+ 
+    m.clear();
+    std::cout << std::boolalpha << "8) Map is empty: " << m.empty() << '\n';
+}
+/*
+1) Initial map: [CPU] = 10; [GPU] = 15; [RAM] = 20; 
+2) Updated map: [CPU] = 25; [GPU] = 15; [RAM] = 20; [SSD] = 30; 
+3) m[UPS] = 0
+4) Updated map: [CPU] = 25; [GPU] = 15; [RAM] = 20; [SSD] = 30; [UPS] = 0; 
+5) After erase: [CPU] = 25; [RAM] = 20; [SSD] = 30; [UPS] = 0; 
+6) After erase: [CPU] = 25; [RAM] = 20; [UPS] = 0; 
+7) m.size() = 3
+8) Map is empty: true
+*/
+```
+
+##### Member functions
+
+###### [std::map<Key,T,Compare,Allocator>::map](https://en.cppreference.com/w/cpp/container/map/map)
+
+* constructs the map (public member function)
+* Constructs new container from a variety of data sources and optionally using user supplied allocator alloc or comparison function object comp.
+* [Copy a map in C++ | Techie Delight](https://www.techiedelight.com/copy-a-map-in-cpp/)
+    * 1. Using copy constructor
+    * 2. Using std::map::insert
+    * 3. Using std::copy 
+* [Descending Order in Map and Multimap of C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/descending-order-map-multimap-c-stl/)
+	* We can use the third parameter, that is std::greater along with map and multimap to store elements in descending order.
+	* Descending order in the map: 
+		* A map stores key-value pairs. A self-balancing-BST (typically Red-Black tree) is used to implement it.
+```c++
+map<key_datatype, value_datatype, greater<int> > mapName;
+```
+
+###### Element access
+
 * [map::operator[] - C++ Reference](http://www.cplusplus.com/reference/map/map/operator[]/)
 	* access or insert specified element (public member function)
 	* If k matches the key of an element in the container, the function returns a reference to its mapped value.
@@ -12853,6 +12943,9 @@ int main()
 * !!! DON'T use double as the key as it could not be found due to the double precision
 	* [c++ - Floating point keys in std:map - Stack Overflow](https://stackoverflow.com/questions/6684573/floating-point-keys-in-stdmap)
 	* use static_cast\<int>(std::round(key * 10)) as key instead
+
+###### Iterators
+
 * [std::map<Key,T,Compare,Allocator>::begin, std::map<Key,T,Compare,Allocator>::cbegin - cppreference.com](https://en.cppreference.com/w/cpp/container/map/begin)
 	* Returns an iterator to the first element of the map.
 	* If the map is empty, the returned iterator will be equal to end().
@@ -12877,6 +12970,9 @@ int main()
 * [std::map<Key,T,Compare,Allocator>::rend, std::map<Key,T,Compare,Allocator>::crend - cppreference.com](https://en.cppreference.com/w/cpp/container/map/rend)
 	* returns a reverse iterator to the end (public member function)
 	* Returns a reverse iterator to the element following the last element of the reversed map. It corresponds to the element preceding the first element of the non-reversed map. This element acts as a placeholder, attempting to access it results in undefined behavior.
+
+###### Capacity
+
 * [std::map<Key,T,Compare,Allocator>::empty - cppreference.com](https://en.cppreference.com/w/cpp/container/map/empty)
 	* checks whether the container is empty (public member function)
 	* Checks if the container has no elements, i.e. whether begin() == end().
@@ -12884,6 +12980,9 @@ int main()
 		* true if the container is empty, false otherwise
 	* Complexity
 		* Constant. 
+
+###### Modifiers
+
 * [std::map<Key,T,Compare,Allocator>::clear - cppreference.com](https://en.cppreference.com/w/cpp/container/map/clear)
 	* clears the contents (public member function)
 	* Erases all elements from the container. After this call, size() returns zero.
@@ -13167,6 +13266,9 @@ mb.at(5): X
 10, banana
 */
 ```
+
+###### Lookup
+
 * [std::map<Key,T,Compare,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/container/map/find)
 	* finds element with specific key (public member function)
 	* Return value
@@ -13237,18 +13339,18 @@ int main()
     return 0;
 }
 ```
-* [std::erase_if (std::map) - cppreference.com](https://en.cppreference.com/w/cpp/container/map/erase_if)
-	* Erases all elements satisfying specific criteria (function template)
-	* `erase_if( std::map<Key,T,Compare,Alloc>& c, Pred pred );` (since C++20)
-	* Return value
-		* The number of erased elements.
-* [Descending Order in Map and Multimap of C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/descending-order-map-multimap-c-stl/)
-	* We can use the third parameter, that is std::greater along with map and multimap to store elements in descending order.
-	* Descending order in the map: 
-		* A map stores key-value pairs. A self-balancing-BST (typically Red-Black tree) is used to implement it.
-```c++
-map<key_datatype, value_datatype, greater<int> > mapName;
-```
+
+##### Non-member functions
+
+###### [std::erase_if (std::map)](https://en.cppreference.com/w/cpp/container/map/erase_if)
+
+* Erases all elements satisfying specific criteria (function template)
+* `erase_if( std::map<Key,T,Compare,Alloc>& c, Pred pred );` (since C++20)
+* Return value
+    * The number of erased elements.
+
+##### MISC
+
 * [Maps-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-maps/problem)
 ```c++
 #include <cmath>
