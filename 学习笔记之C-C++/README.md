@@ -12461,8 +12461,19 @@ int main()
 
 #### [std::list](https://en.cppreference.com/w/cpp/container/list)
 
-* std::list is a container that supports constant time insertion and removal of elements from anywhere in the container. Fast random access is not supported. It is usually implemented as a doubly-linked list. Compared to std::forward_list this container provides bidirectional iteration capability while being less space efficient.
-* Adding, removing and moving the elements within the list or across several lists does not invalidate the iterators or references. An iterator is invalidated only when the corresponding element is deleted.
+* Defined in header `<list>`
+```c++
+template<
+    class T,
+    class Allocator = std::allocator<T>
+> class list;   (1)	
+namespace pmr {
+    template <class T>
+    using list = std::list<T, std::pmr::polymorphic_allocator<T>>;
+}   (2)	(since C++17)
+```
+* std::list is a container that supports `constant time` `insertion and removal of elements from anywhere` in the container. `Fast random access` is `not` supported. It is usually implemented as a `doubly-linked list`. Compared to `std::forward_list` this container provides `bidirectional iteration` capability while being `less space efficient`.
+* Adding, `removing and moving` the elements within the list or across several lists does `not invalidate` the iterators or references. An iterator is invalidated `only` when the corresponding element is `deleted`.
 * std::list meets the requirements of Container, AllocatorAwareContainer, SequenceContainer and ReversibleContainer.
 ```c++
 #include <algorithm>
