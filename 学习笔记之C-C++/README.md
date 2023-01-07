@@ -13822,6 +13822,10 @@ int main()
     ```
 * [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::erase](https://en.cppreference.com/w/cpp/container/unordered_map/erase)
     * erases elements (public member function)
+    * `iterator erase( const_iterator pos );`   (1)
+    * `iterator erase( const_iterator first, const_iterator last );`    (2)	
+    * `size_type erase( const Key& key );`  (3)
+    * `template< class K > size_type erase( K&& x );`   (4)	(since C++23)
     * Removes specified elements from the container.
         * 1) Removes the element at `pos`.
         * 2) Removes the elements in the range `[first; last)`, which must be a valid range in `*this`.
