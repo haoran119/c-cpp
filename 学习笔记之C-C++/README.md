@@ -10019,22 +10019,32 @@ int main()
 
 ### Pairs and tuples
 
-* Defined in header \<utility>
+* Defined in header `<utility>`
 
 | [pair](https://en.cppreference.com/w/cpp/utility/pair) | implements binary tuple, i.e. a pair of values(class template) |
 | - | - |
 | [tuple](https://en.cppreference.com/w/cpp/utility/tuple) | implements fixed size container, which holds elements of possibly different types(class template) |
 
-* [std::pair - cppreference.com](https://en.cppreference.com/w/cpp/utility/pair)
-	* std::pair is a class template that provides a way to store two heterogeneous objects as a single unit. A pair is a specific case of a std::tuple with two elements.
-	* If neither T1 nor T2 is a possibly cv-qualified class type with non-trivial destructor, or array thereof, the destructor of pair is trivial.
-	* Member objects
-		* Member name
-			* first
-			* second
-	* Non-member functions
-		* [make_pair](https://en.cppreference.com/w/cpp/utility/pair/make_pair)
-			* creates a pair object of type, defined by the argument types(function template)
+#### [std::pair](https://en.cppreference.com/w/cpp/utility/pair)
+
+* Defined in header `<utility>`
+* std::pair is a class template that provides a way to store two heterogeneous objects as a single unit. A pair is a specific case of a std::tuple with two elements.
+* If neither T1 nor T2 is a possibly cv-qualified class type with non-trivial destructor, or array thereof, the destructor of pair is trivial.
+
+##### Member objects
+
+* Member name
+    * first
+    * second
+
+##### Non-member functions
+
+###### [std::make_pair](https://en.cppreference.com/w/cpp/utility/pair/make_pair)
+
+* creates a pair object of type, defined by the argument types(function template)
+
+##### MISC
+
 * [Pair in C++ Standard Template Library (STL) - GeeksforGeeks](https://www.geeksforgeeks.org/pair-in-cpp-stl/)
 * [c++ - Check if pair is empty or uninitialized - Stack Overflow](https://stackoverflow.com/questions/57109084/check-if-pair-is-empty-or-uninitialized)
 ```c++
@@ -10047,49 +10057,13 @@ if (res) // the pair is initialized and usable
 else // ... it's not, hence initialize it
    res = std::make_pair(42, 43);
 ```
-* [std::tuple - cppreference.com](https://en.cppreference.com/w/cpp/utility/tuple)
-	* Class template std::tuple is a fixed-size collection of heterogeneous values. It is a generalization of std::pair.
-	* If std::is_trivially_destructible\<Ti>::value is true for every Ti in Types, the destructor of tuple is trivial.
-	* Non-member functions
-		* [make_tuple](https://en.cppreference.com/w/cpp/utility/tuple/make_tuple)
-			* creates a tuple object of the type defined by the argument types(function template)
-		* [std::tie - cppreference.com](https://en.cppreference.com/w/cpp/utility/tuple/tie)
-			* creates a tuple of lvalue references or unpacks a tuple into individual objects (function template)
-			* Creates a tuple of lvalue references to its arguments or instances of std::ignore.
-			* Notes
-				* std::tie may be used to unpack a std::pair because std::tuple has a converting assignment from pairs
-	* Helper classes
-		* [std::ignore - cppreference.com](https://en.cppreference.com/w/cpp/utility/tuple/ignore)
-			* placeholder to skip an element when unpacking a tuple using tie (constant)
-			* An object of unspecified type such that any value can be assigned to it with no effect. Intended for use with std::tie when unpacking a std::tuple, as a placeholder for the arguments that are not used.
-			* While the behavior of std::ignore outside of std::tie is not formally specified, some code guides recommend using std::ignore to avoid warnings from unused return values of [[nodiscard]] functions.
-```c++
-#include <iostream>
-#include <string>
-#include <set>
-#include <tuple>
- 
-[[nodiscard]] int dontIgnoreMe()
-{
-    return 42;
-}
- 
-int main()
-{
-    std::ignore = dontIgnoreMe();
- 
-    std::set<std::string> set_of_str;
-    bool inserted = false;
-    std::tie(std::ignore, inserted) = set_of_str.insert("Test");
-    if (inserted) {
-        std::cout << "Value was inserted successfully\n";
-    }
-}
-/*
-Value was inserted successfully
-*/
-```
-* [Tuples in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/tuples-in-c/)
+
+#### [std::tuple](https://en.cppreference.com/w/cpp/utility/tuple)
+
+* Defined in header `<tuple>`
+* Class template std::tuple is a `fixed-size` collection of `heterogeneous` values. It is a generalization of `std::pair`.
+* If `std::is_trivially_destructible<Ti>::value` is `true` for every Ti in Types, the destructor of tuple is trivial.
+* Example
 ```c++
 #include <tuple>
 #include <iostream>
@@ -10129,6 +10103,91 @@ int main()
               << "name: " << name2 << '\n';
 }
 ```
+
+##### Non-member functions
+
+###### [std::make_tuple](https://en.cppreference.com/w/cpp/utility/tuple/make_tuple)
+
+* creates a tuple object of the type defined by the argument types(function template)
+
+###### [std::tie](https://en.cppreference.com/w/cpp/utility/tuple/tie)
+
+* creates a tuple of lvalue references or unpacks a tuple into individual objects (function template)
+* Creates a tuple of lvalue references to its arguments or instances of std::ignore.
+* Notes
+    * std::tie may be used to unpack a std::pair because std::tuple has a converting assignment from pairs
+
+###### [std::get(std::tuple)](https://en.cppreference.com/w/cpp/utility/tuple/get)
+
+* tuple accesses specified element (function template)
+* 1-4) Extracts the Ith element from the tuple. I must be an integer value in `[0, sizeof...(Types))`.
+* 5-8) Extracts the element of the tuple t whose type is T. Fails to compile unless the tuple has exactly one element of that type.
+* Parameters
+    * t	-	tuple whose contents to extract
+* Return value
+    * A `reference` to the selected element of t.
+* Example
+```c++
+#include <iostream>
+#include <string>
+#include <tuple>
+ 
+int main()
+{
+    auto t = std::make_tuple(1, "Foo", 3.14);
+    
+    std::get<0>(t) = -1;
+    
+    // index-based access
+    std::cout << "(" << std::get<0>(t) << ", " << std::get<1>(t)
+              << ", " << std::get<2>(t) << ")\n";
+    // type-based access (C++14 or later)
+    std::cout << "(" << std::get<int>(t) << ", " << std::get<const char*>(t)
+              << ", " << std::get<double>(t) << ")\n";
+    // Note: std::tie and structured binding may also be used to decompose a tuple
+}
+/*
+(-1, Foo, 3.14)
+(-1, Foo, 3.14)
+*/
+```
+
+##### Helper classes
+
+* [std::ignore - cppreference.com](https://en.cppreference.com/w/cpp/utility/tuple/ignore)
+    * placeholder to skip an element when unpacking a tuple using tie (constant)
+    * An object of unspecified type such that any value can be assigned to it with no effect. Intended for use with std::tie when unpacking a std::tuple, as a placeholder for the arguments that are not used.
+    * While the behavior of std::ignore outside of std::tie is not formally specified, some code guides recommend using std::ignore to avoid warnings from unused return values of [[nodiscard]] functions.
+```c++
+#include <iostream>
+#include <string>
+#include <set>
+#include <tuple>
+ 
+[[nodiscard]] int dontIgnoreMe()
+{
+    return 42;
+}
+ 
+int main()
+{
+    std::ignore = dontIgnoreMe();
+ 
+    std::set<std::string> set_of_str;
+    bool inserted = false;
+    std::tie(std::ignore, inserted) = set_of_str.insert("Test");
+    if (inserted) {
+        std::cout << "Value was inserted successfully\n";
+    }
+}
+/*
+Value was inserted successfully
+*/
+```
+
+##### MISC
+
+* [Tuples in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/tuples-in-c/)
 * [【C++11】让程序更简洁—tuple元组](https://mp.weixin.qq.com/s/TiU3L9vkyD-gSr5UD3jAGw)
 	* tuple元组是一个泛化的std::pair，可以在一个数据结构中保存不同类型的变量，这一点和C#里面的tupe类似，由此可见，C++也在逐渐吸收其他编程语言的优良特性，加入到自己的势力范围里面来。
 
