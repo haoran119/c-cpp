@@ -14239,9 +14239,35 @@ int main()
 #### [std::prev](https://en.cppreference.com/w/cpp/iterator/prev)
 
 * decrement an iterator (function template)
-* Return the nth predecessor of iterator it.
+* Return the nth predecessor (or -nth successor if n is negative) of iterator it.
+* Complexity
+    * Linear.
+    * However, if BidirIt additionally meets the requirements of LegacyRandomAccessIterator, complexity is constant.
 * Notes
-    * Although the expression --c.end() often compiles, it is not guaranteed to do so: c.end() is an rvalue expression, and there is no iterator requirement that specifies that decrement of an rvalue is guaranteed to work. In particular, when iterators are implemented as pointers or its operator-- is lvalue-ref-qualified, --c.end() does not compile, while std::prev(c.end()) does.
+    * Although the expression `--c.end()` often compiles, it is not guaranteed to do so: `c.end()` is an rvalue expression, and there is no iterator requirement that specifies that decrement of an rvalue is guaranteed to work. In particular, when iterators are implemented as pointers or its `operator--` is lvalue-ref-qualified, `--c.end()` does not compile, while `std::prev(c.end())` does.
+* Example
+```c++
+#include <iostream>
+#include <iterator>
+#include <vector>
+ 
+int main()
+{
+    std::vector<int> v{ 3, 1, 4 };
+ 
+    auto it = v.end();
+    auto pv = std::prev(it, 2);
+    std::cout << *pv << '\n';
+ 
+    it = v.begin();
+    pv = std::prev(it, -2);
+    std::cout << *pv << '\n';
+}
+/*
+1
+4
+*/
+```
 
 ### Range access
 
