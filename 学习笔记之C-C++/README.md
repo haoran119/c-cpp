@@ -1947,6 +1947,7 @@ The value "Hello" already exists in the set.
 1 2 3 4
 */
 ```
+* !!! Be careful of using `auto& [b, d, p, q] = s;` if s is deleted, b will be invalidated as well. In this case, use `auto` rather than `auto&`
 * [C++17常用新特性(三)---结构化绑定](https://mp.weixin.qq.com/s?__biz=MjM5ODg5MDIzOQ==&mid=2650491856&idx=1&sn=d676113480a097e2b3fd156c5096e0fd&chksm=becc344089bbbd56b357e949b694534a4a8146c548114c9d20f8612b7fe9b1f4297948018fc7&scene=21#wechat_redirect)
 	* 1 结构化绑定概述
 	* 2 细品结构化绑定
