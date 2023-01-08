@@ -12612,18 +12612,21 @@ The first character is 'o'.
         * 1) Removes the element at pos.
         * 2) Removes the elements in the range \[first, last).
     * References and iterators to the erased elements are invalidated. Other references and iterators are not affected.
-    * The iterator pos must be valid and dereferenceable. Thus the end() iterator (which is valid, but is not dereferenceable) cannot be used as a value for pos.
-    * The iterator first does not need to be dereferenceable if first == last: erasing an empty range is a no-op.
+    * The iterator `pos` must be valid and dereferenceable. Thus the [end()](https://en.cppreference.com/w/cpp/container/list/end) iterator (which is valid, but is not dereferenceable) cannot be used as a value for `pos`.
+    * The iterator `first` does not need to be dereferenceable if `first == last`: erasing an empty range is a no-op.
+    * Parameters
+        * pos	-	iterator to the element to remove
+        * first, last	-	range of elements to remove
     * Return value
         * Iterator following the last removed element.
-        * If pos refers to the last element, then the end() iterator is returned.
-        * If last == end() prior to removal, then the updated end() iterator is returned.
-        * If \[first, last) is an empty range, then last is returned.
+        * If `pos` refers to the last element, then the `end()` iterator is returned.
+        * If `last == end()` prior to removal, then the updated `end()` iterator is returned.
+        * If `[first, last)` is an empty range, then `last` is returned.
     * Exceptions
         * (none)
     * Complexity
         * 1) Constant.
-        * 2) Linear in the distance between first and last.
+        * 2) Linear in the distance between `first` and `last`.
 ```c++
 #include <list>
 #include <iostream>
