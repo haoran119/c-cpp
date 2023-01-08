@@ -12705,12 +12705,17 @@ Moved-from string `s` holds: ""
 ```
 * [std::list<T,Allocator>::emplace_back - cppreference.com](https://en.cppreference.com/w/cpp/container/list/emplace_back)
     * constructs an element in-place at the end (public member function)
-    * Appends a new element to the end of the container. The element is constructed through std::allocator_traits::construct, which typically uses placement-new to construct the element in-place at the location provided by the container. The arguments args... are forwarded to the constructor as std::forward\<Args>(args)....
+    * Appends a new element to the end of the container. The element is constructed through std::allocator_traits::construct, which typically uses placement-new to construct the element in-place at the location provided by the container. The arguments `args...` are forwarded to the constructor as `std::forward<Args>(args)...`.
     * No iterators or references are invalidated.
+    * Return value
+        * (none)    (until C++17)
+        * A reference to the inserted element.  (since C++17)
     * Complexity
         * Constant.
     * Exceptions
         * If an exception is thrown, this function has no effect (strong exception guarantee).
+    * Example
+        * The following code uses emplace_back to append an object of type President to a `std::list`. It demonstrates how emplace_back forwards parameters to the President constructor and shows how using emplace_back avoids the extra copy or move operation required when using push_back.
 ```c++
 #include <list>
 #include <string>
