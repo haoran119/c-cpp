@@ -374,6 +374,10 @@ std::shared_ptr<std::string> shared = std::make_unique<std::string>("test");
     }
     ```
 
+### [friend](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#friend-declaration)
+
+* The friend declaration appears in a class body and grants a function or another class access to all members of the class where the friend declaration appears.
+
 ### static
 
 * `static`关键字至少有下列n个作用：
