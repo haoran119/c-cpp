@@ -2129,10 +2129,34 @@ Deletion time   | log(n) + Rebalance  | Same as search
 * This issue is not inherently unique to C++, but it does not occur naturally in most other object-oriented languages — even C++'s relatives such as D, Java, and C# — because copying of objects is not a basic operation in those languages. (Instead, those languages prefer to manipulate objects via implicit references, such that only copying the reference is a basic operation.) In C++, by contrast, objects are copied automatically whenever a function takes an object argument by value or returns an object by value. Additionally, due to the lack of garbage collection in C++, programs will frequently copy an object whenever the ownership and lifetime of a single shared object would be unclear; for example, inserting an object into a standard-library collection, such as a std::vector, actually involves inserting a copy into the collection.
 * [c++对象切割 - CSDN博客](https://blog.csdn.net/weiwangchao_/article/details/4702241)
 
-### [exceptions](https://en.cppreference.com/w/cpp/language/exceptions)
+### [Exceptions](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#exceptions)
 
 * 异常,异常的功能
     * 保证异常的健壮性，结构化处理出错信息
+```c++
+#include <iostream>
+
+template<typename T>
+double SafeDivide(T n, T d)
+{
+    if (0 == d) {
+        throw ("Division by 0");
+    }
+
+    return static_cast<double>(n) / d;
+}
+
+int main()
+{
+    try {
+        SafeDivide(3, 0);
+    } catch (const char* err) {
+        std::cout << err << '\n';   // Division by 0
+    }
+
+    return 0;
+}
+```
 * Exception safety
     * After the error condition is reported by a function, additional guarantees may be provided with regards to the state of the program. The following four levels of exception guarantee are generally recognized[4][5][6], which are strict supersets of each other:
         * `Nothrow (or nofail) exception guarantee` -- the function never throws exceptions. Nothrow (errors are reported by other means or concealed) is expected of destructors and other functions that may be called during stack unwinding. The destructors are noexcept by default. (since C++11) Nofail (the function always succeeds) is expected of swaps, move constructors, and other functions used by those that provide strong exception guarantee.
