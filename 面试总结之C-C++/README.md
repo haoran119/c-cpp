@@ -1607,6 +1607,16 @@ return 0;
 		* reinterpret_cast 的一个实际用途是在哈希函数中，即，通过让两个不同的值几乎不以相同的索引结尾的方式将值映射到索引。
 	* bad_cast
 		* 由于强制转换为引用类型失败，dynamic_cast 运算符引发 bad_cast 异常。
+```c++
+int i = 5;
+int *pi = &i;
+
+double *pd = reinterpret_cast<double*>(pi); // only this compiles
+// double *pd1 = const_cast<double*>(pi);
+// double *pd2 = dynamic_cast<double*>(pi);
+// double *pd3 = static_cast<double*>(pi);
+// int **pp = &&i;
+```
 
 ### [templates](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#templates)
 
