@@ -1581,6 +1581,14 @@ return 0;
 * 函数对象功能
     * 可以用作类似C里的回调函数，也可以用作函数功能的组合
   
+### [Type alias, alias template](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#type-alias-alias-template)  
+
+* Valid methods of creating an alias of a type
+```c++
+using MyAlias1 = char;
+typedef int MyAlias2;
+```
+
 ### [type casting](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#conversions)
 
 * [强制类型转换运算符](https://github.com/huihut/interview#%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E8%BF%90%E7%AE%97%E7%AC%A6)
