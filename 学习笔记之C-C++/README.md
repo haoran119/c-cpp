@@ -7841,46 +7841,57 @@ struct T {
 #### [std::unique_ptr](https://en.cppreference.com/w/cpp/memory/unique_ptr)
 
 * smart pointer with unique object ownership semantics (class template)
-* std::unique_ptr is a smart pointer that owns and manages another object through a pointer and disposes of that object when the unique_ptr goes out of scope.
+* `std::unique_ptr is a smart pointer that owns and manages another object through a pointer and disposes of that object when the unique_ptr goes out of scope`.
 * The object is disposed of, using the associated deleter when either of the following happens:
-    * the managing unique_ptr object is destroyed
-    * the managing unique_ptr object is assigned another pointer via operator= or reset().
-* The object is disposed of, using a potentially user-supplied deleter by calling get_deleter()(ptr). The default deleter uses the delete operator, which destroys the object and deallocates the memory.
-* A unique_ptr may alternatively own no object, in which case it is called empty.
+    * the managing unique_ptr object is `destroyed`
+    * the managing unique_ptr object is assigned another pointer via `operator=` or `reset()`.
+* The object is disposed of, using a potentially user-supplied deleter by calling `get_deleter()(ptr)`. The default deleter uses the `delete` operator, which destroys the object and deallocates the memory.
+* A unique_ptr may alternatively own no object, in which case it is called `empty`.
 * There are two versions of std::unique_ptr:
-    * Manages a single object (e.g. allocated with new)
-    * Manages a dynamically-allocated array of objects (e.g. allocated with new[])
+    * Manages a single object (e.g. allocated with `new`)
+    * Manages a dynamically-allocated array of objects (e.g. allocated with `new[]`)
 * The class satisfies the requirements of MoveConstructible and MoveAssignable, but of neither CopyConstructible nor CopyAssignable.
 * Type requirements
-    * -Deleter must be FunctionObject or lvalue reference to a FunctionObject or lvalue reference to function, callable with an argument of type unique_ptr\<T, Deleter>::pointer
+    * Deleter must be FunctionObject or lvalue reference to a FunctionObject or lvalue reference to function, callable with an argument of type `unique_ptr<T, Deleter>::pointer`
 * Notes
-    * Only non-const unique_ptr can transfer the ownership of the managed object to another unique_ptr. If an object's lifetime is managed by a const std::unique_ptr, it is limited to the scope in which the pointer was created.
+    * Only non-const unique_ptr can transfer the ownership of the managed object to another unique_ptr. If an object's lifetime is managed by a `const std::unique_ptr`, it is limited to the scope in which the pointer was created.
     * std::unique_ptr is commonly used to manage the lifetime of objects, including:
         * providing exception safety to classes and functions that handle objects with dynamic lifetime, by guaranteeing deletion on both normal exit and exit through exception
         * passing ownership of uniquely-owned objects with dynamic lifetime into functions
         * acquiring ownership of uniquely-owned objects with dynamic lifetime from functions
-        * as the element type in move-aware containers, such as std::vector, which hold pointers to dynamically-allocated objects (e.g. if polymorphic behavior is desired)
-    * std::unique_ptr may be constructed for an incomplete type T, such as to facilitate the use as a handle in the pImpl idiom. If the default deleter is used, T must be complete at the point in code where the deleter is invoked, which happens in the destructor, move assignment operator, and reset member function of std::unique_ptr. (Conversely, std::shared_ptr can't be constructed from a raw pointer to incomplete type, but can be destroyed where T is incomplete). Note that if T is a class template specialization, use of unique_ptr as an operand, e.g. !p requires T's parameters to be complete due to ADL.
-    * If T is a derived class of some base B, then std::unique_ptr\<T> is implicitly convertible to std::unique_ptr\<B>. The default deleter of the resulting std::unique_ptr\<B> will use operator delete for B, leading to undefined behavior unless the destructor of B is virtual. Note that std::shared_ptr behaves differently: std::shared_ptr\<B> will use the operator delete for the type T and the owned object will be deleted correctly even if the destructor of B is not virtual.
-    * Unlike std::shared_ptr, std::unique_ptr may manage an object through any custom handle type that satisfies NullablePointer. This allows, for example, managing objects located in shared memory, by supplying a Deleter that defines typedef boost::offset_ptr pointer; or another fancy pointer.
-* [std::unique_ptr<T,Deleter>::unique_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/unique_ptr)
-    * (constructor)
-* [std::unique_ptr<T,Deleter>::operator= - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/operator%3D)
-    * assigns the unique_ptr (public member function)
-    * 1) Move assignment operator. Transfers ownership from r to *this as if by calling reset(r.release()) followed by an assignment of get_deleter() from std::forward\<Deleter>(r.get_deleter()).
-        * If Deleter is not a reference type, requires that it is nothrow-MoveAssignable.
-        * If Deleter is a reference type, requires that std::remove_reference\<Deleter>::type is nothrow-CopyAssignable.
-        * The move assignment operator only participates in overload resolution if std::is_move_assignable\<Deleter>::value is true.
-    * 2) Converting assignment operator. Behaves same as (1), except that
-        * This assignment operator of the primary template only participates in overload resolution if U is not an array type and unique_ptr\<U,E>::pointer is implicitly convertible to pointer and std::is_assignable\<Deleter&, E&&>::value is true.
-        * This assignment operator in the specialization for arrays, std::unique_ptr<T[]> behaves the same as in the primary template, except that will only participate in overload resolution if all of the following is true:
-            * U is an array type
-            * pointer is the same type as element_type*
-            * unique_ptr\<U,E>::pointer is the same type as unique_ptr\<U,E>::element_type*
-            * unique_ptr\<U,E>::element_type(*)[] is convertible to element_type(*)[]
-            * std::is_assignable\<Deleter&, E&&>::value is true
-    * 3) Effectively the same as calling reset().
-    * Note that unique_ptr's assignment operator only accepts rvalues, which are typically generated by std::move. (The unique_ptr class explicitly deletes its lvalue copy constructor and lvalue assignment operator.)
+        * as the element type in move-aware containers, such as `std::vector`, which hold pointers to dynamically-allocated objects (e.g. if polymorphic behavior is desired)
+    * std::unique_ptr may be constructed for an incomplete type T, such as to facilitate the use as a handle in the [pImpl idiom](https://en.cppreference.com/w/cpp/language/pimpl). If the default deleter is used, T must be complete at the point in code where the deleter is invoked, which happens in the destructor, move assignment operator, and reset member function of `std::unique_ptr`. (Conversely, `std::shared_ptr` can't be constructed from a raw pointer to incomplete type, but can be destroyed where T is incomplete). Note that if T is a class template specialization, use of unique_ptr as an operand, e.g. `!p` requires T's parameters to be complete due to [ADL](https://en.cppreference.com/w/cpp/language/adl).
+    * If T is a derived class of some base B, then `std::unique_ptr<T>` is `implicitly convertible` to `std::unique_ptr<B>`. The default deleter of the resulting `std::unique_ptr<B>` will use `operator delete` for B, leading to `undefined behavior` unless the destructor of B is virtual. Note that `std::shared_ptr` behaves differently: `std::shared_ptr<B>` will use the `operator delete` for the type T and the owned object will be deleted correctly even if the destructor of B is not virtual.
+    * Unlike `std::shared_ptr`, `std::unique_ptr` may manage an object through any custom handle type that satisfies `NullablePointer`. This allows, for example, managing objects located in shared memory, by supplying a `Deleter` that defines typedef `boost::offset_ptr` pointer; or another `fancy pointer`.
+
+##### Member functions
+
+###### [std::unique_ptr<T,Deleter>::unique_ptr](https://en.cppreference.com/w/cpp/memory/unique_ptr/unique_ptr)
+
+* (constructor)
+* constructs a new unique_ptr (public member function)
+
+###### [std::unique_ptr<T,Deleter>::operator=](https://en.cppreference.com/w/cpp/memory/unique_ptr/operator%3D)
+
+* assigns the unique_ptr (public member function)
+* 1) Move assignment operator. Transfers ownership from r to `*this` as if by calling `reset(r.release())` followed by an assignment of `get_deleter()` from `std::forward<Deleter>(r.get_deleter())`.
+    * If Deleter is not a reference type, requires that it is `nothrow-MoveAssignable`.
+    * If Deleter is a reference type, requires that `std::remove_reference<Deleter>::type` is `nothrow-CopyAssignable`.
+    * The move assignment operator only participates in overload resolution if `std::is_move_assignable<Deleter>::value` is `true`.
+* 2) Converting assignment operator. Behaves same as (1), except that
+    * This assignment operator of the primary template only participates in overload resolution if U is not an array type and `unique_ptr<U,E>::pointer` is implicitly convertible to pointer and `std::is_assignable<Deleter&, E&&>::value` is `true`.
+    * This assignment operator in the specialization for arrays, `std::unique_ptr<T[]>` behaves the same as in the primary template, except that will only participate in overload resolution if all of the following is true:
+        * U is an array type
+        * pointer is the same type as `element_type*`
+        * `unique_ptr<U,E>::pointer` is the same type as `unique_ptr<U,E>::element_type*`
+        * `unique_ptr<U,E>::element_type(*)[]` is convertible to `element_type(*)[]`
+        * `std::is_assignable<Deleter&, E&&>::value` is `true`
+* 3) Effectively the same as calling `reset()`.
+* Note that unique_ptr's assignment operator only accepts `rvalues`, which are typically generated by std::move. (The `unique_ptr` class explicitly deletes its `lvalue` copy constructor and `lvalue` assignment operator.)
+* Parameters
+    * r	-	smart pointer from which ownership will be transferred
+* Return value
+    * `*this`
 ```c++
 #include <iostream>
 #include <memory>
@@ -7918,47 +7929,10 @@ About to leave program...
 ~Foo 2
 */
 ```
-* [std::unique_ptr<T,Deleter>::get - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/get)
-    * returns a pointer to the managed object (public member function)
-    * Returns a pointer to the managed object or nullptr if no object is owned.
-```c++
-#include <iomanip>
-#include <iostream>
-#include <memory>
-#include <string>
-#include <utility>
- 
-class Res {
-    std::string s;
- 
-public:
-    Res(std::string arg) : s{ std::move(arg) } {
-        std::cout << "Res::Res(" << std::quoted(s) << ");\n";
-    }
- 
-    ~Res() {
-        std::cout << "Res::~Res();\n";
-    }
- 
-private:
-    friend std::ostream& operator<< (std::ostream& os, Res const& r) {
-        return os << "Res { s = " << std::quoted(r.s) << "; }";
-    }
-};
- 
-int main()
-{
-    std::unique_ptr<Res> up(new Res{"Hello, world!"});
-    Res *res = up.get();
-    std::cout << *res << '\n';
-}
-/*
-Res::Res("Hello, world!");
-Res { s = "Hello, world!"; }
-Res::~Res();
-*/
-```
-* [std::unique_ptr<T,Deleter>::release - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/release)
+
+###### Modifiers
+
+* [std::unique_ptr<T,Deleter>::release](https://en.cppreference.com/w/cpp/memory/unique_ptr/release)
     * returns a pointer to the managed object and releases the ownership (public member function)
     * Releases the ownership of the managed object, if any.
     * get() returns nullptr after the call.
@@ -7996,7 +7970,7 @@ Foo is no longer owned by unique_ptr...
 ~Foo
 */
 ```
-* [std::unique_ptr<T,Deleter>::reset - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/reset)
+* [std::unique_ptr<T,Deleter>::reset](https://en.cppreference.com/w/cpp/memory/unique_ptr/reset)
     * replaces the managed object (public member function)
     * Replaces the managed object.
         * 1) Given current_ptr, the pointer that was managed by *this, performs the following actions, in this order:
@@ -8049,11 +8023,56 @@ Calling delete for Foo object...
 ~Foo...
 */
 ```
-* [std::unique_ptr<T,Deleter>::operator*, std::unique_ptr<T,Deleter>::operator-> - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/operator*)
-    * Single-object version, unique_ptr\<T>
+
+###### Observers
+
+* [std::unique_ptr<T,Deleter>::get](https://en.cppreference.com/w/cpp/memory/unique_ptr/get)
+    * returns a pointer to the managed object (public member function)
+    * Returns a pointer to the managed object or nullptr if no object is owned.
+```c++
+#include <iomanip>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <utility>
+ 
+class Res {
+    std::string s;
+ 
+public:
+    Res(std::string arg) : s{ std::move(arg) } {
+        std::cout << "Res::Res(" << std::quoted(s) << ");\n";
+    }
+ 
+    ~Res() {
+        std::cout << "Res::~Res();\n";
+    }
+ 
+private:
+    friend std::ostream& operator<< (std::ostream& os, Res const& r) {
+        return os << "Res { s = " << std::quoted(r.s) << "; }";
+    }
+};
+ 
+int main()
+{
+    std::unique_ptr<Res> up(new Res{"Hello, world!"});
+    Res *res = up.get();
+    std::cout << *res << '\n';
+}
+/*
+Res::Res("Hello, world!");
+Res { s = "Hello, world!"; }
+Res::~Res();
+*/
+```
+
+###### Single-object version, `unique_ptr<T>`
+
+* [std::unique_ptr<T,Deleter>::operator*, std::unique_ptr<T,Deleter>::operator->](https://en.cppreference.com/w/cpp/memory/unique_ptr/operator*)
     * dereferences pointer to the managed object (public member function)
-    * operator* and operator-> provide access to the object owned by *this.
-    * The behavior is undefined if get() == nullptr.
+    * `operator*` and `operator->` provide access to the object owned by `*this`.
+    * The behavior is undefined if `get() == nullptr`.
     * These member functions are only provided for unique_ptr for the single objects i.e. the primary template.
 ```c++
 #include <iostream>
@@ -8080,10 +8099,12 @@ Foo::bar
 f(const Foo&)
 */
 ```
-* [std::unique_ptr<T,Deleter>::operator[] - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/operator_at)
-    * Array version, unique_ptr\<T[]>
+
+###### `Array version, unique_ptr<T[]>`
+
+* [std::unique_ptr<T,Deleter>::operator[]](https://en.cppreference.com/w/cpp/memory/unique_ptr/operator_at)
     * provides indexed access to the managed array (public member function)
-    * operator[] provides access to elements of an array managed by a unique_ptr.
+    * `operator[]` provides access to elements of an array managed by a unique_ptr.
     * The parameter i shall be less than the number of elements in the array; otherwise, the behavior is undefined.
     * This member function is only provided for specializations for array types.
 ```c++
@@ -8116,9 +8137,13 @@ int main()
 9! = 362880
 */
 ```
-* [std::make_unique, std::make_unique_for_overwrite - cppreference.com](https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique)
-    * creates a unique pointer that manages a new object (function template)
-    * Constructs an object of type T and wraps it in a std::unique_ptr.
+
+##### Non-member functions
+
+###### [std::make_unique, std::make_unique_for_overwrite](https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique)
+
+* creates a unique pointer that manages a new object (function template)
+* Constructs an object of type T and wraps it in a std::unique_ptr.
 ```c++
 #include <cassert>
 #include <cstdio>
