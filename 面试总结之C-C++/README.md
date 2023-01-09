@@ -13,6 +13,7 @@
     * [C++ Interview Questions (2023)](https://www.geeksforgeeks.org/cpp-interview-questions/)
     * [Commonly Asked C++ Interview Questions | Set 1 - GeeksforGeeks](https://www.geeksforgeeks.org/commonly-asked-c-interview-questions-set-1/)
     * [Commonly Asked C++ Interview Questions | Set 2 - GeeksforGeeks](https://www.geeksforgeeks.org/commonly-asked-c-interview-questions-set-2/?ref=lbp)    
+    * [Commonly Asked OOP Interview Questions | Set 1 - GeeksforGeeks](https://www.geeksforgeeks.org/commonly-asked-oop-interview-questions/)
     * [C/C++ Programs - GeeksforGeeks](https://www.geeksforgeeks.org/cc-programs/)	
 * [Containers library - cppreference.com](https://en.cppreference.com/w/cpp/container)
     * The Containers library is a generic collection of class templates and algorithms that allow programmers to easily implement common data structures like queues, lists and stacks. There are two (until C++11)three (since C++11) classes of containers:
