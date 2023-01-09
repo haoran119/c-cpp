@@ -80,6 +80,7 @@ public:
 private:
     int m_capacity;
     // key : value
+    // use list rather than deque due to O(1) in erase()
     std::list<std::pair<int, int> >   m_cache;
     // key : iterator of m_cache
     std::unordered_map<int, std::list<std::pair<int, int> >::iterator>    m_keys;    
