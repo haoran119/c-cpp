@@ -11968,6 +11968,44 @@ First 5 chars of [body!] equal [body!]
 * std::array satisfies the requirements of `Container` and `ReversibleContainer` except that default-constructed array is not empty and that the complexity of swapping is linear, `satisfies the requirements of ContiguousContainer, (since C++17)` and partially satisfies the requirements of `SequenceContainer`.
 * There is a special case for a zero-length array (N == 0). In that case, `array.begin() == array.end()`, which is some unique value. The effect of calling `front()` or `back()` on a zero-sized array is undefined.
 * An array can also be used as a tuple of N elements of the same type.
+* Example
+```c++
+#include <string>
+#include <iterator>
+#include <iostream>
+#include <algorithm>
+#include <array>
+ 
+int main()
+{
+    // construction uses aggregate initialization
+    std::array<int, 3> a1{ {1, 2, 3} }; // double-braces required in C++11 prior to
+                                        // the CWG 1270 revision (not needed in C++11
+                                        // after the revision and in C++14 and beyond)
+ 
+    std::array<int, 3> a2 = {1, 2, 3};  // double braces never required after =
+ 
+    std::array<std::string, 2> a3 = { std::string("a"), "b" };
+ 
+    // container operations are supported
+    std::sort(a1.begin(), a1.end());
+    std::reverse_copy(a2.begin(), a2.end(), 
+                      std::ostream_iterator<int>(std::cout, " "));
+ 
+    std::cout << '\n';
+ 
+    // ranged for loop is supported
+    for(const auto& s: a3)
+        std::cout << s << ' ';
+ 
+    // deduction guide for array creation (since C++17)
+    [[maybe_unused]] std::array a4{3.0, 1.0, 4.0};  // -> std::array<double, 3>
+}
+/*
+3 2 1 
+a b
+*/
+```
 
 ##### Iterator invalidation
 
