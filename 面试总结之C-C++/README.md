@@ -1689,6 +1689,12 @@ return 0;
     * A `template parameter pack` is a template parameter that accepts zero or more template arguments (non-types, types, or templates). A `function parameter pack` is a function parameter that accepts zero or more function arguments.
     * A template with at least one parameter pack is called a `variadic template`.
 
+### [Pairs and tuples](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#pairs-and-tuples)
+
+* A `std::pair` can be assigned to `std::tuple`, but not vice versa
+* `std::tie` may be used to unpack a `std::pair` as well as `std::tuple` because `std::tuple` has a converting assignment from pairs
+* Both `std::pair` and `std::tuple` can be initialized via an initializer list (e.g. {0, 1} )
+
 ### [STL](https://github.com/huihut/interview#-stl)
 
 * [Containers library](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#containers-library)
