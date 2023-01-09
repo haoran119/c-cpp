@@ -2157,6 +2157,79 @@ int main()
     return 0;
 }
 ```
+* There may be exception handling necessary in a `noexcept` function
+    * [C++ static code analysis: Exceptions should not be thrown in "noexcept" functions](https://rules.sonarsource.com/cpp/RSPEC-3743)
+    * noexcept is a specifier that can be applied to a function declaration to state whether or not this function might throw an exception.
+    * This specifier is a crucial information for the compiler as it enables it to perform automatic optimizations. It is also used by the noexcept operator, so that a developer can know whether an expression can throw, and adapt the code accordingly (for instance, to decide to move or copy an object).
+    * When a function is specified noexcept, the compiler does not generate any code to throw exceptions and any uncaught exception will result in a call to std::terminate. This means that writing a noexcept function is an implicit agreement to the statement : "my program will terminate if any exception is thrown inside this function".
+    * It is a very strong commitment as there are so many ways to get an exception including any dynamic allocation.
+    * This rule raises an issue when an exception is thrown, directly or indirectly, from a function declared noexcept.
+    * Noncompliant Code Example
+    ```c++
+    #include <exception>
+    #include <memory>
+
+    using namespace std;
+
+    class SafetyException {};
+    class Engine {};
+    unique_ptr<Engine> engine;
+
+    bool safety_check() noexcept;
+    void other_checks();
+
+    void critical_checks() {
+      if (!safety_check()) {
+        throw SafetyException{};
+      }
+    }
+
+    void do_checks() {
+      critical_checks(); // can throw
+      other_checks(); // can throw
+    }
+
+    void init() noexcept(true) { // noncompliant because...
+      do_checks(); // can throw
+      engine = std::make_unique<Engine>(); // can throw
+    }
+    ```
+    * Compliant Solution
+    ```c++
+    #include <exception>
+    #include <memory>
+
+    using namespace std;
+
+    class SafetyException {};
+    class Engine {};
+    unique_ptr<Engine> engine;
+
+    bool safety_check();
+    void other_checks();
+
+    void critical_checks() {
+      if (!safety_check()) {
+        throw SafetyException{};
+      }
+    }
+
+    void do_checks() {
+      critical_checks();
+      other_checks();
+    }
+
+    void init() noexcept(true) { // compliant because ...
+      try {
+        do_checks(); // exception caught
+        engine = std::make_unique<Engine>(); // exception caught
+      } catch(std::exception e) {
+        std::terminate();
+      }
+    }
+    ```
+    * Exceptions
+        * Destructors are not handled by this rule because there is a specific rule about exceptions in destructors (see ExceptionInDestructor).
 * Exception safety
     * After the error condition is reported by a function, additional guarantees may be provided with regards to the state of the program. The following four levels of exception guarantee are generally recognized[4][5][6], which are strict supersets of each other:
         * `Nothrow (or nofail) exception guarantee` -- the function never throws exceptions. Nothrow (errors are reported by other means or concealed) is expected of destructors and other functions that may be called during stack unwinding. The destructors are noexcept by default. (since C++11) Nofail (the function always succeeds) is expected of swaps, move constructors, and other functions used by those that provide strong exception guarantee.
