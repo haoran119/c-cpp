@@ -12,7 +12,7 @@
 * [C++ Programming Language - GeeksforGeeks](https://www.geeksforgeeks.org/c-plus-plus/?ref=shm#C++inCompetitiveProgramming)
     * [C++ Interview Questions (2023)](https://www.geeksforgeeks.org/cpp-interview-questions/)
     * [Commonly Asked C++ Interview Questions | Set 1 - GeeksforGeeks](https://www.geeksforgeeks.org/commonly-asked-c-interview-questions-set-1/)
-    * [Commonly Asked C++ Interview Questions | Set 2 - GeeksforGeeks](https://www.geeksforgeeks.org/commonly-asked-c-interview-questions-set-2/?ref=lbp)
+    * [Commonly Asked C++ Interview Questions | Set 2 - GeeksforGeeks](https://www.geeksforgeeks.org/commonly-asked-c-interview-questions-set-2/?ref=lbp)    
     * [C/C++ Programs - GeeksforGeeks](https://www.geeksforgeeks.org/cc-programs/)	
 * [Containers library - cppreference.com](https://en.cppreference.com/w/cpp/container)
     * The Containers library is a generic collection of class templates and algorithms that allow programmers to easily implement common data structures like queues, lists and stacks. There are two (until C++11)three (since C++11) classes of containers:
@@ -173,7 +173,7 @@
 ### MISC
 
 * [这些C++工程师面试题你都会了吗？](https://mp.weixin.qq.com/s/JA3ZrRwS_KllNdJxVMQRdA)
-  * [你们要的C++面试题答案来了--基础篇](https://mp.weixin.qq.com/s/YRo5Lm9pbbZnjY1DQfW6yw)
+    * [你们要的C++面试题答案来了--基础篇](https://mp.weixin.qq.com/s/YRo5Lm9pbbZnjY1DQfW6yw)
 * [2021 年 C++ 岗就业如何？附学习路线图 (qq.com)](https://mp.weixin.qq.com/s/g6dHxYN7jhw_bLXqnFdEyA)
 * [C++ 八股文（一）](https://mp.weixin.qq.com/s/qVSdP0hXbC7le5DC3vJHKw)
 * [C/C++ 八股文（二）](https://mp.weixin.qq.com/s?__biz=MzA4MjI3NzQ1Nw==&mid=2247497197&idx=1&sn=eda5b49d1abaa48cdfa948744efba95a&chksm=9f8a90d3a8fd19c51ad9071de207ade8929d45071c7b9191acfea3d65cd3ff01b009aec303dd&scene=178&cur_album_id=1511180677537464321#rd)
@@ -521,22 +521,22 @@ int main()
 ## 面向对象
 
 * 面向对象的三大特性：
-  * `封装(Encapsulation)`：将具体的实现过程和数据封装成一个函数，只能通过接口进行访问，降低耦合性。
-  * `继承(Inheritance)`：子类继承父类的特征和行为，子类有父类的非 private 方法或成员变量，子类可以对父类的方法进行重写，增强了类之间的耦合性，但是当父类中的成员变量、成员函数或者类本身被 final 关键字修饰时，修饰的类不能继承，修饰的成员不能重写或修改。
-  * `多态(Polymorphism)`：多态就是不同继承类的对象，对同一消息做出不同的响应，基类的指针指向或绑定到派生类的对象，使得基类指针呈现不同的表现方式。
+    * `封装(Encapsulation)`：将具体的实现过程和数据封装成一个函数，只能通过接口进行访问，降低耦合性。
+    * `继承(Inheritance)`：子类继承父类的特征和行为，子类有父类的非 private 方法或成员变量，子类可以对父类的方法进行重写，增强了类之间的耦合性，但是当父类中的成员变量、成员函数或者类本身被 final 关键字修饰时，修饰的类不能继承，修饰的成员不能重写或修改。
+    * `多态(Polymorphism)`：多态就是不同继承类的对象，对同一消息做出不同的响应，基类的指针指向或绑定到派生类的对象，使得基类指针呈现不同的表现方式。
 * C++虚拟机制
-  * 用来实现多态
+    * 用来实现多态
 * 重载、重写、隐藏的区别
-  * `重载(Overload)`：是指同一可访问区内被声明几个具有不同参数列（`参数的类型`、`个数`、`顺序`）的`同名函数`，根据`参数列表`确定调用哪个函数，重载不关心`函数返回类型`。
-  * `隐藏(Overwrite / Hide)`：是指派生类的函数屏蔽了与其同名的基类函数，主要只要`同名函数`，不管`参数列表`是否相同，基类函数都会被隐藏。
-  * `重写(覆盖)(Override)`：是指派生类中存在重新定义的函数。`函数名`、`参数列表`、`返回值类型`都必须同基类中被重写的函数一致，只有函数体不同。派生类调用时会调用派生类的重写函数，不会调用被重写函数。重写的基类中被重写的函数必须有`virtual`修饰。
-  * 重写和重载的区别：
-    * 范围区别：对于类中函数的重载或者重写而言，重载发生在同一个类的内部，重写发生在不同的类之间（子类和父类之间）。
-    * 参数区别：重载的函数需要与原函数有相同的函数名、不同的参数列表，不关注函数的返回值类型；重写的函数的函数名、参数列表和返回值类型都需要和原函数相同，父类中被重写的函数需要有 virtual 修饰。
-    * virtual 关键字：重写的函数基类中必须有 virtual关键字的修饰，重载的函数可以有 virtual 关键字的修饰也可以没有。
-  * 隐藏和重写，重载的区别：
-    * 范围区别：隐藏与重载范围不同，隐藏发生在不同类中。
-    * 参数区别：隐藏函数和被隐藏函数参数列表可以相同，也可以不同，但函数名一定相同；当参数不同时，无论基类中的函数是否被 virtual 修饰，基类函数都是被隐藏，而不是重写。
+    * `重载(Overload)`：是指同一可访问区内被声明几个具有不同参数列（`参数的类型`、`个数`、`顺序`）的`同名函数`，根据`参数列表`确定调用哪个函数，重载不关心`函数返回类型`。
+    * `隐藏(Overwrite / Hide)`：是指派生类的函数屏蔽了与其同名的基类函数，主要只要`同名函数`，不管`参数列表`是否相同，基类函数都会被隐藏。
+    * `重写(覆盖)(Override)`：是指派生类中存在重新定义的函数。`函数名`、`参数列表`、`返回值类型`都必须同基类中被重写的函数一致，只有函数体不同。派生类调用时会调用派生类的重写函数，不会调用被重写函数。重写的基类中被重写的函数必须有`virtual`修饰。
+    * `重写`和`重载`的区别：
+        * 范围区别：对于类中函数的重载或者重写而言，重载发生在同一个类的内部，重写发生在不同的类之间（子类和父类之间）。
+        * 参数区别：重载的函数需要与原函数有相同的函数名、不同的参数列表，不关注函数的返回值类型；重写的函数的函数名、参数列表和返回值类型都需要和原函数相同，父类中被重写的函数需要有 virtual 修饰。
+    * `virtual` 关键字：重写的函数基类中必须有 virtual关键字的修饰，重载的函数可以有 virtual 关键字的修饰也可以没有。
+    * `隐藏`和`重写`，`重载`的区别：
+        * 范围区别：隐藏与重载范围不同，隐藏发生在不同类中。
+        * 参数区别：隐藏函数和被隐藏函数参数列表可以相同，也可以不同，但函数名一定相同；当参数不同时，无论基类中的函数是否被 virtual 修饰，基类函数都是被隐藏，而不是重写。
 * [C++ Public, Protected and Private Inheritance](https://www.programiz.com/cpp-programming/public-protected-private-inheritance)
     * `public` inheritance makes `public` members of the base class `public` in the derived class, and the `protected` members of the base class remain `protected` in the derived class.
     * `protected` inheritance makes the `public` and `protected` members of the base class `protected` in the derived class.
@@ -1036,12 +1036,12 @@ int main()
 ### [copy constructor](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#copy-constructors)
 
 * 什么是拷贝构造函数 ?
-  * 它是单个参数的构造函数，其参数是与它同属一类的对象的(常)引用；类定义中，如果未提供自己的拷贝构造函数，C++提供一个默认拷贝构造函数，该默认拷贝构造函数完成一个成员到一个成员的拷贝
+    * 它是单个参数的构造函数，其参数是与它同属一类的对象的(常)引用；类定义中，如果未提供自己的拷贝构造函数，C++提供一个默认拷贝构造函数，该默认拷贝构造函数完成一个成员到一个成员的拷贝
 * 要在C++防止对象被复制，有什么方法 ?
-  * [Explicitly Defaulted and Deleted Functions | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/explicitly-defaulted-and-deleted-functions?view=msvc-160)
-  * Pre-C++11 定义一个基类，将其中的拷贝构造函数和赋值构造函数声明为私有`private`
-  * C++11则可以对拷贝构造函数和赋值构造函数声明为`delete`
-  * 派生类以私有`private`的方式继承基类
+    * [Explicitly Defaulted and Deleted Functions | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/explicitly-defaulted-and-deleted-functions?view=msvc-160)
+    * Pre-C++11 定义一个基类，将其中的拷贝构造函数和赋值构造函数声明为私有`private`
+    * C++11则可以对拷贝构造函数和赋值构造函数声明为`delete`
+    * 派生类以私有`private`的方式继承基类
 
 ### deep copy / shallow copy
 
@@ -1433,12 +1433,12 @@ int main()
 ### [namespaces](https://en.cppreference.com/w/cpp/language/namespace)
 
 * [namespace in C++ | Set 2 (Extending namespace and Unnamed namespace) - GeeksforGeeks](https://www.geeksforgeeks.org/namespace-in-c-set-2-extending-namespace-and-unnamed-namespace/)
-  * Unnamed Namespaces
-    * They are directly usable in the same program and are used for declaring unique identifiers.
-    * In unnamed namespaces, name of the namespace in not mentioned in the declaration of namespace.
-    * The name of the namespace is uniquely generated by the compiler.
-    * The unnamed namespaces you have created will only be accessible within the file you created it in.
-    * Unnamed namespaces are the replacement for the static declaration of variables.
+    * Unnamed Namespaces
+        * They are directly usable in the same program and are used for declaring unique identifiers.
+        * In unnamed namespaces, name of the namespace in not mentioned in the declaration of namespace.
+        * The name of the namespace is uniquely generated by the compiler.
+        * The unnamed namespaces you have created will only be accessible within the file you created it in.
+        * Unnamed namespaces are the replacement for the static declaration of variables.
 ```c++
 // C++ program to demonstrate working of unnamed
 // namespaces
@@ -1474,13 +1474,13 @@ return 0;
 * `A prvalue expression has no address that is accessible by your program`. Examples of prvalue expressions include literals, function calls that return a non-reference type, and temporary objects that are created during expression evaluation but accessible only by the compiler.
 * `An xvalue expression has an address that no longer accessible by your program but can be used to initialize an rvalue reference, which provides access to the expression`. Examples include function calls that return an rvalue reference, and the array subscript, member and pointer to member expressions where the array or object is an rvalue reference.
 * [左值和右值的区别？左值引用和右值引用的区别，如何将左值转换成右值？](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#value-categories)
-  * 左值：指表达式结束后依然存在的持久对象。
-  * 右值：表达式结束就不再存在的临时对象。
-  * 左值和右值的区别：左值持久，右值短暂
-  * 右值引用和左值引用的区别：
-  * 左值引用不能绑定到要转换的表达式、字面常量或返回右值的表达式。右值引用恰好相反，可以绑定到这类表达式，但不能绑定到一个左值上。
-  * 右值引用必须绑定到右值的引用，通过 && 获得。右值引用只能绑定到一个将要销毁的对象上，因此可以自由地移动其资源。
-  * std::move 可以将一个左值强制转化为右值，继而可以通过右值引用使用该值，以用于移动语义。
+    * 左值：指表达式结束后依然存在的持久对象。
+    * 右值：表达式结束就不再存在的临时对象。
+    * 左值和右值的区别：左值持久，右值短暂
+    * 右值引用和左值引用的区别：
+    * 左值引用不能绑定到要转换的表达式、字面常量或返回右值的表达式。右值引用恰好相反，可以绑定到这类表达式，但不能绑定到一个左值上。
+    * 右值引用必须绑定到右值的引用，通过 && 获得。右值引用只能绑定到一个将要销毁的对象上，因此可以自由地移动其资源。
+    * std::move 可以将一个左值强制转化为右值，继而可以通过右值引用使用该值，以用于移动语义。
 * [Rvalue Reference Quick Look](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2027.html#Move_Semantics)
     * Rvalue references is a small technical extension to the C++ language. Rvalue references allow programmers to avoid logically unnecessary copying and to provide perfect forwarding functions. They are primarily meant to aid in the design of higer performance and more robust libraries.
     * The rvalue reference      
@@ -1567,14 +1567,14 @@ return 0;
 
 * C++语言有几种callable objects：函数、函数指针、lambda表达式、bind创建的对象以及重载了函数调用运算符()的类。
 * 函数指针,什么是函数指针，有什么用处
-  * 函数指针是指向函数的指针，最大的用处是做回调函数，可以做接口函数，就像系统中断中的中断处理函数
+    * 函数指针是指向函数的指针，最大的用处是做回调函数，可以做接口函数，就像系统中断中的中断处理函数
 * 设计一个函数，函数中有一段功能是对相关数据的结理，但具体的处理方式是不定的。
-  * 将不定的处理方式设定成一个外部传来函数指针。(可以设计成这样 func(int a,int b，某种函数指针) )
+    * 将不定的处理方式设定成一个外部传来函数指针。(可以设计成这样 func(int a,int b，某种函数指针) )
 * 如何对消息实现同步响应
-  * 使用CALLBACK，回调函数
-  * [CALLBACK_百度百科](https://baike.baidu.com/item/CALLBACK/813549?fr=aladdin)
+    * 使用CALLBACK，回调函数
+    * [CALLBACK_百度百科](https://baike.baidu.com/item/CALLBACK/813549?fr=aladdin)
 * 函数对象功能
-  * 可以用作类似C里的回调函数，也可以用作函数功能的组合
+    * 可以用作类似C里的回调函数，也可以用作函数功能的组合
   
 ### [type casting](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#conversions)
 
@@ -2103,7 +2103,7 @@ Deletion time   | log(n) + Rebalance  | Same as search
 ### [exceptions](https://en.cppreference.com/w/cpp/language/exceptions)
 
 * 异常,异常的功能
-  * 保证异常的健壮性，结构化处理出错信息
+    * 保证异常的健壮性，结构化处理出错信息
 * Exception safety
     * After the error condition is reported by a function, additional guarantees may be provided with regards to the state of the program. The following four levels of exception guarantee are generally recognized[4][5][6], which are strict supersets of each other:
         * `Nothrow (or nofail) exception guarantee` -- the function never throws exceptions. Nothrow (errors are reported by other means or concealed) is expected of destructors and other functions that may be called during stack unwinding. The destructors are noexcept by default. (since C++11) Nofail (the function always succeeds) is expected of swaps, move constructors, and other functions used by those that provide strong exception guarantee.
@@ -2133,8 +2133,8 @@ Deletion time   | log(n) + Rebalance  | Same as search
 	* The Curiously Recurring Template Pattern is an idiom in which a class X derives from a class template Y, taking a template parameter Z, where Y is instantiated with Z=X.
 	* CRTP may be used to implement "compile-time polymorphism", when a base class exposes an interface, and derived classes implement such interface.
 * [DRY - Don't repeat yourself - Wikipedia](https://en.wikipedia.org/wiki/Don't_repeat_yourself)
-  * "Don't repeat yourself" (DRY, or sometimes "do not repeat yourself") is a principle of software development aimed at reducing repetition of software patterns,[1] replacing it with abstractions or using data normalization to avoid redundancy.
-  * The DRY principle is stated as "Every piece of knowledge must have a single, unambiguous, authoritative representation within a system". The principle has been formulated by Andy Hunt and Dave Thomas in their book The Pragmatic Programmer.[2] They apply it quite broadly to include "database schemas, test plans, the build system, even documentation".[3] When the DRY principle is applied successfully, a modification of any single element of a system does not require a change in other logically unrelated elements. Additionally, elements that are logically related all change predictably and uniformly, and are thus kept in sync. Besides using methods and subroutines in their code, Thomas and Hunt rely on code generators, automatic build systems, and scripting languages to observe the DRY principle across layers.
+    * "Don't repeat yourself" (DRY, or sometimes "do not repeat yourself") is a principle of software development aimed at reducing repetition of software patterns,[1] replacing it with abstractions or using data normalization to avoid redundancy.
+    * The DRY principle is stated as "Every piece of knowledge must have a single, unambiguous, authoritative representation within a system". The principle has been formulated by Andy Hunt and Dave Thomas in their book The Pragmatic Programmer.[2] They apply it quite broadly to include "database schemas, test plans, the build system, even documentation".[3] When the DRY principle is applied successfully, a modification of any single element of a system does not require a change in other logically unrelated elements. Additionally, elements that are logically related all change predictably and uniformly, and are thus kept in sync. Besides using methods and subroutines in their code, Thomas and Hunt rely on code generators, automatic build systems, and scripting languages to observe the DRY principle across layers.
 * [PImpl - cppreference.com](https://en.cppreference.com/w/cpp/language/pimpl)
 	* "Pointer to implementation" or "pImpl" is a C++ programming technique[1] that removes implementation details of a class from its object representation by placing them in a separate class, accessed through an opaque pointer
 	* This technique is used to construct C++ library interfaces with stable ABI and to reduce compile-time dependencies.
@@ -2157,29 +2157,29 @@ Deletion time   | log(n) + Rebalance  | Same as search
 			* has lifetime that is bounded by the lifetime of an automatic or temporary object
 	* Move semantics make it possible to safely transfer resource ownership between objects, across scopes, and in and out of threads, while maintaining resource safety.
 	* Classes with open()/close(), lock()/unlock(), or init()/copyFrom()/destroy() member functions are typical examples of non-RAII classes
-  * [RAII - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/RAII)
-    * RAII全称为Resource Acquisition Is Initialization，它是在一些面向对象语言中的一种惯用法。RAII源于C++，在Java，C#，D，Ada，Vala和Rust中也有应用。1984-1989年期间，比雅尼·斯特劳斯特鲁普和安德鲁·柯尼希在设计C++异常时，为解决资源管理时的异常安全性而使用了该用法，后来比雅尼·斯特劳斯特鲁普将其称为RAII。
-    * RAII要求，资源的有效期与持有资源的对象的生命期严格绑定，即由对象的构造函数完成资源的分配(获取)，同时由析构函数完成资源的释放。在这种要求下，只要对象能正确地析构，就不会出现资源泄露问题。
-  * [RAII_百度百科](http://baike.baidu.com/link?url=cZ_EqWVrbxk9AIOFJ-9IrYDMRVaeEtubQlI-JKvquwrTkm9clZshXDLN9WM1Kth0W98ADgTckgMMEAwmQ3gZDq)
-    * RAII，也称为“资源获取就是初始化”，是c++等编程语言常用的管理资源、避免内存泄露的方法。它保证在任何情况下，使用对象时先构造对象，最后析构对象。
-    * [对象所有资源 (RAII)](https://msdn.microsoft.com/zh-cn/library/hh438480.aspx)
+    * [RAII - 维基百科，自由的百科全书](https://zh.wikipedia.org/wiki/RAII)
+        * RAII全称为Resource Acquisition Is Initialization，它是在一些面向对象语言中的一种惯用法。RAII源于C++，在Java，C#，D，Ada，Vala和Rust中也有应用。1984-1989年期间，比雅尼·斯特劳斯特鲁普和安德鲁·柯尼希在设计C++异常时，为解决资源管理时的异常安全性而使用了该用法，后来比雅尼·斯特劳斯特鲁普将其称为RAII。
+        * RAII要求，资源的有效期与持有资源的对象的生命期严格绑定，即由对象的构造函数完成资源的分配(获取)，同时由析构函数完成资源的释放。在这种要求下，只要对象能正确地析构，就不会出现资源泄露问题。
+    * [RAII_百度百科](http://baike.baidu.com/link?url=cZ_EqWVrbxk9AIOFJ-9IrYDMRVaeEtubQlI-JKvquwrTkm9clZshXDLN9WM1Kth0W98ADgTckgMMEAwmQ3gZDq)
+        * RAII，也称为“资源获取就是初始化”，是c++等编程语言常用的管理资源、避免内存泄露的方法。它保证在任何情况下，使用对象时先构造对象，最后析构对象。
+        * [对象所有资源 (RAII)](https://msdn.microsoft.com/zh-cn/library/hh438480.aspx)
 * RTTI
-  * RTTI事指运行时类型识别（Run-time type identification）在只有一个指向基类的指针或引用时确定一个对象的准确类型。
+    * RTTI事指运行时类型识别（Run-time type identification）在只有一个指向基类的指针或引用时确定一个对象的准确类型。
 * [SOLID - Wikipedia](https://en.wikipedia.org/wiki/SOLID)
-  * In software engineering, SOLID is a mnemonic acronym for five design principles intended to make software designs more understandable, flexible, and maintainable. The principles are a subset of many principles promoted by American software engineer and instructor Robert C. Martin,[1][2][3] first introduced in his 2000 paper Design Principles and Design Patterns.[2][4]
-  * The SOLID concepts are
-    * The Single-responsibility principle: "There should never be more than one reason for a class to change."[5] In other words, every class should have only one responsibility.[6]
-    * The Open–closed principle: "Software entities ... should be open for extension, but closed for modification."[7]
-    * The Liskov substitution principle: "Functions that use pointers or references to base classes must be able to use objects of derived classes without knowing it."[8] See also design by contract.[8]
-    * The Interface segregation principle: "Many client-specific interfaces are better than one general-purpose interface."[9][4]
-    * The Dependency inversion principle: "Depend upon abstractions, [not] concretions."[10][4]
+    * In software engineering, SOLID is a mnemonic acronym for five design principles intended to make software designs more understandable, flexible, and maintainable. The principles are a subset of many principles promoted by American software engineer and instructor Robert C. Martin,[1][2][3] first introduced in his 2000 paper Design Principles and Design Patterns.[2][4]
+    * The `SOLID` concepts are
+        * The `Single-responsibility principle`: "There should never be more than one reason for a class to change."[5] In other words, every class should have only one responsibility.[6]
+        * The `Open–closed principle`: "Software entities ... should be open for extension, but closed for modification."[7]
+        * The `Liskov substitution principle`: "Functions that use pointers or references to base classes must be able to use objects of derived classes without knowing it."[8] See also design by contract.[8]
+        * The `Interface segregation principle`: "Many client-specific interfaces are better than one general-purpose interface."[9][4]
+        * The `Dependency inversion principle`: "Depend upon abstractions, [not] concretions."[10][4]
 * [The rule of three/five/zero - cppreference.com](https://en.cppreference.com/w/cpp/language/rule_of_three)
-	* Rule of three
+	* `Rule of three`
 		* If a class requires a user-defined destructor, a user-defined copy constructor, or a user-defined copy assignment operator, it almost certainly requires all three.
 		* Because C++ copies and copy-assigns objects of user-defined types in various situations (passing/returning by value, manipulating a container, etc), these special member functions will be called, if accessible, and if they are not user-defined, they are implicitly-defined by the compiler.
 		* The implicitly-defined special member functions are typically incorrect if the class manages a resource whose handle is an object of non-class type (raw pointer, POSIX file descriptor, etc), whose destructor does nothing and copy constructor/assignment operator performs a "shallow copy" (copy the value of the handle, without duplicating the underlying resource).
 		* Classes that manage non-copyable resources through copyable handles may have to declare copy assignment and copy constructor private and not provide their definitions or define them as deleted. This is another application of the rule of three: deleting one and leaving the other to be implicitly-defined will most likely result in errors.
-	* Rule of five
+	* `Rule of five`
 		* Because the presence of a user-defined (or = default or = delete declared) destructor, copy-constructor, or copy-assignment operator prevents implicit definition of the move constructor and the move assignment operator, any class for which move semantics are desirable, has to declare all five special member functions
 		* Unlike Rule of Three, failing to provide move constructor and move assignment is usually not an error, but a missed optimization opportunity.
 		* [C.21: If you define or =delete any copy, move, or destructor function, define or =delete them all](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c21-if-you-define-or-delete-any-copy-move-or-destructor-function-define-or-delete-them-all)
@@ -2247,7 +2247,7 @@ Deletion time   | log(n) + Rebalance  | Same as search
             ```
             * A minor mistake (such as a misspelling, leaving out a `const`, using `&` instead of `&&`, or leaving out a special function) can lead to errors or warnings. To avoid the tedium and the possibility of errors, try to follow the [rule of zero](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rc-zero).
             * `Enforcement` (Simple) A class should have a declaration (even a `=delete` one) for either `all` or `none` of the `copy/move/destructor functions`.
-	* Rule of zero
+	* `Rule of zero`
 		* Classes that have custom destructors, copy/move constructors or copy/move assignment operators should deal exclusively with ownership (which follows from the Single Responsibility Principle). Other classes should not have custom destructors, copy/move constructors or copy/move assignment operators[1].
 		* This rule also appears in the C++ Core Guidelines as [C.20: If you can avoid defining default operations, do](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c20-if-you-can-avoid-defining-default-operations-do).
 		    * `Reason` It’s the simplest and gives the cleanest semantics.
@@ -2326,7 +2326,7 @@ Deletion time   | log(n) + Rebalance  | Same as search
                 * Flag an assignment of polymorphic class objects.
 	* [Rule of three (C++ programming) - Wikipedia](https://en.wikipedia.org/wiki/Rule_of_three_(C%2B%2B_programming))
 * [Zero-overhead principle - cppreference.com](https://en.cppreference.com/w/cpp/language/Zero-overhead_principle)
-	* The zero-overhead principle is a C++ design principle that states:
+	* The `zero-overhead principle` is a C++ design principle that states:
 		* You don't pay for what you don't use.
 		* What you do use is just as efficient as what you could reasonably write by hand.
 	* In general, this means that no feature should be added to C++ that would impose any overhead, whether in time or space, greater than a programmer would introduce without using the feature.
@@ -2337,7 +2337,7 @@ Deletion time   | log(n) + Rebalance  | Same as search
 * [c-cpp/面试总结之C-C++ at main · haoran119/c-cpp](https://github.com/haoran119/c-cpp/tree/main/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93%E4%B9%8BC-C%2B%2B)
 * [C/C++ 10 大常见基础算法](https://mp.weixin.qq.com/s/tGGNGpaRcWwKiNoQyo-TXw)
 * 用C语言，将一个数字乘以7倍的效率最快的方法是什么？ 
-  * 先左移三位（*8）然后再减去原值：X << 3 – X
+    * 先左移三位（*8）然后再减去原值：X << 3 – X
 
 ### 判断输出结果
 
