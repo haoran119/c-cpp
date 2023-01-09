@@ -2564,6 +2564,150 @@ int main()
 
 #### Class
 
+##### constructor / destructor
+
+```c++
+/*
+What will be printed, and why?
+
+data=1.
+Because class B inherits class A, it would call constructor of A and B when constructing b. 
+When calling the constructor of A, A::SetData() was called, so data was set to 1.
+*/
+
+class A
+{
+public:
+    A () : data (0) { SetData (); printf ("data=%d", data); }
+    virtual void SetData () { data = 1; }
+protected:
+    int data;
+};
+
+class B : public A
+{
+public:
+    B () {}
+    virtual void SetData () { data = 2; }
+};
+
+int main(int argc, char* argv[])
+{
+    B b;
+    return 0;
+}
+```
+```c++
+#include <iostream>
+
+class A
+{
+public:
+    A() { std::cout << "A()\n"; }
+    ~A() { std::cout << "~A()\n"; }
+};
+
+class B : public A
+{
+public:
+    B() { std::cout << "B()\n"; }
+    ~B() { std::cout << "~B()\n"; }
+};
+
+int main()
+{
+    B b;    // A() B()
+    A* p = new B;   // A() B()
+    delete p;   // ~A()
+
+    return 0;
+}   // ~B() ~A()
+```
+```c++
+#include <iostream>
+
+class Base
+{
+public:
+    Base() { std::cout << "Base()\n"; }
+    ~Base() { std::cout << "~Base()\n"; }
+};
+
+class Base2
+{
+public:
+    Base2() { std::cout << "Base2()\n"; }
+    ~Base2() { std::cout << "~Base2()\n"; }
+};
+
+class Derive : public Base, Base2
+{
+public:
+    Derive() { std::cout << "Derive()\n"; }
+    ~Derive() { std::cout << "~Derive()\n"; }
+};
+
+int main()
+{
+    Derive b;    // Base() Base2() Derive()
+    Base* p = new Derive;   // Base() Base2() Derive()
+    delete p;   // ~Base()
+
+    return 0;
+}   // ~Derive() ~Base2() ~Base()
+```
+```c++
+#include<iostream>
+
+struct A {
+    A(int value) : m_value(value)
+    {
+        std::cout << "A(" << m_value << ")" << std::endl;
+    }
+
+    ~A()
+    {
+        std::cout << "~A(" << m_value << ")" << std::endl;
+    }
+
+    A(const A& other) : m_value(other.m_value)
+    {
+        std::cout << "copy constructor" << std::endl;
+    }
+
+    A& operator=(const A& other)
+    {
+        std::cout << "copy assignment" << std::endl;
+        this->m_value = other.m_value;
+        return *this;
+    }
+
+    int m_value;
+};
+
+int main()
+{
+    A a(1);         // A(1)
+
+    {
+        A aa(a);   // copy constructor
+    }               // ~A(1)
+
+    {
+        A aaa = a;   // copy constructor
+    }               // ~A(1)
+
+    {
+        A b(2);     // A(2)
+        b = a;      // copy assignment
+    }               // ~A(1)
+
+    return 0;
+}                   // ~A(1)
+```
+
+###### virtual destructor
+
 ```c++
 /*
 What's wrong, and how to fix?
@@ -2594,6 +2738,90 @@ int main(int argc, char* argv[])
     P1 * pp = new P2;
     ...
     delete pp;
+    return 0;
+}
+```
+```c++
+#include <iostream>
+#include <memory>
+
+class Base
+{
+public:
+    virtual void print() = 0;
+    // virtual ~Base() = default; // to fix it, uncomment this and get "~Derived() : 1"
+};
+
+class Derived : public Base
+{
+public:
+    Derived(int value) 
+    {
+        m_data = new int;
+        *m_data = value;
+        std::cout << "Derived(" << value << ")" << '\n';
+    }
+
+    ~Derived() 
+    { 
+        std::cout << "~Derived() : " << *m_data << '\n'; 
+    }
+
+    void print() override
+    {
+        std::cout << "print() : " << *m_data << '\n';
+    }
+
+private:
+    int* m_data = nullptr;
+};
+
+int main()
+{
+    {
+        Base* p = new Derived(1); // Derived(1)
+        p->print(); // print() : 1
+        delete p;
+    }
+
+    {
+        std::shared_ptr<Base> p_s = std::make_shared<Derived>(2); // Derived(2)
+        p_s->print();   // print() : 2
+    }   // ~Derived() : 2
+
+    return 0;
+}
+```
+
+##### MISC
+
+```c++
+/*
+What will be printed, and why?
+
+In 32-bit environment, size of TestSize2 = 12.
+12 = TestSize2 virtual table pointer(4) + TestSize2::b(4) + TestSize1::a(4)
+*/
+
+class TestSize1
+{
+public:
+    TestSize1 () : a (0) {}
+    virtual void F () = 0;
+private:
+    int a;
+};
+class TestSize2 : public TestSize1
+{
+public:
+    TestSize2 () : b (1) {}
+    virtual void F () { b = 3; }
+private:
+    int b;
+};
+int main(int argc, char* argv[])
+{
+    printf ("size of TestSize2 = %d", sizeof (TestSize2));
     return 0;
 }
 ```
@@ -2656,193 +2884,6 @@ int main()
 
     return 0;
 }
-```
-```c++
-/*
-What will be printed, and why?
-
-In 32-bit environment, size of TestSize2 = 12.
-12 = TestSize2 virtual table pointer(4) + TestSize2::b(4) + TestSize1::a(4)
-*/
-
-class TestSize1
-{
-public:
-    TestSize1 () : a (0) {}
-    virtual void F () = 0;
-private:
-    int a;
-};
-class TestSize2 : public TestSize1
-{
-public:
-    TestSize2 () : b (1) {}
-    virtual void F () { b = 3; }
-private:
-    int b;
-};
-int main(int argc, char* argv[])
-{
-    printf ("size of TestSize2 = %d", sizeof (TestSize2));
-    return 0;
-}
-```
-```c++
-/*
-What will be printed, and why?
-
-data=1.
-Because class B inherits class A, it would call constructor of A and B when constructing b. 
-When calling the constructor of A, A::SetData() was called, so data was set to 1.
-*/
-
-class A
-{
-public:
-    A () : data (0) { SetData (); printf ("data=%d", data); }
-    virtual void SetData () { data = 1; }
-protected:
-    int data;
-};
-
-class B : public A
-{
-public:
-    B () {}
-    virtual void SetData () { data = 2; }
-};
-
-int main(int argc, char* argv[])
-{
-    B b;
-    return 0;
-}
-```
-```c++
-#include <iostream>
-
-class A
-{
-public:
-    A() { std::cout << "A()\n"; }
-    ~A() { std::cout << "~A()\n"; }
-};
-
-class B : public A
-{
-public:
-    B() { std::cout << "B()\n"; }
-    ~B() { std::cout << "~B()\n"; }
-};
-
-int main()
-{
-    B b;    // A() B()
-    A* p = new B;   // A() B()
-    delete p;   // ~A()
-
-    return 0;
-}   // ~B() ~A()
-```
-```c++
-#include <iostream>
-#include <memory>
-
-class Base
-{
-public:
-    virtual void print() = 0;
-    // virtual ~Base() = default; // to fix it, uncomment this and get "~Derived() : 1"
-};
-
-class Derived : public Base
-{
-public:
-    Derived(int value) 
-    {
-        m_data = new int;
-        *m_data = value;
-        std::cout << "Derived(" << value << ")" << '\n';
-    }
-
-    ~Derived() 
-    { 
-        std::cout << "~Derived() : " << *m_data << '\n'; 
-    }
-
-    void print() override
-    {
-        std::cout << "print() : " << *m_data << '\n';
-    }
-
-private:
-    int* m_data = nullptr;
-};
-
-int main()
-{
-    {
-        Base* p = new Derived(1); // Derived(1)
-        p->print(); // print() : 1
-        delete p;
-    }
-
-    {
-        std::shared_ptr<Base> p_s = std::make_shared<Derived>(2); // Derived(2)
-        p_s->print();   // print() : 2
-    }   // ~Derived() : 2
-
-    return 0;
-}
-```
-```c++
-#include<iostream>
-
-struct A {
-    A(int value) : m_value(value)
-    {
-        std::cout << "A(" << m_value << ")" << std::endl;
-    }
-
-    ~A()
-    {
-        std::cout << "~A(" << m_value << ")" << std::endl;
-    }
-
-    A(const A& other) : m_value(other.m_value)
-    {
-        std::cout << "copy constructor" << std::endl;
-    }
-
-    A& operator=(const A& other)
-    {
-        std::cout << "copy assignment" << std::endl;
-        this->m_value = other.m_value;
-        return *this;
-    }
-
-    int m_value;
-};
-
-int main()
-{
-    A a(1);         // A(1)
-
-    {
-        A aa(a);   // copy constructor
-    }               // ~A(1)
-
-    {
-        A aaa = a;   // copy constructor
-    }               // ~A(1)
-
-    {
-        A b(2);     // A(2)
-        b = a;      // copy assignment
-    }               // ~A(1)
-
-    return 0;
-}                   // ~A(1)
 ```
 
 #### STL
