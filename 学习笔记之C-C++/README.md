@@ -6766,11 +6766,11 @@ Accessing the 11th element of the vector...
 
 * `noexcept`	(1)	
 * `noexcept(expression)`	(2)	
-* `throw()`	(3)	(deprecated in C++17) (removed in C++20)
-* 1) Same as noexcept(true)
-* 2) If expression evaluates to true, the function is declared not to throw any exceptions. A ( following noexcept is always a part of this form (it can never start an initializer).
-* 3) Same as noexcept(true) (see dynamic exception specification for its semantics before C++17)
-* expression	-	contextually converted constant expression of type bool
+* `throw()`     (3)	(deprecated in C++17) (removed in C++20)
+* 1) Same as `noexcept(true)`
+* 2) If expression evaluates to `true`, the function is declared not to throw any exceptions. A `(` following `noexcept` is always a part of this form (it can never start an initializer).
+* 3) Same as `noexcept(true)` (see [dynamic exception specification](https://en.cppreference.com/w/cpp/language/except_spec) for its semantics before C++17)
+* expression	-	[contextually converted constant expression of type](https://en.cppreference.com/w/cpp/language/constant_expression#Converted_constant_expression) `bool`
 
 ##### Explanation
 
@@ -6893,11 +6893,19 @@ terminate called after throwing an instance of 'int'
 * [Exception specifications (throw, noexcept) (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/exception-specifications-throw-cpp?view=msvc-160)
 * [Modern C++ best practices for exceptions and error handling | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/errors-and-exception-handling-modern-cpp?view=msvc-160)
 * [C.37: Make destructors noexcept](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c37-make-destructors-noexcept)
-    * Reason A destructor must not fail. If a destructor tries to exit with an exception, it’s a bad design error and the program had better terminate.
-    * Note A destructor (either user-defined or compiler-generated) is implicitly declared noexcept (independently of what code is in its body) if all of the members of its class have noexcept destructors. By explicitly marking destructors noexcept, an author guards against the destructor becoming implicitly noexcept(false) through the addition or modification of a class member.
-    * Example Not all destructors are noexcept by default; one throwing member poisons the whole class hierarchy
+    * `Reason` [A destructor must not fail](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rc-dtor-fail). If a destructor tries to exit with an exception, it’s a bad design error and the program had better terminate.
+    * `Note` A destructor (either user-defined or compiler-generated) is implicitly declared `noexcept` (independently of what code is in its body) if all of the members of its class have `noexcept` destructors. By explicitly marking destructors `noexcept`, an author guards against the destructor becoming implicitly `noexcept(false)` through the addition or modification of a class member.
+    * `Example` Not all destructors are noexcept by default; one throwing member poisons the whole class hierarchy
+    ```c++
+    struct X {
+        Details x;  // happens to have a throwing destructor
+        // ...
+        ~X() { }    // implicitly noexcept(false); aka can throw
+    };
+    ```
     * So, if in doubt, declare a destructor noexcept.
-    * Note Why not then declare all destructors noexcept? Because that would in many cases – especially simple cases – be distracting clutter.Enforcement (Simple) A destructor should be declared noexcept if it could throw.
+    * `Note` Why not then declare all destructors noexcept? Because that would in many cases – especially simple cases – be distracting clutter.
+    * `Enforcement` (Simple) A destructor should be declared `noexcept` if it could throw.
 * [C.66: Make move operations noexcept](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c66-make-move-operations-noexcept)
     * `Reason` A throwing move violates most people’s reasonable assumptions. A non-throwing move will be used more efficiently by standard-library and language facilities.
     * `Example`
