@@ -6939,12 +6939,37 @@ terminate called after throwing an instance of 'int'
     * `Enforcement` (Simple) A move operation should be marked `noexcept`.
 * [E.12: Use noexcept when exiting a function because of a throw is impossible or unacceptable](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#e12-use-noexcept-when-exiting-a-function-because-of-a-throw-is-impossible-or-unacceptable)
     * `Reason` To make error handling systematic, robust, and efficient.
-    * `Note` Many standard-library functions are noexcept including all the standard-library functions “inherited” from the C Standard Library.
+    * `Example`
+    ```c++
+    double compute(double d) noexcept
+    {
+        return log(sqrt(d <= 0 ? 1 : d));
+    }
+    ```
+    * Here, we know that `compute` will not throw because it is composed out of operations that don’t throw. By declaring `compute` to be `noexcept`, we give the compiler and human readers information that can make it easier for them to understand and manipulate `compute`.
+    * `Note` Many standard-library functions are `noexcept` including all the standard-library functions “inherited” from the C Standard Library.
+    * `Example`
+    ```c++
+    vector<double> munge(const vector<double>& v) noexcept
+    {
+        vector<double> v2(v.size());
+        // ... do something ...
+    }
+    ```
+    * The `noexcept` here states that I am not willing or able to handle the situation where I cannot construct the local vector. That is, I consider memory exhaustion a serious design error (on par with hardware failures) so that I’m willing to crash the program if it happens.
+    * `Note` Do not use traditional [exception-specifications](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Re-specifications).
+    * See also [discussion](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Sd-noexcept).
 * [F.6: If your function must not throw, declare it noexcept](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f6-if-your-function-must-not-throw-declare-it-noexcept)
-    * `Reason` If an exception is not supposed to be thrown, the program cannot be assumed to cope with the error and should be terminated as soon as possible. Declaring a function noexcept helps optimizers by reducing the number of alternative execution paths. It also speeds up the exit after failure.
-    * `Example` Put noexcept on every function written completely in C or in any other language without exceptions. The C++ Standard Library does that implicitly for all functions in the C Standard Library.
-    * `Note` constexpr functions can throw when evaluated at run time, so you might need conditional noexcept for some of those.
-    * noexcept is most useful (and most clearly correct) for frequently used, low-level functions.
+    * `Reason` If an exception is not supposed to be thrown, the program cannot be assumed to cope with the error and should be terminated as soon as possible. Declaring a function `noexcept` helps optimizers by reducing the number of alternative execution paths. It also speeds up the exit after failure.
+    * `Example` Put `noexcept` on every function written completely in C or in any other language without exceptions. The C++ Standard Library does that implicitly for all functions in the C Standard Library.
+    * `Note` `constexpr` functions can throw when evaluated at run time, so you might need conditional `noexcept` for some of those.
+    * `Note` You must be aware of the execution environment that your code is running when deciding whether to tag a function `noexcept`, especially because of the issue of throwing and allocation. Code that is intended to be perfectly general (like the standard library and other utility code of that sort) needs to support environments where a bad_alloc exception could be handled meaningfully. However, most programs and execution environments cannot meaningfully handle a failure to allocate, and aborting the program is the cleanest and simplest response to an allocation failure in those cases. If you know that your application code cannot respond to an allocation failure, it could be appropriate to add `noexcept` even on functions that allocate.
+    * Put another way: In most programs, most functions can throw (e.g., because they use `new`, call functions that do, or use library functions that reports failure by throwing), so don’t just sprinkle `noexcept` all over the place without considering whether the possible exceptions can be handled.
+    * `noexcept` is most useful (and most clearly correct) for frequently used, low-level functions.
+    * `Note` Destructors, swap functions, move operations, and default constructors should never throw. See also [C.44](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rc-default00).
+    * `Enforcement`
+        * Flag functions that are not `noexcept`, yet cannot throw.
+        * Flag throwing `swap`, `move`, destructors, and default constructors.
 * [现代C++编程实践(八)—关于noexcept修饰符和noexcept操作符](https://mp.weixin.qq.com/s/mAh7amGmNTbKqgW2GYEIog)
     * noexcept修饰符和noexcept操作符可以说是两个概念，C++标准委员会给noexcept的这两种用法的定义如下：
         * noexcept修饰符：指定函数是否抛出异常。
