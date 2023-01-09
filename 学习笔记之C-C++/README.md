@@ -6935,15 +6935,15 @@ terminate called after throwing an instance of 'int'
         int sz;
     };
     ```
-    * This Vector2 is not just inefficient, but since a vector copy requires allocation, it can throw.
-    * Enforcement (Simple) A move operation should be marked noexcept.
-* [C++ Core Guidelines - E.12: Use noexcept when exiting a function because of a throw is impossible or unacceptable](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#e12-use-noexcept-when-exiting-a-function-because-of-a-throw-is-impossible-or-unacceptable)
-    * Reason To make error handling systematic, robust, and efficient.
-    * Note Many standard-library functions are noexcept including all the standard-library functions “inherited” from the C Standard Library.
-* [C++ Core Guidelines - F.6: If your function must not throw, declare it noexcept](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f6-if-your-function-must-not-throw-declare-it-noexcept)
-    * Reason If an exception is not supposed to be thrown, the program cannot be assumed to cope with the error and should be terminated as soon as possible. Declaring a function noexcept helps optimizers by reducing the number of alternative execution paths. It also speeds up the exit after failure.
-    * Example Put noexcept on every function written completely in C or in any other language without exceptions. The C++ Standard Library does that implicitly for all functions in the C Standard Library.
-    * Note constexpr functions can throw when evaluated at run time, so you might need conditional noexcept for some of those.
+    * This `Vector2` is not just inefficient, but since a vector copy requires allocation, it can throw.
+    * `Enforcement` (Simple) A move operation should be marked `noexcept`.
+* [E.12: Use noexcept when exiting a function because of a throw is impossible or unacceptable](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#e12-use-noexcept-when-exiting-a-function-because-of-a-throw-is-impossible-or-unacceptable)
+    * `Reason` To make error handling systematic, robust, and efficient.
+    * `Note` Many standard-library functions are noexcept including all the standard-library functions “inherited” from the C Standard Library.
+* [F.6: If your function must not throw, declare it noexcept](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#f6-if-your-function-must-not-throw-declare-it-noexcept)
+    * `Reason` If an exception is not supposed to be thrown, the program cannot be assumed to cope with the error and should be terminated as soon as possible. Declaring a function noexcept helps optimizers by reducing the number of alternative execution paths. It also speeds up the exit after failure.
+    * `Example` Put noexcept on every function written completely in C or in any other language without exceptions. The C++ Standard Library does that implicitly for all functions in the C Standard Library.
+    * `Note` constexpr functions can throw when evaluated at run time, so you might need conditional noexcept for some of those.
     * noexcept is most useful (and most clearly correct) for frequently used, low-level functions.
 * [现代C++编程实践(八)—关于noexcept修饰符和noexcept操作符](https://mp.weixin.qq.com/s/mAh7amGmNTbKqgW2GYEIog)
     * noexcept修饰符和noexcept操作符可以说是两个概念，C++标准委员会给noexcept的这两种用法的定义如下：
