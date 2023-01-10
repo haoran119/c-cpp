@@ -17516,6 +17516,126 @@ int main()
 * `std::memory_order` specifies how memory accesses, including regular, non-atomic memory accesses, are to be ordered around an atomic operation. Absent any constraints on a multi-core system, when multiple threads simultaneously read and write to several variables, one thread can observe the values change in an order different from the order another thread wrote them. Indeed, the apparent order of changes can even differ among multiple reader threads. Some similar effects can occur even on uniprocessor systems due to compiler transformations allowed by the memory model.
 * The default behavior of all atomic operations in the library provides for `sequentially consistent ordering` (see discussion below). That default can hurt performance, but the library's atomic operations can be given an additional `std::memory_order` argument to specify the exact constraints, beyond atomicity, that the compiler and processor must enforce for that operation.
 
+###### Explanation
+
+#
+Relaxed ordering
+
+* Atomic operations tagged `memory_order_relaxed` are not synchronization operations; they do not impose an order among concurrent memory accesses. They only guarantee atomicity and modification order consistency.
+* ...
+* Typical use for relaxed memory ordering is incrementing counters, such as the reference counters of `std::shared_ptr`, since this only requires atomicity, but not ordering or synchronization (note that decrementing the shared_ptr counters requires acquire-release synchronization with the destructor)
+```c++
+#include <vector>
+#include <iostream>
+#include <thread>
+#include <atomic>
+ 
+std::atomic<int> cnt = {0};
+ 
+void f()
+{
+    for (int n = 0; n < 1000; ++n) {
+        cnt.fetch_add(1, std::memory_order_relaxed);
+    }
+}
+ 
+int main()
+{
+    std::vector<std::thread> v;
+    for (int n = 0; n < 10; ++n) {
+        v.emplace_back(f);
+    }
+    for (auto& t : v) {
+        t.join();
+    }
+    std::cout << "Final counter value is " << cnt << '\n';
+}
+/*
+Final counter value is 10000
+*/
+```
+
+#
+Release-Acquire ordering
+
+* If an atomic store in thread A is tagged `memory_order_release`, an atomic load in thread B from the same variable is tagged `memory_order_acquire`, and the load in thread B reads a value written by the store in thread A, then the store in thread A `synchronizes-with` the load in thread B.
+* ...
+* Mutual exclusion locks, such as `std::mutex` or [atomic spinlock](https://en.cppreference.com/w/cpp/atomic/atomic_flag), are an example of release-acquire synchronization: when the lock is released by thread A and acquired by thread B, everything that took place in the critical section (before the release) in the context of thread A has to be visible to thread B (after the acquire) which is executing the same critical section.
+```c++
+#include <thread>
+#include <atomic>
+#include <cassert>
+#include <string>
+ 
+std::atomic<std::string*> ptr;
+int data;
+ 
+void producer()
+{
+    std::string* p  = new std::string("Hello");
+    data = 42;
+    ptr.store(p, std::memory_order_release);
+}
+ 
+void consumer()
+{
+    std::string* p2;
+    while (!(p2 = ptr.load(std::memory_order_acquire)))
+        ;
+    assert(*p2 == "Hello"); // never fires
+    assert(data == 42); // never fires
+}
+ 
+int main()
+{
+    std::thread t1(producer);
+    std::thread t2(consumer);
+    t1.join(); t2.join();
+}
+```
+* The following example demonstrates transitive release-acquire ordering across three threads, using a release sequence
+```c++
+#include <thread>
+#include <atomic>
+#include <cassert>
+#include <vector>
+ 
+std::vector<int> data;
+std::atomic<int> flag = {0};
+ 
+void thread_1()
+{
+    data.push_back(42);
+    flag.store(1, std::memory_order_release);
+}
+ 
+void thread_2()
+{
+    int expected=1;
+    // memory_order_relaxed is okay because this is an RMW,
+    // and RMWs (with any ordering) following a release form a release sequence
+    while (!flag.compare_exchange_strong(expected, 2, std::memory_order_relaxed)) {
+        expected = 1;
+    }
+}
+ 
+void thread_3()
+{
+    while (flag.load(std::memory_order_acquire) < 2)
+        ;
+    // if we read the value 2 from the atomic flag, we see 42 in the vector
+    assert(data.at(0) == 42); // will never fire
+}
+ 
+int main()
+{
+    std::thread a(thread_1);
+    std::thread b(thread_2);
+    std::thread c(thread_3);
+    a.join(); b.join(); c.join();
+}
+```
+
 ### Mutual exclusion
 
 * Mutual exclusion algorithms prevent multiple threads from simultaneously accessing shared resources. This prevents data races and provides support for synchronization between threads.
