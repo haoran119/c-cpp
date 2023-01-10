@@ -17513,6 +17513,27 @@ int main()
 ##### [std::memory_order](https://en.cppreference.com/w/cpp/atomic/memory_order)
 
 * defines memory ordering constraints for the given atomic operation (enum)
+* Defined in header `<atomic>`
+```c++
+typedef enum memory_order {
+    memory_order_relaxed,
+    memory_order_consume,
+    memory_order_acquire,
+    memory_order_release,
+    memory_order_acq_rel,
+    memory_order_seq_cst
+} memory_order;     (since C++11)(until C++20)
+
+enum class memory_order : /*unspecified*/ {
+    relaxed, consume, acquire, release, acq_rel, seq_cst
+};
+inline constexpr memory_order memory_order_relaxed = memory_order::relaxed;
+inline constexpr memory_order memory_order_consume = memory_order::consume;
+inline constexpr memory_order memory_order_acquire = memory_order::acquire;
+inline constexpr memory_order memory_order_release = memory_order::release;
+inline constexpr memory_order memory_order_acq_rel = memory_order::acq_rel;
+inline constexpr memory_order memory_order_seq_cst = memory_order::seq_cst;     (since C++20)
+```
 * `std::memory_order` specifies how memory accesses, including regular, non-atomic memory accesses, are to be ordered around an atomic operation. Absent any constraints on a multi-core system, when multiple threads simultaneously read and write to several variables, one thread can observe the values change in an order different from the order another thread wrote them. Indeed, the apparent order of changes can even differ among multiple reader threads. Some similar effects can occur even on uniprocessor systems due to compiler transformations allowed by the memory model.
 * The default behavior of all atomic operations in the library provides for `sequentially consistent ordering` (see discussion below). That default can hurt performance, but the library's atomic operations can be given an additional `std::memory_order` argument to specify the exact constraints, beyond atomicity, that the compiler and processor must enforce for that operation.
 
@@ -17633,6 +17654,99 @@ int main()
     std::thread b(thread_2);
     std::thread c(thread_3);
     a.join(); b.join(); c.join();
+}
+```
+
+#
+Release-Consume ordering
+
+* If an atomic store in thread A is tagged `memory_order_release`, an atomic load in thread B from the same variable is tagged `memory_order_consume`, and the load in thread B reads a value written by the store in thread A, then the store in thread A is dependency-ordered before the load in thread B.
+* ...
+* This example demonstrates dependency-ordered synchronization for pointer-mediated publication: the integer data is not related to the pointer to string by a data-dependency relationship, thus its value is undefined in the consumer.
+```c++
+#include <thread>
+#include <atomic>
+#include <cassert>
+#include <string>
+ 
+std::atomic<std::string*> ptr;
+int data;
+ 
+void producer()
+{
+    std::string* p  = new std::string("Hello");
+    data = 42;
+    ptr.store(p, std::memory_order_release);
+}
+ 
+void consumer()
+{
+    std::string* p2;
+    while (!(p2 = ptr.load(std::memory_order_consume)))
+        ;
+    assert(*p2 == "Hello"); // never fires: *p2 carries dependency from ptr
+    assert(data == 42); // may or may not fire: data does not carry dependency from ptr
+}
+ 
+int main()
+{
+    std::thread t1(producer);
+    std::thread t2(consumer);
+    t1.join(); t2.join();
+}
+```
+
+#
+Sequentially-consistent ordering
+
+* Atomic operations tagged `memory_order_seq_cst` not only order memory the same way as release/acquire ordering (everything that `happened-before` a store in one thread becomes a `visible side effect` in the thread that did a load), but also establish a `single total modification order` of all atomic operations that are so tagged.
+* ...
+* This example demonstrates a situation where sequential ordering is necessary. Any other ordering may trigger the assert because it would be possible for the threads c and d to observe changes to the atomics x and y in opposite order.
+```c++
+#include <thread>
+#include <atomic>
+#include <cassert>
+ 
+std::atomic<bool> x = {false};
+std::atomic<bool> y = {false};
+std::atomic<int> z = {0};
+ 
+void write_x()
+{
+    x.store(true, std::memory_order_seq_cst);
+}
+ 
+void write_y()
+{
+    y.store(true, std::memory_order_seq_cst);
+}
+ 
+void read_x_then_y()
+{
+    while (!x.load(std::memory_order_seq_cst))
+        ;
+    if (y.load(std::memory_order_seq_cst)) {
+        ++z;
+    }
+}
+ 
+void read_y_then_x()
+{
+    while (!y.load(std::memory_order_seq_cst))
+        ;
+    if (x.load(std::memory_order_seq_cst)) {
+        ++z;
+    }
+}
+ 
+int main()
+{
+    std::thread a(write_x);
+    std::thread b(write_y);
+    std::thread c(read_x_then_y);
+    std::thread d(read_y_then_x);
+    a.join(); b.join(); c.join(); d.join();
+    assert(z.load() != 0);  // will never happen
 }
 ```
 
