@@ -17329,7 +17329,7 @@ test1_result test3_result test2_result test4_result
 ### [Atomic operations library](https://en.cppreference.com/w/cpp/atomic)
 
 * These components are provided for fine-grained atomic operations allowing for lockless concurrent programming. Each atomic operation is indivisible with regards to any other atomic operation that involves the same object. Atomic objects are [free of data races](https://en.cppreference.com/w/cpp/language/memory_model#Threads_and_data_races).
-* Neither the _Atomic macro, nor any of the non-macro global namespace declarations are provided by any C++ standard library header other than \<stdatomic.h>. (since C++23)
+* Neither the _Atomic macro, nor any of the non-macro global namespace declarations are provided by any C++ standard library header other than `<stdatomic.h>`. (since C++23)
 * Defined in header [\<atomic>](https://en.cppreference.com/w/cpp/header/atomic)
 
 #### [std::atomic](https://en.cppreference.com/w/cpp/atomic/atomic)
@@ -17337,19 +17337,33 @@ test1_result test3_result test2_result test4_result
 * Each instantiation and full specialization of the std::atomic template defines an atomic type. If one thread writes to an atomic object while another thread reads from it, the behavior is well-defined (see memory model for details on data races).
 * In addition, accesses to atomic objects may establish inter-thread synchronization and order non-atomic memory accesses as specified by std::memory_order.
 * std::atomic is neither copyable nor movable.
-* [std::atomic\<T>::atomic - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/atomic)
-    * constructs an atomic object
-* [std::atomic\<T>::compare_exchange_weak, std::atomic\<T>::compare_exchange_strong - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange)
-    * atomically compares the value of the atomic object with non-atomic argument and performs atomic exchange if equal or atomic load if not
+
+##### Member functions
+
+###### [std::atomic\<T>::atomic - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/atomic)
+
+* (constructor)
+* constructs an atomic object (public member function)
+
+###### [std::atomic\<T>::store - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/store)
+    
+* atomically replaces the value of the atomic object with a non-atomic argument (public member function)
+
+###### [std::atomic\<T>::load - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/load)
+
+* atomically obtains the value of the atomic object (public member function)
+
+###### [std::atomic\<T>::compare_exchange_weak, std::atomic\<T>::compare_exchange_strong - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange)
+
+* atomically compares the value of the atomic object with non-atomic argument and performs atomic exchange if equal or atomic load if not (public member function)
 * [atomic_compare_exchange_strong - C++ Reference](https://www.cplusplus.com/reference/atomic/atomic_compare_exchange_strong/)
     * Compare and exchange contained value (strong)
     * Compares the contents of the value contained in obj with the value pointed by expected:
     * - if true, it replaces the contained value with val.
     * - if false, it replaces the value pointed by expected with the contained value .
-* [std::atomic\<T>::load - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/load)
-    * atomically obtains the value of the atomic object
-* [std::atomic\<T>::store - cppreference.com](https://en.cppreference.com/w/cpp/atomic/atomic/store)
-    * atomically replaces the value of the atomic object with a non-atomic argument
+
+##### MISC
+ 
 * [Non-blocking algorithm - Wikipedia](https://en.wikipedia.org/wiki/Non-blocking_algorithm)
     * In computer science, an algorithm is called non-blocking if failure or suspension of any thread cannot cause failure or suspension of another thread;[1] for some operations, these algorithms provide a useful alternative to traditional blocking implementations. A non-blocking algorithm is lock-free if there is guaranteed system-wide progress, and wait-free if there is also guaranteed per-thread progress. "Non-blocking" was used as a synonym for "lock-free" in the literature until the introduction of obstruction-freedom in 2003.[2]
 * [Linearizability - Wikipedia](https://en.wikipedia.org/wiki/Linearizability)
@@ -17438,6 +17452,7 @@ int main()
 ```
 ![image](https://user-images.githubusercontent.com/34557994/156122924-ede55b2c-d15d-47cc-af2c-0b219f1d3391.png)
 * [C++ 11 开发中的 Atomic 原子操作](https://mp.weixin.qq.com/s/FSE95BtgA2PT59HCX3EzsQ)
+
 * [std::memory_order - cppreference.com](https://en.cppreference.com/w/cpp/atomic/memory_order)
 	* defines memory ordering constraints for the given atomic operation (enum)
 	* std::memory_order specifies how memory accesses, including regular, non-atomic memory accesses, are to be ordered around an atomic operation. Absent any constraints on a multi-core system, when multiple threads simultaneously read and write to several variables, one thread can observe the values change in an order different from the order another thread wrote them. Indeed, the apparent order of changes can even differ among multiple reader threads. Some similar effects can occur even on uniprocessor systems due to compiler transformations allowed by the memory model.
