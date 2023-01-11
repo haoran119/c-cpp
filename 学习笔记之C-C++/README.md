@@ -17028,39 +17028,43 @@ Some people, when [confronted] with a [problem], think
 * Threads begin execution immediately upon construction of the associated thread object (pending any OS scheduling delays), starting at the top-level function provided as a constructor argument. The return value of the top-level function is ignored and if it terminates by throwing an exception, std::terminate is called. The top-level function may communicate its return value or an exception to the caller via std::promise or by modifying shared variables (which may require synchronization, see std::mutex and std::atomic)
 * std::thread objects may also be in the state that does not represent any thread (after default construction, move from, detach, or join), and a thread of execution may not be associated with any thread objects (after detach).
 * No two std::thread objects may represent the same thread of execution; std::thread is not CopyConstructible or CopyAssignable, although it is MoveConstructible and MoveAssignable.
-* [`std::thread::thread`](https://en.cppreference.com/w/cpp/thread/thread/thread)
-    * (constructor)
-	* constructs new thread object (public member function)
-	* 1) Creates new thread object which does not represent a thread.
-	* 2) Move constructor. Constructs the thread object to represent the thread of execution that was represented by other. After this call other no longer represents a thread of execution.
-	* 3) Creates new std::thread object and associates it with a thread of execution. The new thread of execution starts executing /*INVOKE*/(std::move(f_copy), std::move(args_copy)...), where
-		* /*INVOKE*/ performs the INVOKE operation specified in Callable, which can be performed by std::invoke (since C++17), and
-		* f_copy is an object of type std::decay\<Function>::type and constructed from std::forward\<Function>(f), and
-		* args_copy... are objects of types std::decay\<Args>::type... and constructed from std::forward\<Args>(args)....
-	* Constructions of these objects are executed in the context of the caller, so that any exceptions thrown during evaluation and copying/moving of the arguments are thrown in the current thread, without starting the new thread. The program is ill-formed if any construction or the INVOKE operation is invalid.
-	* This constructor does not participate in overload resolution if std::decay\<Function>::type is the same type as thread.
-	* The completion of the invocation of the constructor synchronizes-with (as defined in std::memory_order) the beginning of the invocation of the copy of f on the new thread of execution.
-	* 4) The copy constructor is deleted; threads are not copyable. No two std::thread objects may represent the same thread of execution.
-	* Parameters
-		* other	- another thread object to construct this thread object with
-		* f	- [Callable](https://en.cppreference.com/w/cpp/named_req/Callable) object to execute in the new thread
-		* args...	-	arguments to pass to the new function
-		* C++ named requirements: Callable
-            * A Callable type is a type for which the INVOKE operation (used by, e.g., std::function, std::bind, and std::thread::thread) is applicable.
-            * The INVOKE operation may be performed explicitly using the library function std::invoke. (since C++17)
-            * The INVOKE operation with explicitly specified return type (INVOKE\<R>) may be performed explicitly using the library function std::invoke_r. (since C++23)
-            * Notes
-                * For pointers to member functions and pointers to data members, t1 may be a `regular pointer` or an `object of class type that overloads operator*`, such as std::unique_ptr or std::shared_ptr.
-                * `Pointers to data members` are Callable, even though no function calls take place.
-	* Postconditions
-		* 1) get_id() equal to `std::thread::id()` (i.e. joinable is false)
-		* 2) other.get_id() equal to `std::thread::id()` and get_id() returns the value of other.get_id() prior to the start of construction
-		* 3) get_id() not equal to `std::thread::id()` (i.e. joinable is true)
-	* Exceptions
-		* 3) std::system_error if the thread could not be started. The exception may represent the error condition std::errc::resource_unavailable_try_again or another implementation-specific error condition.
-	* Notes
-		* The arguments to the thread function are moved or copied by value. If a reference argument needs to be passed to the thread function, it has to be wrapped (e.g., with std::ref or std::cref).
-		* Any return value from the function is ignored. If the function throws an exception, std::terminate is called. In order to pass return values or exceptions back to the calling thread, std::promise or std::async may be used.
+
+##### Member functions
+
+###### [`std::thread::thread`](https://en.cppreference.com/w/cpp/thread/thread/thread)
+
+* (constructor)
+* constructs new thread object (public member function)
+    * 1) Creates new thread object which does not represent a thread.
+    * 2) Move constructor. Constructs the thread object to represent the thread of execution that was represented by other. After this call other no longer represents a thread of execution.
+    * 3) Creates new std::thread object and associates it with a thread of execution. The new thread of execution starts executing `/*INVOKE*/(std::move(f_copy), std::move(args_copy)...)`, where
+        * `/*INVOKE*/` performs the INVOKE operation specified in Callable`, which can be performed by std::invoke (since C++17)`, and
+        * `f_copy` is an object of type `std::decay<Function>::type` and constructed from `std::forward<Function>(f)`, and
+        * `args_copy...` are objects of types `std::decay<Args>::type...` and constructed from `std::forward<Args>(args)...`.
+    * Constructions of these objects are executed in the context of the caller, so that any exceptions thrown during evaluation and copying/moving of the arguments are thrown in the current thread, without starting the new thread. The program is ill-formed if any construction or the `INVOKE` operation is invalid.
+    * This constructor does not participate in overload resolution if `std::decay<Function>::type` is the same type as thread.
+    * The completion of the invocation of the constructor `synchronizes-with` (as defined in `std::memory_order`) the beginning of the invocation of the copy of f on the new thread of execution.
+    * 4) The copy constructor is deleted; threads are not copyable. No two `std::thread` objects may represent the same thread of execution.
+* Parameters
+    * other	- another thread object to construct this thread object with
+    * f	- [Callable](https://en.cppreference.com/w/cpp/named_req/Callable) object to execute in the new thread
+    * args...	-	arguments to pass to the new function
+    * C++ named requirements: Callable
+        * A Callable type is a type for which the INVOKE operation (used by, e.g., std::function, std::bind, and std::thread::thread) is applicable.
+        * The INVOKE operation may be performed explicitly using the library function std::invoke. (since C++17)
+        * The INVOKE operation with explicitly specified return type (INVOKE\<R>) may be performed explicitly using the library function std::invoke_r. (since C++23)
+        * Notes
+            * For pointers to member functions and pointers to data members, t1 may be a `regular pointer` or an `object of class type that overloads operator*`, such as `std::unique_ptr` or `std::shared_ptr`.
+            * `Pointers to data members` are Callable, even though no function calls take place.
+* Postconditions
+    * 1) `get_id()` equal to `std::thread::id()` (i.e. joinable is false)
+    * 2) `other.get_id()` equal to `std::thread::id()` and `get_id()` returns the value of `other.get_id()` prior to the start of construction
+    * 3) `get_id()` not equal to `std::thread::id()` (i.e. joinable is true)
+* Exceptions
+    * 3) `std::system_error` if the thread could not be started. The exception may represent the error condition `std::errc::resource_unavailable_try_again` or another implementation-specific error condition.
+* Notes
+    * The arguments to the thread function are moved or copied by value. If a reference argument needs to be passed to the thread function, it has to be wrapped (e.g., with `std::ref` or `std::cref`).
+    * Any return value from the function is ignored. If the function throws an exception, `std::terminate` is called. In order to pass return values or exceptions back to the calling thread, `std::promise` or `std::async` may be used.
 * [thread::thread - C++ Reference](https://cplusplus.com/reference/thread/thread/thread/)
 	* Data races
 		* The move constructor (4) modifies x.
@@ -17119,26 +17123,32 @@ foo: 10000
 bar: 10000
 */
 ```
-* [`std::thread::joinable` - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/joinable)
+
+###### Observers
+
+* [`std::thread::joinable`](https://en.cppreference.com/w/cpp/thread/thread/joinable)
 	* checks whether the thread is joinable, i.e. potentially running in parallel context (public member function)
 	* Checks if the std::thread object identifies an active thread of execution. Specifically, returns true if get_id() != `std::thread::id()`. So a default constructed thread is not joinable.
 	* A thread that has finished executing code, but has not yet been joined is still considered an active thread of execution and is therefore joinable.
 	* Return value
 		* true if the thread object identifies an active thread of execution, false otherwise
-* [`std::thread::get_id` - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/get_id)
+* [`std::thread::get_id`](https://en.cppreference.com/w/cpp/thread/thread/get_id)
 	* Returns a value of `std::thread::id` identifying the thread associated with *this.
 	* Return value
 		* A value of type `std::thread::id` identifying the thread associated with *this. If there is no thread associated, default constructed `std::thread::id` is returned.
-* [`std::thread::hardware_concurrency` - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency)
+* [`std::thread::hardware_concurrency`](https://en.cppreference.com/w/cpp/thread/thread/hardware_concurrency)
 	* returns the number of concurrent threads supported by the implementation (public static member function)
 	* Returns the number of concurrent threads supported by the implementation. The value should be considered only a hint.
 	* Return value
 		* Number of concurrent threads supported. If the value is not well defined or not computable, returns ​0​.
-* [`std::thread::join` - cppreference.com](https://en.cppreference.com/w/cpp/thread/thread/join)
+
+###### Operations
+
+* [`std::thread::join`](https://en.cppreference.com/w/cpp/thread/thread/join)
 	* waits for the thread to finish its execution (public member function)
-	* Blocks the current thread until the thread identified by *this finishes its execution.
-	* The completion of the thread identified by *this synchronizes with the corresponding successful return from join().
-	* No synchronization is performed on *this itself. Concurrently calling join() on the same thread object from multiple threads constitutes a data race that results in undefined behavior.
+	* Blocks the current thread until the thread identified by `*this` finishes its execution.
+	* The completion of the thread identified by `*this` synchronizes with the corresponding successful return from join().
+	* No synchronization is performed on `*this` itself. Concurrently calling join() on the same thread object from multiple threads constitutes a data race that results in undefined behavior.
 	* Postconditions
 		* joinable() is false
 	* Exceptions
@@ -17147,6 +17157,9 @@ bar: 10000
 		* resource_deadlock_would_occur if this->get_id() == std::this_thread::get_id() (deadlock detected)
 		* no_such_process if the thread is not valid
 		* invalid_argument if joinable() is false
+
+##### MISC
+
 * [Multithreading in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/multithreading-in-cpp/)
     * std::thread is the thread class that represents a single thread in C++. To start a thread we simply need to create a new thread object and pass the executing code to be called (i.e, a callable object) into the constructor of the object. Once the object is created a new thread is launched which will execute the code specified in callable.
     * A `callable` can be either of the three
@@ -17318,12 +17331,25 @@ test1_result test3_result test2_result test4_result
 */
 ```
 
+#### [std::jthread (C++20)](https://en.cppreference.com/w/cpp/thread/jthread)
+
+* `std::thread` with support for auto-joining and cancellation (class)
+* Defined in header `<thread>`
+* `class jthread;   (since C++20)`
+* The class jthread represents [a single thread of execution](https://en.wikipedia.org/wiki/Thread_(computing)). It has the same general behavior as `std::thread`, except that jthread automatically rejoins on destruction, and can be cancelled/stopped in certain situations.
+* Threads begin execution immediately upon construction of the associated thread object (pending any OS scheduling delays), starting at the top-level function provided as a [constructor argument](https://en.cppreference.com/w/cpp/thread/jthread/jthread). The return value of the top-level function is ignored and if it terminates by throwing an exception, `std::terminate` is called. The top-level function may communicate its return value or an exception to the caller via `std::promise` or by modifying shared variables (which may require synchronization, see `std::mutex` and `std::atomic`)
+* Unlike `std::thread`, the jthread logically holds an internal private member of type `std::stop_source`, which maintains a shared stop-state. The jthread constructor accepts a function that takes a `std::stop_token` as its first argument, which will be passed in by the jthread from its internal `std::stop_source`. This allows the function to check if stop has been requested during its execution, and return if it has.
+* `std::jthread` objects may also be in the state that does not represent any thread (after default construction, move from, detach, or join), and a thread of execution may be not associated with any jthread objects (after detach).
+* No two `std::jthread` objects may represent the same thread of execution; `std::jthread` is not `CopyConstructible` or `CopyAssignable`, although it is `MoveConstructible` and `MoveAssignable`.
+
 #### Functions managing the current thread
 
-* [std::this_thread::sleep_for - cppreference.com](https://en.cppreference.com/w/cpp/thread/sleep_for)
-	* Blocks the execution of the current thread for at least the specified sleep_duration.
-	* This function may block for longer than sleep_duration due to scheduling or resource contention delays.
-	* The standard recommends that a steady clock is used to measure the duration. If an implementation uses a system clock instead, the wait time may also be sensitive to clock adjustments.
+##### [std::this_thread::sleep_for](https://en.cppreference.com/w/cpp/thread/sleep_for)
+
+* stops the execution of the current thread for a specified time duration (function)
+* Blocks the execution of the current thread for at least the specified sleep_duration.
+* This function may block for longer than sleep_duration due to scheduling or resource contention delays.
+* The standard recommends that a steady clock is used to measure the duration. If an implementation uses a system clock instead, the wait time may also be sensitive to clock adjustments.
 * [Sleep v.s. sleep - 浩然119 - 博客园](https://www.cnblogs.com/pegasus923/p/5584088.html)
 
 ### [Atomic operations library](https://en.cppreference.com/w/cpp/atomic)
