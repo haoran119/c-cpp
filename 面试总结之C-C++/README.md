@@ -2870,6 +2870,31 @@ int main()
 
 ```c++
 /*
+What's wrong, and how to fix ?
+
+To fix it, change to class C : public Point {}
+*/
+#include <iostream>
+
+struct Point {
+    int x;
+    int y;
+    int z;
+};
+
+class C : Point {
+};
+
+int main()
+{
+    C c;            
+    c.x = 5; c.y = 3; c.z = 1;  // error: 'int Point::x' is inaccessible within this context
+
+    return 0;
+}
+```
+```c++
+/*
 What will be printed, and why?
 
 In 32-bit environment, size of TestSize2 = 12.
