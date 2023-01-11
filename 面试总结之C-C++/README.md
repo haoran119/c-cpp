@@ -3011,4 +3011,120 @@ int main()
 }
 ```
 
+#### Concurrency
+
+* Implement thread safety for SomeClass
+```c++
+#include <iostream>
+#include <atomic>
+#include <mutex>
+#include <thread>
+#include <vector>
+
+// SomeClass
+class SomeClass {
+    static int instance_count;
+
+public:
+    SomeClass() { ++ instance_count; }
+    int GetCount() const { return instance_count; }
+};
+
+int SomeClass::instance_count{0};
+
+// SomeClass1
+class SomeClass1 {
+    static std::atomic<int> instance_count;
+
+public:
+    SomeClass1() { ++ instance_count; }
+    int GetCount() const { return instance_count; }
+};
+
+std::atomic<int> SomeClass1::instance_count{0};
+
+// SomeClass2
+std::mutex mtx;
+
+class SomeClass2 {
+    static int instance_count;
+
+public:
+    SomeClass2() 
+    {
+        std::lock_guard<std::mutex> lock(mtx);
+        ++ instance_count; 
+    }
+    int GetCount() const { return instance_count; }
+};
+
+int SomeClass2::instance_count{0};
+
+// ??? SomeClass3
+class SomeClass3 {
+    static std::atomic<int> instance_count;
+
+public:
+    SomeClass3() { instance_count.fetch_add(1); }
+    int GetCount() const { return instance_count; }
+};
+
+std::atomic<int> SomeClass3::instance_count{0};
+
+auto n = 10;
+std::vector<int> return_values(n * n);
+ 
+void do_work(int thread_num)
+{
+    for (auto i = 0; i < n; ++ i) {
+        SomeClass obj;    
+        return_values[thread_num] = obj.GetCount();
+
+        // SomeClass1 obj1;    
+        // return_values[thread_num] = obj1.GetCount();
+
+        // SomeClass2 obj2;    
+        // return_values[thread_num] = obj2.GetCount();
+
+        // SomeClass3 obj3;    
+        // return_values[thread_num] = obj3.GetCount();
+    }
+}
+ 
+int main()
+{
+    {
+        std::vector<std::thread> threads;
+        threads.reserve(n);
+
+        for (auto i = 0; i < n; ++ i) {
+            threads.emplace_back(std::thread(do_work, i));
+            // std::jthread th0{do_work, i};
+        }
+
+        for (auto& th : threads) {
+            th.join();
+        }
+    }
+ 
+    // for (auto val : return_values) {
+    //     std::cout << "Seen return value : " << val << std::endl;
+    // }
+
+    SomeClass obj;    
+    std::cout << obj.GetCount() << '\n';
+
+    SomeClass1 obj1;    
+    std::cout << obj1.GetCount() << '\n';
+
+    SomeClass2 obj2;    
+    std::cout << obj2.GetCount() << '\n';
+
+    SomeClass3 obj3;    
+    std::cout << obj3.GetCount() << '\n';
+
+    return 0;
+}
+```
+
 # END
