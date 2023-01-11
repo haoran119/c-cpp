@@ -1473,9 +1473,12 @@ return 0;
 
 * `operator=`, `operator()`, `operator[]`, `operator->` cannot be non-member function
 
-### function overload
+### function overloading
 
-* Type `void` is an overloaded type. E.g. function(void); function(); function(int);
+* Type `void` is an overloaded type. 
+    * `function(void); function(); function(int);`
+* `typedef` can `not` create different overloadable types.
+    * `typedef int A; typedef int B; function(A); function(B);`
 
 ### [prvalue v.s. xvalue v.s. lvalue](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#value-categories-lvalue-rvalue-xvalue)
 
