@@ -3152,4 +3152,39 @@ int main()
 }
 ```
 
+#### Template
+
+```c++
+/*
+Which call will successfully compile ?
+*/
+
+#include <iostream>
+
+template<class N> auto TriangleArea(N base, N height) {
+    static_assert(std::is_arithmetic<N>::value && sizeof(N) > 1,
+                    "Cannot compute with non-numeric type!");
+    return static_cast<double>(0.5) * base * height;
+}
+
+int main()
+{
+    // error: no matching function for call to 'TriangleArea(float, double)'
+    // TriangleArea(static_cast<float>(5.93), static_cast<double>(3.33));
+
+    // error: static assertion failed: Cannot compute with non-numeric type!
+    // TriangleArea(static_cast<char>(10), static_cast<char>(5));
+
+    // error: static assertion failed: Cannot compute with non-numeric type!
+    // TriangleArea('a', 'c');
+
+    // error: no matching function for call to 'TriangleArea(int, double)'
+    // TriangleArea(10, 3.1415);
+
+    TriangleArea(10.0, 3.1415);
+
+    return 0;
+}
+```
+
 # END
