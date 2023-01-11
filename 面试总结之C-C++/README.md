@@ -2488,6 +2488,26 @@ private:
     const int aaa;
 };
 ```
+```c++
+/*
+How to fix it to successfully compile ?
+
+Change Process() as (1) or (2)
+*/
+
+class MyClass {
+    int i;
+public:
+    constexpr MyClass() : i(0) {}
+    void ChangeVar(int tmp) { i = tmp; }
+};
+
+void Process(const MyClass& m) {
+// void Process(MyClass& m) {   // (1)
+    m.ChangeVar(10);    // error: passing 'const MyClass' as 'this' argument discards qualifiers
+    // const_cast<MyClass&>(m).ChangeVar(10);   // (2)
+}
+```
 
 #### Static
 
