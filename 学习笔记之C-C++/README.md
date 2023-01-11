@@ -7536,9 +7536,29 @@ Use = only when you are sure that there can be no narrowing conversions. For bui
 ### Type property
 
 * These type traits define compile-time template-based interfaces to query the properties of types.
-* Attempting to specialize a template defined in the \<type_traits> header and described in this section results in undefined behavior.
-* A template defined in the \<type_traits> header may be instantiated with an incomplete type unless otherwise specified, notwithstanding the general prohibition against instantiating standard library templates with incomplete types.
-* Defined in header \<type_traits>
+* Attempting to specialize a template defined in the `<type_traits>` header and described in this section results in undefined behavior.
+* A template defined in the `<type_traits>` header may be instantiated with an incomplete type unless otherwise specified, notwithstanding the general prohibition against instantiating standard library templates with incomplete types.
+* Defined in header `<type_traits>`
+
+#### Composite type categories
+
+##### [std::is_arithmetic](https://en.cppreference.com/w/cpp/types/is_arithmetic)
+
+* checks if a type is an arithmetic type (class template)
+* Defined in header `<type_traits>`
+```c++
+template< class T >
+struct is_arithmetic;   (since C++11)
+```
+* If T is an arithmetic type (that is, an integral type or a floating-point type) or a cv-qualified version thereof, provides the member constant value equal to `true`. For any other type, value is `false`.
+* The behavior of a program that adds specializations for is_arithmetic `or is_arithmetic_v (since C++17)` is undefined.
+* Template parameters
+    * `T`	-	a type to check
+* Helper variable template
+```c++
+template< class T >
+inline constexpr bool is_arithmetic_v = is_arithmetic<T>::value;    (since C++17)
+```
 
 #### Type properties
 
