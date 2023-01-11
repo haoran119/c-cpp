@@ -1473,6 +1473,10 @@ return 0;
 
 * `operator=`, `operator()`, `operator[]`, `operator->` cannot be non-member function
 
+### function overload
+
+* Type `void` is an overloaded type. E.g. function(void); function(); function(int);
+
 ### [prvalue v.s. xvalue v.s. lvalue](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#value-categories-lvalue-rvalue-xvalue)
 
 * `An lvalue has an address that your program can access`. Examples of lvalue expressions include variable names, including const variables, array elements, function calls that return an lvalue reference, bit-fields, unions, and class members.
