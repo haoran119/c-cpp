@@ -3215,7 +3215,8 @@ int main()
 ```
 ```c++
 /*
-It will not result in an infinite loop. The function findTotal uses recursion to add the arguments passed to it together, with the base case being when there is only one argument left. 
+It will not result in an infinite loop. The function findTotal uses recursion to add the arguments passed to it together, 
+with the base case being when there is only one argument left. 
 
 The template function findTotal(T head, P ...tail) can take any number of parameters
 */
