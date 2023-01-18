@@ -3213,5 +3213,50 @@ int main()
     return 0;
 }
 ```
+```c++
+/*
+It will not result in an infinite loop. The function findTotal uses recursion to add the arguments passed to it together, with the base case being when there is only one argument left. 
+
+The template function findTotal(T head, P ...tail) can take any number of parameters
+*/
+
+#include <iostream>
+
+template <typename T>
+T findTotal(T lastOne)
+{
+    std::cout << __func__ << "(T lastOne): " << lastOne << '\n';
+    return (lastOne);
+}
+
+template <typename T, typename ...P>
+T findTotal(T head, P ...tail)
+{
+    std::cout << __func__ << "(T head, P ...tail): " << head << '\n';
+    if (sizeof...(tail))
+        head += findTotal(tail...);
+
+    return (head);        
+}
+
+int main()
+{
+    double total = findTotal(2.1, 3.0, 4.15, 3.14, 0, 9.9);
+    
+    total = findTotal(-1.1);
+
+    return 0;
+}
+
+/*
+findTotal(T head, P ...tail): 2.1
+findTotal(T head, P ...tail): 3
+findTotal(T head, P ...tail): 4.15
+findTotal(T head, P ...tail): 3.14
+findTotal(T head, P ...tail): 0
+findTotal(T lastOne): 9.9
+findTotal(T lastOne): -1.1
+*/
+```
 
 # END
