@@ -255,6 +255,14 @@ std::shared_ptr<std::string> shared = std::move(unique);
 std::shared_ptr<std::string> shared = std::make_unique<std::string>("test");
 ```
 
+#### [std::weak_ptr](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#stdweak_ptr)
+
+* ??? An instance of `std::weak_ptr` must be initialized by either an object of `std::share_ptr` or another `std::weak_ptr` object
+* ??? An `std::weak_ptr` instance can transfer ownership of its contained pointer if assigned to an object of `std::unique_ptr`
+* Each `std::weak_ptr` instance does not increase the reference count of the pointer object being shared
+* ??? Access to `std::weak_ptr` contained pointer is via `operator->()`
+* The object being referenced by the `std::weak_ptr` instance must be checked to see if it still exists before it can be accessed
+
 ## 语言对比
 
 * C++如何实现JAVA接口
