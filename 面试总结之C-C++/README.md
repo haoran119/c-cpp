@@ -257,9 +257,16 @@ std::shared_ptr<std::string> shared = std::make_unique<std::string>("test");
 
 #### [std::weak_ptr](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#stdweak_ptr)
 
-* ??? An instance of `std::weak_ptr` must be initialized by either an object of `std::share_ptr` or another `std::weak_ptr` object
-* ??? An `std::weak_ptr` instance can transfer ownership of its contained pointer if assigned to an object of `std::unique_ptr`
+* An instance of `std::weak_ptr` must be initialized by either an object of `std::share_ptr` or another `std::weak_ptr` object, otherwise it is an empty weak_ptr constructed by the default constructor. 
+    * Because it holds a non-owning ("weak") reference to an object that is managed by `std::shared_ptr`. 
+    * It must be converted to `std::shared_ptr` in order to access the referenced object.
+* An `std::weak_ptr` instance can `not` transfer ownership of its contained pointer because it holds a non-owning ("weak") reference to an object that is managed by `std::shared_ptr`. 
+    * Since it is non-owning, it does not have the ownership of the contained pointer and therefore it can't transfer the ownership. 
+    * To transfer ownership from a `std::weak_ptr` to a `std::unique_ptr` you need to first lock the `std::weak_ptr` which will return a `std::shared_ptr` and then use `std::move` to transfer the ownership to the `std::unique_ptr`.
 * Each `std::weak_ptr` instance does not increase the reference count of the pointer object being shared
+    * it only holds a non-owning reference to the object, meaning it can access the object while it is still in scope, but it does not affect the object's lifetime.
+    * The reference count is maintained by the `std::shared_ptr` instances that own the object, and when all `std::shared_ptr` instances go out of scope, the object will be deleted.
+    * Because `std::weak_ptr` does not affect the reference count, it is useful in situations where you need to access an object but do not want to prolong its lifetime, such as in a circular reference scenario.
 * ??? Access to `std::weak_ptr` contained pointer is via `operator->()`
 * The object being referenced by the `std::weak_ptr` instance must be checked to see if it still exists before it can be accessed
 
