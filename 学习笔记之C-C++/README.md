@@ -8764,9 +8764,16 @@ sp2->{ i:2, f:3 }
 #### [std::weak_ptr](https://en.cppreference.com/w/cpp/memory/weak_ptr)
 
 * weak reference to an object managed by std::shared_ptr (class template)
-* std::weak_ptr is a smart pointer that holds a non-owning ("weak") reference to an object that is managed by std::shared_ptr. It must be converted to std::shared_ptr in order to access the referenced object.
-* std::weak_ptr models temporary ownership: when an object needs to be accessed only if it exists, and it may be deleted at any time by someone else, std::weak_ptr is used to track the object, and it is converted to std::shared_ptr to assume temporary ownership. If the original std::shared_ptr is destroyed at this time, the object's lifetime is extended until the temporary std::shared_ptr is destroyed as well.
-* Another use for std::weak_ptr is to break reference cycles formed by objects managed by std::shared_ptr. If such cycle is orphaned (i.e., there are no outside shared pointers into the cycle), the shared_ptr reference counts cannot reach zero and the memory is leaked. To prevent this, one of the pointers in the cycle can be made weak.
+* `std::weak_ptr` is a smart pointer that holds a `non-owning ("weak") reference` to an object that is managed by `std::shared_ptr`. It must be converted to `std::shared_ptr` in order to access the referenced object.
+* `std::weak_ptr` models temporary ownership: when an object needs to be accessed only if it exists, and it may be deleted at any time by someone else, `std::weak_ptr` is used to track the object, and it is converted to `std::shared_ptr` to assume temporary ownership. If the original `std::shared_ptr` is destroyed at this time, the object's lifetime is extended until the temporary `std::shared_ptr` is destroyed as well.
+* Another use for `std::weak_ptr` is to `break reference cycles` formed by objects managed by `std::shared_ptr`. If such cycle is orphaned (i.e., there are no outside shared pointers into the cycle), the shared_ptr reference counts cannot reach zero and the memory is leaked. To prevent this, one of the pointers in the cycle can be made weak.
+* Notes
+    * Like `std::shared_ptr`, a typical implementation of weak_ptr stores two pointers:
+        * a pointer to the control block; and
+        * the stored pointer of the shared_ptr it was constructed from.
+    * A separate stored pointer is necessary to ensure that converting a shared_ptr to weak_ptr and then back works correctly, even for aliased shared_ptrs. It is not possible to access the stored pointer in a weak_ptr without locking it into a shared_ptr.
+* Example
+    * Demonstrates how lock is used to ensure validity of the pointer.
 ```c++
 #include <iostream>
 #include <memory>
@@ -8801,10 +8808,66 @@ gw.use_count() == 1; *spt == 42
 gw.use_count() == 0; gw is expired
 */
 ```
-* [std::weak_ptr\<T>::~weak_ptr - cppreference.com](https://en.cppreference.com/w/cpp/memory/weak_ptr/~weak_ptr#Example)
-	* Destroys the weak_ptr object. Results in no effect to the managed object.
-	* Example
-		* The program shows the effect of "non-breaking" the cycle of std::shared_ptrs.	
+
+##### Member functions
+
+###### [`std::weak_ptr<T>::weak_ptr`](https://en.cppreference.com/w/cpp/memory/weak_ptr/weak_ptr)
+
+* (constructor)
+* creates a new weak_ptr (public member function)
+```c++
+constexpr weak_ptr() noexcept;  (1)	(since C++11)
+weak_ptr( const weak_ptr& r ) noexcept; (2)	(since C++11)
+template< class Y >
+weak_ptr( const weak_ptr<Y>& r ) noexcept;  (2)	(since C++11)
+template< class Y >
+weak_ptr( const std::shared_ptr<Y>& r ) noexcept;   (2)	(since C++11)
+weak_ptr( weak_ptr&& r ) noexcept;  (3)	(since C++11)
+template< class Y >
+weak_ptr( weak_ptr<Y>&& r ) noexcept;   (3)	(since C++11)
+```
+* Constructs new weak_ptr that potentially shares an object with r.
+    * 1) Default constructor. Constructs empty weak_ptr.
+    * 2) Constructs new weak_ptr which shares an object managed by r. If r manages no object, `*this` manages no object too. The templated overloads don't participate in the overload resolution unless `Y*` is implicitly convertible to `T*``, or Y is the type "array of N U" for some type U and some number N, and T is the type "array of unknown bound of (possibly cv-qualified) U" (since C++17)`.
+    * 3) Move constructors. Moves a weak_ptr instance from r into `*this`. After this, r is empty and `r.use_count()==0`. The templated overload doesn't participate in the overload resolution unless `Y*` is implicitly convertible to `T*`.
+* Parameters
+    * r	-	a `std::shared_ptr` or `std::weak_ptr` that will be viewed by this `std::weak_ptr`.
+* Notes
+    * Because the default constructor is constexpr, static std::weak_ptrs are initialized as part of [static non-local initialization](https://en.cppreference.com/w/cpp/language/initialization#Non-local_variables), before any dynamic non-local initialization begins. This makes it safe to use a std::weak_ptr in a constructor of any static object.
+* Example
+```c++
+#include <memory>
+#include <iostream>
+ 
+struct Foo {};
+ 
+int main()
+{
+   std::weak_ptr<Foo> w_ptr;
+ 
+   {
+      auto ptr = std::make_shared<Foo>();
+      w_ptr = ptr;
+      std::cout << "w_ptr.use_count() inside scope: " << w_ptr.use_count() << '\n';
+   }
+ 
+   std::cout << "w_ptr.use_count() out of scope: " << w_ptr.use_count() << '\n';
+   std::cout << "w_ptr.expired() out of scope: " << std::boolalpha << w_ptr.expired() << '\n';
+}
+/*
+w_ptr.use_count() inside scope: 1
+w_ptr.use_count() out of scope: 0
+w_ptr.expired() out of scope: true
+*/
+```
+
+###### [`std::weak_ptr<T>::~weak_ptr`](https://en.cppreference.com/w/cpp/memory/weak_ptr/~weak_ptr#Example)
+    
+* (destructor)
+* destroys a weak_ptr (public member function)
+* Destroys the weak_ptr object. Results in no effect to the managed object.
+* Example
+    * The program shows the effect of "non-breaking" the cycle of std::shared_ptrs.	
 ```c++
 #include <iostream>
 #include <memory>
