@@ -341,6 +341,10 @@ std::shared_ptr<std::string> shared = std::make_unique<std::string>("test");
 
 * unsigned integer type returned by the sizeof operator (typedef)
 
+### [lambda](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#lambda-expressions)
+
+* Using `[]` will not capture any variables outside of the lambda definition and can only access its own local variables.
+
 ### [explicit](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#explicit-specifier)
 
 * explicit 的作用（如何避免编译器进行隐式类型转换）?
