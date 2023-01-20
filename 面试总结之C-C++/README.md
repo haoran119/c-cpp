@@ -263,11 +263,11 @@ std::shared_ptr<std::string> shared = std::make_unique<std::string>("test");
 * An `std::weak_ptr` instance can `not` transfer ownership of its contained pointer because it holds a non-owning ("weak") reference to an object that is managed by `std::shared_ptr`. 
     * Since it is non-owning, it does not have the ownership of the contained pointer and therefore it can't transfer the ownership. 
     * To transfer ownership from a `std::weak_ptr` to a `std::unique_ptr` you need to first lock the `std::weak_ptr` which will return a `std::shared_ptr` and then use `std::move` to transfer the ownership to the `std::unique_ptr`.
-* Each `std::weak_ptr` instance does not increase the reference count of the pointer object being shared
+* Each `std::weak_ptr` instance does `not` increase the reference count of the pointer object being shared
     * it only holds a non-owning reference to the object, meaning it can access the object while it is still in scope, but it does not affect the object's lifetime.
     * The reference count is maintained by the `std::shared_ptr` instances that own the object, and when all `std::shared_ptr` instances go out of scope, the object will be deleted.
-    * Because `std::weak_ptr` does not affect the reference count, it is useful in situations where you need to access an object but do not want to prolong its lifetime, such as in a circular reference scenario.
-* Access to `std::weak_ptr` contained pointer is not done via `operator->()`
+    * Because `std::weak_ptr` does not affect the reference count, it is useful in situations where you need to access an object but do not want to prolong its lifetime, such as in a `circular reference` scenario.
+* Access to `std::weak_ptr` contained pointer is `not` done via `operator->()`
     * The `operator->()` is used to access the members of the object pointed by the pointer, but since `std::weak_ptr` only holds a non-owning reference to an object managed by a `std::shared_ptr`, it does not guarantee that the object will still be alive when the `std::weak_ptr` is accessed.
     * To access the object, you need to first use the `lock()` function, which will return a `std::shared_ptr` that points to the same object.
     * Once you have a `std::shared_ptr`, you can use the `operator->()` to access the members of the object, or `get()` to get a raw pointer.
