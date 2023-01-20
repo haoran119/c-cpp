@@ -2960,6 +2960,7 @@ int main()
 
 ##### virtual
 
+```c++
 /*
 which class methods will additionally be made virtual in the base class Polygon ?
 
@@ -2985,6 +2986,7 @@ public:
     double Area() { return 0; }
     double Perimeter() { return 0; }
 };
+```
 
 ##### MISC
 
