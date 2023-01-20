@@ -3022,6 +3022,88 @@ int main()
 ```
 ```c++
 /*
+What should replace *** to allow the constructor to execute correctly ?
+
+MyClass / MyClass&
+*/
+
+#include <iostream>
+
+class MyClass{
+public:
+    int* my_ptr;
+
+    MyClass(int i) : my_ptr(new int)
+    {
+        *my_ptr = i;
+    }
+
+    ~MyClass() 
+    {
+        std::cout << __func__ << ':' << (my_ptr ? *my_ptr : -1) << '\n';
+        
+        if (my_ptr) {
+            // double deletion
+            // free(): double free detected in tcache 2
+            // delete my_ptr;
+            // my_ptr = nullptr;
+        }  
+    }
+
+    void operator=(*** rhs)
+    {
+        delete my_ptr;
+        my_ptr = rhs.my_ptr;
+        rhs.my_ptr = nullptr;
+    }
+
+    int* get_my_ptr() const { return my_ptr; }
+};
+
+int main()
+{
+    MyClass my_class(1);
+    std::cout << *my_class.get_my_ptr() << '\n';
+
+    MyClass my_class_2(2);
+    std::cout << *my_class_2.get_my_ptr() << '\n';
+
+    my_class = my_class_2;
+
+    std::cout << my_class.get_my_ptr() << '\n';
+    if (my_class.get_my_ptr()) std::cout << *my_class.get_my_ptr() << '\n';
+    std::cout << my_class_2.get_my_ptr() << '\n';
+    if (my_class_2.get_my_ptr()) std::cout << *my_class_2.get_my_ptr() << '\n';
+
+    return 0;
+}
+
+/*
+void operator=(MyClass rhs)
+
+1
+2
+~MyClass:-1
+0x205fee0
+2
+0x205fee0
+2
+~MyClass:2
+~MyClass:2
+----------------------------
+void operator=(MyClass& rhs)
+
+1
+2
+0x12abee0
+2
+0
+~MyClass:-1
+~MyClass:2
+*/
+```
+```c++
+/*
 What will be printed, and why?
 
 In 32-bit environment, size of TestSize2 = 12.
