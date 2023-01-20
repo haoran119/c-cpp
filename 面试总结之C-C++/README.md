@@ -2965,9 +2965,14 @@ int main()
 which class methods will additionally be made virtual in the base class Polygon ?
 
 * The methods Area() and Perimeter() should be made virtual in the base class Polygon.
-* The reason for this is that these methods will likely have different implementations for different derived classes of Polygon, such as Triangle, Rectangle, and Circle.
-* When a virtual method is called through a base class pointer or reference, the program will determine at runtime which version of the method to call, based on the actual type of the object pointed to or referred to.
-* Making these methods virtual in the base class allows for polymorphism, where a pointer or reference to a Polygon object can be used to call the correct version of Area() or Perimeter() for the actual type of the object.
+* The reason for this is that these methods will likely have different implementations 
+for different derived classes of Polygon, such as Triangle, Rectangle, and Circle.
+* When a virtual method is called through a base class pointer or reference, 
+the program will determine at runtime which version of the method to call, 
+based on the actual type of the object pointed to or referred to.
+* Making these methods virtual in the base class allows for polymorphism, 
+where a pointer or reference to a Polygon object can be used to call the correct version 
+of Area() or Perimeter() for the actual type of the object.
 */
 
 class Polygon {
