@@ -267,8 +267,14 @@ std::shared_ptr<std::string> shared = std::make_unique<std::string>("test");
     * it only holds a non-owning reference to the object, meaning it can access the object while it is still in scope, but it does not affect the object's lifetime.
     * The reference count is maintained by the `std::shared_ptr` instances that own the object, and when all `std::shared_ptr` instances go out of scope, the object will be deleted.
     * Because `std::weak_ptr` does not affect the reference count, it is useful in situations where you need to access an object but do not want to prolong its lifetime, such as in a circular reference scenario.
-* ??? Access to `std::weak_ptr` contained pointer is via `operator->()`
+* Access to `std::weak_ptr` contained pointer is not done via `operator->()`
+    * The `operator->()` is used to access the members of the object pointed by the pointer, but since `std::weak_ptr` only holds a non-owning reference to an object managed by a `std::shared_ptr`, it does not guarantee that the object will still be alive when the `std::weak_ptr` is accessed.
+    * To access the object, you need to first use the `lock()` function, which will return a `std::shared_ptr` that points to the same object.
+    * Once you have a `std::shared_ptr`, you can use the `operator->()` to access the members of the object, or `get()` to get a raw pointer.
 * The object being referenced by the `std::weak_ptr` instance must be checked to see if it still exists before it can be accessed
+    * Since a `std::weak_ptr` instance holds a non-owning reference to an object managed by a `std::shared_ptr`, it does not guarantee that the object will still be alive when the `std::weak_ptr` is accessed.
+    * You must use the `lock()` function to check if the object still exists before accessing it. The `lock()` function returns a `std::shared_ptr` that points to the same object, if the object is still alive, otherwise it returns an empty `std::shared_ptr`.
+    * You can then use the shared_ptr to access the object, if it is not expired.
 
 ## 语言对比
 
