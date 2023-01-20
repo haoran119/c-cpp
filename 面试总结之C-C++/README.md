@@ -2835,7 +2835,8 @@ int main()
 What's wrong and how to fix ?
 
 1. Memory leak. To fix it, define a destructor to release namePtr.
-2. Shallow copy. The namePtr member in both president and chairman will point to the same memory location. To fix it, define a copy constructor and copy assignment operator.
+2. Shallow copy. The namePtr member in both president and chairman will point to the same memory location. 
+To fix it, define a copy constructor and copy assignment operator.
 */
 
 #include <iostream>
