@@ -2830,6 +2830,45 @@ int main()
     return 0;
 }                   // ~A(1)
 ```
+```c++
+/*
+What's wrong and how to fix ?
+
+1. Memory leak. To fix it, define a destructor to release namePtr.
+2. Shallow copy. The namePtr member in both president and chairman will point to the same memory location. To fix it, define a copy constructor and copy assignment operator.
+*/
+
+#include <iostream>
+
+class Person {
+    std::string *namePtr;
+
+public:
+    Person() { namePtr = new std::string; }
+    void setName(std::string s) { *namePtr = s; }
+    std::string getName() const { return *namePtr; }
+};
+
+int main()
+{
+    Person president;
+    Person chairman;
+
+    president.setName("Tom");
+    chairman = president;
+    president.setName("Janet");
+
+    std::cout << president.getName() << '\n';
+    std::cout << chairman.getName() << '\n';
+
+    return 0;
+}
+
+/*
+Janet
+Janet
+*/
+```
 
 ###### virtual destructor
 
