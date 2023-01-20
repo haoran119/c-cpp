@@ -8831,7 +8831,7 @@ weak_ptr( weak_ptr<Y>&& r ) noexcept;   (3)	(since C++11)
     * 2) Constructs new weak_ptr which shares an object managed by r. If r manages no object, `*this` manages no object too. The templated overloads don't participate in the overload resolution unless `Y*` is implicitly convertible to `T*``, or Y is the type "array of N U" for some type U and some number N, and T is the type "array of unknown bound of (possibly cv-qualified) U" (since C++17)`.
     * 3) Move constructors. Moves a weak_ptr instance from r into `*this`. After this, r is empty and `r.use_count()==0`. The templated overload doesn't participate in the overload resolution unless `Y*` is implicitly convertible to `T*`.
 * Parameters
-    * r	-	a `std::shared_ptr` or `std::weak_ptr` that will be viewed by this `std::weak_ptr`.
+    * r	- a `std::shared_ptr` or `std::weak_ptr` that will be viewed by this `std::weak_ptr`.
 * Notes
     * Because the default constructor is constexpr, static std::weak_ptrs are initialized as part of [static non-local initialization](https://en.cppreference.com/w/cpp/language/initialization#Non-local_variables), before any dynamic non-local initialization begins. This makes it safe to use a std::weak_ptr in a constructor of any static object.
 * Example
@@ -8919,6 +8919,57 @@ Leaving...
 All links are shared pointers
 Leaving...
 */
+```
+
+###### Observers
+
+* [`std::weak_ptr<T>::lock`](https://en.cppreference.com/w/cpp/memory/weak_ptr/lock)
+    * creates a shared_ptr that manages the referenced object (public member function)
+    * `std::shared_ptr<T> lock() const noexcept;`
+    * Creates a new `std::shared_ptr` that shares ownership of the managed object. If there is no managed object, i.e. `*this` is empty, then the returned shared_ptr also is empty.
+    * Effectively returns `expired() ? shared_ptr<T>() : shared_ptr<T>(*this)`, executed atomically.
+    * Return value
+        * A shared_ptr which shares ownership of the owned object if [std::weak_ptr::expired](https://en.cppreference.com/w/cpp/memory/weak_ptr/expired) returns false. Else returns default-constructed shared_ptr of type T.
+    * Notes
+        * Both this function and the constructor of `std::shared_ptr` may be used to acquire temporary ownership of the managed object referred to by a `std::weak_ptr`. The difference is that the constructor of `std::shared_ptr` throws an exception when its `std::weak_ptr` argument is empty, while `std::weak_ptr<T>::lock()` constructs an empty `std::shared_ptr<T>`.
+    * Example
+```c++
+#include <iostream>
+#include <memory>
+ 
+void observe(std::weak_ptr<int> weak) 
+{
+    if (auto observe = weak.lock()) {
+        std::cout << "\tobserve() able to lock weak_ptr<>, value=" << *observe << "\n";
+    } else {
+        std::cout << "\tobserve() unable to lock weak_ptr<>\n";
+    }
+}
+ 
+int main()
+{
+    std::weak_ptr<int> weak;
+    std::cout << "weak_ptr<> not yet initialized\n";
+    observe(weak);
+ 
+    {
+        auto shared = std::make_shared<int>(42);
+        weak = shared;
+        std::cout << "weak_ptr<> initialized with shared_ptr.\n";
+        observe(weak);
+    }
+ 
+    std::cout << "shared_ptr<> has been destructed due to scope exit.\n";
+    observe(weak);
+}
+/*
+weak_ptr<> not yet initialized
+        observe() unable to lock weak_ptr<>
+weak_ptr<> initialized with shared_ptr.
+        observe() able to lock weak_ptr<>, value=42
+shared_ptr<> has been destructed due to scope exit.
+        observe() unable to lock weak_ptr<>
+*/       
 ```
 
 #### MISC
