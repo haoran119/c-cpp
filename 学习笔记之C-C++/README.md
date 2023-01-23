@@ -18097,33 +18097,141 @@ g_i: 2; in main()
 ### Futures
 
 * The standard library provides facilities to obtain values that are returned and to catch exceptions that are thrown by asynchronous tasks (i.e. functions launched in separate threads). These values are communicated in a shared state, in which the asynchronous task may write its return value or store an exception, and which may be examined, waited for, and otherwise manipulated by other threads that hold instances of std::future or std::shared_future that reference that shared state.
-* Defined in header [\<future>](https://en.cppreference.com/w/cpp/header/future)
+* Defined in header [`<future>`](https://en.cppreference.com/w/cpp/header/future)
+
+#### [std::future](https://en.cppreference.com/w/cpp/thread/future)
+
+* waits for a value that is set asynchronously (class template)
+* Examples
+```c++
+#include <iostream>
+#include <future>
+#include <thread>
+ 
+int main()
+{
+    // future from a packaged_task
+    std::packaged_task<int()> task([]{ return 7; }); // wrap the function
+    std::future<int> f1 = task.get_future();  // get a future
+    std::thread t(std::move(task)); // launch on a thread
+ 
+    // future from an async()
+    std::future<int> f2 = std::async(std::launch::async, []{ return 8; });
+ 
+    // future from a promise
+    std::promise<int> p;
+    std::future<int> f3 = p.get_future();
+    std::thread( [&p]{ p.set_value_at_thread_exit(9); }).detach();
+ 
+    std::cout << "Waiting..." << std::flush;
+    f1.wait();
+    f2.wait();
+    f3.wait();
+    std::cout << "Done!\nResults are: "
+              << f1.get() << ' ' << f2.get() << ' ' << f3.get() << '\n';
+    t.join();
+}
+/*
+Waiting...Done!
+Results are: 7 8 9
+*/
+```
 
 #### [std::async](https://en.cppreference.com/w/cpp/thread/async)
 
-* runs a function asynchronously (potentially in a new thread) and returns a std::future that will hold the result (function template)
-* The function template async runs the function f asynchronously (potentially in a separate thread which might be a part of a thread pool) and returns a std::future that will eventually hold the result of that function call.
-* In any case, the call to std::async synchronizes-with (as defined in std::memory_order) the call to f, and the completion of f is sequenced-before making the shared state ready. If the async policy is chosen, the associated thread completion synchronizes-with the successful return from the first function that is waiting on the shared state, or with the return of the last function that releases the shared state, whichever comes first. If std::decay\<Function>::type or each type in std::decay\<Args>::type is not constructible from its corresponding argument, the program is ill-formed.
+* runs a function asynchronously (potentially in a new thread) and returns a [std::future](https://en.cppreference.com/w/cpp/thread/future) that will hold the result (function template)
+* The function template async runs the function f asynchronously (potentially in a separate thread which might be a part of a thread pool) and returns a `std::future` that will eventually hold the result of that function call.
+* In any case, the call to `std::async` `synchronizes-with` (as defined in [std::memory_order](https://en.cppreference.com/w/cpp/atomic/memory_order)) the call to f, and the completion of f is sequenced-before making the shared state ready. If the async policy is chosen, the associated thread completion `synchronizes-with` the successful return from the first function that is waiting on the shared state, or with the return of the last function that releases the shared state, whichever comes first. If `std::decay<Function>::type` or each type in `std::decay<Args>::type` is not constructible from its corresponding argument, the program is ill-formed.
 * Parameters
     * f	-	Callable object to call
     * args...	-	parameters to pass to f
     * policy	-	bitmask value, where individual bits control the allowed methods of execution
-        * Bit	Explanation
-        * std::launch::async	enable asynchronous evaluation
-        * std::launch::deferred	enable lazy evaluation
-    * Return value
-        * std::future referring to the shared state created by this call to std::async.
-    * Exceptions
-        * Throws std::system_error with error condition std::errc::resource_unavailable_try_again if the launch policy equals std::launch::async and the implementation is unable to start a new thread (if the policy is async|deferred or has additional bits set, it will fall back to deferred or the implementation-defined policies in this case), or std::bad_alloc if memory for the internal data structures could not be allocated.
-    * Notes
-        * The implementation may extend the behavior of the first overload of std::async by enabling additional (implementation-defined) bits in the default launch policy.
-        * Examples of implementation-defined launch policies are the sync policy (execute immediately, within the async call) and the task policy (similar to async, but thread-locals are not cleared)
-        * If the std::future obtained from std::async is not moved from or bound to a reference, the destructor of the std::future will block at the end of the full expression until the asynchronous operation completes, essentially making code such as the following synchronous:
-        * (note that the destructors of std::futures obtained by means other than a call to std::async never block)
+        * Bit   Explanation
+        * [std::launch::async](https://en.cppreference.com/w/cpp/thread/launch)	enable asynchronous evaluation
+        * [std::launch::deferred](https://en.cppreference.com/w/cpp/thread/launch)	enable lazy evaluation
+* Return value
+    * `std::future` referring to the shared state created by this call to `std::async`.
+* Exceptions
+    * Throws [std::system_error](https://en.cppreference.com/w/cpp/error/system_error) with error condition [std::errc::resource_unavailable_try_again](https://en.cppreference.com/w/cpp/thread/async#:~:text=std%3A%3Aerrc%3A%3Aresource_unavailable_try_again) if the launch policy equals [std::launch::async](https://en.cppreference.com/w/cpp/thread/launch) and the implementation is unable to start a new thread (if the policy is async|deferred or has additional bits set, it will fall back to deferred or the implementation-defined policies in this case), or [std::bad_alloc](https://en.cppreference.com/w/cpp/memory/new/bad_alloc) if memory for the internal data structures could not be allocated.
+* Notes
+    * The implementation may extend the behavior of the first overload of std::async by enabling additional (implementation-defined) bits in the default launch policy.
+    * Examples of implementation-defined launch policies are the sync policy (execute immediately, within the async call) and the task policy (similar to async, but thread-locals are not cleared)
+    * If the std::future obtained from std::async is not moved from or bound to a reference, the destructor of the std::future will block at the end of the full expression until the asynchronous operation completes, essentially making code such as the following synchronous:
+    ```c++
+    std::async(std::launch::async, []{ f(); }); // temporary's dtor waits for f()
+    std::async(std::launch::async, []{ g(); }); // does not start until f() completes
+    ```
+    * (note that the destructors of std::futures obtained by means other than a call to std::async never block)
+* Example
 ```c++
-std::async(std::launch::async, []{ f(); }); // temporary's dtor waits for f()
-std::async(std::launch::async, []{ g(); }); // does not start until f() completes
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+#include <future>
+#include <string>
+#include <mutex>
+ 
+std::mutex m;
+struct X {
+    void foo(int i, const std::string& str) {
+        std::lock_guard<std::mutex> lk(m);
+        std::cout << str << ' ' << i << '\n';
+    }
+    void bar(const std::string& str) {
+        std::lock_guard<std::mutex> lk(m);
+        std::cout << str << '\n';
+    }
+    int operator()(int i) {
+        std::lock_guard<std::mutex> lk(m);
+        std::cout << i << '\n';
+        return i + 10;
+    }
+};
+ 
+template <typename RandomIt>
+int parallel_sum(RandomIt beg, RandomIt end)
+{
+    auto len = end - beg;
+    if (len < 1000)
+        return std::accumulate(beg, end, 0);
+ 
+    RandomIt mid = beg + len/2;
+    auto handle = std::async(std::launch::async,
+                             parallel_sum<RandomIt>, mid, end);
+    int sum = parallel_sum(beg, mid);
+    return sum + handle.get();
+}
+ 
+int main()
+{
+    std::vector<int> v(10000, 1);
+    std::cout << "The sum is " << parallel_sum(v.begin(), v.end()) << '\n';
+ 
+    X x;
+    // Calls (&x)->foo(42, "Hello") with default policy:
+    // may print "Hello 42" concurrently or defer execution
+    auto a1 = std::async(&X::foo, &x, 42, "Hello");
+    // Calls x.bar("world!") with deferred policy
+    // prints "world!" when a2.get() or a2.wait() is called
+    auto a2 = std::async(std::launch::deferred, &X::bar, x, "world!");
+    // Calls X()(43); with async policy
+    // prints "43" concurrently
+    auto a3 = std::async(std::launch::async, X(), 43);
+    a2.wait();                     // prints "world!"
+    std::cout << a3.get() << '\n'; // prints "53"
+} // if a1 is not done at this point, destructor of a1 prints "Hello 42" here
+/*
+The sum is 10000
+43
+world!
+53
+Hello 42
+*/
 ```
+
+#### MISC
+
 * [从无栈协程到 C++异步框架](https://mp.weixin.qq.com/s/QVXE7QbxEchl8ue4SoijiQ)
 	* 本文我们将尝试对整个 C++的协程做深入浅出的剥析, 方便大家的理解. 再结合上层的封装, 最终给出一个 C++异步框架实际业务使用的一种形态, 方便大家更好的在实际项目中应用无栈协程。
 
