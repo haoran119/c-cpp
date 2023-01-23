@@ -18141,9 +18141,15 @@ Results are: 7 8 9
 
 * runs a function asynchronously (potentially in a new thread) and returns a [std::future](https://en.cppreference.com/w/cpp/thread/future) that will hold the result (function template)
 * The function template async runs the function f asynchronously (potentially in a separate thread which might be a part of a thread pool) and returns a `std::future` that will eventually hold the result of that function call.
+    * 1) Behaves as if (2) is called with `policy` being `std::launch::async | std::launch::deferred`.
+    * 2) Calls a function f with arguments args according to a specific launch policy policy.
+        * If the `async` flag is set (i.e. `(policy & std::launch::async) != 0`), then async executes the callable object f on a new thread of execution (with all thread-locals initialized) as if spawned by `std::thread(std::forward<F>(f), std::forward<Args>(args)...)`, except that if the function f returns a value or throws an exception, it is stored in the shared state accessible through the `std::future` that async returns to the caller.
+        * If the `deferred` flag is set (i.e. `(policy & std::launch::deferred) != 0`), then async converts f and `args...` the same way as by `std::thread` constructor, but does not spawn a new thread of execution. Instead, `lazy evaluation` is performed: the first call to a non-timed wait function on the `std::future` that async returned to the caller will cause the copy of f to be invoked (as an rvalue) with the copies of `args...` (also passed as rvalues) in the current thread (which does not have to be the thread that originally called `std::async`). The result or exception is placed in the shared state associated with the future and only then it is made ready. All further accesses to the same `std::future` will return the result immediately.
+        * If neither `std::launch::async` nor `std::launch::deferred`, nor any implementation-defined policy flag is set in policy, the behavior is undefined.
+    * If more than one flag is set, it is implementation-defined which policy is selected. For the default (both the `std::launch::async` and `std::launch::deferred` flags are set in policy), standard recommends (but doesn't require) utilizing available concurrency, and deferring any additional tasks.
 * In any case, the call to `std::async` `synchronizes-with` (as defined in [std::memory_order](https://en.cppreference.com/w/cpp/atomic/memory_order)) the call to f, and the completion of f is sequenced-before making the shared state ready. If the async policy is chosen, the associated thread completion `synchronizes-with` the successful return from the first function that is waiting on the shared state, or with the return of the last function that releases the shared state, whichever comes first. If `std::decay<Function>::type` or each type in `std::decay<Args>::type` is not constructible from its corresponding argument, the program is ill-formed.
 * Parameters
-    * f	-	Callable object to call
+    * f	-   Callable object to call
     * args...	-	parameters to pass to f
     * policy	-	bitmask value, where individual bits control the allowed methods of execution
         * Bit   Explanation
