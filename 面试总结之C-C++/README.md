@@ -3444,5 +3444,50 @@ findTotal(T lastOne): 9.9
 findTotal(T lastOne): -1.1
 */
 ```
+```c++
+/*
+Implement a C++ function to support multiplying a variable number of arguments 
+for a generic calculator application.
+*/
+
+#include <iostream>
+#include <vector>
+
+// 1
+template <typename T>
+double multiply(T val)
+{
+    return val;
+}
+
+template <typename T, typename... O>
+double multiply(T val, O... other)
+{
+    return val * multiply(other...);
+}
+
+// 2
+template <typename T>
+double multiply_(std::vector<T> vec)
+{
+    double product = 1.0;
+    for (T elem : vec) {
+        product *= elem;
+    }
+
+    return product;
+}
+
+int main()
+{
+    auto result = multiply(1, 2, 3, 4, 5);
+    std::cout << result << '\n';
+
+    auto result_ = multiply_(std::vector<int>{1, 2, 3, 4, 5});
+    std::cout << result_ << '\n';
+
+    return 0;
+}
+```
 
 # END
