@@ -1050,6 +1050,9 @@ int main()
     * 如果某个类不包含虚函数，那一般是表示它将不作为一个基类来使用。当一个类不准备作为基类使用时，使析构函数为虚一般是个坏主意。因为它会为类增加一个虚函数表，使得对象的体积翻倍，还有可能降低其可移植性
     * 所以基本的一条是：`无故的声明虚析构函数和永远不去声明一样是错误的`。实际上，很多人这样总结：当且仅当类里包含至少一个虚函数的时候才去声明虚析构函数。抽象类是准备被用做基类的，基类必须要有一个虚析构函数，纯虚函数会产生抽象类，所以方法很简单：在想要成为抽象类的类里声明一个纯虚析构函数。
     * 析构函数定义成虚函数是为了防止内存泄漏，因为当基类的指针或者引用指向或绑定到派生类的对象时，如果未将基类的析构函数定义成虚函数，会调用基类的析构函数，那么只能将基类的成员所占的空间释放掉，派生类中特有的就会无法释放内存空间导致内存泄漏。
+* Why C++ destructor should be declared `virtual` in a base class ?
+    * A C++ destructor must be declared `virtual` in a base class to ensure that the correct derived class destructor is called when an object of a derived class is deleted through a `pointer to the base class`. If a base class destructor is not declared virtual, the base class destructor will be called when an object of a derived class is deleted through a pointer to the base class, rather than the derived class destructor. This can lead to `resource leaks` or other problems because the derived class may have additional resources that need to be cleaned up.
+    * To ensure that a derived class destructor is executed when the derived class is destroyed through a base class pointer.
 * How to avoid memory leak if without virtual destructor ?
     * use smart pointer
         * `std::shared_ptr<Base> p_s = std::make_shared<Derived>(2);`
