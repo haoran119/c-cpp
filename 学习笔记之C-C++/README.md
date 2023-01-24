@@ -18102,6 +18102,11 @@ g_i: 2; in main()
 #### [std::future](https://en.cppreference.com/w/cpp/thread/future)
 
 * waits for a value that is set asynchronously (class template)
+* The class template std::future provides a mechanism to access the result of asynchronous operations:
+    * An asynchronous operation (created via [std::async](https://en.cppreference.com/w/cpp/thread/async), [std::packaged_task](https://en.cppreference.com/w/cpp/thread/packaged_task), or [std::promise](https://en.cppreference.com/w/cpp/thread/promise)) can provide a std::future object to the creator of that asynchronous operation.
+    * The creator of the asynchronous operation can then use a variety of methods to query, wait for, or extract a value from the std::future. These methods may block if the asynchronous operation has not yet provided a value.
+    * When the asynchronous operation is ready to send a result to the creator, it can do so by modifying shared state (e.g. [std::promise::set_value](https://en.cppreference.com/w/cpp/thread/promise/set_value)) that is linked to the creator's `std::future`.
+* Note that std::future references shared state that is not shared with any other asynchronous return objects (as opposed to [std::shared_future](https://en.cppreference.com/w/cpp/thread/shared_future)).
 * Examples
 ```c++
 #include <iostream>
@@ -18136,6 +18141,128 @@ Waiting...Done!
 Results are: 7 8 9
 */
 ```
+* Example with exceptions
+```c++
+#include <thread>
+#include <iostream>
+#include <future>
+ 
+int main()
+{
+    std::promise<int> p;
+    std::future<int> f = p.get_future();
+ 
+    std::thread t([&p]{
+        try {
+            // code that may throw
+            throw std::runtime_error("Example");
+        } catch(...) {
+            try {
+                // store anything thrown in the promise
+                p.set_exception(std::current_exception());
+            } catch(...) {} // set_exception() may throw too
+        }
+    });
+ 
+    try {
+        std::cout << f.get();
+    } catch(const std::exception& e) {
+        std::cout << "Exception from the thread: " << e.what() << '\n';
+    }
+    t.join();
+}
+/*
+Exception from the thread: Example
+*/
+```
+
+##### Member functions
+
+###### [`std::future<T>::future`](https://en.cppreference.com/w/cpp/thread/future/future)
+
+* (constructor)
+* constructs the future object (public member function)
+```c++
+future() noexcept;  (1)	(since C++11)
+future( future&& other ) noexcept;  (2)	(since C++11)
+future( const future& other ) = delete; (3)	(since C++11)
+```
+* Constructs a std::future object.
+    * 1) Default constructor. Constructs a std::future with no shared state. After construction, `valid() == false`.
+    * 2) Move constructor. Constructs a std::future with the shared state of other using move semantics. After construction, `other.valid() == false`.
+    * 3) std::future is not [CopyConstructible](https://en.cppreference.com/w/cpp/named_req/CopyConstructible).
+* Parameters
+    * other	-   another std::future to acquire shared state from
+
+###### Getting the result
+
+* [`std::future<T>::get`](https://en.cppreference.com/w/cpp/thread/future/get)
+    * returns the result (public member function)
+    * The get member function waits until the future has a valid result and (depending on which template is used) retrieves it. It effectively calls [wait()](https://en.cppreference.com/w/cpp/thread/future/wait) in order to wait for the result.
+    * The generic template and two template specializations each contain a single version of get. The three versions of get differ only in the return type.
+    * The behavior is undefined if [valid()](https://en.cppreference.com/w/cpp/thread/future/valid) is `false` before the call to this function.
+    * Any shared state is released. [valid()](https://en.cppreference.com/w/cpp/thread/future/valid) is `false` after a call to this member function.
+    * Notes
+        * The implementations are encouraged to detect the case when `valid()` is `false` before the call and throw a [std::future_error](https://en.cppreference.com/w/cpp/thread/future_error) with an error condition of [std::future_errc::no_state](https://en.cppreference.com/w/cpp/thread/future_errc).
+    * Example
+```c++
+#include <thread>
+#include <future>
+#include <iostream>
+#include <string>
+#include <chrono>
+ 
+std::string time() {
+    static auto start = std::chrono::steady_clock::now();
+    std::chrono::duration<double> d = std::chrono::steady_clock::now() - start;
+    return "[" + std::to_string(d.count()) + "s]";
+}
+int main() {
+    using namespace std::chrono_literals;
+    {
+        std::cout << time() << " launching thread\n";
+        std::future<int> f = std::async(std::launch::async, []{
+            std::this_thread::sleep_for(1s);
+            return 7;
+        });
+        std::cout << time() << " waiting for the future, f.valid() == "
+                  << f.valid() << "\n";
+        int n = f.get();
+        std::cout << time() << " future.get() returned with " << n << ". f.valid() = "
+                  << f.valid() << '\n';
+    }
+ 
+    {
+        std::cout << time() << " launching thread\n";
+        std::future<int> f = std::async(std::launch::async, []{
+            std::this_thread::sleep_for(1s);
+            return true ? throw std::runtime_error("7") : 7;
+        });
+        std::cout << time() << " waiting for the future, f.valid() == "
+                  << f.valid() << "\n";
+        try {
+            int n = f.get();
+            std::cout << time() << " future.get() returned with " << n
+                      << " f.valid() = " << f.valid() << '\n';
+        } catch(const std::exception& e) {
+            std::cout << time() << " caught exception " << e.what()
+                      << ", f.valid() == " << f.valid() << "\n";
+        }
+    }
+}
+/*
+[0.000004s] launching thread
+[0.000461s] waiting for the future, f.valid() == 1
+[1.001156s] future.get() returned with 7. f.valid() = 0
+[1.001192s] launching thread
+[1.001275s] waiting for the future, f.valid() == 1
+[2.002356s] caught exception 7, f.valid() == 0
+*/
+```
+
+###### State
+
+
 
 #### [std::async](https://en.cppreference.com/w/cpp/thread/async)
 
