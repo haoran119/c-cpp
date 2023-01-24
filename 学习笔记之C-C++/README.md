@@ -18196,15 +18196,17 @@ future( const future& other ) = delete; (3)	(since C++11)
 
 ###### Getting the result
 
-* [`std::future<T>::get`](https://en.cppreference.com/w/cpp/thread/future/get)
-    * returns the result (public member function)
-    * The get member function waits until the future has a valid result and (depending on which template is used) retrieves it. It effectively calls [wait()](https://en.cppreference.com/w/cpp/thread/future/wait) in order to wait for the result.
-    * The generic template and two template specializations each contain a single version of get. The three versions of get differ only in the return type.
-    * The behavior is undefined if [valid()](https://en.cppreference.com/w/cpp/thread/future/valid) is `false` before the call to this function.
-    * Any shared state is released. [valid()](https://en.cppreference.com/w/cpp/thread/future/valid) is `false` after a call to this member function.
-    * Notes
-        * The implementations are encouraged to detect the case when `valid()` is `false` before the call and throw a [std::future_error](https://en.cppreference.com/w/cpp/thread/future_error) with an error condition of [std::future_errc::no_state](https://en.cppreference.com/w/cpp/thread/future_errc).
-    * Example
+#
+[`std::future<T>::get`](https://en.cppreference.com/w/cpp/thread/future/get)
+
+* returns the result (public member function)
+* The get member function waits until the future has a valid result and (depending on which template is used) retrieves it. It effectively calls [wait()](https://en.cppreference.com/w/cpp/thread/future/wait) in order to wait for the result.
+* The generic template and two template specializations each contain a single version of get. The three versions of get differ only in the return type.
+* The behavior is undefined if [valid()](https://en.cppreference.com/w/cpp/thread/future/valid) is `false` before the call to this function.
+* Any shared state is released. [valid()](https://en.cppreference.com/w/cpp/thread/future/valid) is `false` after a call to this member function.
+* Notes
+    * The implementations are encouraged to detect the case when `valid()` is `false` before the call and throw a [std::future_error](https://en.cppreference.com/w/cpp/thread/future_error) with an error condition of [std::future_errc::no_state](https://en.cppreference.com/w/cpp/thread/future_errc).
+* Example
 ```c++
 #include <thread>
 #include <future>
@@ -18262,7 +18264,40 @@ int main() {
 
 ###### State
 
+#
+[`std::future<T>::valid`](https://en.cppreference.com/w/cpp/thread/future/valid)
 
+* checks if the future has a shared state (public member function)
+* Checks if the future refers to a shared state.
+* This is the case only for futures that were not default-constructed or moved from (i.e. returned by [std::promise::get_future()](https://en.cppreference.com/w/cpp/thread/promise/get_future), [std::packaged_task::get_future()](https://en.cppreference.com/w/cpp/thread/packaged_task/get_future) or [std::async()](https://en.cppreference.com/w/cpp/thread/async)) until the first time [get()](https://en.cppreference.com/w/cpp/thread/future/get) or [share()](https://en.cppreference.com/w/cpp/thread/future/share) is called.
+* The behavior is undefined if any member function other than the destructor, the move-assignment operator, or valid is called on a future that does not refer to shared state (although implementations are encouraged to throw [std::future_error](https://en.cppreference.com/w/cpp/thread/future_error) indicating no_state in this case). It is valid to move from a future object for which `valid()` is false.
+* Parameters
+    * (none)
+* Return value
+    * true if `*this` refers to a shared state, otherwise false.
+* Example
+```c++
+#include <future>
+#include <iostream>
+ 
+int main() {
+    std::promise<void> p;
+    std::future<void> f = p.get_future();
+ 
+    std::cout << std::boolalpha;
+ 
+    std::cout << f.valid() << '\n';
+    p.set_value();
+    std::cout << f.valid() << '\n';
+    f.get();
+    std::cout << f.valid() << '\n';
+}
+/*
+true
+true
+false
+*/
+```
 
 #### [std::async](https://en.cppreference.com/w/cpp/thread/async)
 
