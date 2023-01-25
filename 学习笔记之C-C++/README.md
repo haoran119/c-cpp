@@ -14597,61 +14597,71 @@ int main()
 
 ### Non-modifying sequence operations
 
-* [std::all_of, std::any_of, std::none_of - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/all_any_none_of)
-	* checks if a predicate is true for all, any or none of the elements in a range (function template)
-* [std::for_each - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/for_each)
-	* applies a function to a range of elements(function template)
+#### [std::all_of, std::any_of, std::none_of](https://en.cppreference.com/w/cpp/algorithm/all_any_none_of)
+
+* checks if a predicate is true for all, any or none of the elements in a range (function template)
+
+#### [std::for_each](https://en.cppreference.com/w/cpp/algorithm/for_each)
+
+* applies a function to a range of elements(function template)
+```c++
+template< class InputIt, class UnaryFunction >
+UnaryFunction for_each( InputIt first, InputIt last, UnaryFunction f );
+(1) (until C++20)
+template< class InputIt, class UnaryFunction >
+constexpr UnaryFunction for_each( InputIt first, InputIt last, UnaryFunction f );
+(1) (since C++20)
+
+template< class ExecutionPolicy, class ForwardIt, class UnaryFunction2 >
+void for_each( ExecutionPolicy&& policy, ForwardIt first, ForwardIt last, UnaryFunction2 f );
+(2) (since C++17)
+```
+* 1) Applies the given function object f to the result of dereferencing every iterator in the range `[first, last)`, in order.
+* 2) Applies the given function object f to the result of dereferencing every iterator in the range `[first, last)` (not necessarily in order). The algorithm is executed according to policy. This overload does not participate in overload resolution unless `std::is_execution_policy_v<std::decay_t<ExecutionPolicy>> (until C++20) std::is_execution_policy_v<std::remove_cvref_t<ExecutionPolicy>> (since C++20)` is true.
+* For both overloads, if the iterator type is mutable, f may modify the elements of the range through the dereferenced iterator. If f returns a result, the result is ignored.
+* Unlike the rest of the parallel algorithms, for_each is not allowed to make copies of the elements in the sequence even if they are trivially copyable.
+
+##### MISC
+
+* [for_each loop in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/for_each-loop-c/)
+    * It is versatile, i.e.  Can work with any container.
+    * It reduces chances of errors one can commit using generic for loop
+    * It makes code more readable
+    * for_each loops improve overall performance of code
+* [c++ - How can I change the value of the elements in a vector? - Stack Overflow](https://stackoverflow.com/questions/4807709/how-can-i-change-the-value-of-the-elements-in-a-vector)
+```c++
+double total = 0;
+for_each( v.begin(), v.end(), [&total](double  v) { total += v; });
+cout << "The sum of the values is: " << total << endl;
+
+double total = std::accumulate(v.begin(), v.end(), 0.0);
+```
+* [c++ - Use of for_each on map elements - Stack Overflow](https://stackoverflow.com/questions/2850312/use-of-for-each-on-map-elements)
+    * You can iterate through a std::map object. Each iterator will point to a std::pair<const T,S> where T and S are the same types you specified on your map.
+    * If you still want to use std::for_each, pass a function that takes a std::pair<const int, MyClass>& as an argument instead.
+    * And pass it to std::for_each:
     ```c++
-    template< class InputIt, class UnaryFunction >
-    UnaryFunction for_each( InputIt first, InputIt last, UnaryFunction f );
-    (1) (until C++20)
-    template< class InputIt, class UnaryFunction >
-    constexpr UnaryFunction for_each( InputIt first, InputIt last, UnaryFunction f );
-    (1) (since C++20)
+    void CallMyMethod(std::pair<const int, MyClass>& pair) // could be a class static method as well
+    {
+      pair.second.Method();
+    }
 
-    template< class ExecutionPolicy, class ForwardIt, class UnaryFunction2 >
-    void for_each( ExecutionPolicy&& policy, ForwardIt first, ForwardIt last, UnaryFunction2 f );
-    (2) (since C++17)
+    std::for_each(Map.begin(), Map.end(), CallMyMethod);
     ```
-	* 1) Applies the given function object f to the result of dereferencing every iterator in the range \[first, last), in order.
-	* 2) Applies the given function object f to the result of dereferencing every iterator in the range \[first, last) (not necessarily in order). The algorithm is executed according to policy. This overload does not participate in overload resolution unless std::is_execution_policy_v\<std::decay_t\<ExecutionPolicy>> (until C++20) std::is_execution_policy_v\<std::remove_cvref_t\<ExecutionPolicy>> (since C++20) is true.
-	* For both overloads, if the iterator type is mutable, f may modify the elements of the range through the dereferenced iterator. If f returns a result, the result is ignored.
-	* Unlike the rest of the parallel algorithms, for_each is not allowed to make copies of the elements in the sequence even if they are trivially copyable.
-	* [for_each loop in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/for_each-loop-c/)
-		* It is versatile, i.e.  Can work with any container.
-		* It reduces chances of errors one can commit using generic for loop
-		* It makes code more readable
-		* for_each loops improve overall performance of code
-	* [c++ - How can I change the value of the elements in a vector? - Stack Overflow](https://stackoverflow.com/questions/4807709/how-can-i-change-the-value-of-the-elements-in-a-vector)
-	```c++
-	double total = 0;
-	for_each( v.begin(), v.end(), [&total](double  v) { total += v; });
-	cout << "The sum of the values is: " << total << endl;
-
-	double total = std::accumulate(v.begin(), v.end(), 0.0);
-	```
-	* [c++ - Use of for_each on map elements - Stack Overflow](https://stackoverflow.com/questions/2850312/use-of-for-each-on-map-elements)
-		* You can iterate through a std::map object. Each iterator will point to a std::pair<const T,S> where T and S are the same types you specified on your map.
-		* If you still want to use std::for_each, pass a function that takes a std::pair<const int, MyClass>& as an argument instead.
-		* And pass it to std::for_each:
-		```c++
-		void CallMyMethod(std::pair<const int, MyClass>& pair) // could be a class static method as well
-		{
-		  pair.second.Method();
-		}
-		
-		std::for_each(Map.begin(), Map.end(), CallMyMethod);
-		```
 * [c++ - Raw Loop on an array of bool is 5 times faster than transform or for_each - Stack Overflow](https://stackoverflow.com/questions/56873187/raw-loop-on-an-array-of-bool-is-5-times-faster-than-transform-or-for-each)
 	* In this example, clang vectorizes indexing but (mistakenly) fails to vectorize iterating.
 	* To summarize the results, there is no difference between using a raw loop and using std::transform or std::for_each. There IS, however, a difference between using indexing and using iterating, and for the purposes of this particular problem, clang is better at optimizing indexing than it is at optimizing iterating because indexing gets vectorized. std::transform and std::for_each use iterating, so they end up being slower (when compiled under clang).
-* [std::find, std::find_if, std::find_if_not - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/find)
-  * [find_if - C++ Reference](https://www.cplusplus.com/reference/algorithm/find_if/)
-    * Find element in range
-      * Returns an iterator to the first element in the range \[first,last) for which pred returns true. If no such element is found, the function returns last.
-  * [std::find_if , std::find_if_not in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdfind_if-stdfind_if_not-in-c/)
-  * [c++ - How to find out if an item is present in a std::vector? - Stack Overflow](https://stackoverflow.com/questions/571394/how-to-find-out-if-an-item-is-present-in-a-stdvector)
-  	* `std::find(vec.begin(), vec.end(), item) != vec.end()`
+
+#### [std::find, std::find_if, std::find_if_not](https://en.cppreference.com/w/cpp/algorithm/find)
+
+##### MISC
+
+* [find_if - C++ Reference](https://www.cplusplus.com/reference/algorithm/find_if/)
+* Find element in range
+  * Returns an iterator to the first element in the range \[first,last) for which pred returns true. If no such element is found, the function returns last.
+* [std::find_if , std::find_if_not in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdfind_if-stdfind_if_not-in-c/)
+* [c++ - How to find out if an item is present in a std::vector? - Stack Overflow](https://stackoverflow.com/questions/571394/how-to-find-out-if-an-item-is-present-in-a-stdvector)
+* `std::find(vec.begin(), vec.end(), item) != vec.end()`
 
 ### Modifying sequence operations
 
