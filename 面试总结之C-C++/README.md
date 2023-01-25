@@ -3280,6 +3280,69 @@ int main()
     return 0;
 }
 ```
+```c++
+/*
+Which code snippet could combine the first and last name in FirstLast into a single list of names in FullName ?
+*/
+
+#include <iostream>
+#include <algorithm>
+#include <map>
+#include <vector>
+
+int main()
+{
+    std::vector<std::string> FirstLast = {"John", "Jane", "Jim", "Sally",
+                                            "Smith", "Doe", "Jones", "Adams"};
+    std::vector<std::string> FullName(4);
+    auto concat = [](const std::string& s1, const std::string& s2) {
+        return s1 + " " + s2;
+    };
+
+    // error: no match for 'operator[]'
+    // std::vector<std::string>::iterator it = FirstLast.begin();
+    // while (*it != "Smith") {
+    //     FullName[it] = concat(*it, *(it + 4));
+    //     ++ it;
+    // }
+
+    // error: no matching function for call to
+    // std::for_each(FirstLast.begin(), FirstLast.end(), FullName.begin(), concat);
+
+    /*
+    John Smith
+    Jane Doe
+    Jim Jones
+    Sally Adams
+    */
+    std::vector<std::string>::iterator it = FirstLast.begin() + 4;
+    std::transform(FirstLast.begin(), it, it, FullName.begin(), concat);
+
+    /*
+
+
+
+
+    Smith John
+    Doe Jane
+    Jones Jim
+    Adams Sally
+    */
+    // for (std::vector<std::string>::iterator it = FirstLast.begin(); *it != "Smith"; ++ it) {
+    //     FullName.push_back(concat(*(it + 4), *it));
+    // }
+
+    // error: no match for call to
+    // std::vector<std::string>::iterator it = FirstLast.begin() + 4;
+    // std::transform(FirstLast.begin(), it, FullName.begin(), concat);
+
+    for (auto it : FullName) {
+        std::cout << it << '\n';
+    }
+
+    return 0;
+}
+```
 
 #### Concurrency
 
