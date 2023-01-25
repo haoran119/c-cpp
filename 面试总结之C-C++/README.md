@@ -3363,6 +3363,69 @@ int main()
     return 0;
 }
 ```
+* `std::async` call
+```c++
+/*
+
+* threaded_func is not guaranteed to start immediately in another thread
+    * Even if you pass std::launch::async as a launch policy to std::async, it is not guaranteed
+    that threaded_func will start immediately in another thread. The implementation is still free 
+    to decide whether to run the function in the current thread or in a new thread, based on 
+    various factors such as the number of available hardware threads, the workload of the system, 
+    and other implementation-specific considerations. The std::async with std::launch::async 
+    guarantees that the function will be run asynchronously, but does not guarantee that the 
+    function will start immediately in another thread.
+* If an exception is thrown in threaded_func, it will not be handled in main(). 
+    * The exception will propagate through the thread, but it will not be caught in the main 
+    function. To handle exceptions thrown in threaded_func, you can use a try-catch block in main() 
+    and call the .get() method on the future object, which will wait for the function to complete 
+    and will propagate any exception thrown by the function.
+    * Alternatively, you can use a std::future<T>::wait() function which will wait for the function 
+    to complete and will propagate any exception thrown by the function.
+    * Note that the .get() and .wait() method may re-throw the exception that was thrown in the 
+    threaded_func so you can use try-catch block around them as well.
+* Adding a call to future_result.get() after the std::async call will not launch threaded_func in a 
+separate thread. 
+    * The std::async call is responsible for launching the function in a separate thread, and the 
+    call to future_result.get() simply waits for the function to complete and retrieves the result. 
+    The .get() method will block the main thread until the function execution is finished, 
+    regardless of whether the function is run in a separate thread or not.
+    * It's worth noting that, there is no launch policy passed to std::async, so the behavior of 
+    the function execution is not guaranteed to run async. So, adding .get() method will wait for 
+    the completion of the task only.
+* It is possible that threaded_func may be started synchronously at a future time, if the 
+implementation chooses to do so. The std::async call is responsible for launching the function, but 
+no launch policy is passed to it, so the implementation is free to decide whether to run the 
+function synchronously or asynchronously.
+    * The while loop will continue to execute until the future_result is valid. This means that the 
+    main thread will be blocked until the future_result is ready. When the future_result is ready, 
+    it means that the threaded_func has completed and the main thread will exit the loop and print 
+    "Done!". Depending on the implementation, this could mean that the function was run 
+    synchronously, in which case the main thread would be blocked until the function completed.
+    * It's worth noting that, there is no launch policy passed to std::async, so the behavior of 
+    the function execution is not guaranteed to run async or sync.
+
+*/
+
+#include <iostream>
+#include <future>
+
+void threaded_func() {}
+
+int main()
+{
+    auto future_result = std::async(threaded_func);
+
+    while (1) {
+        if (future_result.valid()) {
+            std::cout << "Done!" << '\n';   // Done!
+            break;
+        }
+    }
+
+    return 0;
+}
+```
 
 #### Template
 
