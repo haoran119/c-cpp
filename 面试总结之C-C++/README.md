@@ -2690,6 +2690,39 @@ int main()
 }
 ```
 
+#### Lambda
+
+```c++
+/*
+How to substitute *** to correctly capture the normalization_factor ?
+
+* [&]
+* [=]
+    * warning: implicit capture of 'this' via '[=]' is deprecated in C++20 [-Wdeprecated]
+*/
+
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
+class FFT {
+public:
+    using SampleData = std::vector<double>;
+
+    void normalize()
+    {
+        std::for_each(samples.begin(), samples.end(), 
+                        *** (double& elem) {
+                            elem *= normalization_factor;
+                        });
+    }
+
+private:
+    SampleData samples;
+    double  normalization_factor;
+};
+```
+
 #### Class
 
 ##### constructor / destructor
