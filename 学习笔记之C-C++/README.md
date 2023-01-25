@@ -14655,52 +14655,55 @@ int main()
 
 ### Modifying sequence operations
 
-* [std::copy, std::copy_if - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/copy)
-	* copies a range of elements to a new location (function template)
-	* Copies the elements in the range, defined by \[first, last), to another range beginning at d_first.
-	* [c++ - How to use copy_if for maps - Stack Overflow](https://stackoverflow.com/questions/23548139/how-to-use-copy-if-for-maps)
-* [std::transform - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/transform)
-	* applies a function to a range of elements, storing results in a destination range (function template)
-	* std::transform applies the given function to a range and stores the result in another range, keeping the original elements order and beginning at d_first.
-		* 1) The unary operation unary_op is applied to the range defined by \[first1, last1).
-		* 3) The binary operation binary_op is applied to pairs of elements from two ranges: one defined by \[first1, last1) and the other beginning at first2.
-		* 2,4) Same as (1,3), but executed according to policy. These overloads do not participate in overload resolution unless 
-			* std::is_execution_policy_v\<std::decay_t\<ExecutionPolicy>> (until C++20) 
-			* std::is_execution_policy_v\<std::remove_cvref_t\<ExecutionPolicy>> (since C++20) is true.
-	* unary_op and binary_op must not have side effects. (until C++11)
-	* unary_op and binary_op must not invalidate any iterators, including the end iterators, or modify any elements of the ranges involved. (since C++11)
-	* Parameters
-		* first1, last1	-	the first range of elements to transform
-		* first2	-	the beginning of the second range of elements to transform
-		* d_first	-	the beginning of the destination range, may be equal to first1 or first2
-		* policy	-	the execution policy to use. See execution policy for details.
-		* unary_op	-	unary operation function object that will be applied.
-			* The signature of the function should be equivalent to the following:
-			* `Ret fun(const Type &a);`
-			* The signature does not need to have const &.
-			* The type Type must be such that an object of type InputIt can be dereferenced and then implicitly converted to Type. The type Ret must be such that an object of type OutputIt can be dereferenced and assigned a value of type Ret.
-		* binary_op	-	binary operation function object that will be applied.
-			* The signature of the function should be equivalent to the following:
-			* `Ret fun(const Type1 &a, const Type2 &b);`
-			* The signature does not need to have const &.
-			* The types Type1 and Type2 must be such that objects of types InputIt1 and InputIt2 can be dereferenced and then implicitly converted to Type1 and Type2 respectively. The type Ret must be such that an object of type OutputIt can be dereferenced and assigned a value of type Ret.
-		* Type requirements
-			* -InputIt, InputIt1, InputIt2 must meet the requirements of LegacyInputIterator.
-			* -OutputIt must meet the requirements of LegacyOutputIterator.
-			* -ForwardIt1, ForwardIt2, ForwardIt3 must meet the requirements of LegacyForwardIterator.
-	* Return value
-		* Output iterator to the element past the last element transformed.
-	* Complexity
-		* 1-2) Exactly std::distance(first1, last1) applications of unary_op
-		* 3-4) Exactly std::distance(first1, last1) applications of binary_op
-	* Exceptions
-		* The overloads with a template parameter named ExecutionPolicy report errors as follows:
-			* If execution of a function invoked as part of the algorithm throws an exception and ExecutionPolicy is one of the standard policies, std::terminate is called. For any other ExecutionPolicy, the behavior is implementation-defined.
-			* If the algorithm fails to allocate memory, std::bad_alloc is thrown.
-	* Notes
-		* std::transform does not guarantee in-order application of unary_op or binary_op. To apply a function to a sequence in-order or to apply a function that modifies the elements of a sequence, use std::for_each.
-	* Example
-		* The following code uses transform to convert a string in place to uppercase using the std::toupper function and then transforms each char to its ordinal value:
+#### [std::copy, std::copy_if](https://en.cppreference.com/w/cpp/algorithm/copy)
+
+* copies a range of elements to a new location (function template)
+* Copies the elements in the range, defined by \[first, last), to another range beginning at d_first.
+* [c++ - How to use copy_if for maps - Stack Overflow](https://stackoverflow.com/questions/23548139/how-to-use-copy-if-for-maps)
+
+#### [std::transform](https://en.cppreference.com/w/cpp/algorithm/transform)
+
+* applies a function to a range of elements, storing results in a destination range (function template)
+* std::transform applies the given function to a range and stores the result in another range, keeping the original elements order and beginning at d_first.
+    * 1) The unary operation unary_op is applied to the range defined by \[first1, last1).
+    * 3) The binary operation binary_op is applied to pairs of elements from two ranges: one defined by \[first1, last1) and the other beginning at first2.
+    * 2,4) Same as (1,3), but executed according to policy. These overloads do not participate in overload resolution unless 
+        * std::is_execution_policy_v\<std::decay_t\<ExecutionPolicy>> (until C++20) 
+        * std::is_execution_policy_v\<std::remove_cvref_t\<ExecutionPolicy>> (since C++20) is true.
+* unary_op and binary_op must not have side effects. (until C++11)
+* unary_op and binary_op must not invalidate any iterators, including the end iterators, or modify any elements of the ranges involved. (since C++11)
+* Parameters
+    * `first1, last1`	-	the first range of elements to transform
+    * `first2`	-	the beginning of the second range of elements to transform
+    * `d_first`	-	the beginning of the destination range, may be equal to first1 or first2
+    * `policy`	-	the execution policy to use. See execution policy for details.
+    * `unary_op`	-	unary operation function object that will be applied.
+        * The signature of the function should be equivalent to the following:
+        * `Ret fun(const Type &a);`
+        * The signature does not need to have const &.
+        * The type Type must be such that an object of type InputIt can be dereferenced and then implicitly converted to Type. The type Ret must be such that an object of type OutputIt can be dereferenced and assigned a value of type Ret.
+    * `binary_op`	-	binary operation function object that will be applied.
+        * The signature of the function should be equivalent to the following:
+        * `Ret fun(const Type1 &a, const Type2 &b);`
+        * The signature does not need to have const &.
+        * The types Type1 and Type2 must be such that objects of types InputIt1 and InputIt2 can be dereferenced and then implicitly converted to Type1 and Type2 respectively. The type Ret must be such that an object of type OutputIt can be dereferenced and assigned a value of type Ret.
+    * Type requirements
+        * -InputIt, InputIt1, InputIt2 must meet the requirements of LegacyInputIterator.
+        * -OutputIt must meet the requirements of LegacyOutputIterator.
+        * -ForwardIt1, ForwardIt2, ForwardIt3 must meet the requirements of LegacyForwardIterator.
+* Return value
+    * Output iterator to the element past the last element transformed.
+* Complexity
+    * 1-2) Exactly std::distance(first1, last1) applications of unary_op
+    * 3-4) Exactly std::distance(first1, last1) applications of binary_op
+* Exceptions
+    * The overloads with a template parameter named ExecutionPolicy report errors as follows:
+        * If execution of a function invoked as part of the algorithm throws an exception and ExecutionPolicy is one of the standard policies, std::terminate is called. For any other ExecutionPolicy, the behavior is implementation-defined.
+        * If the algorithm fails to allocate memory, std::bad_alloc is thrown.
+* Notes
+    * std::transform does not guarantee in-order application of unary_op or binary_op. To apply a function to a sequence in-order or to apply a function that modifies the elements of a sequence, use std::for_each.
+* Example
+    * The following code uses transform to convert a string in place to uppercase using the std::toupper function and then transforms each char to its ordinal value:
 ```c++
 #include <algorithm>
 #include <cctype>
@@ -14749,6 +14752,9 @@ ordinals: 72 69 76 76 79
 ordinals: 144 138 152 152 158
 */
 ```
+
+##### MISC
+
 * [std::transform() in C++ STL (Perform an operation on all elements) - GeeksforGeeks](https://www.geeksforgeeks.org/transform-c-stl-perform-operation-elements/)
 * How to transform vector ?
 ```c++
@@ -14880,32 +14886,39 @@ std::vector<int> v2(v1.size());
 std::transform(v1.begin(), v1.end(), v2.begin(),
     [pv = 0](int val) mutable { int nv = pv + val; pv = val; return nv; });
 ```
-* [std::remove, std::remove_if - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/remove)
-	* removes elements satisfying specific criteria (function template)
-	* Return value
-		* Past-the-end iterator for the new range of values (if this is not end, then it points to an unspecified value, and so do iterators to any values between this iterator and end).
-	* Complexity
-		* Exactly std::distance(first, last) applications of the predicate.
-	* Notes
-		* A call to remove is typically followed by a call to a container's erase method, which erases the unspecified values and reduces the physical size of the container to match its new logical size. These two invocations together constitute a so-called [Erase–remove idiom](https://en.wikipedia.org/wiki/Erase-remove_idiom), which can be achieved by the free function std::erase that has overloads for all standard sequence containers, or std::erase_if that has overloads for all standard containers (since C++20).
-		* The similarly-named container member functions list::remove, list::remove_if, forward_list::remove, and forward_list::remove_if erase the removed elements.
-		* These algorithms cannot be used with associative containers such as std::set and std::map because their iterator types do not dereference to MoveAssignable types (the keys in these containers are not modifiable).
-		* The standard library also defines an overload of std::remove in \<cstdio>, which takes a const char* and is used to delete files.
-		* Because std::remove takes value by reference, it can have unexpected behavior if it is a reference to an element of the range \[first, last).
-	* [std::remove, std::remove_if in c++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdremove-stdremove_if-c/)
-	* [c++ - difference between erase and remove/remove_if algorithms? - Stack Overflow](https://stackoverflow.com/questions/3031923/difference-between-erase-and-remove-remove-if-algorithms)
-		* No, std::remove_if will move the elements that don't match the predicate to the end of list and will return an iterator to the new "end". Erase will effectively drop the element (call the dtor) from the container.
-		* The difference is perfectly illustrated by the examples
-			* [remove_if - C++ Reference](https://cplusplus.com/reference/algorithm/remove_if/)
-	* [c++ - using remove_if for a map container - Stack Overflow](https://stackoverflow.com/questions/29004092/using-remove-if-for-a-map-container)
-		* remove_if works by scanning the elements and once an element is to be removed, it remembers the "gap" that will leave (keeping an iterator pointing thereto) while advancing another iterator to find the next element to retain... it then starts copying or moving elements from the latter position to the former until it reaches end().
-		* That doesn't work for map, because you can't overwrite the pair<key,value> elements wholesale: the key values aren't allowed to be modified or the sorted-order invariant the implementation needs could be invalidated.
-		* So, you'll need to abandon remove_if. You could use a normal loop, being careful to save the iterator-to-next-element rather than attempting to advance from a just-erased iterator. Lots of other questions about how to erase elements from a map while iterating, e.g. here....
-		* [c++ - How to remove from a map while iterating it? - Stack Overflow](https://stackoverflow.com/questions/8234779/how-to-remove-from-a-map-while-iterating-it)
-	* [c++ - remove_if equivalent for std::map - Stack Overflow](https://stackoverflow.com/questions/800955/remove-if-equivalent-for-stdmap)
-* [std::replace, std::replace_if - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/replace)
-	* replaces all values satisfying specific criteria with another value (function template)
-	* Replaces all elements satisfying specific criteria with new_value in the range \[first, last).
+
+#### [std::remove, std::remove_if](https://en.cppreference.com/w/cpp/algorithm/remove)
+
+* removes elements satisfying specific criteria (function template)
+* Return value
+    * Past-the-end iterator for the new range of values (if this is not end, then it points to an unspecified value, and so do iterators to any values between this iterator and end).
+* Complexity
+    * Exactly std::distance(first, last) applications of the predicate.
+* Notes
+    * A call to remove is typically followed by a call to a container's erase method, which erases the unspecified values and reduces the physical size of the container to match its new logical size. These two invocations together constitute a so-called [Erase–remove idiom](https://en.wikipedia.org/wiki/Erase-remove_idiom), which can be achieved by the free function std::erase that has overloads for all standard sequence containers, or std::erase_if that has overloads for all standard containers (since C++20).
+    * The similarly-named container member functions list::remove, list::remove_if, forward_list::remove, and forward_list::remove_if erase the removed elements.
+    * These algorithms cannot be used with associative containers such as std::set and std::map because their iterator types do not dereference to MoveAssignable types (the keys in these containers are not modifiable).
+    * The standard library also defines an overload of std::remove in \<cstdio>, which takes a const char* and is used to delete files.
+    * Because std::remove takes value by reference, it can have unexpected behavior if it is a reference to an element of the range \[first, last).
+
+##### MISC
+
+* [std::remove, std::remove_if in c++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdremove-stdremove_if-c/)
+* [c++ - difference between erase and remove/remove_if algorithms? - Stack Overflow](https://stackoverflow.com/questions/3031923/difference-between-erase-and-remove-remove-if-algorithms)
+    * No, std::remove_if will move the elements that don't match the predicate to the end of list and will return an iterator to the new "end". Erase will effectively drop the element (call the dtor) from the container.
+    * The difference is perfectly illustrated by the examples
+        * [remove_if - C++ Reference](https://cplusplus.com/reference/algorithm/remove_if/)
+* [c++ - using remove_if for a map container - Stack Overflow](https://stackoverflow.com/questions/29004092/using-remove-if-for-a-map-container)
+    * remove_if works by scanning the elements and once an element is to be removed, it remembers the "gap" that will leave (keeping an iterator pointing thereto) while advancing another iterator to find the next element to retain... it then starts copying or moving elements from the latter position to the former until it reaches end().
+    * That doesn't work for map, because you can't overwrite the pair<key,value> elements wholesale: the key values aren't allowed to be modified or the sorted-order invariant the implementation needs could be invalidated.
+    * So, you'll need to abandon remove_if. You could use a normal loop, being careful to save the iterator-to-next-element rather than attempting to advance from a just-erased iterator. Lots of other questions about how to erase elements from a map while iterating, e.g. here....
+    * [c++ - How to remove from a map while iterating it? - Stack Overflow](https://stackoverflow.com/questions/8234779/how-to-remove-from-a-map-while-iterating-it)
+* [c++ - remove_if equivalent for std::map - Stack Overflow](https://stackoverflow.com/questions/800955/remove-if-equivalent-for-stdmap)
+
+#### [std::replace, std::replace_if](https://en.cppreference.com/w/cpp/algorithm/replace)
+
+* replaces all values satisfying specific criteria with another value (function template)
+* Replaces all elements satisfying specific criteria with new_value in the range `[first, last)`.
 ```c++
 #include <algorithm>
 #include <array>
@@ -14935,11 +14948,15 @@ int main()
 5 7 55 55 88 6 55 9 55 55
 */
 ```
-* [std::swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/swap)
-  * [swap() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/swap-in-cpp/)
-* [std::iter_swap - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/iter_swap)
-	* swaps the elements pointed to by two iterators (function template)
-	* Swaps the values of the elements the given iterators are pointing to.
+
+#### [std::swap](https://en.cppreference.com/w/cpp/algorithm/swap)
+
+* [swap() in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/swap-in-cpp/)
+
+#### [std::iter_swap](https://en.cppreference.com/w/cpp/algorithm/iter_swap)
+
+* swaps the elements pointed to by two iterators (function template)
+* Swaps the values of the elements the given iterators are pointing to.
 ```c++
 #include <random>
 #include <vector>
@@ -14978,21 +14995,23 @@ Before sort: -9 -3 +2 -8 +0 -1 +8 -4 -5 +1 -4 -5 +4 -9 -8 -6 -6 +8 -4 -6
 After sort : -9 -9 -8 -8 -6 -6 -6 -5 -5 -4 -4 -4 -3 -1 +0 +1 +2 +4 +8 +8
 */
 ```
-* [std::reverse - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/reverse)
-	* reverses the order of elements in a range (function template)
-	* Parameters
-		* first, last	-	the range of elements to reverse
-		* policy	-	the execution policy to use. See execution policy for details.
-	* Type requirements
-		* -BidirIt must meet the requirements of ValueSwappable and LegacyBidirectionalIterator.
-	* Return value
-		* (none)
-	* Complexity
-		* Exactly (last - first)/2 swaps.
-	* Exceptions
-		* The overload with a template parameter named ExecutionPolicy reports errors as follows:
-		* If execution of a function invoked as part of the algorithm throws an exception and ExecutionPolicy is one of the standard policies, std::terminate is called. For any other ExecutionPolicy, the behavior is implementation-defined.
-		* If the algorithm fails to allocate memory, std::bad_alloc is thrown.
+
+#### [std::reverse](https://en.cppreference.com/w/cpp/algorithm/reverse)
+
+* reverses the order of elements in a range (function template)
+* Parameters
+    * `first, last`	-	the range of elements to reverse
+    * `policy`	-	the execution policy to use. See execution policy for details.
+* Type requirements
+    * -BidirIt must meet the requirements of ValueSwappable and LegacyBidirectionalIterator.
+* Return value
+    * (none)
+* Complexity
+    * Exactly (last - first)/2 swaps.
+* Exceptions
+    * The overload with a template parameter named ExecutionPolicy reports errors as follows:
+    * If execution of a function invoked as part of the algorithm throws an exception and ExecutionPolicy is one of the standard policies, std::terminate is called. For any other ExecutionPolicy, the behavior is implementation-defined.
+    * If the algorithm fails to allocate memory, std::bad_alloc is thrown.
 ```c++
 #include <vector>
 #include <iostream>
@@ -15020,9 +15039,10 @@ int main()
 
 ### Sorting operations
 
-* [std::sort - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/sort)
-	* Sorts the elements in the range \[first, last) in non-descending order. The order of equal elements is not guaranteed to be preserved.
-	* [std::sort() in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/sort-c-stl/)
+#### [std::sort](https://en.cppreference.com/w/cpp/algorithm/sort)
+
+* Sorts the elements in the range \[first, last) in non-descending order. The order of equal elements is not guaranteed to be preserved.
+* [std::sort() in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/sort-c-stl/)
 ```c++
 #include <algorithm>
 #include <functional>
@@ -15069,12 +15089,16 @@ int main()
 
 ### Binary search operations (on sorted ranges)
 
-* [std::lower_bound - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/lower_bound)
-  * returns an iterator to the first element not less than the given value (function template)
-  * Returns an iterator pointing to the first element in the range \[first, last) that does not satisfy element < value (or comp(element, value)), (i.e. greater or equal to), or last if no such element is found.
-  * The range \[first, last) must be partitioned with respect to the expression element < value (or comp(element, value)), i.e., all elements for which the expression is true must precede all elements for which the expression is false. A fully-sorted range meets this criterion.
-  * The first version uses operator< to compare the elements, the second version uses the given comparison function comp.
-  * [Lower Bound-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-lower-bound/problem)
+#### [std::lower_bound](https://en.cppreference.com/w/cpp/algorithm/lower_bound)
+
+* returns an iterator to the first element not less than the given value (function template)
+* Returns an iterator pointing to the first element in the range `[first, last)` that does not satisfy element < value (or comp(element, value)), (i.e. greater or equal to), or last if no such element is found.
+* The range `[first, last)` must be partitioned with respect to the expression element < value (or comp(element, value)), i.e., all elements for which the expression is true must precede all elements for which the expression is false. A fully-sorted range meets this criterion.
+* The first version uses operator< to compare the elements, the second version uses the given comparison function comp.
+
+##### MISC
+
+* [Lower Bound-STL | HackerRank](https://www.hackerrank.com/challenges/cpp-lower-bound/problem)
 ```c++
 #include <cmath>
 #include <cstdio>
@@ -15111,19 +15135,22 @@ int main() {
     return 0;
 }
 ```
-* [std::upper_bound - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/upper_bound)
-	* returns an iterator to the first element greater than a certain value (function template)
-	* Returns an iterator pointing to the first element in the range \[first, last) such that value < element (or comp(value, element)) is true (i.e. strictly greater), or last if no such element is found.
-	* The range \[first, last) must be partitioned with respect to the expression !(value < element) or !comp(value, element), i.e., all elements for which the expression is true must precede all elements for which the expression is false. A fully-sorted range meets this criterion.
-	* The first version uses operator< to compare the elements, the second version uses the given comparison function comp.
+
+#### [std::upper_bound](https://en.cppreference.com/w/cpp/algorithm/upper_bound)
+
+* returns an iterator to the first element greater than a certain value (function template)
+* Returns an iterator pointing to the first element in the range \[first, last) such that value < element (or comp(value, element)) is true (i.e. strictly greater), or last if no such element is found.
+* The range `[first, last)` must be partitioned with respect to the expression !(value < element) or !comp(value, element), i.e., all elements for which the expression is true must precede all elements for which the expression is false. A fully-sorted range meets this criterion.
+* The first version uses operator< to compare the elements, the second version uses the given comparison function comp.
 
 ### Other operations on sorted ranges
 
 ### Set operations (on sorted ranges)
 
-* [std::set_intersection - cppreference.com](https://en.cppreference.com/w/cpp/algorithm/set_intersection)
-	* computes the intersection of two sets (function template)
-	* Constructs a sorted range beginning at d_first consisting of elements that are found in both sorted ranges [first1, last1) and [first2, last2). If some element is found m times in [first1, last1) and n times in [first2, last2), the first std::min(m, n) elements will be copied from the first range to the destination range. The order of equivalent elements is preserved. The resulting range cannot overlap with either of the input ranges.
+#### [std::set_intersection](https://en.cppreference.com/w/cpp/algorithm/set_intersection)
+
+* computes the intersection of two sets (function template)
+* Constructs a sorted range beginning at d_first consisting of elements that are found in both sorted ranges `[first1, last1)` and `[first2, last2)`. If some element is found m times in `[first1, last1)` and n times in `[first2, last2)`, the first `std::min(m, n)` elements will be copied from the first range to the destination range. The order of equivalent elements is preserved. The resulting range cannot overlap with either of the input ranges.
 ```c++
 #include <iostream>
 #include <vector>
@@ -15145,6 +15172,9 @@ int main()
         std::cout << n << ' ';
 }
 ```
+
+##### MISC
+
 * [std::set_intersection in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/std-set_intersection-in-cpp/)
 	* find the common elements in two vectors
 
@@ -15161,9 +15191,9 @@ int main()
 #### [std::max_element](https://en.cppreference.com/w/cpp/algorithm/max_element)
 	
 * returns the largest element in a range (function template)
-* Finds the greatest element in the range \[first, last).
+* Finds the greatest element in the range `[first, last)`.
 * Return value
-    * Iterator to the greatest element in the range \[first, last). If several elements in the range are equivalent to the greatest element, returns the iterator to the first such element. Returns last if the range is empty.
+    * Iterator to the greatest element in the range `[first, last)`. If several elements in the range are equivalent to the greatest element, returns the iterator to the first such element. Returns last if the range is empty.
 * Complexity
     * Exactly max(N-1,0) comparisons, where N = std::distance(first, last).
 ```c++
@@ -15189,6 +15219,9 @@ int main()
     std::cout << "max element (absolute) at: " << std::distance(v.begin(), result) << '\n';
 }
 ```
+
+##### MISC
+
 * [Find element with the maximum value in a map in C++ | Techie Delight](https://www.techiedelight.com/find-element-with-the-maximum-value-in-a-map-in-cpp/)
 	* 1. Using std::max_element
 	* 2. Using Loop
@@ -15255,6 +15288,9 @@ smaller of 'a', and 'b' is 'a'
 shortest of "foo", "bar", and "hello" is "foo"
 */
 ```
+
+##### MISC
+
 * [std::min in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/stdmin-in-cpp/)
 * [max - Find the smallest amongst 3 numbers in C++ - Stack Overflow](https://stackoverflow.com/questions/9424173/find-the-smallest-amongst-3-numbers-in-c)
     * `std::min({x, y, z})`
@@ -15264,7 +15300,7 @@ shortest of "foo", "bar", and "hello" is "foo"
 * returns the smallest element in a range (function template)
 * returns the smallest element in a range (function template)
 * Return value
-    * Iterator to the smallest element in the range \[first, last). If several elements in the range are equivalent to the smallest element, returns the iterator to the first such element. Returns last if the range is empty.
+    * Iterator to the smallest element in the range `[first, last)`. If several elements in the range are equivalent to the smallest element, returns the iterator to the first such element. Returns last if the range is empty.
 * Complexity
     * Exactly max(N-1,0) comparisons, where N = std::distance(first, last).
 * Exceptions
@@ -15338,6 +15374,9 @@ int main()
 v[2,7]: 4 1 5 9 2
 */
 ```
+
+##### MISC
+
 * [std::minmax() and std::minmax_element() in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/stdminmax-stdminmax_element-c-stl/)
 
 #### [std::minmax_element](https://en.cppreference.com/w/cpp/algorithm/minmax_element)
@@ -15419,7 +15458,7 @@ int main()
 #### [std::iota](https://en.cppreference.com/w/cpp/algorithm/iota)
 
 * fills a range with successive increments of the starting value (function template)
-* Fills the range \[first, last) with sequentially increasing values, starting with value and repetitively evaluating ++value.
+* Fills the range `[first, last)` with sequentially increasing values, starting with value and repetitively evaluating ++value.
 * Equivalent operation:
 ```c++
 *(first)   = value;
@@ -15534,7 +15573,7 @@ dash-separated string (right-folded): 10-9-8-7-6-5-4-3-2-1
 #### [std::inner_product](https://en.cppreference.com/w/cpp/algorithm/inner_product)
 	
 * computes the inner product of two ranges of elements (function template)
-* Computes inner product (i.e. sum of products) or performs ordered map/reduce operation on the range \[first1, last1) and the range beginning at first2.
+* Computes inner product (i.e. sum of products) or performs ordered map/reduce operation on the range `[first1, last1)` and the range beginning at first2.
 ```c++
 #include <numeric>
 #include <iostream>
@@ -15572,9 +15611,9 @@ int main()
 
 #### [Common mathematical functions](https://en.cppreference.com/w/cpp/numeric/math)
 
-* The header \<cmath> provides standard C library mathematical functions such as std::fabs, std::sqrt, and std::sin.
+* The header `<cmath>` provides standard C library mathematical functions such as std::fabs, std::sqrt, and std::sin.
 * [std::div, std::ldiv, std::lldiv - cppreference.com](https://en.cppreference.com/w/cpp/numeric/math/div)
-	* Defined in header \<cstdlib>
+	* Defined in header `<cstdlib>`
 	* computes quotient and remainder of integer division (function)
 	* Computes both the quotient and the remainder of the division of the numerator x by the denominator y.
 	* The quotient is the result of the expression x/y. The remainder is the result of the expression x%y.
