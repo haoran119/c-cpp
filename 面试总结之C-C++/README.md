@@ -1501,12 +1501,18 @@ return 0;
 
 * `operator=`, `operator()`, `operator[]`, `operator->` cannot be non-member function
 
-### function overloading
+### [function overloading](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C%2B%2B/README.md#functions)
 
 * Type `void` is an overloaded type. 
     * `function(void); function(); function(int);`
 * `typedef` can `not` create different overloadable types.
     * `typedef int A; typedef int B; function(A); function(B);`
+* The return types from the overloaded functions do `not` have to be different
+* The names of overloaded functions do `not` have to be different. The function name is not considered when determining whether a function is overloaded or not.
+* Overloaded functions do `not` have to be scoped inside a namespace. They can be defined in any scope, such as in the global scope or inside a class or struct. However, it is possible to define overloaded functions inside a namespace, and this can be useful in certain situations. For example, if you are working on a large project with multiple teams, namespacing can be used to prevent naming conflicts between different teams' functions.
+* The argument types and/or number of arguments to the overloaded functions must be different.
+    * When defining overloaded functions, the function signature, which consists of the function name and the number and types of arguments, must be different for each function.
+    * This means that you can have multiple functions with the same name, but with different number or types of arguments. This is known as `function overloading`.
 
 ### [prvalue v.s. xvalue v.s. lvalue](https://github.com/haoran119/c-cpp/blob/main/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8BC-C++/README.md#value-categories-lvalue-rvalue-xvalue)
 
