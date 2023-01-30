@@ -3680,22 +3680,26 @@ int main()
 /*
 Which of the following potential improvements that can be made to the C++ code below ? 
 1. Use char buffers instead of std::string.
-    * This can be a potential improvement if the size of the string objects can be determined beforehand and the memory usage is a concern. 
+    * This can be a potential improvement if the size of the string objects can be determined beforehand and the 
+memory usage is a concern. 
     * However, it would make the code more complicated and less readable.
 2. Use a container class like std::vector instead of manually creating arrays.
-    * This would be a good improvement as vectors handle memory allocation and deallocation for you, making the code cleaner and less error-prone.
+    * This would be a good improvement as vectors handle memory allocation and deallocation for you, 
+making the code cleaner and less error-prone.
 3. Use a C++ standard library pointer like std::unique_ptr instead of a raw pointer.
-    * This would be a good improvement as smart pointers handle memory management for you and provide automatic memory deallocation.
+    * This would be a good improvement as smart pointers handle memory management for you and provide automatic 
+memory deallocation.
 4. Explicitly declare the arrays using their actual types(double *, std::string*) instead of using auto.
     * This can make the code more readable and explicit, but is not necessary.
 5. Use malloc() instead of new[] for performance improvement
-    * malloc() is faster than new[] in some cases, but new[] provides better type-safety and exception handling. Whether to use malloc() or 
-    * new[] depends on the specific requirements and trade-offs of your code.
+    * malloc() is faster than new[] in some cases, but new[] provides better type-safety and exception handling. 
+    * Whether to use malloc() or new[] depends on the specific requirements and trade-offs of your code.
 
 * Memory leak: The allocated memory is never freed, causing a potential memory leak.
 * Unnecessarily large arrays: The arrays might be larger than necessary, consider using a smaller size.
 * Exception handling: No exception handling is in place, which could result in a crash.
-* Use of raw pointers: Raw pointers can be error-prone and should be replaced with smart pointers such as unique_ptr or shared_ptr.
+* Use of raw pointers: Raw pointers can be error-prone and should be replaced with smart pointers such as unique_ptr 
+or shared_ptr.
 * Names of variables: The names of the variables could be more descriptive to make the code easier to read and understand.
 */
 
