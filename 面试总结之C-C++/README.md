@@ -2696,6 +2696,25 @@ int main()
 }
 ```
 
+#### Reference
+
+```c++
+/*
+What's wrong ?
+
+* The reference to the temporary variable c can fall out of scope when returned
+* Returning a value instead of a reference will prevent issues for callers
+
+*/
+
+const double PI = 3.14159265;
+double& calculateCircumreference(double r)
+{
+    double c = 2 * PI * r;
+    return c;
+}
+```
+
 #### Lambda
 
 ```c++
