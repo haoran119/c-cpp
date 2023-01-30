@@ -3700,7 +3700,8 @@ memory deallocation.
 * Exception handling: No exception handling is in place, which could result in a crash.
 * Use of raw pointers: Raw pointers can be error-prone and should be replaced with smart pointers such as unique_ptr 
 or shared_ptr.
-* Names of variables: The names of the variables could be more descriptive to make the code easier to read and understand.
+* Names of variables: The names of the variables could be more descriptive to make the code easier to read and 
+understand.
 */
 
 int main()
