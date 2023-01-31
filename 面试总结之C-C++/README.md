@@ -3369,6 +3369,33 @@ int main()
 }
 ```
 
+#### Regular expressions
+
+```c++
+/*
+What C++ regular expressions will correctly convert a number in the form 123-45-6789 to
+ XXX-XX-6789 when substituted for *** in this function ?
+*/
+
+#include <iostream>
+#include <regex>
+
+std::string SSHide(const std::string& SSNum)
+{
+    std::regex rx("***");
+    // std::regex rx("[[:digit:]]{3}-[[:digit:]]{2}");
+    return regex_replace(SSNum, rx, "XXX-XX");
+}
+
+int main()
+{
+    auto s = SSHide("123-45-6789");
+    std::cout << s << '\n';
+
+    return 0;
+}
+```
+
 #### Concurrency
 
 * Implement thread safety for SomeClass
