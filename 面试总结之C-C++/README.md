@@ -3253,6 +3253,55 @@ int main()
     return 0;
 }
 ```
+```c++
+/*
+What's the result ?
+*/
+
+#include <iostream>
+
+class Store {
+    unsigned int SqFootage;
+    unsigned int value;
+
+public:
+    Store(unsigned int size, unsigned int cost) : SqFootage(size), value(cost) {}
+    unsigned int GetSize() { return SqFootage; }
+    unsigned int GetVal() { return value; }
+};
+
+class Restaurant : protected Store {
+public:
+    enum FoodType { fast, casual, sit_down };
+    Restaurant(FoodType ft, unsigned int size, unsigned int cost) 
+        : Store(size, cost), speed(ft) {}
+    FoodType GetType() { return speed; }
+
+private:
+    FoodType speed;
+};
+
+int main()
+{
+    Restaurant wings(Restaurant::sit_down, 1500, 120000);
+
+    // error: 'unsigned int Store::GetSize()' is inaccessible within this context
+    // wings.GetSize();
+
+    std::cout << wings.GetType() << '\n';   // 2
+
+    // error: 'casual' was not declared in this scope
+    // Restaurant thai(casual, 1000, 80000);
+
+    // error: 'unsigned int Store::GetVal()' is inaccessible within this context
+    // wings.GetVal();
+
+    // error: 'Restaurant::FoodType Restaurant::speed' is private within this context
+    // wings.speed = Restaurant::casual;
+
+    return 0;
+}
+```
 
 #### STL
 
