@@ -2931,6 +2931,44 @@ Janet
 Janet
 */
 ```
+```c++
+/*
+What's the result ?
+*/
+
+#include <iostream>
+
+class Vehicle {
+public:
+    ~Vehicle() { std::cout << "Vehicle" << '\n'; }
+};
+
+class Engine {
+public:
+    ~Engine() { std::cout << "Engine" << '\n'; }
+};
+
+class Truck : public Vehicle {
+private:
+    Engine theEngine;
+public:
+    ~Truck() { std::cout << "Truck" << '\n'; }
+};
+
+
+int main()
+{
+    Truck theTruck;
+
+    return 0;
+}
+
+/*
+Truck
+Engine
+Vehicle
+*/
+```
 
 ###### virtual destructor
 
