@@ -2734,7 +2734,8 @@ int main()
     //     std::unique_ptr<MyClass>(new MyClass)
     // };
 
-    // error: no matching function for call to 'std::vector<std::weak_ptr<MyClass> >::vector(<brace-enclosed initializer list>)'
+    // error: no matching function for call to 
+    // 'std::vector<std::weak_ptr<MyClass> >::vector(<brace-enclosed initializer list>)'
     // std::vector<std::weak_ptr<MyClass> > v { new MyClass, new MyClass, new MyClass };
 
     v[0]->Hello();   // Hello
