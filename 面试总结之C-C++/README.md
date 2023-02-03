@@ -2997,19 +2997,22 @@ What's the result ?
 
 class Vehicle {
 public:
-    ~Vehicle() { std::cout << "Vehicle" << '\n'; }
+    Vehicle() { std::cout << "Vehicle" << '\n'; }
+    ~Vehicle() { std::cout << "~Vehicle" << '\n'; }
 };
 
 class Engine {
 public:
-    ~Engine() { std::cout << "Engine" << '\n'; }
+    Engine() { std::cout << "Engine" << '\n'; }
+    ~Engine() { std::cout << "~Engine" << '\n'; }
 };
 
 class Truck : public Vehicle {
 private:
     Engine theEngine;
 public:
-    ~Truck() { std::cout << "Truck" << '\n'; }
+    Truck() { std::cout << "Truck" << '\n'; }
+    ~Truck() { std::cout << "~Truck" << '\n'; }
 };
 
 
@@ -3021,9 +3024,12 @@ int main()
 }
 
 /*
-Truck
-Engine
 Vehicle
+Engine
+Truck
+~Truck
+~Engine
+~Vehicle
 */
 ```
 
