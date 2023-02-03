@@ -2695,6 +2695,62 @@ int main()
     return 0;
 }
 ```
+```c++
+/*
+What's the result ?
+*/
+
+#include <iostream>
+#include <vector>
+#include <memory>
+
+class MyClass {
+public:
+    ~MyClass() { std::cout << "Goodbye" << '\n'; }
+    void Hello() { std::cout << "Hello" << '\n'; }
+};
+
+int main()
+{
+    // Hello
+    // std::vector<MyClass*> v { new MyClass, new MyClass, new MyClass };
+
+    /*
+    Hello
+    Goodbye
+    Goodbye
+    Goodbye    
+    */
+    std::vector<std::shared_ptr<MyClass> > v {
+        std::shared_ptr<MyClass>(new MyClass),
+        std::shared_ptr<MyClass>(new MyClass),
+        std::shared_ptr<MyClass>(new MyClass)
+    };
+
+    // error: static assertion failed: result type must be constructible from input type
+    // std::vector<std::unique_ptr<MyClass> > v {
+    //     std::unique_ptr<MyClass>(new MyClass),
+    //     std::unique_ptr<MyClass>(new MyClass),
+    //     std::unique_ptr<MyClass>(new MyClass)
+    // };
+
+    // error: no matching function for call to 'std::vector<std::weak_ptr<MyClass> >::vector(<brace-enclosed initializer list>)'
+    // std::vector<std::weak_ptr<MyClass> > v { new MyClass, new MyClass, new MyClass };
+
+    v[0]->Hello();   // Hello
+
+    {
+        // auto v1 = std::unique_ptr<MyClass>(new MyClass);
+        // v1->Hello();  // Hello
+        // auto v2 = std::unique_ptr<MyClass>(new MyClass);
+        // v2->Hello();  // Hello
+        // Goodbye
+        // Goodbye
+    }
+
+    return 0;
+}
+```
 
 #### Reference
 
