@@ -3665,6 +3665,51 @@ int main()
     return 0;
 }
 ```
+```c++
+/*
+1. The code will not crash when locking mx1.
+2. The lock_guard class is being used correctly in this code, as it provides a convenient 
+RAII wrapper for managing the lifetime of a mutex lock.
+3. The global mutex variables do not require the static keyword. 
+    * The global mutex variables are accessible throughout the program and their lifetime 
+    lasts for the entire duration of the program. Adding the static keyword would limit 
+    their visibility to the translation unit where they are defined, but in this case they 
+    are already globally visible without the static keyword.
+4. The code may potentially deadlock in the right circumstances. 
+    * Deadlocks can occur when two or more threads are waiting for each other to release 
+    a resource, leading to a permanent blockage. In this case, if func1 and func2 are 
+    executed concurrently, they may each try to lock mx1 and mx2 in different orders, 
+    resulting in a deadlock. For example, if func1 locks mx1 and then tries to lock mx2 
+    while func2 has already locked mx2 and is waiting to lock mx1, both functions will be 
+    stuck waiting for the other to release its lock, leading to a deadlock. 
+    * To prevent deadlocks, it's important to ensure that the locking order of mutexes is 
+    always the same in all functions that use them.
+5. It is legal to use two different mutexes within the same function.
+*/
+
+#include <mutex>
+
+std::mutex mx1;
+std::mutex mx2;
+
+void func1()
+{
+    std::lock_guard<std::mutex> lg1(mx1);
+    // do time-consuming work
+
+    std::lock_guard<std::mutex> lg2(mx2);
+    // do time-consuming work
+}
+
+void func2()
+{
+    std::lock_guard<std::mutex> lg1(mx2);
+    // do time-consuming work
+
+    std::lock_guard<std::mutex> lg2(mx1);
+    // do time-consuming work
+}
+```
 * `std::async` call
 ```c++
 /*
