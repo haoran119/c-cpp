@@ -3891,5 +3891,59 @@ int main()
     auto strarr = new std::string[20];
 }
 ```
+```c++
+/*
+What's the result ?
+
+1. The definition of function func5() claims to never throw an exception because the 
+definition of function func3() claims to never throw an exception.
+    * ??? False. The definition of function func5() claims to never throw an exception 
+    because the expression noexcept(func3()) returns false, indicating that the function 
+    func3() may throw an exception. However, the definition of func3() contains a throw 
+    expression, which means that it actually throws an exception, despite being declared 
+    with the noexcept specifier.
+2. The definition of function func3() causes a compile error because the function throws 
+an exception, while its definition claims that it never does.
+    * The definition of function func3() contains a throw expression, which means that it 
+    throws an exception, while its definition claims that it never throws an exception 
+    with the noexcept specifier. This causes a compile error because the function 
+    definition contradicts the noexcept specification.
+3. The expression noexcept(func3()) does not evaluate function func3() to see if it 
+throws an exception. It returns true if the definition of function func3() claims (via 
+noexcept) that it never throws an exception.
+    * ??? The expression noexcept(func3()) returns false, indicating that the 
+    function func3() may throw an exception, based on its definition. This expression does 
+    not actually evaluate the function, it only examines its definition.
+4. Declaring a function to be noexcept is NOT primarily for documentation purpose.
+    * Declaring a function to be noexcept has practical implications for exception safety 
+    and performance. The noexcept specifier allows the compiler to make certain 
+    optimizations, such as avoiding the need to generate code for stack unwinding in the 
+    case of an exception. It also communicates to the caller that the function does not 
+    throw exceptions, allowing the caller to make decisions based on this information.
+5. A program that calls func3() should handle the exception.
+    * The function func3() throws an exception, as indicated by its definition, so a    
+    program that calls func3() should be prepared to handle the exception. If a program 
+    does not handle the exception, it will propagate up the call stack until it is caught 
+    by a suitable handler or results in a call to std::terminate().
+*/
+
+#include <iostream>
+
+void func2() noexcept {}
+void func3() noexcept { throw 1; }  // warning: 'throw' will always call 'terminate'
+void func5() noexcept(noexcept(func3())) {}
+
+int main()
+{
+    std::cout << std::boolalpha << noexcept(func2()) << '\n';   // true
+    std::cout << std::boolalpha << noexcept(func3()) << '\n';   // true
+    std::cout << std::boolalpha << noexcept(func5()) << '\n';   // true
+    std::cout << std::boolalpha << noexcept(noexcept(func3())) << '\n';   // true
+
+    // func3();    // terminate called after throwing an instance of 'int'
+
+    return 0;
+}
+```
 
 # END
