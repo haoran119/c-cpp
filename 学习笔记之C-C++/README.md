@@ -15475,7 +15475,6 @@ shortest of "foo", "bar", and "hello" is "foo"
 #### [std::min_element](https://en.cppreference.com/w/cpp/algorithm/min_element)
 	
 * returns the smallest element in a range (function template)
-* returns the smallest element in a range (function template)
 * Return value
     * Iterator to the smallest element in the range `[first, last)`. If several elements in the range are equivalent to the smallest element, returns the iterator to the first such element. Returns last if the range is empty.
 * Complexity
