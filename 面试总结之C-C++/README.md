@@ -2553,6 +2553,42 @@ void Process(const MyClass& m) {
     // const_cast<MyClass&>(m).ChangeVar(10);   // (2)
 }
 ```
+```c++
+#include <iostream>
+
+struct A {
+    int x{0};
+    int get() { std::cout << "get()" << '\n'; return x ++; }
+    int get() const { std::cout << "get() const" << '\n'; return x; }
+};
+
+int main() 
+{
+    A a;
+    std::cout << a.x << '\n';   // 0
+
+    auto x = a.get();           // get()
+    std::cout << x << '\n';     // 0
+    std::cout << a.x << '\n';   // 1
+
+    auto y = a.get();           // get()
+    std::cout << y << '\n';     // 1
+    std::cout << a.x << '\n' << '\n';   // 2
+
+    const auto &b = a;          
+    std::cout << b.x << '\n';   // 2
+
+    auto x_ = b.get();          // get() const
+    std::cout << x_ << '\n';    // 2
+    std::cout << b.x << '\n';   // 2
+
+    auto y_ = b.get();          // get() const
+    std::cout << y_ << '\n';    // 2
+    std::cout << b.x << '\n';   // 2
+
+    return 0;
+}
+```
 
 #### Static
 
