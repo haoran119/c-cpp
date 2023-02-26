@@ -2510,9 +2510,7 @@ int main()
 * 用C语言，将一个数字乘以7倍的效率最快的方法是什么？ 
     * 先左移三位（*8）然后再减去原值：X << 3 – X
 
-### 判断输出结果
-
-#### Const
+### Const
 
 ```c++
 /*
@@ -2590,7 +2588,7 @@ int main()
 }
 ```
 
-#### Static
+### Static
 
 ```c++
 /*
@@ -2611,7 +2609,7 @@ private:
 // int TryStatic::aa = 1;
 ```
 
-#### String
+### String
 
 ```c++
 #include <iostream>
@@ -2665,7 +2663,7 @@ int main()
 // xx yy x yy
 ```
 
-#### Pointer
+### Pointer
 
 * [一道C语言指针的题目](https://mp.weixin.qq.com/s/KqbMSR_rYD7ziWt-YsrYRQ)
 ```c++
@@ -2793,7 +2791,7 @@ int main()
 }
 ```
 
-#### Reference
+### Reference
 
 ```c++
 /*
@@ -2812,7 +2810,7 @@ double& calculateCircumreference(double r)
 }
 ```
 
-#### Lambda
+### Lambda
 
 ```c++
 /*
@@ -2845,9 +2843,9 @@ private:
 };
 ```
 
-#### Class
+### Class
 
-##### constructor / destructor
+#### constructor / destructor
 
 ```c++
 /*
@@ -3073,7 +3071,7 @@ Truck
 */
 ```
 
-###### virtual destructor
+##### virtual destructor
 
 ```c++
 /*
@@ -3160,7 +3158,7 @@ int main()
 }
 ```
 
-##### virtual
+#### virtual
 
 ```c++
 /*
@@ -3195,7 +3193,7 @@ public:
 };
 ```
 
-##### MISC
+#### MISC
 
 ```c++
 /*
@@ -3444,7 +3442,7 @@ int main()
 }
 ```
 
-#### STL
+### STL
 
 ```c++
 #include <iostream>
@@ -3559,7 +3557,7 @@ int main()
 }
 ```
 
-#### Regular expressions
+### Regular expressions
 
 ```c++
 /*
@@ -3586,7 +3584,7 @@ int main()
 }
 ```
 
-#### Concurrency
+### Concurrency
 
 * Implement thread safety for SomeClass
 ```c++
@@ -3810,7 +3808,7 @@ int main()
 }
 ```
 
-#### Template
+### Template
 
 ```c++
 /*
@@ -4032,7 +4030,7 @@ int main() {
 }
 ```
 
-#### MISC
+### MISC
 
 ```c++
 /*
