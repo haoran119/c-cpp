@@ -17654,6 +17654,7 @@ int main()
   * 3. 静态函数
   * 4. C 线程库
     * [C语言线程库的使用](https://mp.weixin.qq.com/s?__biz=MzI3ODQ3OTczMw==&mid=2247491745&idx=1&sn=d995e1617ed6ad3d56de28b5be127e73&scene=21#wechat_redirect)
+* [Learn C++ Multi Threading in 20 Minutes - YouTube](https://www.youtube.com/watch?v=3aqxaZsvn80)
 * How to insert into vector with thread safe ?
 	* [multithreading - C++ STL Concurrent update to values in fixed size map - Is it safe? - Stack Overflow](https://stackoverflow.com/questions/47309237/c-stl-concurrent-update-to-values-in-fixed-size-map-is-it-safe)
 	* [c++ - Can a std::map rebalance during the invocation of a const function? - Stack Overflow](https://stackoverflow.com/questions/26867435/can-a-stdmap-rebalance-during-the-invocation-of-a-const-function/26867506#26867506)
