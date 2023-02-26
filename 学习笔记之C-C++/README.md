@@ -10215,6 +10215,11 @@ Fibonacci sequence: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, ...
 * 1) Forwards lvalues as either lvalues or as rvalues, depending on T
 * 2) Forwards rvalues as rvalues and prohibits forwarding of rvalues as lvalues
 
+##### MISC
+
+* [【C++11】 改成程序性能的方法--完美转发](https://mp.weixin.qq.com/s/3TPhTa4mNy8AOLMtjbGI6A)
+    *  所谓的完美转发，实际上就是指在C++函数模板中，完全按照函数模板的参数类型将参数传递给函数模板中调用的另外一个参数。通俗点解释就是，如果一个参数不管是右值引用还是左值引用，函数调用时都不会改变参数的类型。C++11给我们提供了这样一个函数std::forward,它就是专门为完美转发而生的，实际使用时它会完全按照参数本来的类型进行转发，而不是改变。
+
 #### [std::move](https://en.cppreference.com/w/cpp/utility/move)
 	
 * obtains an rvalue reference (function template)
@@ -10255,6 +10260,9 @@ After move, str is ""
 The contents of the vector are { "Salut", "Salut" }
 */
 ```
+
+##### MISC
+
 * [深入理解C++中的move和forward！](https://mp.weixin.qq.com/s/Vc1sz26ACKQNonSzA-cHKQ)
 	* 导语 |  在C++11标准之前，C++中默认的传值类型均为Copy语义，即：不论是指针类型还是值类型，都将会在进行函数调用时被完整的复制一份！对于非指针而言，开销极其巨大！因此在C++11以后，引入了右值和Move语义，极大地提高了效率。本文介绍了在此场景下两个常用的标准库函数：move和forward。
 	* 一、特性背景
