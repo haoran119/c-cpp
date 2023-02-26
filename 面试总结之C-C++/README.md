@@ -3899,6 +3899,102 @@ int main()
     return 0;
 }
 ```
+```c++
+/*
+Implement template to get minimum and/or maximum of numbers
+*/
+
+#include <cstdint>
+#include <cstdlib>
+#include <ctime>
+#include <utility>
+#include <vector>
+
+enum class minmax_t : uint8_t{ MIN, MAX};
+
+// Get the minimum or maximum of the vectors based on the template parameter
+template <minmax_t M, typename T>
+constexpr T get(const std::vector<T>& v1, const std::vector<T>& v2, const std::vector<T>& v3);
+
+// Get both the minimum and the maximum of the vectors
+template <typename T> constexpr std::pair<T, T> get(
+        const std::vector<T>& v1, const std::vector<T>& v2, const std::vector<T>& v3);
+
+#include <algorithm>
+#include <iostream>
+#include <sstream>
+#include <string>
+
+// Implement your templates here
+
+// Get the minimum or maximum of the vectors based on the template parameter
+template <minmax_t M, typename T>
+constexpr T get(const std::vector<T>& v1, const std::vector<T>& v2, const std::vector<T>& v3)
+{
+    if constexpr (M == minmax_t::MIN) {
+        return std::min({*std::min_element(v1.begin(), v1.end()), 
+                            *std::min_element(v2.begin(), v2.end()),
+                            *std::min_element(v3.begin(), v3.end())});
+    }
+    else {
+        return std::max({*std::max_element(v1.begin(), v1.end()), 
+                            *std::max_element(v2.begin(), v2.end()),
+                            *std::max_element(v3.begin(), v3.end())});
+    }
+}
+
+// Get both the minimum and the maximum of the vectors
+template <typename T> constexpr std::pair<T, T> get(
+        const std::vector<T>& v1, const std::vector<T>& v2, const std::vector<T>& v3)
+{
+    return std::make_pair(get<minmax_t::MIN, T>(v1, v2, v3),
+                            get<minmax_t::MAX, T>(v1, v2, v3));
+}
+
+// Write your driver function
+template<typename T>
+void test_types()
+{
+    std::vector<std::vector<T> >    v(3);
+    // for (auto i = 0; i < 3; ++ i) {
+    //     std::string s{};
+    //     std::getline(std::cin, s);
+    //     std::stringstream ss{s};
+    //     T value{};
+    //     while (ss >> value) {
+    //         v.at(i).emplace_back(value);
+    //     }            
+    // }
+
+    std::srand(std::time(0));
+    for (auto i = 0; i < 3; ++ i) {
+        auto n = std::rand() % 10;
+        for (auto j = 0; j < n; ++ j) {
+            auto value = std::rand() % 100;
+            std::cout << value << ' ';
+            v.at(i).emplace_back(value);
+        }        
+        std::cout << '\n';
+    }
+    
+    auto min_result = get<minmax_t::MIN, T>(v.at(0), v.at(1), v.at(2));    
+    auto max_result = get<minmax_t::MAX, T>(v.at(0), v.at(1), v.at(2));    
+    std::cout << min_result << " " << max_result << '\n';
+    
+    auto [min_pair_result, max_pair_result] = get<T>(v.at(0), v.at(1), v.at(2));
+    std::cout << min_pair_result << " " << max_pair_result << '\n';    
+}
+
+int main() {
+    // unit test of type int
+    test_types<int>();
+    
+    // unit test of type double
+    // test_types<double>();
+    
+    return 0;
+}
+```
 
 #### MISC
 
