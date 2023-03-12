@@ -2609,6 +2609,118 @@ private:
 // int TryStatic::aa = 1;
 ```
 
+### Double
+
+```c++
+// What is the output of the following program
+// Will the output change if x and y are declared as constexpr / No
+
+#include <iostream>
+#include <limits>
+
+void F1() {
+    double x = 1.2 / 8.0;
+    double y = (32 / 256.0) * 1.2;
+    std::cout << x << '\n' << y << '\n';
+    if (x == y) {
+        std::cout << "F1: Yes they are equal" << std::endl;
+    } else {
+        std::cout << "F1: No they are not" << std::endl;
+    }
+}
+
+void F2() {
+    double x = 1.2 / 7;
+    double y = (21.0 / 147) * 1.2;
+    std::cout << x << '\n' << y << '\n';
+    if (x == y) {
+        std::cout << "F2: Yes they are equal" << std::endl;
+    } else {
+        std::cout << "F2: No they are not" << std::endl;
+    }
+}
+
+void F3() {
+    double x = 1.2 / 7;
+    double y = (32.0 / 224) * 1.2;
+    std::cout << x << '\n' << y << '\n';
+    if (x == y) {
+        std::cout << "F3: Yes they are equal" << std::endl;
+    } else {
+        std::cout << "F3: No they are not" << std::endl;
+    }
+}
+
+void F1_() {
+    constexpr double x = 1.2 / 8.0;
+    constexpr double y = (32 / 256.0) * 1.2;
+    std::cout << x << '\n' << y << '\n';
+    if (x == y) {
+        std::cout << "F1: Yes they are equal" << std::endl;
+    } else {
+        std::cout << "F1: No they are not" << std::endl;
+    }
+}
+
+void F2_() {
+    constexpr double x = 1.2 / 7;
+    constexpr double y = (21.0 / 147) * 1.2;
+    std::cout << x << '\n' << y << '\n';
+    if (x == y) {
+        std::cout << "F2: Yes they are equal" << std::endl;
+    } else {
+        std::cout << "F2: No they are not" << std::endl;
+    }
+}
+
+void F3_() {
+    constexpr double x = 1.2 / 7;
+    constexpr double y = (32.0 / 224) * 1.2;
+    std::cout << x << '\n' << y << '\n';
+    if (x == y) {
+        std::cout << "F3: Yes they are equal" << std::endl;
+    } else {
+        std::cout << "F3: No they are not" << std::endl;
+    }
+}
+
+int main() {
+  std::cout << std::numeric_limits<double>::epsilon() << '\n';
+
+  F1();
+  F2();
+  F3();
+
+  F1_();
+  F2_();
+  F3_();
+
+  return 0;
+}
+
+/*
+2.22045e-16
+0.15
+0.15
+F1: Yes they are equal
+0.171429
+0.171429
+F2: No they are not
+0.171429
+0.171429
+F3: No they are not
+0.15
+0.15
+F1: Yes they are equal
+0.171429
+0.171429
+F2: No they are not
+0.171429
+0.171429
+F3: No they are not
+*/
+```
+
 ### String
 
 ```c++
