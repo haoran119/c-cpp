@@ -3856,6 +3856,59 @@ void func2()
     // do time-consuming work
 }
 ```
+```c++
+/* What are the possible outputs of the following program?
+The possible outputs of the program are:
+    Caught in main:Exception in ThreadA
+    Caught in main:Exception in ThreadB
+    terminate called after throwing an instance of ‘std::runtime_error’ what(): Exception in ThreadA Aborted (core dumped)
+    terminate called after throwing an instance of ‘std::runtime_error’ what(): Exception in ThreadB Aborted (core dumped)
+    
+The explanation is:
+    The program creates two threads, t1 and t2, that execute ThreadA and ThreadB functions respectively.
+    Each thread tries to lock two mutexes, mutex1 and mutex2, but in reverse order. This creates a potential deadlock situation if both threads lock one mutex each and wait for the other one to release it.
+    However, before locking both mutexes, each thread throws a runtime_error exception. This exception is not caught within the thread function, so it propagates to the main function where it is caught by a try-catch block.
+    The catch block prints out the message “Caught in main:” followed by the exception’s what() method that returns a string with the error message.
+    The output depends on which thread throws the exception first and whether it is caught by the main function or not. If one thread throws the exception before locking any mutex, then it will be caught by the main function and printed out. If both threads throw the exception after locking one mutex each, then they will deadlock and neither of them will be caught by the main function. In this case, the program will terminate abnormally with a message indicating that an uncaught exception was thrown
+*/
+
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <unistd.h>
+#include <exception>
+
+std::mutex mutex1, mutex2;
+
+void ThreadA()
+{
+    mutex2.lock();
+    throw std::runtime_error("Exception in ThreadA");
+    mutex1.lock();
+    mutex2.unlock();
+    mutex1.unlock();
+}
+void ThreadB()
+{
+    mutex1.lock();
+    throw std::runtime_error("Exception in ThreadB");
+    mutex2.lock();
+    mutex1.unlock();
+    mutex2.unlock();
+}
+int main()
+{
+  try {
+    std::thread t1( ThreadA );
+    std::thread t2( ThreadB );
+    t1.join();
+    t2.join();
+  } catch (const std::exception& ex) {
+    std::cout << "Caught in main:" << ex.what() << "\n";
+  }
+  return 0;
+}
+```
 * `std::async` call
 ```c++
 /*
