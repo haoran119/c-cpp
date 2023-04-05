@@ -13314,14 +13314,42 @@ chars.front(): 'D'
 * std::set is an associative container that contains a sorted set of unique objects of type Key. Sorting is done using the key comparison function Compare. Search, removal, and insertion operations have logarithmic complexity. Sets are usually implemented as red-black trees.
 * Everywhere the standard library uses the Compare requirements, uniqueness is determined by using the equivalence relation. In imprecise terms, two objects a and b are considered equivalent if neither compares less than the other: !comp(a, b) && !comp(b, a).
 * std::set meets the requirements of Container, AllocatorAwareContainer, AssociativeContainer and ReversibleContainer.
-* [std::set<Key,Compare,Allocator>::contains - cppreference.com](https://en.cppreference.com/w/cpp/container/set/contains)
-	* 1) Checks if there is an element with key equivalent to key in the container.
-	* 2) Checks if there is an element with key that compares equivalent to the value x. This overload participates in overload resolution only if the qualified-id Compare::is_transparent is valid and denotes a type. It allows calling this function without constructing an instance of Key.
-* [std::set<Key,Compare,Allocator>::count - cppreference.com](https://en.cppreference.com/w/cpp/container/set/count)
-	* Returns the number of elements with key that compares equivalent to the specified argument, which is either 1 or 0 since this container does not allow duplicates.
-	* 1) Returns the number of elements with key key.
-	* 2) Returns the number of elements with key that compares equivalent to the value x. This overload participates in overload resolution only if the qualified-id Compare::is_transparent is valid and denotes a type. They allow calling this function without constructing an instance of Key.
+
+##### Member functions
+
+###### Modifiers
+
+* [std::set<Key,Compare,Allocator>::insert - cppreference.com](https://en.cppreference.com/w/cpp/container/set/insert)
+    * inserts elements `or nodes (since C++17)` (public member function)
+	* Inserts element(s) into the container, if the container doesn't already contain an element with an equivalent key.
+```c++
+#include <set>
+#include <cassert>
+#include <iostream>
+ 
+int main()
+{
+    std::set<int> set;
+ 
+    auto result_1 = set.insert(3);
+    assert(result_1.first != set.end()); // it is a valid iterator
+    assert(*result_1.first == 3);
+    if (result_1.second)
+        std::cout << "insert done\n";
+ 
+    auto result_2 = set.insert(3);
+    assert(result_2.first == result_1.first); // same iterator
+    assert(*result_2.first == 3);
+    if (!result_2.second)
+        std::cout << "no insertion\n";
+}
+/*
+insert done
+no insertion
+*/
+```
 * [std::set<Key,Compare,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/container/set/erase)
+    * erases elements (public member function)
 	* Removes specified elements from the container.
 	* 1) Removes the element at pos. Only one overload is provided if iterator and const_iterator are the same type. (since C++11)
 	* 2) Removes the elements in the range \[first; last), which must be a valid range in *this.
@@ -13329,7 +13357,16 @@ chars.front(): 'D'
 	* 4) Removes the element (if one exists) with key that compares equivalent to the value x. This overload participates in overload resolution only if the qualified-id Compare::is_transparent is valid and denotes a type, and neither iterator nor const_iterator is implicitly convertible from K. It allows calling this function without constructing an instance of Key.
 	* References and iterators to the erased elements are invalidated. Other references and iterators are not affected.
 	* The iterator pos must be valid and dereferenceable. Thus the end() iterator (which is valid, but is not dereferenceable) cannot be used as a value for pos.
+
+###### Lookup
+
+* [std::set<Key,Compare,Allocator>::count - cppreference.com](https://en.cppreference.com/w/cpp/container/set/count)
+    * returns the number of elements matching specific key (public member function)
+	* Returns the number of elements with key that compares equivalent to the specified argument, which is either 1 or 0 since this container does not allow duplicates.
+	* 1) Returns the number of elements with key key.
+	* 2) Returns the number of elements with key that compares equivalent to the value x. This overload participates in overload resolution only if the qualified-id Compare::is_transparent is valid and denotes a type. They allow calling this function without constructing an instance of Key.
 * [std::set<Key,Compare,Allocator>::find - cppreference.com](https://en.cppreference.com/w/cpp/container/set/find)
+    * finds element with specific key (public member function)
 	* 1,2) Finds an element with key equivalent to key.
 	* 3,4) Finds an element with key that compares equivalent to the value x. This overload participates in overload resolution only if the qualified-id Compare::is_transparent is valid and denotes a type. It allows calling this function without constructing an instance of Key.
 	* [set find() function in C++ STL - GeeksforGeeks](https://www.geeksforgeeks.org/set-find-function-in-c-stl/)
@@ -13372,8 +13409,10 @@ int main()
     }
 }
 ```
-* [std::set<Key,Compare,Allocator>::insert - cppreference.com](https://en.cppreference.com/w/cpp/container/set/insert)
-	* Inserts element(s) into the container, if the container doesn't already contain an element with an equivalent key.
+* [std::set<Key,Compare,Allocator>::contains - cppreference.com](https://en.cppreference.com/w/cpp/container/set/contains)
+    * checks if the container contains element with specific key (public member function)
+	* 1) Checks if there is an element with key equivalent to key in the container.
+	* 2) Checks if there is an element with key that compares equivalent to the value x. This overload participates in overload resolution only if the qualified-id Compare::is_transparent is valid and denotes a type. It allows calling this function without constructing an instance of Key.
 
 #### [std::map](https://en.cppreference.com/w/cpp/container/map)
 
