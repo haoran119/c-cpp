@@ -10445,11 +10445,23 @@ int main()
 * std::pair is a class template that provides a way to store two heterogeneous objects as a single unit. A pair is a specific case of a std::tuple with two elements.
 * If neither T1 nor T2 is a possibly cv-qualified class type with non-trivial destructor, or array thereof, the destructor of pair is trivial.
 
+##### Template parameters
+
+* T1, T2 - the types of the elements that the pair stores.
+
+##### Member types
+
+|Member type|Definition|
+|-|-|
+|first_type|T1|
+|second_type|T2|
+
 ##### Member objects
 
-* Member name
-    * first
-    * second
+|Member name|Type|
+|-|-|
+|first|T1|
+|second|T2|
 
 ##### Non-member functions
 
