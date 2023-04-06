@@ -19272,6 +19272,25 @@ std::string exec(const char* cmd) {
 
 * How to fix "error C1853: '.pch' precompiled header file is from a previous version of the compiler, or the precompiled header is C++ and you are using it from C (or vice versa)" ?
 	* Rebuild All
+* How to fix `error C2275: 'std::pair<int,double>::first_type': expected an expression instead of a type`?
+    * add `typename`
+```c++
+template <typename Container>
+static void construct(PyObject* object, boost::python::converter::rvalue_from_python_stage1_data* data)
+{
+    PyObject *first  = PyTuple_GET_ITEM(object, 0);
+    PyObject *second = PyTuple_GET_ITEM(object, 1);
+    void *storage = ((boost::python::converter::rvalue_from_python_storage<Container >*) data)->storage.bytes;
+
+	new (storage) Container(boost::python::extract<Container::first_type>(first),
+							boost::python::extract<Container::second_type>(second));
+		
+	//new (storage) Container(extract<typename Container::first_type>(first), 
+	//    						extract<typename Container::second_type>(second));
+		
+    data->convertible = storage;
+}
+```
 * How to fix "Compiler error C2653: not a class or namespace name" ?
 	* Generate full list of includes files to see include stack
 		* MSVS > Property > C/C++ > Advanced > Show Includes > Yes
