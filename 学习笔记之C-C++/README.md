@@ -10456,6 +10456,20 @@ int main()
 |first_type|T1|
 |second_type|T2|
 
+* How to implement `first_type`?
+```c++
+template<class T1, class T2>
+struct pair {
+    using first_type = T1;
+    using second_type = T2;
+
+    T1 first;
+    T2 second;
+
+    // ...
+};
+```
+
 ##### Member objects
 
 |Member name|Type|
