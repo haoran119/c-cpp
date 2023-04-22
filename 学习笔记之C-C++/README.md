@@ -13333,6 +13333,7 @@ chars.front(): 'D'
 
 ###### Modifiers
 
+#
 * [std::set<Key,Compare,Allocator>::insert - cppreference.com](https://en.cppreference.com/w/cpp/container/set/insert)
     * inserts elements `or nodes (since C++17)` (public member function)
 	* Inserts element(s) into the container, if the container doesn't already contain an element with an equivalent key.
@@ -13362,6 +13363,10 @@ insert done
 no insertion
 */
 ```
+* Need to check if key exists before call std::set::insert() or not?
+    * No, it is not necessary to check if the key exists before calling std::set::insert(). The insert() function of std::set will automatically check if the key already exists in the set and will not add it again if it does. This is because the keys in a std::set are unique, and adding a duplicate key would violate that property.
+    * So, you can safely call std::set::insert() with a key, and the function will take care of checking if it already exists. If the key does not exist, it will be added to the set, and if it does, nothing will happen.
+#
 * [std::set<Key,Compare,Allocator>::erase - cppreference.com](https://en.cppreference.com/w/cpp/container/set/erase)
     * erases elements (public member function)
 	* Removes specified elements from the container.
