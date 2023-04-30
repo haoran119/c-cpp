@@ -82,9 +82,72 @@ void foo(bool a, int b, char c)
 
 ### [Boost.Python Reference Manual](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/index.html)
 
+#### [2. High Level Components](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/high_level_components.html)
+
+##### [boost/python/def.hpp](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/high_level_components/boost_python_def_hpp.html)
+
+* def() is the function which can be used to expose C++ functions and callable objects as Python functions in the current scope.
+* Example
+```c++
+#include <boost/python/def.hpp>
+#include <boost/python/module.hpp>
+#include <boost/python/args.hpp>
+
+using namespace boost::python;
+
+char const* foo(int x, int y) { return "foo"; }
+
+BOOST_PYTHON_MODULE(def_test)
+{
+    def("foo", foo, args("x", "y"), "foo's docstring");
+}
+```
+
+###### MISC
+
+* `def()` v.s. `.def()` in boost.python ?
+    * Both def() and .def() are functions used in boost.python to expose C++ functions to Python. However, they are used in different contexts.
+    * The def() function is used to define a Python function that maps to a C++ function. It is typically used in the module definition to expose one or more C++ functions to Python. Here is an example:
+    ```c++
+    #include <boost/python.hpp>
+
+    int add(int x, int y) {
+        return x + y;
+    }
+
+    BOOST_PYTHON_MODULE(example) {
+        using namespace boost::python;
+        def("add", add);
+    }
+    ```
+    * In this example, the def() function is used to define a Python function named add that maps to the C++ function add(). When the module is imported into Python, the add() function can be called like any other Python function.
+    * On the other hand, the .def() member function is used to add methods to a class that is being exposed to Python. It is typically used inside the class_ definition to add one or more methods to the Python class. Here is an example:
+    ```c++
+    #include <boost/python.hpp>
+
+    class Rectangle {
+    public:
+        Rectangle(int w, int h) : width(w), height(h) {}
+        int area() const { return width * height; }
+        int perimeter() const { return 2 * (width + height); }
+    private:
+        int width;
+        int height;
+    };
+
+    BOOST_PYTHON_MODULE(example) {
+        using namespace boost::python;
+        class_<Rectangle>("Rectangle", init<int, int>())
+            .def("area", &Rectangle::area)
+            .def("perimeter", &Rectangle::perimeter);
+    }
+    ```
+    * In this example, the .def() member function is used to add two methods, area() and perimeter(), to the Python class Rectangle. The first argument of .def() is the name of the method in Python, and the second argument is a pointer to the C++ method.
+    * So, to summarize, def() is used to define Python functions that map to C++ functions, while .def() is used to add methods to a Python class that is defined in C++.
+
 #### [4. Function Invocation and Creation](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation.html)
 
-##### [boost/python/overloads.hpp - 1.76.0](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation/boost_python_overloads_hpp.html#function_invocation_and_creation.boost_python_overloads_hpp.macros)
+##### [boost/python/overloads.hpp](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation/boost_python_overloads_hpp.html#function_invocation_and_creation.boost_python_overloads_hpp.macros)
 
 * Defines facilities for generating families of overloaded Python functions and extension class methods from C++ functions and member functions with default arguments, or from similar families of C++ overloads
 * Example
@@ -139,7 +202,7 @@ BOOST_PYTHON_MODULE(args_ext)
 }
 ```
 
-##### [Models of CallPolicies - 1.76.0](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation/models_of_callpolicies.html#function_invocation_and_creation.models_of_callpolicies.boost_python_return_value_policy)
+##### [Models of CallPolicies](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation/models_of_callpolicies.html#function_invocation_and_creation.models_of_callpolicies.boost_python_return_value_policy)
     
 ###### [boost/python/return_value_policy.hpp](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation/models_of_callpolicies.html#function_invocation_and_creation.models_of_callpolicies.boost_python_return_value_policy)
 
