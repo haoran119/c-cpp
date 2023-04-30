@@ -45,7 +45,49 @@ b2 --build-dir=build/x64 address-model=64 threading=multi --build-type=complete 
     * Documentation Strings
 * [Functions - 1.76.0](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/tutorial/tutorial/functions.html#tutorial.functions.auto_overloading)
 * [boost/python/overloads.hpp - 1.76.0](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation/boost_python_overloads_hpp.html#function_invocation_and_creation.boost_python_overloads_hpp.macros)
-* [Models of CallPolicies - 1.76.0](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation/models_of_callpolicies.html#function_invocation_and_creation.models_of_callpolicies.boost_python_return_value_policy)
+
+### [4. Function Invocation and Creation](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation.html)
+
+#### [Models of CallPolicies - 1.76.0](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation/models_of_callpolicies.html#function_invocation_and_creation.models_of_callpolicies.boost_python_return_value_policy)
+    
+##### [boost/python/return_value_policy.hpp](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation/models_of_callpolicies.html#function_invocation_and_creation.models_of_callpolicies.boost_python_return_value_policy)
+
+* Example
+    * C++ module definition:
+    ```c++
+    #include <boost/python/module.hpp>
+    #include <boost/python/class.hpp>
+    #include <boost/python/copy_const_reference.hpp>
+    #include <boost/python/return_value_policy.hpp>
+
+    // classes to wrap
+    struct Bar { int x; }
+
+    struct Foo {
+       Foo(int x) : { b.x = x; }
+       Bar const& get_bar() const { return b; }
+     private:
+       Bar b;
+    };
+
+    // Wrapper code
+    using namespace boost::python;
+    BOOST_PYTHON_MODULE(my_module)
+    {
+       class_<Bar>("Bar");
+
+       class_<Foo>("Foo", init<int>())
+          .def("get_bar", &Foo::get_bar
+              , return_value_policy<copy_const_reference>())
+          ;
+    }
+    ```
+    * Python code:
+    ```c++
+    >>> from my_module import *
+    >>> f = Foo(3)         # create a Foo object
+    >>> b = f.get_bar()    # make a copy of the internal Bar object
+    ```
 
 ### MISC
 
@@ -85,3 +127,4 @@ BOOST_PYTHON_MODULE(example)
 }
 ```
 
+# END
