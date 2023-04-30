@@ -43,15 +43,107 @@ b2 --build-dir=build/x64 address-model=64 threading=multi --build-type=complete 
     * Manipulating Python objects in C++
     * Exporting C++ Iterators as Python Iterators
     * Documentation Strings
-* [Functions - 1.76.0](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/tutorial/tutorial/functions.html#tutorial.functions.auto_overloading)
-* [boost/python/overloads.hpp - 1.76.0](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation/boost_python_overloads_hpp.html#function_invocation_and_creation.boost_python_overloads_hpp.macros)
 
-### [4. Function Invocation and Creation](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation.html)
+### [Boost.Python Tutorial - 1.76.0](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/tutorial/index.html)
+        
+#### [Functions](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/tutorial/tutorial/functions.html)
 
-#### [Models of CallPolicies - 1.76.0](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation/models_of_callpolicies.html#function_invocation_and_creation.models_of_callpolicies.boost_python_return_value_policy)
+* In this chapter, we'll look at Boost.Python powered functions in closer detail. We will see some facilities to make exposing C++ functions to Python safe from potential pifalls such as dangling pointers and references. We will also see facilities that will make it even easier for us to expose C++ functions that take advantage of C++ features such as overloading and default arguments.
+
+##### [Auto-Overloading](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/tutorial/tutorial/functions.html#tutorial.functions.auto_overloading)
+
+* It was mentioned in passing in the previous section that BOOST_PYTHON_FUNCTION_OVERLOADS and BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS can also be used for overloaded functions and member functions with a common sequence of initial arguments. Here is an example:
+```c++
+void foo()
+{
+   /*...*/
+}
+
+void foo(bool a)
+{
+   /*...*/
+}
+
+void foo(bool a, int b)
+{
+   /*...*/
+}
+
+void foo(bool a, int b, char c)
+{
+   /*...*/
+}
+```
+* Like in the previous section, we can generate thin wrappers for these overloaded functions in one-shot:
+    * `BOOST_PYTHON_FUNCTION_OVERLOADS(foo_overloads, foo, 0, 3)`
+* Then...
+    * `.def("foo", (void(*)(bool, int, char))0, foo_overloads());`
+* Notice though that we have a situation now where we have a minimum of zero (0) arguments and a maximum of 3 arguments.
+
+### [Boost.Python Reference Manual - 1.76.0](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/index.html)
+
+#### [4. Function Invocation and Creation](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation.html)
+
+##### [boost/python/overloads.hpp - 1.76.0](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation/boost_python_overloads_hpp.html#function_invocation_and_creation.boost_python_overloads_hpp.macros)
+
+* Defines facilities for generating families of overloaded Python functions and extension class methods from C++ functions and member functions with default arguments, or from similar families of C++ overloads
+* Example
+```c++
+#include <boost/python/module.hpp>
+#include <boost/python/def.hpp>
+#include <boost/python/args.hpp>
+#include <boost/python/tuple.hpp>
+#include <boost/python/class.hpp>
+#include <boost/python/overloads.hpp>
+#include <boost/python/return_internal_reference.hpp>
+
+using namespace boost::python;
+
+tuple f(int x = 1, double y = 4.25, char const* z = "wow")
+{
+    return make_tuple(x, y, z);
+}
+
+BOOST_PYTHON_FUNCTION_OVERLOADS(f_overloads, f, 0, 3)
+
+struct Y {};
+struct X
+{
+    Y& f(int x, double y = 4.25, char const* z = "wow")
+    {
+        return inner;
+    }
+    Y inner;
+};
+
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_member_overloads, f, 1, 3)
+
+BOOST_PYTHON_MODULE(args_ext)
+{
+    def("f", f,
+        f_overloads(
+            args("x", "y", "z"), "This is f's docstring"
+        ));
+
+
+    class_<Y>("Y")
+        ;
+
+    class_<X>("X", "This is X's docstring")
+        .def("f1", &X::f,
+                f_member_overloads(
+                    args("x", "y", "z"), "f's docstring"
+                )[return_internal_reference<>()]
+        )
+        ;
+}
+```
+
+##### [Models of CallPolicies - 1.76.0](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation/models_of_callpolicies.html#function_invocation_and_creation.models_of_callpolicies.boost_python_return_value_policy)
     
-##### [boost/python/return_value_policy.hpp](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation/models_of_callpolicies.html#function_invocation_and_creation.models_of_callpolicies.boost_python_return_value_policy)
+###### [boost/python/return_value_policy.hpp](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation/models_of_callpolicies.html#function_invocation_and_creation.models_of_callpolicies.boost_python_return_value_policy)
 
+* return_value_policy instantiations are simply models of CallPolicies which are composed of a ResultConverterGenerator and optional Base CallPolicies.
 * Example
     * C++ module definition:
     ```c++
