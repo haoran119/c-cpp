@@ -44,7 +44,7 @@ b2 --build-dir=build/x64 address-model=64 threading=multi --build-type=complete 
     * Exporting C++ Iterators as Python Iterators
     * Documentation Strings
 
-### [Boost.Python Tutorial - 1.76.0](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/tutorial/index.html)
+### [Boost.Python Tutorial](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/tutorial/index.html)
         
 #### [Functions](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/tutorial/tutorial/functions.html)
 
@@ -80,7 +80,7 @@ void foo(bool a, int b, char c)
     * `.def("foo", (void(*)(bool, int, char))0, foo_overloads());`
 * Notice though that we have a situation now where we have a minimum of zero (0) arguments and a maximum of 3 arguments.
 
-### [Boost.Python Reference Manual - 1.76.0](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/index.html)
+### [Boost.Python Reference Manual](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/index.html)
 
 #### [4. Function Invocation and Creation](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/function_invocation_and_creation.html)
 
