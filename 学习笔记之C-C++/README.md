@@ -7695,6 +7695,8 @@ G true
 * If T and U name the same type (taking into account const/volatile qualifications), provides the member constant value equal to true. Otherwise value is false.
 * Commutativity is satisfied, i.e. for any two types T and U, `is_same<T, U>::value == true` if and only if `is_same<U, T>::value == true`.
 * The behavior of a program that adds specializations for is_same or is_same_v (since C++17) is undefined.
+* Helper variable template
+    * `template< class T, class U > inline constexpr bool is_same_v = is_same<T, U>::value;`
 ```c++
 #include <iostream>
 #include <type_traits>
