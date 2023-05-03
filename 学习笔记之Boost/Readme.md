@@ -52,7 +52,7 @@ b2 --build-dir=build/x64 address-model=64 threading=multi --build-type=complete 
 
 ##### [Auto-Overloading](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/tutorial/tutorial/functions.html#tutorial.functions.auto_overloading)
 
-* It was mentioned in passing in the previous section that BOOST_PYTHON_FUNCTION_OVERLOADS and BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS can also be used for overloaded functions and member functions with a common sequence of initial arguments. Here is an example:
+* It was mentioned in passing in the previous section that `BOOST_PYTHON_FUNCTION_OVERLOADS` and `BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS` can also be used for overloaded functions and member functions with a common sequence of initial arguments. Here is an example:
 ```c++
 void foo()
 {
@@ -79,6 +79,59 @@ void foo(bool a, int b, char c)
 * Then...
     * `.def("foo", (void(*)(bool, int, char))0, foo_overloads());`
 * Notice though that we have a situation now where we have a minimum of zero (0) arguments and a maximum of 3 arguments.
+
+###### MISC
+
+* `BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS` v.s. `BOOST_PYTHON_FUNCTION_OVERLOADS` ?
+    * Both `BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS` and `BOOST_PYTHON_FUNCTION_OVERLOADS` are macros in boost.python used to define overloaded C++ functions for Python. However, they are used in different contexts.
+    * `BOOST_PYTHON_FUNCTION_OVERLOADS` is used to define overloaded non-member functions, while `BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS` is used to define overloaded member functions of a class.
+    * Here is an example of using `BOOST_PYTHON_FUNCTION_OVERLOADS` to define overloaded non-member functions:
+    ```c++
+    #include <boost/python.hpp>
+
+    int add(int x, int y) {
+        return x + y;
+    }
+
+    int add(int x, int y, int z) {
+        return x + y + z;
+    }
+
+    BOOST_PYTHON_FUNCTION_OVERLOADS(add_overloads, add, 2, 3);
+
+    BOOST_PYTHON_MODULE(example) {
+        using namespace boost::python;
+        def("add", add, add_overloads());
+    }
+    ```
+    * In this example, the `add()` function is overloaded to accept either two or three arguments. `BOOST_PYTHON_FUNCTION_OVERLOADS` is used to define the overloads and their respective argument counts. The `add_overloads()` object is then passed to the `def()` function to expose the overloaded `add()` function to Python.
+    * Now, here is an example of using `BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS` to define overloaded member functions of a class:
+    ```c++
+    #include <boost/python.hpp>
+
+    class Rectangle {
+    public:
+        Rectangle(int w, int h) : width(w), height(h) {}
+        int area() const { return width * height; }
+        int perimeter() const { return 2 * (width + height); }
+        int diagonal(int x, int y) const { return std::sqrt(x * x + y * y); }
+    private:
+        int width;
+        int height;
+    };
+
+    BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(Rectangle_diagonal_overloads, Rectangle::diagonal, 2, 3);
+
+    BOOST_PYTHON_MODULE(example) {
+        using namespace boost::python;
+        class_<Rectangle>("Rectangle", init<int, int>())
+            .def("area", &Rectangle::area)
+            .def("perimeter", &Rectangle::perimeter)
+            .def("diagonal", &Rectangle::diagonal, Rectangle_diagonal_overloads());
+    }
+    ```
+    * In this example, the `diagonal()` member function of the Rectangle class is overloaded to accept either two or three arguments. `BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS` is used to define the overloads and their respective argument counts. The `Rectangle_diagonal_overloads()` object is then passed to the `.def()` member function of the Rectangle class to expose the overloaded `diagonal()` function to Python.
+    * So, to summarize, `BOOST_PYTHON_FUNCTION_OVERLOADS` is used to define overloaded non-member functions, while `BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS` is used to define overloaded member functions of a class.
 
 ### [Boost.Python Reference Manual](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/index.html)
 
