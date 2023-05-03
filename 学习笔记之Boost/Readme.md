@@ -354,6 +354,62 @@ BOOST_PYTHON_MODULE(args_ext)
     >>> b = f.get_bar()    # make a copy of the internal Bar object
     ```
 
+#### [5. To/From Python Type Conversion](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/to_from_python_type_conversion.html)
+
+##### [boost/python/to_python_converter.hpp](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/to_from_python_type_conversion/boost_python_to_python_converter.html)
+
+* to_python_converter registers a conversion from objects of a given C++ type into a Python object.
+
+###### MISC
+
+* `boost::python::to_python_converter` ?
+    * `boost::python::to_python_converter` is a template class in the boost.python library that allows users to define custom converters between C++ types and Python objects. It is used to convert C++ objects to Python objects when returning values from C++ functions or passing arguments to C++ functions that expect Python objects.
+    * Here is an example of using `boost::python::to_python_converter` to define a custom converter for a user-defined `MyClass` type:
+    ```c++
+    #include <boost/python.hpp>
+
+    class MyClass {
+    public:
+        int value;
+
+        MyClass(int value) : value(value) {}
+    };
+
+    struct MyClass_to_python {
+        static PyObject* convert(const MyClass& obj) {
+            boost::python::dict dict;
+            dict["value"] = obj.value;
+            return boost::python::incref(dict.ptr());
+        }
+    };
+
+    BOOST_PYTHON_MODULE(example) {
+        boost::python::to_python_converter<MyClass, MyClass_to_python>();
+    }
+    ```
+    * In this example, `MyClass` is a simple user-defined class with a single integer member variable. The `MyClass_to_python` struct defines the conversion logic between `MyClass` objects and Python objects. The `convert()` function takes a const MyClass& reference and returns a new Python dictionary with the value member variable stored as a key-value pair.
+    * The `boost::python::to_python_converter` template is then used to register the custom converter for the `MyClass` type with the example module.
+    * With this custom converter in place, instances of `MyClass` can be returned from C++ functions and automatically converted to Python objects:
+    ```c++
+    MyClass create_myclass() {
+        return MyClass(42);
+    }
+
+    BOOST_PYTHON_MODULE(example) {
+        boost::python::to_python_converter<MyClass, MyClass_to_python>();
+
+        boost::python::def("create_myclass", create_myclass);
+    }
+    ```
+    * In this example, the `create_myclass()` function returns a new instance of `MyClass`, which is automatically converted to a Python dictionary object when the function is called from Python:
+    ```c++
+    import example
+
+    obj = example.create_myclass()
+    print(obj)  # Output: {'value': 42}
+    ```
+    * Note that `boost::python::to_python_converter` can be used to define custom converters for a wide range of C++ types, including primitive types, standard library types, and user-defined types. It provides a powerful and flexible mechanism for integrating C++ code with Python.
+
 ### MISC
 
 * [TNG/boost-python-examples: Some examples for the use of boost::python](https://github.com/TNG/boost-python-examples)
