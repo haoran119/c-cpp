@@ -76,6 +76,33 @@ BOOST_PYTHON_MODULE(hello_ext)
 hello, world
 ```
 
+##### MISC
+
+* `BOOST_PYTHON_MODULE` ?
+    * `BOOST_PYTHON_MODULE` is a macro provided by the boost.python library that simplifies the process of exporting C++ code to Python. It defines a module initializer function that creates a new Python module and registers functions, classes, and other objects defined in C++ to be accessible from Python.
+    * Here is an example of using `BOOST_PYTHON_MODULE` to define a simple Python module that exposes a single C++ function:
+    ```c++
+    #include <boost/python.hpp>
+
+    int add(int x, int y) {
+        return x + y;
+    }
+
+    BOOST_PYTHON_MODULE(example) {
+        using namespace boost::python;
+        def("add", add);
+    }
+    ```
+    * In this example, the `BOOST_PYTHON_MODULE` macro defines the `initexample()` function, which is the module initializer for the example module. Inside the `initexample()` function, the `def()` function is used to register the `add()` function, allowing it to be called from Python with the same name.
+    * To use this module in Python, simply compile the C++ code into a shared library and import it like any other Python module:
+    ```python
+    import example
+
+    print(example.add(2, 3))  # Output: 5
+    ```
+    * Note that `BOOST_PYTHON_MODULE` takes the name of the module as an argument, which determines the name of the shared library and the name that must be used when importing the module in Python.
+    * In addition to functions, `BOOST_PYTHON_MODULE` can also be used to export classes, namespaces, constants, and other objects to Python. It provides a simple and flexible way to create custom Python modules that leverage the power and performance of C++.
+
 #### [Functions](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/tutorial/tutorial/functions.html)
 
 * In this chapter, we'll look at Boost.Python powered functions in closer detail. We will see some facilities to make exposing C++ functions to Python safe from potential pifalls such as dangling pointers and references. We will also see facilities that will make it even easier for us to expose C++ functions that take advantage of C++ features such as overloading and default arguments.
