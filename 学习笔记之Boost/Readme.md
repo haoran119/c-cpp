@@ -417,7 +417,7 @@ BOOST_PYTHON_MODULE(args_ext)
 ```c++
 #include <boost/python.hpp>
 #include <map>
-#include <pair>
+#include <utility>
 #include <vector>
 
 template<typename K, typename V>
@@ -444,22 +444,22 @@ void register_map_to_dict_converter()
     }
 }
 
-template<typename T>
+template<typename T1, typename T2>
 struct pair_to_tuple
 {
-    static PyObject* convert(const T& p)
+    static PyObject* convert(const std::pair<T1, T2>& p)
     {
         return boost::python::incref(boost::python::make_tuple(p.first, p.second).ptr());
     }
 };
 
-template <typename T>
+template<typename T1, typename T2>
 void register_pair_to_tuple_converter()
 {
-    auto typeID = boost::python::type_id<T >();
+    auto typeID = boost::python::type_id<std::pair<T1, T2> >();
     if (auto reg = boost::python::converter::registry::query(typeID); reg == nullptr || reg->m_to_python == nullptr)
     {
-        boost::python::to_python_converter<T, pair_to_tuple<T> >();
+        boost::python::to_python_converter<std::pair<T1, T2>, pair_to_tuple<T1, T2> >();
     }
 }
 
@@ -490,7 +490,7 @@ void register_vector_to_list_converter()
 BOOST_PYTHON_MODULE(example)
 {
     register_map_to_dict_converter<int, double>();
-    register_pair_to_tuple_converter<std::pair<int, int> >;
+    register_pair_to_tuple_converter<int, int>();
     register_vector_to_list_converter<double>();
 }
 ```
