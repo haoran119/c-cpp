@@ -356,6 +356,37 @@ BOOST_PYTHON_MODULE(args_ext)
 
 #### [5. To/From Python Type Conversion](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/to_from_python_type_conversion.html)
 
+##### [boost/python/extract.hpp](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/to_from_python_type_conversion.html#to_from_python_type_conversion.boost_python_extract_hpp)
+
+* Exposes a mechanism for extracting C++ object values from generalized Python objects. Note that `extract<...>` can also be used to "downcast" an object to some specific ObjectWrapper. Because invoking a mutable python type with an argument of the same type (e.g. list([1,2]) typically makes a copy of the argument object, this may be the only way to access the ObjectWrapper's interface on the original object.
+
+###### MISC
+
+* `boost::python::extract` ?
+    * `boost::python::extract` is a class template in the Boost.Python library that is used to extract a C++ object from a Python object. It provides a generic way to convert a Python object to a C++ object by checking the type of the Python object and using the appropriate conversion function.
+    * The `boost::python::extract` class template takes one template argument, which specifies the C++ type to which the Python object should be converted. The extract object can be constructed with a Python object, and the () operator can be used to obtain the C++ object.
+    * Here's an example that demonstrates how to use `boost::python::extract` to extract an int from a Python object:
+    ```c++
+    #include <boost/python.hpp>
+
+    namespace py = boost::python;
+
+    int extract_int(py::object obj) {
+        py::extract<int> ex(obj);
+        if (ex.check()) {
+            return ex();
+        } else {
+            throw std::runtime_error("Cannot extract int");
+        }
+    }
+
+    BOOST_PYTHON_MODULE(my_module) {
+        py::def("extract_int", extract_int);
+    }
+    ```
+    * In this example, the extract_int function takes a Python object as its argument and tries to extract an int from it using `boost::python::extract<int>`. If the extraction is successful, the function returns the int value. If the extraction fails, the function throws a `std::runtime_error` exception.
+    * When you call the extract_int function from Python, you can pass any object that can be converted to an int, such as an int, a float, or a str. If the object cannot be converted to an int, the function will raise an exception.
+
 ##### [boost/python/to_python_converter.hpp](https://www.boost.org/doc/libs/1_76_0/libs/python/doc/html/reference/to_from_python_type_conversion/boost_python_to_python_converter.html)
 
 * to_python_converter registers a conversion from objects of a given C++ type into a Python object.
