@@ -416,7 +416,52 @@ BOOST_PYTHON_MODULE(args_ext)
 * [boost python - Checking whether a converter has already been registered - Stack Overflow](https://stackoverflow.com/questions/9888289/checking-whether-a-converter-has-already-been-registered)
 ```c++
 #include <boost/python.hpp>
+#include <map>
+#include <pair>
 #include <vector>
+
+template<typename K, typename V>
+struct map_to_dict
+{
+    static PyObject* convert(const std::map<K, V>& m)
+    {
+        boost::python::dict d;        
+        for (const auto& [key, value] : m) {
+            d[key] = value;
+        }
+
+        return boost::python::incref(d.ptr());
+    }
+};
+
+template<typename K, typename V>
+void register_map_to_dict_converter()
+{
+    auto typeID = boost::python::type_id<std::map<K, V> >();
+    if (auto reg = boost::python::converter::registry::query(typeID); reg == nullptr || reg->m_to_python == nullptr)
+    {
+        boost::python::to_python_converter<std::map<K, V>, map_to_dict<K, V> >();
+    }
+}
+
+template<typename T>
+struct pair_to_tuple
+{
+    static PyObject* convert(const T& p)
+    {
+        return boost::python::incref(boost::python::make_tuple(p.first, p.second).ptr());
+    }
+};
+
+template <typename T>
+void register_pair_to_tuple_converter()
+{
+    auto typeID = boost::python::type_id<T >();
+    if (auto reg = boost::python::converter::registry::query(typeID); reg == nullptr || reg->m_to_python == nullptr)
+    {
+        boost::python::to_python_converter<T, pair_to_tuple<T> >();
+    }
+}
 
 template<typename T>
 struct vector_to_list
@@ -444,6 +489,8 @@ void register_vector_to_list_converter()
 
 BOOST_PYTHON_MODULE(example)
 {
+    register_map_to_dict_converter<int, double>();
+    register_pair_to_tuple_converter<std::pair<int, int> >;
     register_vector_to_list_converter<double>();
 }
 ```
