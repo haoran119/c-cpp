@@ -240,6 +240,33 @@
  
 ### [REFERENCE - PowerShell Module Browser](https://learn.microsoft.com/en-us/powershell/module/)
 
+#### Write-Output in powershell
+
+* Write-Output in powershell ?
+    * Write-Output is a cmdlet in PowerShell that sends the specified objects to the next command in the pipeline. If the command is the last command in the pipeline, the objects are displayed in the console.
+    * Basic Usage:
+        * `Write-Output "Your message here"`
+    * Examples:
+        * Display a simple message:
+            * `Write-Output "Hello, World!"`
+        * Output a list of numbers:
+            * `Write-Output 1,2,3,4,5`
+        * Using variables:
+        ```sh
+        $name = "Alice"
+        Write-Output "Hello, $name!"
+        ```
+        * Piping output to another cmdlet:
+            * `Write-Output 1,2,3,4,5 | ForEach-Object { $_ * 2 }`
+            * This would multiply each number in the list by 2 and display the results.
+        * Sending multiple items as separate pipeline elements:
+            * `Write-Output "First line", "Second line", "Third line"`
+            * Each string is sent as a separate pipeline element.
+            * Write-Output is useful when you want to ensure that the output is sent to the pipeline and not just displayed on the screen. However, in most day-to-day scripting in PowerShell, you might see just the object or string on its own or use the simpler Write-Host cmdlet to print something directly to the console.
+    * Remember, while both Write-Output and Write-Host can display information to the console, there's a key difference:
+        * Write-Output sends objects down the pipeline.
+        * Write-Host displays information directly to the console and doesn't pass any output objects to the pipeline.
+
 #### Test-Path
 
 * Test-Path in powershell ?
