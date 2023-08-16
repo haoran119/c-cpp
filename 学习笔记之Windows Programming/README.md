@@ -229,6 +229,47 @@
   * Returns detailed information about the last parse error, including the error number, line number, character position, and a text description.
   * [IXMLDOMParseError Members | Microsoft Docs](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ms767720(v=vs.85))
 
+## [PowerShell](https://learn.microsoft.com/en-us/powershell/)
+
+* [PowerShell - Wikipedia](https://en.wikipedia.org/wiki/PowerShell)
+    * PowerShell is a task automation and configuration management program from Microsoft, consisting of a command-line shell and the associated scripting language. Initially a Windows component only, known as Windows PowerShell, it was made open-source and cross-platform on August 18, 2016, with the introduction of PowerShell Core.[5] The former is built on the .NET Framework, the latter on .NET (previously .NET Core).
+    * Since Windows 10 build 14971, PowerShell replaced Command Prompt and became the default command shell for File Explorer.[6][7]
+    * In PowerShell, administrative tasks are generally performed via cmdlets (pronounced command-lets), which are specialized .NET classes implementing a particular operation. These work by accessing data in different data stores, like the file system or Windows Registry, which are made available to PowerShell via providers. Third-party developers can add cmdlets and providers to PowerShell.[8][9] Cmdlets may be used by scripts, which may in turn be packaged into modules. Cmdlets work in tandem with the .NET API.
+    * PowerShell's support for .NET Remoting, WS-Management, CIM, and SSH enables administrators to perform administrative tasks on both local and remote Windows systems. PowerShell also provides a hosting API with which the PowerShell runtime can be embedded inside other applications. These applications can then use PowerShell functionality to implement certain operations, including those exposed via the graphical interface. This capability has been used by Microsoft Exchange Server 2007 to expose its management functionality as PowerShell cmdlets and providers and implement the graphical management tools as PowerShell hosts which invoke the necessary cmdlets.[8][10] Other Microsoft applications including Microsoft SQL Server 2008 also expose their management interface via PowerShell cmdlets.[11]
+    * PowerShell includes its own extensive, console-based help (similar to man pages in Unix shells) accessible via the Get-Help cmdlet. Updated local help contents can be retrieved from the Internet via the Update-Help cmdlet. Alternatively, help from the web can be acquired on a case-by-case basis via the -online switch to Get-Help.
+ 
+### [REFERENCE - PowerShell Module Browser](https://learn.microsoft.com/en-us/powershell/module/)
+
+#### Test-Path
+
+* Test-Path in powershell ?
+    * In PowerShell, Test-Path is a cmdlet that allows you to determine if a particular path (like a file or a folder) exists. This can be useful in scripts or functions where you need to take different actions based on the presence or absence of a file or folder.
+    * Basic Usage:
+        * `Test-Path -Path "C:\path\to\your\file_or_folder"`
+        * If the path exists, it will return $true. Otherwise, it will return $false.
+    * Examples:
+        * Check if a file exists:
+            * `Test-Path -Path "C:\Users\Username\Documents\example.txt"`
+        * Check if a directory exists:
+            * `Test-Path -Path "C:\Users\Username\Documents\ExampleFolder"`
+        * Check for a wildcard match:
+            * `Test-Path -Path "C:\Users\Username\Documents\*.txt"`
+            * This will return $true if there's at least one .txt file in the specified directory.
+        * Using with conditional statements:
+        ```sh
+        if (Test-Path -Path "C:\Users\Username\Documents\example.txt") {
+            Write-Host "File exists!"
+        } else {
+            Write-Host "File does not exist."
+        }
+        ```
+    * Parameters:
+        * -Path: Specifies the path to be tested. You can also pipe a path to Test-Path.
+        * -LiteralPath: Like -Path, but doesn't recognize characters like * or ? as wildcards.
+        * -IsValid: Returns $true if the path is syntactically valid, regardless of whether the items exist.
+        * -PathType: Tests the type of item at the path. Valid values are Any, Container, and Leaf. "Container" generally refers to directories, and "Leaf" refers to files.
+    * This cmdlet is especially useful for ensuring a file or directory's existence before trying operations that might fail or produce errors if the item doesn't exist.
+
 ## FAQ
 
 * How to add host in Windows ?
