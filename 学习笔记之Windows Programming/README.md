@@ -240,7 +240,7 @@
  
 ### [REFERENCE - PowerShell Module Browser](https://learn.microsoft.com/en-us/powershell/module/)
 
-#### Write-Output in powershell
+#### Write-Output
 
 * Write-Output in powershell ?
     * Write-Output is a cmdlet in PowerShell that sends the specified objects to the next command in the pipeline. If the command is the last command in the pipeline, the objects are displayed in the console.
