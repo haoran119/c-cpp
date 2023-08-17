@@ -240,6 +240,111 @@
  
 ### [REFERENCE - PowerShell Module Browser](https://learn.microsoft.com/en-us/powershell/module/)
 
+#### Expand-Archive
+
+* Expand-Archive in powershell ?
+    * Expand-Archive is a cmdlet in PowerShell that allows you to extract the contents of an archive file, such as a ZIP file.
+    * Syntax:
+        * `Expand-Archive [-Path] <string> [-DestinationPath] <string> [-PassThru] [-WhatIf] [-Confirm] [<CommonParameters>]`
+    * Parameters:
+        * -Path: Specifies the path to the archive file you want to expand.
+        * -DestinationPath: Specifies the path to the folder where you want to save the expanded files. If the destination folder does not exist, PowerShell creates it for you.
+        * -PassThru: Returns an object representing the item with which you are working. By default, this cmdlet does not generate any output.
+        * -WhatIf: Shows what would happen if the cmdlet runs. The cmdlet is not run.
+        * -Confirm: Prompts you for confirmation before running the cmdlet.
+    * Example:
+        * Suppose you have a ZIP file at C:\source\example.zip and you want to extract its contents to D:\destination:
+        * `Expand-Archive -Path "C:\source\example.zip" -DestinationPath "D:\destination"`
+        * After running the above command, the contents of example.zip would be extracted to the D:\destination directory.
+        * Expand-Archive is especially useful in automation scripts and other administrative tasks where you might need to handle compressed files without manually intervening or using third-party tools.
+
+#### Get-ChildItem
+
+* Get-ChildItem in powershell ?
+    * Get-ChildItem is a cmdlet in PowerShell that retrieves the items (like files and folders) and child items (like files inside a folder) from specified locations.
+    * Basic Usage:
+        * `Get-ChildItem [-Path] <string[]>`
+        * -Path: Specifies the path to the items. If not provided, it defaults to the current location.
+    * Commonly Used Parameters:
+        * -Recurse or -R: Gets items in the specified locations and in all child items of the locations.
+        * -Filter <string>: Gets only the specified items. Wildcards are permitted.
+        * -Include <string[]>: Gets only the specified items from the Path. This parameter works only when the command includes the -Recurse parameter.
+        * -Exclude <string[]>: Omits the specified items. This parameter is effective only when the command includes the -Recurse parameter.
+        * -Hidden: Gets hidden items.
+        * -File: Gets only files.
+        * -Directory: Gets only directories.
+    * Examples:
+        * List all items in the current directory:
+            * `Get-ChildItem`
+        * List all items in a specific directory:
+            * `Get-ChildItem -Path C:\Example\`
+        * List all .txt files in a directory:
+            * `Get-ChildItem -Path C:\Example\ -Filter *.txt`
+        * List all items recursively in a directory:
+            * `Get-ChildItem -Path C:\Example\ -Recurse`
+        * List only directories within a directory:
+            * `Get-ChildItem -Path C:\Example\ -Directory`
+        * List only files within a directory:
+            * `Get-ChildItem -Path C:\Example\ -File`
+        * List all .txt and .pdf files recursively, excluding files named example.txt:
+            * `Get-ChildItem -Path C:\Example\ -Recurse -Include *.txt, *.pdf -Exclude example.txt`
+        * The Get-ChildItem cmdlet provides a flexible way to list and filter items in directories, making it a fundamental tool in many PowerShell scripting scenarios.
+     
+#### New-Item
+
+* New-Item in powershell ?
+    * New-Item is a cmdlet in PowerShell used to create a new item. "Item" in this context is quite broad; it can be a file, directory, or other types of item, depending on the provider. For instance, in the file system provider, items are files and directories.
+    * Basic Usage:
+        * `New-Item -Path <path> -ItemType <type> -Name <name>`
+        * -Path: Specifies the path to the location where you want to create the item.
+        * -ItemType: Specifies the type of item to create. Common values are Directory and File for the filesystem provider.
+        * -Name: Specifies the name of the item to create.
+    * Examples:
+        * Create a new directory:
+            * `New-Item -Path "C:\Users\YourUsername" -ItemType Directory -Name "NewFolder"`
+        * Create a new file:
+            * `New-Item -Path "C:\Users\YourUsername\NewFolder" -ItemType File -Name "example.txt"`
+        * Create a new file with content:
+            * `New-Item -Path "C:\Users\YourUsername\NewFolder" -ItemType File -Name "example.txt" -Value "Hello, World!"`
+        * Using shorthand:
+            * For creating directories, you can often omit -ItemType:
+                * `New-Item "C:\Users\YourUsername\AnotherNewFolder"`
+            * Similarly, for files:
+                * `New-Item "C:\Users\YourUsername\NewFolder\anotherExample.txt"`
+        * Creating items in other providers:
+            * For instance, in the registry provider, you might create a new registry key or value.
+    * Notes:
+        * If the specified item already exists, New-Item will throw an error. If you want to check if an item exists and only create it if it doesn't, you would need to wrap your New-Item command in an if statement that checks for the item's existence.
+        * The -Force parameter can be used to force the command to run without asking for user confirmation.
+        * It's always a good idea to check the documentation or use Get-Help New-Item to see the full range of parameters and their descriptions when working with a cmdlet in PowerShell.
+
+#### Remove-Item
+
+* Remove-Item in powershell ?
+    * In PowerShell, the Remove-Item cmdlet is used to delete one or more items, which can be files, folders, registry keys, or other types of items depending on the provider.
+    * Basic Usage:
+        * Delete a single file:
+            * `Remove-Item -Path 'C:\path\to\file.txt'`
+        * Delete a folder:
+            * `Remove-Item -Path 'C:\path\to\folder' -Recurse`
+    * Parameters:
+        * -Path: Specifies the path to the item to remove. Wildcards are accepted.
+        * -LiteralPath: Specifies the path to the item to remove, but without interpreting any wildcards. This is useful when filenames contain wildcard characters like `[, ], *, or ?`.
+        * -Recurse: If specified, all items in the specified locations will be removed. Useful for deleting folders and their contents.
+        * -Force: Forces the removal of an item, without prompting for confirmation. This can also help in deleting hidden or read-only files.
+        * -WhatIf: Shows what would happen if the cmdlet runs. The cmdlet is not run.
+        * -Confirm: Prompts you for confirmation before running the cmdlet.
+    * Examples:
+        * Delete multiple files:
+            * `Remove-Item -Path 'C:\path\to\*.txt' -Force`
+        * Delete a directory and its contents:
+            * `Remove-Item -Path 'C:\path\to\folder' -Recurse -Force`
+        * Delete a file without interpreting wildcards:
+            * `Remove-Item -LiteralPath 'C:\path\to\[file].txt'`
+        * Check what would be deleted without actually deleting:
+            * `Remove-Item -Path 'C:\path\to\folder' -Recurse -WhatIf`
+    * Always be cautious when using Remove-Item, especially with the -Force and -Recurse flags, as it can lead to unintended data loss. It's a good practice to use the -WhatIf parameter first to see what would be deleted before actually running the command.
+
 #### Write-Output
 
 * Write-Output in powershell ?
