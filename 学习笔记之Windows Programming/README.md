@@ -73,6 +73,56 @@
       * Return Value
         * A pointer to a null-terminated character string.
 
+## [CMD](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands) 
+
+* Windows built-in commands
+
+### [Command-line reference A-Z](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands#command-line-reference-a-z)
+
+#### [xcopy](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/xcopy)
+
+* [XCOPY - Wikipedia](https://en.wikipedia.org/wiki/XCOPY)
+    * In computing, XCOPY is a command used on IBM PC DOS, MS-DOS, IBM OS/2,[1] Microsoft Windows,[2] FreeDOS,[3] ReactOS,[4] and related operating systems for copying multiple files or entire directory trees from one directory to another and for copying files across a network.
+* xcopy ?
+    * xcopy is a command-line utility on Windows for copying multiple files or entire directory trees from one directory to another. It is a more powerful version of the copy command with additional features.
+    * Basic Usage:
+        * `xcopy source [destination] [options]`
+        * source - Specifies the file(s) to copy.
+        * destination - Specifies the location and/or name of new files.
+        * options - Flags that specify how the files will be copied.
+    * Commonly Used Options:
+        * /S: Copies directories and subdirectories, excluding empty ones.
+        * /E: Copies directories and subdirectories, including empty ones.
+        * /I: If in doubt, it assumes that the destination is a directory (e.g., when the destination does not exist).
+        * /H: Copies hidden and system files.
+        * /R: Overwrites read-only files.
+        * /Y: Suppresses prompting to confirm you want to overwrite an existing destination file.
+        * `/EXCLUDE:file1[+file2][+file3]...`: Specifies a list of files containing strings. Each string should be in a separate line in the files. When any of the strings match any part of the absolute path of the file to be copied, that file will be excluded from being copied.
+    * Examples:
+        * Copy a file to another directory:
+            * `xcopy C:\example.txt D:\`
+        * Copy a directory and its contents to another directory:
+            * `xcopy C:\example D:\backup\example /E`
+        * Copy a directory excluding certain files:
+        ```sh
+        echo .txt > exclude.txt
+        xcopy C:\example D:\backup\example /E /EXCLUDE:exclude.txt
+        ```
+        * Suppress overwrite prompt:
+            * `xcopy C:\example.txt D:\example.txt /Y`
+    * Always remember to have a backup of your data when using command-line utilities, especially when copying or moving files. If used incorrectly, data might be overwritten or lost.
+* How to ignore "Does <destination> specify a file name or directory name on the target" when xcopy a file to a file ?
+    * When you use xcopy to copy a file to another file (as opposed to copying a file into a directory), xcopy prompts the user with the question
+    * You can bypass this prompt by redirecting an input to xcopy. Here's how you can do it:
+        * Using echo:
+            * If you're certain that the destination is a file, you can use the echo command to send the F input to xcopy:
+            * `echo F | xcopy C:\source\example.txt D:\destination\example.txt`
+        * Using the `/I` switch:
+            * The `/I` switch tells xcopy to assume that the destination is a directory if there's any ambiguity. This is more suited for copying directories or when the destination doesn't already exist, but it can sometimes be useful for files too, especially if the destination file already exists.
+            * `xcopy C:\source\example.txt D:\destination\example.txt /I`
+            * However, note that the `/I` switch is more of a workaround in this context. The more direct way is using `echo F |`.
+            * Always ensure you're copying to the correct destination and make backups of important data, as misuse can result in data loss.
+
 ## COM
 
 * [`Component Object Model (COM)` - Win32 apps | Microsoft Docs](https://docs.microsoft.com/en-us/windows/win32/com/component-object-model--com--portal)
