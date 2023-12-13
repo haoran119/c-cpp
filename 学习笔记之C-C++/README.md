@@ -11403,6 +11403,10 @@ s.erase(s.find_last_not_of(" \n\r\t")+1);
     * Compares the value of the string object (or a substring) to the sequence of characters specified by its arguments.
     * The compared string is the value of the string object or -if the signature used has a pos and a len parameters- the substring that begins at its character in position pos and spans len characters.
     * This string is compared to a comparing string, which is determined by the other arguments passed to the function.
+* Return value
+    * Negative value if `*this` appears before the character sequence specified by the arguments, in lexicographical order.
+    * `Zero` if both character sequences compare equivalent.
+    * Positive value if `*this` appears after the character sequence specified by the arguments, in lexicographical order.
 
 ###### [std::basic_string<CharT,Traits,Allocator>::replace](https://en.cppreference.com/w/cpp/string/basic_string/replace)
 
