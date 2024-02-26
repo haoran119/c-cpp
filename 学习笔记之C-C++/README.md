@@ -14484,6 +14484,34 @@ int main()
     true
     */
     ```
+* [std::unordered_map<Key,T,Hash,KeyEqual,Allocator>::contains - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_map/contains)
+    * checks if the container contains element with specific key (public member function)
+    * Return value
+        * true if there is such an element, otherwise false.
+    * Complexity
+        * Constant on average, worst case linear in the size of the container.
+    * Example
+    ```c++
+    #include <iostream>
+    #include <unordered_map>
+     
+    int main()
+    {
+        std::unordered_map<int, char> example{{1, 'a'}, {2, 'b'}};
+     
+        for (int x : {2, 5})
+            if (example.contains(x))
+                std::cout << x << ": Found\n";
+            else
+                std::cout << x << ": Not found\n";
+    }
+    /*
+    Output:
+    
+    2: Found
+    5: Not found
+    */
+    ```
 
 ###### MISC
 
