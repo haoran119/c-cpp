@@ -14086,7 +14086,127 @@ int main()
 * Internally, the elements are not sorted in any particular order, but organized into buckets. Which bucket an element is placed into depends entirely on the hash of its value. This allows fast access to individual elements, since once a hash is computed, it refers to the exact bucket the element is placed into.
 * Container elements may not be modified (even by non const iterators) since modification could change an element's hash and corrupt the container.
 * std::unordered_set meets the requirements of Container, AllocatorAwareContainer, UnorderedAssociativeContainer.
+* Example
+```c++
+#include <iostream>
+#include <unordered_set>
+ 
+void print(const auto& set)
+{
+    for (const auto& elem : set)
+        std::cout << elem << ' ';
+    std::cout << '\n';
+}
+ 
+int main()
+{
+    std::unordered_set<int> mySet{2, 7, 1, 8, 2, 8}; // creates a set of ints
+    print(mySet);
+ 
+    mySet.insert(5); // puts an element 5 in the set
+    print(mySet);
+ 
+    if (auto iter = mySet.find(5); iter != mySet.end())
+        mySet.erase(iter); // removes an element pointed to by iter
+    print(mySet);
+ 
+    mySet.erase(7); // removes an element 7
+    print(mySet);
+}
+/*
+Possible output:
+
+8 1 7 2
+5 8 1 7 2
+8 1 7 2
+8 1 2
+*/
+```
+
+##### Iterator invalidation
+
+| Operations | Invalidated |
+| - | - |
+| All read only operations, swap, std::swap	| Never |
+| clear, rehash, reserve, operator=	| Always |
+| insert, emplace, emplace_hint	| Only if causes rehash |
+| erase	| Only to the element erased |
+
+* Notes
+    * The swap functions do not invalidate any of the iterators inside the container, but they do invalidate the iterator marking the end of the swap region.
+    * References and pointers to data stored in the container are only invalidated by erasing that element, even when the corresponding iterator is invalidated.
+    * After container move assignment, unless elementwise move assignment is forced by incompatible allocators, references, pointers, and iterators (other than the past-the-end iterator) to moved-from container remain valid, but refer to elements that are now in `*this`.
+
+##### Member types
+
+##### Member functions
+
+###### Lookup
+
 * [std::unordered_set<Key,Hash,KeyEqual,Allocator>::count - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_set/count)
+    * returns the number of elements matching specific key (public member function)
+    * Return value
+        * 1) Number of elements with key key, that is either 1 or ​0​.
+        * 2) Number of elements with key that compares equivalent to x.
+    * Complexity
+        * Constant on average, worst case linear in the size of the container.
+    * Example
+    ```c++
+    #include <algorithm>
+    #include <iostream>
+    #include <unordered_set>
+     
+    int main()
+    {
+        std::unordered_set set{2, 7, 1, 8, 2, 8, 1, 8, 2, 8};
+     
+        std::cout << "The set is: ";
+        for (int e : set)
+            std::cout << e << ' ';
+     
+        const auto [min, max] = std::ranges::minmax(set);
+     
+        std::cout << "\nNumbers from " << min << " to " << max << " that are in the set: ";
+        for (int i{min}; i <= max; ++i)
+            if (set.count(i) == 1)
+                std::cout << i << ' ';
+        std::cout << '\n';
+    }
+    /*
+    Possible output:
+    
+    The set is: 8 1 7 2
+    Numbers from 1 to 8 that are in the set: 1 2 7 8
+    */
+    ```
+* [std::unordered_set<Key,Hash,KeyEqual,Allocator>::contains - cppreference.com](https://en.cppreference.com/w/cpp/container/unordered_set/contains)
+    * checks if the container contains element with specific key (public member function)
+    * Return value
+        * `true` if there is such an element, otherwise `false`.
+    * Complexity
+        * Constant on average, worst case linear in the size of the container.
+    * Example
+    ```c++
+    #include <iostream>
+    #include <unordered_set>
+     
+    int main()
+    {
+        std::unordered_set<int> example{1, 2, 3, 4};
+     
+        for (int x : {2, 5})
+            if (example.contains(x))
+                std::cout << x << ": Found\n";
+            else
+                std::cout << x << ": Not found\n";
+    }
+    /*
+    Output:
+    
+    2: Found
+    5: Not found
+    */
+    ```
 
 #### [std::unordered_map](https://en.cppreference.com/w/cpp/container/unordered_map)
 
