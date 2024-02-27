@@ -2821,6 +2821,38 @@ int main() {}
 * [I.12: Declare a pointer that must not be null as not_null](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i12-declare-a-pointer-that-must-not-be-null-as-not_null)
 * [I.13: Do not pass an array as a single pointer](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i13-do-not-pass-an-array-as-a-single-pointer)
 * [I.27: For stable library ABI, consider the Pimpl idiom](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#i27-for-stable-library-abi-consider-the-pimpl-idiom)
+    * `Reason` Because private data members participate in class layout and private member functions participate in overload resolution, changes to those implementation details require recompilation of all users of a class that uses them. A non-polymorphic interface class holding a pointer to implementation (`Pimpl`) can isolate the users of a class from changes in its implementation at the cost of an indirection.
+    * `Example` interface (widget.h)
+    ```c++
+    class widget {
+        class impl;
+        std::unique_ptr<impl> pimpl;
+    public:
+        void draw(); // public API that will be forwarded to the implementation
+        widget(int); // defined in the implementation file
+        ~widget();   // defined in the implementation file, where impl is a complete type
+        widget(widget&&) noexcept; // defined in the implementation file
+        widget(const widget&) = delete;
+        widget& operator=(widget&&) noexcept; // defined in the implementation file
+        widget& operator=(const widget&) = delete;
+    };
+    ```
+    * implementation (widget.cpp)
+    ```c++
+    class widget::impl {
+        int n; // private data
+    public:
+        void draw(const widget& w) { /* ... */ }
+        impl(int n) : n(n) {}
+    };
+    void widget::draw() { pimpl->draw(*this); }
+    widget::widget(int n) : pimpl{std::make_unique<impl>(n)} {}
+    widget::widget(widget&&) noexcept = default;
+    widget::~widget() = default;
+    widget& widget::operator=(widget&&) noexcept = default;
+    ```
+    * `Notes` See [GOTW #100](https://herbsutter.com/gotw/_100/) and [cppreference](http://en.cppreference.com/w/cpp/language/pimpl) for the trade-offs and additional implementation details associated with this idiom.
+    * `Enforcement` (Not enforceable) It is difficult to reliably identify where an interface forms part of an ABI.
 
 ### [Initialization](https://en.cppreference.com/w/cpp/language/initialization)
 
