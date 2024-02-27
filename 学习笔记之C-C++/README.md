@@ -19475,7 +19475,7 @@ std::string exec(const char* cmd) {
 
 ### ERROR FIX
 
-* How to fix "error C1853: '.pch' precompiled header file is from a previous version of the compiler, or the precompiled header is C++ and you are using it from C (or vice versa)" ?
+* How to fix `error C1853: '.pch' precompiled header file is from a previous version of the compiler, or the precompiled header is C++ and you are using it from C (or vice versa)` ?
 	* Rebuild All
 * How to fix `error C2275: 'std::pair<int,double>::first_type': expected an expression instead of a type`?
     * add `typename`
@@ -19496,7 +19496,13 @@ static void construct(PyObject* object, boost::python::converter::rvalue_from_py
     data->convertible = storage;
 }
 ```
-* How to fix "Compiler error C2653: not a class or namespace name" ?
+* How to fix `Warning C26455 Default constructor should not throw. Declare it 'noexcept'`?
+    * https://learn.microsoft.com/en-us/cpp/code-quality/c26455?view=msvc-170#Overview
+    * The C++ Core Guidelines suggest that default constructors shouldn't do anything that can throw. When the default constructor can throw, all code that relies on a properly instantiated object may also throw.
+    * Remarks
+        * Consider the default constructors of the STL types, like `std::vector`. In these implementations, the default constructors initialize internal state without making allocations. In the `std::vector` case, the size is set to 0 and the internal pointer is set to `nullptr`. The same pattern should be followed for all default constructors.
+        * Code analysis name: `DEFAULT_CTOR_NOEXCEPT`
+* How to fix `Compiler error C2653: not a class or namespace name` ?
 	* Generate full list of includes files to see include stack
 		* MSVS > Property > C/C++ > Advanced > Show Includes > Yes
 	* Fix circular dependency in header files. Need to look into the included header files as well.
@@ -19504,34 +19510,88 @@ static void construct(PyObject* object, boost::python::converter::rvalue_from_py
 		* You have a circular dependency in your headers. BaseEntity.h includes Input.h, which includes ScreenSystem.h, which includes GameScreen.h, which in turn re-includes BaseEntity.h. This leads to class names appearing before they are declared, causing compilation failure.
 		* To avoid this, do not include headers unnecessarily. 
 	* [c# - What is a circular dependency and how can I solve it? - Stack Overflow](https://stackoverflow.com/questions/38042130/what-is-a-circular-dependency-and-how-can-i-solve-it)
-* How to fix "LNK1104: cannot open file 'libboost_log-vc142-mt-x32-1_72.lib'" when building project in MSVS ?
+* How to fix `lint message lnt-accidental-copy 'auto' doesn't deduce references` ?
+    * [lnt-accidental-copy | Microsoft Learn](https://learn.microsoft.com/en-us/cpp/ide/lnt-accidental-copy?view=msvc-170)
+        * A copy is being made because `auto` doesn't deduce references.
+        * Variables declared by using `auto` are never deduced to be type references. If you initialize an `auto` variable from the result of a function that returns by reference, it results in a copy. Sometimes this effect is desirable, but in many cases it causes an unintentional copy.
+        * The `lnt-accidental-copy` check is controlled by the Accidental Copy setting in the C/C++ Code Style options. For information on how to change this setting, see [Configure the linter](https://learn.microsoft.com/en-us/cpp/ide/cpp-linter-overview?view=msvc-170#configure-the-linter).
+        * Examples
+        ```c++
+        #include <string>
+        #include <vector>
+        
+        std::string& return_by_ref();
+        
+        int& return_int_by_ref();
+        
+        void accidental_copy(std::vector<std::string>& strings)
+        {
+            for (auto s : strings) {} // Flagged: A new copy of each string is
+                                      // made when the vector is iterated.
+        
+            auto s = return_by_ref(); // Flagged: the function returns by-reference
+                                      // but a copy is made to initialize 's'.
+        
+            auto i = return_int_by_ref(); // Not flagged because no copy constructor is called.
+        }
+        ```
+        * How to fix the issue
+            * The fix the linter suggests is to change `auto` to `auto&` on the declaration.
+            ```C++
+            #include <string>
+            
+            std::string& return_by_ref();
+            
+            void accidental_copy(std::vector<std::string>& strings)
+            {
+                for (auto& s : strings) {}
+            
+                auto& s = return_by_ref();
+            }
+            ```
+        * Remarks
+            * The suggested fix isn't safe to apply in all cases. The fix may cause a compilation error or change the behavior of the code. It's important to understand how the suggested fix affects the code before applying it.
+            * In cases where a temporary is returned, `const auto&` is necessary to prevent a compilation error. In this case, it may be preferable to continue to use `auto`.
+            * Sometimes a copy is intentional, such as when you want to modify the copy without affecting the source instance, as shown in this example.
+            ```C++
+            void modifies_string(std::string& s);
+            
+            void example(std::vector<std::string>& strings)
+            {
+                for (auto s : strings) {
+                    modifies_string(s);    // In this case, the copy may be intended so that
+                                           // the original strings are not modified.
+                }
+            }
+            ```
+* How to fix `LNK1104: cannot open file 'libboost_log-vc142-mt-x32-1_72.lib'` when building project in MSVS ?
   * check the path, e.g. "BOOST_ROOT", in system enviroment variable to see if "\\" is appended at the end, e.g. C:\Program Files\boost\boost_1_72_0\
-* How to fix "error LNK2019: unresolved external symbol "char * __stdcall _com_util::ConvertBSTRToString(wchar_t *)" (?ConvertBSTRToString@_com_util@@YGPADPA_W@Z) referenced in function "public: char const * __thiscall _bstr_t::Data_t::GetString(void)const " (?GetString@Data_t@_bstr_t@@QBEPBDXZ)" when #include \<comutil.h>?
+* How to fix `error LNK2019: unresolved external symbol "char * __stdcall _com_util::ConvertBSTRToString(wchar_t *)" (?ConvertBSTRToString@_com_util@@YGPADPA_W@Z) referenced in function "public: char const * __thiscall _bstr_t::Data_t::GetString(void)const " (?GetString@Data_t@_bstr_t@@QBEPBDXZ)` when #include \<comutil.h>?
   * Append "comsuppw.lib" to MSVS > Project Property > Linker > Input
   * [error LNK2019 related to ConvertStringToBSTR](https://social.microsoft.com/Forums/windows/he-IL/8e2b44f4-3884-445c-9da9-e6abb2783b4c/error-lnk2019-related-to-convertstringtobstr?forum=Vsexpressvc)
   * [ConvertStringToBSTR | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/convertstringtobstr?redirectedfrom=MSDN&view=msvc-160)
-* How to fix "error LNK2019: unresolved external symbol __imp__UuidCreate@4" ?
+* How to fix `error LNK2019: unresolved external symbol __imp__UuidCreate@4` ?
 	* Under Project menu, open <project name> Properties -> Configuration Properties -> Linker -> Command Line. Type Rpcrt4.lib into the Additional Options box.
 	* [How to Link with .lib file -- UuidCreate()](https://forums.codeguru.com/showthread.php?448070-How-to-Link-with-lib-file-UuidCreate())
-* How to fix "warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification" ?
+* How to fix `warning LNK4075: ignoring '/INCREMENTAL' due to '/OPT:ICF' specification` ?
   * Change default to below values in MSVS > Your project property > Linker > Optimization :
     * References = Keep Unreferenced Data (/OPT:NOREF)
     * Enable COMDAT Folding = Do Not Remove Redundant COMDATs (/OPT:NOICF)
   * [c++ - LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:ICF' specification - Stack Overflow](https://stackoverflow.com/questions/1574367/lnk4075-ignoring-editandcontinue-due-to-opticf-specification)
   * [Linker Tools Warning LNK4075 | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/error-messages/tool-errors/linker-tools-warning-lnk4075?view=msvc-160)
-* How to fix warning "control reaches end of non-void function -wreturn-type" ?
+* How to fix warning `control reaches end of non-void function -wreturn-type` ?
 	* [c++ - control reaches end of non-void functions -wreturn-type - Stack Overflow](https://stackoverflow.com/questions/60863967/control-reaches-end-of-non-void-functions-wreturn-type)
 	* check the conditions of return statement. Return statement is not executed under all conditions.
-* How to fix compile error "fatal error: google/protobuf/stubs/common.h: No such file or directory" ?
+* How to fix compile error `fatal error: google/protobuf/stubs/common.h: No such file or directory` ?
 	* `g++ -I /path_to_protobuf/`
 	* [protocol buffers - protobuf common.h "No such file" - Stack Overflow](https://stackoverflow.com/questions/32039549/protobuf-common-h-no-such-file)
-* How to fix compile error "has initializer but incomplete type" ?
+* How to fix compile error `has initializer but incomplete type` ?
 	* `#include <sstream>`
 	* [compilation - C++ compile error: has initializer but incomplete type - Stack Overflow](https://stackoverflow.com/questions/13428164/c-compile-error-has-initializer-but-incomplete-type)
 * How to fix compile error `c - Undefined reference to pthread_create` ?
 	* `gcc -pthread -o term term.c`
 	* [c - Undefined reference to pthread_create in Linux - Stack Overflow](https://stackoverflow.com/questions/1662909/undefined-reference-to-pthread-create-in-linux)
-* How to fix compile error "undefined reference to utils::FileUtils::func()" ?
+* How to fix compile error `undefined reference to utils::FileUtils::func()` ?
 	* check .cpp if FileUtils::func() exists
 	* for template function, move the definition to .h
 		* [c++ - undefined reference to template function - Stack Overflow](https://stackoverflow.com/questions/10632251/undefined-reference-to-template-function)
@@ -19540,13 +19600,13 @@ static void construct(PyObject* object, boost::python::converter::rvalue_from_py
 			* Inlines must be defined in the same translation unit where they are used. By defining your "inline" function in the .cpp file, it is only usable in the same .cpp file. You need to move it either to the header file, or some special "inlines" file that some projects prefer to keep their implementation details a bit more hidden (you'd then #include that inlines file, either in your header or in main.cpp).
 		* [inline - C++ inlining class methods causes undefined reference - Stack Overflow](https://stackoverflow.com/questions/4769479/c-inlining-class-methods-causes-undefined-reference)
 			* The body of an inline function needs to be in the header so that the compiler can actually substitute it wherever required. 
-* How to fix compile error "error: unterminated #ifdef" ?
+* How to fix compile error `error: unterminated #ifdef` ?
 	* add missing `#endif`
-* How to fix link error "undefined reference to 'std::filesystem::__cxx11::directory_iterator::operator*() const" ?
+* How to fix link error `undefined reference to 'std::filesystem::__cxx11::directory_iterator::operator*() const` ?
 	* It need to add `-lstdc++fs` to option.
 		* `g++ -lstdc++fs -std=c++17 -o fs fs.cpp -lstdc++fs`
 	* [c++ - std::filesystem link error on ubuntu 18.10 - Stack Overflow](https://stackoverflow.com/questions/53852684/stdfilesystem-link-error-on-ubuntu-18-10) 
-* How to fix error "**Cannot evaluate function -- may be inlined**" ?
+* How to fix error `**Cannot evaluate function -- may be inlined**` ?
 	* [c++ - Cannot evaluate function -- may be inlined - Stack Overflow](https://stackoverflow.com/questions/22163730/cannot-evaluate-function-may-be-inlined)
 
 # END
